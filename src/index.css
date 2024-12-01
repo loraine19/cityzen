@@ -1,0 +1,289 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "Comfortaa";
+    src: url("/fonts/Comfortaa.ttf") format("ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light dark;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+    margin: auto;
+    height: 100vh;
+    width: 100%;
+    color: #242424;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+}
+
+.Body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
+    overflow: auto;
+    flex-shrink: 1;
+    flex-grow: 1;
+    padding: 0 2.5%;
+}
+
+footer,
+header,
+main {
+    width: 100%;
+    max-width: 1100px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+header {
+    padding-left: min(1rem);
+    padding-right: min(1rem);
+}
+
+footer {
+    padding-left: min(0.5rem);
+    padding-right: min(0.5rem);
+}
+
+.eventCyan {
+    background-image: linear-gradient(#f9fafb #b3eaf0);
+}
+
+.cyan {
+    background-image: linear-gradient(#f9fafb, #a5f3fc);
+}
+
+.gray {
+    background-image: linear-gradient(#f9fafb, #9ca3af);
+}
+
+.gray100 {
+    background-image: linear-gradient(#f9fafb, #9ca3af50);
+}
+
+.orange {
+    background-image: linear-gradient(#f9fafb, #fed7aa);
+}
+.orange100 {
+    background-image: linear-gradient(#f9fafb, #ffedd5);
+}
+
+/* CARD */
+.w-resp {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 36rem;
+}
+.w-respLarge {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 46rem;
+}
+
+.Grid {
+    display: grid;
+    grid-template-columns: auto;
+    row-gap: 0.5rem;
+    column-gap: 1rem;
+    grid-auto-rows: (auto, 40vh);
+}
+
+@media (min-width: 1024px) {
+    .w-resp {
+        max-width: 36rem;
+    }
+    .Grid {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 1rem;
+        column-gap: 2rem;
+    }
+    footer,
+    header {
+        padding-left: min(0rem);
+        padding-right: min(0rem);
+    }
+    .active .material-symbols-rounded {
+        text-underline-offset: 10px !important;
+    }
+}
+
+/* NAV */
+.material-symbols-rounded {
+    font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
+    font-size: 48px;
+}
+nav .material-symbols-rounded {
+    font-size: 29px;
+    font-variation-settings: "wght" 300 !important;
+}
+
+nav li .material-symbols-rounded {
+    color: #6b7280;
+}
+
+.active .material-symbols-rounded {
+    font-variation-settings: "FILL" 1 !important;
+    font-size: 32px;
+    opacity: 100%;
+    text-decoration: underline;
+    text-underline-offset: 20px;
+    text-decoration-color: #06b6d4;
+    color: #1f2937;
+}
+.error {
+    color: #b91c1c !important;
+}
+
+.fill {
+    font-variation-settings: "FILL" 1 !important;
+}
+
+.fillThin {
+    font-variation-settings: "FILL" 1, "wght" 200 !important;
+}
+.unFillThin {
+    font-variation-settings: "FILL" 0, "wght" 200 !important;
+}
+
+/* CHIP LIGHT COLOR */
+.OrangeChip {
+    background-color: #fed7aa;
+    color: #ea580c;
+}
+.GrayChip {
+    background-color: #d1d5db;
+    color: #1f2937;
+}
+
+.CyanChip {
+    background-color: #a5f3fc;
+    color: #0e7490;
+}
+
+/*CHIP OUTLINED*/
+
+.CyanChipOutlined {
+    border: 1px solid #06b6d4;
+    color: #06b6d4;
+}
+
+.OrangeChipOutlined {
+    border: 1px solid #ea580c;
+    color: #ea580c;
+}
+
+/* Gray 800*/
+.lgBtn:disabled {
+    background-color: transparent;
+    color: #1f2937;
+    border: 2px solid #1f2937;
+}
+button:disabled {
+    opacity: 60%;
+}
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ffffff20;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #ffffff;
+}
+
+button {
+    white-space: nowrap;
+    text-transform: capitalize !important;
+    font-weight: 500 !important;
+}
+
+.FixCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+}
+
+.FixCardHeader {
+    flex: 1;
+    display: flex;
+}
+
+.FixCardBody {
+    position: relative;
+    overflow: auto;
+    padding: 0.5rem 1.5rem;
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.CardOverFlow {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 0.5rem 0;
+}
+
+.CardFooter {
+    position: relative;
+    padding: 0 1.5rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.NoImage {
+    box-shadow: none;
+    flex: none;
+}
+
+/* .FixCard 
+.FixCardHeader
+.FixCardBody
+.CardOverFlow */
