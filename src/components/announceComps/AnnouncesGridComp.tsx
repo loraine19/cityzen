@@ -1,39 +1,39 @@
-
-import flagsFaker from '../../datas/fakers/flagsFaker';
-import likesFaker from '../../datas/fakers/likesFaker';
+import { useContext } from 'react';
 import { imIn } from '../../functions/GetDataFunctions';
-import { post } from '../../types/type';
+import { PostL } from '../../types/class';
 import AnnouncesComp from "./AnnouncesComp";
+import DataContext from '../../contexts/data.context';
 
 
-export default function AnnouncesGridComp(props: { line: post[], mines?: boolean, change: (e: any) => void, view?: string, user: any, handleClickDelete?: (id: number) => void, handleLike: (post: post) => void }) {
+export default function AnnouncesGridComp(props: { line: PostL[], mines?: boolean, change: (e: any) => void, view?: string, user: any, handleClickDelete?: (id: number) => void, handleLike: (post: PostL) => void }) {
+    const { data } = useContext(DataContext);
+    const { flags } = data
     const { line, mines, change, user, handleLike } = props
-    const short = "pt-10 row-span-5 h-full  !h-[38vh] ";
-    const long = "pt-10 row-span-6 h-full  !h-[52vh]";
-    const isFlaged = (element: any) => { return imIn(element, flagsFaker, user) ? true : false };
-    const isLiked = (element: any) => { return imIn(element, likesFaker, user, "post_id") ? true : false };
+    const short = "pt-8 row-span-5 h-full  !h-[38vh] ";
+    const long = "pt-8 row-span-6 h-full  !h-[52vh] ";
+    const isFlaged = (element: any) => { return imIn(element, flags, user) ? true : false };
 
     return (
         <>
-            <div className={"grid grid-cols-[1fr_1fr] grid-rows-[(24*1fr)] gap-x-4"}>
+            <div className={"grid grid-cols-[1fr_1fr] grid-rows-[(24*1fr)] gap-x-4 gap-y-2"}>
                 {line[0] &&
                     <div className={line[0].image ? short : short}>
-                        <AnnouncesComp post={line[0]} mines={mines} change={change} isFlaged={isFlaged(line[0])} isLiked={isLiked(line[0])} handleClickDelete={props.handleClickDelete} handleLike={handleLike} />
+                        <AnnouncesComp post={line[0]} mines={mines} change={change} isFlaged={isFlaged(line[0])} handleClickDelete={props.handleClickDelete} handleLike={handleLike} />
                     </div>}
 
                 {line[1] &&
                     <div className={line[1].image ? long : long}>
-                        <AnnouncesComp post={line[1]} mines={mines} change={change} isFlaged={isFlaged(line[1])} isLiked={isLiked(line[1])} handleClickDelete={props.handleClickDelete} handleLike={handleLike} />
+                        <AnnouncesComp post={line[1]} mines={mines} change={change} isFlaged={isFlaged(line[1])} handleClickDelete={props.handleClickDelete} handleLike={handleLike} />
                     </div>}
                 {line[2] &&
-                    <div className={line[2].image ? long : short}>
-                        <AnnouncesComp post={line[2]} mines={mines} change={change} isFlaged={isFlaged(line[2])} isLiked={isLiked(line[2])}
+                    <div className={line[2].image ? long : long}>
+                        <AnnouncesComp post={line[2]} mines={mines} change={change} isFlaged={isFlaged(line[2])}
                             handleClickDelete={props.handleClickDelete} handleLike={handleLike} />
                     </div>}
 
                 {line[3] &&
-                    <div className={line[2].image ? short : long}>
-                        <AnnouncesComp post={line[3]} mines={mines} change={change} isFlaged={isFlaged(line[3])} isLiked={isLiked(line[3])}
+                    <div className={line[2].image ? short : short}>
+                        <AnnouncesComp post={line[3]} mines={mines} change={change} isFlaged={isFlaged(line[3])}
                             handleClickDelete={props.handleClickDelete} handleLike={handleLike} />
                     </div>}
             </div >

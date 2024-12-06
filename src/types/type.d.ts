@@ -1,4 +1,4 @@
-import { service } from "./service"
+import { service } from './service';
 import { survey } from "./survey"
 import { userProfile } from "./user"
 
@@ -77,6 +77,25 @@ export type all = {
 export interface flag extends targetUser  {
     element: post | event | survey | pool | service,
 }
+
+
+////TYPES SERVICE 
+export interface service {
+    id: number;
+    user_id_get: number;
+    user_id1_do: number;
+    type: 'get' | 'do';
+    title: string;
+    description: string;
+    category: 1 | 2 | 3;
+    skill_level: 0 | 1 | 2 | 3;
+    hard_level: 0 | 1 | 2 | 3;
+    created_at: Date;
+    updated_at: Date;
+  }
+
+  
+  
 
 //// JOINTURES 
 export type eventUser = { event_id: number, user_id: number }

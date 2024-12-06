@@ -7,42 +7,49 @@ import NavBarTop from "../../components/NavBarTop";
 import TabsMenu from "../../components/TabsMenu";
 import { EventCard } from "../../components/eventComps/EventCard";
 import { eventCategories } from "../../datas/enumsCategories";
-import { eventsFaker } from "../../datas/fakers/eventsFaker";
 import { label } from "../../types/label";
-import { event } from "../../types/type";
 import SubHeader from "../../components/SubHeader";
 import CalendarCompLarge from "../../components/calendarComps/CalendarCompLarge";
-import eventUsersFaker from "../../datas/fakers/eventUsers";
-import { usersFaker } from "../../datas/fakers/usersFaker";
 import { beInElement, deleteElement, getDays, getUsers, imIn } from "../../functions/GetDataFunctions";
 import UserContext from "../../contexts/user.context";
-import { userProfile } from "../../types/user";
-import flagsFaker from "../../datas/fakers/flagsFaker";
+import DataContext from "../../contexts/data.context";
+import { EventP, Profile } from "../../types/class";
 
 export default function EventListPage() {
     const { user } = useContext(UserContext);
+    const { data, setDataInLocal } = useContext(DataContext)
+    const { events, flags, profiles } = data
+    const [participants, setParticipants] = useState<Profile[]>(data.participants)
     const navigate = useNavigate();
     const [view, setView] = useState("view_agenda");
     const [tabSelected, setTabSelected] = useState<string>("");
     const [categorySelected, setCategorySelected] = useState<string>(eventCategories[0]);
     const [notif, setNotif] = useState<string>("");
-    const [eventsTabled, setEventsTabled] = useState<event[]>([]);
+    const [eventsTabled, setEventsTabled] = useState<EventP[]>([]);
     const [mines, setMines] = useState<boolean>(false);
 
     //// Initialise array
-    const eventsWithUsers = getDays(getUsers(eventsFaker, eventUsersFaker as [], usersFaker as [], "event_id"));
-    const arrayToFilter: event[] = eventsWithUsers;
-    const [eventList, setEventList] = useState<event[]>(eventsWithUsers);
+    const [eventsWithUsers] = useState<EventP[]>(getDays(getUsers(events, participants as [], profiles as [], "event_id")));
+    const arrayToFilter: EventP[] = eventsWithUsers;
+    const [eventList, setEventList] = useState<EventP[]>(eventsWithUsers);
+
+
 
     ///// pass to card  
-    const isFlaged = (element: any) => { return imIn(element, flagsFaker, user.id) };
-    const isWithMe = (element: any) => { return imIn(element, eventUsersFaker, user.id, "event_id") };
-    const handleGo = (elementLiked: event) => { beInElement(elementLiked, eventList, setEventList, eventUsersFaker, user, "event_id") }
-    const handleClickDelete = (id: number) => deleteElement(id, eventList, setEventList);
+    const isFlaged = (element: any) => { return imIn(element, flags, user.id) };
+    const isWithMe = (element: any) => { return imIn(element, participants, user.id, "event_id") };
+    const handleGo = (elementLiked: EventP) => {
+        beInElement(elementLiked, eventList, setEventList, participants, setParticipants, user, "event_id");
+        setDataInLocal({ ...data, events: eventList, participants: participants })
+    };
+    const handleClickDelete = (id: number) => {
+        deleteElement(id, eventList, setEventList);
+        setDataInLocal({ ...data, events: data.events.filter((event: EventP) => event.id !== id) })
+    }
     const handleClick = () => navigate("/evenement/create");
 
     /////FILTER FUNCTIONS
-    const filterEvents = (newArray: event[], value: string) => {
+    const filterEvents = (newArray: EventP[], value: string) => {
         value !== tabSelected && setCategorySelected(eventCategories[0]);
         setEventsTabled(newArray);
         setEventList(newArray);
@@ -59,13 +66,13 @@ export default function EventListPage() {
         {
             label: "validé",
             value: "validé",
-            result: () => filterEvents([...arrayToFilter.filter((event) => event.participants <= event.users.length)], eventTabs[1].value),
+            result: () => filterEvents([...arrayToFilter.filter((event) => event.participants_min <= event.users.length)], eventTabs[1].value),
 
         },
         {
             label: "j'y vais",
             value: "j'y vais",
-            result: () => filterEvents([...arrayToFilter.filter((event: event) => event.users.find((userE: userProfile) => userE === user))], eventTabs[2].value)
+            result: () => filterEvents([...arrayToFilter.filter((event: EventP) => event.users.find((userE: Profile) => userE.user_id === user.user_id))], eventTabs[2].value)
         },
         {
             label: "j'organise",
@@ -83,7 +90,7 @@ export default function EventListPage() {
         setCategorySelected(e);
         e === eventCategories[0] ?
             setEventList([...eventsTabled]) :
-            setEventList([...eventsTabled.filter((event: event) => event.category.toLowerCase() === e),
+            setEventList([...eventsTabled.filter((event: EventP) => event.category.toLowerCase() === e),
             ]);
     };
 
@@ -142,7 +149,7 @@ export default function EventListPage() {
             {view === "view_agenda" && (
                 <main className="Grid">
                     {view === "view_agenda" &&
-                        eventList.map((eventC: event, index: number) => (
+                        eventList.map((eventC: EventP, index: number) => (
                             <EventCard
                                 key={eventC.id}
                                 event={eventC}
@@ -153,7 +160,7 @@ export default function EventListPage() {
                                 index={index}
                                 isFlaged={isFlaged(eventC)}
                                 isWithMe={isWithMe(eventC)}
-                                handleGo={(event: event) => handleGo(event)}
+                                handleGo={(event: EventP) => handleGo(event)}
                             />
                         ))}
                 </main>

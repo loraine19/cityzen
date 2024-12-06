@@ -5,34 +5,37 @@ import NavBarTop from "../../components/NavBarTop";
 import SubHeader from "../../components/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
 import { announceCategories } from "../../datas/enumsCategories";
-import { post } from '../../types/type';
 import { label } from "../../types/label";
 import { beInElement, deleteElement, getUsers, imIn } from '../../functions/GetDataFunctions';
-import { usersFaker } from "../../datas/fakers/usersFaker";
 import AnnouncesGridComp from "../../components/announceComps/AnnouncesGridComp";
 import AnnouncesComp from "../../components/announceComps/AnnouncesComp";
 import UserContext from "../../contexts/user.context";
-import { userProfile } from '../../types/user';
-import flagsFaker from "../../datas/fakers/flagsFaker";
-import likesFaker from "../../datas/fakers/likesFaker";
-import postsFaker from '../../datas/fakers/postsFaker';
+import DataContext from "../../contexts/data.context";
+import { PostL, PostUser, Profile } from "../../types/class";
 
 export default function AnnounceListPage() {
     const { user } = useContext(UserContext);
+    const { data, setDataInLocal } = useContext(DataContext);
+    const { flags, profiles } = data;
+    const [likes, setLikes] = useState<PostUser[]>(data.likes);
     const [categorySelected, setCategorySelected] = useState<string>(announceCategories[0]);
     const [notif, setNotif] = useState<string>('');
     const [view, setView] = useState(window.innerWidth > 768 ? "list" : "dashboard");
-    const [announceList, setAnnounceList] = useState<post[]>(postsFaker.sort((a: any, b: any) => b.users.length - a.users.length));
+    const [posts, setPosts] = useState<any>(getUsers(data.posts, likes as [], profiles as [], "post_id"))
+    const [announceList, setAnnounceList] = useState<PostL[]>(posts.sort((a: any, b: any) => b.users?.length - a.users?.length));
     const [mines, setMines] = useState<boolean>(false);
     const [tabSelected, setTabSelected] = useState<string>('');
-    const [announcesTabled, setAnnouncesTabled] = useState<post[]>([]);;
-    const handleLike = (elementLiked: post) => { beInElement(elementLiked, announceList, setAnnounceList, likesFaker, user, "post_id"); };
-    const isFlaged = (element: any) => { return imIn(element, flagsFaker, user.id) ? true : false };
-    const isLiked = (element: any) => { return imIn(element, likesFaker, user.id, "post_id") ? true : false };
-    const handleClickDelete = (id: number) => deleteElement(id, announceList, setAnnounceList)
+    const [announcesTabled, setAnnouncesTabled] = useState<PostL[]>([]);;
+    const handleLike = (elementLiked: PostL) => { beInElement(elementLiked, announceList, setAnnounceList, likes, setLikes, user, "post_id"); setDataInLocal({ ...data, posts: announceList, likes: likes }) };
+    const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
+
+
+    const isLiked = (element: any) => { return imIn(element, likes, user.id, "post_id") ? true : false };
+
+    const handleClickDelete = (id: number) => { deleteElement(id, announceList, setAnnounceList); setDataInLocal({ ...data, posts: data.posts.filter((post: PostL) => post.id !== id) }) }
 
     /////FILTER FUNCTIONS
-    const filterAnnounces = (newArray: post[], value: string) => {
+    const filterAnnounces = (newArray: PostL[], value: string) => {
         value !== tabSelected && setCategorySelected(announceCategories[0]);
         setAnnouncesTabled(newArray);
         setAnnounceList(newArray);
@@ -43,17 +46,17 @@ export default function AnnounceListPage() {
     const announceTabs: label[] = [{
         label: "tous",
         value: "",
-        result: () => { filterAnnounces((postsFaker), announceTabs[0].value) }
+        result: () => { filterAnnounces((posts), announceTabs[0].value) }
     },
     {
         label: "j'aime",
         value: "j'aime",
-        result: () => { filterAnnounces((postsFaker).filter((announce: post) => announce.users.find((userA: userProfile) => userA === user)), announceTabs[1].value) }
+        result: () => { filterAnnounces((posts).filter((announce: PostL) => announce.users?.find((userA: Profile) => userA.user_id === user.user_id)), announceTabs[1].value) }
     },
     {
         label: "les miens",
         value: "les miens",
-        result: () => { filterAnnounces((postsFaker).filter((announce: post) => announce.user_id === user.id), announceTabs[2].value) }
+        result: () => { filterAnnounces((posts).filter((announce: PostL) => announce.user_id === user.id), announceTabs[2].value) }
     },
     ]
 
@@ -62,7 +65,7 @@ export default function AnnounceListPage() {
         functTab();
         typeof (e) !== 'object' ? e = e.toLowerCase() : e = (e.target).innerText.toLowerCase()
         setCategorySelected(e)
-        e === announceCategories[0] ? setAnnounceList([...announcesTabled]) : setAnnounceList([...announcesTabled.filter((post: post) => post.category.toLowerCase() === e)]);
+        e === announceCategories[0] ? setAnnounceList([...announcesTabled]) : setAnnounceList([...announcesTabled.filter((post: PostL) => post.category.toLowerCase() === e)]);
     }
 
 
@@ -73,9 +76,15 @@ export default function AnnounceListPage() {
     }, [announceList])
 
     useEffect(() => {
-        filterAnnounces((postsFaker), announceTabs[0].value);
-        (getUsers(postsFaker, likesFaker as [], usersFaker as [], 'post_id'))
-    }, [postsFaker])
+        filterAnnounces((posts), announceTabs[0].value);
+        (getUsers(posts, likes as [], profiles as [], 'post_id'))
+
+    }, [posts])
+
+    useEffect(() => {
+        setAnnounceList(posts.sort((a: any, b: any) => b.users?.length - a.users?.length));
+        setPosts(getUsers(posts, likes as [], profiles as [], "post_id"))
+    }, [likes])
 
     useEffect(() => {
         window.addEventListener("resize", () => {
@@ -83,7 +92,7 @@ export default function AnnounceListPage() {
         })
     })
 
-    const AnnouncesByFour = (array: post[]) => {
+    const AnnouncesByFour = (array: PostL[]) => {
         let i = 0
         const arrayTotal: any[] = []
         while (i < array.length) {
@@ -125,7 +134,7 @@ export default function AnnounceListPage() {
                 {
                     view === "list" && announcesToGrid.map((line, index) => (
                         <AnnouncesGridComp key={index} line={line} change={change} mines={mines} view={view}
-                            handleClickDelete={handleClickDelete} handleLike={(post: post) => handleLike(post)} user={user.id} />
+                            handleClickDelete={handleClickDelete} handleLike={(post: PostL) => handleLike(post)} user={user.id} />
                     ))}
                 {
                     view === "dashboard" &&
@@ -140,7 +149,7 @@ export default function AnnounceListPage() {
                                     isLiked={isLiked(announce)}
                                     isFlaged={isFlaged(announce)}
                                     handleClickDelete={handleClickDelete}
-                                    handleLike={(post: post) => handleLike(post)} />
+                                    handleLike={(post: PostL) => handleLike(post)} />
                             </div>
                         ))}
                     </div>

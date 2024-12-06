@@ -12,10 +12,9 @@ export function NotifCard(props: notifCardProps) {
     const relationName = relation === "mines" ? "J'ai ecris " : relation === "ImIn" ? "J'y participes" : ""
 
     return (
-
         <Card className="w-resp !h-max FixCard">
             <CardHeader className="FixCardHeader NoImage" floated={false}>
-                <div className="flex items-start justify-between">
+                <div className="flex w-full items-start justify-between">
                     <div className="flex items-center gap-2 mb-1">
                         <Chip value={GetPathElement(type)} className="rounded-full h-max text-ellipsis  " color="cyan">
                         </Chip>
@@ -25,7 +24,8 @@ export function NotifCard(props: notifCardProps) {
                     </div>
                     <Button variant="text" onClick={() => handleClick(notif)} className="flex justify-center items-center rounded-full h-8 w-8 p-4 opacity-60">
                         <span className="material-symbols-outlined unFillThin  !text-4xl" >cancel</span>
-                    </Button></div>
+                    </Button>
+                </div>
             </CardHeader>
             <CardBody className="FixCardBody">
                 <Typography color="gray" className="font-normal">

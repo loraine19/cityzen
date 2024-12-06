@@ -1,11 +1,11 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { post } from '../../types/type';
 import { Link } from "react-router-dom";
 import { usersFaker } from "../../datas/fakers/usersFaker";
+import { PostL } from "../../types/class";
 
 
 
-export default function AnnounceDetailComp(props: { post: post, mines?: boolean, change: (e: any) => void, handleLike: (post: post) => void, isFlaged?: boolean, isLiked?: boolean }) {
+export default function AnnounceDetailComp(props: { post: PostL, mines?: boolean, change: (e: any) => void, handleLike: (post: PostL) => void, isFlaged?: boolean, isLiked?: boolean }) {
     const { post, change, handleLike, isFlaged, isLiked } = props
     const { id, title, description, image, category, created_at, users, user_id } = props.post
     const haveImage = post.image ? true : false
@@ -64,7 +64,7 @@ export default function AnnounceDetailComp(props: { post: post, mines?: boolean,
 
                     <div className="flex items-center gap-2">
                         <button onClick={() => handleLike(post)}>
-                            <Chip value={`.   ${users.length}`} variant="ghost" className="px-3 rounded-full h-full flex items-center gap-5"
+                            <Chip value={`.   ${users?.length}`} variant="ghost" className="px-3 rounded-full h-full flex items-center gap-5"
                                 icon={<span className={`${isLiked && 'fill !text-cyan-500'} material-symbols-outlined  !text-[1.2rem] pl-1 `}>thumb_up    </span>}>
                             </Chip></button>
                         <Link to={`/annonce/${id}`} className="flex items-center gap-2" title={`voir les details de ${title}`}><span className="material-symbols-outlined fill !text-[3rem] text-gray-900  fillThin">

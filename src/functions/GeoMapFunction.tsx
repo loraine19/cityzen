@@ -3,6 +3,7 @@ import {
     setLanguage,
     setRegion,
     fromAddress,
+    fromLatLng,
 } from "react-geocode";
 
 
@@ -21,6 +22,24 @@ export const GetAdressGps = async (adress: string) => {
     catch (error) { console.log(error) }
 }
 
+// Get latitude & longitude from address.
+export const GetAdressString = async (lat: number, lng: number) => {
+    try {
+        let adressString = {} as any
+        const { results } = await fromLatLng(lat, lng);
+        adressString = {
+            address: results[0].address_components[0]?.long_name + " " + results[0].address_components[1].long_name,
+            city: results[0].address_components[2]?.long_name,
+            zipcode: (results[0].address_components[6]?.long_name),
+            lat: lat,
+            lng: lng,
+            formated: results[0].formatted_address
+        }
+
+        return (adressString)
+    }
+    catch (error) { console.log(error) }
+}
 
 
 // // Get address fr
@@ -32,6 +51,9 @@ export const GetAdressGps = async (adress: string) => {
 //         console.log(lat, lng);
 //     })
 //     .catch(console.error);
+
+
+
 
 // // Get latitude & longitude from place_id.
 // fromPlaceId("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")

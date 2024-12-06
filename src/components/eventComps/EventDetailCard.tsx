@@ -1,33 +1,43 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress, Avatar } from "@material-tailwind/react";
-import { avatarData, event, adressGps } from '../../types/type'
+import { adressGps } from '../../types/type'
 import { Link } from "react-router-dom";
 import { AvatarStack } from "./AvatarStack";
 import { MapComp } from "../mapComps/MapComp";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GetAdressGps } from "../../functions/GeoMapFunction";
 import { eventdateInfo } from "../../functions/GetDataFunctions";
-import { usersFaker } from "../../datas/fakers/usersFaker";
-import { userProfile } from '../../types/user';
+import { Address, EventP, Profile } from "../../types/class";
+import DataContext from "../../contexts/data.context";
+import { defaultEventImage } from "../../datas/enumsCategories";
 
-type EventCardProps = { event: event, avatarDatas: avatarData[], change?: (e: any) => void, mines?: boolean }
+type EventCardProps = { event: EventP, address: Address, avatarDatas: Profile[], change?: (e: any) => void, mines?: boolean }
 
 export function EventDetailCard(props: EventCardProps) {
-    const { id, title, image, description, category, participants, start, adress, users, user_id } = props.event
-    const { avatarDatas } = props
+    const { data } = useContext(DataContext)
+    const { profiles } = data
+    const { id, title, description, category, participants_min, start, users, user_id } = props.event
+    const { avatarDatas, address, } = props
     const date = new Date(start)
     const daysBefore: number = ((date.getTime() - (new Date(Date.now())).getTime()) / 1000 / 60 / 60 / 24)
-    const pourcentParticipants: number = Math.floor((avatarDatas.length) / participants * 100)
+    const pourcentParticipants: number = Math.floor((avatarDatas.length) / participants_min * 100)
     let dateClass = daysBefore < 15 && pourcentParticipants < 100 ? "OrangeChip" : "GrayChip";
     const [adressGps, setAdressGps] = useState<adressGps>({ lat: 0, lng: 0 })
-    const userOrga: userProfile | undefined = usersFaker.find(userF => userF.id === user_id) ? usersFaker.find(userP => userP.id === user_id) : usersFaker[0]
+    const userOrga: Profile | undefined = profiles.find((userF: Profile) => userF.id === user_id) ? profiles.find((userP: Profile) => userP.user_id === user_id) : profiles[0]
+
+    const imgCategory: string | undefined | Blob = (defaultEventImage.find(categoryD => categoryD.type === category) ?
+        defaultEventImage.find(categoryD => categoryD.type === category)?.image
+        : defaultEventImage[0].image);
+    const [image] = useState<string>(props.event.image ? (props.event.image) as any : (imgCategory));
 
     useEffect(() => {
         const loadGps = async () => {
-            const adressGpsLoaded = await GetAdressGps(adress);
+            const adressGpsLoaded = await GetAdressGps(address.address + " " + address.zipcode + " " + address.city);
             adressGpsLoaded && setAdressGps(adressGpsLoaded)
         }
         loadGps()
-    }, [])
+    }, [adressGps, address])
+
+
 
 
     return (
@@ -61,16 +71,16 @@ export function EventDetailCard(props: EventCardProps) {
                             <span className="material-symbols-outlined !text-[1.2rem] opacity-80">flag_2</span>
                         </Link>
                     </div>
-                    <div className=" flex  flex-col flex-1 gap-2 py-1 lg:flex-row">
-                        <div className="flex-1 relative overflow-auto">
-                            <div className=" break-all absolute flex-1 ">
+                    <div className=" flex  flex-col flex-1 gap-x-3 py-1 lg:flex-row">
+                        <div className=" relative flex flex-col  flex-auto overflow-auto">
+                            <div className="h-max break-all absolute ">
                                 <Typography>
                                     {description}
                                 </Typography>
                             </div>
                         </div>
 
-                        <div className="bg-cyan-200 flex-1 rounded-full">
+                        <div className=" !w-full  flex-1 rounded-full">
                             <MapComp adressGpsEvent={adressGps} />
                         </div>
                     </div>
@@ -83,7 +93,7 @@ export function EventDetailCard(props: EventCardProps) {
                             <div>
                                 <Typography variant="small" className="font-normal !p-0">{userOrga?.firstName} - {userOrga?.lastName}</Typography>
                                 <Typography variant="small" color="gray" >
-                                    {userOrga?.skills?.join(", ")}
+                                    ◦ {userOrga?.skills?.join(", ")}
                                 </Typography>
                             </div>
 
@@ -96,7 +106,7 @@ export function EventDetailCard(props: EventCardProps) {
 
                     <div className="flex items-center gap-2">
                         <AvatarStack avatarDatas={users} />
-                        <Chip value={participants} variant="ghost" className="rounded-full h-max flex items-center gap-2"
+                        <Chip value={participants_min} variant="ghost" className="rounded-full h-max flex items-center gap-2"
                             icon={<span className="material-symbols-outlined fill !text-[1.2rem]">person</span>}>
                         </Chip>
                     </div>

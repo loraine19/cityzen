@@ -7,9 +7,9 @@ import {
 
 const API_KEY: any = "AIzaSyDNjhPXdHwsECXX68PZ_P3LikGEUdYNBNA"
 
-export default function MapPickUpComp(props: { adress: any, setAdress: any, text?: string, inputStyle?: boolean }) {
+export default function MapPickUpComp(props: { address: any, setAddress: any, text?: string, inputStyle?: boolean }) {
     //
-    const { adress, setAdress, text } = props
+    const { address, setAddress, text } = props
     const [selectedPlace, setSelectedPlace] =
         useState<google.maps.places.PlaceResult | null>(null);
 
@@ -18,7 +18,7 @@ export default function MapPickUpComp(props: { adress: any, setAdress: any, text
         <APIProvider
             apiKey={API_KEY}
             solutionChannel='GMP_devsite_samples_v3_rgmautocomplete'>
-            <PlaceAutocomplete onPlaceSelect={setSelectedPlace} adress={adress} setAdress={setAdress} text={text} inputStyle={props.inputStyle} />
+            <PlaceAutocomplete onPlaceSelect={setSelectedPlace} address={address} setAddress={setAddress} text={text} inputStyle={props.inputStyle} />
         </APIProvider>
     );
 };
@@ -26,14 +26,14 @@ export default function MapPickUpComp(props: { adress: any, setAdress: any, text
 
 interface PlaceAutocompleteProps {
     onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
-    adress: string,
-    setAdress: any,
+    address: string,
+    setAddress: any,
     text?: string,
     inputStyle?: boolean
 }
 
 
-const PlaceAutocomplete = ({ onPlaceSelect, setAdress, text, inputStyle }: PlaceAutocompleteProps) => {
+const PlaceAutocomplete = ({ onPlaceSelect, setAddress, text, inputStyle }: PlaceAutocompleteProps) => {
     const [placeAutocomplete, setPlaceAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const places = useMapsLibrary('places');
@@ -41,9 +41,11 @@ const PlaceAutocomplete = ({ onPlaceSelect, setAdress, text, inputStyle }: Place
     useEffect(() => {
         if (!places || !inputRef.current) return;
         const options = {
-            fields: ['geometry', 'name', 'formatted_address']
+            fields: ['formatted_address', 'address_components', 'place_id', 'geometry']
         };
         setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
+
+        console.log("place", placeAutocomplete)
     }, [places]);
 
 
@@ -52,13 +54,13 @@ const PlaceAutocomplete = ({ onPlaceSelect, setAdress, text, inputStyle }: Place
         placeAutocomplete.addListener('place_changed', () => {
             onPlaceSelect(placeAutocomplete.getPlace());
             //
-            setAdress(inputRef.current?.value);
+            setAddress(inputRef.current?.value);
             //
         });
     }, [onPlaceSelect, placeAutocomplete, inputRef]);
 
     const changeValue = () => {
-        setAdress(inputRef.current?.value)
+        setAddress(inputRef.current?.value)
 
     }
     const placeHolder = text ? text : "choisir une adresse"

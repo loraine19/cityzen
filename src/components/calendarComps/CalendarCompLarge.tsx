@@ -1,27 +1,29 @@
 import { useContext, useEffect, useState } from 'react';
-import { event } from '../../types/type';
 import { Button, Card, Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react';
 import { EventCard } from '../eventComps/EventCard';
-import { beInElement, getDays, getUsers, getWeeks, imIn, shortDateString } from '../../functions/GetDataFunctions';
-import eventUsersFaker from '../../datas/fakers/eventUsers';
-import flagsFaker from '../../datas/fakers/flagsFaker';
-import { usersFaker } from '../../datas/fakers/usersFaker';
+import { beInElement, getDays, getUsers, getUsersDetail, getWeeks, imIn, shortDateString } from '../../functions/GetDataFunctions';
 import UserContext from '../../contexts/user.context';
-import eventsFaker from '../../datas/fakers/eventsFaker';
+import dataContext from '../../contexts/data.context';
+import { EventP } from '../../types/class';
 
-export default function CalendarCompLarge(props: { eventList: event[] }) {
+export default function CalendarCompLarge(props: { eventList: EventP[] }) {
     const { user } = useContext(UserContext)
-    type day = { date: Date, events: event[], text: String }
+
+    const { data } = useContext(dataContext)
+    const { events, users, profiles, flags } = data
+    const [participants, setParticipants] = useState(data.particpants)
+    const UsersProfile = (getUsersDetail(users, profiles))
+    type day = { date: Date, events: EventP[], text: String }
     const dayInMilli = 24 * 60 * 60 * 1000
     const numberOfwweks = 2
     const [startDateBackup] = useState<Date>(new Date().getDay() > 0 ? new Date() : new Date(new Date().getTime() - 1 * dayInMilli));
     const [startDate, setStartDate] = useState<string>(startDateBackup.toDateString());
-    const [eventList, setEventList] = useState<event[]>(getDays(getUsers(eventsFaker, eventUsersFaker as [], usersFaker as [], "event_id")))
+    const [eventList, setEventList] = useState<EventP[]>(getDays(getUsers(events, participants as [], UsersProfile as [], "event_id")))
     const [weeks, setWeeks] = useState<day[][]>([])
 
-    const isFlaged = (element: any) => { return imIn(element, flagsFaker, user.id) ? true : false };
-    const isWithMe = (element: any) => { return imIn(element, eventUsersFaker, user.id, "event_id") ? true : false };
-    const handleGo = (elementLiked: event) => { beInElement(elementLiked, eventList, setEventList, eventUsersFaker, user, "event_id") }
+    const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
+    const isWithMe = (element: any) => { return imIn(element, participants, user.id, "event_id") ? true : false };
+    const handleGo = (elementLiked: EventP) => { beInElement(elementLiked, eventList, setEventList, participants, setParticipants, user, "event_id") }
 
     /// NAVIGATE WEEK BTN
     const addWeek = () => { setStartDate((new Date(new Date(startDate).getTime() + 7 * dayInMilli)).toDateString()) }
@@ -112,7 +114,7 @@ export default function CalendarCompLarge(props: { eventList: event[] }) {
                                             <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
                                                 <EventCard
                                                     event={event} avatarDatas={event.users} change={() => { }} index={index}
-                                                    handleGo={(event: event) => handleGo(event)} isFlaged={isFlaged(event)} isWithMe={isWithMe(event)}
+                                                    handleGo={(event: EventP) => handleGo(event)} isFlaged={isFlaged(event)} isWithMe={isWithMe(event)}
                                                     handleClickDelete={() => { }} />
                                             </PopoverContent>
                                         </Popover>

@@ -1,18 +1,24 @@
 import { useFormik } from 'formik';
 import { object, string, array } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
-import { post } from '../../types/type';
-import postsFaker from '../../datas/fakers/postsFaker';
+import { useContext, useEffect, useState } from 'react';
 import { AnnounceForm } from '../../components/announceComps/AnnounceForm';
+import DataContext from '../../contexts/data.context';
+import { Post } from '../../types/class';
+import { ConfirmModal } from '../../components/ConfirmModal';
 
 
 export default function AnnounceEditPage() {
+
     const { id } = useParams()
-    let found = (postsFaker.find(post => post.id == parseInt(id!)))
-    const [selectedAnnounce] = useState<post>(found ? (found) : (postsFaker[0]))
+    const { data, setDataInLocal } = useContext(DataContext)
+    const { posts } = data
+
+    const found = (posts.find((post: Post) => post.id == parseInt(id!)))
+    useEffect(() => { !found && navigate(`/annonce ${id}`) }, [id])
+    const [selectedAnnounce] = useState<Post>(found ? (found) : (posts[0]))
     const navigate = useNavigate();
-    const [newAnnounce, setNewAnnounce] = useState<post>(selectedAnnounce);
+    const [newAnnounce] = useState<Post>(selectedAnnounce);
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -21,23 +27,39 @@ export default function AnnounceEditPage() {
 
     })
     const [value, setValue] = useState("");
-    value && console.log("avoid compile error ", value)
+
+
+    const [open, setOpen] = useState(false);
     const formik = useFormik({
-        initialValues: newAnnounce,
+        initialValues: newAnnounce as Post,
         validationSchema: formSchema,
         onSubmit: values => {
-            setNewAnnounce(values)
-            alert("Announce enregistrée : " + JSON.stringify(values, null, 2));
-            navigate("/annonce")
+            formik.values = values
+            setOpen(true)
+            value && console.log("avoid compile error ", value)
         }
     });
 
-
+    const index = data.posts.findIndex((element: any) => element.id === newAnnounce.id);
+    function saveAnnounce() {
+        data.posts[index] = formik.values as Post
+        setDataInLocal({ ...data, posts: data.posts })
+    }
 
 
     return (
         <div className="Body orange">
-
+            <ConfirmModal
+                open={open}
+                handleOpen={() => setOpen(false)}
+                handleCancel={() => { setOpen(false) }}
+                handleConfirm={() => {
+                    saveAnnounce();
+                    navigate(`/annonce`);
+                    setOpen(false)
+                }}
+                title={"Confimrer la modification"}
+                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
             <AnnounceForm formik={formik} setValue={setValue} />
         </div >
     )

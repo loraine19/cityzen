@@ -36,69 +36,80 @@ import IssueDetailPage from "./pages/service/issue/IssueDetailPage";
 import ConciliationListPage from "./pages/conciliation/ConciliationListPage";
 import ConciliationDetailPage from "./pages/conciliation/ConciliationDetailPage";
 import NotificationPage from "./pages/myInfos/NotificationPage";
+import { DataProvider } from "./contexts/data.context";
+import NotFindPage from "./pages/NotFindPage";
+
+
 
 function App() {
+
+
     return (
         <>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');</style>
+            <DataProvider>
+                <UserProvider>
+                    <BrowserRouter  >
+                        <Routes >
+                            <Route path="/" element={<DashboardPage />} />
+                            <Route path="/signin" element={<SignInPage />} />
+                            <Route path="/signup" element={<SignUpPage />} />
+                            <Route path="/signup_details" element={<SignUpDetailPage />} />
+                            <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
+                            <Route path="/" element={<DashboardPage />} />
+                            <Route path="/signup-details" element={<SignUpDetailPage />} />
+                            <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
 
-            <UserProvider>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<DashboardPage />} />
-                        <Route path="/signin" element={<SignInPage />} />
-                        <Route path="/signup" element={<SignUpPage />} />
-                        <Route path="/signup_details" element={<SignUpDetailPage />} />
-                        <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
-                        <Route path="/" element={<DashboardPage />} />
-                        <Route path="/signup-details" element={<SignUpDetailPage />} />
-                        <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
+                            <Route path="/myprofile" element={<MyInfosPage />} />
+                            <Route path="/notification" element={<NotificationsPage />} />
 
-                        <Route path="/myprofile" element={<MyInfosPage />} />
-                        <Route path="/notification" element={<NotificationsPage />} />
+                            <Route path="/service" element={<ServiceListPage />} />
+                            <Route path="/service/:id" element={<ServiceDetailPage />} />
+                            <Route path="/service/create" element={<ServiceCreatePage />} />
+                            <Route path="/service/edit/:id" element={<ServiceEditPage />} />
 
-                        <Route path="/service" element={<ServiceListPage />} />
-                        <Route path="/service/:id" element={<ServiceDetailPage />} />
-                        <Route path="/service/create" element={<ServiceCreatePage />} />
-                        <Route path="/service/edit/:id" element={<ServiceEditPage />} />
+                            <Route path="/litige/:id" element={<IssueDetailPage />} />
+                            <Route path="/litige/create/:id" element={<IssueCreatePage />} />
 
-                        <Route path="/litige/:id" element={<IssueDetailPage />} />
-                        <Route path="/litige/create/:id" element={<IssueCreatePage />} />
+                            <Route path="/conciliation" element={<ConciliationListPage />} />
+                            <Route path="/conciliation/:id" element={<ConciliationDetailPage />} />
 
-                        <Route path="/conciliation" element={<ConciliationListPage />} />
-                        <Route path="/conciliation/:id" element={<ConciliationDetailPage />} />
+                            <Route path="/evenement" element={<EventListPage />} />
+                            <Route path="/evenement/create" element={<EventCreatePage />} />
+                            <Route path="/evenement/:id" element={<EventDetailPage />} />
+                            <Route path="/evenement/edit/:id" element={<EventEditPage />} />
 
-                        <Route path="/evenement" element={<EventListPage />} />
-                        <Route path="/evenement/create" element={<EventCreatePage />} />
-                        <Route path="/evenement/:id" element={<EventDetailPage />} />
-                        <Route path="/evenement/edit/:id" element={<EventEditPage />} />
+                            <Route path="/flag/:id" element={<FlagDetailPage />} />
+                            <Route path="/flag/edit/:id" element={<FlagEditPage />} />
+                            <Route path="/flag" element={<FlagPage />} />
 
-                        <Route path="/flag/:id" element={<FlagDetailPage />} />
-                        <Route path="/flag/edit/:id" element={<FlagEditPage />} />
-                        <Route path="/flag" element={<FlagPage />} />
+                            <Route path="/sondage" element={<SurveyListPage />} />
+                            <Route path="/sondage/:id" element={<SurveyDetailPage />} />
+                            <Route path="/sondage/edit/:id" element={<SurveyEditPage />} />
+                            <Route path="/sondage/create" element={<SurveyCreatePage />} />
+                            <Route path="/cagnotte/:id" element={<SurveyDetailPoolPage />} />
+                            <Route path="/cagnotte/edit/:id" element={<SurveyEditPoolPage />} />
 
-                        <Route path="/sondage" element={<SurveyListPage />} />
-                        <Route path="/sondage/:id" element={<SurveyDetailPage />} />
-                        <Route path="/sondage/edit/:id" element={<SurveyEditPage />} />
-                        <Route path="/sondage/create" element={<SurveyCreatePage />} />
-                        <Route path="/cagnotte/:id" element={<SurveyDetailPoolPage />} />
-                        <Route path="/cagnotte/edit/:id" element={<SurveyEditPoolPage />} />
+                            <Route path="/annonce" element={<AnnounceListPage />} />
+                            <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
+                            <Route path="/annonce/create" element={<AnnounceCreatePage />} />
+                            <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
+                            <Route path="/myprofile" element={<MyInfosPage />} />
+                            <Route path="/notification" element={<NotificationPage />} />
+                            <Route path="/rules" element={<RulesPage />} />
+                            <Route path="/flag" element={<FlagPage />} />
+                            <Route path="/flag/edit/:id" element={<FlagEditPage />} />
+                            <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
+                            <Route path="/annonce/create" element={<AnnounceCreatePage />} />
+                            <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
 
-                        <Route path="/annonce" element={<AnnounceListPage />} />
-                        <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
-                        <Route path="/annonce/create" element={<AnnounceCreatePage />} />
-                        <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
-                        <Route path="/myprofile" element={<MyInfosPage />} />
-                        <Route path="/notification" element={<NotificationPage />} />
-                        <Route path="/rules" element={<RulesPage />} />
-                        <Route path="/flag" element={<FlagPage />} />
-                        <Route path="/flag/edit/:id" element={<FlagEditPage />} />
-                        <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
-                        <Route path="/annonce/create" element={<AnnounceCreatePage />} />
-                        <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
-                    </Routes>
-                </BrowserRouter>
-            </UserProvider>
+                            <Route path="/*" element={<NotFindPage />} />
+
+
+                        </Routes>
+                    </BrowserRouter>
+                </UserProvider>
+            </DataProvider>
         </>
     );
 }

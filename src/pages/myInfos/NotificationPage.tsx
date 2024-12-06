@@ -2,9 +2,6 @@
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context";
 import { deleteElementJoin, getNotifications } from "../../functions/GetDataFunctions";
-import postsFaker from "../../datas/fakers/postsFaker";
-import { poolsFaker, surveysFaker } from "../../datas/fakers/surveyFaker";
-import { servicesFaker } from "../../datas/fakers/servicesFaker";
 import { label } from "../../types/label";
 import { notif } from "../../types/type";
 import NavBarBottom from "../../components/NavBarBottom";
@@ -12,21 +9,26 @@ import NavBarTop from "../../components/NavBarTop";
 import SubHeader from "../../components/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
 import { NotifCard } from "../../components/NotifCard";
-import eventsFaker from "../../datas/fakers/eventsFaker";
 import { notifCategories } from "../../datas/enumsCategories";
+import DataContext from "../../contexts/data.context";
+import { Post, Survey, Pool, Service } from "../../types/class";
 
 export default function NotificationPage() {
     const { user, setUserNotif } = useContext(UserContext)
     const idS = user.id ? user.id : 0
-    const notificationList = getNotifications(postsFaker, eventsFaker, surveysFaker, poolsFaker, servicesFaker, idS);
+    const { data } = useContext(DataContext)
+    const posts: Post[] = data.posts
+    const events: Event[] = data.events
+    const surveys: Survey[] = data.surveys
+    const pools: Pool[] = data.pools
+    const services: Service[] = data.services
+    const notificationList = getNotifications(posts, events, surveys, pools, services, idS);
     const [notifList, setNotifList] = useState<any[]>(notificationList ? notificationList : []);
     const [arrayToFilter] = useState<any>(notificationList);
     const [tabSelected, setTabSelected] = useState<string>('Tous');
     const [categorySelected, setCategorySelected] = useState<string>(notifCategories[0]);
     const [notifFind, setNotifFind] = useState<string>('');
-
-    const handleDelete = (notif: notif) => deleteElementJoin(notif, notifList, setNotifList)
-
+    const handleDelete = (notif: notif) => { deleteElementJoin(notif, notifList, setNotifList) }
 
     /////FILTER FUNCTIONS
     const filterNotifs = (newArray: any[], value: string) => {
