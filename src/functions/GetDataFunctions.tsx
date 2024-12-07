@@ -205,8 +205,8 @@ export const getWeeks = (day: any, eventList: EventP[], numberOfwweks: number) =
 ///// DELET ELEMENT NOTIF / FLAG 
 
 export const deleteElement = (id: number, array: any[], setArray: any,) => {
-    let index = array.findIndex((element: any) => element.id === id);
-    array.splice(index, 1); setArray([...array]);
+    setArray([...array.filter((element: any) => element.id !== id)]);
+
 }
 
 export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any) => {
@@ -236,10 +236,6 @@ export const beInElement = (elementLiked: PostL | EventP, array: any[], setArray
     setArrayJoin([...arrayJoin]);
     setArray([...array]);
     elementLiked.users = [...users]
-
-
-
-
 }
 
 
@@ -263,3 +259,35 @@ export const FindAdressData = async (addressSaisie: string, array: Address[], da
     else return findAdress
 }
 
+//// GET CATEGORI SERVICE 
+export const GetCategory = (service: Service): string => {
+    return service.category === 1 ? "cat1" : service.category === 2 ? "cat2" : service.category === 3 ? "cours" : "autre"
+
+}
+export const GetPoints = (service: Service, userAuthor: Profile, userResp?: Profile): number[] => {
+    const base = Number(((service.hard / 2 + service.skill / 2) + 1).toFixed(1))
+    return userResp ? [base + userResp.assistance / 2] : service.type === "do" ? [base + userAuthor.assistance / 2] : [base, (base + 1.5)]
+
+}
+
+export const isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
+
+export const AcceptUserResp = (id: number, array: Service[], setArray: any, step: 0 | 1 | 2 | 3) => {
+    let index = array.findIndex((element: Service) => element.id === id);
+    array[index].status = step
+    setArray([...array]);
+}
+
+export const takeElement = (id: number, array: Service[], setArray: any, userProfile: Profile) => {
+    let index = array.findIndex((element: Service) => element.id === id);
+    if (array[index].user_id_resp === userProfile?.user_id) {
+        array[index].user_id_resp = 0;
+        array[index].status = 0;
+    }
+    else {
+        array[index].user_id_resp = userProfile?.user_id;
+        array[index].status = 0;
+    }
+    console.log(array)
+    setArray([...array]);
+}

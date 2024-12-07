@@ -7,7 +7,7 @@ import { defaultEventImage } from "../../datas/enumsCategories";
 import { useState } from "react";
 import { EventP, Profile } from "../../types/class";
 
-type EventCardProps = { event: EventP, avatarDatas: Profile[], change: (e: any) => void, mines?: boolean, handleClickDelete: (index: number) => void, index: number, isFlaged?: boolean, isWithMe?: boolean, handleGo: (event: EventP) => void }
+type EventCardProps = { event: EventP, avatarDatas: Profile[], change: (e: any) => void, mines?: boolean, handleClickDelete: (id: number) => void, index: number, isFlaged?: boolean, isWithMe?: boolean, handleGo: (event: EventP) => void }
 
 export function EventCard(props: EventCardProps) {
     const { id, title, description, category, participants_min, start } = props.event

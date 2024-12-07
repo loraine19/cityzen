@@ -1,6 +1,6 @@
 // + calendar view
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import NavBarBottom from "../../components/NavBarBottom";
 import { CategoriesSelect } from "../../components/CategoriesSelect";
 import NavBarTop from "../../components/NavBarTop";
@@ -20,20 +20,27 @@ export default function EventListPage() {
     const { data, setDataInLocal } = useContext(DataContext)
     const { events, flags, profiles } = data
     const [participants, setParticipants] = useState<Profile[]>(data.participants)
-    const navigate = useNavigate();
     const [view, setView] = useState("view_agenda");
     const [tabSelected, setTabSelected] = useState<string>("");
     const [categorySelected, setCategorySelected] = useState<string>(eventCategories[0]);
     const [notif, setNotif] = useState<string>("");
     const [eventsTabled, setEventsTabled] = useState<EventP[]>([]);
     const [mines, setMines] = useState<boolean>(false);
+    const activeTab: any = document.querySelector(`li[data-value="${tabSelected}"]`);
+
+    /// insert params queri 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const params = (searchParams.get("search"))
+    useEffect(() => {
+        const Tab: any = document.querySelector(`li[data-value="${params}"]`);
+        Tab && Tab.click();
+    }, [params])
+
 
     //// Initialise array
     const [eventsWithUsers] = useState<EventP[]>(getDays(getUsers(events, participants as [], profiles as [], "event_id")));
     const arrayToFilter: EventP[] = eventsWithUsers;
     const [eventList, setEventList] = useState<EventP[]>(eventsWithUsers);
-
-
 
     ///// pass to card  
     const isFlaged = (element: any) => { return imIn(element, flags, user.id) };
@@ -45,16 +52,16 @@ export default function EventListPage() {
     const handleClickDelete = (id: number) => {
         deleteElement(id, eventList, setEventList);
         setDataInLocal({ ...data, events: data.events.filter((event: EventP) => event.id !== id) })
+        activeTab.click();
     }
-    const handleClick = () => navigate("/evenement/create");
-
     /////FILTER FUNCTIONS
     const filterEvents = (newArray: EventP[], value: string) => {
         value !== tabSelected && setCategorySelected(eventCategories[0]);
         setEventsTabled(newArray);
         setEventList(newArray);
         setTabSelected(value);
-        value === "j'organise" ? setMines(true) : setMines(false);
+        value === "mines" ? setMines(true) : setMines(false);
+        setSearchParams({ search: value });
     };
 
     const eventTabs: label[] = [
@@ -65,18 +72,18 @@ export default function EventListPage() {
         },
         {
             label: "validé",
-            value: "validé",
+            value: "ok",
             result: () => filterEvents([...arrayToFilter.filter((event) => event.participants_min <= event.users.length)], eventTabs[1].value),
 
         },
         {
             label: "j'y vais",
-            value: "j'y vais",
+            value: "igo",
             result: () => filterEvents([...arrayToFilter.filter((event: EventP) => event.users.find((userE: Profile) => userE.user_id === user.user_id))], eventTabs[2].value)
         },
         {
             label: "j'organise",
-            value: "j'organise",
+            value: "mines",
             result: () => filterEvents([...arrayToFilter.filter((event) => event.user_id === user.id)], eventTabs[3].value)
         },
     ];
@@ -92,6 +99,7 @@ export default function EventListPage() {
             setEventList([...eventsTabled]) :
             setEventList([...eventsTabled.filter((event: EventP) => event.category.toLowerCase() === e),
             ]);
+        setSearchParams({ search: tabSelected, category: e });
     };
 
     //// CALENDAR VIEW FUNCTIONS
@@ -109,7 +117,6 @@ export default function EventListPage() {
             } na été trouvé`
         );
     }, [eventList]);
-
 
 
 
@@ -156,7 +163,7 @@ export default function EventListPage() {
                                 avatarDatas={eventC.users}
                                 change={change}
                                 mines={mines}
-                                handleClickDelete={(index: number) => handleClickDelete(index)}
+                                handleClickDelete={(id: number) => handleClickDelete(id)}
                                 index={index}
                                 isFlaged={isFlaged(eventC)}
                                 isWithMe={isWithMe(eventC)}
@@ -168,7 +175,7 @@ export default function EventListPage() {
             {view === "event" && (
                 <main>{<CalendarCompLarge eventList={eventList} />}</main>
             )}
-            <NavBarBottom handleClick={handleClick} addBtn={true} />
+            <NavBarBottom addBtn={true} />
         </div>
     );
 }

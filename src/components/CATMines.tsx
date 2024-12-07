@@ -4,42 +4,49 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ConfirmModal } from "./ConfirmModal";
 import DataContext from "../contexts/data.context";
 import { GetArrayElement } from "../functions/GetDataFunctions";
+import { action } from "../types/class";
 
-type value = { icon: string, function: () => void, title?: string }
-type CTAMinesProps = { values?: value[], icon3?: boolean, id: number, disabled1?: boolean, disabled2?: boolean, }
+type CTAMinesProps = { values?: action[], icon3?: boolean, id: number, disabled1?: boolean, disabled2?: boolean, }
 
 export default function CTAMines(props: CTAMinesProps) {
     const type = (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
     const navigate = useNavigate();
     const { data, setDataInLocal } = useContext(DataContext)
-    const icon2 = props.disabled2 ? (type + ' non modifiable') : 'Modifier'
+    const { values, disabled1, disabled2, id } = props
+    const icon2 = disabled2 ? (type + ' non modifiable') : 'Modifier'
     const array = GetArrayElement(type)
-
+    const [icon3] = useState<boolean>(props.icon3 ? true : false)
 
     //// ENVOYER UN ARRAY INDENTIQUE SINON IL PREND CES VALEUR 
-    const [defaultValues, setDefaultValues] = useState<value[]>(
-        [
-            {
-                icon: 'Supprimer', function: () => {
-                    setOpen(true);
-                    setDataInLocal({ ...data, [array]: data[array].filter((element: any) => element.id !== props.id) });
-                    navigate({ pathname: `/${type}` })
-                }, title: `Supprimer ${type} ${props.id}`
+    const [buttons, setButtons] = useState<action[]>(
+        [{
+            icon: 'Supprimer',
+            title: `Supprimer ${type} `,
+            body: (data[array].find((element: any) => element.id === id)).title,
+            function: () => {
+                setDataInLocal({ ...data, [array]: data[array].filter((element: any) => element.id !== id) });
+                navigate({ pathname: `/${type}` })
             },
-            { icon: icon2, function: () => navigate({ pathname: `/${type}/edit/${props.id}` }), title: "Modifier" },
-            { icon: 'Relancer', function: () => { alert(`Voulez-vous relancer ${type} ${props.id} ?`) }, title: "Relancer" },
+        },
+        {
+            icon: icon2,
+            title: "Modifier",
+            body: (data[array].find((element: any) => element.id === id)).title,
+            function: () => navigate({ pathname: `/${type}/edit/${id}` }),
+        },
+        {
+            icon: 'Relancer',
+            title: "Relancer",
+            body: (data[array].find((element: any) => element.id === id)).title,
+            function: () => { alert(`Voulez-vous relancer ${type} ${id} ?`) }
+        },
         ]
     )
 
-    useEffect(() => {
-        props?.values && setDefaultValues(props.values)
-    }, [props])
-    const [icon3, setIcon3] = useState<boolean>(false)
-    props?.icon3 && setIcon3(props.icon3)
-
+    useEffect(() => { values && setButtons(values) }, [values])
     const [open, setOpen] = useState(false);
-    const [modalTitle, setModalTitle] = useState("");
     const [index, setIndex] = useState(0)
+    console.log(buttons)
 
     return (
         <footer className="flex gap-2 gap-x-4 w-respLarge justify-around py-2">
@@ -48,27 +55,31 @@ export default function CTAMines(props: CTAMinesProps) {
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={() => {
-                    defaultValues[index].function();
+                    buttons[index].function();
                     setOpen(false)
                 }}
-                title={"Confimrer "}
-                element={modalTitle} />
+                title={buttons[index].title}
+                element={buttons[index].body} />
 
             <Button className="flex items-center justify-center rounded-full w-full shadow lgBtn"
                 color="white"
-                onClick={() => { setOpen(true), setModalTitle(defaultValues[0].title + ' ' + type), setIndex(0) }} disabled={props.disabled1} >
-                {defaultValues[0].icon}
+                onClick={() => { setOpen(true), setIndex(0) }}
+                disabled={disabled1} >
+                {buttons[0].icon}
             </Button>
+
             <Button className="flex items-center justify-center rounded-full w-full lgBtn"
                 color="white"
-                onClick={() => { setOpen(true), setModalTitle(defaultValues[1].title + ' ' + type), setIndex(1) }} disabled={props.disabled2} >
-                {defaultValues[1].icon}
+                onClick={() => { setOpen(true), setIndex(1) }}
+                disabled={disabled2} >
+                {buttons[1].icon}
             </Button>
-            <Button className={icon3 ? "flex items-center justify-center rounded-full w-full lgBtn" : "hidden"}
-                onClick={() => { setOpen(true), setModalTitle(defaultValues[0].title + ' '), setIndex(2) }}>
 
-                {defaultValues[2].icon}
-            </Button>
+            {icon3 &&
+                <Button className={icon3 ? "flex items-center justify-center rounded-full w-full lgBtn" : "hidden"}
+                    onClick={() => { setOpen(true), setIndex(2) }}>
+                    {buttons[2].icon}
+                </Button>}
         </footer>
     );
 }

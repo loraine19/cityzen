@@ -12,6 +12,7 @@ import AnnouncesComp from "../../components/announceComps/AnnouncesComp";
 import UserContext from "../../contexts/user.context";
 import DataContext from "../../contexts/data.context";
 import { PostL, PostUser, Profile } from "../../types/class";
+import { useSearchParams } from "react-router-dom";
 
 export default function AnnounceListPage() {
     const { user } = useContext(UserContext);
@@ -26,13 +27,25 @@ export default function AnnounceListPage() {
     const [mines, setMines] = useState<boolean>(false);
     const [tabSelected, setTabSelected] = useState<string>('');
     const [announcesTabled, setAnnouncesTabled] = useState<PostL[]>([]);;
+
+    /// insert params queri 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const params = (searchParams.get("search"))
+    useEffect(() => {
+        const Tab: any = document.querySelector(`li[data-value="${params}"]`);
+        Tab && Tab.click();
+    }, [params])
+
     const handleLike = (elementLiked: PostL) => { beInElement(elementLiked, announceList, setAnnounceList, likes, setLikes, user, "post_id"); setDataInLocal({ ...data, posts: announceList, likes: likes }) };
     const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
 
 
     const isLiked = (element: any) => { return imIn(element, likes, user.id, "post_id") ? true : false };
 
-    const handleClickDelete = (id: number) => { deleteElement(id, announceList, setAnnounceList); setDataInLocal({ ...data, posts: data.posts.filter((post: PostL) => post.id !== id) }) }
+    const handleClickDelete = (id: number) => {
+        deleteElement(id, announceList, setAnnounceList);
+        setDataInLocal({ ...data, posts: data.posts.filter((post: PostL) => post.id !== id) })
+    }
 
     /////FILTER FUNCTIONS
     const filterAnnounces = (newArray: PostL[], value: string) => {
@@ -40,7 +53,8 @@ export default function AnnounceListPage() {
         setAnnouncesTabled(newArray);
         setAnnounceList(newArray);
         setTabSelected(value);
-        value === "les miens" ? setMines(true) : setMines(false);
+        value === "mines" ? setMines(true) : setMines(false);
+        setSearchParams({ search: value });
     }
 
     const announceTabs: label[] = [{
@@ -50,12 +64,12 @@ export default function AnnounceListPage() {
     },
     {
         label: "j'aime",
-        value: "j'aime",
+        value: "liked",
         result: () => { filterAnnounces((posts).filter((announce: PostL) => announce.users?.find((userA: Profile) => userA.user_id === user.user_id)), announceTabs[1].value) }
     },
     {
         label: "les miens",
-        value: "les miens",
+        value: "mines",
         result: () => { filterAnnounces((posts).filter((announce: PostL) => announce.user_id === user.id), announceTabs[2].value) }
     },
     ]
@@ -140,7 +154,7 @@ export default function AnnounceListPage() {
                     view === "dashboard" &&
                     <div className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
                         {announceList.map((announce, index) => (
-                            <div className="pt-6 h-[35Vh]" key={index}>
+                            <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
                                 <AnnouncesComp
                                     post={announce}
                                     change={change}

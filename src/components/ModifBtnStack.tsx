@@ -1,11 +1,13 @@
 import { Button } from "@material-tailwind/react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ConfirmModal } from "./ConfirmModal";
+import { action } from "../types/class";
+import DataContext from "../contexts/data.context";
+import { GetArrayElement } from "../functions/GetDataFunctions";
 
-type value = { icon: string; function: () => void };
 type ModifBtnStackProps = {
-    values?: value[];
+    values?: action[];
     icon3?: boolean;
     id: number;
     disabledEdit?: boolean;
@@ -18,72 +20,85 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
         .toString()
         .replace("=", "");
     isPool && (type = "cagnotte");
+    const { id, values, disabledEdit, handleClickDelete } = props;
+    const { data } = useContext(DataContext);
+    const array = GetArrayElement(type)
 
     const navigate = useNavigate();
-    const [defaultValues, setDefaultValues] = useState<value[]>([
+    const [buttons, setButtons] = useState<action[]>([
         {
             icon: "edit",
+            title: `Modifier ${type}`,
+            body: (data[array].find((element: any) => element.id === id)).title,
             function: () => navigate({ pathname: `/${type}/edit/${props.id}` }),
         },
         {
             icon: "close",
-            function: () => {
-                alert(`Voulez-vous vraiment supprimer ${type} ${props.id} ?`);
-            },
+            title: `Supprimer ${type}`,
+            body: (data[array].find((element: any) => element.id === id)).title,
+            function: () => { handleClickDelete && handleClickDelete(id) },
         },
         {
             icon: "groups",
+            title: `Relancer ${type}`,
+            body: (data[array].find((element: any) => element.id === id)).title,
             function: () => {
                 alert(`Voulez-vous relancer ${type} ${props.id} ?`);
             },
         },
     ]);
-    const [icon3, setIcon3] = useState<boolean>(false);
-    props?.icon3 && setIcon3(props.icon3);
-    props?.values && setDefaultValues(props.values);
-
-
-
+    const [icon3] = useState<boolean>(props.icon3 ? true : false);
+    useEffect(() => { values && setButtons(values) }, [values])
     const [open, setOpen] = useState(false);
-    const { handleClickDelete } = props;
+    const [index, setIndex] = useState(0)
 
     return (
-        <div className="flex gap-1 items-center -space-x-0">
-            <ConfirmModal open={open} handleOpen={() => setOpen(false)} handleCancel={() => { setOpen(false) }} handleConfirm={() => { handleClickDelete && handleClickDelete(props.id) }} title={"voulez vous vraiment supprimer"} element={type + " " + props.id} />
+        <div className="flex gap-2 items-center ">
+            <ConfirmModal
+                open={open}
+                handleOpen={() => setOpen(false)}
+                handleCancel={() => { setOpen(false) }}
+                handleConfirm={() => {
+                    buttons[index].function();
+                    setOpen(false)
+                }}
+                title={buttons[index].title}
+                element={buttons[index].body} />
+
             <Button
                 variant="outlined"
                 className="flex items-center justify-center rounded-full h-9 w-9 p-1 "
-                onClick={defaultValues[0].function}
-                disabled={props.disabledEdit}
+                onClick={() => { setOpen(true), setIndex(0) }}
+                disabled={disabledEdit}
             >
                 <span className="material-symbols-outlined unFillThin !text-[1.5rem]">
-                    {defaultValues[0].icon}
+                    {buttons[0].icon}
                 </span>
             </Button>
+
             <Button
                 color="red"
                 variant="outlined"
                 className="flex items-center justify-center error rounded-full h-9 w-9 p-1 "
-                onClick={() => setOpen(true)}
-
+                onClick={() => { setOpen(true), setIndex(1) }}
             >
                 <span className="material-symbols-outlined  fillThin !text-[1.5rem]">
-                    {defaultValues[1].icon}
+                    {buttons[1].icon}
                 </span>
             </Button>
-            <Button
+
+            {icon3 && <Button
                 variant="outlined"
-                className={
-                    icon3
-                        ? "flex items-center justify-center rounded-full h-9 w-9 p-1"
-                        : "hidden"
-                }
-                onClick={defaultValues[2].function}
+                color="cyan"
+                className={"flex items-center justify-center rounded-full h-9 w-9 p-1"}
+                onClick={() => { setOpen(true), setIndex(0) }}
             >
                 <span className="material-symbols-outlined fillThin !text-[1.5rem]">
-                    {defaultValues[2].icon}
+                    {buttons[2].icon}
                 </span>
-            </Button>
+            </Button>}
         </div>
     );
 }
+
+

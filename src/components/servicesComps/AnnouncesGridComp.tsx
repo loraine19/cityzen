@@ -9,8 +9,8 @@ export default function AnnouncesGridComp(props: { line: PostL[], mines?: boolea
     const { data } = useContext(DataContext);
     const { flags } = data
     const { line, mines, change, user, handleLike } = props
-    const short = "pt-8 row-span-5 h-full  !h-[45vh] ";
-    const long = "pt-8 row-span-6 h-full  !h-[58vh] ";
+    const short = "pt-8 row-span-5 h-full  !h-[38vh] ";
+    const long = "pt-8 row-span-6 h-full  !h-[52vh] ";
     const isFlaged = (element: any) => { return imIn(element, flags, user) ? true : false };
 
     return (

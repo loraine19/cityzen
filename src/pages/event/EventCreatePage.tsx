@@ -69,7 +69,7 @@ export default function EventCreatePage() {
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={() => {
                     addressIn();
-                    navigate(`/evenement`);
+                    navigate(`/evenement?search=mines`);
                     setOpen(false)
                 }}
                 title={"Confimrer la modification"}

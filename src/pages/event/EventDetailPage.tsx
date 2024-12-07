@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import CTAMines from '../../components/CATMines';
 import { beInElement, getAdress, getDays, getUsers } from '../../functions/GetDataFunctions';
 import UserContext from '../../contexts/user.context';
-import { Address, EventP, Profile } from '../../types/class';
+import { action, Address, EventP, Profile } from '../../types/class';
 import DataContext from '../../contexts/data.context';
 export default function EventDetailPage() {
     const { id } = useParams()
@@ -38,6 +38,20 @@ export default function EventDetailPage() {
 
 
 
+    const buttons: action[] = [
+        {
+            icon: igo ? "Vous participer déjà" : `Participer a ${selectedEvent.title}`,
+            title: `Participer a ${selectedEvent.title}`,
+            body: `Participer a ${selectedEvent.title}`,
+            function: () => { { handleGo(selectedEvent) } }
+        },
+        {
+            icon: 'Annuler',
+            title: `annuler votre participation a ${selectedEvent.title}`,
+            body: `annuler votre participation a ${selectedEvent.title}`,
+            function: () => { { handleGo(selectedEvent) } }
+        },
+    ]
 
     return (
 
@@ -54,7 +68,12 @@ export default function EventDetailPage() {
             {mines ?
                 <CTAMines id={selectedEvent.id} disabled2={disabledEditCTA} />
                 :
-                <CTA addBtn={true} text={igo ? "Vous participer déjà" : `Participer a ${selectedEvent.title}`} disabled={disabledCTA} cancelBtn={igo} handleClick={(selectedEvent: EventP) => { handleGo(selectedEvent) }} element={selectedEvent} />
+                <CTA
+                    addBtn={true}
+                    disabled={disabledCTA}
+                    cancelBtn={igo}
+                    element={selectedEvent}
+                    values={buttons} />
             }
 
         </div >

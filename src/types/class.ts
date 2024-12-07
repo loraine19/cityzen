@@ -63,14 +63,14 @@ export class Profile {
     address_id: number;
     firstName: string;
     lastName: string;
-    avatar?: Blob |string;
-    phone?: string;
     addressShared: boolean;
-    assistance: string;
+    assistance: 0 | 1 | 2 | 3;
     points: number;
     skills: string[]
     created_at: Date;
     updated_at: Date;
+    avatar?: Blob |string;
+    phone?: string;
 
     constructor(
         id: number,
@@ -79,14 +79,14 @@ export class Profile {
         address_id: number = 1,
         firstName: string,
         lastName: string,
-        avatar?: Blob |string,
-        phone?: string,
         addressShared: boolean = false,
-        assistance: string = '0',
+        assistance: 0 | 1 | 2 | 3,
         points: number = 0,
         skills: string[] = [],
         created_at: Date = new Date(),
-        updated_at: Date = new Date()
+        updated_at: Date = new Date(),
+        avatar?: Blob |string,
+        phone?: string,
     ) {
         this.id = id;
         this.user_id = user_id;
@@ -94,14 +94,14 @@ export class Profile {
         this.address_id = address_id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.avatar = avatar;
-        this.phone = phone;
         this.addressShared = addressShared;
         this.assistance = assistance;
         this.points = points;
         this.skills = skills;
         this.created_at = created_at;
         this.updated_at = updated_at;
+        this.avatar = avatar;
+        this.phone = phone;
     }
 }
 
@@ -188,44 +188,53 @@ export class Event {
 ///// SERVICES
 export class Service {
     id: number;
-    user_id_get: number;
-    user_id_do: number;
+    user_id: number;
+    user_id_resp: number;
     type: 'get' | 'do';
     title: string;
     description: string;
-    category: '1' | '2' | '3';
-    skillLevel: '1' | '2' | '3' | '0';
-    hardLevel: '1' | '2' | '3' | '0';
+    category: 1 | 2 | 3 | 4;
+    skill: 1 | 2 | 3 | 0;
+    hard: 1 | 2 | 3 | 0;
+    status: 0 | 1 | 2 | 3 | 4
     created_at: Date;
     updated_at: Date;
     image?: Blob;
+    finished_at?: Date;
+
 
     constructor(
         id: number,
-        user_id_get: number,
-        user_id_do: number,
+        user_id: number,
+        user_id_resp: number,
         type: 'get' | 'do',
         title: string,
         description: string,
-        category: '1' | '2' | '3',
-        skillLevel: '1' | '2' | '3' | '0',
-        hardLevel: '1' | '2' | '3' | '0',
+        category:  1 | 2 | 3 | 4,
+        skill: 1 | 2 | 3 | 0,
+        hard: 1 | 2 | 3 | 0,
+        status: 0 | 1 | 2 | 3 | 4,
         created_at: Date,
         updated_at: Date,
-        image?: Blob
+        image?: Blob,
+        finished_at?: Date,
+
     ) {
         this.id = id;
-        this.user_id_get = user_id_get;
-        this.user_id_do = user_id_do;
+        this.user_id = user_id;
+        this.user_id_resp = user_id_resp;
         this.type = type;
         this.title = title;
         this.description = description;
         this.category = category;
-        this.skillLevel = skillLevel;
-        this.hardLevel = hardLevel;
+        this.skill = skill;
+        this.hard = hard;
+        this.status = status;
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.image = image;
+        this.finished_at = finished_at;
+
     }
 }
 
@@ -496,3 +505,4 @@ export interface PostL extends Post{
 
 
 
+export type action = { icon: string, function: () => void, title: string, body: any }

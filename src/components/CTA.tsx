@@ -1,58 +1,77 @@
 import { Button } from "@material-tailwind/react";
-import { useLocation } from 'react-router-dom';
-import { useContext, useState } from "react";
-import UserContext from "../contexts/user.context";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
+import { action } from "../types/class";
+import DataContext from "../contexts/data.context";
+import { GetArrayElement } from "../functions/GetDataFunctions";
 
 export default function CTA(props:
     {
         addBtn?: boolean,
-        text: string,
         disabled?: boolean,
         cancelBtn?: boolean,
-        handleClick?: (element: any) => void
-        handleClickCancel?: () => void
-        element: any
+        element: any,
+        values?: action[]
     }) {
-    const { text, disabled, cancelBtn, handleClick, element } = props
+    const { disabled, cancelBtn, element, values } = props
     const type = (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
-    const { user } = useContext(UserContext);
+    const { data, setDataInLocal } = useContext(DataContext)
+    const array = GetArrayElement(type)
+    const navigate = useNavigate();
+    const id = element.id
 
-    let onClick = (element: any) => { alert(`${user.firstName} a ${element.title}   ?`) }
-    handleClick && (onClick = handleClick)
+    const [buttons, setButtons] = useState<action[]>(
+        [{
+            icon: 'Supprimer',
+            title: `Supprimer ${type} ${id}`,
+            body: (data[array].find((element: any) => element.id === id)).title,
+            function: () => {
+                setDataInLocal({ ...data, [array]: data[array].filter((element: any) => element.id !== id) });
+                navigate({ pathname: `/${type}` })
+            },
+        },
+        {
+            icon: 'Modidfier',
+            title: "Modifier",
+            body: (data[array].find((element: any) => element.id === id)).title,
+            function: () => navigate({ pathname: `/${type}/edit/${id}` }),
+        },
+        ]
+    )
 
-
+    useEffect(() => { values && setButtons(values) }, [values])
     const [open, setOpen] = useState(false);
-    const [modalTitle, setModalTitle] = useState("");
+    const [index, setIndex] = useState(0)
 
     return (
         <footer className="flex gap-2  w-respLarge justify-around py-2">
+
             <ConfirmModal
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={() => {
-                    onClick(element)
+                    buttons[index].function();
                     setOpen(false)
                 }}
-                title={modalTitle}
-                element={type + " " + element.title} />
-            <Button
-                onClick={() => { setOpen(true), setModalTitle("voulez vous participer") }}
-                disabled={disabled}
+                title={buttons[index].title}
+                element={buttons[index].body} />
 
-                className="lgBtnflex items-center w-full justify-center rounded-full font-medium shadow " >
-                {text}
+
+            <Button className="flex items-center justify-center rounded-full w-full shadow lgBtn"
+                color="white"
+                onClick={() => { setOpen(true), setIndex(0) }}
+                disabled={disabled} >
+                {buttons[0].icon}
             </Button>
+
             {
-                cancelBtn &&
-                <Button
+                cancelBtn && <Button className="flex items-center justify-center rounded-full w-full lgBtn"
                     color="white"
-                    onClick={() => { setOpen(true), setModalTitle("voulez vous vraiment annuler") }}
-                    className="lgBtn flex items-center w-full justify-center rounded-full font-medium shadow " >
-                    Annuler
-                </Button>
-            }
+                    onClick={() => { setOpen(true), setIndex(1) }} >
+                    {buttons[1].icon}
+                </Button>}
         </footer>
     );
 }
