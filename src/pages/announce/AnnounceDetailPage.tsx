@@ -28,10 +28,24 @@ export default function AnnounceDetailPage() {
     const handleOpen = () => setOpen(!open);
     //////CTAVALUES
     const CTAValues = [
-        { icon: 'Appel', function: () => { handleOpen }, title: "Confirmer mon appel " + selectedPost.user_id },
-        { icon: 'Email', function: () => { alert(`email  user ${selectedPost.user_id} ?`) }, title: "Envoyer un email" + selectedPost.user_id },
-        { icon: 'messagerie', function: () => { alert(`messagerie ?`) }, title: "pas la fonction" }
+
+
+        {
+            icon: 'Appel',
+            title: "Confirmer mon appel " + selectedPost.user_id,
+            body: "Confirmer mon appel " + selectedPost.user_id,
+            function: () => { handleOpen },
+        },
+        {
+            icon: 'Email',
+            function: () => { alert(`email  user ${selectedPost.user_id} ?`) },
+            title: "Envoyer un email" + selectedPost.user_id,
+            body: "Envoyer un email" + selectedPost.user_id
+        },
+
     ]
+
+
     const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
     const isLiked = (element: any) => { return imIn(element, likes, user.id, "post_id") ? true : false };
     const [likes, setLikes] = useState<PostUser[]>(data.likes);

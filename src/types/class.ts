@@ -466,20 +466,20 @@ export class Vote {
 
 //// FLAG
 export class Flag {
-    targetid: number;
+    target_id: number;
     user_id: number;
     target: string;
     created_at: Date;
     updated_at: Date;
 
     constructor(
-        targetid: number,
+        target_id: number,
         user_id: number,
         target: string,
         created_at: Date,
         updated_at: Date
     ) {
-        this.targetid = targetid;
+        this.target_id = target_id;
         this.user_id = user_id;
         this.target = target;
         this.created_at = created_at;

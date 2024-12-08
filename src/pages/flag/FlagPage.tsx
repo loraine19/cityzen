@@ -2,22 +2,21 @@
 import { useContext, useState } from "react";
 import UserContext from "../../contexts/user.context";
 import { deleteElementJoin, getFlagsUser } from "../../functions/GetDataFunctions";
-import postsFaker from "../../datas/fakers/postsFaker";
-import { poolsFaker, surveysFaker } from "../../datas/fakers/surveyFaker";
-import { servicesFaker } from "../../datas/fakers/servicesFaker";
 import { flag, } from "../../types/type";
 import NavBarBottom from "../../components/NavBarBottom";
 import NavBarTop from "../../components/NavBarTop";
 import SubHeader from "../../components/SubHeader";
 import { FlagCard } from "../../components/flagComps/FlagCard";
-import eventsFaker from "../../datas/fakers/eventsFaker";
-import { flagsFaker } from "../../datas/fakers/flagsFaker";
+import DataContext from "../../contexts/data.context";
+
 
 
 export default function FlagPage() {
     const { user } = useContext(UserContext)
+    const { data } = useContext(DataContext)
+    const { posts, events, surveys, pools, services, flags } = data
     const idS = user.id ? user.id : 0
-    const flagList1 = getFlagsUser(postsFaker, eventsFaker, surveysFaker, poolsFaker, servicesFaker, flagsFaker, idS);
+    const flagList1 = getFlagsUser(posts, events, surveys, pools, services, flags, idS);
     const [flagList, setflagList] = useState<any[]>(flagList1 ? flagList1 : []);
     const [notifFind] = useState<string>('');
 

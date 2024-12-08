@@ -1,6 +1,6 @@
 // + calendar view
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import NavBarBottom from "../../components/NavBarBottom";
 import { CategoriesSelect } from "../../components/CategoriesSelect";
 import NavBarTop from "../../components/NavBarTop";

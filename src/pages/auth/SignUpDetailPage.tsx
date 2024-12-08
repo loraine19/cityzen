@@ -7,23 +7,26 @@ import { Card, CardBody, Typography, Input, Button, Select, Option, CardHeader, 
 import MapPickUpComp from '../../components/mapComps/MapPickUpComp';
 import UserContext from '../../contexts/user.context';
 import { AuthHeader } from '../../components/authComps/AuthHeader';
-import { profileDetail } from '../../types/user';
 import { assistanceLevel } from '../../datas/enumsCategories';
 import { getImageBlob } from '../../functions/GetDataFunctions';
+import { Profile } from '../../types/class';
 
 
 export default function SignUpDetailPage() {
     const { user } = useContext(UserContext)
     const navigate = useNavigate();
-    const [newUser, setNewUser] = useState<profileDetail>({ id: 0, firstName: "", lastName: "", avatar: "", phone: "", adress_shared: false, assistant: 0, points: 0, adress: "", skills: [] } as profileDetail);
+    interface ProfileA extends Profile {
+        address: string
+    }
+    const [newUser, setNewUser] = useState<ProfileA>({} as ProfileA);
 
     const formSchema = object({
         firstName: string().required("Le prémon est obligatoire").min(2, "minmum 2 lettres"),
         lastName: string().required("Le Nom est obligatoire").min(2, "minmum 2 lettres"),
         phone: string().required("Le Numéro est obligatoire").min(2, "minmum 2 lettres"),
-        // adress: string().required("Adresse est obligatoire").min(2, "minmum 2 lettres"),
+        // address: string().required("Addresse est obligatoire").min(2, "minmum 2 lettres"),
     })
-    const [adress, setAdress] = useState<string>("");
+    const [address, setAddress] = useState<string>("");
     const [value, setValue] = useState("0");
     1 < 0 && console.log("avoid compile error ", value)
 
@@ -42,10 +45,10 @@ export default function SignUpDetailPage() {
     const [newSkill, setNewSkill] = useState<string | undefined>()
 
     useEffect(() => {
-        formik.values.adress = adress
+        formik.values.address = address
         formik.values.skills = skillList
-        formik.values.assistant = formik.values.assistant as number
-    }, [formik.values, adress, skillList])
+        formik.values.assistance = formik.values.assistance
+    }, [formik.values, address, skillList])
 
     const removeSkill = (index: number, array: string[]) => { array.splice(index, 1); console.log(array); setSkillList([...array]); }
     const addSkill = () => { newSkill && setSkillList([...skillList, newSkill as string]), setNewSkill('') }
@@ -83,14 +86,14 @@ export default function SignUpDetailPage() {
                             <Typography className='text-xs error'>{formik.errors.phone as string} </Typography>
                             <Input label="Télephone" name="phone" variant="standard" onChange={formik.handleChange} />
                             <Typography className='text-xs error'>{formik.errors.phone as string} </Typography>
-                            <Typography className='text-xs max-w-50  max-h-4 overflow-auto'>{formik.errors.adress as string}  </Typography>
+                            <Typography className='text-xs max-w-50  max-h-4 overflow-auto'>{formik.errors.address as string}  </Typography>
 
                             <div className="relative w-full min-w-[200px] h-11 pb-2">
-                                <MapPickUpComp adress={adress} setAdress={setAdress} inputStyle={true} text={"Adresse"} />
-                                <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] after:content[''] after:block after:w-full after:absolute after:-bottom-1.5 after:border-b-2 after:scale-x-0 peer-focus:after:scale-x-100 after:transition-transform after:duration-300 peer-placeholder-shown:leading-[4.25] text-gray-500 peer-focus:text-gray-900 after:border-gray-500 peer-focus:after:border-gray-900">adresse </label></div>
+                                <MapPickUpComp address={address} setAddress={setAddress} inputStyle={true} text={"Addresse"} />
+                                <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] after:content[''] after:block after:w-full after:absolute after:-bottom-1.5 after:border-b-2 after:scale-x-0 peer-focus:after:scale-x-100 after:transition-transform after:duration-300 peer-placeholder-shown:leading-[4.25] text-gray-500 peer-focus:text-gray-900 after:border-gray-500 peer-focus:after:border-gray-900">addresse </label></div>
                             <Select className="p-5 capitaliz " label="Assistance" name="level" variant='standard'
                                 value={value}
-                                onChange={(val: any) => { setValue(val); console.log(val); formik.values.assistant = parseInt(val) }}
+                                onChange={(val: any) => { setValue(val); formik.values.assistance = parseInt(val) as 0 | 1 | 2 | 3 }}
                             >
                                 {assistanceLevel.map((level: number, index: number) => {
                                     return (

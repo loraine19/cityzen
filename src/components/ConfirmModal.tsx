@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
-import parse from 'html-react-parser';
+
 export function ConfirmModal(props: { open: boolean, handleOpen: () => void, handleConfirm: () => void, handleCancel: () => void, title: string, element: string }) {
     const { open, handleOpen, handleConfirm, handleCancel } = props
     return (

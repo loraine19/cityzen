@@ -1,16 +1,15 @@
 import NavBarTop from '../NavBarTop';
 import SubHeader from '../SubHeader';
 import { useContext, useEffect, useState } from 'react';
-import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Checkbox, Radio } from '@material-tailwind/react';
+import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Radio } from '@material-tailwind/react';
 import { announceCategories } from "../../datas/enumsCategories";
 import { getImageBlob, GetPoints } from '../../functions/GetDataFunctions';
 import UserContext from '../../contexts/user.context';
 
 export function ServiceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
-    const { created_at, title, description, category, image } = formik.values
+    const { created_at, title, description, image } = formik.values
     const haveImage = image ? true : false
-    const { service } = formik.values
     const { user } = useContext(UserContext)
 
     ///// BLOB FUNCTION 
@@ -32,7 +31,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={formik.values.title ? `Modifier mon service` : "Créer mon service"} place={category ? category : ""} closeBtn />
+                    <SubHeader type={formik.values.title ? `Modifier mon service` : "Créer mon service"} place={formik.values.title} closeBtn />
                     <div className="w-respLarge">
                         <div className="flex gap-10">
                             <Radio name="type" label="Demande" value="get" color='orange' defaultChecked={isGet} onChange={formik.handleChange} />
@@ -89,12 +88,12 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
 
 
                         <CardBody className='FixCardBody '>
-                            <div className='CardOverFlow h-full justify-between'>
+                            <div className='CardOverFlow h-full justify-between gap-4'>
                                 <Input label="titre" name="title" variant="standard" onChange={formik.handleChange} value={title} />
                                 <Typography className='text-xs error'>{formik.errors.title as string} </Typography>
 
-                                <div className='flex flex-col lg:flex-row gap-5 pt-3 justify-end'>
-                                    <div className='flex flex-col flex-1 pt-1'>
+                                <div className='flex flex-col lg:flex-row gap-5 pt-3 h-full '>
+                                    <div className='flex flex-col flex-1 pt-1 '>
                                         <Textarea rows={2} resize={true} variant="static" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
                                             value={description}
                                             containerProps={{
@@ -108,7 +107,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
 
                                 </div>
 
-                                <div className="flex flex-col justify-center pt-4 h-max  ">
+                                <div className="flex flex-col justify-center pt-4 h-full  ">
                                     <Typography className='text-xs pb-3'>Difficulté du service: </Typography>
 
                                     <div className="flex gap-9">
@@ -152,7 +151,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                                 )}
                                             </Select></div>
                                         <Chip value={`${points.join(' à ')}  pts`} className="flex-1 GrayChip  lowercase !font-medium  rounded-full h-full flex items-center justify-center gap-2"
-                                            icon={<span className={`${formik.values.type === "do" ? " !text-green-500" : "!text-orange-500"} ${user.points > points[0] && "fill"}  material-symbols-outlined  `}>fiber_manual_record</span>}>
+                                            icon={<span className={`${formik.values.type === "do" ? " !text-green-500" : "!text-orange-500"} ${user.points > points[0] && "fill"}  material-symbols-outlined flex flex-1 -mt-0.5 `}>fiber_manual_record</span>}>
 
 
                                         </Chip>

@@ -1,202 +1,67 @@
-import { Avatar, Card, CardBody, CardFooter, Typography } from "@material-tailwind/react";
-import { useParams } from "react-router-dom";
-import NavBarTop from "../../../components/NavBarTop";
-import { servicesFaker } from "../../../datas/fakers/servicesFaker";
-import { usersFaker } from "../../../datas/fakers/usersFaker";
-import { useState } from "react";
-import BtnBottom from "../../../components/BtnBottom";
-import { Link } from "react-router-dom";
-import { calculatePoints } from "../../../functions/CalculatePoints";
-import { issuesFaker } from "../../../datas/fakers/issuesFaker";
-import { issue } from "../../../types/issue";
-import { Textarea } from "@material-tailwind/react";
-import { useFormik } from "formik";
-import { object, string } from "yup";
-import Modal from "../../../components/Modal";
-import { useNavigate } from "react-router-dom";
+import { useFormik } from 'formik';
+import { object, string } from 'yup';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import DataContext from '../../../contexts/data.context';
+import { Service } from '../../../types/class';
+import { ConfirmModal } from '../../../components/ConfirmModal';
+import { ServiceForm } from '../../../components/servicesComps/ServiceForm';
 
-export default function IssueEditPage() {
-    const params = useParams();
-    const id = Number(params.id);
 
-    //GET DATA FROM ID PARAM
-    const [issue, setIssue] = useState<issue>(issuesFaker[id]);
+export default function ServiceEditPage() {
 
-    let serviceWithIssue: any;
-    serviceWithIssue = servicesFaker.find((service) => service.id === issue.service_id);
-    let modoDo: any;
-    modoDo = usersFaker.find((user) => user.id === issue.user_id_mdo);
-    let modoGet: any;
-    modoGet = usersFaker.find((user) => user.id === issue.user_id_mget);
+    const { id } = useParams()
+    const { data, setDataInLocal } = useContext(DataContext)
+    const { services } = data
 
-    //DATE
-    const currentDate = new Date(Date.now());
-    const serviceDate = new Date(serviceWithIssue.created_at);
-    const issueDate = new Date(issue.created_at);
-    const displayedServDate = `${serviceDate.getDate()}/${serviceDate.getMonth() + 1}/${serviceDate.getFullYear()}`;
-    const displayedIssueDate = `${issueDate.getDate()}/${issueDate.getMonth() + 1}/${issueDate.getFullYear()}`;
-    const pendingServDuration: number = Math.round((currentDate.getTime() - serviceDate.getTime()) / 1000 / 60 / 60 / 24);
-    const pendingIssueDuration: number = Math.round((currentDate.getTime() - issueDate.getTime()) / 1000 / 60 / 60 / 24);
-
-    //CALCULATE POINTS
-    const servicePoints: any = calculatePoints(serviceWithIssue.skill_level, serviceWithIssue.hard_level, serviceWithIssue.type);
-
-    //FORM
-    const [issueModif, setIssueModif] = useState<issue>(issue);
-    const formSchema = object({
-        description: string().required("La description est obligatoire").min(20, "La description doit avoir au minimum 20 lettres"),
-    });
-
+    const found = (services.find((Service: Service) => Service.id == parseInt(id!)))
+    useEffect(() => { !found && navigate(`/annonce ${id}`) }, [id])
+    const [selectedService] = useState<Service>(found ? (found) : (services[0]))
     const navigate = useNavigate();
+    const [newService] = useState<Service>(selectedService);
+    const formSchema = object({
+        category: string().required("Catégorie est obligatoire"),
+        title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
+        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        skill: string(),
+        hard: string()
 
+    })
+    const [value, setValue] = useState("");
+
+
+    const [open, setOpen] = useState(false);
     const formik = useFormik({
-        initialValues: issue,
+        initialValues: newService as Service,
         validationSchema: formSchema,
-        onSubmit: (values) => {
-            setModalTitle("Modifier le litige");
-            setModalDescription("");
-            setOpenModal(!openModal);
-            setIssueModif(values);
-        },
+        onSubmit: values => {
+            formik.values = values
+            setOpen(true)
+            value && console.log("avoid compile error ", value)
+        }
     });
 
-    //MODAL
-    const [openModal, setOpenModal] = useState<boolean>(false);
-    const [modalTitle, setModalTitle] = useState<string>("");
-    const [modalDescription, setModalDescription] = useState<any>("");
-    const getModalResult = (result: boolean) => {
-        setOpenModal(!openModal);
-        if (modalTitle === "Modifier le litige" && result === true) {
-            //MODIFY ISSUE POSSIBLE
-            setIssue(issueModif);
-            alert(JSON.stringify(issueModif, null, 2));
-            navigate(`/litige/${id}`);
-        } else if (modalTitle === "Modifier le litige" && result === false) {
-            //MODIFY ISSUE CANCELED
-            console.log(`Litige ${id} non modifié`);
-        }
-        //ADD OTHER CONDIDTIONS IF MODAL IS CALLED FOR DIFFERENT PURPOSES
-    };
+    const index = data.services.findIndex((element: any) => element.id === newService.id);
+    function saveService() {
+        data.services[index] = formik.values as Service
+        setDataInLocal({ ...data, services: data.services })
+    }
+
 
     return (
-        <>
-            {openModal === true && <Modal title={modalTitle} description={modalDescription} openModal={openModal} getModalResult={getModalResult} />}
-
-            <form className="Body cyan" onSubmit={formik.handleSubmit}>
-                <main>
-                    <header className="h-auto">
-                        <NavBarTop />
-                        <h1 className="text-4xl font-thin px-2">
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <div className="font-bold">{serviceWithIssue.category} </div>
-                                    <div className="flex gap-4 items-center">
-                                        <div>{serviceWithIssue.type}</div>
-
-                                        <div className="text-xl drop-shadow-md">
-                                            <div className="bg-white w-fit px-2 py-1 rounded-full text-[#15803D] ">En cours</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <Link to={`/service`}>
-                                    <button type="button" className="bg-gray-500 w-12 h-12 rounded-full flex items-center justify-center mr-2">
-                                        <span className="material-symbols-outlined text-white ">close</span>
-                                    </button>
-                                </Link>
-                            </div>
-                        </h1>
-                    </header>
-                    <div className="w-respLarge overflow-auto  content-start h-full pt-8 pb-1">
-                        <Card>
-                            <CardBody className="border-b-[1px] border-gray-400 pb-2">
-                                <div className="flex justify-between items-center">
-                                    <Typography variant="h4" color="blue-gray" className="mb-2">
-                                        <div>{serviceWithIssue.title}</div>
-                                    </Typography>
-                                    <div className="flex gap-2">
-                                        {pendingServDuration < 15 && <div>{displayedServDate}</div>}
-                                        {pendingServDuration >= 15 && <div className="bg-[#FEE2E2] w-fit px-2 py-[0.25em] rounded-full text-[#DC2626] flex items-center">{displayedServDate}</div>}
-                                    </div>
-                                </div>
-                                <div className="flex gap-2 pb-3">
-                                    <div className="flex gap-2 text-sm items-center">
-                                        <div className="bg-gray-500 w-fit px-2 py-[0.25em] rounded-full text-gray-800 flex ites-center">
-                                            <span className="material-symbols-outlined scale-75">architecture</span>
-                                            <span className="mt-[0.15em]">{serviceWithIssue.skill_level}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-2 text-sm items-center">
-                                        <div className="bg-gray-500 w-fit px-2 py-[0.25em] rounded-full text-gray-800 flex ites-center">
-                                            <span className="material-symbols-outlined scale-75">bar_chart</span>
-                                            <span className="mt-[0.15em]">{serviceWithIssue.hard_level}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex justify-between gap-8 items-center">
-                                    <Typography className="text-sm ">
-                                        <span>{serviceWithIssue.description}</span>
-                                    </Typography>
-                                    <div className="flex gap-2 items-center text-gray-800">
-                                        <div className="text-[3.5em] font-bold tracking-tighter">{servicePoints}</div>
-                                        <div className="">pts</div>
-                                    </div>
-                                </div>
-                            </CardBody>
-                            <CardBody className=" pb-2">
-                                <div className="flex justify-between items-center">
-                                    <Typography variant="h4" color="blue-gray" className="mb-2">
-                                        <p>Litige</p>
-                                    </Typography>
-
-                                    <div className="flex gap-2">
-                                        {pendingIssueDuration < 15 && <div>{displayedIssueDate}</div>}
-                                        {pendingIssueDuration >= 15 && <div className="bg-[#FEE2E2] w-fit px-2 py-[0.25em] rounded-full text-[#DC2626] flex items-center">{displayedIssueDate}</div>}
-                                    </div>
-                                </div>
-
-                                <Textarea variant="static" name="description" label="Description" onChange={formik.handleChange} defaultValue={issue.description} className="border-[1px]" />
-                                <div className="text-[0.75em] text-red-600 ">{formik.errors.description}</div>
-                            </CardBody>
-                            <CardFooter color="transparent" className="m-0 p-4 flex items-center justify-between gap-4">
-                                <div className="flex flex-col w-full">
-                                    <Typography variant="h4" color="blue-gray" className="mb-2">
-                                        <p>Modérateurs</p>
-                                    </Typography>
-                                    <div className="flex justify-between w-full">
-                                        <div className="flex gap-4 border-r-[1px] border-gray-400 w-[50%]">
-                                            <Avatar size="md" variant="circular" src={modoGet.avatar} alt="tania andrew" />
-                                            <div className="flex w-full flex-col gap-0.5">
-                                                <div className="flex items-center justify-between">
-                                                    <Typography variant="h6">
-                                                        {modoGet.firstName} {modoGet.lastName}
-                                                    </Typography>
-                                                </div>
-                                                <Typography className="flex items-center text-sm">Demande</Typography>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-4">
-                                            <Avatar size="md" variant="circular" src={modoDo.avatar} alt="tania andrew" />
-                                            <div className="flex w-full flex-col gap-0.5">
-                                                <div className="flex items-center justify-between">
-                                                    <Typography variant="h6">
-                                                        {modoDo.firstName} {modoDo.lastName}
-                                                    </Typography>
-                                                </div>
-                                                <Typography className="flex items-center text-sm">Offre</Typography>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardFooter>
-                        </Card>
-                    </div>
-                </main>
-
-                <footer className="w-respLarge px-4 md:px-0">
-                    <BtnBottom type="submit" label="Valider" dark={true} />
-                </footer>
-            </form>
-        </>
-    );
+        <div className="Body cyan">
+            <ConfirmModal
+                open={open}
+                handleOpen={() => setOpen(false)}
+                handleCancel={() => { setOpen(false) }}
+                handleConfirm={() => {
+                    saveService();
+                    navigate(`/service?serach=mines`);
+                    setOpen(false)
+                }}
+                title={"Confimrer la modification"}
+                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+            <ServiceForm formik={formik} setValue={setValue} />
+        </div >
+    )
 }

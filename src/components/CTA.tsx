@@ -60,7 +60,6 @@ export default function CTA(props:
 
 
             <Button className="flex items-center justify-center rounded-full w-full shadow lgBtn"
-                color="white"
                 onClick={() => { setOpen(true), setIndex(0) }}
                 disabled={disabled} >
                 {buttons[0].icon}

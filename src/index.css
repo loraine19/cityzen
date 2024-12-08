@@ -188,7 +188,8 @@ nav li .material-symbols-rounded {
     background-color: #fecaca;
     color: #b91c1c;
 }
-.GrayChip {
+.GrayChip,
+.lgBtn:disabled {
     background-color: #d1d5db;
     color: #1f2937;
 }
@@ -211,13 +212,9 @@ nav li .material-symbols-rounded {
 }
 
 /* Gray 800*/
-.lgBtn:disabled {
-    background-color: transparent;
-    color: #1f2937;
-    border: 2px solid #1f2937;
-}
+
 button:disabled {
-    opacity: 60%;
+    opacity: 90% !important;
 }
 
 /* width */
@@ -245,9 +242,19 @@ button:disabled {
 
 button {
     white-space: nowrap;
-    text-transform: capitalize !important;
     font-weight: 500 !important;
+    text-transform: none !important;
 }
+.lgBtn {
+    font-size: 1rem;
+}
+::first-letter {
+    text-transform: capitalize !important;
+}
+
+/* :first-child {
+    text-transform: none !important;
+} */
 
 .FixCard {
     position: relative;

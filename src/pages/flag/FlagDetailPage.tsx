@@ -5,20 +5,20 @@ import { Option, Button, Select, Switch } from '@material-tailwind/react';
 import { useContext, useState } from 'react';
 import UserContext from '../../contexts/user.context';
 import { getCommuns } from '../../functions/GetDataFunctions';
-import postsFaker from '../../datas/fakers/postsFaker';
-import eventsFaker from '../../datas/fakers/eventsFaker';
-import { poolsFaker, surveysFaker } from '../../datas/fakers/surveyFaker';
-import { servicesFaker } from '../../datas/fakers/servicesFaker';
+
 import { flagCategories } from '../../datas/enumsCategories';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { all, flag, } from '../../types/type';
 import FlagDetailComp from '../../components/flagComps/FlagDetailComp';
+import DataContext from '../../contexts/data.context';
 export default function FlagDetailPage() {
     const { id } = useParams()
     const { user } = useContext(UserContext)
+    const { data } = useContext(DataContext)
+    const { posts, events, surveys, pools, services } = data
     const idS = user.id ? user.id : 0
-    const elementList: all[] = getCommuns(postsFaker, eventsFaker, surveysFaker, poolsFaker, servicesFaker);
+    const elementList: all[] = getCommuns(posts, events, surveys, pools, services);
     const elementFound = elementList.find((element) => (element.type + element.id) === id);
     const elementSelected = elementFound ? elementFound : {} as all;
 

@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useNavigate, } from 'react-router-dom';
+import { useContext, useState } from 'react';
 import DataContext from '../../contexts/data.context';
 import { Service } from '../../types/class';
 import { ConfirmModal } from '../../components/ConfirmModal';
@@ -14,13 +14,17 @@ export default function ServiceCreatePage() {
     const { user } = useContext(UserContext)
     const { services } = data
     const navigate = useNavigate();
+    const maxId = Math.max.apply(null, services.map((service: Service) => service.id));
     const [newService] = useState<Service>({
-        id: services.length + 1,
+        id: maxId + 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         status: 0,
-        user_id: user.id,
+        user_id: user.user_id,
         user_id_resp: 0,
+        type: "get",
+        skill: 0,
+        hard: 0,
     } as any);
 
     const formSchema = object({
@@ -48,8 +52,7 @@ export default function ServiceCreatePage() {
 
     function saveService() {
         data.services.push(formik.values as Service)
-        setDataInLocal({ ...data, services: data.services })
-        console.log(data.services)
+        setDataInLocal({ ...data, services: [...data.services] })
     }
 
 
@@ -61,7 +64,7 @@ export default function ServiceCreatePage() {
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={() => {
                     saveService();
-                    navigate(`/service?serach=mines`);
+                    navigate(`/service?search=mines`);
                     setOpen(false)
                 }}
                 title={"Confimrer la modification"}

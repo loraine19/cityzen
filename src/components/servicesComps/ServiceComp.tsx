@@ -86,7 +86,7 @@ export default function ServiceComp(props:
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1`}>
                     <div className="flex sticky top-0 bg-white w-full items-center justify-between">
-                        <Typography variant="h5" color="blue-gray" className="mb-2">
+                        <Typography variant="h5" color="blue-gray">
                             {title}
                         </Typography>
 
@@ -98,7 +98,9 @@ export default function ServiceComp(props:
                     </div>
                     <div className="flex flex-col h-full">
                         <div className="CardOverFlow">
-
+                            <Typography color="blue-gray" variant="small">
+                                {service.status === 1 ? "en attente" : service.status === 2 ? "en cours" : service.status === 3 ? "terminé" : "..."}
+                            </Typography>
                             <Typography color="blue-gray" className="mb-2">
                                 {description}...
                             </Typography></div>

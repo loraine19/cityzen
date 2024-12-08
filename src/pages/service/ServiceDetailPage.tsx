@@ -4,12 +4,10 @@ import SubHeader from '../../components/SubHeader';
 import { useContext, useEffect, useState } from 'react';
 import CTAMines from '../../components/CATMines';
 import UserContext from '../../contexts/user.context';
-import { AcceptUserResp, deleteElement, GetCategory, imIn, takeElement } from '../../functions/GetDataFunctions';
+import { AcceptUserResp, GetCategory, imIn, takeElement } from '../../functions/GetDataFunctions';
 import DataContext from '../../contexts/data.context';
-import { action, Post, PostL, PostUser, Service } from '../../types/class';
+import { action, Service } from '../../types/class';
 import ServiceDetailComp from '../../components/servicesComps/ServiceDetailComp';
-import parse from 'html-react-parser';
-import CTA from '../../components/CTA';
 export default function ServiceDetailPage() {
     const { id } = useParams()
     const { user } = useContext(UserContext);
@@ -24,23 +22,29 @@ export default function ServiceDetailPage() {
     }, [found])
     const [selectedService] = useState<Service>(found ? (found) : (data.services[0]))
     const [serviceList, setServiceList] = useState<Service[]>(data.services);
-
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(!open);
     //////CTAVALUES
     const category = GetCategory(selectedService)
     const type = selectedService.type === "get" ? "demande" : "offre"
     const mines = found?.user_id === user.id ? true : false
 
-    const iResp = selectedService.user_id_resp === user.user_id ? true : false
-    const isValidated = selectedService.status >= 2 ? true : false
-    const disabledCTA = mines || iResp ? true : false
-    const disabledEditCTA = selectedService.user_id_resp ? true : false
+    let isPost = selectedService.status === 0 ? true : false
+    let isResp = selectedService.status === 1 ? true : false
+    let isValidated = selectedService.status === 2 ? true : false
+    let isFinish = selectedService.status === 3 ? true : false
 
+    useEffect(() => {
+        isPost = selectedService.status === 0 ? true : false
+        isResp = selectedService.status === 1 ? true : false
+        isValidated = selectedService.status === 2 ? true : false
+        isFinish = selectedService.status === 3 ? true : false
+
+    }, [selectedService.status])
 
     const handleTake = (id: number) => {
         takeElement(id, serviceList, setServiceList, user)
         setDataInLocal({ ...data, services: serviceList })
+        console.log("take")
+        console.log(selectedService.status)
     }
 
     const handleValidate = (id: number) => {
@@ -53,39 +57,66 @@ export default function ServiceDetailPage() {
     }
     const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
 
+    //// AUTHOR
+
+
     const buttonsValidate: action[] = [
         {
-            icon: 'Besoins d\'aide',
-            title: `Besoins d'aide`,
-            body: JSON.stringify(data.services.find((element: any) => element.id === id)),
-            function: () => { navigate(`/litige/create/${selectedService.id}`) }
+            icon: isResp && "no" || isValidated && "Besoins d'aide ?" || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || 'no',
+            title: isResp && "no" || isValidated && "Ouvrir un litige ?" || 'no',
+            body: selectedService.title,
+            function: () => {
+                if (isValidated) { isValidated && navigate(`/litige/create/${selectedService.id}`) }
+                else { return null }
+            }
         },
         {
-            icon: 'Terminer',
-            title: "Terminer",
-            body: JSON.stringify(data.services.find((element: any) => element.id === id)),
-            function: () => { handleFinish(selectedService.id) }
+            icon: isResp && "no" || isValidated && 'Service finis ?' || isFinish && '' || 'no',
+            title: isResp && "no" || isValidated && "Cloturer le service ?" || 'no',
+            body: selectedService.title,
+            function: () => {
+                if (isResp) { handleFinish(selectedService.id) }
+                else { return null }
+            }
+        },
+        {
+            icon: isResp && "valider ?" || isValidated && '' || isFinish && '' || '',
+            title: isResp && "Accepter la reponse" || '',
+            body: selectedService.title,
+            function: () => {
+                if (isResp) { handleValidate(selectedService.id) }
+                else { return null }
+            }
+
         },
     ]
-
+    /// RESP 
     const buttons: action[] = [
         {
-            icon: iResp ? `Vous avez déjà sélectionné cette ${type}` : `Selectionner ${selectedService.title}`,
-            title: `Repondre à ${type} ${selectedService.title}`,
-            body: `Repondre à ${type} ${selectedService.title}`,
-            function: () => { handleTake(selectedService.id) }
+            icon: isResp && "annuler ?" || isValidated && '' || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || '',
+            title: isResp && "Vous annulez votre réponse" || isValidated && "Ouvrir un litige ?" || '',
+            body: selectedService.title + 'c',
+            function: () => {
+                if (isResp) { handleTake(selectedService.id) }
+                else { return null }
+            }
         },
         {
-            icon: 'Annuler',
-            title: `Annuler votre réponse à ${type} ${selectedService.title}`,
-            body: `Annuler votre réponse à ${type} ${selectedService.title}`,
-            function: () => { handleTake(selectedService.id) }
-        },
+            icon: isPost && "répondre au service?" || isResp && '' || '',
+            title: isPost && "postuler au service" || isResp && '' || '',
+            body: selectedService.title + "g",
+            function: () => {
+                if (isPost) { handleTake(selectedService.id) }
+                else { return null }
+            }
+        }
     ]
 
-    useEffect(() => {
+    // console.log(buttons[1].function())
 
-    }, [serviceList])
+
+
+
 
     return (
         <div className="Body cyan">
@@ -100,21 +131,22 @@ export default function ServiceDetailPage() {
                         service={selectedService}
                         mines={mines} change={() => { }}
                         isFlaged={isFlaged(selectedService)}
-                        handleValidate={(id: number) => handleValidate(id)} /></div>
+                        handleValidate={(id: number) => handleValidate(id)} />
+                </div>
             </main>
 
             {mines ?
                 <CTAMines id={selectedService.id}
-                    values={isValidated ? buttonsValidate : undefined}
+                    values={buttonsValidate}
+                    disabled1={isFinish}
+                    disabled2={isFinish}
+                    button3={isResp ? buttonsValidate[2] : undefined}
                 />
                 :
-                <CTA
-                    addBtn={true}
-                    disabled={disabledCTA}
-                    cancelBtn={iResp}
+                <CTAMines
+                    id={selectedService.id}
                     values={buttons}
-                    element={selectedService} />
-                // <CTAMines id={selectedService.id} values={CTAValues} disabled1={false} disabled2={false} />
+                />
             }
 
         </div >

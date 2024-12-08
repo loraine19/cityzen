@@ -1,4 +1,4 @@
-import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar, Button } from "@material-tailwind/react";
+import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { Profile, Service } from "../../types/class";
 import { GetCategory, GetPoints } from "../../functions/GetDataFunctions";
@@ -6,25 +6,23 @@ import DataContext from "../../contexts/data.context";
 import { useContext } from "react";
 import UserContext from "../../contexts/user.context";
 
-
-
 export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void, isFlaged?: boolean, handleValidate: (id: number) => void }) {
     const { user } = useContext(UserContext)
-    const { service, isFlaged, handleValidate } = props
+    const { service, isFlaged } = props
     const { id, title, description, image, created_at, user_id_resp, user_id } = props.service
     const { data } = useContext(DataContext);
     const haveImage = service.image ? true : false
     const userAuthor = data.profiles.find((user: Profile) => user.user_id === user_id)
-    const isMine = user.user_id === user_id ? true : false
-
+    const isMine = user.user_id === user_id || user.user_id === user_id_resp ? true : false
     const category = GetCategory(service)
-
     const type = service.type === "get" ? "demande" : "offre";
-    const isResp = user_id_resp === 0 ? false : true
-    const isValidated = service.status >= 2 ? true : false
+    const isResp = service.status === 1 ? true : false
+    const isValidated = service.status === 2 ? true : false
+    const isFinish = service.status === 3 ? true : false
     const userResp = data.profiles.find((user: Profile) => user.user_id === user_id_resp)
     const points = GetPoints(service, userAuthor, userResp)
-    console.log(isResp, user_id_resp)
+    let button = isResp && "en attente" || isValidated && "en cours" || isFinish && "terminé"
+
     return (
         <>
             <Card className="FixCard w-respLarge" >
@@ -74,11 +72,11 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                             <Typography color="blue-gray" className="mb-2">
                                 {description}
                             </Typography>
-                            {isResp &&
+                            {isMine && isResp &&
                                 <div className="flex  flex-1 flex-col justify-between items-end  gap-2">
                                     <Typography variant="h6" color="blue-gray" className="text-right">
-                                        Vous avez<br></br>
-                                        {isMine ? "recu une réponse" : "repondu"} à la   {type}
+
+                                        {isMine ? "Réponse" : "Vous avez repondu"} <br></br>à la   {type}
                                     </Typography>
                                     <div
                                         className="flex flex-col items-end gap-2"> <Avatar src={userResp?.avatar} size="sm" alt="avatar" withBorder={true} />
@@ -89,7 +87,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                                             </Typography>
 
                                         </div>
-                                        <Button variant="outlined" size="sm" disabled={isMine ? isValidated ? true : false : true} onClick={() => handleValidate(id)} className="rounded-full">{isMine ? isValidated ? "en cours" : "valider" : "En attente de validation"}</Button>
+                                        <Chip value={button} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}></Chip>
                                     </div>
                                 </div>}
                         </div>
@@ -108,9 +106,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                     </div>}
 
                     <div className="flex items-center gap-2">
-
                         <Typography variant="h2" >
-
                             {points[1] && <span className="!text-[1.2rem] font-light">de </span>}
                             {points[0]}
                             {points[1] && <>  <span className="!text-[1.2rem] font-light">à</span> {points[1]}</>}

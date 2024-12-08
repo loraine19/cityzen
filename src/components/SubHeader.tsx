@@ -8,7 +8,7 @@ export default function SubHeader(props: { type: string, qty?: number, place?: a
     return (
         <div className="flex justify-between items-center pb-2">
             <h2 className="text-3xl font-thin px-4 ">
-                <span className="font-medium capitalize">{qty} {type} </span>{place ? place : " dans votre quartier"}
+                <span className="font-medium ">{qty} {type} </span>{place ? place : " dans votre quartier"}
             </h2>
             <div className={closeBtn ? 'flex' : 'hidden'}>
 

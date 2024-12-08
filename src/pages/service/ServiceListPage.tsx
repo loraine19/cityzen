@@ -24,7 +24,7 @@ export default function ServicesPage() {
 
     const { user } = useContext(UserContext);
     const { data, setDataInLocal } = useContext(DataContext);
-    const { flags, profiles } = data;
+    const { flags } = data;
     const [categorySelected, setCategorySelected] = useState<string>(announceCategories[0]);
     const [notif, setNotif] = useState<string>('');
     const [copy, setCopy] = useState<Service[]>([...data.services])
@@ -32,7 +32,7 @@ export default function ServicesPage() {
 
     const [mines, setMines] = useState<boolean>(false);
     const [tabSelected, setTabSelected] = useState<string>('');
-    const [servicesTabled, setServicesTabled] = useState<Service[]>([]);;
+    // const [setServicesTabled] = useState<Service[]>([]);;
 
     const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
     const activeTab: any = document.querySelector(`li[data-value="${tabSelected}"]`);
@@ -52,11 +52,11 @@ export default function ServicesPage() {
     /////FILTER FUNCTIONS
     const filterServices = (newArray: Service[], value: string) => {
         value !== tabSelected && setCategorySelected(announceCategories[0]);
-        setServicesTabled(newArray);
+        // setServicesTabled(newArray);
         setServices(newArray);
         setTabSelected(value);
         setSearchParams({ search: value });
-        value === "les miens" ? setMines(true) : setMines(false);
+        value === "mines" ? setMines(true) : setMines(false);
     }
 
     const serviceTabs: label[] = [{

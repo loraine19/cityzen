@@ -74,11 +74,11 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
 
 
                         <CardBody className='FixCardBody '>
-                            <div className='CardOverFlow h-full justify-between'>
+                            <div className='CardOverFlow h-full justify-between gap-4'>
                                 <Input label="titre" name="title" variant="standard" onChange={formik.handleChange} value={title} />
                                 <Typography className='text-xs error'>{formik.errors.title as string} </Typography>
 
-                                <div className='flex flex-col lg:flex-row gap-5 pt-3 justify-end'>
+                                <div className='flex flex-col lg:flex-row gap-5 pt-3 h-full'>
                                     <div className='flex flex-col flex-1 pt-1'>
                                         <Textarea rows={2} resize={true} variant="static" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
                                             value={description}
@@ -93,7 +93,7 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
 
                                 </div>
 
-                                <div className="flex flex-col justify-center pt-4 h-max w-full">
+                                <div className="flex flex-col justify-center pt-4 h-full w-full">
                                     <Typography className='text-xs'>Partager : </Typography>
 
                                     <div className="flex items-center gap-[10%]">

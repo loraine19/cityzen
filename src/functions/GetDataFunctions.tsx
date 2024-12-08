@@ -275,6 +275,7 @@ export const isLate = (date: Date, days: number) => new Date(date) < new Date((n
 export const AcceptUserResp = (id: number, array: Service[], setArray: any, step: 0 | 1 | 2 | 3) => {
     let index = array.findIndex((element: Service) => element.id === id);
     array[index].status = step
+    step === 3 && (array[index].finished_at = new Date())
     setArray([...array]);
 }
 
@@ -286,8 +287,7 @@ export const takeElement = (id: number, array: Service[], setArray: any, userPro
     }
     else {
         array[index].user_id_resp = userProfile?.user_id;
-        array[index].status = 0;
+        array[index].status = 1;
     }
-    console.log(array)
     setArray([...array]);
 }

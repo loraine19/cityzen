@@ -110,11 +110,11 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                         <Typography className='text-xs px-4'>{formik.values.image != formik.values.image && formik.values.image as string} </Typography>
 
                         <CardBody className='FixCardBody'>
-                            <div className='CardOverFlow'>
+                            <div className='CardOverFlow gap-3'>
                                 <Input label="titre" name="title" variant="standard" onChange={formik.handleChange} value={formik.values.title} />
                                 <Typography className='text-xs error'>{formik.errors.title as string} </Typography>
 
-                                <div className='flex flex-col lg:flex-row gap-5 pt-3 justify-end'>
+                                <div className='flex flex-col lg:flex-row gap-5 pt-3 h-full'>
                                     <div className='flex flex-col flex-1 pt-1'>
                                         <Textarea rows={1} resize={true} variant="static" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
                                             value={formik.values.description}
