@@ -40,7 +40,7 @@ export default function AnnouncesComp(props:
                     </div>
                     {image &&
                         <img
-                            src={image}
+                            src={image as any}
                             alt={title}
                             className="h-full w-full object-cover"
                         />

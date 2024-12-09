@@ -8,6 +8,7 @@ import { AcceptUserResp, GetCategory, imIn, takeElement } from '../../functions/
 import DataContext from '../../contexts/data.context';
 import { action, Service } from '../../types/class';
 import ServiceDetailComp from '../../components/servicesComps/ServiceDetailComp';
+import { serviceCategories } from '../../datas/enumsCategories';
 export default function ServiceDetailPage() {
     const { id } = useParams()
     const { user } = useContext(UserContext);
@@ -23,7 +24,7 @@ export default function ServiceDetailPage() {
     const [selectedService] = useState<Service>(found ? (found) : (data.services[0]))
     const [serviceList, setServiceList] = useState<Service[]>(data.services);
     //////CTAVALUES
-    const category = GetCategory(selectedService)
+    const category = GetCategory(selectedService, serviceCategories)
     const type = selectedService.type === "get" ? "demande" : "offre"
     const mines = found?.user_id === user.id ? true : false
 
@@ -43,8 +44,6 @@ export default function ServiceDetailPage() {
     const handleTake = (id: number) => {
         takeElement(id, serviceList, setServiceList, user)
         setDataInLocal({ ...data, services: serviceList })
-        console.log("take")
-        console.log(selectedService.status)
     }
 
     const handleValidate = (id: number) => {
@@ -102,18 +101,15 @@ export default function ServiceDetailPage() {
             }
         },
         {
-            icon: isPost && "répondre au service?" || isResp && '' || '',
-            title: isPost && "postuler au service" || isResp && '' || '',
-            body: selectedService.title + "g",
+            icon: isPost && "répondre au service ?" || isResp && '' || '',
+            title: isPost && "Repondre au service" || isResp && '' || '',
+            body: selectedService.title,
             function: () => {
                 if (isPost) { handleTake(selectedService.id) }
                 else { return null }
             }
         }
     ]
-
-    // console.log(buttons[1].function())
-
 
 
 

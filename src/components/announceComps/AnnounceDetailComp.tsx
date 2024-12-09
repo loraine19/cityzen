@@ -28,7 +28,7 @@ export default function AnnounceDetailComp(props: { post: PostL, mines?: boolean
                     {image &&
 
                         <img
-                            src={image}
+                            src={image as any}
                             alt={title}
                             className="h-full w-full object-cover"
                         />

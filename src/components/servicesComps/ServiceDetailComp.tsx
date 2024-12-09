@@ -5,6 +5,7 @@ import { GetCategory, GetPoints } from "../../functions/GetDataFunctions";
 import DataContext from "../../contexts/data.context";
 import { useContext } from "react";
 import UserContext from "../../contexts/user.context";
+import { serviceCategories } from "../../datas/enumsCategories";
 
 export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void, isFlaged?: boolean, handleValidate: (id: number) => void }) {
     const { user } = useContext(UserContext)
@@ -14,7 +15,8 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
     const haveImage = service.image ? true : false
     const userAuthor = data.profiles.find((user: Profile) => user.user_id === user_id)
     const isMine = user.user_id === user_id || user.user_id === user_id_resp ? true : false
-    const category = GetCategory(service)
+
+    const category = GetCategory(service, serviceCategories)
     const type = service.type === "get" ? "demande" : "offre";
     const isResp = service.status === 1 ? true : false
     const isValidated = service.status === 2 ? true : false
@@ -42,7 +44,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                     {image &&
 
                         <img
-                            src={image}
+                            src={image as any}
                             alt={title}
                             className="h-full w-full object-cover"
                         />

@@ -55,7 +55,7 @@ export default function CTAMines(props: CTAMinesProps) {
         },
         {
             icon: values && values[1]?.icon !== 'no' ? values[1]?.icon : 'Modifier ?',
-            title: values && values[1]?.title !== 'no' ? values[0]?.title : 'Voulez vous vraiment modifier ?',
+            title: values && values[1]?.title !== 'no' ? values[1]?.title : 'Voulez vous vraiment modifier ?',
             body: values ? values[1]?.body : (data[array].find((element: any) => element.id === id)).title,
             function: () => {
                 if (values[1]?.function() === null) { navigate({ pathname: `/${type}/edit/${id}` }) }
@@ -65,11 +65,11 @@ export default function CTAMines(props: CTAMinesProps) {
         },
         {
             icon: values && values[2]?.icon !== 'no' ? values[2]?.icon : '',
-            title: values ? values[2]?.title : '',
+            title: values ? values[2]?.title : '-',
             body: values ? values[2]?.body : '',
             function: () => {
                 if (values[2]?.function() === null) { }
-                else values[1]?.function
+                else values[2]?.function
 
             }
         }

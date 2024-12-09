@@ -154,7 +154,7 @@ export default function EventListPage() {
             </header>
 
             {view === "view_agenda" && (
-                <main className="Grid">
+                <main className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
                     {view === "view_agenda" &&
                         eventList.map((eventC: EventP, index: number) => (
                             <EventCard

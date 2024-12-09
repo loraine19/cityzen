@@ -69,7 +69,7 @@ export class Profile {
     skills: string[]
     created_at: Date;
     updated_at: Date;
-    avatar?: Blob |string;
+    avatar: any;
     phone?: string;
 
     constructor(
@@ -85,7 +85,7 @@ export class Profile {
         skills: string[] = [],
         created_at: Date = new Date(),
         updated_at: Date = new Date(),
-        avatar?: Blob |string,
+        avatar: any,
         phone?: string,
     ) {
         this.id = id;

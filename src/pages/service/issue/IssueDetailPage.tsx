@@ -8,6 +8,7 @@ import { AcceptUserResp, GetCategory, imIn, takeElement } from '../../../functio
 import DataContext from '../../../contexts/data.context';
 import { action, Service } from '../../../types/class';
 import ServiceDetailComp from '../../../components/servicesComps/ServiceDetailComp';
+import { serviceCategories } from '../../../datas/enumsCategories';
 export default function ServiceDetailPage() {
     const { id } = useParams()
     const { user } = useContext(UserContext);
@@ -23,7 +24,7 @@ export default function ServiceDetailPage() {
     const [selectedService] = useState<Service>(found ? (found) : (data.services[0]))
     const [serviceList, setServiceList] = useState<Service[]>(data.services);
     //////CTAVALUES
-    const category = GetCategory(selectedService)
+    const category = GetCategory(selectedService, serviceCategories)
     const type = selectedService.type === "get" ? "demande" : "offre"
     const mines = found?.user_id === user.id ? true : false
 

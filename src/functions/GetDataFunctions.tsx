@@ -260,10 +260,10 @@ export const FindAdressData = async (addressSaisie: string, array: Address[], da
 }
 
 //// GET CATEGORI SERVICE 
-export const GetCategory = (service: Service): string => {
-    return service.category === 1 ? "cat1" : service.category === 2 ? "cat2" : service.category === 3 ? "cours" : "autre"
-
+export const GetCategory = (service: Service, categories: string[]): string => {
+    return service.category <= categories.length ? categories[(service.category) - 1] : "autre"
 }
+
 export const GetPoints = (service: Service, userAuthor: Profile, userResp?: Profile): number[] => {
     const base = Number(((service.hard / 2 + service.skill / 2) + 1).toFixed(1))
     return userResp ? [base + userResp.assistance / 2] : service.type === "do" ? [base + userAuthor.assistance / 2] : [base, (base + 1.5)]

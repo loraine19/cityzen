@@ -6,6 +6,7 @@ import { useContext } from "react";
 import DataContext from "../../contexts/data.context";
 import UserContext from "../../contexts/user.context";
 import { GetCategory, GetPoints, isLate } from "../../functions/GetDataFunctions";
+import { serviceCategories } from "../../datas/enumsCategories";
 
 
 export default function ServiceComp(props:
@@ -27,10 +28,13 @@ export default function ServiceComp(props:
     const userAuthor = data.profiles.find((user: Profile) => user.user_id === user_id)
     const type = service.type === "get" ? "demande" : "offre"
     const points = GetPoints(service, userAuthor)
-    const category = GetCategory(service)
+    const category = GetCategory(service, serviceCategories)
     const navigate = useNavigate();
-
     const late = isLate(created_at, 15)
+    const isResp = service.status === 1 ? true : false
+    const isValidated = service.status === 2 ? true : false
+    const isFinish = service.status === 3 ? true : false
+    let button = isResp && "en attente" || isValidated && "en cours" || isFinish && "terminé" || 'nouveau'
 
 
     const takenCTA: action[] = [
@@ -73,12 +77,18 @@ export default function ServiceComp(props:
                             </div>
 
                         </button>
-                        <Chip value={(new Date(created_at)).toLocaleDateString('fr-FR')} className={`${late ? "RedChip" : "GrayChip"} rounded-full  h-max flex items-center gap-2 shadow font-medium `}>
-                        </Chip>
+                        <div className="flex items-center gap-4">
+                            <Chip value={button} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}>
+
+                            </Chip>
+                            <Chip value={(new Date(created_at)).toLocaleDateString('fr-FR')} className={`${late ? "RedChip" : "GrayChip"} rounded-full  h-max flex items-center gap-2 shadow font-medium `}>
+                            </Chip>
+
+                        </div>
                     </div>
                     {image &&
                         <img
-                            src={image}
+                            src={image as any}
                             alt={title}
                             className="h-full w-full object-cover"
                         />
@@ -90,7 +100,7 @@ export default function ServiceComp(props:
                             {title}
                         </Typography>
 
-                        <Link to={`/flag${isFlaged ? '/edit' : ''}/service/${id}`} title={`signaler un problème sur ${title}`}>
+                        <Link to={`/flag${isFlaged ? '/edit' : ''}/service${id}`} title={`signaler un problème sur ${title}`}>
 
                             <span className={`${isFlaged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
@@ -108,6 +118,7 @@ export default function ServiceComp(props:
                 </CardBody>
                 <CardFooter className="CardFooter">
                     {mines && userAuthor.id === user.id &&
+
                         <ModifBtnStack id={id} handleClickDelete={handleClickDelete} icon3={late} />}
 
                     {mines && userAuthor.id !== user.id &&

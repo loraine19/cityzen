@@ -23,25 +23,26 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
     const { id, values, disabledEdit, handleClickDelete } = props;
     const { data } = useContext(DataContext);
     const array = GetArrayElement(type)
+    const title = (data[array].find((element: any) => element.id === id)) ? (data[array].find((element: any) => element.id === id)).title : 'titre'
 
     const navigate = useNavigate();
     const [buttons, setButtons] = useState<action[]>([
         {
             icon: "edit",
             title: `Modifier ${type}`,
-            body: (data[array].find((element: any) => element.id === id)).title,
+            body: title,
             function: () => navigate({ pathname: `/${type}/edit/${props.id}` }),
         },
         {
             icon: "close",
             title: `Supprimer ${type}`,
-            body: (data[array].find((element: any) => element.id === id)).title,
+            body: title,
             function: () => { handleClickDelete && handleClickDelete(id) },
         },
         {
             icon: "groups",
             title: `Relancer ${type}`,
-            body: (data[array].find((element: any) => element.id === id)).title,
+            body: title,
             function: () => {
                 alert(`Voulez-vous relancer ${type} ${props.id} ?`);
             },
@@ -91,7 +92,7 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
                 variant="outlined"
                 color="cyan"
                 className={"flex items-center justify-center rounded-full h-9 w-9 p-1"}
-                onClick={() => { setOpen(true), setIndex(0) }}
+                onClick={() => { setOpen(true), setIndex(2) }}
             >
                 <span className="material-symbols-outlined fillThin !text-[1.5rem]">
                     {buttons[2].icon}

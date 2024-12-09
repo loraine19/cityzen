@@ -8,6 +8,7 @@ export const notifCategories: string[] = ["tous", "services", "évenements", "an
 
 export const flagCategories: string[] = ["illicite", "haineux", "dangereux", "irrespecteux", "atteinte à la vie privé"]
 
+export const serviceCategories: string[] = ["bricolage", "cours", "animaux", "autre"]
 
 export const defaultEventImage = [
     { type: "", image: "https://images.squarespace-cdn.com/content/v1/53dd6676e4b0fedfbc26ea91/b5511a07-a9b9-4c65-aa14-474e3698b8f8/6254751079_46a4340650_h.jpg" },

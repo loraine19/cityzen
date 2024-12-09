@@ -61,7 +61,7 @@ export default function SignUpDetailPage() {
             <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
                 <main className='flex flew-1 pt-8'>
                     <Card className="w-respLarge h-full justify-between">  <CardHeader className="bg-transparent shadow-none flex pb-2 justify-center items-end " floated={true}>
-                        <Avatar src={imgBlob ? imgBlob : user.avatar} alt="avatar" size="xl" className=" shadow-md w-24 h-24" />
+                        <Avatar src={imgBlob ? imgBlob : user?.avatar} alt="avatar" size="xl" className=" shadow-md w-24 h-24" />
                         <div className="flex -ml-8">
                             <Button color="gray" className="w-8 h-12 rounded-full z-20">
                                 <label htmlFor="image"

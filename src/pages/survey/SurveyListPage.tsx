@@ -182,7 +182,7 @@ export default function SurveyListPage() {
         },
     ];
 
-    useEffect(() => {}, []);
+    useEffect(() => { }, []);
 
     return (
         <div className="Body orange">
@@ -203,11 +203,11 @@ export default function SurveyListPage() {
             </header>
             <main>
                 <div className="grid gap-4 md:grid-cols-2 w-full">
-                    {surveysPoolsList.map((element: any) =>
+                    {surveysPoolsList.map((element: any, index: number) =>
                         element.category ? (
-                            <SurveyCard survey={element} id={element.id} />
+                            <SurveyCard survey={element} id={element.id} key={index} />
                         ) : (
-                            <PoolCard pool={element} id={element.id} />
+                            <PoolCard pool={element} id={element.id} key={index} />
                         )
                     )}
                 </div>
