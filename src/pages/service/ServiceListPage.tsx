@@ -32,14 +32,7 @@ export default function ServicesPage() {
     const params = (searchParams.get("search"))
 
     useEffect(() => {
-        const load = async () => await data.services.length >
-            setServices([...data.services])
-        load()
-    }, [services.length])
-
-    useEffect(() => {
-
-        const Tab: any = document.querySelector(`li[data-value="${params}"]`);
+        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${params}"]`);
         params && Tab && Tab.click();
     }, [params])
 
@@ -60,11 +53,10 @@ export default function ServicesPage() {
         await activeTab.click();
     }
 
-
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé"];
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray);
 
-    function selectBox(e: any) {
+    function selectBox(e: React.ChangeEvent<HTMLInputElement>) {
         e.target.checked ? boxSelected.push(e.target.value) : boxSelected.splice(boxSelected.indexOf(e.target.value), 1)
         setBoxSelected([...boxSelected])
         return boxSelected
@@ -85,7 +77,7 @@ export default function ServicesPage() {
         setServices(filterCheck(boxSelected))
     }, [boxSelected])
 
-    const [cat, setCat]: any = useState("")
+    const [cat, setCat] = useState<string>("")
 
     /////FILTER FUNCTIONS
     const filterServices = (newArray: Service[], value: string) => {
@@ -121,7 +113,7 @@ export default function ServicesPage() {
 
 
     const search = (cat: string) => {
-        const Tab: any = document.querySelector(`li[data-value="${tabSelected}"]`);
+        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${tabSelected}"]`);
         setCategorySelected(cat);
         Tab && Tab.click();
         let copy2 = servicesTabled.filter((service: Service) => GetCategory(service, serviceCategories) === cat || service.title.toLowerCase().includes(cat.toLowerCase()) || service.description.toLowerCase().includes(cat.toLowerCase()))
@@ -139,9 +131,7 @@ export default function ServicesPage() {
         <div className="Body cyan">
             <header className=" px-4">
                 <NavBarTop />
-
                 <SubHeader qty={services.length} type={"service " + `${categorySelected != serviceCategories[0] ? categorySelected : ""} `} />
-
                 <TabsMenu labels={serviceTabs} subMenu={false} />
                 {mines ?
                     <CheckCard
