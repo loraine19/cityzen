@@ -14,7 +14,6 @@ import { useSearchParams } from "react-router-dom";
 import { CheckCard } from "../../components/CheckCard";
 import { SelectSearch } from "../../components/SelectSearch";
 
-
 export default function ServicesPage() {
     const { user } = useContext(UserContext);
     const { data, setDataInLocal } = useContext(DataContext);
@@ -38,7 +37,6 @@ export default function ServicesPage() {
 
     useEffect(() => {
         setCopy([...data.services])
-        console.log(services.length)
     }, [data.services])
 
 
@@ -77,9 +75,8 @@ export default function ServicesPage() {
         setServices(filterCheck(boxSelected))
     }, [boxSelected])
 
-    const [cat, setCat] = useState<string>("")
 
-    /////FILTER FUNCTIONS
+
     const filterServices = (newArray: Service[], value: string) => {
         value !== tabSelected && setCategorySelected(serviceCategories[0]);
         setServicesTabled(newArray);
@@ -112,8 +109,10 @@ export default function ServicesPage() {
     ]
 
 
+    const [cat, setCat] = useState<string>("")
     const search = (cat: string) => {
         const Tab: HTMLElement | null = document.querySelector(`li[data-value="${tabSelected}"]`);
+
         setCategorySelected(cat);
         Tab && Tab.click();
         let copy2 = servicesTabled.filter((service: Service) => GetCategory(service, serviceCategories) === cat || service.title.toLowerCase().includes(cat.toLowerCase()) || service.description.toLowerCase().includes(cat.toLowerCase()))
@@ -150,7 +149,7 @@ export default function ServicesPage() {
                         <div className="pt-6 h-[calc(40Vh+2rem)]  w-respLarge" key={index}>
                             <ServiceComp
                                 service={service}
-                                change={() => { }}
+                                change={(cat: string) => search(cat)}
                                 mines={mines}
                                 key={service.id}
                                 isFlaged={isFlaged(service)}
