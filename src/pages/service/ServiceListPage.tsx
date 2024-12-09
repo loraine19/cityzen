@@ -24,7 +24,7 @@ export default function ServicesPage() {
     const [copy, setCopy] = useState<Service[]>([...data.services])
     const [services, setServices] = useState<Service[]>([...data.services])
     const [mines, setMines] = useState<boolean>(false);
-    const [tabSelected, setTabSelected] = useState<string>("");
+    const [tabSelected, setTabSelected] = useState<string>("mines");
     const [servicesTabled, setServicesTabled] = useState<Service[]>([...data.services]);
     const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
     const activeTab: any = document.querySelector(`li[data-value="${tabSelected}"]`);
@@ -32,6 +32,13 @@ export default function ServicesPage() {
     const params = (searchParams.get("search"))
 
     useEffect(() => {
+        const load = async () => await data.services.length >
+            setServices([...data.services])
+        load()
+    }, [services.length])
+
+    useEffect(() => {
+
         const Tab: any = document.querySelector(`li[data-value="${params}"]`);
         params && Tab && Tab.click();
     }, [params])
