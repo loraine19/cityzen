@@ -38,6 +38,7 @@ import ConciliationDetailPage from "./pages/conciliation/ConciliationDetailPage"
 import NotificationPage from "./pages/myInfos/NotificationPage";
 import { DataProvider } from "./contexts/data.context";
 import NotFindPage from "./pages/NotFindPage";
+import { Test } from "./pages/Test";
 
 
 
@@ -104,6 +105,7 @@ function App() {
                             <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
 
                             <Route path="/*" element={<NotFindPage />} />
+                            <Route path="/test" element={<Test />} />
 
 
                         </Routes>

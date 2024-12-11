@@ -109,7 +109,7 @@ export default function CTAMines(props: CTAMinesProps) {
                     <Button className={buttons[2]?.icon === '' || !buttons[2]?.icon ? "hidden" : " rounded-full w-full !shadow lgBtn"}
                         color="green"
                         onClick={() => { setOpen(true), setIndex(2) }}>
-                        {buttons[2]?.icon}.
+                        {buttons[2]?.icon}
                     </Button>
                 </>}
         </footer>

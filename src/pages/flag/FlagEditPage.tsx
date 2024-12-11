@@ -12,11 +12,12 @@ import { all, flag, } from '../../types/type';
 import FlagDetailComp from '../../components/flagComps/FlagDetailComp';
 import DataContext from '../../contexts/data.context';
 import { Flag } from '../../types/class';
+import { ConfirmModal } from '../../components/ConfirmModal';
 
 export default function FlagEditPage() {
     const { id } = useParams()
     const { user } = useContext(UserContext)
-    const { data } = useContext(DataContext)
+    const { data, setDataInLocal } = useContext(DataContext)
     const { flags, posts, events, surveys, pools, services } = data
     const idS = user.id ? user.id : 0
     const elementList: all[] = getCommuns(posts, events, surveys, pools, services);
@@ -46,20 +47,42 @@ export default function FlagEditPage() {
     })
     const [value, setValue] = useState("");
 
+
+
     const formik = useFormik({
-        initialValues: newFlag,
+        initialValues: newFlag as flag,
         validationSchema: formSchema,
         onSubmit: values => {
             setNewFlag(values)
-            alert("Flag enregistré : " + JSON.stringify(values, null, 2));
-            navigate("/flag")
+            formik.values = values
+            setOpen(true)
+            value && console.log("avoid compile error ", value)
+
         }
     });
 
 
+    const [open, setOpen] = useState(false);
+    const index = data.flags.findIndex((element: any) => (element.user_id + element.type + element.target_id) === newFlag.user_id + newFlag.type + newFlag.target_id);
+    function saveIssue() {
 
+        data.flags[index] = newFlag
+        setDataInLocal({ ...data, flags: [...data.flags] })
+    }
     return (
         <div className="Body gray">
+
+            <ConfirmModal
+                open={open}
+                handleOpen={() => setOpen(false)}
+                handleCancel={() => { setOpen(false) }}
+                handleConfirm={() => {
+                    saveIssue();
+                    navigate("/flag")
+                    setOpen(false)
+                }}
+                title={"Confimrer le litige"}
+                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2 pb-3">
                 <header className="px-4">
                     <NavBarTop />

@@ -99,19 +99,19 @@ export default function DashboardPage() {
                                     <Link to="/myprofile">
                                         <span
                                             className=" pt-[0.3rem] pb-[0.2rem]
-                                     material-symbols-rounded fill bg-cyan-200 rounded-full p-1 !text-[1rem] text-cyan-800"
+                                     material-symbols-rounded !notranslate fill bg-cyan-200 rounded-full p-1 !text-[1rem] text-cyan-800"
                                         >
-                                            person_edit
+                                            &#xf4fa;
                                         </span>
                                     </Link>
                                     <Link to="/">
-                                        <span className=" pt-[0.3rem] pb-[0.2rem] material-symbols-rounded fill bg-orange-200 rounded-full p-1 !text-[1rem] text-orange-800">
-                                            shield_person
+                                        <span className=" pt-[0.3rem] pb-[0.2rem] material-symbols-rounded notranslate notranslate fill bg-orange-200 rounded-full p-1 !text-[1rem] text-orange-800">
+                                            &#xef3d;
                                         </span>
                                     </Link>
                                     <Link to="/">
-                                        <span className="pt-[0.3rem] pb-[0.2rem] material-symbols-rounded fill bg-gray-400 rounded-full p-1 !text-[1rem] text-gray-800">
-                                            book_4
+                                        <span className="pt-[0.3rem] pb-[0.2rem] material-symbols-rounded notranslate fill bg-gray-400 rounded-full p-1 !text-[1rem] text-gray-800">
+                                            &#xf53c;
                                         </span>
                                     </Link>
                                 </div>

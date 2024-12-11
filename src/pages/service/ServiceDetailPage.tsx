@@ -26,7 +26,7 @@ export default function ServiceDetailPage() {
     //////CTAVALUES
     const category = GetCategory(selectedService, serviceCategories)
     const type = selectedService.type === "get" ? "demande" : "offre"
-    const mines = found?.user_id === user.id ? true : false
+    const mines = (found?.user_id === user.id) ? true : false
 
     let isPost = selectedService.status === 0 ? true : false
     let isResp = selectedService.status === 1 ? true : false
@@ -61,8 +61,8 @@ export default function ServiceDetailPage() {
 
     const buttonsValidate: action[] = [
         {
-            icon: isResp && "no" || isValidated && "Besoins d'aide ?" || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || 'no',
-            title: isResp && "no" || isValidated && "Ouvrir un litige ?" || 'no',
+            icon: isPost && "no" || isResp && "no" || isValidated && "Besoins d'aide ?" || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || 'no',
+            title: isPost && "no" || isResp && "" || isValidated && "Ouvrir un litige ?" || 'no',
             body: selectedService.title,
             function: () => {
                 if (isValidated) { isValidated && navigate(`/litige/create/${selectedService.id}`) }
@@ -70,8 +70,8 @@ export default function ServiceDetailPage() {
             }
         },
         {
-            icon: isResp && "no" || isValidated && 'Service finis ?' || isFinish && '' || 'no',
-            title: isResp && "no" || isValidated && "Cloturer le service ?" || 'no',
+            icon: isPost && "no" || isResp && "no" || isValidated && 'Service finis ?' || isFinish && '' || '',
+            title: isPost && "no" || isResp && "" || isValidated && "Cloturer le service ?" || '',
             body: selectedService.title,
             function: () => {
                 if (isResp) { handleFinish(selectedService.id) }
@@ -79,8 +79,8 @@ export default function ServiceDetailPage() {
             }
         },
         {
-            icon: isResp && "valider ?" || isValidated && '' || isFinish && '' || '',
-            title: isResp && "Accepter la reponse" || '',
+            icon: isResp && "valider ? " || isValidated && '' || isFinish && '' || '',
+            title: isResp && "Accepter la reponse" || isValidated && '' || isFinish && '' || '',
             body: selectedService.title,
             function: () => {
                 if (isResp) { handleValidate(selectedService.id) }
@@ -92,9 +92,9 @@ export default function ServiceDetailPage() {
     /// RESP 
     const buttons: action[] = [
         {
-            icon: isResp && "annuler ?" || isValidated && '' || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || '',
+            icon: isResp && "annuler ?" || isValidated && 'ce service est déjà pris ... ' || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || '',
             title: isResp && "Vous annulez votre réponse" || isValidated && "Ouvrir un litige ?" || '',
-            body: selectedService.title + 'c',
+            body: selectedService.title + '',
             function: () => {
                 if (isResp) { handleTake(selectedService.id) }
                 else { return null }
@@ -141,6 +141,7 @@ export default function ServiceDetailPage() {
                 :
                 <CTAMines
                     id={selectedService.id}
+                    disabled1={isValidated}
                     values={buttons}
                 />
             }

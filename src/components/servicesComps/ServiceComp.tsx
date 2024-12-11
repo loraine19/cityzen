@@ -19,7 +19,6 @@ export default function ServiceComp(props:
         isFlaged?: boolean
     }) {
 
-
     const { data } = useContext(DataContext);
     const { user } = useContext(UserContext)
     const { service, mines, change, handleClickDelete, handleClickTake, isFlaged } = props
@@ -65,14 +64,16 @@ export default function ServiceComp(props:
             <Card className={`CardFix  ${haveImage ? "!h-full " : "!h-[calc(100%+1.5rem)] -mt-6"}`}>
                 <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeader NoImage"}
                     floated={haveImage}>
-                    <div className={` ${haveImage && "absolute p-2"} h-max w-full flex justify-between   `}>
+                    <div className={` ${haveImage && "absolute p-2"} h-max w-full flex justify-between`}>
                         <div className="flex items-start  md:items-center gap-2 mb-1">
-                            <button onClick={(e: any) => change(e.target.innerText.toLowerCase() as string)}>
+                            <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat); console.log(cat) }}>
                                 <Chip value={`${category}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
                                 </Chip>
                             </button>
-                            <Chip value={type} className={`${service.type === "get" ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
-                            </Chip>
+                            <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat); console.log(cat) }}>
+                                <Chip value={type} className={`${service.type === "get" ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
+                                </Chip>
+                            </button>
                         </div>
 
 

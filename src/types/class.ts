@@ -243,31 +243,31 @@ export class Service {
 //// ISSUE
 export class Issue {
     id: number;
-    user_id_Mget: number;
-    user_id_Mdo: number;
+    user_id_M: number;
+    user_id_Mresp: number;
     servicesid: number;
     description: string;
     date: Date;
     status: "solved" | "pending";
     created_at: Date;
     updated_at: Date;
-    image?: Blob;
+    image?: Blob | string;
 
     constructor(
         id: number,
-        user_id_Mget: number,
-        user_id_Mdo: number,
+        user_id_M: number,
+        user_id_Mresp: number,
         servicesid: number,
         description: string,
         date: Date,
         status: "solved" | "pending",
         created_at: Date,
         updated_at: Date,
-        image?: Blob
+        image?: Blob| string
     ) {
         this.id = id;
-        this.user_id_Mget = user_id_Mget;
-        this.user_id_Mdo = user_id_Mdo;
+        this.user_id_M = user_id_M;
+        this.user_id_Mresp = user_id_Mresp;
         this.servicesid = servicesid;
         this.description = description;
         this.date = date;
@@ -469,19 +469,25 @@ export class Flag {
     target_id: number;
     user_id: number;
     target: string;
-    created_at: Date;
-    updated_at: Date;
+    active: boolean;
+    reason: string;
+    created_at: Date | string
+    updated_at: Date | string;
 
     constructor(
         target_id: number,
         user_id: number,
         target: string,
-        created_at: Date,
-        updated_at: Date
+        active: boolean,
+        reason: string,
+        created_at: Date  | string, 
+        updated_at: Date  | string
     ) {
         this.target_id = target_id;
         this.user_id = user_id;
         this.target = target;
+        this.active = active;
+        this.reason = reason;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
@@ -500,9 +506,5 @@ export interface EventP extends Event{
 export interface PostL extends Post{
     users?: []
 }
-
-
-
-
 
 export type action = { icon: string, function: () => void, title: string, body: any }

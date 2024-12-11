@@ -12,10 +12,12 @@ import { object, string } from 'yup';
 import { all, flag, } from '../../types/type';
 import FlagDetailComp from '../../components/flagComps/FlagDetailComp';
 import DataContext from '../../contexts/data.context';
+import { ConfirmModal } from '../../components/ConfirmModal';
+import parse from 'html-react-parser';
 export default function FlagDetailPage() {
     const { id } = useParams()
     const { user } = useContext(UserContext)
-    const { data } = useContext(DataContext)
+    const { data, setDataInLocal } = useContext(DataContext)
     const { posts, events, surveys, pools, services } = data
     const idS = user.id ? user.id : 0
     const elementList: all[] = getCommuns(posts, events, surveys, pools, services);
@@ -42,19 +44,38 @@ export default function FlagDetailPage() {
     const [value, setValue] = useState("");
 
     const formik = useFormik({
-        initialValues: newFlag,
+        initialValues: newFlag as flag,
         validationSchema: formSchema,
         onSubmit: values => {
             setNewFlag(values)
-            alert("Flag enregistré : " + JSON.stringify(values, null, 2));
-            navigate("/flag")
+            formik.values = values
+            setOpen(true)
+            value && console.log("avoid compile error ", value)
+
         }
     });
 
-    console.log(formik.values)
 
+    const [open, setOpen] = useState(false);
+    function saveIssue() {
+
+        data.flags.push(newFlag),
+            setDataInLocal({ ...data, flags: [...data.flags] })
+    }
     return (
         <div className="Body gray">
+
+            <ConfirmModal
+                open={open}
+                handleOpen={() => setOpen(false)}
+                handleCancel={() => { setOpen(false) }}
+                handleConfirm={() => {
+                    saveIssue();
+                    navigate("/flag")
+                    setOpen(false)
+                }}
+                title={"Confimrer le litige"}
+                element={parse((JSON.stringify(formik.values, null, 2).replace(/,/g, "   ",).replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")) as any} />
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2 pb-3">
                 <header className="px-4">
                     <NavBarTop />

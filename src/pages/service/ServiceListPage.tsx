@@ -36,13 +36,14 @@ export default function ServicesPage() {
     }, [params])
 
     useEffect(() => {
-        setCopy([...data.services])
+        setServices([...data.services])
     }, [data.services])
 
 
     const handleClickDelete = (id: number) => {
         deleteElement(id, services, setServices);
         setDataInLocal({ ...data, services: data.services.filter((service: Service) => service.id !== id) })
+        services.sort((a, b) => b.id - a.id)
     }
 
     const handleTake = async (id: number) => {
@@ -61,18 +62,18 @@ export default function ServicesPage() {
     }
 
     const filterCheck = (boxSelected: string[]) => {
-        let box0 = boxSelected.includes(boxArray[0]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.type === boxSelected[0]) : []
-        let box1 = boxSelected.includes(boxArray[1]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.type === boxSelected[1]) : []
+        let box0 = boxSelected.includes(boxArray[0]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.type !== "get") : []
+        let box1 = boxSelected.includes(boxArray[1]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.type !== "do") : []
         let box2 = boxSelected.includes(boxArray[2]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 0) : []
         let box3 = boxSelected.includes(boxArray[3]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 1) : []
         let box4 = boxSelected.includes(boxArray[4]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 2) : []
         let box5 = boxSelected.includes(boxArray[5]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 3) : []
-        let concat = [...box0, ...box1, ...box2, ...box3, ...box4, ...box5]
-        return concat
+        return [... new Set([...box0, ...box1, ...box2, ...box3, ...box4, ...box5])]
     }
 
     useEffect(() => {
-        setServices(filterCheck(boxSelected))
+        if (mines
+        ) { setServices(filterCheck(boxSelected)) }
     }, [boxSelected])
 
 
@@ -112,7 +113,6 @@ export default function ServicesPage() {
     const [cat, setCat] = useState<string>("")
     const search = (cat: string) => {
         const Tab: HTMLElement | null = document.querySelector(`li[data-value="${tabSelected}"]`);
-
         setCategorySelected(cat);
         Tab && Tab.click();
         let copy2 = servicesTabled.filter((service: Service) => GetCategory(service, serviceCategories) === cat || service.title.toLowerCase().includes(cat.toLowerCase()) || service.description.toLowerCase().includes(cat.toLowerCase()))
@@ -121,7 +121,7 @@ export default function ServicesPage() {
 
     //// USE EFFECT 
     useEffect(() => {
-        services.length > 0 ? setNotif('') : setNotif(`Aucune annonce ${tabSelected} ${categorySelected != serviceCategories[0] && categorySelected ? "de la catégorie " + categorySelected : ""} n'a été trouvé`);
+        services.length > 0 ? setNotif('') : setNotif(`Aucun service ${tabSelected} ${categorySelected != serviceCategories[0] && categorySelected ? " " + categorySelected : ""} n'a été trouvé`);
     }, [services])
 
 

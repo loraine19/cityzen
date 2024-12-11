@@ -14,7 +14,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
     const { data } = useContext(DataContext);
     const haveImage = service.image ? true : false
     const userAuthor = data.profiles.find((user: Profile) => user.user_id === user_id)
-    const isMine = user.user_id === user_id || user.user_id === user_id_resp ? true : false
+    const isMine = (user.user_id === user_id || user.user_id === user_id_resp) ? true : false
 
     const category = GetCategory(service, serviceCategories)
     const type = service.type === "get" ? "demande" : "offre";
@@ -70,12 +70,12 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                     </div>
 
                     <div className="CardOverFlow h-full ">
-                        <div className="flex  h-full flex-col md:flex-row md: gap-8">
-                            <Typography color="blue-gray" className="mb-2">
+                        <div className="flex  h-full md: gap-8">
+                            <Typography color="blue-gray" className="flex-1 border-r-2 pr-4">
                                 {description}
                             </Typography>
                             {isMine && isResp &&
-                                <div className="flex  flex-1 flex-col justify-between items-end  gap-2">
+                                <div className="flex w-[40%] flex-col justify-between items-end  gap-2">
                                     <Typography variant="h6" color="blue-gray" className="text-right">
 
                                         {isMine ? "Réponse" : "Vous avez repondu"} <br></br>à la   {type}

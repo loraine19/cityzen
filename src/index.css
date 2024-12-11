@@ -142,6 +142,10 @@ footer {
     font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
     font-size: 48px;
 }
+
+.material-symbols-rounded:not() {
+    display: none;
+}
 nav .material-symbols-rounded {
     font-size: 29px;
     font-variation-settings: "wght" 300 !important;
