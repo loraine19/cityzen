@@ -10,8 +10,10 @@ import { getDays, getNotifications, GetPathElement, getUsersDetail } from "../fu
 import UserContext from "../contexts/user.context";
 import DataContext from "../contexts/data.context";
 import { EventP, Profile, } from "../types/class";
-import { getUserMe } from "../functions/API/usersApi";
+import { getRefreshToken, getUserMe } from "../functions/API/usersApi";
 import { getEvents } from "../functions/API/eventsApi";
+import { refreshAccess } from "../functions/API/useApi";
+
 
 export default function DashboardPage() {
     const { setUserCont, userNotif, setUserNotif } = useContext(UserContext)
@@ -45,6 +47,14 @@ export default function DashboardPage() {
         }
         fetch()
     }, []);
+
+
+
+    const fetchRefreshToken = async () => {
+        const token = await refreshAccess();
+        console.log(token)
+    };
+
     const notifList = getNotifications(posts, events as any, surveys, pools, services, idS);
 
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
@@ -76,6 +86,7 @@ export default function DashboardPage() {
                             )}
                         </Select></div>
                     <Button ripple={false} variant="text" size="sm" onClick={() => { resetData() }} className="text-sm !font-light rounded-full flex-1 px-5">Reset local </Button>
+                    <button onClick={() => fetchRefreshToken()} className="text-sm !font-light rounded-full flex-1 px-5">refresh token</button>
                 </div>
                 <AuthHeader />
                 <Link to="/notification">

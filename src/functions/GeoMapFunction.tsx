@@ -41,6 +41,40 @@ export const GetAdressString = async (lat: number, lng: number) => {
     catch (error) { console.log(error) }
 }
 
+export const GetAddressDataByGps = async (lat: number, lng: number) => {
+    try {
+        let adressString = {} as any
+        const { results } = await fromLatLng(lat, lng);
+        adressString = {
+            address: results[0].address_components[0]?.long_name + " " + results[0].address_components[1].long_name,
+            city: results[0].address_components[2]?.long_name,
+            zipcode: (results[0].address_components[6]?.long_name),
+            lat: results[0].geometry.location.lat,
+            lng: results[0].geometry.location.lng,
+        }
+        console.log('554,', adressString)
+        return (adressString)
+    }
+    catch (error) { console.log(error) }
+}
+
+export const GetAddressObject = async (adress: string) => {
+    try {
+        let adressString = {} as any
+        const { results } = await fromAddress(adress);
+        adressString = {
+            address: results[0].address_components[0]?.long_name + " " + results[0].address_components[1].long_name,
+            city: results[0].address_components[2]?.long_name,
+            zipcode: (results[0].address_components[6]?.long_name),
+            lat: results[0].geometry.location.lat,
+            lng: results[0].geometry.location.lng,
+        }
+        console.log('formated addres object for db', adressString)
+        return (adressString)
+    }
+    catch (error) { console.log(error) }
+}
+
 
 // // Get address fr
 

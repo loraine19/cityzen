@@ -38,7 +38,7 @@ export const getAdress = (id: number, arraySearch: Address[]): Address | undefin
     return arraySearch.filter((element: any) => element.id === id)[0]
 }
 export const getUserDetail = (id: number, arraySearch: Profile[]): Profile | undefined => {
-    return arraySearch.filter((element: Profile) => element.user_id as number === id)[0]
+    return arraySearch.filter((element: Profile) => element.userId as number === id)[0]
 }
 
 

@@ -1,20 +1,13 @@
 import { User, Auth } from "../../types/class";
-import { useApi } from "./useApi";
+import { handleApiCall, useApi, useApiRefresh } from "./useApi";
+import Cookies from 'js-cookie';
 
 type UserDto = Partial<User>;
 // type AuthDto = Partial<Auth>;
 
 const api = useApi();
 const dataType = "users";
-
-const handleApiCall = async (apiCall: () => Promise<any>) => {
-    try {
-        const { data } = await apiCall();
-        return data;
-    } catch (error) {
-        console.error(error);
-    }
-};
+const apiRefresh = useApiRefresh();
 
 
 // USERS
@@ -35,4 +28,12 @@ export const signIn = async (credentials: { email: string, password: string }): 
 
 export const signUp = async (user: any): Promise<Auth> => handleApiCall(() => api.post('auth/signup', user));
 
-export const refreshToken = async (refreshtoken: string): Promise<Auth> => handleApiCall(() => api.post('auth/refresh', { refreshtoken }));
+
+// export const getRefreshToken = async (): Promise<Auth> => handleApiCall(async () => {
+//     const refreshToken = Cookies.get('refreshToken');
+//     const data = { refreshToken };
+//     const result = await apiRefresh.post('auth/refresh', data);
+//     Cookies.set('accessToken', result.data.accessToken, { expires: 1 });
+//     Cookies.set('refreshToken', result.data.refreshToken, { expires: 10 });
+//     return result;
+// });
