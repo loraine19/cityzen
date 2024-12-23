@@ -1,510 +1,302 @@
-
-// GROUP
-export class Group {
-    id: number;
-    address_id: number;
-    area: number;
-    rules: string;
-    name: string;
-    created_at: Date;
-    updated_at: Date;
-
-    constructor(
-        id: number,
-        address_id: number,
-        area: number,
-        rules: string,
-        name: string,
-        created_at: Date,
-        updated_at: Date
-    ) {
-        this.id = id;
-        this.address_id = address_id;
-        this.area = area;
-        this.rules = rules;
-        this.name = name;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
-}
+import Decimal from "decimal.js";
 
 
-//// USER
-export class User {
-    id: number;
-    email: string;
-    password: string;
-    created_at: Date;
-    updated_at: Date;
-    lastConnection: Date;
-
-    constructor(
-        id: number,
-        email: string,
-        password: string,
-        created_at: Date,
-        updated_at: Date,
-        lastConnection: Date
-    ) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.lastConnection = lastConnection;
-    }
-}
-
-///// PROFILE
-export class Profile {
-    id: number;
-    user_id: number;
-    user_id_sp: number;
-    address_id: number;
-    firstName: string;
-    lastName: string;
-    addressShared: boolean;
-    assistance: 0 | 1 | 2 | 3;
-    points: number;
-    skills: string[]
-    created_at: Date;
-    updated_at: Date;
-    avatar: any;
-    phone?: string;
-
-    constructor(
-        id: number,
-        user_id: number,
-        user_id_sp: number,
-        address_id: number = 1,
-        firstName: string,
-        lastName: string,
-        addressShared: boolean = false,
-        assistance: 0 | 1 | 2 | 3,
-        points: number = 0,
-        skills: string[] = [],
-        created_at: Date = new Date(),
-        updated_at: Date = new Date(),
-        avatar: any,
-        phone?: string,
-    ) {
-        this.id = id;
-        this.user_id = user_id;
-        this.user_id_sp = user_id_sp;
-        this.address_id = address_id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.addressShared = addressShared;
-        this.assistance = assistance;
-        this.points = points;
-        this.skills = skills;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.avatar = avatar;
-        this.phone = phone;
-    }
-}
-
-
-// ADRESS
 export class Address {
-    id: number;
-    zipcode: string;
-    city: string;
-    country?: string;
-    address: string;
-    lat: number;
-    lng: number;
-    created_at: number;
-    updated_at: number;
-
-    constructor(
-        id: number,
-        zipcode: string,
-        city: string,
-        country: string,
-        address: string,
-        lat: number,
-        lng: number,
-        created_at: number,
-        updated_at: number
-    ) {
-        this.id = id;
-        this.zipcode = zipcode;
-        this.city = city;
-        this.country = country;
-        this.address = address;
-        this.lat = lat;
-        this.lng = lng;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
+    id: number = 0;
+    address: string = '';
+    zipcode: string = '';
+    city: string = '';
+    // lat: Decimal = new Decimal(0); // or string if needed
+    // lng: Decimal = new Decimal(0); // or string if needed
+    lat: number = 0; // or string if needed
+    lng: number = 0; // or string if needed
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-// EVENT 
-export class Event {
-    id: number;
-    user_id: number;
-    address_id: number;
-    start: Date;
-    end: Date;
-    title: string;
-    description: string;
-    category: string;
-    participants_min: number;
-    created_at: Date;
-    updated_at: Date;
-    image?: Blob |string;
-
-    constructor(
-        id: number,
-        user_id: number,
-        address_id: number,
-        start: Date,
-        end: Date,
-        title: string,
-        description: string,
-        category: string,
-        participants_min: number,
-        created_at: Date,
-        updated_at: Date,
-        image?: Blob |string 
-    ) {
-        this.id = id;
-        this.user_id = user_id;
-        this.address_id = address_id;
-        this.start = start;
-        this.end = end;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.participants_min = participants_min;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.image = image;
-    }
+export class User {
+    id: number = 0;
+    email: string = '';
+    password: string = '';
+    Profile: Profile = new Profile();
+    image: string = '';
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
+    lastConnection: Date = new Date();
 }
 
-///// SERVICES
-export class Service {
-    id: number;
-    user_id: number;
-    user_id_resp: number;
-    type: 'get' | 'do';
-    title: string;
-    description: string;
-    category: 1 | 2 | 3 | 4;
-    skill: 1 | 2 | 3 | 0;
-    hard: 1 | 2 | 3 | 0;
-    status: 0 | 1 | 2 | 3 | 4
-    created_at: Date;
-    updated_at: Date;
-    image?: Blob;
-    finished_at?: Date;
-
-
-    constructor(
-        id: number,
-        user_id: number,
-        user_id_resp: number,
-        type: 'get' | 'do',
-        title: string,
-        description: string,
-        category:  1 | 2 | 3 | 4,
-        skill: 1 | 2 | 3 | 0,
-        hard: 1 | 2 | 3 | 0,
-        status: 0 | 1 | 2 | 3 | 4,
-        created_at: Date,
-        updated_at: Date,
-        image?: Blob,
-        finished_at?: Date,
-
-    ) {
-        this.id = id;
-        this.user_id = user_id;
-        this.user_id_resp = user_id_resp;
-        this.type = type;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.skill = skill;
-        this.hard = hard;
-        this.status = status;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.image = image;
-        this.finished_at = finished_at;
-
-    }
+export class Profile {
+    id: number = 0;
+    user: User = new User();
+    userId: number = 0;
+    userIdSp: number = 0;
+    addressId: number = 0;
+    Address: Address = new Address();
+    firstName: string = '';
+    lastName: string = '';
+    image: string = '';
+    phone: string = '';
+    addressShared: boolean = false;
+    assistance: AssistanceLevel = AssistanceLevel.LEVEL_0;
+    points: number = 0;
+    skills: string[] = [''];
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-
-
-//// ISSUE
-export class Issue {
-    id: number;
-    user_id_M: number;
-    user_id_Mresp: number;
-    servicesid: number;
-    description: string;
-    date: Date;
-    status: "solved" | "pending";
-    created_at: Date;
-    updated_at: Date;
-    image?: Blob | string;
-
-    constructor(
-        id: number,
-        user_id_M: number,
-        user_id_Mresp: number,
-        servicesid: number,
-        description: string,
-        date: Date,
-        status: "solved" | "pending",
-        created_at: Date,
-        updated_at: Date,
-        image?: Blob| string
-    ) {
-        this.id = id;
-        this.user_id_M = user_id_M;
-        this.user_id_Mresp = user_id_Mresp;
-        this.servicesid = servicesid;
-        this.description = description;
-        this.date = date;
-        this.status = status;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.image = image;
-    }
+export class Group {
+    id: number = 0;
+    name: string = '';
+    description: string = '';
+    address: Address = new Address();
+    addressId: number = 0;
+    area: number = 0;
+    rules: string = '';
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-
-
-////// SURVEY 
-export class Survey {
-    id: number;
-    user_id: number;
-    title: string;
-    description: string;
-    category: string;
-    created_at: Date;
-    updated_at: Date;
-    image?: Blob;
-
-    constructor(
-        id: number,
-        user_id: number,
-        title: string,
-        description: string,
-        category: string,
-        created_at: Date,
-        updated_at: Date,
-        image?: Blob
-    ) {
-        this.id = id;
-        this.user_id = user_id;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.image = image;
-    }
+export class EventP {
+    id: number = 0;
+    name: string = '';
+    description: string = '';
+    startAt: Date = new Date();
+    endAt: Date = new Date();
+    address: Address = new Address();
+    addressId: number = 0;
+    group: Group = new Group();
+    groupId: number = 0;
+    userId: number = 0;
+    image: string = '';
+    title: string = '';
+    start: Date = new Date();
+    end: Date = new Date();
+    category: EventCategory = EventCategory.CATEGORY_1
+    participantsMin: number = 0;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
+    Participants: Participant[] = [new Participant()];
 }
 
-////POOL
-export class Pool {
-    id: number;
-    user_idCreat: number;
-    user_idBenef: number;
-    title: string;
-    description: string;
-    created_at: Date;
-    updated_at: Date;
-
-    constructor(
-        id: number,
-        user_idCreat: number,
-        user_idBenef: number,
-        title: string,
-        description: string,
-        created_at: Date,
-        updated_at: Date
-    ) {
-        this.id = id;
-        this.user_idCreat = user_idCreat;
-        this.user_idBenef = user_idBenef;
-        this.title = title;
-        this.description = description;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
+export class Participant {
+    id: number = 0;
+    eventP: EventP = new EventP();
+    eventPId: number = 0;
+    User: User = new User();
+    userId: number = 0;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-//// POST 
 export class Post {
-    id: number;
-    user_id: number;
-    title: string;
-    description: string;
-    category: string;
-    share : ["phone"]|["email"]|["phone","email"];
-    created_at: Date;
-    updated_at: Date;
-    image?: Blob | string;
-    constructor(
-        id: number,
-        user_id: number,
-        title: string,
-        description: string,
-        category: string,
-        share : ["phone"]|["email"]|["phone","email"],
-        created_at: Date,
-        updated_at: Date,
-        image?: Blob | string,
-    ) {
-        this.id = id;
-        this.user_id = user_id;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.share = share;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.image = image;
-    }
+    id: number = 0;
+    content: string = '';
+    author: User = new User();
+    authorId: number = 0;
+    group: Group = new Group();
+    groupId: number = 0;
+    userId: number = 0;
+    image: string = '';
+    title: string = '';
+    description: string = '';
+    category: PostCategory = PostCategory.CATEGORY_1;
+    share: Share = Share.EMAIL;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-
-
-
-
-
-////// JOINCTION 
-
-
-//// GOUPUSERS
-export class GroupUser {
-    groupid: number;
-    userid: number;
-    role: string;
-    created_at: Date;
-    updated_at: Date;
-
-    constructor(
-        groupid: number,
-        userid: number,
-        role: string,
-        created_at: Date,
-        updated_at: Date
-    ) {
-        this.groupid = groupid;
-        this.userid = userid;
-        this.role = role;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
+export class Pool {
+    id: number = 0;
+    name: string = '';
+    description: string = '';
+    group: Group = new Group();
+    groupId: number = 0;
+    userId: number = 0;
+    title: string = '';
+    userIdBenef: number = 0;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-//// LIKES 
-export class PostUser {
-    user_id: number;
-    postid: number;
-    created_at: Date;
-    updated_at: Date;
-
-    constructor(user_id: number, postid: number, created_at: Date, updated_at: Date) {
-        this.user_id = user_id;
-        this.postid = postid;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
-}
-
-//// PARTICPANTS EVENT 
-export class UserEvent {
-    user_id: number;
-    eventid: number;
-    created_at: Date;
-    updated_at: Date;
-
-    constructor(
-        user_id: number,
-        eventid: number,
-        created_at: Date,
-        updated_at: Date,
-    ) {
-        this.user_id = user_id;
-        this.eventid = eventid;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
-}
-
-
-//// VOTES
 export class Vote {
-    user_id: number;
-    targetid: number;
-    target: 'survey' | 'pool';
-    opinion: 'ok' | 'no' | 'wo';
-
-    constructor(
-        user_id: number,
-        targetid: number,
-        target: 'survey' | 'pool',
-        opinion: 'ok' | 'no' | 'wo'
-    ) {
-        this.user_id = user_id;
-        this.targetid = targetid;
-        this.target = target;
-        this.opinion = opinion;
-    }
+    id: number = 0;
+    pool: Pool = new Pool();
+    poolId: number = 0;
+    user: User = new User();
+    userId: number = 0;
+    targetId: number = 0;
+    target: VoteTarget = VoteTarget.POOL;
+    opinion: VoteOpinion = VoteOpinion.OK;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-
-
-//// FLAG
-export class Flag {
-    target_id: number;
-    user_id: number;
-    target: string;
-    active: boolean;
-    reason: string;
-    created_at: Date | string
-    updated_at: Date | string;
-
-    constructor(
-        target_id: number,
-        user_id: number,
-        target: string,
-        active: boolean,
-        reason: string,
-        created_at: Date  | string, 
-        updated_at: Date  | string
-    ) {
-        this.target_id = target_id;
-        this.user_id = user_id;
-        this.target = target;
-        this.active = active;
-        this.reason = reason;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
+export class Survey {
+    id: number = 0;
+    name: string = '';
+    description: string = '';
+    group: Group = new Group();
+    groupId: number = 0;
+    userId: number = 0;
+    image: string = '';
+    title: string = '';
+    category: SurveyCategory = SurveyCategory.CATEGORY_1;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-
-
-
-
-export interface UserProfile extends User, Profile{ }
-export interface EventP extends Event{
-    days: []
-    users: Profile[]
+export class GroupUser {
+    id: number = 0;
+    group: Group = new Group();
+    groupId: number = 0;
+    user: User = new User();
+    userId: number = 0;
+    role: Role = Role.MEMBER;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-export interface PostL extends Post{
-    users?: []
+export class Service {
+    id: number = 0;
+    name: string = '';
+    description: string = '';
+    address: Address = new Address();
+    addressId: number = 0;
+    userId: number = 0;
+    image: string = '';
+    title: string = '';
+    category: ServiceCategory = ServiceCategory.CATEGORY_1;
+    userIdResp: number = 0;
+    type: ServiceType = ServiceType.GET;
+    skill: SkillLevel = SkillLevel.LEVEL_0;
+    hard: HardLevel = HardLevel.LEVEL_0;
+    status: ServiceStep = ServiceStep.STEP_0;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
 }
 
-export type action = { icon: string, function: () => void, title: string, body: any }
+export class Token {
+    userId: number = 0;
+    token: string = '';
+    type: TokenType = TokenType.REFRESH;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
+    expiredAt: Date = new Date();
+}
+
+export class Auth {
+    accessToken: string = '';
+    refreshToken: string = '';
+}
+
+enum TokenType {
+    REFRESH,
+    RESET,
+    VERIFY
+}
+
+enum Role {
+    MEMBER,
+    GUEST
+}
+
+enum ServiceType {
+    GET,
+    DO
+}
+
+enum VoteTarget {
+    SURVEY,
+    POOL
+}
+
+enum VoteOpinion {
+    OK,
+    NO,
+    WO
+}
+
+enum FlagTarget {
+    EVENTP,
+    POST,
+    SURVEY
+}
+
+enum Share {
+    EMAIL,
+    PHONE,
+    BOTH
+}
+
+enum ServiceStep {
+    STEP_0,
+    STEP_1,
+    STEP_2,
+    STEP_3,
+    STEP_4
+}
+
+enum IssueStep {
+    STEP_0,
+    STEP_1
+}
+
+enum EventCategory {
+    CATEGORY_1,
+    CATEGORY_2,
+    CATEGORY_3,
+    CATEGORY_4,
+    CATEGORY_5,
+    CATEGORY_6
+}
+
+enum PostCategory {
+    CATEGORY_1,
+    CATEGORY_2,
+    CATEGORY_3,
+    CATEGORY_4,
+    CATEGORY_5,
+    CATEGORY_6
+}
+
+enum ServiceCategory {
+    CATEGORY_1,
+    CATEGORY_2,
+    CATEGORY_3,
+    CATEGORY_4,
+    CATEGORY_5,
+    CATEGORY_6
+}
+
+enum SurveyCategory {
+    CATEGORY_1,
+    CATEGORY_2,
+    CATEGORY_3,
+    CATEGORY_4,
+    CATEGORY_5,
+    CATEGORY_6
+}
+
+enum AssistanceLevel {
+    LEVEL_0,
+    LEVEL_1,
+    LEVEL_2,
+    LEVEL_3,
+    LEVEL_4
+}
+
+enum SkillLevel {
+    LEVEL_0,
+    LEVEL_1,
+    LEVEL_2,
+    LEVEL_3,
+    LEVEL_4
+}
+
+enum HardLevel {
+    LEVEL_0,
+    LEVEL_1,
+    LEVEL_2,
+    LEVEL_3,
+    LEVEL_4
+}

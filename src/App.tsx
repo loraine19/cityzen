@@ -39,6 +39,7 @@ import NotificationPage from "./pages/myInfos/NotificationPage";
 import { DataProvider } from "./contexts/data.context";
 import NotFindPage from "./pages/NotFindPage";
 import { Test } from "./pages/Test";
+import IssueEditPage from "./pages/service/issue/IssueEditPage";
 
 
 
@@ -71,6 +72,7 @@ function App() {
 
                             <Route path="/litige/:id" element={<IssueDetailPage />} />
                             <Route path="/litige/create/:id" element={<IssueCreatePage />} />
+                            <Route path="/litige/edit/:id" element={<IssueEditPage />} />
 
                             <Route path="/conciliation" element={<ConciliationListPage />} />
                             <Route path="/conciliation/:id" element={<ConciliationDetailPage />} />

@@ -6,10 +6,13 @@ import { AuthForm } from '../../components/authComps/AuthForm';
 import { user } from '../../types/user';
 import { AuthHeader } from '../../components/authComps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
+import { signIn } from '../../functions/API/usersApi';
+import { useToken } from '../../functions/API/useToken';
+;
 
 
 export default function SignInPage() {
-
+    const { saveToken } = useToken();
     const [newUser, setNewUser] = useState<user>({} as user);
     const navigate = useNavigate();
     const [notif, setNotif] = useState<string>("");
@@ -25,8 +28,16 @@ export default function SignInPage() {
         validationSchema: formSchema,
         onSubmit: values => {
             if (values.email && values.password) {
-                navigate("/")
-                setNewUser(values)
+                async function connect() {
+                    const result = await signIn({ email: values.email, password: values.password })
+                    if (result) {
+                        console.log(result)
+                        saveToken(result.accessToken, result.refreshToken)
+                        navigate("/")
+                    }
+                    else setNotif("Non connecté")
+                }
+                connect()
             }
             else setNotif("Non connecté")
         },
@@ -74,3 +85,4 @@ export default function SignInPage() {
         </div>
     )
 }
+

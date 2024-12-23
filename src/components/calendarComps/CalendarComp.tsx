@@ -96,7 +96,7 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                                                     </span>
                                                 </PopoverHandler>
                                                 <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
-                                                    <EventCard event={event} avatarDatas={event.users} change={() => { }} index={index} isWithMe={isWithMe(event)}
+                                                    <EventCard event={event} avatarDatas={event.Participant} change={() => { }} index={index} isWithMe={isWithMe(event)}
                                                         handleGo={(event: EventP) => { handleGo(event) }}
                                                         handleClickDelete={() => { }}
                                                     />

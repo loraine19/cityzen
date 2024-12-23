@@ -60,7 +60,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                             <span className={`${isFlaged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex  items-center gap-2 mb-1">
                         <Chip value={service.skill} size="lg" className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
                             icon={<span className={`pl-1 material-symbols-outlined unFillThin !text-[1.5rem]`}>design_services</span>}>
                         </Chip>
@@ -69,13 +69,13 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         </Chip>
                     </div>
 
-                    <div className="CardOverFlow h-full ">
-                        <div className="flex  h-full md: gap-8">
-                            <Typography color="blue-gray" className="flex-1 border-r-2 pr-4">
+                    <div className="CardOverFlow h-full flex flex-col ">
+                        <div className="flex flex-col h-full md: gap-8">
+                            <Typography color="blue-gray" className="flex-1  pr-4">
                                 {description}
                             </Typography>
                             {isMine && isResp &&
-                                <div className="flex w-[40%] flex-col justify-between items-end  gap-2">
+                                <div className="flex w-full flex-col justify-between items-end  gap-2">
                                     <Typography variant="h6" color="blue-gray" className="text-right">
 
                                         {isMine ? "Réponse" : "Vous avez repondu"} <br></br>à la   {type}

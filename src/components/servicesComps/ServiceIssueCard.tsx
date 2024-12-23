@@ -90,9 +90,6 @@ export default function ServiceComp(props:
                                     <Avatar src={userResp?.avatar} size="sm" alt="avatar" withBorder={true} />
                                     <div className="flex flex-col">
                                         <Typography variant="small" className="font-normal !p-0">{userResp?.firstName} - {userResp?.lastName}</Typography>
-                                        <Typography variant="small" color="gray" >
-                                            {userResp?.skills?.join(', ')}
-                                        </Typography>
 
                                     </div>
 

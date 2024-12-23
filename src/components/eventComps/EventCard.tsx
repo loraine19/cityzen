@@ -3,25 +3,25 @@ import { Link } from "react-router-dom";
 import { AvatarStack } from "./AvatarStack";
 import ModifBtnStack from "../ModifBtnStack";
 import { eventdateInfo } from "../../functions/GetDataFunctions";
-import { defaultEventImage } from "../../datas/enumsCategories";
 import { useState } from "react";
-import { EventP, Profile } from "../../types/class";
+import { EventP, Participant, } from "../../types/class";
 
-type EventCardProps = { event: EventP, avatarDatas: Profile[], change: (e: any) => void, mines?: boolean, handleClickDelete: (id: number) => void, index: number, isFlaged?: boolean, isWithMe?: boolean, handleGo: (event: EventP) => void }
+type EventCardProps = { event: EventP, avatarDatas: Participant[], change: (e: any) => void, mines?: boolean, handleClickDelete: (id: number) => void, index: number, isFlaged?: boolean, isWithMe?: boolean, handleGo: (event: EventP) => void }
 
 export function EventCard(props: EventCardProps) {
-    const { id, title, description, category, participants_min, start } = props.event
+    const { id, title, description, category, participantsMin, start } = props.event
     const { avatarDatas, change, mines, isWithMe } = props
     const date = new Date(start)
     const now = new Date(Date.now())
     const daysBefore: number = ((date.getTime() - now.getTime()) / 1000 / 60 / 60 / 24)
-    const pourcentParticipants: number = Math.floor((avatarDatas?.length) / participants_min * 100)
+    const pourcentParticipants: number = Math.floor((avatarDatas?.length) / participantsMin * 100)
     let dateClass = daysBefore < 15 && pourcentParticipants < 100 ? "OrangeChip" : "GrayChip";
     const disabledEditCTA = pourcentParticipants >= 100 ? true : false
 
-    const imgCategory: string | undefined | Blob = (defaultEventImage.find(categoryD => categoryD.type === category.toLocaleLowerCase()) ?
-        defaultEventImage.find(categoryD => categoryD.type === category.toLocaleLowerCase())?.image
-        : defaultEventImage[0].image);
+    const imgCategory: string = ''
+    // const imgCategory: string | undefined | Blob = (defaultEventImage.find(categoryD => categoryD.type === category.toLocaleLowerCase()) ?
+    //     defaultEventImage.find(categoryD => categoryD.type === category.toLocaleLowerCase())?.image
+    //     : defaultEventImage[0].image);
 
     const [image] = useState<string>(props.event.image ? (props.event.image) as any : (imgCategory));
     let haveImage = image ? true : false
@@ -41,7 +41,7 @@ export function EventCard(props: EventCardProps) {
                             {pourcentParticipants > 0 ? <Progress value={pourcentParticipants} color={pourcentParticipants === 100 ? "green" : "gray"} size="md"
                                 label={" "} /> :
                                 <div className="flex flex-1 bg-white/70 rounded-full h-max items-center justify-center">
-                                    <Typography className="mb-0 text-xs font-medium"> pas encore de participants_min
+                                    <Typography className="mb-0 text-xs font-medium"> pas encore de participantsMin
                                     </Typography></div>}
                         </div>
                     </div>
@@ -84,7 +84,7 @@ export function EventCard(props: EventCardProps) {
                         <ModifBtnStack id={id} disabledEdit={disabledEditCTA} handleClickDelete={props.handleClickDelete} />}
                     <div className="flex items-center gap-2">
                         <button onClick={() => props.handleGo(props.event)}>
-                            <Chip value={participants_min} variant="ghost" className="rounded-full h-max flex items-center gap-2"
+                            <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center gap-2"
                                 icon={<span className={`${isWithMe && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem]`}>person</span>}>
                             </Chip></button>
                         <Link to={`/evenement/${id}`} className="flex items-center gap-2" title={`voir les details de ${title}`}><span className="material-symbols-outlined fill !text-[3rem] text-gray-900  fillThin">

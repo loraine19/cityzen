@@ -13,9 +13,7 @@ export default function CTAMines(props: CTAMinesProps) {
     const { data, setDataInLocal } = useContext(DataContext)
     const { disabled1, disabled2, id } = props
     const array = GetArrayElement(type)
-
-    //// ENVOYER UN ARRAY INDENTIQUE SINON IL PREND CES VALEUR 
-
+    let values = props.values
 
     const empty: action[] = [
         {
@@ -37,8 +35,8 @@ export default function CTAMines(props: CTAMinesProps) {
             function: () => { return null }
         }
     ]
-    !props.values && (props.values = empty)
 
+    !values && (values = empty)
     const buttonsC = (values: action[]) => {
         return [{
             icon: values && values[0]?.icon !== 'no' ? values[0]?.icon : 'Supprimer ?',
@@ -56,7 +54,7 @@ export default function CTAMines(props: CTAMinesProps) {
         {
             icon: values && values[1]?.icon !== 'no' ? values[1]?.icon : 'Modifier ?',
             title: values && values[1]?.title !== 'no' ? values[1]?.title : 'Voulez vous vraiment modifier ?',
-            body: values ? values[1]?.body : (data[array].find((element: any) => element.id === id)).title,
+            body: values && values[1]?.body !== 'no' ? values[1]?.body : (data[array].find((element: any) => element.id === id)).title,
             function: () => {
                 if (values[1]?.function() === null) { navigate({ pathname: `/${type}/edit/${id}` }) }
                 else values[1]?.function
@@ -75,7 +73,7 @@ export default function CTAMines(props: CTAMinesProps) {
         }
         ]
     }
-    const buttons = buttonsC(props.values)
+    const buttons = buttonsC(values)
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0)
     return (

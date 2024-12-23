@@ -6,36 +6,47 @@ import { useEffect, useState, useContext } from "react";
 import { adressGps, notif } from "../types/type";
 import { MapComp } from "../components/mapComps/MapComp";
 import CalendarComp from "../components/calendarComps/CalendarComp";
-import { getAdress, getDays, getNotifications, GetPathElement, getUsersDetail } from "../functions/GetDataFunctions";
+import { getDays, getNotifications, GetPathElement, getUsersDetail } from "../functions/GetDataFunctions";
 import UserContext from "../contexts/user.context";
 import DataContext from "../contexts/data.context";
-import { Address, EventP, UserProfile } from "../types/class";
+import { EventP, Profile, } from "../types/class";
+import { getUserMe } from "../functions/API/usersApi";
+import { getEvents } from "../functions/API/eventsApi";
 
 export default function DashboardPage() {
-    const { user, setUserCont, userNotif, setUserNotif } = useContext(UserContext)
+    const { setUserCont, userNotif, setUserNotif } = useContext(UserContext)
+    const [user, setUser] = useState<Profile>({} as Profile);
+    const [events, setEvents] = useState<EventP[]>([] as EventP[]);
     const { data, resetData } = useContext(DataContext)
-    const { users, posts, events, surveys, pools, services, profiles } = data
+    const { users, posts, surveys, pools, services, profiles } = data
     const UsersProfile = (getUsersDetail(users, profiles))
 
     const selectUser = (e: string) => {
-        const find: UserProfile | undefined = UsersProfile.find((user) => user.id === parseInt(e));
+        const find: Profile | undefined = UsersProfile.find((user) => user.id === parseInt(e));
         find && setUserCont(find) && localStorage.setItem('user', JSON.stringify(find));
-        setUserNotif(notifList.length)
+        // setUserNotif(notifList.length)
     };
     const idS = user.id ? user.id : 0
-    const notificationList = getNotifications(posts, events, surveys, pools, services, idS);
-    const [notifList, setNotifList] = useState<notif[]>(notificationList ? notificationList : []);
-    let { firstName, avatar, points, address_id } = user;
-    const address: Address = getAdress(address_id, data.address) as Address
+    //const notificationList = getNotifications(posts, surveys, pools, services, idS);
+    //  const [notifList, setNotifList] = useState<notif[]>(notificationList ? notificationList : []);
+    let { firstName, image, points, } = user;
     const [adressGps, setAdressGps] = useState<adressGps>({ lat: 0, lng: 0 });
 
     useEffect(() => {
-        firstName = user.firstName;
-        setAdressGps({ lat: address.lat, lng: address.lng });
-        setNotifList(getNotifications(posts, events, surveys, pools, services, idS))
-    }, [address, user, data]);
+        const fetch = async () => {
+            const me = await getUserMe()
+            const userProfile = me.Profile as Profile;
+            setUser(userProfile);
+            setAdressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
+            const events = await getEvents()
+            console.log(events)
+            setEvents(events);
+            setEvents(getDays(events));
+        }
+        fetch()
+    }, []);
+    const notifList = getNotifications(posts, events as any, surveys, pools, services, idS);
 
-    const [eventList] = useState<EventP[]>(getDays(events));
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
@@ -55,7 +66,7 @@ export default function DashboardPage() {
                             onChange={(e: any) => { selectUser(e) }}
                             value={user.id?.toString()}>
                             {UsersProfile.map(
-                                (user: UserProfile, index: number) => {
+                                (user: Profile, index: number) => {
                                     return (
                                         <Option value={user.id?.toString()} key={index} >
                                             {user.firstName}
@@ -80,7 +91,7 @@ export default function DashboardPage() {
                         <Card className="lg:h-full p-0 flex-1 flex ">
                             <CardHeader className="flex flex-col items-center !p-0 justify-centerp-0 bg-transparent shadow-none">
                                 <Avatar
-                                    src={avatar as string}
+                                    src={image as string}
                                     alt={firstName}
                                     variant="circular"
                                     className="!shadow-sm !shadow-gray-400 w-16 h-16 lg:w-20 lg:h-20"
@@ -166,7 +177,7 @@ export default function DashboardPage() {
                     <div className={eventClasse}>
                         <Card className="h-full flex-1  gray100">
                             <CardBody className="h-full flex flex-col p-4 ">
-                                <CalendarComp eventList={eventList} />
+                                <CalendarComp eventList={events} />
                             </CardBody>
                         </Card>
                     </div>

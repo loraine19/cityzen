@@ -17,6 +17,7 @@ type authFormProps = {
     errorCheck: any
     confirm: boolean
     errorConfirm: any
+    confirmPassword?: boolean
 
 }
 export function AuthForm({ handleChange, handleSubmit, lead, notif, errorEmail, errorPassword, errorCheck, popOverContent, popOverClass, popOverButtonText, checkboxName, submitText, confirm, errorConfirm }: authFormProps) {
@@ -30,10 +31,10 @@ export function AuthForm({ handleChange, handleSubmit, lead, notif, errorEmail, 
                         <Typography variant="lead" color="blue-gray">{lead}</Typography>
                         <Typography className='text-sm'>{notif} </Typography>
                         <Typography className='text-xs error'>{errorEmail} </Typography>
-                        <Input label="Email" name="email" variant="standard" onChange={handleChange} />
+                        <Input label="Email" name="email" variant="standard" onChange={handleChange} defaultValue="test@mail.com" />
                         <Typography className='text-xs error'>{errorPassword} </Typography>
-                        <Input label="Mot de passe" name="password" variant="standard" onChange={handleChange} />
-                        <div className={!confirm ? "none" : ""}>
+                        <Input label="Mot de passe" name="password" variant="standard" onChange={handleChange} defaultValue="passwordtest" />
+                        <div className={!confirm ? "hidden" : ""}>
                             <Typography className='text-xs mb-2 error'>{errorConfirm} </Typography>
                             <Input label="Password Confirm" name="passwordConfirm" variant="standard" onChange={handleChange} /></div>
                     </CardBody>

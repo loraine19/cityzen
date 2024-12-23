@@ -1,155 +1,152 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import NavBarTop from '../../../components/NavBarTop';
 import SubHeader from '../../../components/SubHeader';
-import { useContext, useEffect, useState } from 'react';
-import CTAMines from '../../../components/CATMines';
+import { Option, Select, Card, CardBody, CardHeader, Chip, Textarea, Typography } from '@material-tailwind/react';
+import { useContext, useState } from 'react';
 import UserContext from '../../../contexts/user.context';
-import { AcceptUserResp, GetCategory, imIn, takeElement } from '../../../functions/GetDataFunctions';
 import DataContext from '../../../contexts/data.context';
-import { action, Service } from '../../../types/class';
-import ServiceDetailComp from '../../../components/servicesComps/ServiceDetailComp';
-import { serviceCategories } from '../../../datas/enumsCategories';
-export default function ServiceDetailPage() {
+import { Issue, Profile, Service } from '../../../types/class';
+import ServiceIssueCard from '../../../components/servicesComps/ServiceIssueCard';
+import { ConfirmModal } from '../../../components/ConfirmModal';
+import CTAMines from '../../../components/CATMines';
+
+export default function IssueEditPage() {
     const { id } = useParams()
-    const { user } = useContext(UserContext);
+    const { user } = useContext(UserContext)
     const { data, setDataInLocal } = useContext(DataContext)
-    const { flags } = data
+    const { services, issues, profiles } = data
+    const elementFound = issues.find((element: Issue) => element.id === Number(id));
+    const issue = elementFound ? elementFound : {} as Issue;
+    const service = services.find((element: Service) => element.id === issue.service_id)
     const navigate = useNavigate();
-    let found = (data.services.find((service: Service) => service.id == parseInt(id!)))
-    useEffect(() => {
-        if (!found) {
-            navigate("/service-" + id)
-        }
-    }, [found])
-    const [selectedService] = useState<Service>(found ? (found) : (data.services[0]))
-    const [serviceList, setServiceList] = useState<Service[]>(data.services);
-    //////CTAVALUES
-    const category = GetCategory(selectedService, serviceCategories)
-    const type = selectedService.type === "get" ? "demande" : "offre"
-    const mines = found?.user_id === user.id ? true : false
 
-    let isPost = selectedService.status === 0 ? true : false
-    let isResp = selectedService.status === 1 ? true : false
-    let isValidated = selectedService.status === 2 ? true : false
-    let isFinish = selectedService.status === 3 ? true : false
+    const haveImage = issue.image ? true : false
 
-    useEffect(() => {
-        isPost = selectedService.status === 0 ? true : false
-        isResp = selectedService.status === 1 ? true : false
-        isValidated = selectedService.status === 2 ? true : false
-        isFinish = selectedService.status === 3 ? true : false
-
-    }, [selectedService.status])
-
-    const handleTake = (id: number) => {
-        takeElement(id, serviceList, setServiceList, user)
-        setDataInLocal({ ...data, services: serviceList })
-        console.log("take")
-        console.log(selectedService.status)
+    const { created_at } = issue
+    const { description, image } = issue
+    const { title } = service
+    const modo = profiles.filter((profile: Profile) => profile.user_id !== service.user_id && profile.user_id !== service.user_id_resp)
+    const [open, setOpen] = useState(false);
+    function saveIssue() {
+        data.issues.push(service as Issue)
+        setDataInLocal({ ...data, issues: [...data.issues] })
     }
-
-    const handleValidate = (id: number) => {
-        AcceptUserResp(id, serviceList, setServiceList, 2);
-        setDataInLocal({ ...data, services: serviceList })
-    }
-    const handleFinish = (id: number) => {
-        AcceptUserResp(id, serviceList, setServiceList, 3);
-        setDataInLocal({ ...data, services: serviceList })
-    }
-    const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
-
-    //// AUTHOR
-
-
-    const buttonsValidate: action[] = [
-        {
-            icon: isResp && "no" || isValidated && "Besoins d'aide ?" || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || 'no',
-            title: isResp && "no" || isValidated && "Ouvrir un litige ?" || 'no',
-            body: selectedService.title,
-            function: () => {
-                if (isValidated) { isValidated && navigate(`/litige/create/${selectedService.id}`) }
-                else { return null }
-            }
-        },
-        {
-            icon: isResp && "no" || isValidated && 'Service finis ?' || isFinish && '' || 'no',
-            title: isResp && "no" || isValidated && "Cloturer le service ?" || 'no',
-            body: selectedService.title,
-            function: () => {
-                if (isResp) { handleFinish(selectedService.id) }
-                else { return null }
-            }
-        },
-        {
-            icon: isResp && "valider ?" || isValidated && '' || isFinish && '' || '',
-            title: isResp && "Accepter la reponse" || '',
-            body: selectedService.title,
-            function: () => {
-                if (isResp) { handleValidate(selectedService.id) }
-                else { return null }
-            }
-
-        },
-    ]
-    /// RESP 
-    const buttons: action[] = [
-        {
-            icon: isResp && "annuler ?" || isValidated && '' || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || '',
-            title: isResp && "Vous annulez votre réponse" || isValidated && "Ouvrir un litige ?" || '',
-            body: selectedService.title + 'c',
-            function: () => {
-                if (isResp) { handleTake(selectedService.id) }
-                else { return null }
-            }
-        },
-        {
-            icon: isPost && "répondre au service?" || isResp && '' || '',
-            title: isPost && "postuler au service" || isResp && '' || '',
-            body: selectedService.title + "g",
-            function: () => {
-                if (isPost) { handleTake(selectedService.id) }
-                else { return null }
-            }
-        }
-    ]
-
-    // console.log(buttons[1].function())
-
-
-
-
-
     return (
-        <div className="Body cyan">
+        <div className="Body gray">
+            <ConfirmModal
+                open={open}
+                handleOpen={() => setOpen(false)}
+                handleCancel={() => { setOpen(false) }}
+                handleConfirm={() => {
+                    saveIssue();
+                    navigate(`/service/${service.id}`);
+                    setOpen(false)
+                }}
+                title={"Confimrer le litige"}
+                element={(JSON.stringify(service, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+
+
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={`${type} de service ${category}`}
-                    closeBtn />
-            </header>
-            <main>
-                <div className="flex  pt-6 pb-1 h-full">
-                    <ServiceDetailComp
-                        service={selectedService}
-                        mines={mines} change={() => { }}
-                        isFlaged={isFlaged(selectedService)}
-                        handleValidate={(id: number) => handleValidate(id)} />
+                <SubHeader type={service.id && service.id < issues.length ? ` mon litige ` : "mon litige"} place={` sur ${service.type === "get" ? "une demande" : "une offre"} de service  ${user.id === service.user_id ? "que j'ai créé" : "à laquelle j'ai repondu"}`} closeBtn />
+                <div className="w-respLarge">
+
+
+
                 </div>
+            </header>
+            <main className={`flex flex-1 pb-2 ' ${haveImage && "pt-[1.5rem]"}`}>
+                <Card className=" w-respLarge FixCard">
+                    <CardHeader className={"FixCardHeaderNoImage  justify-between shadow-none flex "}
+                        floated={false}>
+                        <Typography variant="lead" color="blue-gray" >
+                            description du problème
+                        </Typography>
+
+
+
+                        <Chip value={(new Date(created_at ? created_at : new Date())).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
+                        </Chip>
+
+
+                    </CardHeader>
+
+
+                    <CardBody className='FixCardBody '>
+                        <div className='CardOverFlow h-full justify-between gap-4 !pb-4'>
+                            <div className='flex  h-full'>
+                                <div className='flex flex-col flex-1'>
+
+                                    <Textarea rows={2} resize={true} variant="static" label="Description" name="description" className="rounded-2xl p-4 shadow-sm w-full focus:outline-none min-h-full  "
+                                        value={description}
+                                        disabled={true}
+                                        containerProps={{
+                                            className: "grid h-full",
+                                        }} labelProps={{
+                                            className: "before:content-none after:content-none",
+                                        }} />
+
+
+                                </div>
+
+                                <div className="flex w-max max-w-[50%] px-4 pt-1 relative justify-end items-end h-full rounded-2xl">
+
+
+                                    {image &&
+
+                                        <img
+                                            src={image}
+                                            alt={title}
+                                            className="h-full  flex-1  rounded-2xl object-cover"
+                                        />
+                                    }
+                                </div>
+
+                            </div>
+
+                            <div className='flex gap-2'>
+                                <Select className="rounded-full flex shadow  bg-white border-none capitalize"
+                                    label={`Modérateur de user ${service.id} = ${issue.user_id_M}`}
+                                    name={"category"}
+                                    labelProps={{ className: `before:border-none after:border-none ` }}
+                                    disabled={true}
+                                    value={(service.user_id_M)?.toString()}
+                                    onChange={() => { }}
+                                >
+
+                                    <Option className={"rounded-full my-1 capitalize"} value={(user.user_id).toString()} >
+                                        {user.firstName} - {user.lastName}
+                                    </Option>
+                                </Select>
+                                <Select className="rounded-full shadow  bg-white border-none capitalize"
+                                    label={`Modérateur de user ${service.user_id_resp} = ${issue.user_id_Mresp}`}
+                                    name={"category"}
+                                    labelProps={{ className: `before:border-none after:border-none ` }}
+                                    disabled={true}
+                                    value={(service.user_id_M)?.toString()}
+                                    onChange={() => { }}
+                                >
+                                    {modo.map((user: Profile, index: number) => {
+                                        return (
+                                            <Option className={"rounded-full my-1 capitalize"} value={(user.user_id).toString()} key={index} >
+                                                {user.firstName} - {user.lastName}
+                                            </Option>)
+                                    })}
+                                </Select>
+                            </div>
+                            <ServiceIssueCard service={service} />
+                        </div>
+
+                    </CardBody>
+                </Card>
+
             </main>
-
-            {mines ?
-                <CTAMines id={selectedService.id}
-                    values={buttonsValidate}
-                    disabled1={isFinish}
-                    disabled2={isFinish}
-                    button3={isResp ? buttonsValidate[2] : undefined}
-                />
-                :
-                <CTAMines
-                    id={selectedService.id}
-                    values={buttons}
-                />
-            }
-
+            <footer className="w-respLarge">
+                {user.id === issue.user_id ?
+                    <CTAMines id={issue.id} /> :
+                    <CTAMines id={issue.id} disabled1={true} />
+                }
+            </footer>
         </div >
     )
-} 
+}
