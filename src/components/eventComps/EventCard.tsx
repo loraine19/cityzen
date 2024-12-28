@@ -29,7 +29,7 @@ export function EventCard(props: EventCardProps) {
 
 
     return (
-        <div className="pt-8">
+        <div className="pt-8  max-w-[calc(100vw-1rem)] mx-2">
             <Card className="FixCard w-resp !h-max ">
                 <CardHeader className={haveImage ? "FixCardHeader !max-h-[26vh] " : "FixCardHeader NoImage"}
                     floated={haveImage}>
@@ -38,10 +38,11 @@ export function EventCard(props: EventCardProps) {
                             rounded-full w-max h-max`}>
                         </Chip>
                         <div className={`${!haveImage && "bg-blue-gray-100"}  h-max w-full !rounded-full backdrop-blur flex items-center gap-2 shadow p-2`}>
-                            {pourcentParticipants > 0 ? <Progress value={pourcentParticipants} color={pourcentParticipants === 100 ? "green" : "gray"} size="md"
-                                label={" "} /> :
+                            {pourcentParticipants > 0 ?
+                                <Progress value={pourcentParticipants} color={pourcentParticipants > 100 ? "green" : "gray"} size="md"
+                                    label={pourcentParticipants > 100 ? "Validé" : " "} /> :
                                 <div className="flex flex-1 bg-white/70 rounded-full h-max items-center justify-center">
-                                    <Typography className="mb-0 text-xs font-medium"> pas encore de participantsMin
+                                    <Typography className="mb-0 text-xs font-medium"> pas encore de participants
                                     </Typography></div>}
                         </div>
                     </div>

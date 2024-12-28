@@ -10,7 +10,8 @@ module.exports = withMT({
       },
     },
   },
-  plugins: [],
+  plugins: [
+  ],
 });
 
 const config = {

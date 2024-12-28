@@ -7,7 +7,7 @@ type UserDto = Partial<User>;
 
 const api = useApi();
 const dataType = "users";
-const apiRefresh = useApiRefresh();
+//const apiRefresh = useApiRefresh();
 
 
 // USERS
@@ -19,7 +19,7 @@ export const getUserMe = async (): Promise<User> => handleApiCall(() => api.get(
 
 export const postUser = async (user: UserDto): Promise<User> => handleApiCall(() => api.post(dataType, user));
 
-export const putUser = async (id: number, user: UserDto): Promise<User> => handleApiCall(() => api.put(`${dataType}/${id}`, user));
+export const patchUser = async (id: number, user: UserDto): Promise<User> => handleApiCall(() => api.patch(`${dataType}/${id}`, user));
 
 export const deleteUser = async (id: number): Promise<User> => handleApiCall(() => api.delete(`${dataType}/${id}`));
 

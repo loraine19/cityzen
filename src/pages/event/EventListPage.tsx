@@ -11,14 +11,19 @@ import { label } from "../../types/label";
 import SubHeader from "../../components/SubHeader";
 import CalendarCompLarge from "../../components/calendarComps/CalendarCompLarge";
 import { beInElement, deleteElement, getDays, getUsers, imIn } from "../../functions/GetDataFunctions";
-import UserContext from "../../contexts/user.context";
 import DataContext from "../../contexts/data.context";
-import { EventP, Profile } from "../../types/class";
+import { EventP, Profile, User } from "../../types/class";
+import { getUserMe } from "../../functions/API/usersApi";
+import { getEvents } from "../../functions/API/eventsApi";
 
 export default function EventListPage() {
-    const { user } = useContext(UserContext);
     const { data, setDataInLocal } = useContext(DataContext)
-    const { events, flags, profiles } = data
+    const { flags, profiles } = data
+    const [user, setUser] = useState<User>({} as User)
+    const [profile, setProfile] = useState<Profile>({} as Profile)
+    const [events, setEvents] = useState<EventP[]>([])
+    const [eventList, setEventList] = useState<EventP[]>(events);
+    const [arrayToFilter, setArrayToFilter] = useState<EventP[]>(events)
     const [participants, setParticipants] = useState<Profile[]>(data.participants)
     const [view, setView] = useState("view_agenda");
     const [tabSelected, setTabSelected] = useState<string>("");
@@ -37,16 +42,34 @@ export default function EventListPage() {
     }, [params])
 
 
+
+    ///// FETCH ON LOAD 
+    useEffect(() => {
+        console.log("fetching")
+        const fetch = async () => {
+            const user = await getUserMe()
+            setProfile(user.Profile);
+            setUser(user)
+            const events = await getEvents()
+            setEvents(getDays(events));
+            setArrayToFilter(events);
+            setEventList(events);
+            console.log(events)
+        }
+        fetch()
+    }, []);
+
+
     //// Initialise array
-    const [eventsWithUsers] = useState<EventP[]>(getDays(getUsers(events, participants as [], profiles as [], "event_id")));
-    const arrayToFilter: EventP[] = eventsWithUsers;
-    const [eventList, setEventList] = useState<EventP[]>(eventsWithUsers);
+
 
     ///// pass to card  
-    const isFlaged = (element: any) => { return imIn(element, flags, user.id) };
-    const isWithMe = (element: any) => { return imIn(element, participants, user.id, "event_id") };
+    const isFlaged = (element: any) => { return imIn(element, flags, 1) };
+    // const isWithMe = (element: any) => { return imIn(element, participants, user.id, "event_id") };
+    // const isWithMe = (element: any): boolean => { return element.Particpants.find((particpant: User) => particpant.id === user.id) ? true : false };
+    const isWithMe = (element: any): boolean => { return element.Participants.find((particpant: any) => particpant.userId === user.id) ? true : false };
     const handleGo = (elementLiked: EventP) => {
-        beInElement(elementLiked, eventList, setEventList, participants, setParticipants, user, "event_id");
+        beInElement(elementLiked, eventList, setEventList, participants, setParticipants, user.Profile, "event_id");
         setDataInLocal({ ...data, events: eventList, participants: participants })
     };
     const handleClickDelete = (id: number) => {
@@ -56,6 +79,7 @@ export default function EventListPage() {
     }
     /////FILTER FUNCTIONS
     const filterEvents = (newArray: EventP[], value: string) => {
+        console.log("filterEvents", newArray)
         value !== tabSelected && setCategorySelected(eventCategories[0]);
         setEventsTabled(newArray);
         setEventList(newArray);
@@ -73,18 +97,18 @@ export default function EventListPage() {
         {
             label: "validé",
             value: "ok",
-            result: () => filterEvents([...arrayToFilter.filter((event) => event.participants_min <= event.users.length)], eventTabs[1].value),
+            result: () => filterEvents([...arrayToFilter.filter((event) => event.participantsMin <= event.Participants.length)], eventTabs[1].value),
 
         },
         {
             label: "j'y vais",
             value: "igo",
-            result: () => filterEvents([...arrayToFilter.filter((event: EventP) => event.users.find((userE: Profile) => userE.user_id === user.user_id))], eventTabs[2].value)
+            result: () => filterEvents([...arrayToFilter.filter((event: EventP) => event.Participants.find((participant: any) => participant.userId === user.id))], eventTabs[2].value)
         },
         {
             label: "j'organise",
             value: "mines",
-            result: () => filterEvents([...arrayToFilter.filter((event) => event.user_id === user.id)], eventTabs[3].value)
+            result: () => filterEvents([...arrayToFilter.filter((event) => event.userId === user.id)], eventTabs[3].value)
         },
     ];
 
@@ -97,7 +121,7 @@ export default function EventListPage() {
         setCategorySelected(e);
         e === eventCategories[0] ?
             setEventList([...eventsTabled]) :
-            setEventList([...eventsTabled.filter((event: EventP) => event.category.toLowerCase() === e),
+            setEventList([...eventsTabled.filter((event: EventP) => event.category.toString().toLowerCase() === e),
             ]);
         setSearchParams({ search: tabSelected, category: e });
     };
@@ -156,17 +180,17 @@ export default function EventListPage() {
             {view === "view_agenda" && (
                 <main className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
                     {view === "view_agenda" &&
-                        eventList.map((eventC: EventP, index: number) => (
+                        eventList.map((event: EventP, index: number) => (
                             <EventCard
-                                key={eventC.id}
-                                event={eventC}
-                                avatarDatas={eventC.users}
+                                key={event.id}
+                                event={event}
+                                avatarDatas={event.Participants}
                                 change={change}
                                 mines={mines}
                                 handleClickDelete={(id: number) => handleClickDelete(id)}
                                 index={index}
-                                isFlaged={isFlaged(eventC)}
-                                isWithMe={isWithMe(eventC)}
+                                // isFlaged={isFlaged(eventC)}
+                                isWithMe={isWithMe(event)}
                                 handleGo={(event: EventP) => handleGo(event)}
                             />
                         ))}

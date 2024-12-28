@@ -92,11 +92,13 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                                         {(day.events).map((event: any, index: number) =>
                                             <Popover key={index}>
                                                 <PopoverHandler>
-                                                    <span key={index} className=' bg-cyan-100  text-cyan-700 display flex items-center justify-center m-0.5 py-0.5 lg:py-2 px-0 rounded-full !capitalize font-normal'>{event.category}
-                                                    </span>
+                                                    <p key={index} className={'CyanChip display flex px-2 m-0.5 py-0.5 lg:py-1.5 rounded-full lg:truncate line-clamp-1'}>
+                                                        {/* {event.category.length > 6 ? event.category.slice(0, 5) + '...' : event.category} */}
+                                                        {event.category}
+                                                    </p>
                                                 </PopoverHandler>
                                                 <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
-                                                    <EventCard event={event} avatarDatas={event.Participant} change={() => { }} index={index} isWithMe={isWithMe(event)}
+                                                    <EventCard event={event} avatarDatas={event.Participants} change={() => { }} index={index} isWithMe={isWithMe(event)}
                                                         handleGo={(event: EventP) => { handleGo(event) }}
                                                         handleClickDelete={() => { }}
                                                     />

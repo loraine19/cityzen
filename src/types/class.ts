@@ -304,6 +304,7 @@ export enum HardLevel {
 
 // DTOs
 export class AddressDTO implements Partial<Address> {
+    id?: number;
     address: string = '';
     zipcode: string = '';
     city: string = '';
@@ -315,18 +316,14 @@ export class AddressUpdateDTO implements Partial<AddressDTO> { }
 
 
 // DTOs
-export class UserUpdateDTO implements Partial<User> {
-    Profile?: any;
-    addressId?: any;
-}
+export class UserUpdateDTO implements Partial<User> { }
 export class UserDTO implements Partial<User> {
     email: string = '';
     password: string = 'password';
     image: string = '';
     addressId: number = 0;
+    Profile?: any
 }
-
-
 
 
 
@@ -339,11 +336,14 @@ export class ProfileDTO implements Partial<Profile> {
     image: string = '';
     addressShared: boolean = false;
     assistance: AssistanceLevel = AssistanceLevel.LEVEL_0;
+    phone?: string;
     points?: number;
     skills?: string[];
 }
 export class ProfileUpdateDTO implements Partial<ProfileDTO> {
     skills: any;
+    assistance?: AssistanceLevel | undefined;
+    addressId?: number | undefined;
 }
 
 
@@ -479,3 +479,4 @@ export class AuthDTO {
     accessToken?: string;
     refreshToken?: string;
 }
+

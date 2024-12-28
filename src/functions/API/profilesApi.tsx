@@ -1,13 +1,12 @@
-import { User, Auth } from "../../types/class";
+import { Profile, Auth } from "../../types/class";
 import { useApi } from "./useApi";
 
-type UserDto = Partial<User>;
-// type AuthDto = Partial<Auth>;
+type ProfileDto = Partial<Profile>;
 
 const api = useApi();
-const dataType = "users";
+const dataType = "profiles";
 
-const handleApiCall = async (apiCall: () => Promise<any>) => {
+const handleApiCall = async (apiCall: () => Promise<any>): Promise<any> => {
     try {
         const { data } = await apiCall();
         return data;
@@ -16,21 +15,53 @@ const handleApiCall = async (apiCall: () => Promise<any>) => {
     }
 };
 
+// PROFILES
+export const getProfiles = async (): Promise<Profile[]> => handleApiCall(() => api.get(dataType));
 
-// USERS
-export const getUsers = async (): Promise<User[]> => handleApiCall(() => api.get(dataType));
+export const getProfileById = async (id: number): Promise<Profile> => handleApiCall(() => api.get(`${dataType}/${id}`));
 
-export const getUserById = async (id: number): Promise<User> => handleApiCall(() => api.get(`${dataType}/${id}`));
+export const postProfile = async (profile: ProfileDto): Promise<Profile> => handleApiCall(() => api.post(dataType, profile));
 
-export const postUser = async (user: UserDto): Promise<User> => handleApiCall(() => api.post(dataType, user));
+export const putProfile = async (id: number, profile: ProfileDto): Promise<Profile> => handleApiCall(() => api.put(`${dataType}/${id}`, profile));
 
-export const putUser = async (id: number, user: UserDto): Promise<User> => handleApiCall(() => api.put(`${dataType}/${id}`, user));
+export const deleteProfile = async (id: number): Promise<Profile> => handleApiCall(() => api.delete(`${dataType}/${id}`));
 
-export const deleteUser = async (id: number): Promise<User> => handleApiCall(() => api.delete(`${dataType}/${id}`));
+// export const patchProfile = async (id: number, profile: ProfileDto): Promise<Profile> => handleApiCall(() => api.patch(`${dataType}/${id}`, profile));
+// export const patchProfile = async (id: number, profile: ProfileDto): Promise<Profile> => {
+//     console.log("profile", profile);
+//     const formData = new FormData();
+//     Object.entries(profile).forEach(([key, value]) => {
+//         if (value instanceof File) {
+//             formData.append(key, value);
+//         } else if (value !== undefined && value !== null) {
+//             if (typeof value === 'object') {
+//                 formData.append(key, JSON.stringify(value));
+//             } else {
+//                 formData.append(key, value.toString());
+//             }
+//         }
+//     });
+//     console.log("formData entries", Array.from(formData.entries()));
+//     return handleApiCall(() => api.patch(`${dataType}/${id}`, formData, {
+//         headers: { 'Content-Type': 'multipart/form-data' }
+//     }));
+// };
 
-// AUTH
-export const signIn = async (credentials: { email: string, password: string }): Promise<Auth> => handleApiCall(() => api.post('auth/signin', credentials));
+export const patchProfile = async (id: number, profile: ProfileDto): Promise<Profile> => {
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(profile)) {
+        if (value instanceof File) {
+            formData.append(key, value);
+        } else if (value !== undefined && value !== null) {
+            if (typeof value === 'object') {
+                formData.append(key, JSON.stringify(value));
+            } else {
+                formData.append(key, value.toString());
+            }
+        }
+    }
+    return handleApiCall(() => api.patch(`${dataType}/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }));
+};
 
-export const signUp = async (user: any): Promise<Auth> => handleApiCall(() => api.post('auth/signup', user));
-
-export const refreshToken = async (refreshtoken: string): Promise<Auth> => handleApiCall(() => api.post('auth/refresh', { refreshtoken }));

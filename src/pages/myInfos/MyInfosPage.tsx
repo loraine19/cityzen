@@ -1,58 +1,56 @@
 import { useFormik } from 'formik';
-import { object, string, array } from 'yup';
+import { object, string } from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, CardHeader, Avatar, IconButton, List, ListItem, ListItemSuffix, } from '@material-tailwind/react';
 import MapPickUpComp from '../../components/mapComps/MapPickUpComp';
 import { AuthHeader } from '../../components/authComps/AuthHeader';
-import { FindAdressData, getAdress, getImageBlob, } from '../../functions/GetDataFunctions';
-import DataContext from '../../contexts/data.context';
-import { Address, AssistanceLevel, assistanceLevel, Profile, ProfileDTO, ProfileUpdateDTO, User, UserDTO, UserUpdateDTO } from '../../types/class';
+import { getImageBlob2, } from '../../functions/GetDataFunctions';
+import { Address, AssistanceLevel, assistanceLevel, ProfileDTO, User } from '../../types/class';
 import { ConfirmModal } from '../../components/ConfirmModal';
-import { getUserMe, putUser } from '../../functions/API/usersApi';
+import { getUserMe } from '../../functions/API/usersApi';
 import { GetAddressObject } from '../../functions/GeoMapFunction';
-import { getAddresses } from '../../functions/API/addressApi';
+import { getAddresses, postAddress } from '../../functions/API/addressApi';
 import parse from 'html-react-parser';
+import { patchProfile } from '../../functions/API/profilesApi';
 
 export default function MyInfosPage() {
     // INIT STATE
-    const [me, setMe] = useState<User>({} as User);
+    const [user, setUser] = useState<User>({} as User);
     const [Address, setAddress] = useState<Address>({} as Address);
-    const [adressGps, setAdressGps] = useState<{ lat: number, lng: number }>({ lat: 0, lng: 0 });
     const navigate = useNavigate();
-    const { data, setDataInLocal } = useContext(DataContext)
     const [newAddress, setNewAddress] = useState<string>(`${Address.address} ${Address.zipcode} ${Address.city}`);
     const [newProfile, setNewProfile] = useState<ProfileDTO>({} as ProfileDTO);
     const [imgBlob, setImgBlob] = useState<string>("")
     const [skillList, setSkillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
     const [newSkill, setNewSkill] = useState<string | undefined>()
     const [value, setValue] = useState(newProfile.assistance ? newProfile.assistance.toString() : "0");
-
+    const [addressList, setAddressList] = useState<Address[]>([])
+    const [open, setOpen] = useState(false);
     let assistanceLevelSelect = assistanceLevel.filter((level: any) => { if (!isNaN(level)) { return level.toString() } }) as string[]
-
-
-
 
     /// ON LOAD PAGE FETCH 
     useEffect(() => {
         const fetch = async () => {
-            const me = await getUserMe()
-            const addressList = await getAddresses()
-            console.log('addressList', addressList)
-            setMe(me)
-            const { Profile } = me
-            setNewProfile(me.Profile)
+            const user = await getUserMe()
+            const addresses = await getAddresses()
+            setAddressList(addresses)
+            setUser(user)
+            const { Profile } = user
+            setNewProfile(user.Profile)
             setAddress(Profile.Address)
-            setAdressGps({ lat: Number(Profile.Address.lat), lng: Number(Profile.Address.lng) });
             setNewAddress(`${Profile.Address.address} ${Profile.Address.zipcode} ${Profile.Address.city}`)
             setSkillList(Profile.skills.toString().split(','))
+            setImgBlob(user.Profile.image)
             formik.values.firstName = Profile.firstName
             formik.values.lastName = Profile.lastName
-            formik.values.phone = Profile.phone
+            formik.values.phone = Profile.phone.toString()
             formik.values.image = Profile.image
-            formik.values.assistance = Profile.assistance.toString().replace(/LEVEL_/g, "")
-            console.log(Profile.assistance.toString().replace(/LEVEL_/g, ""))
-            setValue('3')
+            formik.values.addressId = Profile.addressId
+            const assistanceValue = Profile.assistance.toString().replace(/LEVEL_/g, "")
+            formik.values.assistance = assistanceValue as unknown as AssistanceLevel
+            setValue(assistanceValue)
+
         }
         fetch()
     }, []);
@@ -62,8 +60,8 @@ export default function MyInfosPage() {
     const formSchema = object({
         firstName: string().required("Le prémon est obligatoire").min(2, "minmum 2 lettres"),
         lastName: string().required("Le Nom est obligatoire").min(2, "minmum 2 lettres"),
-        phone: string().required("Le Numéro est obligatoire").min(10, "minmum 2 caractères").max(14, "maxmum 14 caractères"),
-        Address: string().required("L'adresse est obligatoire").min(2, "minmum 2 lettres"),
+        phone: string().required("Le Numéro est obligatoire").min(10, "minmum 2 caractères").max(14, "maxmum 14 caractères").matches(/^\+33/, "Le Numéro doit commencer par +33"),
+        Address: object().required("L'adresse est obligatoire")
     })
 
     /// FORMIK SUBMIT
@@ -71,34 +69,57 @@ export default function MyInfosPage() {
         initialValues: newProfile as any,
         validationSchema: formSchema,
         onSubmit: values => {
+            addressIn()
             formik.values = values
-            formik.values.skills = skillList
-            const UpdateAddress = async () => formik.values.Address = await GetAddressObject(newAddress)
-            UpdateAddress()
             setOpen(true)
         }
-    });
+    })
+
     /// UPDATE FORMIK VALUES ON CHANGE 
     useEffect(() => {
-        formik.values.Address = newAddress;
-        console.log('newAddress', newAddress)
-        // formik.values.image = imgBlob;
-    }, [formik.values.Address, imgBlob, newProfile])
+        async function updateAddress() {
+            formik.values.Address = await GetAddressObject(newAddress);
+            formik.values.addressId = formik.values.Address?.id
+        }
+        updateAddress()
+    }, [newProfile, newAddress])
+
 
 
     /// SKILLS FUNCTIONS
     const removeSkill = (index: number, array: string[]) => { array.splice(index, 1); console.log(array); setSkillList([...array]) }
     const addSkill = () => { newSkill && setSkillList([...skillList, newSkill as string]), setNewSkill('') }
-    let { firstName, lastName, phone, skills, image, assistance } = formik.values
 
+
+    /// ADDRESS FUNCTION
     async function addressIn() {
-        const addressFind = await FindAdressData(newAddress, data.address, data, formik)
-        addressFind.id !== newProfile.addressId && (formik.values.addressId = addressFind.id);
-        formik.values.Address = addressFind?.address
-        // data.profiles[index] = (delete formik.values.Address) && formik.values as Profile
-        setDataInLocal(data)
+        const AdressToSearch = formik.values.Address
+        const addressFind = addressList.find((address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
+        if (!addressFind) {
+            const post = await postAddress(AdressToSearch)
+            post ? (formik.values.Address = post) : (formik.values.Address = '')
+        }
+        else {
+            addressFind?.id !== newProfile.addressId && (formik.values.Address = addressFind);
+        }
+        formik.values.addressId = formik.values.Address.id
     }
-    const [open, setOpen] = useState(false);
+
+    /// DESTRCUCTURING FORMIK VALUES
+    let { firstName, lastName, phone, image } = formik.values
+
+
+    /// UPDATE FUNCTION API
+    const updateFunction = async () => {
+        formik.values.assistance = "LEVEL_" + formik.values.assistance
+        formik.values.skills = skillList.toString()
+        formik.values.addressId = formik.values.Address.id
+        const { Address, ...rest } = formik.values;
+        const updateData = { ...rest }
+        const patchedProfile = await patchProfile(user.Profile.id, updateData);
+        return patchedProfile
+    }
+
 
     return (
         <div className="Body gray flex">
@@ -107,19 +128,11 @@ export default function MyInfosPage() {
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => {
-                    // addressIn();
-                    const skill = skills.toString().split(',')
-                    const up = { ...me as User, Profile: { ...newProfile, skills: skill, ...formik.values } }
-                    console.log(up)
-                    const patchUser = async () => {
-                        const patchedUser = await putUser(me.id, up)
-                        console.log('--', patchedUser)
+                    const ok = await updateFunction()
+                    if (ok) {
+                        navigate("/");
+                        setOpen(false);
                     }
-                    patchUser()
-
-                    //  navigate("/");
-                    //  setOpen(false);
-
                 }}
                 title={"Confimrer la modification"}
                 element={parse((JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")) as unknown as string} />
@@ -141,27 +154,27 @@ export default function MyInfosPage() {
                 <main className='flex flew-1 pt-8'>
                     <Card className="w-respLarge h-full justify-between">
                         <CardHeader className="bg-transparent shadow-none flex pb-2 justify-center items-end " floated={true}>
-                            <Avatar src={image ? image : imgBlob as string} alt="avatar" size="xl" className=" shadow-md w-24 h-24" />
+                            <Avatar src={imgBlob ? imgBlob as String : image} alt={image || imgBlob ? firstName : ''} size="xl" className={"bg-blue-gray-500 shadow-md w-24 h-24 BgUser"} />
                             <div className="flex -ml-8">
                                 <Button color="gray" className="w-8 h-12 rounded-full z-20">
                                     <label htmlFor="image"
                                         className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
-                                        <span className="material-symbols-rounded">add_a_photo</span>
+                                        <span className="material-symbols-rounded">{image ? 'edit' : 'add_a_photo'}</span>
                                         <div className="flex flex-col w-full items-center justify-center">
-                                            <input id="image" type="file" name="image" className="hidden" onChange={(e) => getImageBlob(e, setImgBlob, formik)} />
+                                            <input id="image" type="file" name="image" className="hidden" onChange={(e) => getImageBlob2(e, setImgBlob, formik)} />
                                         </div>
                                     </label>
                                 </Button>
-                                <Button type='button' variant='text' color="cyan" className={imgBlob ? `p-1` : `hidden`} onClick={() => { setImgBlob(''), formik.values.image = '' }}>
-                                    <span className="material-symbols-rounded">cancel</span>
-                                </Button>
+                                <button type='button' className={imgBlob ? `p-0 absolute bottom-0 z-50 right-[calc(50%-4.5rem)] rounded] text-red-500 h-max !text-sm` : `hidden`} onClick={() => { setImgBlob(''), formik.values.image = '' }}>
+                                    <span className="material-symbols-rounded ">cancel</span>
+                                </button>
                                 <Button type='button' variant='text' color="blue-gray" className="absolute top-7 -right-6" onClick={() => navigate('/motdepasse_oublie')}>
                                     modifier le mot de passe ?
                                 </Button>
                             </div>
                         </CardHeader>
                         <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-0 overflow-auto !max-h-[calc(100vh-18rem)]">
-                            <Typography className='text-xs'>Information pour : {firstName} </Typography>
+                            <Typography className='text-xs'>Information pour : {user.email} </Typography>
                             <Typography className='text-xs error'>{formik.errors.firstName as string} </Typography>
                             <Input label="Prénom" name="firstName" variant="standard" onChange={formik.handleChange} value={firstName} />
                             <Typography className='text-xs error'>{formik.errors.lastName as string} </Typography>
@@ -177,7 +190,7 @@ export default function MyInfosPage() {
                                 <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] after:content[''] after:block after:w-full after:absolute after:-bottom-1.5 after:border-b-2 after:scale-x-0 peer-focus:after:scale-x-100 after:transition-transform after:duration-300 peer-placeholder-shown:leading-[4.25] text-gray-500 peer-focus:text-gray-900 after:border-gray-500 peer-focus:after:border-gray-900">addresse </label></div>
                             <Select className="p-5 capitaliz " label="Assistance" name="level" variant='standard'
                                 value={value}
-                                onChange={(val: any) => { setValue(val); assistance = val }}>
+                                onChange={(val: any) => { setValue(val); formik.values.assistance = val }}>
                                 {assistanceLevelSelect.map((level: string, index: number) => {
                                     return (
                                         <Option value={(level).toString()} key={index}>
@@ -211,7 +224,7 @@ export default function MyInfosPage() {
                 </main>
                 <footer className="w-respLarge pb-2 flex-2">
                     <Button type="submit" size="md" className="w-full rounded-full" >
-                        moidifier mon profile
+                        modifier mon profile
                     </Button>
                 </footer>
             </form>

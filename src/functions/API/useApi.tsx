@@ -1,11 +1,11 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Auth } from "../../types/class";
+import { jwtDecode } from "jwt-decode";
 
 // On vérifie qu'Axios est chargé via le CDN avant d'utiliser ce module
 //let url = "'https://back.imagindev-app.fr";
 //const url = import.meta.env.BASE_URL;
-//console.log(url);
 const url = 'http://localhost:3000';
 
 const accessToken = Cookies.get('accessToken')
@@ -97,8 +97,12 @@ export const useApiRefresh = () => {
             }
             if (error.response && error.response.status === 404) {
                 console.log("404 error.response", error.response)
-                console.log(headersRefresh)
-                //  refreshAccessToken()
+                if (error.response.data.message.includes("expired") || error.response.data.message.includes("jwt")) {
+
+                    refreshAccess()
+
+                }
+
 
             }
             return Promise.reject(error);
@@ -109,12 +113,34 @@ export const useApiRefresh = () => {
 };
 
 
-export const refreshAccess = async (): Promise<Auth> => {
+export const refreshAccess = async () => {
     const refreshToken = Cookies.get('refreshToken');
     const data = { refreshToken };
     const apiRefresh = useApiRefresh();
     const result = await apiRefresh.post('auth/refresh', data);
-    Cookies.set('accessToken', result.data.accessToken, { expires: 1 });
-    Cookies.set('refreshToken', result.data.refreshToken, { expires: 10 });
-    return result.data;
+    console.log("result", result)
+    const expirationDateAccess = getTokenExpirationDate(result.data.accessToken) || new Date();
+    const expirationDateRefresh = getTokenExpirationDate(result.data.refreshToken) || new Date();
+    Cookies.set('accessToken', result.data.accessToken, { expires: expirationDateAccess });
+    Cookies.set('refreshToken', result.data.refreshToken, { expires: expirationDateRefresh });
+};
+
+
+export const getTokenExpirationDate = (token: string): Date | null => {
+    try {
+        const decoded: any = jwtDecode(token);
+        if (!decoded.exp) {
+            return null;
+        }
+        return new Date(decoded.exp * 1000);
+    } catch (error) {
+        console.error("Invalid token", error);
+        return null;
+    }
+};
+
+
+export const isTokenExpired = (token: string): boolean => {
+    const expirationDate = getTokenExpirationDate(token);
+    return expirationDate ? expirationDate < new Date() : true;
 };

@@ -29,6 +29,16 @@ export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
     }
 }
 
+export const getImageBlob2 = (event: any, setImgBlob: any, formik: any) => {
+    let file = event.target.files[0];
+    formik.values.image = file
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+        setImgBlob(reader.result as string)
+    }
+}
+
 //// JOINS TABLE FUNCTIONS
 //// GET user profil 
 export const getUsersDetail = (arrayUser: User[], arraySearch: Profile[]) => {
@@ -48,7 +58,7 @@ export const getUsers = (array: Post[] | EventP[], arrayOfJoin: any[], initialAr
         let users: Profile[] = [];
         element.users = [];
         arrayOfJoin.filter((row: any) => row[lookingID] === element.id).map((row: any) => {
-            initialArray.map((user: Profile) => (user.id === row.user_id) && users.push(user));
+            initialArray.map((user: Profile) => (user.id === row.userId) && users.push(user));
             element.users = users
         })
     })
@@ -79,7 +89,7 @@ export const getFlags = (posts: PostL[], events: Event[], surveys: Survey[], poo
 //// avoir tout les flags d'un user ( return flag[])
 export const getFlagsUser = (posts: Post[], events: Event[], surveys: Survey[], pools: Pool[], services: Service[], arrayOfJoin: any[], idS: number) => {
     let all = getCommuns(posts, events, surveys, pools, services)
-    return (arrayOfJoin.filter((flagRow: targetUser) => (flagRow.user_id === idS))).map((element1: flag) => {
+    return (arrayOfJoin.filter((flagRow: targetUser) => (flagRow.userId === idS))).map((element1: flag) => {
         for (let i = 0; i < all.length; i++) {
             (all[i].id + all[i].type) === (element1.target_id + element1.type) && (element1.element = all[i].element);
         }
@@ -104,11 +114,11 @@ export const getCommuns = (posts: Post[], events: Event[], surveys: Survey[], po
     let all = getAll(posts, events, surveys, pools, services)
     let newElement: all
     all.map((element: any) => {
-        const findId = element.user_id ? element.user_id : element.type === "Demande" ? element.user_id_get : element.user_id_do;
+        const findId = element.userId ? element.userId : element.type === "Demande" ? element.userId_get : element.userId_do;
         (findId) && (
             newElement = {
                 id: element.id,
-                user_id: findId,
+                userId: findId,
                 type: element.type,
                 element: element,
                 created_at: element.created_at
@@ -125,11 +135,11 @@ export const getNotifications = (posts: Post[], events: Event[], surveys: Survey
     let notif: notif = {} as notif
     let all = getAll(posts, events, surveys, pools, services)
     all.map((element: any) => {
-        const findId = element.user_id === userId || element.user_id_get === userId || element.user_id_do === userId || element.userId === userId;
+        const findId = element.userId === userId || element.userId_get === userId || element.userId_do === userId || element.userId === userId;
         (findId || element.users?.find((user: userProfile) => user.id === userId)) && (
             notif = {
                 target_id: element.id,
-                user_id: element.user_id,
+                userId: element.userId,
                 relation: findId ? "mines" : "ImIn",
                 type: element.type,
                 element: element,
@@ -210,7 +220,7 @@ export const deleteElement = (id: number, array: any[], setArray: any,) => {
 }
 
 export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any) => {
-    let index = array.findIndex((element: any) => (element.user_id + element.type + element.target_id) === (elementJoin.user_id + elementJoin.type + elementJoin.target_id));
+    let index = array.findIndex((element: any) => (element.userId + element.type + element.target_id) === (elementJoin.userId + elementJoin.type + elementJoin.target_id));
     confirm(" voulez vous supprimer " + array[index].element.title + " ?") && array.splice(index, 1); setArray([...array])
 
 }
@@ -223,14 +233,14 @@ export const beInElement = (elementLiked: PostL | EventP, array: any[], setArray
     let index = array.findIndex((element: any) => element.id === elementLiked.id);
     let users = []
 
-    if (elementLiked.users?.find((user: any) => user.user_id === userProfile?.user_id)) {
-        users = elementLiked.users.filter((user: any) => user.user_id !== userProfile?.id);
-        let filter = arrayJoin.find((element: any) => element[keyOf] === elementLiked.id && element.user_id === userProfile?.user_id)
+    if (elementLiked.users?.find((user: any) => user.userId === userProfile?.userId)) {
+        users = elementLiked.users.filter((user: any) => user.userId !== userProfile?.id);
+        let filter = arrayJoin.find((element: any) => element[keyOf] === elementLiked.id && element.userId === userProfile?.userId)
         arrayJoin.splice(arrayJoin.indexOf(filter), 1)
 
     } else {
         users.push(userProfile);
-        arrayJoin.push({ user_id: userProfile?.user_id, [keyOf]: elementLiked.id })
+        arrayJoin.push({ userId: userProfile?.userId, [keyOf]: elementLiked.id })
         array[index].users.push(userProfile)
     }
     setArrayJoin([...arrayJoin]);
@@ -241,7 +251,7 @@ export const beInElement = (elementLiked: PostL | EventP, array: any[], setArray
 
 export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefined, keyOf?: string) => {
     keyOf ? keyOf = keyOf : keyOf = 'target_id'
-    return arrayJoin.find((element: any) => element[keyOf] === elementCheck.id && element.user_id === userId) ? true : false
+    return arrayJoin.find((element: any) => element[keyOf] === elementCheck.id && element.userId === userId) ? true : false
 }
 
 
@@ -281,12 +291,12 @@ export const AcceptUserResp = (id: number, array: Service[], setArray: any, step
 
 export const takeElement = (id: number, array: Service[], setArray: any, userProfile: Profile) => {
     let index = array.findIndex((element: Service) => element.id === id);
-    if (array[index].user_id_resp === userProfile?.user_id) {
-        array[index].user_id_resp = 0;
+    if (array[index].userIdResp === userProfile?.userId) {
+        array[index].userIdResp = 0;
         array[index].status = 0;
     }
     else {
-        array[index].user_id_resp = userProfile?.user_id;
+        array[index].userIdResp = userProfile?.userId;
         array[index].status = 1;
     }
     setArray([...array]);

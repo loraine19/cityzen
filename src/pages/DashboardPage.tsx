@@ -10,10 +10,9 @@ import { getDays, getNotifications, GetPathElement, getUsersDetail } from "../fu
 import UserContext from "../contexts/user.context";
 import DataContext from "../contexts/data.context";
 import { EventP, Profile, } from "../types/class";
-import { getRefreshToken, getUserMe } from "../functions/API/usersApi";
+import { getUserMe } from "../functions/API/usersApi";
 import { getEvents } from "../functions/API/eventsApi";
 import { refreshAccess } from "../functions/API/useApi";
-
 
 export default function DashboardPage() {
     const { setUserCont, userNotif, setUserNotif } = useContext(UserContext)
@@ -28,7 +27,8 @@ export default function DashboardPage() {
         find && setUserCont(find) && localStorage.setItem('user', JSON.stringify(find));
         // setUserNotif(notifList.length)
     };
-    const idS = user.id ? user.id : 0
+    // const idS = user.id ? user.id : 0
+    const idS = 1
     //const notificationList = getNotifications(posts, surveys, pools, services, idS);
     //  const [notifList, setNotifList] = useState<notif[]>(notificationList ? notificationList : []);
     let { firstName, image, points, } = user;
@@ -39,16 +39,14 @@ export default function DashboardPage() {
             const me = await getUserMe()
             const userProfile = me.Profile as Profile;
             setUser(userProfile);
+            setUserCont(userProfile);
             setAdressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
             const events = await getEvents()
-            console.log(events)
             setEvents(events);
             setEvents(getDays(events));
         }
         fetch()
     }, []);
-
-
 
     const fetchRefreshToken = async () => {
         const token = await refreshAccess();
@@ -56,7 +54,6 @@ export default function DashboardPage() {
     };
 
     const notifList = getNotifications(posts, events as any, surveys, pools, services, idS);
-
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
@@ -67,7 +64,7 @@ export default function DashboardPage() {
             <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
                 <div className="flex items-center  gap-2">
                     <div className="flex items-center flex-1">
-                        <Select className="shadowborder-none capitalize  !p-0 !m-0" variant="standard" label="" name={"users"}
+                        <Select className="shadowborder-none capitalize !p-0 !m-0" variant="standard" label="" name={"users"}
                             labelProps={{
                                 className:
                                     " before:border-none after:border-none !p-0 !m-0 "
@@ -105,7 +102,7 @@ export default function DashboardPage() {
                                     src={image as string}
                                     alt={firstName}
                                     variant="circular"
-                                    className="!shadow-sm !shadow-gray-400 w-16 h-16 lg:w-20 lg:h-20"
+                                    className="!shadow-sm !shadow-gray-400 w-16 h-16 lg:w-20 lg:h-20 BgUser"
                                 />
                                 <div className="flex flex-col items-center justify-center ">
                                     <Typography
