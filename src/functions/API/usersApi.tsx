@@ -1,13 +1,9 @@
-import { User, Auth } from "../../types/class";
-import { handleApiCall, useApi, useApiRefresh } from "./useApi";
-import Cookies from 'js-cookie';
+import { User, Auth, UserDTO } from "../../types/class";
+import { handleApiCall, useApi, } from "./useApi";
 
-type UserDto = Partial<User>;
-// type AuthDto = Partial<Auth>;
 
 const api = useApi();
 const dataType = "users";
-//const apiRefresh = useApiRefresh();
 
 
 // USERS
@@ -17,9 +13,9 @@ export const getUserById = async (id: number): Promise<User> => handleApiCall(()
 
 export const getUserMe = async (): Promise<User> => handleApiCall(() => api.get(`${dataType}/me`));
 
-export const postUser = async (user: UserDto): Promise<User> => handleApiCall(() => api.post(dataType, user));
+export const postUser = async (user: UserDTO): Promise<User> => handleApiCall(() => api.post(dataType, user));
 
-export const patchUser = async (id: number, user: UserDto): Promise<User> => handleApiCall(() => api.patch(`${dataType}/${id}`, user));
+export const patchUser = async (id: number, user: UserDTO): Promise<User> => handleApiCall(() => api.patch(`${dataType}/${id}`, user));
 
 export const deleteUser = async (id: number): Promise<User> => handleApiCall(() => api.delete(`${dataType}/${id}`));
 
@@ -28,12 +24,3 @@ export const signIn = async (credentials: { email: string, password: string }): 
 
 export const signUp = async (user: any): Promise<Auth> => handleApiCall(() => api.post('auth/signup', user));
 
-
-// export const getRefreshToken = async (): Promise<Auth> => handleApiCall(async () => {
-//     const refreshToken = Cookies.get('refreshToken');
-//     const data = { refreshToken };
-//     const result = await apiRefresh.post('auth/refresh', data);
-//     Cookies.set('accessToken', result.data.accessToken, { expires: 1 });
-//     Cookies.set('refreshToken', result.data.refreshToken, { expires: 10 });
-//     return result;
-// });

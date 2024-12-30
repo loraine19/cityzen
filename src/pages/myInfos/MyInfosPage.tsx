@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, CardHeader, Avatar, IconButton, List, ListItem, ListItemSuffix, } from '@material-tailwind/react';
 import MapPickUpComp from '../../components/mapComps/MapPickUpComp';
 import { AuthHeader } from '../../components/authComps/AuthHeader';
-import { getImageBlob2, } from '../../functions/GetDataFunctions';
+import { getImageBlob, } from '../../functions/GetDataFunctions';
 import { Address, AssistanceLevel, assistanceLevel, ProfileDTO, User } from '../../types/class';
-import { ConfirmModal } from '../../components/ConfirmModal';
+import { ConfirmModal } from '../../components/UIX/ConfirmModal';
 import { getUserMe } from '../../functions/API/usersApi';
 import { GetAddressObject } from '../../functions/GeoMapFunction';
 import { getAddresses, postAddress } from '../../functions/API/addressApi';
@@ -15,7 +15,6 @@ import parse from 'html-react-parser';
 import { patchProfile } from '../../functions/API/profilesApi';
 
 export default function MyInfosPage() {
-    // INIT STATE
     const [user, setUser] = useState<User>({} as User);
     const [Address, setAddress] = useState<Address>({} as Address);
     const navigate = useNavigate();
@@ -26,6 +25,7 @@ export default function MyInfosPage() {
     const [newSkill, setNewSkill] = useState<string | undefined>()
     const [value, setValue] = useState(newProfile.assistance ? newProfile.assistance.toString() : "0");
     const [addressList, setAddressList] = useState<Address[]>([])
+    1 > 2 && console.log("avoid compile error", addressList)
     const [open, setOpen] = useState(false);
     let assistanceLevelSelect = assistanceLevel.filter((level: any) => { if (!isNaN(level)) { return level.toString() } }) as string[]
 
@@ -41,7 +41,7 @@ export default function MyInfosPage() {
             setAddress(Profile.Address)
             setNewAddress(`${Profile.Address.address} ${Profile.Address.zipcode} ${Profile.Address.city}`)
             setSkillList(Profile.skills.toString().split(','))
-            setImgBlob(user.Profile.image)
+            setImgBlob(user.Profile.image as string)
             formik.values.firstName = Profile.firstName
             formik.values.lastName = Profile.lastName
             formik.values.phone = Profile.phone.toString()
@@ -94,6 +94,7 @@ export default function MyInfosPage() {
     /// ADDRESS FUNCTION
     async function addressIn() {
         const AdressToSearch = formik.values.Address
+        const addressList = await getAddresses()
         const addressFind = addressList.find((address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
         if (!addressFind) {
             const post = await postAddress(AdressToSearch)
@@ -107,7 +108,6 @@ export default function MyInfosPage() {
 
     /// DESTRCUCTURING FORMIK VALUES
     let { firstName, lastName, phone, image } = formik.values
-
 
     /// UPDATE FUNCTION API
     const updateFunction = async () => {
@@ -161,7 +161,7 @@ export default function MyInfosPage() {
                                         className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
                                         <span className="material-symbols-rounded">{image ? 'edit' : 'add_a_photo'}</span>
                                         <div className="flex flex-col w-full items-center justify-center">
-                                            <input id="image" type="file" name="image" className="hidden" onChange={(e) => getImageBlob2(e, setImgBlob, formik)} />
+                                            <input id="image" type="file" name="image" className="hidden" onChange={(e) => getImageBlob(e, setImgBlob, formik)} />
                                         </div>
                                     </label>
                                 </Button>
@@ -173,7 +173,7 @@ export default function MyInfosPage() {
                                 </Button>
                             </div>
                         </CardHeader>
-                        <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-0 overflow-auto !max-h-[calc(100vh-18rem)]">
+                        <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-8 pt-0 overflow-auto !max-h-[calc(100vh-18rem)]">
                             <Typography className='text-xs'>Information pour : {user.email} </Typography>
                             <Typography className='text-xs error'>{formik.errors.firstName as string} </Typography>
                             <Input label="Prénom" name="firstName" variant="standard" onChange={formik.handleChange} value={firstName} />

@@ -11,16 +11,16 @@ export type postBase = {
     category: string,
     image: string,
     created_at: string,
-    share: string []
+    share: string[]
 }
 
 export interface post extends postBase {
     users: userProfile[],
-    flags ?: targetUser[],
+    flags?: targetUser[],
 }
 
 //// type for event
-export type adressGps = { lat: number, lng: number } 
+export type adressGps = { lat: number, lng: number }
 
 export type eventBase = {
     id: number,
@@ -34,13 +34,13 @@ export type eventBase = {
     image: any
     users: []
     days?: Date[]
-    flags ?: targetUser[]
+    flags?: targetUser[]
     participants: number
     created_at?: string
 }
 export interface event extends eventBase {
     users: [],
-    flags ?: targetUser[],
+    flags?: targetUser[],
 }
 
 export type avatarData = {
@@ -51,30 +51,30 @@ export type avatarData = {
 
 
 //// TYPE NOTIF 
-export type notif ={
+export type notif = {
     user_id: number,
     relation: string,
     read: boolean
     target_id: number
     type: string,
-    element : post | event | survey | pool | service,
+    element: post | event | survey | pool | service,
     created_at: string,
     updated_at?: string
-    flag?:targetUser[]|flag[]|null
+    flag?: targetUser[] | flag[] | null
 }
 
 export type all = {
     id: number,
     user_id: number,
     type: string,
-    element : post | event | survey | pool | service,
+    element: post | event | survey | pool | service,
     created_at: string,
     updated_at?: string
-    flag?:targetUser[]|flag[]|null
+    flag?: targetUser[] | flag[] | null
 }
 
 ///// TYPE FLAG 
-export interface flag extends targetUser  {
+export interface flag extends targetUser {
     element: post | event | survey | pool | service,
 }
 
@@ -92,12 +92,20 @@ export interface service {
     hard_level: 0 | 1 | 2 | 3;
     created_at: Date;
     updated_at: Date;
-  }
+}
 
-  
-  
+
+
 
 //// JOINTURES 
 export type eventUser = { event_id: number, user_id: number }
 export type postUser = { post_id: number, user_id: number }
-export type targetUser ={ target_id: number | string, user_id: number , type: string, reason: string, active: boolean, created_at: string, updated_at: string}
+export type targetUser = { target_id: number | string, user_id: number, type: string, reason: string, active: boolean, created_at: string, updated_at: string }
+
+
+
+///// FOR FRONT ONLY 
+
+const action = {
+
+}

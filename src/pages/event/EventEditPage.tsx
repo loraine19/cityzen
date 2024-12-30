@@ -1,53 +1,68 @@
+import parse from 'html-react-parser';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EventForm } from '../../components/eventComps/EventForm';
-import DataContext from '../../contexts/data.context';
 import { EventP } from '../../types/class';
-import { FindAdressData, getDays, getUsers } from '../../functions/GetDataFunctions';
-import { ConfirmModal } from '../../components/ConfirmModal';
+import { addressIn } from '../../functions/GetDataFunctions';
+import { ConfirmModal } from '../../components/UIX/ConfirmModal';
+import { getEventById, patchEvent } from '../../functions/API/eventsApi';
 export default function EventDetailPage() {
     const { id } = useParams()
-    const { data, setDataInLocal } = useContext(DataContext)
-    const { events, participants, profiles } = data
-    const [eventList] = useState<EventP[]>(getDays(getUsers(events, participants as [], profiles as [], "event_id")))
-    const found = (eventList.find((EventP: EventP) => EventP.id == parseInt(id!)))
-
+    const [newEvent, setNewEvent] = useState<EventP>({} as EventP);
     const navigate = useNavigate();
-    useEffect(() => { !found && navigate(`/evenement/${id}`) }, [id])
 
-    type EventPA = EventP & { address?: any }
-    const [newEvent] = useState<EventP>(found ? (found) : (eventList[0]));
+    const fetchEvent = async () => {
+        const idS = id ? parseInt(id) : 0;
+        const fetchedEvent = await getEventById(idS);
+        setNewEvent(fetchedEvent);
+        formik.values.category = fetchedEvent.category;
+        formik.values.Address = fetchedEvent.Address;
+        formik.values.start = fetchedEvent.start;
+        formik.values.title = fetchedEvent.title;
+        formik.values.description = fetchedEvent.description;
+        formik.values.participantsMin = fetchedEvent.participantsMin as number;
+        formik.values.end = fetchedEvent.end;
+        formik.values.image = fetchedEvent.image;
+        formik.values.Participants = fetchedEvent.Participants;
+        //navigate(`/evenement/${id}`
+    };
+
+    useEffect(() => {
+        fetchEvent()
+    }, []);
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         start: date().required("Date est obligatoire").max(ref('end'), "la date de debut doit etre avant a la date de fin"),
         end: date().required("Date est obligatoire").min(ref('start'), "la date de fin doit etre aprés a la date de debut"),
-        participants_min: number().required("Participants est obligatoire").min(1, "minmum 1 personne"),
+        participantsMin: number().required("Participants est obligatoire").min(1, "minmum 1 personne"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
         category: string().required("Catégorie est obligatoire"),
-        address: string().required("Adresse est obligatoire").min(2, "minmum 2 lettres"),
+        Address: object().required("Adresse est obligatoire")
     })
     const [value, setValue] = useState("");
-    value && console.log("avoid compile error ", value)
+    value && 9 > 10 && console.log("avoid compile error ", value)
+
 
     const formik = useFormik({
-        initialValues: newEvent as EventPA,
+        initialValues: newEvent as EventP,
         validationSchema: formSchema,
         onSubmit: values => {
+            addressIn(formik, newEvent);
             formik.values = values
             setOpen(true)
         }
     });
 
-    const index = data.events.findIndex((element: any) => element.id === newEvent.id);
-    async function addressIn() {
-        const addressFind = await FindAdressData(formik.values.address, data.address, data, formik)
-        addressFind.id !== newEvent.address_id && (formik.values.address_id = addressFind.id);
-        formik.values.address = addressFind?.address
-        data.events[index] = (delete formik.values.address) && formik.values as EventP
-        setDataInLocal({ ...data, events: data.events })
+    const updateFunction = async () => {
+        formik.values.start = new Date(formik.values.start).toISOString()
+        formik.values.end = new Date(formik.values.end).toISOString()
+        formik.values.addressId = formik.values.Address.id
+        const { Address, Participants, ...rest } = formik.values;
+        const updateData = { ...rest }
+        return await patchEvent(newEvent.id, updateData)
     }
 
     const [open, setOpen] = useState(false);
@@ -57,14 +72,17 @@ export default function EventDetailPage() {
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={() => {
-                    addressIn();
-                    navigate(`/evenement`);
-                    setOpen(false)
+                handleConfirm={async () => {
+                    const ok = await updateFunction()
+                    if (ok) {
+                        navigate("/evenement/" + newEvent.id);
+                        setOpen(false);
+                    }
                 }}
                 title={"Confimrer la modification"}
-                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-            <EventForm formik={formik} setValue={setValue} />
+                element={parse((JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")) as unknown as string} />
+            {newEvent && newEvent.id &&
+                <EventForm formik={formik} setValue={setValue} />}
         </div >
     )
 }

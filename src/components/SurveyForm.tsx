@@ -11,8 +11,8 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import { surveyCategoryFaker } from "../datas/fakers/surveyFaker";
-import { CategoriesSelect } from "./CategoriesSelect";
-import BtnBottom from "./BtnBottom";
+import { CategoriesSelect } from "./UIX/CategoriesSelect";
+import BtnBottom from "./UIX/BtnBottom";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { array, object, string } from "yup";

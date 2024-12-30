@@ -3,9 +3,9 @@ import { useContext, useState } from "react";
 import UserContext from "../../contexts/user.context";
 import { deleteElementJoin, getFlagsUser } from "../../functions/GetDataFunctions";
 import { flag, } from "../../types/type";
-import NavBarBottom from "../../components/NavBarBottom";
-import NavBarTop from "../../components/NavBarTop";
-import SubHeader from "../../components/SubHeader";
+import NavBarBottom from "../../components/UIX/NavBarBottom";
+import NavBarTop from "../../components/UIX/NavBarTop";
+import SubHeader from "../../components/UIX/SubHeader";
 import { FlagCard } from "../../components/flagComps/FlagCard";
 import DataContext from "../../contexts/data.context";
 

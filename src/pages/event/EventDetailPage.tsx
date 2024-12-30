@@ -1,82 +1,81 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import NavBarTop from '../../components/NavBarTop';
-import { EventDetailCard } from '../../components/eventComps/EventDetailCard';
-import SubHeader from '../../components/SubHeader';
-import parse from 'html-react-parser';
-import CTA from '../../components/CTA';
+import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import CTAMines from '../../components/CATMines';
-import { beInElement, getAdress, getDays, getUsers } from '../../functions/GetDataFunctions';
+import parse from 'html-react-parser';
+import NavBarTop from '../../components/UIX/NavBarTop';
+import SubHeader from '../../components/UIX/SubHeader';
+import CTA from '../../components/UIX/CTA';
+import CTAMines from '../../components/UIX/CATMines';
+import { EventDetailCard } from '../../components/eventComps/EventDetailCard';
 import UserContext from '../../contexts/user.context';
-import { action, Address, EventP, Profile } from '../../types/class';
-import DataContext from '../../contexts/data.context';
+import { toggleParticipant } from '../../functions/GetDataFunctions';
+import { getEventById } from '../../functions/API/eventsApi';
+import { action, EventP, Participant } from '../../types/class';
+
 export default function EventDetailPage() {
-    const { id } = useParams()
-    const { user } = useContext(UserContext);
-    const { data, setDataInLocal } = useContext(DataContext)
-    const { events, profiles } = data
-    const navigate = useNavigate();
-    const [participants, setParticipants] = useState<Profile[]>(data.participants)
-    const [eventList, setEventList] = useState<EventP[]>(getDays(getUsers(events, participants as [], profiles as [], "event_id")))
-    const [found] = useState<EventP | undefined>(eventList.find((EventP: EventP) => EventP.id == parseInt(id!)))
+    const { id } = useParams();
+    const user = useContext(UserContext)
+    const userId = user.user.userId
+    const [event, setEvent] = useState<EventP>({} as EventP);
+    const [isMine, setIsMine] = useState<boolean>(true);
+    const [Igo, setIgo] = useState<boolean>(false);
+    const [isValidate, setIsValidate] = useState<boolean>(false);
+    const disabledCTA = isMine || Igo;
+    const disabledEditCTA = isValidate;
 
-
-    const [selectedEvent] = useState<EventP>(found ? (found) : (eventList[0]))
-    const address: Address = getAdress(selectedEvent.address_id, data.address) as Address
-    const mines = found?.user_id === user.id ? true : false
-    const igo = selectedEvent.users?.find((userE: Profile) => userE.user_id === user.user_id) ? true : false
-    const disabledCTA = mines || igo ? true : false
-    const disabledEditCTA = selectedEvent.users.length >= selectedEvent.participants_min ? true : false
-
-    const handleGo = (elementLiked: EventP) => { beInElement(elementLiked, eventList, setEventList, participants, setParticipants, user, "event_id"), setDataInLocal({ ...data, events: eventList, participants: participants }) }
+    const fetchEvent = async () => {
+        const idS = id ? parseInt(id) : 0;
+        const event = await getEventById(idS);
+        setEvent(event);
+        setIsMine(event.userId === userId);
+        setIsValidate(event.Participants.length > event.participantsMin);
+        setIgo(event.Participants.find((participant: Participant) => participant.userId === userId) ? true : false)
+    };
 
     useEffect(() => {
-        if (!found) {
-            navigate("/evenement-" + id)
-        }
-    }, [found])
+        fetchEvent();
+    }, [event.Participants]);
 
-
+    const { title, category, Address } = event;
 
     const buttons: action[] = [
         {
-            icon: igo ? "Vous participer déjà" : `Participer a ${selectedEvent.title}`,
-            title: `Participer a ${selectedEvent.title}`,
-            body: `Participer a ${selectedEvent.title}`,
-            function: () => { { handleGo(selectedEvent) } }
+            icon: Igo ? "Vous participer déjà" : `Participer a ${title}`,
+            title: `Participer a ${title}`,
+            body: `Participer a ${title}`,
+            function: () => { toggleParticipant(event.id, userId, setEvent) }
         },
         {
             icon: 'Annuler',
-            title: `annuler votre participation a ${selectedEvent.title}`,
-            body: `annuler votre participation a ${selectedEvent.title}`,
-            function: () => { { handleGo(selectedEvent) } }
+            title: `annuler votre participation a ${title}`,
+            body: `annuler votre participation a ${title}`,
+            function: () => { toggleParticipant(event.id, userId, setEvent) }
         },
-    ]
+    ];
+
+    if (!event.id) {
+        return <div>Loading...</div>;
+    }
 
     return (
-
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={`évenement ${selectedEvent.category}`}
-                    place={parse(`<br><div className="text-xl whitespace-nowrap text-ellipsis overflow-hidden ">${address.address}</div>`)} closeBtn />
+                <SubHeader type={`évenement ${category.toString().toLowerCase()}`}
+                    place={parse(`<br><div className="text-xl whitespace-nowrap text-ellipsis overflow-hidden ">${Address.address} ${Address.city}</div>`)} closeBtn />
             </header>
-            <main >
-                <EventDetailCard event={selectedEvent} address={address} avatarDatas={selectedEvent.users} mines={mines} />
+            <main>
+                <EventDetailCard Event={event} setEvent={setEvent} />
             </main>
-
-            {mines ?
-                <CTAMines id={selectedEvent.id} disabled2={disabledEditCTA} />
+            {isMine ?
+                <CTAMines id={event.id} disabled2={disabledEditCTA} />
                 :
                 <CTA
                     addBtn={true}
                     disabled={disabledCTA}
-                    cancelBtn={igo}
-                    element={selectedEvent}
+                    cancelBtn={Igo}
+                    element={event}
                     values={buttons} />
             }
-
-        </div >
-    )
-
-} 
+        </div>
+    );
+}

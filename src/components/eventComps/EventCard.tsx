@@ -1,31 +1,43 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { AvatarStack } from "./AvatarStack";
-import ModifBtnStack from "../ModifBtnStack";
-import { eventdateInfo } from "../../functions/GetDataFunctions";
-import { useState } from "react";
-import { EventP, Participant, } from "../../types/class";
+import ModifBtnStack from "../UIX/ModifBtnStack";
+import { eventdateInfo, toggleParticipant, isFlaged, GetDefaultImage, GenereMyActions } from '../../functions/GetDataFunctions';
+import { useContext, useEffect, useState } from "react";
+import { EventP, Flag, Participant, } from "../../types/class";
+import UserContext from "../../contexts/user.context";
+import { getFlagsEvent } from "../../functions/API/flagsApi";
+import { deleteEvent } from "../../functions/API/eventsApi";
 
-type EventCardProps = { event: EventP, avatarDatas: Participant[], change: (e: any) => void, mines?: boolean, handleClickDelete: (id: number) => void, index: number, isFlaged?: boolean, isWithMe?: boolean, handleGo: (event: EventP) => void }
-
+type EventCardProps = { event: EventP, change: (e: any) => void, mines?: boolean, update?: () => void }
 export function EventCard(props: EventCardProps) {
-    const { id, title, description, category, participantsMin, start } = props.event
-    const { avatarDatas, change, mines, isWithMe } = props
+    const [event, setEvent] = useState<EventP>(props.event)
+    const { id, title, description, category, participantsMin, start } = event
+    const { change, mines, update } = props
+    const user = useContext(UserContext)
+    const userId = user.user.userId
+    const Igo: boolean = event.Participants.find((participant: Participant) => participant.userId === userId) ? true : false
+    const [flags, setFlags] = useState<Flag[]>([])
+    1 > 2 && console.log(flags)
+    const [flagged, setFlagged] = useState<boolean>(false)
     const date = new Date(start)
     const now = new Date(Date.now())
     const daysBefore: number = ((date.getTime() - now.getTime()) / 1000 / 60 / 60 / 24)
-    const pourcentParticipants: number = Math.floor((avatarDatas?.length) / participantsMin * 100)
+    const pourcentParticipants: number = Math.floor((event.Participants?.length) / participantsMin * 100)
     let dateClass = daysBefore < 15 && pourcentParticipants < 100 ? "OrangeChip" : "GrayChip";
     const disabledEditCTA = pourcentParticipants >= 100 ? true : false
-
-    const imgCategory: string = ''
-    // const imgCategory: string | undefined | Blob = (defaultEventImage.find(categoryD => categoryD.type === category.toLocaleLowerCase()) ?
-    //     defaultEventImage.find(categoryD => categoryD.type === category.toLocaleLowerCase())?.image
-    //     : defaultEventImage[0].image);
-
+    const imgCategory: string | undefined | Blob = GetDefaultImage(category)
     const [image] = useState<string>(props.event.image ? (props.event.image) as any : (imgCategory));
     let haveImage = image ? true : false
 
+    useEffect(() => {
+        const onload = async () => {
+            const flags = await getFlagsEvent()
+            setFlags(flags)
+            setFlagged(isFlaged(event, userId, flags))
+        }
+        onload()
+    }, [event])
 
 
     return (
@@ -65,8 +77,8 @@ export function EventCard(props: EventCardProps) {
                             {title}<br></br>
                             <span className="text-sm font-medium text-blue-gray-500">{eventdateInfo(props.event)}</span>
                         </Typography>
-                        <Link to={`/flag${props.isFlaged ? '/edit' : ''}/event${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${props.isFlaged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
+                        <Link to={`/flag${flagged ? '/edit' : ''}/event${id}`} title={`signaler un problème sur ${title}`}>
+                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
 
@@ -80,13 +92,13 @@ export function EventCard(props: EventCardProps) {
                         <button onClick={(e: any) => change(e)}>
                             <Chip value={category} className="rounded-full h-max" color="cyan">
                             </Chip></button>
-                        <AvatarStack avatarDatas={avatarDatas} />
+                        <AvatarStack avatarDatas={event.Participants} />
                     </div> :
-                        <ModifBtnStack id={id} disabledEdit={disabledEditCTA} handleClickDelete={props.handleClickDelete} />}
+                        <ModifBtnStack disabledEdit={disabledEditCTA} actions={GenereMyActions(event, "evenement", deleteEvent)} update={update} />}
                     <div className="flex items-center gap-2">
-                        <button onClick={() => props.handleGo(props.event)}>
+                        <button onClick={() => toggleParticipant(event.id, userId, setEvent)}>
                             <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center gap-2"
-                                icon={<span className={`${isWithMe && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem]`}>person</span>}>
+                                icon={<span className={`${Igo && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem]`}>person</span>}>
                             </Chip></button>
                         <Link to={`/evenement/${id}`} className="flex items-center gap-2" title={`voir les details de ${title}`}><span className="material-symbols-outlined fill !text-[3rem] text-gray-900  fillThin">
                             arrow_circle_right

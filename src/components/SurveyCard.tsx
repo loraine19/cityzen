@@ -10,7 +10,7 @@ import {
 
 //import TYPES
 import { survey } from "../types/survey";
-import ModifBtnStack from "./ModifBtnStack";
+import ModifBtnStack from "./UIX/ModifBtnStack";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../contexts/user.context";

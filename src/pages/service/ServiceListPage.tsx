@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import NavBarBottom from "../../components/NavBarBottom"
-import NavBarTop from "../../components/NavBarTop";
-import SubHeader from "../../components/SubHeader";
+import NavBarBottom from "../../components/UIX/NavBarBottom"
+import NavBarTop from "../../components/UIX/NavBarTop";
+import SubHeader from "../../components/UIX/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
 import { serviceCategories } from "../../datas/enumsCategories";
 import { label } from "../../types/label";

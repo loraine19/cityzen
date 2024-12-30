@@ -11,7 +11,7 @@ import { Radio, Typography } from "@material-tailwind/react";
 //import COMPONENTS
 import SurveyForm from "../../components/SurveyForm";
 import PoolForm from "../../components/PoolForm";
-import NavBarTop from "../../components/NavBarTop";
+import NavBarTop from "../../components/UIX/NavBarTop";
 
 // ------------------------------------- //
 function Icon() {

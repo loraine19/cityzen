@@ -1,39 +1,36 @@
-// + calendar view
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import NavBarBottom from "../../components/NavBarBottom";
-import { CategoriesSelect } from "../../components/CategoriesSelect";
-import NavBarTop from "../../components/NavBarTop";
+import NavBarBottom from "../../components/UIX/NavBarBottom";
+import { CategoriesSelect } from "../../components/UIX/CategoriesSelect";
+import NavBarTop from "../../components/UIX/NavBarTop";
 import TabsMenu from "../../components/TabsMenu";
 import { EventCard } from "../../components/eventComps/EventCard";
-import { eventCategories } from "../../datas/enumsCategories";
 import { label } from "../../types/label";
-import SubHeader from "../../components/SubHeader";
+import SubHeader from "../../components/UIX/SubHeader";
 import CalendarCompLarge from "../../components/calendarComps/CalendarCompLarge";
-import { beInElement, deleteElement, getDays, getUsers, imIn } from "../../functions/GetDataFunctions";
-import DataContext from "../../contexts/data.context";
-import { EventP, Profile, User } from "../../types/class";
-import { getUserMe } from "../../functions/API/usersApi";
-import { getEvents } from "../../functions/API/eventsApi";
+import { getDays } from "../../functions/GetDataFunctions";
+import { eventCategory, EventP } from "../../types/class";
+import { getEvents, getEventsIgo, getEventsMines, getEventsValidated } from '../../functions/API/eventsApi';
 
 export default function EventListPage() {
-    const { data, setDataInLocal } = useContext(DataContext)
-    const { flags, profiles } = data
-    const [user, setUser] = useState<User>({} as User)
-    const [profile, setProfile] = useState<Profile>({} as Profile)
+    //// CONTEXT AND STATE DECLARATIONS
     const [events, setEvents] = useState<EventP[]>([])
     const [eventList, setEventList] = useState<EventP[]>(events);
+    const [myEvents, setMyEvents] = useState<EventP[]>([])
+    const [IgoEvents, setIgoEvents] = useState<EventP[]>([])
+    const [validatedEvents, setValidatedEvents] = useState<EventP[]>([])
     const [arrayToFilter, setArrayToFilter] = useState<EventP[]>(events)
-    const [participants, setParticipants] = useState<Profile[]>(data.participants)
     const [view, setView] = useState("view_agenda");
-    const [tabSelected, setTabSelected] = useState<string>("");
-    const [categorySelected, setCategorySelected] = useState<string>(eventCategories[0]);
     const [notif, setNotif] = useState<string>("");
     const [eventsTabled, setEventsTabled] = useState<EventP[]>([]);
     const [mines, setMines] = useState<boolean>(false);
-    const activeTab: any = document.querySelector(`li[data-value="${tabSelected}"]`);
+    const [tabSelected, setTabSelected] = useState<string>("");
+    const [activeTab] = useState<any>(document.querySelector(`li[data-value="${tabSelected}"]`))
+    const eventCategories = (eventCategory.filter((category) => typeof category === "string").map((category) => category.toString().toLowerCase()));
+    eventCategories.unshift("tous");
+    const [categorySelected, setCategorySelected] = useState<string>(eventCategories[0]);
 
-    /// insert params queri 
+    //// INSERT PARAMS QUERY
     const [searchParams, setSearchParams] = useSearchParams();
     const params = (searchParams.get("search"))
     useEffect(() => {
@@ -41,46 +38,45 @@ export default function EventListPage() {
         Tab && Tab.click();
     }, [params])
 
-
-
-    ///// FETCH ON LOAD 
-    useEffect(() => {
-        console.log("fetching")
-        const fetch = async () => {
-            const user = await getUserMe()
-            setProfile(user.Profile);
-            setUser(user)
-            const events = await getEvents()
-            setEvents(getDays(events));
-            setArrayToFilter(events);
-            setEventList(events);
-            console.log(events)
+    //// UPDATE EVENT LIST FUNCTION
+    const UpdateList = async () => {
+        const events = await getEvents()
+        const IgoEvents = await getEventsIgo()
+        const validatedEvents = await getEventsValidated()
+        const myEvents = await getEventsMines()
+        setEvents(getDays(events));
+        setArrayToFilter(events);
+        setMyEvents(myEvents);
+        setIgoEvents(IgoEvents);
+        setValidatedEvents(validatedEvents);
+        switch (tabSelected) {
+            case "mines": setEventList(myEvents);
+                break;
+            case "igo": setEventList(IgoEvents);
+                break;
+            case "ok": setEventList(validatedEvents);
+                break;
+            default: setEventList(events);
+                break;
         }
-        fetch()
+    }
+
+    //// FETCH ON LOAD 
+    useEffect(() => {
+        const Tab: any = document.querySelector(`li[data-value="${params}"]`);
+        const fetch = async () => {
+            await UpdateList()
+        }
+        fetch().then(() => Tab && Tab.click())
     }, []);
 
 
-    //// Initialise array
+    //// HANDLE CLICK DELETE FUNCTION
+    const update = async () => { activeTab && activeTab.click(); await UpdateList() }
 
-
-    ///// pass to card  
-    const isFlaged = (element: any) => { return imIn(element, flags, 1) };
-    // const isWithMe = (element: any) => { return imIn(element, participants, user.id, "event_id") };
-    // const isWithMe = (element: any): boolean => { return element.Particpants.find((particpant: User) => particpant.id === user.id) ? true : false };
-    const isWithMe = (element: any): boolean => { return element.Participants.find((particpant: any) => particpant.userId === user.id) ? true : false };
-    const handleGo = (elementLiked: EventP) => {
-        beInElement(elementLiked, eventList, setEventList, participants, setParticipants, user.Profile, "event_id");
-        setDataInLocal({ ...data, events: eventList, participants: participants })
-    };
-    const handleClickDelete = (id: number) => {
-        deleteElement(id, eventList, setEventList);
-        setDataInLocal({ ...data, events: data.events.filter((event: EventP) => event.id !== id) })
-        activeTab.click();
-    }
-    /////FILTER FUNCTIONS
-    const filterEvents = (newArray: EventP[], value: string) => {
-        console.log("filterEvents", newArray)
-        value !== tabSelected && setCategorySelected(eventCategories[0]);
+    //// FILTER FUNCTIONS
+    const filterEvents = async (newArray: EventP[], value: string) => {
+        if (value !== tabSelected) { setCategorySelected(eventCategories[0]); await UpdateList() }
         setEventsTabled(newArray);
         setEventList(newArray);
         setTabSelected(value);
@@ -88,6 +84,7 @@ export default function EventListPage() {
         setSearchParams({ search: value });
     };
 
+    //// EVENT TABS
     const eventTabs: label[] = [
         {
             label: "tous",
@@ -97,33 +94,32 @@ export default function EventListPage() {
         {
             label: "validé",
             value: "ok",
-            result: () => filterEvents([...arrayToFilter.filter((event) => event.participantsMin <= event.Participants.length)], eventTabs[1].value),
+            result: () => filterEvents([...validatedEvents], eventTabs[1].value),
 
         },
         {
             label: "j'y vais",
             value: "igo",
-            result: () => filterEvents([...arrayToFilter.filter((event: EventP) => event.Participants.find((participant: any) => participant.userId === user.id))], eventTabs[2].value)
+            result: () => filterEvents([...IgoEvents], eventTabs[2].value)
         },
         {
             label: "j'organise",
             value: "mines",
-            result: () => filterEvents([...arrayToFilter.filter((event) => event.userId === user.id)], eventTabs[3].value)
+            result: () => filterEvents([...myEvents], eventTabs[3].value)
         },
     ];
 
-    /// FILTER ON SELECT 
+    //// FILTER ON SELECT 
     const change = (e: string | React.ChangeEvent<HTMLSelectElement>) => {
-        eventTabs.find((tab: label) => tab.value === tabSelected)?.result();
-        typeof e !== "object"
-            ? (e = e.toLowerCase())
-            : (e = e.target.innerText.toLowerCase());
-        setCategorySelected(e);
-        e === eventCategories[0] ?
-            setEventList([...eventsTabled]) :
-            setEventList([...eventsTabled.filter((event: EventP) => event.category.toString().toLowerCase() === e),
-            ]);
-        setSearchParams({ search: tabSelected, category: e });
+        const selectedTab = eventTabs.find((tab: label) => tab.value === tabSelected);
+        selectedTab?.result();
+        const selectedCategory = typeof e !== "object" ? e.toLowerCase() : e.target.innerText.toLowerCase();
+        setCategorySelected(selectedCategory);
+        const filteredEvents = selectedCategory === eventCategories[0]
+            ? eventsTabled
+            : eventsTabled.filter((event: EventP) => event.category.toString().toLowerCase() === selectedCategory);
+        setEventList(filteredEvents);
+        setSearchParams({ search: tabSelected, category: selectedCategory });
     };
 
     //// CALENDAR VIEW FUNCTIONS
@@ -133,7 +129,7 @@ export default function EventListPage() {
         filterEvents([...arrayToFilter], eventTabs[0].value);
     };
 
-    //// USE EFFECT avoid to many render
+    //// USE EFFECT AVOID TOO MANY RENDERS
     useEffect(() => {
         eventList.length > 0 ? setNotif("") : setNotif(
             `Aucun évènement ${tabSelected} ${categorySelected != eventCategories[0] && categorySelected
@@ -142,8 +138,7 @@ export default function EventListPage() {
         );
     }, [eventList]);
 
-
-
+    //// RETURN JSX
     return (
         <div className="Body cyan">
             <header className=" px-4">
@@ -180,24 +175,19 @@ export default function EventListPage() {
             {view === "view_agenda" && (
                 <main className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
                     {view === "view_agenda" &&
-                        eventList.map((event: EventP, index: number) => (
+                        eventList.map((event: EventP) => (
                             <EventCard
                                 key={event.id}
                                 event={event}
-                                avatarDatas={event.Participants}
                                 change={change}
                                 mines={mines}
-                                handleClickDelete={(id: number) => handleClickDelete(id)}
-                                index={index}
-                                // isFlaged={isFlaged(eventC)}
-                                isWithMe={isWithMe(event)}
-                                handleGo={(event: EventP) => handleGo(event)}
+                                update={update}
                             />
                         ))}
                 </main>
             )}
             {view === "event" && (
-                <main>{<CalendarCompLarge eventList={eventList} />}</main>
+                <main>{<CalendarCompLarge eventList={getDays(events)} />}</main>
             )}
             <NavBarBottom addBtn={true} />
         </div>

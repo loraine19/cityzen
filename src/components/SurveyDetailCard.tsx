@@ -8,9 +8,9 @@ import {
     Progress,
     Typography,
 } from "@material-tailwind/react";
-import NavBarTop from "./NavBarTop";
-import { CategoriesSelect } from "./CategoriesSelect";
-import BtnBottom from "./BtnBottom";
+import NavBarTop from "./UIX/NavBarTop";
+import { CategoriesSelect } from "./UIX/CategoriesSelect";
+import BtnBottom from "./UIX/BtnBottom";
 //import { survey } from "../types/survey";
 import { Link, useLocation } from "react-router-dom";
 

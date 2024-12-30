@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import NavBarTop from '../../../components/NavBarTop';
-import SubHeader from '../../../components/SubHeader';
+import NavBarTop from '../../../components/UIX/NavBarTop';
+import SubHeader from '../../../components/UIX/SubHeader';
 import { Option, Button, Select, Card, CardBody, CardHeader, Chip, Textarea, Typography } from '@material-tailwind/react';
 import { useContext, useState } from 'react';
 import UserContext from '../../../contexts/user.context';
@@ -10,7 +10,7 @@ import { object, string } from 'yup';
 import DataContext from '../../../contexts/data.context';
 import { Issue, Profile, Service } from '../../../types/class';
 import ServiceIssueCard from '../../../components/servicesComps/ServiceIssueCard';
-import { ConfirmModal } from '../../../components/ConfirmModal';
+import { ConfirmModal } from '../../../components/UIX/ConfirmModal';
 
 export default function FlagEditPage() {
     const { id } = useParams()

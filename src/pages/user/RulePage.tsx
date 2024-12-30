@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import NavBarBottom from "../../components/NavBarBottom";
-import NavBarTop from "../../components/NavBarTop";
+import NavBarBottom from "../../components/UIX/NavBarBottom";
+import NavBarTop from "../../components/UIX/NavBarTop";
 import { Card, CardBody } from "@material-tailwind/react";
 
 export default function RulesPage() {

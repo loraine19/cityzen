@@ -1,4 +1,3 @@
-import Decimal from "decimal.js";
 
 
 export class Address {
@@ -19,7 +18,7 @@ export class User {
     email: string = '';
     password: string = '';
     Profile: Profile = new Profile();
-    image: string = '';
+    image: string | File = '';
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     lastConnection: Date = new Date();
@@ -34,7 +33,7 @@ export class Profile {
     Address: Address = new Address();
     firstName: string = '';
     lastName: string = '';
-    image: string = '';
+    image: string | File = '';
     phone: string = '';
     addressShared: boolean = false;
     assistance: AssistanceLevel = AssistanceLevel.LEVEL_0;
@@ -60,18 +59,17 @@ export class EventP {
     id: number = 0;
     name: string = '';
     description: string = '';
-    startAt: Date = new Date();
-    endAt: Date = new Date();
-    address: Address = new Address();
+    Address: Address = new Address();
     addressId: number = 0;
     group: Group = new Group();
     groupId: number = 0;
     userId: number = 0;
-    image: string = '';
+    User: User = new User();
+    image: string | File = '';
     title: string = '';
-    start: Date = new Date();
-    end: Date = new Date();
-    category: EventCategory = EventCategory.CATEGORY_1
+    start: Date | string = new Date();
+    end: Date | string = new Date();
+    category: EventCategory | string = EventCategory.CATEGORY_1
     participantsMin: number = 0;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
@@ -80,8 +78,8 @@ export class EventP {
 
 export class Participant {
     id: number = 0;
-    eventP: EventP = new EventP();
-    eventPId: number = 0;
+    event: EventP = new EventP();
+    eventId: number = 0;
     User: User = new User();
     userId: number = 0;
     createdAt: Date = new Date();
@@ -91,17 +89,23 @@ export class Participant {
 export class Post {
     id: number = 0;
     content: string = '';
-    author: User = new User();
-    authorId: number = 0;
+    User: User = new User();
+    userId: number = 0;
     group: Group = new Group();
     groupId: number = 0;
-    userId: number = 0;
-    image: string = '';
+    image: string | File = '';
     title: string = '';
     description: string = '';
+    Likes: any = [new Like()];
     category: PostCategory = PostCategory.CATEGORY_1;
     share: Share = Share.EMAIL;
     createdAt: Date = new Date();
+    updatedAt: Date = new Date();
+}
+
+export class Like {
+    postId: number = 0;
+    userId: number = 0;
     updatedAt: Date = new Date();
 }
 
@@ -138,7 +142,7 @@ export class Survey {
     group: Group = new Group();
     groupId: number = 0;
     userId: number = 0;
-    image: string = '';
+    image: string | File = '';
     title: string = '';
     category: SurveyCategory = SurveyCategory.CATEGORY_1;
     createdAt: Date = new Date();
@@ -163,7 +167,7 @@ export class Service {
     address: Address = new Address();
     addressId: number = 0;
     userId: number = 0;
-    image: string = '';
+    image: string | File = '';
     title: string = '';
     category: ServiceCategory = ServiceCategory.CATEGORY_1;
     userIdResp: number = 0;
@@ -171,6 +175,16 @@ export class Service {
     skill: SkillLevel = SkillLevel.LEVEL_0;
     hard: HardLevel = HardLevel.LEVEL_0;
     status: ServiceStep = ServiceStep.STEP_0;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
+}
+
+export class Flag {
+    user: User = new User();
+    userId: number = 0;
+    targetId: number = 0;
+    target: FlagTarget = FlagTarget.EVENT;
+    reason: FlagReason = FlagReason.REASON_1;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
 }
@@ -217,9 +231,10 @@ export enum VoteOpinion {
 }
 
 export enum FlagTarget {
-    EVENTP,
+    EVENT,
     POST,
-    SURVEY
+    SURVEY,
+    SERVICE
 }
 
 export enum Share {
@@ -249,6 +264,7 @@ export enum EventCategory {
     CATEGORY_5,
     CATEGORY_6
 }
+export const eventCategory = Object.values(EventCategory).map(category => category);
 
 export enum PostCategory {
     CATEGORY_1,
@@ -258,6 +274,7 @@ export enum PostCategory {
     CATEGORY_5,
     CATEGORY_6
 }
+export const postCategory = Object.values(PostCategory).map(category => category);
 
 export enum ServiceCategory {
     CATEGORY_1,
@@ -302,6 +319,13 @@ export enum HardLevel {
     LEVEL_4
 }
 
+export enum FlagReason {
+    REASON_1,
+    REASON_2,
+    REASON_3,
+    REASON_4,
+    REASON_5
+}
 // DTOs
 export class AddressDTO implements Partial<Address> {
     id?: number;
@@ -320,7 +344,7 @@ export class UserUpdateDTO implements Partial<User> { }
 export class UserDTO implements Partial<User> {
     email: string = '';
     password: string = 'password';
-    image: string = '';
+    image: string | File = '';
     addressId: number = 0;
     Profile?: any
 }
@@ -333,7 +357,7 @@ export class ProfileDTO implements Partial<Profile> {
     Profile?: ProfileDTO;
     firstName: string = '';
     lastName: string = '';
-    image: string = '';
+    image: string | File = '';
     addressShared: boolean = false;
     assistance: AssistanceLevel = AssistanceLevel.LEVEL_0;
     phone?: string;
@@ -356,45 +380,44 @@ export class GroupDTO implements Partial<Group> {
 }
 export class GroupUpdateDTO implements Partial<GroupDTO> { }
 
-export class EventPDTO implements Partial<EventP> {
+export class EventDTO implements Partial<EventP> {
     name: string = '';
     description: string = '';
-    startAt: Date = new Date();
-    endAt: Date = new Date();
     addressId: number = 0;
     groupId: number = 0;
     userId: number = 0;
-    image: string = '';
+    image: string | File = '';
     title: string = '';
-    start: Date = new Date();
-    end: Date = new Date();
-    category: EventCategory = EventCategory.CATEGORY_1;
+    start: Date | string = new Date();
+    end: Date | string = new Date();
+    category: EventCategory | string = EventCategory.CATEGORY_1;
     participantsMin: number = 0;
 }
-export class EventPUpdateDTO implements Partial<EventPDTO> { }
+export class EventPUpdateDTO implements Partial<EventDTO> { }
 
 export class ParticipantDTO {
-    eventPId: number = 0;
-    userId: number = 0;
+    eventId: number = 0;
+    userId?: number = 0;
 }
 export class ParticipantUpdateDTO implements Partial<ParticipantDTO> { }
 
-export class PostDTO {
-    id?: number;
-    content?: string;
-    author?: UserDTO;
-    authorId?: number;
-    group?: GroupDTO;
-    groupId?: number;
+export class PostDTO implements Partial<Post> {
     userId?: number;
     image?: string;
     title?: string;
     description?: string;
     category?: PostCategory;
     share?: Share;
-    createdAt?: Date;
     updatedAt?: Date;
 }
+export class PostUpdateDTO implements Partial<PostDTO> { }
+
+export class LikeDTO implements Partial<Like> {
+    postId: number = 0;
+    userId?: number = 0;
+}
+export class LikeUpdateDTO implements Partial<LikeDTO> { }
+
 
 export class PoolDTO {
     id?: number;
@@ -466,6 +489,14 @@ export class ServiceDTO {
     updatedAt?: Date;
 }
 
+export class FlagDTO {
+    user?: UserDTO;
+    userId?: number;
+    targetId?: number;
+    target?: FlagTarget;
+    reason?: FlagReason;
+}
+
 export class TokenDTO {
     userId?: number;
     token?: string;
@@ -480,3 +511,11 @@ export class AuthDTO {
     refreshToken?: string;
 }
 
+//// for front only 
+
+export class action {
+    icon?: string;
+    title?: string;
+    body?: string | Element | JSX.Element | Element[] | JSX.Element[];
+    function?: any;
+}

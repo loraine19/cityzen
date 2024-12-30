@@ -1,5 +1,5 @@
 import { AuthHeader } from "../components/authComps/AuthHeader";
-import NavBarBottom from "../components/NavBarBottom";
+import NavBarBottom from "../components/UIX/NavBarBottom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@material-tailwind/react";
 

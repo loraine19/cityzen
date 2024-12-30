@@ -1,7 +1,7 @@
 import { Avatar, Card, CardHeader, IconButton, Typography } from "@material-tailwind/react";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import UserContext from "../contexts/user.context";
+import UserContext from "../../contexts/user.context";
 
 
 function hasUnread(hasUnreadNotifications: boolean, userNotif: number) {
@@ -32,7 +32,6 @@ function hasUnread(hasUnreadNotifications: boolean, userNotif: number) {
 
 export default function NavBarTop() {
     const { user, userNotif, } = useContext(UserContext);
-    console.log(user)
     let hasUnreadNotifications: boolean = userNotif > 0
     return (
         <>
@@ -40,7 +39,7 @@ export default function NavBarTop() {
                 <CardHeader color="transparent" floated={false} shadow={false} className="mx-0 flex items-center gap-4 pt-0 pb-0">
 
                     <NavLink to="/myprofile" className="flex items-center gap-2 w-20 h-20">
-                        <Avatar size="lg" variant="circular" src={user.Profile?.avatar} alt={user.Profile?.firstName} className="BgUser shadow" />
+                        <Avatar size="lg" variant="circular" src={user.image} alt={user.firstName} className="BgUser shadow" />
                     </NavLink>
 
                     <div className="flex w-full items-start justify-between gap-0.5">

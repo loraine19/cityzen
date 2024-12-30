@@ -22,9 +22,9 @@ import {
 } from "@material-tailwind/react";
 
 //import COMPONENTS
-import { CategoriesSelect } from "../../components/CategoriesSelect";
-import BtnBottom from "../../components/BtnBottom";
-import NavBarTop from "../../components/NavBarTop";
+import { CategoriesSelect } from "../../components/UIX/CategoriesSelect";
+import BtnBottom from "../../components/UIX/BtnBottom";
+import NavBarTop from "../../components/UIX/NavBarTop";
 
 //import DATA
 import {
@@ -199,29 +199,29 @@ export default function SurveyEditPage() {
                                     <div className="flex flex-1 flex-col  justify-center w-full">
                                         {formikSurvey.values.image.length >
                                             12 && (
-                                            <Popover>
-                                                <PopoverHandler>
-                                                    <div className=" flex flex-col  flex-1 items-center rounded-full ">
-                                                        <div className=" flex place-content-end w-[125%]   h-[125%] scale-75 ">
+                                                <Popover>
+                                                    <PopoverHandler>
+                                                        <div className=" flex flex-col  flex-1 items-center rounded-full ">
+                                                            <div className=" flex place-content-end w-[125%]   h-[125%] scale-75 ">
+                                                                <img
+                                                                    src={`${imgBlob}`}
+                                                                    alt={`image de ${formikSurvey.values.title}`}
+                                                                    className="h-[7rem]  w-full object-cover rounded-2xl"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </PopoverHandler>
+                                                    <PopoverContent className="bg-transparent p-0">
+                                                        <div className="shadow  rounded-xl flex flex-1 bg-cover bg-center bg-no-repeat w-[30vw] h-[30vh]">
                                                             <img
                                                                 src={`${imgBlob}`}
                                                                 alt={`image de ${formikSurvey.values.title}`}
-                                                                className="h-[7rem]  w-full object-cover rounded-2xl"
+                                                                className="h-full   w-full object-cover rounded-2xl"
                                                             />
                                                         </div>
-                                                    </div>
-                                                </PopoverHandler>
-                                                <PopoverContent className="bg-transparent p-0">
-                                                    <div className="shadow  rounded-xl flex flex-1 bg-cover bg-center bg-no-repeat w-[30vw] h-[30vh]">
-                                                        <img
-                                                            src={`${imgBlob}`}
-                                                            alt={`image de ${formikSurvey.values.title}`}
-                                                            className="h-full   w-full object-cover rounded-2xl"
-                                                        />
-                                                    </div>
-                                                </PopoverContent>
-                                            </Popover>
-                                        )}
+                                                    </PopoverContent>
+                                                </Popover>
+                                            )}
                                         <Typography className="text-xs text-center max-w-50  max-h-4 overflow-auto">
                                             {
                                                 formikSurvey.values

@@ -17,9 +17,9 @@ import UserContext from "../contexts/user.context";
 import { poolsFaker, votesFaker } from "../datas/fakers/surveyFaker";
 
 //import COMPONENTS
-import NavBarTop from "./NavBarTop";
-import { CategoriesSelect } from "./CategoriesSelect";
-import BtnBottom from "./BtnBottom";
+import NavBarTop from "./UIX/NavBarTop";
+import { CategoriesSelect } from "./UIX/CategoriesSelect";
+import BtnBottom from "./UIX/BtnBottom";
 import { useLocation } from "react-router";
 
 import { Link } from "react-router-dom";
@@ -47,7 +47,7 @@ export default function PoolDetailCard() {
         const eventEndTime = new Date().getTime();
         const duration = Math.floor(
             (eventEndTime.valueOf() - eventStartTime.valueOf()) /
-                (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24)
         );
         const daysLeft = 15 - duration;
 

@@ -1,59 +1,45 @@
 import { useFormik } from 'formik';
 import { object, string, array } from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { AnnounceForm } from '../../components/announceComps/AnnounceForm';
-import { Post } from '../../types/class';
-import DataContext from '../../contexts/data.context';
-import UserContext from '../../contexts/user.context';
-import { ConfirmModal } from '../../components/ConfirmModal';
-
+import { Post } from '../../types/class'
+import { ConfirmModal } from '../../components/UIX/ConfirmModal';
+import { postPost } from '../../functions/API/postsApi'
+import parse from 'html-react-parser'
 
 export default function AnnounceCreatePage() {
-    const { user } = useContext(UserContext);
-    const { data, setDataInLocal } = useContext(DataContext);
-
+    const [newPost,] = useState<Post>({} as Post);
     const navigate = useNavigate();
-    const [newAnnounce] = useState<Post>({
-        id: data.posts.length + 1,
-        user_id: user.id,
-        title: "",
-        description: "",
-        category: "",
-        image: "",
-        created_at: (new Date()),
-        updated_at: (new Date()),
-        share: ["email"],
-    } as Post);
-
+    const [value, setValue] = useState("");
 
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
         share: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
-
     })
-    const [value, setValue] = useState("");
 
+    const [open, setOpen] = useState(false);
     const formik = useFormik({
-        initialValues: newAnnounce as Post,
+        initialValues: newPost as any,
         validationSchema: formSchema,
         onSubmit: values => {
             formik.values = values
             setOpen(true)
-            console.log(value)
+            value && console.log("avoid compile error ", value)
         }
     });
 
-
-    const index = data.posts.length
-    function saveAnnounce() {
-        data.posts[index] = formik.values as Post
-        setDataInLocal({ ...data, posts: data.posts })
+    const updateFunction = async () => {
+        Array.isArray(formik.values.share) && formik.values.share.sort((a: string, b: string) => a.localeCompare(b))
+        formik.values.share = formik.values.share.toString().toUpperCase().replace(',', '_')
+        console.log('gppp', formik.values.share)
+        const { ...rest } = formik.values;
+        const updateData = { ...rest }
+        console.log('gppp', updateData)
+        return await postPost(updateData)
     }
-
-    const [open, setOpen] = useState(false);
 
 
     return (
@@ -62,13 +48,12 @@ export default function AnnounceCreatePage() {
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={() => {
-                    saveAnnounce();
-                    navigate(`/announce`);
-                    setOpen(false)
+                handleConfirm={async () => {
+                    const ok = await updateFunction()
+                    if (ok) { navigate(`/annonce`); setOpen(false) }
                 }}
                 title={"Confimrer la modification"}
-                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+                element={parse((JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")) as unknown as string} />
             <AnnounceForm formik={formik} setValue={setValue} />
         </div >
     )

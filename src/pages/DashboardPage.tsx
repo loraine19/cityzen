@@ -1,5 +1,5 @@
 import { AuthHeader } from "../components/authComps/AuthHeader";
-import NavBarBottom from "../components/NavBarBottom";
+import NavBarBottom from "../components/UIX/NavBarBottom";
 import { Link } from "react-router-dom";
 import { Avatar, Card, CardBody, CardHeader, Typography, Option, Select, Button } from "@material-tailwind/react";
 import { useEffect, useState, useContext } from "react";
@@ -15,7 +15,7 @@ import { getEvents } from "../functions/API/eventsApi";
 import { refreshAccess } from "../functions/API/useApi";
 
 export default function DashboardPage() {
-    const { setUserCont, userNotif, setUserNotif } = useContext(UserContext)
+    const { setUserCont, userNotif } = useContext(UserContext)
     const [user, setUser] = useState<Profile>({} as Profile);
     const [events, setEvents] = useState<EventP[]>([] as EventP[]);
     const { data, resetData } = useContext(DataContext)
@@ -40,6 +40,7 @@ export default function DashboardPage() {
             const userProfile = me.Profile as Profile;
             setUser(userProfile);
             setUserCont(userProfile);
+            localStorage.setItem('user', JSON.stringify(userProfile));
             setAdressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
             const events = await getEvents()
             setEvents(events);

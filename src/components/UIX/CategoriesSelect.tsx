@@ -32,6 +32,7 @@ export function CategoriesSelect(props: categoriesSelectProps) {
                     <Option
                         className="rounded-full my-1 capitalize "
                         value={category}
+                        id={category}
                         key={key}
                     >
                         {category}

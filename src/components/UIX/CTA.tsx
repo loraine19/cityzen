@@ -2,9 +2,9 @@ import { Button } from "@material-tailwind/react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
-import { action } from "../types/class";
-import DataContext from "../contexts/data.context";
-import { GetArrayElement } from "../functions/GetDataFunctions";
+import { action } from "../../types/class";
+import DataContext from "../../contexts/data.context";
+import { GetArrayElement } from "../../functions/GetDataFunctions";
 
 export default function CTA(props:
     {
@@ -25,7 +25,7 @@ export default function CTA(props:
         [{
             icon: 'Supprimer',
             title: `Supprimer ${type} ${id}`,
-            body: (data[array].find((element: any) => element.id === id)).title,
+            body: (data[array].find((element: any) => element.id === id))?.title,
             function: () => {
                 setDataInLocal({ ...data, [array]: data[array].filter((element: any) => element.id !== id) });
                 navigate({ pathname: `/${type}` })
@@ -34,7 +34,7 @@ export default function CTA(props:
         {
             icon: 'Modidfier',
             title: "Modifier",
-            body: (data[array].find((element: any) => element.id === id)).title,
+            body: (data[array].find((element: any) => element.id === id))?.title,
             function: () => navigate({ pathname: `/${type}/edit/${id}` }),
         },
         ]

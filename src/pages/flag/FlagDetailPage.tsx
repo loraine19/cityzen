@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import NavBarTop from '../../components/NavBarTop';
-import SubHeader from '../../components/SubHeader';
+import NavBarTop from '../../components/UIX/NavBarTop';
+import SubHeader from '../../components/UIX/SubHeader';
 import { Option, Button, Select, Switch } from '@material-tailwind/react';
 import { useContext, useState } from 'react';
 import UserContext from '../../contexts/user.context';
@@ -12,7 +12,7 @@ import { object, string } from 'yup';
 import { all, flag, } from '../../types/type';
 import FlagDetailComp from '../../components/flagComps/FlagDetailComp';
 import DataContext from '../../contexts/data.context';
-import { ConfirmModal } from '../../components/ConfirmModal';
+import { ConfirmModal } from '../../components/UIX/ConfirmModal';
 import parse from 'html-react-parser';
 export default function FlagDetailPage() {
     const { id } = useParams()

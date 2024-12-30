@@ -1,38 +1,40 @@
-import NavBarTop from '../NavBarTop';
-import SubHeader from '../SubHeader';
-import { useState } from 'react';
-import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Checkbox } from '@material-tailwind/react';
-import { announceCategories } from "../../datas/enumsCategories";
+import NavBarTop from '../UIX/NavBarTop';
+import SubHeader from '../UIX/SubHeader';
+import { useEffect, useState } from 'react';
+import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Checkbox } from '@material-tailwind/react'
 import { getImageBlob } from '../../functions/GetDataFunctions';
+import { postCategory } from '../../types/class';
 
 export function AnnounceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
-    const { created_at, title, description, category, image } = formik.values
-    const haveImage = image ? true : false
-    const checkShare: any = (word: string) => (formik.values.share).includes(word)
+    const { createdAt, title, description, category, image } = formik.values
+    const haveImage = formik.values.image ? true : false
+    const checkShare: any = (word: string) => (formik.values?.share?.toString().toLowerCase())?.includes(word)
+    const categories = (postCategory.filter((category) => typeof category === "string").map((category) => category.toString().toLowerCase()));
 
     ///// BLOB FUNCTION 
-
-    const [img] = useState<string>(image);
-    const [imgBlob, setImgBlob] = useState<string | undefined>(img);
+    const [imgBlob, setImgBlob] = useState<string>(formik.values.image as string);
+    useEffect(() => {
+        !imgBlob && setImgBlob(formik.values.image as string)
+    }, [formik.values.image, imgBlob])
 
     return (
         <>
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={formik.values.title ? `Modifier mon annonce ` : "Créer mon annonce"} place={category ? category : ""} closeBtn />
+                    <SubHeader type={formik.values.title ? `Modifier mon annonce ` : "Créer mon annonce"} place={category ? category.toLowerCase() : ""} closeBtn />
                     <div className="w-respLarge">
                         <Select className="rounded-full shadow  bg-white border-none capitalize"
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                             name={"category"}
                             labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
-                            value={formik.values.category.toLowerCase()}
-                            onChange={(val: any) => { setValue(val); formik.values.category = val }}
+                            value={category?.toLowerCase()}
+                            onChange={(val: any) => { setValue(val); formik.values.category = val.toUpperCase() }}
                         >
-                            {announceCategories.map((category: string, index: number) => {
+                            {categories.map((category: string, index: number) => {
                                 return (
-                                    <Option className={category === "tous" ? "hidden" : "rounded-full my-1 capitalize"} value={category} key={index} >
+                                    <Option className={"rounded-full my-1 capitalize"} value={category} key={index} >
                                         {category}
                                     </Option>)
                             })}
@@ -59,7 +61,7 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
                                     </Button>
                                 </div>
                                 <Typography className='text-xs px-4'>{formik.values.image != formik.values.image && formik.values.image as string} </Typography>
-                                <Chip value={(new Date(created_at)).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
+                                <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
                                 </Chip>
                             </div>
                             {image &&
@@ -67,17 +69,17 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
                                 <img
                                     src={imgBlob}
                                     alt={title}
-                                    className="h-full w-full object-cover"
+                                    width={100}
+                                    height={100}
+                                    className={image || imgBlob ? "h-full w-full object-cover" : "hidden"}
                                 />
                             }
                         </CardHeader>
-
 
                         <CardBody className='FixCardBody '>
                             <div className='CardOverFlow h-full justify-between gap-4'>
                                 <Input label="titre" name="title" variant="standard" onChange={formik.handleChange} value={title} />
                                 <Typography className='text-xs error'>{formik.errors.title as string} </Typography>
-
                                 <div className='flex flex-col lg:flex-row gap-5 pt-3 h-full'>
                                     <div className='flex flex-col flex-1 pt-1'>
                                         <Textarea rows={2} resize={true} variant="static" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
@@ -88,17 +90,14 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
                                                 className: "before:content-none after:content-none",
                                             }} />
                                         <Typography className='text-xs error pt-2'>{formik.errors.description as string} </Typography>
-
                                     </div>
-
                                 </div>
 
                                 <div className="flex flex-col justify-center pt-4 h-full w-full">
                                     <Typography className='text-xs'>Partager : </Typography>
-
                                     <div className="flex items-center gap-[10%]">
-                                        <Checkbox type="checkbox" name="share" value="phone" color="orange" label="telephone" onChange={formik.handleChange} checked={checkShare("phone")} />
-                                        <Checkbox type='checkbox' color="orange" name="share" value="email" label="email" onChange={formik.handleChange} checked={checkShare("email")} />
+                                        <Checkbox type="checkbox" name="share" value="PHONE" color="orange" label="telephone" onChange={formik.handleChange} checked={checkShare("phone")} />
+                                        <Checkbox type='checkbox' color="orange" name="share" value="EMAIL" label="email" onChange={formik.handleChange} checked={checkShare("email")} />
                                     </div>
                                     <Typography className='text-xs error'>{formik.errors.share as string} </Typography>
                                 </div>

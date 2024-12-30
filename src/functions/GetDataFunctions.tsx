@@ -1,7 +1,15 @@
 import { eventUser, postUser, userProfile } from '../types/user';
 import { all, flag, notif, targetUser } from "../types/type";
-import { Address, EventP, Pool, Post, PostL, Profile, Service, Survey, User, } from '../types/class';
+import { action, Address, EventP, Flag, Pool, Post, Profile, Service, Survey, User, } from '../types/class';
 import { GetAdressGps, GetAdressString } from './GeoMapFunction';
+import { deleteParticipant, postParticipant } from './API/partcipantsApi';
+import { getEventById } from './API/eventsApi';
+import { getAddresses, postAddress } from './API/addressApi';
+import { defaultEventImage } from '../datas/enumsCategories';
+import { getPostById } from './API/postsApi';
+import { deleteLike, postLike } from './API/likeApi';
+import { useNavigate } from 'react-router';
+
 
 
 
@@ -19,7 +27,7 @@ export const getDays = (array: any) => {
 }
 
 ///// BLOB FUNCTION 
-export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
+export const getImageBlob2 = (event: any, setImgBlob: any, formik: any) => {
     let file = event.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -29,15 +37,7 @@ export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
     }
 }
 
-export const getImageBlob2 = (event: any, setImgBlob: any, formik: any) => {
-    let file = event.target.files[0];
-    formik.values.image = file
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-        setImgBlob(reader.result as string)
-    }
-}
+
 
 //// JOINS TABLE FUNCTIONS
 //// GET user profil 
@@ -53,10 +53,10 @@ export const getUserDetail = (id: number, arraySearch: Profile[]): Profile | und
 
 
 //// get users in events or post by id 
-export const getUsers = (array: Post[] | EventP[], arrayOfJoin: any[], initialArray: [], lookingID: keyof eventUser | keyof postUser): PostL[] | EventP[] => {
-    array.map((element: PostL | EventP) => {
+export const getUsers = (array: Post[] | EventP[], arrayOfJoin: any[], initialArray: [], lookingID: keyof eventUser | keyof postUser): Post[] | EventP[] => {
+    array.map((element: Post | EventP) => {
         let users: Profile[] = [];
-        element.users = [];
+        element.Likes = [];
         arrayOfJoin.filter((row: any) => row[lookingID] === element.id).map((row: any) => {
             initialArray.map((user: Profile) => (user.id === row.userId) && users.push(user));
             element.users = users
@@ -77,7 +77,7 @@ export const getFlagsInElement = (array: any[], arrayOfJoin: any[]): any => {
 
 
 //// get flags 
-export const getFlags = (posts: PostL[], events: Event[], surveys: Survey[], pools: Pool[], services: Service[], arrayOfJoin: any[]): any[] => {
+export const getFlags = (posts: Post[], events: Event[], surveys: Survey[], pools: Pool[], services: Service[], arrayOfJoin: any[]): any[] => {
     let array = getCommuns(posts, events, surveys, pools, services)
     let arrayWithFlags = array.map((element: all) => {
         element.flag = arrayOfJoin.filter((flagRow: targetUser) => (element.id + element.type) === (flagRow.target_id + flagRow.type))
@@ -301,3 +301,80 @@ export const takeElement = (id: number, array: Service[], setArray: any, userPro
     }
     setArray([...array]);
 }
+
+
+//// NEW FUNCTIONS
+
+export const toggleParticipant = async (eventId: number, userId: number, setEvent: any) => {
+    const response = await getEventById(eventId);
+    const isParticipant = response.Participants.find((participant: any) => participant.userId === userId) ? true : false;
+    isParticipant ? await deleteParticipant(eventId) : await postParticipant({ userId: userId, eventId: eventId });
+    setEvent(await getEventById(eventId));
+};
+
+export const toggleLike = async (postId: number, userId: number, setPost: any) => {
+    const response = await getPostById(postId);
+    const isLiked = response.Likes.find((like: any) => like.userId === userId) ? true : false;
+    isLiked ? await deleteLike(postId) : await postLike({ userId: userId, postId: postId });
+    setPost(await getPostById(postId));
+};
+
+
+export const isFlaged = (element: Post | EventP | Service | Survey, userId: number, flags: Flag[]): boolean => {
+    return flags.find((flag: Flag) => flag.targetId === element.id && flag.userId === userId) ? true : false
+};
+
+export const Igo = (element: EventP, userId: number): boolean => { return element.Participants.find((particpant: any) => particpant.userId === userId) ? true : false };
+
+
+export async function addressIn(formik: any, newElement: EventP | Profile) {
+    const AdressToSearch = formik.values.Address
+    const addressList = await getAddresses()
+    const addressFind = addressList.find((address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
+    if (!addressFind) {
+        const post = await postAddress(AdressToSearch)
+        post ? (formik.values.Address = post) : (formik.values.Address = '')
+    }
+    else {
+        addressFind?.id !== newElement.addressId && (formik.values.Address = addressFind);
+    }
+    formik.values.addressId = formik.values.Address.id
+}
+
+export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
+    let file = event.target.files[0];
+    formik.values.image = file
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+        setImgBlob(reader.result as string)
+    }
+}
+
+export const GetDefaultImage = (category: any) => {
+    const catToFind = category.toString().toLowerCase()
+    return defaultEventImage.find(category => category.type.toLowerCase() === catToFind) ?
+        defaultEventImage.find(category => category.type.toLowerCase() === catToFind)?.image
+        : defaultEventImage[0].image
+}
+
+
+//
+export const GenereMyActions = (element: Post | EventP | Service | Survey, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void): action[] => {
+    const navigate = useNavigate();
+    return [
+        {
+            icon: handleOpen ? 'Supprimer' : 'close',
+            title: "Confirmer la suppression",
+            body: "Confirmer la suppression de " + element.title,
+            function: async () => { await deleteRoute(element.id); handleOpen && handleOpen(); },
+        },
+        {
+            icon: handleOpen ? 'Modifier' : 'edit',
+            title: "Confirmer la modification",
+            body: "Confirmer la modification de " + element.title,
+            function: () => { navigate(`/${type}/edit/${element.id}`); handleOpen && handleOpen(); },
+        },
+    ];
+
+};

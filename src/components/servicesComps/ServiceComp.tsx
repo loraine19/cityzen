@@ -1,6 +1,6 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
-import ModifBtnStack from "../ModifBtnStack";
+import ModifBtnStack from "../UIX/ModifBtnStack";
 import { action, Profile, Service } from "../../types/class";
 import { useContext } from "react";
 import DataContext from "../../contexts/data.context";

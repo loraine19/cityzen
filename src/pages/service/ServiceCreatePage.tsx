@@ -4,7 +4,7 @@ import { useNavigate, } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import DataContext from '../../contexts/data.context';
 import { Service } from '../../types/class';
-import { ConfirmModal } from '../../components/ConfirmModal';
+import { ConfirmModal } from '../../components/UIX/ConfirmModal';
 import { ServiceForm } from '../../components/servicesComps/ServiceForm';
 import UserContext from '../../contexts/user.context';
 

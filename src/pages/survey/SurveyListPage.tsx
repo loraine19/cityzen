@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //import COMPONENTS
-import NavBarBottom from "../../components/NavBarBottom";
-import NavBarTop from "../../components/NavBarTop";
+import NavBarBottom from "../../components/UIX/NavBarBottom";
+import NavBarTop from "../../components/UIX/NavBarTop";
 import SurveyCard from "../../components/SurveyCard";
 import TabsMenu from "../../components/TabsMenu";
 import SubTabsMenu from "../../components/SubTabsMenu";

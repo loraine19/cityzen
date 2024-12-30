@@ -1,5 +1,5 @@
-import NavBarTop from '../NavBarTop';
-import SubHeader from '../SubHeader';
+import NavBarTop from '../UIX/NavBarTop';
+import SubHeader from '../UIX/SubHeader';
 import { useContext, useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Radio } from '@material-tailwind/react';
 import { announceCategories } from "../../datas/enumsCategories";

@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import NavBarTop from '../../components/NavBarTop';
-import SubHeader from '../../components/SubHeader';
+import NavBarTop from '../../components/UIX/NavBarTop';
+import SubHeader from '../../components/UIX/SubHeader';
 import { useContext, useEffect, useState } from 'react';
-import CTAMines from '../../components/CATMines';
+import CTAMines from '../../components/UIX/CATMines';
 import UserContext from '../../contexts/user.context';
 import { AcceptUserResp, GetCategory, imIn, takeElement } from '../../functions/GetDataFunctions';
 import DataContext from '../../contexts/data.context';

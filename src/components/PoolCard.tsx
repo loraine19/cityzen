@@ -10,7 +10,7 @@ import {
 
 //import TYPES
 import { pool } from "../types/survey";
-import ModifBtnStack from "./ModifBtnStack";
+import ModifBtnStack from "./UIX/ModifBtnStack";
 import { Link } from "react-router-dom";
 import UserContext from "../contexts/user.context";
 import { useContext } from "react";
@@ -40,7 +40,7 @@ export default function PoolCard(props: PoolCardProps) {
         const eventEndTime = new Date().getTime();
         const duration = Math.floor(
             (eventEndTime.valueOf() - eventStartTime.valueOf()) /
-                (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24)
         );
         const daysLeft = 15 - duration;
 

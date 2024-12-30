@@ -1,55 +1,19 @@
 import { Button } from "@material-tailwind/react";
-import { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
-import { action } from "../types/class";
-import DataContext from "../contexts/data.context";
-import { GetArrayElement } from "../functions/GetDataFunctions";
+import { action } from "../../types/class";
 
 type ModifBtnStackProps = {
-    values?: action[];
+    actions: action[];
     icon3?: boolean;
-    id: number;
     disabledEdit?: boolean;
-    handleClickDelete?: (id: number) => void;
-    isPool?: boolean;
-};
-export default function ModifBtnStack(props: ModifBtnStackProps) {
-    const isPool = props.isPool;
-    let type = new URLSearchParams(useLocation().pathname.split("/")[1])
-        .toString()
-        .replace("=", "");
-    isPool && (type = "cagnotte");
-    const { id, values, disabledEdit, handleClickDelete } = props;
-    const { data } = useContext(DataContext);
-    const array = GetArrayElement(type)
-    const title = (data[array].find((element: any) => element.id === id)) ? (data[array].find((element: any) => element.id === id)).title : 'titre'
+    update?: () => void;
+}
 
-    const navigate = useNavigate();
-    const [buttons, setButtons] = useState<action[]>([
-        {
-            icon: "edit",
-            title: `Modifier ${type}`,
-            body: title,
-            function: () => navigate({ pathname: `/${type}/edit/${props.id}` }),
-        },
-        {
-            icon: "close",
-            title: `Supprimer ${type}`,
-            body: title,
-            function: () => { handleClickDelete && handleClickDelete(id) },
-        },
-        {
-            icon: "groups",
-            title: `Relancer ${type}`,
-            body: title,
-            function: () => {
-                alert(`Voulez-vous relancer ${type} ${props.id} ?`);
-            },
-        },
-    ]);
+export default function ModifBtnStack(props: ModifBtnStackProps) {
+    const { actions, disabledEdit, update } = props;
+    const [buttons] = useState<action[]>(actions);
     const [icon3] = useState<boolean>(props.icon3 ? true : false);
-    useEffect(() => { values && setButtons(values) }, [values])
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0)
 
@@ -62,9 +26,10 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
                 handleConfirm={() => {
                     buttons[index].function();
                     setOpen(false)
+                    update && update()
                 }}
-                title={buttons[index].title}
-                element={buttons[index].body} />
+                title={buttons[index].title as string}
+                element={buttons[index].body as any} />
 
             <Button
                 variant="outlined"

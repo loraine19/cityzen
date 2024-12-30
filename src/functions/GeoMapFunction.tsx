@@ -5,7 +5,7 @@ import {
     fromAddress,
     fromLatLng,
 } from "react-geocode";
-import { Address, AddressDTO } from "../types/class";
+import { AddressDTO } from "../types/class";
 
 
 setKey("AIzaSyDNjhPXdHwsECXX68PZ_P3LikGEUdYNBNA");

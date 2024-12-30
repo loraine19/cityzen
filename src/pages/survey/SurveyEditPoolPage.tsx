@@ -17,9 +17,9 @@ import {
 } from "@material-tailwind/react";
 
 //import COMPONENTS
-import { CategoriesSelect } from "../../components/CategoriesSelect";
-import BtnBottom from "../../components/BtnBottom";
-import NavBarTop from "../../components/NavBarTop";
+import { CategoriesSelect } from "../../components/UIX/CategoriesSelect";
+import BtnBottom from "../../components/UIX/BtnBottom";
+import NavBarTop from "../../components/UIX/NavBarTop";
 
 //import DATA
 import { poolsFaker } from "../../datas/fakers/surveyFaker";

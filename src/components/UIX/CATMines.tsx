@@ -1,13 +1,14 @@
 import { Button } from "@material-tailwind/react";
 import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ConfirmModal } from "./ConfirmModal";
-import DataContext from "../contexts/data.context";
-import { GetArrayElement } from "../functions/GetDataFunctions";
-import { action } from "../types/class";
+import { ConfirmModal } from "../UIX/ConfirmModal";
+import DataContext from "../../contexts/data.context";
+import { GetArrayElement } from "../../functions/GetDataFunctions";
+import { action } from "../../types/class";
 
 type CTAMinesProps = { values?: action[], icon3?: boolean, id: number, disabled1?: boolean, disabled2?: boolean, button3?: action }
 export default function CTAMines(props: CTAMinesProps) {
+    console.log(props)
     const type = (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
     const navigate = useNavigate();
     const { data, setDataInLocal } = useContext(DataContext)
@@ -42,7 +43,7 @@ export default function CTAMines(props: CTAMinesProps) {
             icon: values && values[0]?.icon !== 'no' ? values[0]?.icon : 'Supprimer ?',
             title: values && values[0]?.title !== 'no' ? values[0]?.title : 'Voulez vous vraiment Supprimer ?',
             body: values && values[0]?.body !== 'no' ? values[0]?.body :
-                (data[array].find((element: any) => element.id === id)).title,
+                (data[array].find((element: any) => element.id === id))?.title,
             function: () => {
                 if (values[0]?.function() === null) {
                     setDataInLocal({ ...data, [array]: data[array].filter((element: any) => element.id !== id) })
@@ -54,7 +55,7 @@ export default function CTAMines(props: CTAMinesProps) {
         {
             icon: values && values[1]?.icon !== 'no' ? values[1]?.icon : 'Modifier ?',
             title: values && values[1]?.title !== 'no' ? values[1]?.title : 'Voulez vous vraiment modifier ?',
-            body: values && values[1]?.body !== 'no' ? values[1]?.body : (data[array].find((element: any) => element.id === id)).title,
+            body: values && values[1]?.body !== 'no' ? values[1]?.body : (data[array].find((element: any) => element.id === id))?.title,
             function: () => {
                 if (values[1]?.function() === null) { navigate({ pathname: `/${type}/edit/${id}` }) }
                 else values[1]?.function

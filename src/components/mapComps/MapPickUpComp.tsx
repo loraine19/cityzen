@@ -41,11 +41,9 @@ const PlaceAutocomplete = ({ onPlaceSelect, setAddress, text, inputStyle }: Plac
     useEffect(() => {
         if (!places || !inputRef.current) return;
         const options = {
-            fields: ['formatted_address', 'address_components', 'place_id', 'geometry']
+            fields: ['formatted_address', 'address_components', 'address_components', 'place_id', 'geometry']
         };
         setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
-
-        console.log("place", placeAutocomplete)
     }, [places]);
 
 

@@ -1,4 +1,4 @@
-import { CategoriesSelect } from "./CategoriesSelect";
+import { CategoriesSelect } from "./UIX/CategoriesSelect";
 import { usersFaker } from "../datas/fakers/usersFaker";
 import { userProfile } from "../types/user";
 import { useFormik } from "formik";
@@ -13,7 +13,7 @@ import {
     Input,
     Textarea,
 } from "@material-tailwind/react";
-import BtnBottom from "./BtnBottom";
+import BtnBottom from "./UIX/BtnBottom";
 
 export default function PoolForm() {
     const navigate = useNavigate();

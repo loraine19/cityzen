@@ -1,7 +1,5 @@
-import { Participant, EventP } from "../../types/class";
-import { useApi } from "./useApi";
-type EventDto = Partial<EventP>;
-type ParticipantDto = Partial<Participant>;
+import { EventDTO, EventP } from "../../types/class";
+import { useApi, createFormData, } from "./useApi";
 
 
 const api = useApi();
@@ -25,19 +23,32 @@ export const getEventsByTag = async (category: string): Promise<EventP[]> => han
 
 export const getEventById = async (id: number): Promise<EventP> => handleApiCall(() => api.get(`${dataType}/${id}`));
 
+export const getEventsMines = async (): Promise<EventP[]> => handleApiCall(() => api.get(`${dataType}/mines`));
+export const getEventsIgo = async (): Promise<EventP[]> => handleApiCall(() => api.get(`${dataType}/igo`));
+
+export const getEventsValidated = async (): Promise<EventP[]> => handleApiCall(() => api.get(`${dataType}/validated`));
+
 export const getEventsByUser = async (id: number): Promise<EventP[]> => handleApiCall(() => api.get(`${dataType}/user/${id}`));
+
+
+export const getEventsByParticipant = async (id: number): Promise<EventP[]> => handleApiCall(() => api.get(`${dataType}/participant/${id}`));
+
 
 export const searchEvents = async (elementToSearch: string): Promise<EventP[]> => handleApiCall(() => api.get(`${dataType}/search?q=${elementToSearch}`));
 
 //// ACTIONS
-export const postEvents = async (event: EventDto): Promise<EventP> => handleApiCall(() => api.post(dataType, event));
+export const deleteEvent = async (id: number): Promise<EventP> => handleApiCall(() => api.delete(`${dataType}/${id}`));
 
-export const putEvents = async (id: number, event: EventDto): Promise<EventP> => handleApiCall(() => api.put(`${dataType}/${id}`, event));
+export const patchEvent = async (id: number, element: EventDTO): Promise<EventP> => {
+    const formData = createFormData(element);
+    return handleApiCall(() => api.patch(`${dataType}/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }));
+};
 
-export const deleteEvents = async (id: number): Promise<EventP> => handleApiCall(() => api.delete(`${dataType}/${id}`));
-
-export const postParticipants = async (participant: ParticipantDto): Promise<Participant> => handleApiCall(() => api.post(dataType, participant));
-
-export const deleteParticipants = async (userId: number, eventId: number): Promise<Participant> => handleApiCall(() => api.delete(`participants/user${userId}/event${eventId}`));
-
-
+export const postEvent = async (element: EventDTO): Promise<EventP> => {
+    const formData = createFormData(element);
+    return handleApiCall(() => api.post(dataType, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }));
+};
