@@ -1,167 +1,150 @@
 import { useContext, useEffect, useState } from "react";
-import NavBarBottom from "../../components/UIX/NavBarBottom"
+import { useSearchParams } from "react-router-dom";
+import CheckCard from "../../components/UIX/CheckCard";
+import NavBarBottom from "../../components/UIX/NavBarBottom";
 import NavBarTop from "../../components/UIX/NavBarTop";
+import SelectSearch from "../../components/UIX/SelectSearch";
 import SubHeader from "../../components/UIX/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
-import { serviceCategories } from "../../datas/enumsCategories";
-import { label } from "../../types/label";
-import { deleteElement, imIn, takeElement, GetCategory } from '../../functions/GetDataFunctions';
-import UserContext from "../../contexts/user.context";
-import DataContext from "../../contexts/data.context";
-import { Service } from "../../types/class";
 import ServiceComp from "../../components/servicesComps/ServiceComp";
-import { useSearchParams } from "react-router-dom";
-import { CheckCard } from "../../components/CheckCard";
-import { SelectSearch } from "../../components/SelectSearch";
+import { label } from "../../types/label";
+import { Service } from "../../types/class";
+import UserContext from "../../contexts/user.context"
+import { serviceCategories, getValue, getLabel } from '../../functions/GetDataFunctions';
+import { getServices, getServicesDo, getServicesGet, getServicesImIn, getServicesImInGet, getServicesImInDo } from '../../functions/API/servicesApi';
 
 export default function ServicesPage() {
-    const { user } = useContext(UserContext);
-    const { data, setDataInLocal } = useContext(DataContext);
-    const { flags } = data;
-    const [categorySelected, setCategorySelected] = useState<string>(serviceCategories[0]);
+    const { user } = useContext(UserContext)
+    const [categorySelected, setCategorySelected] = useState<string>(serviceCategories[0].value);
     const [notif, setNotif] = useState<string>('');
-    const [copy, setCopy] = useState<Service[]>([...data.services])
-    const [services, setServices] = useState<Service[]>([...data.services])
+    const [services, setServices] = useState<Service[]>([]);
     const [mines, setMines] = useState<boolean>(false);
-    const [tabSelected, setTabSelected] = useState<string>("mines");
-    const [servicesTabled, setServicesTabled] = useState<Service[]>([...data.services]);
-    const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
-    const activeTab: any = document.querySelector(`li[data-value="${tabSelected}"]`);
+    const [arrayToFilter, setArrayToFilter] = useState<Service[]>([]);
+    const [doServices, setDoServices] = useState<Service[]>([]);
+    const [getsServices, setGetServices] = useState<Service[]>([]);
+    const [myservices, setMyservices] = useState<Service[]>([]);
+    const [myServicesGet, setMyServicesGet] = useState<Service[]>([]);
+    const [myServicesDo, setMyServicesDo] = useState<Service[]>([]);
+    const [tabSelected, setTabSelected] = useState<string>('');
+    const [serviceList, setServiceList] = useState<Service[]>([]);
+    const [tabledList, setTabledList] = useState<Service[]>([]);
+    const label = getLabel(categorySelected, serviceCategories);
     const [searchParams, setSearchParams] = useSearchParams();
-    const params = (searchParams.get("search"))
+    const [cat, setCat] = useState<string>('')
+    const params = { tab: searchParams.get("search"), category: searchParams.get("category") };
+    !serviceCategories.some(category => category.value === '') && serviceCategories.unshift({ label: 'tous', value: '' })
+
+    const UpdateList = async () => {
+        const services = await getServices();
+        const myservices = await getServicesImIn();
+        const myServicesGet = await getServicesImInGet();
+        const myServicesDo = await getServicesImInDo();
+        const doServices = await getServicesDo();
+        const getsServices = await getServicesGet();
+        setServices(services);
+        setMyservices(myservices);
+        setDoServices(doServices);
+        setGetServices(getsServices);
+        setMyServicesGet(myServicesGet);
+        setMyServicesDo(myServicesDo);
+        switch (tabSelected) {
+            case "myservices": setServiceList(myservices); break;
+            case "get": setServiceList(getsServices); break;
+            case "do": setServiceList(doServices); break;
+            default: setServiceList(services); break;
+        }
+    };
 
     useEffect(() => {
-        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${params}"]`);
-        params && Tab && Tab.click();
-    }, [params])
+        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${params.tab}"]`);
+        const fetch = async () => await UpdateList();
+        fetch().then(() => Tab && Tab.click());
+    }, []);
 
-    useEffect(() => {
-        setServices([...data.services])
-    }, [data.services])
-
-
-    const handleClickDelete = (id: number) => {
-        deleteElement(id, services, setServices);
-        setDataInLocal({ ...data, services: data.services.filter((service: Service) => service.id !== id) })
-        services.sort((a, b) => b.id - a.id)
-    }
-
-    const handleTake = async (id: number) => {
-        takeElement(id, copy, setCopy, user)
-        setDataInLocal({ ...data, services: copy })
-        await activeTab.click();
-    }
 
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé"];
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray);
 
-    function selectBox(e: React.ChangeEvent<HTMLInputElement>) {
-        e.target.checked ? boxSelected.push(e.target.value) : boxSelected.splice(boxSelected.indexOf(e.target.value), 1)
-        setBoxSelected([...boxSelected])
-        return boxSelected
-    }
+    const selectBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newBoxSelected = e.target.checked
+            ? [...boxSelected, e.target.value]
+            : boxSelected.filter(value => value !== e.target.value);
+        setBoxSelected(newBoxSelected);
+    };
 
     const filterCheck = (boxSelected: string[]) => {
-        let box0 = boxSelected.includes(boxArray[0]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.type !== "get") : []
-        let box1 = boxSelected.includes(boxArray[1]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.type !== "do") : []
-        let box2 = boxSelected.includes(boxArray[2]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 0) : []
-        let box3 = boxSelected.includes(boxArray[3]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 1) : []
-        let box4 = boxSelected.includes(boxArray[4]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 2) : []
-        let box5 = boxSelected.includes(boxArray[5]) ? copy.filter((service: Service) => (service.user_id === user.user_id || service.user_id_resp === user.user_id) && service.status === 3) : []
-        return [... new Set([...box0, ...box1, ...box2, ...box3, ...box4, ...box5])]
-    }
+        const filters = [
+            boxSelected.includes(boxArray[0]) ? myServicesDo : [],
+            boxSelected.includes(boxArray[1]) ? myServicesGet : [],
+            boxSelected.includes(boxArray[2]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 0) : [],
+            boxSelected.includes(boxArray[3]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 1) : [],
+            boxSelected.includes(boxArray[4]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 2) : [],
+            boxSelected.includes(boxArray[5]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 3) : [],
+        ];
+        return [...new Set(filters.flat())];
+    };
 
     useEffect(() => {
-        if (mines
-        ) { setServices(filterCheck(boxSelected)) }
-    }, [boxSelected])
+        if (mines) setServices(filterCheck(boxSelected));
+    }, [boxSelected]);
 
-
-
-    const filterServices = (newArray: Service[], value: string) => {
-        value !== tabSelected && setCategorySelected(serviceCategories[0]);
-        setServicesTabled(newArray);
-        setServices(newArray);
+    const filterTab = async (newArray: Service[], value: string) => {
+        if (value !== tabSelected) { setCategorySelected(''); setCat("tous"); await UpdateList() }
+        setServiceList(newArray);
+        setTabledList(newArray);
         setTabSelected(value);
-        setSearchParams({ search: value });
-        value === "mines" ? setMines(true) : setMines(false);
+        value === "myservices" ? setMines(true) : setMines(false);
+        setSearchParams({ search: value, category: categorySelected });
     }
 
-    const serviceTabs: label[] = [{
-        label: "tous",
-        value: "",
-        result: () => { filterServices((copy).filter((service: Service) => service.status < 1 || user.user_id === service.user_id || user.user_id === service.user_id_resp), serviceTabs[0].value) }
-    },
-    {
-        label: "demande",
-        value: "get",
-        result: () => { filterServices((copy).filter((service: Service) => service.type === "get"), serviceTabs[1].value) }
-    },
-    {
-        label: "offre",
-        value: "do",
-        result: () => { filterServices((copy).filter((service: Service) => service.type === "do"), serviceTabs[2].value) }
-    },
-    {
-        label: "les miens",
-        value: "mines",
-        result: () => { filterServices((copy).filter((service: Service) => service.user_id === user.id || service.user_id_resp === user.id), serviceTabs[3].value) }
-    },
+    const serviceTabs: label[] = [
+        { label: "tous", value: '', result: () => filterTab([...services], '') },
+        { label: "demande", value: "get", result: () => filterTab([...getsServices], "get") },
+        { label: "offre", value: "do", result: () => filterTab([...doServices], "do") },
+        { label: "les miens", value: "myservices", result: () => filterTab([...myservices], "myservices") },
     ]
 
-
-    const [cat, setCat] = useState<string>("")
     const search = (cat: string) => {
-        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${tabSelected}"]`);
+        const value = getValue(cat, serviceCategories);
         setCategorySelected(cat);
+        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${tabSelected}"]`);
         Tab && Tab.click();
-        let copy2 = servicesTabled.filter((service: Service) => GetCategory(service, serviceCategories) === cat || service.title.toLowerCase().includes(cat.toLowerCase()) || service.description.toLowerCase().includes(cat.toLowerCase()))
-        setServices([...copy2])
-    }
+        const result = tabledList.filter(service =>
+            service.category.toString() === value ||
+            service.title.toLowerCase().includes(cat.toLowerCase()) ||
+            service.description.toLowerCase().includes(cat.toLowerCase())
+        );
+        setServices(value !== '' ? result : tabledList);
+    };
 
-    //// USE EFFECT 
     useEffect(() => {
-        services.length > 0 ? setNotif('') : setNotif(`Aucun service ${tabSelected} ${categorySelected != serviceCategories[0] && categorySelected ? " " + categorySelected : ""} n'a été trouvé`);
-    }, [services])
-
-
+        setNotif(serviceList.length > 0 ? '' :
+            `Aucun service ${tabSelected} ${categorySelected !== '' && categorySelected ? ' ' + cat : ''} n'a été trouvé`);
+    }, [services]);
 
     return (
         <div className="Body cyan">
-            <header className=" px-4">
+            <header className="px-4">
                 <NavBarTop />
-                <SubHeader qty={services.length} type={"service " + `${categorySelected != serviceCategories[0] ? categorySelected : ""} `} />
+                <SubHeader qty={serviceList.length} type={`service ${categorySelected !== '' ? label : ''}`} />
                 <TabsMenu labels={serviceTabs} subMenu={false} />
-                {mines ?
-                    <CheckCard
-                        categoriesArray={boxArray}
-                        change={(e) => { selectBox(e) }}
-                        setBoxSelected={setBoxSelected} />
-                    :
-                    <SelectSearch cat={cat} setCat={setCat} category={serviceCategories} search={(cat: string) => search(cat)} />
-                }
+                {mines ? (
+                    <CheckCard categoriesArray={boxArray} change={selectBox} setBoxSelected={setBoxSelected} />
+                ) : (
+                    <SelectSearch cat={cat} setCat={setCat} category={serviceCategories} search={search} />
+                )}
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
-
             <main>
                 <div className="grid grid-cols-1 lg:grid-cols-2 pt-4 w-full gap-4">
-                    {services.map((service: Service, index: number) => (
-                        <div className="pt-6 h-[calc(40Vh+2rem)]  w-respLarge" key={index}>
-                            <ServiceComp
-                                service={service}
-                                change={(cat: string) => search(cat)}
-                                mines={mines}
-                                key={service.id}
-                                isFlaged={isFlaged(service)}
-                                handleClickDelete={handleClickDelete}
-                                handleClickTake={handleTake}
-                            />
+                    {serviceList.map((service, index) => (
+                        <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
+                            <ServiceComp key={service.id} service={service} change={search} mines={mines} update={UpdateList} />
                         </div>
                     ))}
                 </div>
-
             </main>
             <NavBarBottom addBtn={true} />
         </div>
-    )
+    );
 }

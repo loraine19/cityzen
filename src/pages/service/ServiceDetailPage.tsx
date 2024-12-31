@@ -4,148 +4,157 @@ import SubHeader from '../../components/UIX/SubHeader';
 import { useContext, useEffect, useState } from 'react';
 import CTAMines from '../../components/UIX/CATMines';
 import UserContext from '../../contexts/user.context';
-import { AcceptUserResp, GetCategory, imIn, takeElement } from '../../functions/GetDataFunctions';
+import { getLabel, serviceTypes, serviceCategories, toggleResp, GenereMyActions, serviceStatus, toggleValidResp, generateContact } from '../../functions/GetDataFunctions';
 import DataContext from '../../contexts/data.context';
 import { action, Service } from '../../types/class';
 import ServiceDetailComp from '../../components/servicesComps/ServiceDetailComp';
-import { serviceCategories } from '../../datas/enumsCategories';
+import { deleteService, getServiceById, putServiceFinish } from '../../functions/API/servicesApi';
+
 export default function ServiceDetailPage() {
-    const { id } = useParams()
+    const { id } = useParams();
     const { user } = useContext(UserContext);
-    const { data, setDataInLocal } = useContext(DataContext)
-    const { flags } = data
+    const userId = user.userId
+    const [service, setService] = useState<Service>({} as Service);
+    const [mine, setMine] = useState<boolean>(false);
+    const [IResp, setIResp] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
-    let found = (data.services.find((service: Service) => service.id == parseInt(id!)))
-    useEffect(() => {
-        if (!found) {
-            navigate("/service-" + id)
+    const [category, setCategory] = useState<string>('');
+    const [type, setType] = useState<string>('');
+    const [status, setStatus] = useState<string>('');
+    const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false);
+    const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
+    const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
+    const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
+    const updateStatus = (status: string) => {
+        setIsNew(status === 'nouveau');
+        setIsResp(status === 'en attente');
+        setIsValidated(status === 'en cours');
+        setIsFinish(status === 'terminé');
+    };
+
+    const fetch = async () => {
+        setLoading(true);
+        const idS = id ? parseInt(id) : 0;
+        const service = await getServiceById(idS);
+        setService(service);
+        setCategory(getLabel(service.category.toString(), serviceCategories));
+        setType(getLabel(service.type.toString(), serviceTypes));
+        setMine(service.User.id === userId);
+        setIResp(service.userIdResp === userId);
+        updateStatus(getLabel(service.status, serviceStatus))
+        setLoading(false)
+    };
+
+    useEffect(() => { fetch() }, []);
+    useEffect(() => { updateStatus(getLabel(service.status, serviceStatus)) }, [service]);
+    const MyActionsStart: action[] = GenereMyActions(service, "service", deleteService, () => { });
+    const MyActions: action[] = isNew && MyActionsStart || [...MyActionsStart,
+    {
+        icon: `Valider `,
+        title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
+        body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+        function: () => { toggleValidResp(service.id, service.UserResp.id, setService); updateStatus(getLabel(service.status, serviceStatus)) }
+    },
+    {
+        icon: `Refuser`,
+        title: `"Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
+        body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+        function: () => { toggleValidResp(service.id, 0, setService); updateStatus(getLabel(service.status, serviceStatus)) }
+    }]
+
+    const MyActionsValidate: action[] = [
+        {
+            icon: `terminer `,
+            title: `Terminer le service`,
+            body: service.title,
+            function: async () => { await putServiceFinish(service.id); fetch() }
+        },
+        {
+            icon: `litige`,
+            title: `Signaler un litige`,
+            body: `Avant d'ouvrir un litige pouvez contacter ${generateContact(service.UserResp)}`,
+            function: () => { console.log('litige') }
         }
-    }, [found])
-    const [selectedService] = useState<Service>(found ? (found) : (data.services[0]))
-    const [serviceList, setServiceList] = useState<Service[]>(data.services);
-    //////CTAVALUES
-    const category = GetCategory(selectedService, serviceCategories)
-    const type = selectedService.type === "get" ? "demande" : "offre"
-    const mines = (found?.user_id === user.id) ? true : false
-
-    let isPost = selectedService.status === 0 ? true : false
-    let isResp = selectedService.status === 1 ? true : false
-    let isValidated = selectedService.status === 2 ? true : false
-    let isFinish = selectedService.status === 3 ? true : false
-
-    useEffect(() => {
-        isPost = selectedService.status === 0 ? true : false
-        isResp = selectedService.status === 1 ? true : false
-        isValidated = selectedService.status === 2 ? true : false
-        isFinish = selectedService.status === 3 ? true : false
-
-    }, [selectedService.status])
-
-    const handleTake = (id: number) => {
-        takeElement(id, serviceList, setServiceList, user)
-        setDataInLocal({ ...data, services: serviceList })
-    }
-
-    const handleValidate = (id: number) => {
-        AcceptUserResp(id, serviceList, setServiceList, 2);
-        setDataInLocal({ ...data, services: serviceList })
-    }
-    const handleFinish = (id: number) => {
-        AcceptUserResp(id, serviceList, setServiceList, 3);
-        setDataInLocal({ ...data, services: serviceList })
-    }
-    const isFlaged = (element: any) => { return imIn(element, flags, user.id) ? true : false };
-
-    //// AUTHOR
-
-
-    const buttonsValidate: action[] = [
-        {
-            icon: isPost && "no" || isResp && "no" || isValidated && "Besoins d'aide ?" || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || 'no',
-            title: isPost && "no" || isResp && "" || isValidated && "Ouvrir un litige ?" || 'no',
-            body: selectedService.title,
-            function: () => {
-                if (isValidated) { isValidated && navigate(`/litige/create/${selectedService.id}`) }
-                else { return null }
-            }
-        },
-        {
-            icon: isPost && "no" || isResp && "no" || isValidated && 'Service finis ?' || isFinish && '' || '',
-            title: isPost && "no" || isResp && "" || isValidated && "Cloturer le service ?" || '',
-            body: selectedService.title,
-            function: () => {
-                if (isResp) { handleFinish(selectedService.id) }
-                else { return null }
-            }
-        },
-        {
-            icon: isResp && "valider ? " || isValidated && '' || isFinish && '' || '',
-            title: isResp && "Accepter la reponse" || isValidated && '' || isFinish && '' || '',
-            body: selectedService.title,
-            function: () => {
-                if (isResp) { handleValidate(selectedService.id) }
-                else { return null }
-            }
-
-        },
     ]
-    /// RESP 
-    const buttons: action[] = [
+
+
+    const isNewAction: action[] = [
         {
-            icon: isResp && "annuler ?" || isValidated && 'ce service est déjà pris ... ' || isFinish && `finis le ${selectedService.finished_at?.toLocaleDateString()}` || '',
-            title: isResp && "Vous annulez votre réponse" || isValidated && "Ouvrir un litige ?" || '',
-            body: selectedService.title + '',
+            icon: isResp ? 'Annuler votre réponse' : isValidated ? "Besoin d'aide ?" : '',
+            title: isResp ? 'Annuler votre réponse' : isValidated ? "Déclarer un litige ?" : '',
+            body: isResp ? service.title : isValidated ? `Avant d'ouvrir un litige pouvez contacter ${generateContact(service.User)}` : '',
+
             function: () => {
-                if (isResp) { handleTake(selectedService.id) }
-                else { return null }
+                if (isResp) {
+                    toggleResp(service.id, userId, setService);
+                    updateStatus(getLabel(service.status, serviceStatus));
+                }
+                if (isValidated) {
+                    console.log('litige');
+                }
             }
         },
         {
-            icon: isPost && "répondre au service ?" || isResp && '' || '',
-            title: isPost && "Repondre au service" || isResp && '' || '',
-            body: selectedService.title,
+            icon: isNew ? 'Répondre au service' : isValidated ? 'Service en cours' : '',
+            title: 'Répondre au service',
+            body: service.title,
             function: () => {
-                if (isPost) { handleTake(selectedService.id) }
-                else { return null }
+                toggleResp(service.id, userId, setService);
+                updateStatus(getLabel(service.status, serviceStatus));
             }
         }
     ]
 
 
-
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={`${type} de service ${category}`}
-                    closeBtn />
+                <SubHeader type={`${type} de service ${category}`} closeBtn />
             </header>
             <main>
-                <div className="flex  pt-6 pb-1 h-full">
+                <div className="flex pt-6 pb-1 h-full">
                     <ServiceDetailComp
-                        service={selectedService}
-                        mines={mines} change={() => { }}
-                        isFlaged={isFlaged(selectedService)}
-                        handleValidate={(id: number) => handleValidate(id)} />
+                        service={service}
+                        mines={mine}
+                        change={() => { }}
+                    />
                 </div>
             </main>
-
-            {mines ?
-                <CTAMines id={selectedService.id}
-                    values={buttonsValidate}
-                    disabled1={isFinish}
-                    disabled2={isFinish}
-                    button3={isResp ? buttonsValidate[2] : undefined}
-                />
-                :
-                <CTAMines
-                    id={selectedService.id}
-                    disabled1={isValidated}
-                    values={buttons}
-                />
-            }
-
-        </div >
-    )
-} 
+            <footer>
+                {mine && !isFinish ?
+                    <CTAMines
+                        actions={isValidated ? MyActionsValidate : MyActions}
+                        disabled1={isFinish}
+                        disabled2={isFinish}
+                    />
+                    :
+                    <CTAMines
+                        disabled2={isValidated}
+                        actions={isNewAction}
+                    />
+                }
+                {
+                    isFinish && <CTAMines
+                        actions={
+                            [
+                                {
+                                    icon: `ce service est terminé`,
+                                    title: ``,
+                                    body: service.title,
+                                    function: () => { }
+                                }
+                            ]
+                        }
+                        disabled1={true}
+                    />
+                }
+            </footer>
+        </div>
+    );
+}

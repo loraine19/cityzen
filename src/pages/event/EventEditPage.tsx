@@ -52,6 +52,7 @@ export default function EventDetailPage() {
         onSubmit: values => {
             addressIn(formik, newEvent);
             formik.values = values
+            console.log("values", values)
             setOpen(true)
         }
     });
@@ -60,6 +61,7 @@ export default function EventDetailPage() {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
         formik.values.addressId = formik.values.Address.id
+        //formik.values.category = getValue(formik.values.category, eventCategories)
         const { Address, Participants, ...rest } = formik.values;
         const updateData = { ...rest }
         return await patchEvent(newEvent.id, updateData)

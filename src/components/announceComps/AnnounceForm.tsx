@@ -2,15 +2,13 @@ import NavBarTop from '../UIX/NavBarTop';
 import SubHeader from '../UIX/SubHeader';
 import { useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Checkbox } from '@material-tailwind/react'
-import { getImageBlob } from '../../functions/GetDataFunctions';
-import { postCategory } from '../../types/class';
+import { getImageBlob, getLabel, postCategories } from '../../functions/GetDataFunctions';
+import { Label } from '../../types/class';
 
 export function AnnounceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
-    const { createdAt, title, description, category, image } = formik.values
     const haveImage = formik.values.image ? true : false
     const checkShare: any = (word: string) => (formik.values?.share?.toString().toLowerCase())?.includes(word)
-    const categories = (postCategory.filter((category) => typeof category === "string").map((category) => category.toString().toLowerCase()));
 
     ///// BLOB FUNCTION 
     const [imgBlob, setImgBlob] = useState<string>(formik.values.image as string);
@@ -18,24 +16,27 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
         !imgBlob && setImgBlob(formik.values.image as string)
     }, [formik.values.image, imgBlob])
 
+    //// DESTRUCTURING FORMIK VALUES
+    const { createdAt, title, description, category, image } = formik.values
+    const label = category ? getLabel(category, postCategories) : ''
     return (
         <>
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={formik.values.title ? `Modifier mon annonce ` : "Créer mon annonce"} place={category ? category.toLowerCase() : ""} closeBtn />
+                    <SubHeader type={formik.values.title ? `Modifier mon annonce ` : "Créer mon annonce "} place={category ? label : ""} closeBtn />
                     <div className="w-respLarge">
                         <Select className="rounded-full shadow  bg-white border-none capitalize"
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                             name={"category"}
                             labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
-                            value={category?.toLowerCase()}
-                            onChange={(val: any) => { setValue(val); formik.values.category = val.toUpperCase() }}
+                            value={category || ""}
+                            onChange={(val: any) => { setValue(val); formik.values.category = val }}
                         >
-                            {categories.map((category: string, index: number) => {
+                            {postCategories.map((category: Label, index: number) => {
                                 return (
-                                    <Option className={"rounded-full my-1 capitalize"} value={category} key={index} >
-                                        {category}
+                                    <Option className={"rounded-full my-1 capitalize"} value={category.value} key={index} >
+                                        {category.label}
                                     </Option>)
                             })}
                         </Select>

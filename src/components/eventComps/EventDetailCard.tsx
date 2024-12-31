@@ -5,7 +5,7 @@ import { AvatarStack } from "./AvatarStack";
 import { MapComp } from "../mapComps/MapComp";
 import { useContext, useEffect, useState } from "react";
 import { GetAdressGps } from "../../functions/GeoMapFunction";
-import { eventdateInfo, toggleParticipant } from "../../functions/GetDataFunctions";
+import { dayMS, eventdateInfo, toggleParticipant } from "../../functions/GetDataFunctions";
 import { EventP, Participant } from '../../types/class';
 import { defaultEventImage } from "../../datas/enumsCategories";
 import UserContext from "../../contexts/user.context";
@@ -20,7 +20,7 @@ export function EventDetailCard(props: EventCardProps) {
     const userId = user.user.userId
     const Igo: boolean = Participants.find((participant: Participant) => participant.userId === userId) ? true : false
     const date = new Date(start)
-    const daysBefore: number = ((date.getTime() - (new Date(Date.now())).getTime()) / 1000 / 60 / 60 / 24)
+    const daysBefore: number = ((date.getTime() - (new Date(Date.now())).getTime()) / dayMS)
     const pourcentParticipants: number = Math.floor((Participants.length) / participantsMin * 100)
     const dateClass = daysBefore < 15 && pourcentParticipants < 100 ? "OrangeChip" : "GrayChip";
     const [adressGps, setAdressGps] = useState<adressGps>({ lat: 0, lng: 0 })
@@ -91,16 +91,16 @@ export function EventDetailCard(props: EventCardProps) {
                                 </Typography>
                             </div>
                         </div>
+                        <AvatarStack avatarDatas={Participants} />
+                    </div>
+                    <div className="flex items-center gap-2">
                         <button onClick={(e: any) => console.log(e)}>
                             <Chip value={category} className="rounded-full h-max" color="cyan">
                             </Chip>
                         </button>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <AvatarStack avatarDatas={Participants} />
                         <button onClick={() => toggleParticipant(id, userId, setEvent)}>
-                            <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center gap-2"
-                                icon={<span className={`${Igo && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem]`}>person</span>}>
+                            <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center pr-3 pl-6 pt-2"
+                                icon={<span className={`${Igo && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem] pt-0.5 pl-2`}>person</span>}>
                             </Chip></button>
                     </div>
                 </CardFooter>

@@ -29,11 +29,9 @@ export default function EventDetailPage() {
         setIsMine(event.userId === userId);
         setIsValidate(event.Participants.length > event.participantsMin);
         setIgo(event.Participants.find((participant: Participant) => participant.userId === userId) ? true : false)
-    };
+    }
 
-    useEffect(() => {
-        fetchEvent();
-    }, [event.Participants]);
+    useEffect(() => { fetchEvent() }, [event.Participants]);
 
     const { title, category, Address } = event;
 

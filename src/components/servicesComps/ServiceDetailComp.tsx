@@ -1,29 +1,43 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
-import { Profile, Service } from "../../types/class";
-import { GetCategory, GetPoints } from "../../functions/GetDataFunctions";
-import DataContext from "../../contexts/data.context";
-import { useContext } from "react";
+import { Flag, HardLevel, Service, ServiceStep, SkillLevel } from "../../types/class";
+import { getEnumVal, getLabel, GetPoints, isFlaged, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../functions/GetDataFunctions";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context";
-import { serviceCategories } from "../../datas/enumsCategories";
+import { getFlagsService } from "../../functions/API/flagsApi";
 
-export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void, isFlaged?: boolean, handleValidate: (id: number) => void }) {
+export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void, isFlaged?: boolean }) {
     const { user } = useContext(UserContext)
-    const { service, isFlaged } = props
-    const { id, title, description, image, created_at, user_id_resp, user_id } = props.service
-    const { data } = useContext(DataContext);
+    const userId = (user.userId)
+    const { service } = props
+    const { id, title, description, image, createdAt, User, UserResp } = props.service
+    const [flagged, setFlagged] = useState<boolean>(false)
+    const [flags, setFlags] = useState<Flag[]>([])
     const haveImage = service.image ? true : false
-    const userAuthor = data.profiles.find((user: Profile) => user.user_id === user_id)
-    const isMine = (user.user_id === user_id || user.user_id === user_id_resp) ? true : false
+    const userAuthor = User.Profile
+    const isMine = (User.id === userId || UserResp?.id === userId)
+    const type = getLabel(service.type.toString(), serviceTypes)
+    const [points, setPoints] = useState<number[]>(GetPoints(service))
+    const category = getLabel(service.category.toString(), serviceCategories)
+    const late: boolean = isLate(createdAt, 15)
+    const status = getLabel(service.status, serviceStatus)
+    const isResp = status === 'en attente' ? true : false
+    const IResp = UserResp?.id === userId
+    const isValidated = status === 'en cours' ? true : false
+    const isFinish = status === 'terminé' ? true : false
+    const hard = getEnumVal(service.hard, HardLevel)
+    const skill = getEnumVal(service.skill, SkillLevel)
+    //    const statusVal = getEnumVal(service.status, ServiceStep)
 
-    const category = GetCategory(service, serviceCategories)
-    const type = service.type === "get" ? "demande" : "offre";
-    const isResp = service.status === 1 ? true : false
-    const isValidated = service.status === 2 ? true : false
-    const isFinish = service.status === 3 ? true : false
-    const userResp = data.profiles.find((user: Profile) => user.user_id === user_id_resp)
-    const points = GetPoints(service, userAuthor, userResp)
-    let button = isResp && "en attente" || isValidated && "en cours" || isFinish && "terminé"
+    useEffect(() => {
+        const onload = async () => {
+            const flags = await getFlagsService()
+            setFlags(flags)
+            setFlagged(isFlaged(service, userId, flags))
+            setPoints(GetPoints(service))
+        }
+        onload()
+    }, [service])
 
     return (
         <>
@@ -35,11 +49,18 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                             <Chip value={`${category}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
                             </Chip>
 
-                            <Chip value={type} className={`${service.type === "get" ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
+                            <Chip value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
                             </Chip>
                         </div>
-                        <Chip value={(new Date(created_at)).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
-                        </Chip>
+                        <div className="flex items-center gap-2 flex-col sm:flex-row">
+                            <Chip value={status}
+                                className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}>
+                            </Chip>
+                            <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')}
+                                className={`${late ? "RedChip" : "GrayChip"} 
+                                rounded-full  h-max flex items-center gap-2 shadow font-medium `}>
+                            </Chip>
+                        </div>
                     </div>
                     {image &&
 
@@ -50,59 +71,67 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         />
                     }
                 </CardHeader>
-                <CardBody className="FixCardBody">
+                <CardBody className="FixCardBody !pb-0">
                     <div className="flex w-full items-center justify-between">
                         <Typography variant="h5" color="blue-gray" className="mb-2">
                             {title}
                         </Typography>
 
                         <Link to={`/flag/post${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${isFlaged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
+                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
-                    <div className="flex  items-center gap-2 mb-1">
-                        <Chip value={service.skill} size="lg" className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
-                            icon={<span className={`pl-1 material-symbols-outlined unFillThin !text-[1.5rem]`}>design_services</span>}>
-                        </Chip>
-                        <Chip value={service.skill} size="lg" className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-5"
-                            icon={<span className={`  material-symbols-outlined unFillThin !text-[1.5rem]`}>signal_cellular_alt</span>}>
-                        </Chip>
-                    </div>
+                    <div className="flex justify-between items-end">
+                        <div className="flex  items-center gap-2 mb-1">
+                            <Chip value={skill} size="lg" className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
+                                icon={<span className={`pl-1 material-symbols-outlined unFillThin !text-[1.5rem]`} title="Compétence">design_services</span>}>
+                            </Chip>
+                            <Chip value={hard} size="lg" className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-5"
+                                icon={<span className={`  material-symbols-outlined unFillThin !text-[1.5rem]`} title="Difficulté">signal_cellular_alt</ span>}>
+                            </Chip>
+                        </div>
+                        {UserResp && !IResp &&
+                            <Typography variant="h6" color="blue-gray" className="text-right">
+                                {isMine && !isValidated && !isFinish && "Réponse " || isValidated && 'en cours par ' || isFinish && 'effectué par ' || IResp && "Vous :" || ' - '}
+                            </Typography>
+                        }
+                        {UserResp && IResp &&
+                            <Typography variant="h6" color="blue-gray" className="text-right">
+                                vous
+                                {isFinish && 'avez fait ' || !isValidated && !isFinish && "avez repondu" || isValidated && !isFinish && ' faite'}
+                            </Typography>
+                        }
 
-                    <div className="CardOverFlow h-full flex flex-col ">
-                        <div className="flex flex-col h-full md: gap-8">
-                            <Typography color="blue-gray" className="flex-1  pr-4">
+                    </div>
+                    <div className="CardOverFlow h-full flex flex-col gap-4 ">
+                        <div className="flex h-full">
+                            <Typography color="blue-gray" className="flex-1 pr-4 overflow-y-auto">
                                 {description}
                             </Typography>
-                            {isMine && isResp &&
-                                <div className="flex w-full flex-col justify-between items-end  gap-2">
-                                    <Typography variant="h6" color="blue-gray" className="text-right">
-
-                                        {isMine ? "Réponse" : "Vous avez repondu"} <br></br>à la   {type}
-                                    </Typography>
-                                    <div
-                                        className="flex flex-col items-end gap-2"> <Avatar src={userResp?.avatar} size="sm" alt="avatar" withBorder={true} />
-                                        <div className="flex flex-col">
-                                            <Typography variant="small" className="font-normal !p-0">{userResp?.firstName} - {userResp?.lastName}</Typography>
-                                            <Typography variant="small" color="gray" >
-                                                {userResp?.skills?.join(', ')}
-                                            </Typography>
-
-                                        </div>
-                                        <Chip value={button} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}></Chip>
+                            {UserResp &&
+                                <div className="flex flex-col items-end  gap-3">
+                                    <div className="flex flex-col items-end ">
+                                        <Typography variant="small" className="font-normal !p-0">
+                                            {UserResp.Profile?.firstName} - {UserResp.Profile?.lastName}
+                                        </Typography>
+                                        <Typography variant="small" color="gray" >
+                                            {UserResp.Profile?.skills} -
+                                        </Typography>
+                                        <Avatar src={UserResp.Profile?.image} size="sm" alt="avatar" withBorder={true} color="blue-gray" />
                                     </div>
+                                    <Chip value={status} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}></Chip>
                                 </div>}
                         </div>
                     </div>
                 </CardBody>
 
                 <CardFooter className="CardFooter">
-                    {userAuthor?.user_id !== user.user_id && <div className="flex items-center px-0 gap-2">
-                        <Avatar src={userAuthor?.avatar} size="sm" alt="avatar" withBorder={true} />
+                    {userAuthor?.userId !== user.userId && <div className="flex items-center px-0 gap-2">
+                        <Avatar src={userAuthor?.image} size="sm" alt="avatar" withBorder={true} />
                         <div className="flex flex-col">
                             <Typography variant="small" className="font-normal !p-0">{userAuthor?.firstName} - {userAuthor?.lastName}</Typography>
                             <Typography variant="small" color="gray" >
-                                {userAuthor?.skills?.join(', ')}
+                                {userAuthor?.skills}
                             </Typography>
                         </div>
                     </div>}

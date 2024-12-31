@@ -5,8 +5,8 @@ import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, Ca
 import MapPickUpComp from '../mapComps/MapPickUpComp';
 import { MapComp } from '../mapComps/MapComp';
 import { GetAddressObject, GetAdressGps } from '../../functions/GeoMapFunction';
-import { GetDefaultImage, getImageBlob } from '../../functions/GetDataFunctions';
-import { Address, eventCategory } from '../../types/class';
+import { eventCategories, getDefaultImage, getImageBlob, getLabel, dayMS } from '../../functions/GetDataFunctions';
+import { Address, Label } from '../../types/class';
 
 export function EventForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
@@ -15,16 +15,16 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
     const [newAddress, setNewAddress] = useState<string>(address ? address.address : '');
     const formatDate = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0])
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100)
-    const daysBefore: number = ((new Date(formik.values.start).getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24)
+    const daysBefore: number = ((new Date(formik.values.start).getTime() - new Date().getTime()) / dayMS)
     let dateClass = daysBefore < 15 ? "OrangeChip" : "GrayChip";
-    const today = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toISOString().slice(0, 16).replace('Z', '');
-    const eventCategories = (eventCategory.filter((category) => typeof category === "string").map((category) => category.toString().toLowerCase()));
+    const today = new Date(new Date().getTime() + (1 * dayMS)).toISOString().slice(0, 16).replace('Z', '')
 
     ///// BLOB FUNCTION 
-    const imgCategory = GetDefaultImage(formik.values.category)
+    const imgCategory = getDefaultImage(formik.values.category)
     const [img] = useState<string>(formik.values.image ? (formik.values.image) : (imgCategory));
     const [imgBlob, setImgBlob] = useState<string | undefined>(img);
 
+    //// ADDRESS GPS FUNCTION
     useEffect(() => {
         const updateAddress = async () => {
             const adressGpsLoaded = await GetAdressGps(newAddress);
@@ -34,37 +34,37 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
         updateAddress()
     }, [newAddress])
 
+    //// UPDATE IMAGE BLOB
     useEffect(() => {
-        setImgBlob(GetDefaultImage(formik.values.category))
+        setImgBlob(getDefaultImage(formik.values.category))
     }, [formik.values.category])
 
     const { image, title, category, description, start, end, participantsMin, Participants, Address } = formik.values
+    const label = category ? getLabel(category, eventCategories) : ''
 
     return (
         <>
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={title ? `Modifier mon évenement ` : "Créer mon évenement"} place={category ? category.toLowerCase() : ""} closeBtn />
+                    <SubHeader type={title ? `Modifier mon évenement ` : "Créer mon évenement"} place={category ? label : ""} closeBtn />
                     <div className="w-respLarge">
                         <Select className="rounded-full shadow  bg-white border-none capitalize"
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                             name={"category"}
-                            labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
-                            value={category?.toLowerCase()}
-                            onChange={(val: any) => { setValue(val); formik.values.category = val.toUpperCase() }}
+                            labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none` }}
+                            value={category || ""}
+                            onChange={(val: any) => { setValue(val); formik.values.category = val }}
                         >
-                            {eventCategories.map((category: string, index: number) => {
+                            {eventCategories.map((category: Label, index: number) => {
                                 return (
-                                    <Option className={"rounded-full my-1 capitalize"} value={category} key={index} >
-                                        {category}
+                                    <Option className={"rounded-full my-1 capitalize"} value={category.value} key={index} >
+                                        {category.label}
                                     </Option>)
                             })}
                         </Select>
                     </div>
                 </header>
-
-
                 <main className='flex flex-1 pb-1 pt-[1.5rem]'>
                     <Card className=" w-respLarge FixCard">
                         <CardHeader className="FixCardHeader bg-blue-gray-300">
@@ -88,12 +88,10 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                                     </div>
                                 </label>
                             </Button>
-                            <Button type='button' variant='text' ripple={false} color="red" className={image ? `p-1 absolute left-10 bottom-0 z-30 rounded-full shadow` : `hidden`} onClick={() => {
-                                formik.values.image = ''; setImgBlob(imgCategory)
-                            }}>
+                            <Button type='button' variant='text' ripple={false} color="red" className={image ? `p-1 absolute left-10 bottom-0 z-30 rounded-full shadow` : `hidden`}
+                                onClick={() => { formik.values.image = ''; setImgBlob(imgCategory) }}>
                                 <span className="material-symbols-rounded !text-2xl">cancel</span>
                             </Button>
-
                         </CardHeader>
                         <Typography className='text-xs px-4'>{image != image && image as string} </Typography>
 
@@ -106,13 +104,10 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                                     <div className='flex flex-col flex-1 pt-1'>
                                         <Textarea rows={1} resize={true} variant="static" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
                                             defaultValue={description}
-                                            containerProps={{
-                                                className: "grid h-full",
-                                            }} labelProps={{
-                                                className: "before:content-none after:content-none",
-                                            }} />
-                                        <Typography className='text-xs error pt-2'>{formik.errors.description as string} </Typography>
-
+                                            containerProps={{ className: "grid h-full" }}
+                                            labelProps={{ className: "before:content-none after:content-none" }} />
+                                        <Typography className='text-xs error pt-2'>{formik.errors.description as string}
+                                        </Typography>
                                     </div>
                                     <div className="flex flex-1 flex-col  ">
                                         <label className="text-sm text-blue-gray-600 -mt-2.5">Adresse</label>
@@ -122,7 +117,6 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                                         <Typography className='text-xs error pt-2'>{formik.errors.adress as string} </Typography>
                                     </div>
                                 </div>
-
                                 <div className='flex gap-[2vw] pt-4'>
                                     <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
                                         <Input type="datetime-local" label="date de debut" name="start" variant="standard" onChange={formik.handleChange} min={today} defaultValue={`${start && formatDate(start)}`} />
@@ -132,7 +126,6 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                                         <Typography className='pb-1 text-xs error'>{formik.errors.end as string} </Typography>
                                     </div>
                                 </div>
-
 
                                 <div className='flex w-full gap-[10%]  pt-1'>
                                     <div className='flex flex-col w-full max-w-[30rem]'>
@@ -149,7 +142,8 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                                                 {Participants?.length}  /  {participantsMin}
                                             </Typography>
                                         </div>
-                                        <Progress value={pourcentParticipants} color={pourcentParticipants === 100 ? "green" : "cyan"} size="md" />
+                                        <Progress value={pourcentParticipants}
+                                            color={pourcentParticipants === 100 ? "green" : "cyan"} size="md" />
                                     </div>
                                 </div>
                             </div>

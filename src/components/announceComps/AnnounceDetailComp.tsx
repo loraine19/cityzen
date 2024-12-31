@@ -69,7 +69,7 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                     </div>
                 </CardBody>
 
-                <CardFooter className="CardFooter">
+                <CardFooter className="CardFooter mb-2">
                     <div className="flex items-center px-0 gap-2">
                         <Avatar src={userOrga?.image} size="sm" alt="avatar" withBorder={true} />
                         <div className="flex flex-col">
@@ -80,15 +80,12 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 ">
                         <button onClick={() => toggleLike(post.id, userId, setPost)}>
-                            <Chip value={`.   ${Likes?.length}`} variant="ghost" className="px-3 rounded-full h-full flex items-center gap-5"
-                                icon={<span className={`${ILike && 'fill !text-cyan-500'} material-symbols-outlined  !text-[1.2rem] pl-1 `}>thumb_up    </span>}>
+                            <Chip value={`${Likes?.length}`} variant="ghost" className="pr-3 pl-6 pt-2 rounded-full h-full flex items-center "
+                                icon={<span className={`${ILike && 'fill !text-cyan-500'} material-symbols-outlined  !text-[1.2rem] pl-2 pt-0.5`}>thumb_up    </span>}>
                             </Chip></button>
-                        <Link to={`/annonce/${id}`} className="flex items-center gap-2" title={`voir les details de ${title}`}><span className="material-symbols-outlined fill !text-[3rem] text-gray-900  fillThin">
-                            arrow_circle_right
-                        </span>
-                        </Link>
+
                     </div>
                 </CardFooter>
             </Card>

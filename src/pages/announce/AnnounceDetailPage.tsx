@@ -1,13 +1,13 @@
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import parse from 'html-react-parser';
 import NavBarTop from '../../components/UIX/NavBarTop';
 import SubHeader from '../../components/UIX/SubHeader';
-import { useContext, useEffect, useState } from 'react';
 import CTAMines from '../../components/UIX/CATMines';
-import UserContext from '../../contexts/user.context'
+import AnnounceDetailComp from '../../components/announceComps/AnnounceDetailComp';
+import UserContext from '../../contexts/user.context';
 import { action, Post } from '../../types/class';
 import { deletePost, getPostById } from '../../functions/API/postsApi';
-import parse from 'html-react-parser';
-import AnnounceDetailComp from '../../components/announceComps/AnnounceDetailComp';
 import { GenereMyActions } from '../../functions/GetDataFunctions';
 
 export default function AnnounceDetailPage() {
@@ -18,6 +18,9 @@ export default function AnnounceDetailPage() {
     const [isMine, setIsMine] = useState<boolean>(false);
     const [share, setShare] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(!open);
+    const myActions = GenereMyActions(post, "annonce", deletePost, handleOpen)
 
     const fetch = async () => {
         const idS = id ? parseInt(id) : 0;
@@ -33,22 +36,19 @@ export default function AnnounceDetailPage() {
         fetch();
     }, []);
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(!open);
-
-    //////CTAVALUES
+    //// CONTACT ACTIONS
     const ContactActions: action[] = [
         {
             icon: 'Appel',
             title: "Confirmer mon appel à " + post.User?.Profile.firstName,
-            body: parse(`<a href="tel:${post.User?.Profile.phone}" class="text-orange-500 font-medium underline">Confirmer mon appel ${post.User?.Profile.phone}</a>`),
-            function: () => { window.location.href = `tel:${post.User?.Profile.phone}`; handleOpen(); },
+            body: parse(`<a href="tel:${post.User?.Profile.phone}" target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Confirmer mon appel ${post.User?.Profile.phone}</a>`),
+            function: () => { window.open(`tel:${post.User?.Profile.phone}`); handleOpen(); },
         },
         {
             icon: 'Email',
             title: "Envoyer un email à " + post.User?.Profile.firstName,
-            body: parse(`<a href="mailto:${post.User?.email}" class="text-orange-500 font-medium underline">Envoyer un email à ${post.User?.Profile.firstName}</a>`),
-            function: () => { window.location.href = `mailto:${post.User?.email}`; handleOpen(); },
+            body: parse(`<a href="mailto:${post.User?.email}?subject=${post.title} target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Envoyer un email à ${post.User?.Profile.firstName}</a>`),
+            function: () => { window.open(`mailto:${post.User?.email}?subject=${post.title}`); handleOpen(); },
         },
     ]
 
@@ -61,17 +61,16 @@ export default function AnnounceDetailPage() {
             <main>
                 {loading ?
                     <div>Loading...</div> :
-
                     <div className="flex pt-6 pb-1 h-full">
                         <AnnounceDetailComp post={post} mines={isMine} change={() => { }} />
                     </div>}
             </main>
 
             {isMine ?
-                <CTAMines id={post.id} values={GenereMyActions(post, "annonce", deletePost, handleOpen)} />
-                :
-                <CTAMines id={post.id} values={ContactActions} disabled1={share.find((s: string) => s === "PHONE") ? false : true} disabled2={share.find((s: string) => s === "EMAIL") ? false : true} />
-            }
+                <CTAMines id={post.id} values={myActions} /> :
+                <CTAMines id={post.id} values={ContactActions}
+                    disabled1={share.find((s: string) => s === "PHONE") ? false : true}
+                    disabled2={share.find((s: string) => s === "EMAIL") ? false : true} />}
         </div>
     );
 }

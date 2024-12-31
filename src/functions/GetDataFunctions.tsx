@@ -1,6 +1,6 @@
 import { eventUser, postUser, userProfile } from '../types/user';
 import { all, flag, notif, targetUser } from "../types/type";
-import { action, Address, EventP, Flag, Pool, Post, Profile, Service, Survey, User, } from '../types/class';
+import { action, Address, eventCategory, EventP, Flag, Label, Pool, Post, postCategory, Profile, Service, Survey, User, serviceType, serviceCategory, HardLevel, SkillLevel, AssistanceLevel, serviceStep } from '../types/class';
 import { GetAdressGps, GetAdressString } from './GeoMapFunction';
 import { deleteParticipant, postParticipant } from './API/partcipantsApi';
 import { getEventById } from './API/eventsApi';
@@ -9,18 +9,19 @@ import { defaultEventImage } from '../datas/enumsCategories';
 import { getPostById } from './API/postsApi';
 import { deleteLike, postLike } from './API/likeApi';
 import { useNavigate } from 'react-router';
+import { getServiceById, putService, putServiceValidation } from './API/servicesApi';
 
 
 
-
+export const dayMS = 24 * 60 * 60 * 1000
 ///// CALL BACK ADD DATA IN EVENTS
 export const getDays = (array: any) => {
     array.map((event: any) => {
         let start = new Date(event.start).getTime();
         let end = new Date(event.end).getTime();
-        let dif = Math.ceil(Math.abs((end - start) / (1000 * 60 * 60 * 24)))
+        let dif = Math.ceil(Math.abs((end - start) / dayMS))
         let days = []
-        for (let i = 0; i < dif; i++) { days.push(new Date(start + i * 24 * 60 * 60 * 1000)) }
+        for (let i = 0; i < dif; i++) { days.push(new Date(start + i * dayMS)) }
         event.days = days
     })
     return array
@@ -158,15 +159,14 @@ export const GetArrayElement = (type: string) => type === "annonce" ? "posts" : 
 
 
 //// CALENDAR FUNCTIONS 
-const dayInMilli = 24 * 60 * 60 * 1000
 export const getWeek = (date: any, eventList: EventP[]) => {
     let week = [];
     date = new Date(date);
     const weekDay = date.getDay();
-    const lundi = date.getTime() - ((weekDay - 1) * dayInMilli)
+    const lundi = date.getTime() - ((weekDay - 1) * dayMS)
     while (week.length < 7) {
         for (let i = 0; i < 7; i++) {
-            const nextDay = (new Date((lundi) + (i * dayInMilli)))
+            const nextDay = (new Date((lundi) + (i * dayMS)))
             let dateInfos = { date: (nextDay), events: [], text: shortDateString(nextDay) }
             week.push(dateInfos);
         }
@@ -206,7 +206,7 @@ export const getWeeks = (day: any, eventList: EventP[], numberOfwweks: number) =
     if (weeks.length < numberOfwweks) {
         for (let i = 0; i < numberOfwweks; i++) {
             weeks.push(getWeek(day, eventList))
-            day = new Date(new Date(day).getTime() + 1 * 7 * dayInMilli)
+            day = new Date(new Date(day).getTime() + 1 * 7 * dayMS)
         }
     }
     return weeks
@@ -227,7 +227,7 @@ export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any)
 
 
 //// LIKE UNLICK // QUICK PARTIPATE
-export const beInElement = (elementLiked: PostL | EventP, array: any[], setArray: any, arrayJoin: any, setArrayJoin: any, userProfile: Profile, keyOf?: string) => {
+export const beInElement = (elementLiked: Post | EventP, array: any[], setArray: any, arrayJoin: any, setArrayJoin: any, userProfile: Profile, keyOf?: string) => {
 
     keyOf ? keyOf = keyOf : keyOf = 'target_id'
     let index = array.findIndex((element: any) => element.id === elementLiked.id);
@@ -270,15 +270,11 @@ export const FindAdressData = async (addressSaisie: string, array: Address[], da
 }
 
 //// GET CATEGORI SERVICE 
-export const GetCategory = (service: Service, categories: string[]): string => {
-    return service.category <= categories.length ? categories[(service.category) - 1] : "autre"
+export const GetCategory = (service: Service, categories: Label[]): string => {
+    return service.category <= categories.length ? categories[(service.category) - 1].value : "autre"
 }
 
-export const GetPoints = (service: Service, userAuthor: Profile, userResp?: Profile): number[] => {
-    const base = Number(((service.hard / 2 + service.skill / 2) + 1).toFixed(1))
-    return userResp ? [base + userResp.assistance / 2] : service.type === "do" ? [base + userAuthor.assistance / 2] : [base, (base + 1.5)]
 
-}
 
 export const isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
 
@@ -319,13 +315,24 @@ export const toggleLike = async (postId: number, userId: number, setPost: any) =
     setPost(await getPostById(postId));
 };
 
+export const toggleResp = async (serviceId: number, userId: number, setService: any) => {
+    const response = await getServiceById(serviceId);
+    const isResp = response.userIdResp === userId ? true : false;
+    isResp ? await putService(serviceId, 0) : await putService(serviceId, userId);
+    setService(await getServiceById(serviceId));
+};
+export const toggleValidResp = async (serviceId: number, userId: number, setService: any) => {
+    await putServiceValidation(serviceId, userId)
+    setService(await getServiceById(serviceId));
+};
+
 
 export const isFlaged = (element: Post | EventP | Service | Survey, userId: number, flags: Flag[]): boolean => {
-    return flags.find((flag: Flag) => flag.targetId === element.id && flag.userId === userId) ? true : false
+    const flagged = flags.find((flag: Flag) => flag.targetId === element.id && flag.userId === userId) ? true : false
+    return flagged ? flagged : false;
 };
 
 export const Igo = (element: EventP, userId: number): boolean => { return element.Participants.find((particpant: any) => particpant.userId === userId) ? true : false };
-
 
 export async function addressIn(formik: any, newElement: EventP | Profile) {
     const AdressToSearch = formik.values.Address
@@ -351,18 +358,10 @@ export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
     }
 }
 
-export const GetDefaultImage = (category: any) => {
-    const catToFind = category.toString().toLowerCase()
-    return defaultEventImage.find(category => category.type.toLowerCase() === catToFind) ?
-        defaultEventImage.find(category => category.type.toLowerCase() === catToFind)?.image
-        : defaultEventImage[0].image
-}
-
-
 //
-export const GenereMyActions = (element: Post | EventP | Service | Survey, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void): action[] => {
-    const navigate = useNavigate();
-    return [
+export const GenereMyActions = (element: Post | EventP | Service | Survey, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): action[] => {
+    const navigate = useNavigate()
+    const actions = [
         {
             icon: handleOpen ? 'Supprimer' : 'close',
             title: "Confirmer la suppression",
@@ -375,6 +374,74 @@ export const GenereMyActions = (element: Post | EventP | Service | Survey, type:
             body: "Confirmer la modification de " + element.title,
             function: () => { navigate(`/${type}/edit/${element.id}`); handleOpen && handleOpen(); },
         },
-    ];
 
+    ];
+    icon3 && actions.length < 3 && actions.push({
+        icon: handleOpen ? 'Relancer' : 'groups',
+        title: "Relancer " + element.title,
+        body: "Relancer " + element.title,
+        function: () => { console.log(`Voulez-vous relancer ${element.title}?`) }
+    })
+    return actions
+}
+
+//// GENERE LABELS 
+const generateLabels = (categories: string[], labels: string[]) => {
+    return categories.map((category, index) => ({ value: category, label: labels[index] }));
+};
+const labelsEvents = ['sport', 'social', 'culturelle', 'blob', 'autre'];
+export const eventCategories = generateLabels(eventCategory, labelsEvents);
+
+const labelsPost = ["perdu-trouvé", "animaux", "à vendre", "blob", "autre"];
+export const postCategories = generateLabels(postCategory, labelsPost);
+
+const typesService = ["demande", "offre"];
+export const serviceTypes = generateLabels(serviceType, typesService);
+
+const labelsServices = ["bricolage", "cours", "animaux", "blob", "autre"];
+export const serviceCategories = generateLabels(serviceCategory, labelsServices);
+
+const statusServices = ["nouveau", "en attente", "en cours", "terminé", "litige"];
+export const serviceStatus = generateLabels(serviceStep, statusServices);
+
+export const getLabel = (value: string | any, array: Label[]): string => {
+    const find = array.find((cat) => cat.value === value?.toUpperCase())
+    return find ? find.label : ' - '
+}
+export const getValue = (label: string, array: Label[]): string => {
+    const find = (array.find((cat) => cat.label === label)?.value)
+    return find ? find : ' - '
+}
+export const getEnumVal = (element: any, enumArray: any) => Object.values(enumArray).indexOf(element);
+
+export const getDefaultImage = (category: string) => {
+    const catToFind = category.toLowerCase();
+    const foundCategory = defaultEventImage.find(category => category.type.toLowerCase() === catToFind);
+    return foundCategory ? foundCategory.image : defaultEventImage[0].image;
+}
+
+export const GetPoints = (service: Service, user?: Profile): number[] => {
+    const userResp = service.UserResp ? service.UserResp.Profile : null
+    const userP = user ? user : service.User.Profile
+    const hard = getEnumVal(service.hard, HardLevel)
+    const skill = getEnumVal(service.skill, SkillLevel)
+    const userPoints = getEnumVal(userP.assistance, AssistanceLevel)
+    const userRespPoints = userResp ? getEnumVal(userResp.assistance, AssistanceLevel) : 0
+    const type = getLabel(service.type, serviceTypes)
+    const base = Number(((hard / 2 + skill / 2) + 1).toFixed(1))
+    const points =
+        userResp && [base + userRespPoints / 2] ||
+        type === "offre" && [base + userPoints / 2] ||
+        [base, (base + 1.5)]
+    return points
+}
+
+
+export const generateContact = (user: User): string => {
+    return `
+        <br> <span className="font-medium">${user?.Profile.firstName} </span>
+        <br> par mail :<br>
+        <a href="mailto:${user?.email}" className="text-orange-500 font-medium underline">${user?.email}</a>
+        <br> ou télèphone :
+        <br> <a href="tel:${user?.Profile.phone}" className="text-orange-500 font-medium underline">${user?.Profile.phone}</a>`;
 };

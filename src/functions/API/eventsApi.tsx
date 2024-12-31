@@ -1,19 +1,10 @@
 import { EventDTO, EventP } from "../../types/class";
-import { useApi, createFormData, } from "./useApi";
+import { useApi, createFormData, handleApiCall, } from "./useApi";
 
 
 const api = useApi();
 const dataType = "events";
 
-
-const handleApiCall = async (apiCall: () => Promise<any>) => {
-    try {
-        const { data } = await apiCall();
-        return data;
-    } catch (error) {
-        console.error(error);
-    }
-};
 
 export const getEvents = async (): Promise<EventP[]> => handleApiCall(() => api.get(dataType));
 

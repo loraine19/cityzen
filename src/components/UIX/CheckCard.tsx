@@ -6,7 +6,7 @@ type chechCardProps = {
     setBoxSelected: any
     change: (e: any) => void;
 };
-export function CheckCard(props: chechCardProps,) {
+export default function CheckCard(props: chechCardProps,) {
     const { categoriesArray, change, setBoxSelected } = props
     const boxs = document.querySelectorAll(`[name="boxs"]`)
     const [check] = useState(true)

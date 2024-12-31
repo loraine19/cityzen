@@ -1,20 +1,13 @@
 import { Flag, FlagDTO } from "../../types/class";
-import { useApi } from "./useApi";
+import { handleApiCall, useApi } from "./useApi";
 
 const api = useApi();
 const dataType = "flags";
 
-const handleApiCall = async (apiCall: () => Promise<any>) => {
-    try {
-        const { data } = await apiCall();
-        return data;
-    } catch (error) {
-        console.error(error);
-    }
-};
 
 export const getFlags = async (): Promise<Flag[]> => handleApiCall(() => api.get(dataType));
 export const getFlagsEvent = async (): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/event`));
+export const getFlagsService = async (): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/service`));
 export const getFlagsPost = async (): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/post`));
 export const getFlagsByEventId = async (eventId: number): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/event/${eventId}`));
 

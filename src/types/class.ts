@@ -1,5 +1,4 @@
 
-
 export class Address {
     id: number = 0;
     address: string = '';
@@ -167,10 +166,12 @@ export class Service {
     address: Address = new Address();
     addressId: number = 0;
     userId: number = 0;
+    User: User = new User();
     image: string | File = '';
     title: string = '';
     category: ServiceCategory = ServiceCategory.CATEGORY_1;
     userIdResp: number = 0;
+    UserResp: User = new User();
     type: ServiceType = ServiceType.GET;
     skill: SkillLevel = SkillLevel.LEVEL_0;
     hard: HardLevel = HardLevel.LEVEL_0;
@@ -218,6 +219,7 @@ export enum ServiceType {
     GET,
     DO
 }
+export const serviceType = Object.values(ServiceType).filter(type => typeof type === 'string');
 
 export enum VoteTarget {
     SURVEY,
@@ -250,6 +252,7 @@ export enum ServiceStep {
     STEP_3,
     STEP_4
 }
+export const serviceStep = Object.values(ServiceStep).filter(step => typeof step === 'string');
 
 export enum IssueStep {
     STEP_0,
@@ -261,37 +264,35 @@ export enum EventCategory {
     CATEGORY_2,
     CATEGORY_3,
     CATEGORY_4,
-    CATEGORY_5,
-    CATEGORY_6
+    CATEGORY_5
 }
-export const eventCategory = Object.values(EventCategory).map(category => category);
+export const eventCategory = Object.values(EventCategory).filter(category => typeof category === 'string');
+
 
 export enum PostCategory {
     CATEGORY_1,
     CATEGORY_2,
     CATEGORY_3,
     CATEGORY_4,
-    CATEGORY_5,
-    CATEGORY_6
+    CATEGORY_5
 }
-export const postCategory = Object.values(PostCategory).map(category => category);
+export const postCategory = Object.values(PostCategory).filter(category => typeof category === 'string');
 
 export enum ServiceCategory {
     CATEGORY_1,
     CATEGORY_2,
     CATEGORY_3,
     CATEGORY_4,
-    CATEGORY_5,
-    CATEGORY_6
+    CATEGORY_5
 }
+export const serviceCategory = Object.values(ServiceCategory).filter(category => typeof category === 'string');
 
 export enum SurveyCategory {
     CATEGORY_1,
     CATEGORY_2,
     CATEGORY_3,
     CATEGORY_4,
-    CATEGORY_5,
-    CATEGORY_6
+    CATEGORY_5
 }
 
 export enum AssistanceLevel {
@@ -338,7 +339,6 @@ export class AddressDTO implements Partial<Address> {
 export class AddressUpdateDTO implements Partial<AddressDTO> { }
 
 
-
 // DTOs
 export class UserUpdateDTO implements Partial<User> { }
 export class UserDTO implements Partial<User> {
@@ -348,8 +348,6 @@ export class UserDTO implements Partial<User> {
     addressId: number = 0;
     Profile?: any
 }
-
-
 
 export class ProfileDTO implements Partial<Profile> {
     userIdSp: number = 0;
@@ -364,12 +362,12 @@ export class ProfileDTO implements Partial<Profile> {
     points?: number;
     skills?: string[];
 }
+
 export class ProfileUpdateDTO implements Partial<ProfileDTO> {
     skills: any;
     assistance?: AssistanceLevel | undefined;
     addressId?: number | undefined;
 }
-
 
 export class GroupDTO implements Partial<Group> {
     name: string = '';
@@ -512,10 +510,13 @@ export class AuthDTO {
 }
 
 //// for front only 
-
 export class action {
     icon?: string;
     title?: string;
     body?: string | Element | JSX.Element | Element[] | JSX.Element[];
     function?: any;
+}
+export class Label {
+    label: string = '';
+    value: string | any = '';
 }

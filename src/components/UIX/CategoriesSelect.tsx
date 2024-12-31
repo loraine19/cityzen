@@ -1,7 +1,8 @@
 import { Select, Option } from "@material-tailwind/react";
+import { Label } from "../../types/class";
 
 type categoriesSelectProps = {
-    categoriesArray: string[];
+    categoriesArray: string[] | Label[];
     change: (e: any) => void;
     categorySelected?: string;
     disabled?: boolean;
@@ -27,15 +28,14 @@ export function CategoriesSelect(props: categoriesSelectProps) {
             value={categorySelected}
             disabled={disabled}
         >
-            {categoriesArray.map((category: string, key: number) => {
+            {categoriesArray.map((category: any, key: number) => {
                 return (
                     <Option
                         className="rounded-full my-1 capitalize "
-                        value={category}
-                        id={category}
+                        value={typeof category === "string" ? category : category.value}
                         key={key}
                     >
-                        {category}
+                        {typeof category === "string" ? category : category.label}
                     </Option>
                 );
             })}

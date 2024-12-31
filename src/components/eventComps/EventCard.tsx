@@ -2,7 +2,7 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } fr
 import { Link } from "react-router-dom";
 import { AvatarStack } from "./AvatarStack";
 import ModifBtnStack from "../UIX/ModifBtnStack";
-import { eventdateInfo, toggleParticipant, isFlaged, GetDefaultImage, GenereMyActions } from '../../functions/GetDataFunctions';
+import { eventdateInfo, toggleParticipant, isFlaged, getDefaultImage, GenereMyActions, getLabel, eventCategories, dayMS } from '../../functions/GetDataFunctions';
 import { useContext, useEffect, useState } from "react";
 import { EventP, Flag, Participant, } from "../../types/class";
 import UserContext from "../../contexts/user.context";
@@ -11,23 +11,25 @@ import { deleteEvent } from "../../functions/API/eventsApi";
 
 type EventCardProps = { event: EventP, change: (e: any) => void, mines?: boolean, update?: () => void }
 export function EventCard(props: EventCardProps) {
+    const user = useContext(UserContext)
+    const userId = user.user.userId
+    //
     const [event, setEvent] = useState<EventP>(props.event)
     const { id, title, description, category, participantsMin, start } = event
     const { change, mines, update } = props
-    const user = useContext(UserContext)
-    const userId = user.user.userId
     const Igo: boolean = event.Participants.find((participant: Participant) => participant.userId === userId) ? true : false
     const [flags, setFlags] = useState<Flag[]>([])
     1 > 2 && console.log(flags)
     const [flagged, setFlagged] = useState<boolean>(false)
     const date = new Date(start)
     const now = new Date(Date.now())
-    const daysBefore: number = ((date.getTime() - now.getTime()) / 1000 / 60 / 60 / 24)
+    const daysBefore: number = ((date.getTime() - now.getTime()) / dayMS)
     const pourcentParticipants: number = Math.floor((event.Participants?.length) / participantsMin * 100)
     let dateClass = daysBefore < 15 && pourcentParticipants < 100 ? "OrangeChip" : "GrayChip";
     const disabledEditCTA = pourcentParticipants >= 100 ? true : false
-    const imgCategory: string | undefined | Blob = GetDefaultImage(category)
+    const imgCategory: string | undefined | Blob = getDefaultImage(category.toString())
     const [image] = useState<string>(props.event.image ? (props.event.image) as any : (imgCategory));
+    const actions = GenereMyActions(event, "evenement", deleteEvent)
     let haveImage = image ? true : false
 
     useEffect(() => {
@@ -67,11 +69,8 @@ export function EventCard(props: EventCardProps) {
                             {title} - {category}
                         </Typography>
                     }
-
-
                 </CardHeader>
                 <CardBody className="FixCardBody !flex-1">
-
                     <div className="flex items-center justify-between">
                         <Typography variant="h5" color="blue-gray" className="flex flex-col mb-1 ellipsis truncate hover:text-clip">
                             {title}<br></br>
@@ -81,7 +80,6 @@ export function EventCard(props: EventCardProps) {
                             <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
-
                     <Typography className=" text-ellipsis overflow-auto max-w-[75vw] h-[1.8rem]">
                         {description}
                     </Typography>
@@ -90,11 +88,11 @@ export function EventCard(props: EventCardProps) {
                 <CardFooter className="CardFooter">
                     {!mines ? <div className="flex items-center gap-2">
                         <button onClick={(e: any) => change(e)}>
-                            <Chip value={category} className="rounded-full h-max" color="cyan">
+                            <Chip value={getLabel(category, eventCategories)} className="rounded-full h-max" color="cyan">
                             </Chip></button>
                         <AvatarStack avatarDatas={event.Participants} />
                     </div> :
-                        <ModifBtnStack disabledEdit={disabledEditCTA} actions={GenereMyActions(event, "evenement", deleteEvent)} update={update} />}
+                        <ModifBtnStack disabledEdit={disabledEditCTA} actions={actions} update={update} />}
                     <div className="flex items-center gap-2">
                         <button onClick={() => toggleParticipant(event.id, userId, setEvent)}>
                             <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center gap-2"

@@ -1,17 +1,15 @@
 import { Button, Input, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
-import { useEffect, } from "react";
+import { Label } from "../../types/class";
 
 type selectSearchProps = {
     cat: string;
     setCat: any;
-    category: string[]
+    category: Label[]
     search: (value: string) => void
 };
-export function SelectSearch(props: selectSearchProps) {
+export default function SelectSearch(props: selectSearchProps) {
     const { cat, setCat, category, search } = props
-    useEffect(() => {
-        setCat(cat)
-    }, [cat])
+    //  useEffect(() => { setCat(cat) }, [cat])
     return (
         <div className="flex m-auto !rounded-full h-7 w-[90%] items-center bg-white shadow !mb-1.5" >
             <Menu placement="bottom-start">
@@ -27,15 +25,15 @@ export function SelectSearch(props: selectSearchProps) {
                     </Button>
                 </MenuHandler>
                 <MenuList className="flex flex-col">
-                    {category.map((name: string, index: number) => {
+                    {category.map((label: Label, index: number) => {
                         return (
                             <MenuItem
                                 key={index}
-                                value={name}
+                                value={label.value}
                                 className="flex items-center gap-2 !text-md"
-                                onClick={() => setCat(name)}
+                                onClick={() => { setCat(label.label); search(label.label); }}
                             >
-                                {name}
+                                {label.label}
                             </MenuItem>
                         );
                     })}
@@ -45,16 +43,11 @@ export function SelectSearch(props: selectSearchProps) {
                 type="search"
                 placeholder="Rechercher"
                 className="bg-none border-none"
-                labelProps={{
-                    className: "before:content-none after:content-none border-none",
-                }}
-                containerProps={{
-                    className: "min-w-0 border-none ",
-                }}
+                labelProps={{ className: "before:content-none after:content-none border-none" }}
+                containerProps={{ className: "min-w-0 border-none ", }}
                 value={cat}
-                onChange={(e) => { setCat(e.target.value); console.log(cat) }}
-                onSubmit={() => search(cat)}
-
+                onChange={(e) => setCat(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && search(cat)}
             />
             <Button
                 ripple={false}
