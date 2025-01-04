@@ -206,6 +206,10 @@ nav li .material-symbols-rounded {
     color: #1f2937;
 }
 
+.BtnDis:disabled {
+    opacity: 40% !important;
+}
+
 .CyanChip {
     background-color: #a5f3fc;
     color: #0e7490;
@@ -313,3 +317,10 @@ button {
 .FixCardHeader
 .FixCardBody
 .CardOverFlow */
+.Map {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.8rem;
+    display: flex;
+    flex: 1;
+}

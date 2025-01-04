@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
+
 //let url = "'https://back.imagindev-app.fr";
 //const url = import.meta.env.BASE_URL;
 const url = 'http://localhost:3000';
@@ -34,8 +35,7 @@ export const useApi = () => {
     })
     // tout de suite la reponse de la requète
     api.interceptors.response.use(
-        (response) => response,
-        (error) => {
+        (response) => response, async (error) => {
             console.log(error);
             if (error.response && error.response.status === 401) {
                 console.log("401error.response", error.response)
@@ -45,6 +45,7 @@ export const useApi = () => {
                 console.log("404 error.response", error.response)
                 if (error.response.data.message.includes("expired") || error.response.data.message.includes("jwt")) {
                     for (let i = 0; i < 1; i++) {
+                        console.log("try refreshAccess")
                         refreshAccess()
                     }
                 }
@@ -68,15 +69,29 @@ export const useApiRefresh = () => {
 
 export const refreshAccess = async () => {
     const refreshToken = Cookies.get('refreshToken');
+    !refreshToken && window.location.replace('/signin');
+    console.log("refreshToken", refreshToken)
     const data = { refreshToken };
     const apiRefresh = useApiRefresh();
-    const result = await apiRefresh.post('auth/refresh', data);
-    console.log("REFRESH", result)
+    let result;
+    try {
+        result = await apiRefresh.post('auth/refresh', data);
+        console.log("result refresh", result);
+    } catch (error) {
+        console.error("Error refreshing access token", error);
+        window.location.replace('/signin');
+        return;
+    }
+    if (!result || !result.data) {
+        window.location.replace('/signin');
+        return;
+    }
     const expirationDateAccess = getTokenExpirationDate(result.data.accessToken) || new Date();
     const expirationDateRefresh = getTokenExpirationDate(result.data.refreshToken) || new Date();
     Cookies.set('accessToken', result.data.accessToken, { expires: expirationDateAccess });
     Cookies.set('refreshToken', result.data.refreshToken, { expires: expirationDateRefresh });
-    location.reload();
+    location.reload()
+    return result;
 };
 
 

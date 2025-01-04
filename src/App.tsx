@@ -42,7 +42,6 @@ import { Test } from "./pages/Test";
 import IssueEditPage from "./pages/service/issue/IssueEditPage";
 
 
-
 function App() {
 
 
@@ -75,7 +74,7 @@ function App() {
                             <Route path="/litige/edit/:id" element={<IssueEditPage />} />
 
                             <Route path="/conciliation" element={<ConciliationListPage />} />
-                            <Route path="/conciliation/:id" element={<ConciliationDetailPage />} />
+                            <Route path="/conciliation/:id" element={<IssueDetailPage />} />
 
                             <Route path="/evenement" element={<EventListPage />} />
                             <Route path="/evenement/create" element={<EventCreatePage />} />

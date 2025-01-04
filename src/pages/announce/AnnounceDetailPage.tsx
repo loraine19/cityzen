@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import NavBarTop from '../../components/UIX/NavBarTop';
 import SubHeader from '../../components/UIX/SubHeader';
-import CTAMines from '../../components/UIX/CATMines';
+import CTAMines from '../../components/UIX/CTAMines';
 import AnnounceDetailComp from '../../components/announceComps/AnnounceDetailComp';
 import UserContext from '../../contexts/user.context';
 import { action, Post } from '../../types/class';

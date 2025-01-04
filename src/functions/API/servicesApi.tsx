@@ -1,4 +1,4 @@
-import { ServiceDTO, Service } from "../../types/class";
+import { ServiceDTO, Service, ServiceStep } from "../../types/class";
 import { useApi, createFormData, handleApiCall, } from "./useApi";
 
 
@@ -16,14 +16,13 @@ export const getServiceById = async (id: number): Promise<Service> => handleApiC
 
 export const getServicesMines = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/mines`));
 export const getServicesImIn = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/imin`));
+export const getServicesImInStatus = async (status: any): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/iminStatus?status=${status}`));
 export const getServicesImInGet = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/imin/get`));
 export const getServicesImInDo = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/imin/do`));
 export const getServicesIResp = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/iresp`));
 export const getServicesGet = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/get`));
 export const getServicesDo = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/do`));
-
 export const getServicesValidated = async (): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/validated`));
-
 export const getServicesByUser = async (id: number): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/user/${id}`));
 export const getServicesByResp = async (id: number): Promise<Service[]> => handleApiCall(() => api.get(`${dataType}/resp/${id}`));
 

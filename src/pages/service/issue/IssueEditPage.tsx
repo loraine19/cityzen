@@ -12,14 +12,13 @@ import { Issue, Profile, Service } from '../../../types/class';
 import ServiceIssueCard from '../../../components/servicesComps/ServiceIssueCard';
 import { ConfirmModal } from '../../../components/UIX/ConfirmModal';
 
-export default function FlagEditPage() {
+export default function IssueEditPage() {
     const { id } = useParams()
     const { user } = useContext(UserContext)
     const { data, setDataInLocal } = useContext(DataContext)
     const { services, issues, profiles } = data
-    const elementFound = issues.find((element: Issue) => element.id === Number(id));
-    const issue = elementFound ? elementFound : {} as Issue;
-    const service = services.find((element: Service) => element.id === issue.service_id)
+    const [issue, setIssue] = useState<Issue>({} as Issue)
+    const [service, setService] = useState<Service>({} as Service)
     const navigate = useNavigate();
     const [newIssue, setNewIssue] = useState<Partial<Issue>>(issue);
 

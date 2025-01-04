@@ -4,7 +4,7 @@ import ModifBtnStack from "../UIX/ModifBtnStack";
 import { Flag, Like, Post } from "../../types/class";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context";
-import { toggleLike, isFlaged, GenereMyActions, postCategories, getLabel } from "../../functions/GetDataFunctions";
+import { toggleLike, isFlaged, GenereMyActions, postCategories, getLabel, getEnumVal } from "../../functions/GetDataFunctions";
 import { getFlagsPost } from "../../functions/API/flagsApi";
 import { deletePost } from "../../functions/API/postsApi";
 
@@ -23,6 +23,7 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
     const label = getLabel(category, postCategories)
     // console.log(label, category)
     const myActions = GenereMyActions(post, "annonce", deletePost)
+
 
     useEffect(() => {
         const onload = async () => {

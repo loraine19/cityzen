@@ -20,7 +20,7 @@ export interface post extends postBase {
 }
 
 //// type for event
-export type adressGps = { lat: number, lng: number }
+export type addressGps = { lat: number, lng: number }
 
 export type eventBase = {
     id: number,

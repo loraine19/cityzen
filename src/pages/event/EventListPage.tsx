@@ -11,6 +11,7 @@ import CalendarCompLarge from "../../components/calendarComps/CalendarCompLarge"
 import { eventCategories, getDays, getLabel, getValue } from "../../functions/GetDataFunctions";
 import { EventP } from "../../types/class";
 import { getEvents, getEventsIgo, getEventsMines, getEventsValidated } from '../../functions/API/eventsApi';
+import Skeleton from "react-loading-skeleton";
 
 export default function EventListPage() {
     const [events, setEvents] = useState<EventP[]>([]);
@@ -25,6 +26,7 @@ export default function EventListPage() {
     const [tabSelected, setTabSelected] = useState<string>("");
     const [categorySelected, setCategorySelected] = useState<string>('');
     const [searchParams, setSearchParams] = useSearchParams();
+    const [loading, setLoading] = useState<boolean>(true);
     const params = { tab: searchParams.get("search"), category: searchParams.get("category") }
     !eventCategories.some(category => category.value === '') && eventCategories.unshift({ label: 'tous', value: '' })
 
@@ -33,6 +35,7 @@ export default function EventListPage() {
         const IgoEvents = await getEventsIgo();
         const validatedEvents = await getEventsValidated();
         const myEvents = await getEventsMines();
+        events.length > 0 && setLoading(false);
         setEvents(events);
         setMyEvents(myEvents);
         setIgoEvents(IgoEvents);
@@ -80,7 +83,7 @@ export default function EventListPage() {
     };
 
     useEffect(() => {
-        eventList.length > 0 ? setNotif('') : setNotif(`Aucun évènement ${tabSelected} ${categorySelected !== '' ? getLabel(categorySelected, eventCategories).toLowerCase() : ''} na été trouvé`);
+        eventList.length < 0 && !loading && setNotif(`Aucun évènement ${tabSelected} ${categorySelected !== '' ? getLabel(categorySelected, eventCategories).toLowerCase() : ''} na été trouvé`);
     }, [eventList])
 
 
@@ -110,9 +113,11 @@ export default function EventListPage() {
             </header>
             {view === "view_agenda" && (
                 <main className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
-                    {eventList.map((event: EventP) => (
-                        <EventCard key={event.id} event={event} change={change} mines={mines} update={UpdateList} />
-                    ))}
+                    {loading ? <Skeleton count={2} height={300} className="my-2.5 !rounded-xl shadow-lg" /> :
+                        eventList.map((event: EventP) => (
+                            <EventCard key={event.id} event={event} change={change} mines={mines} update={UpdateList} />
+                        ))
+                    }
                 </main>
             )}
             {view === "event" && <main><CalendarCompLarge eventList={getDays(events)} /></main>}

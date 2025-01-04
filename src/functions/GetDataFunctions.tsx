@@ -1,7 +1,7 @@
 import { eventUser, postUser, userProfile } from '../types/user';
 import { all, flag, notif, targetUser } from "../types/type";
-import { action, Address, eventCategory, EventP, Flag, Label, Pool, Post, postCategory, Profile, Service, Survey, User, serviceType, serviceCategory, HardLevel, SkillLevel, AssistanceLevel, serviceStep } from '../types/class';
-import { GetAdressGps, GetAdressString } from './GeoMapFunction';
+import { action, Address, eventCategory, EventP, Flag, Label, Pool, Post, postCategory, Profile, Service, Survey, User, serviceType, serviceCategory, HardLevel, SkillLevel, AssistanceLevel, serviceStep, Issue } from '../types/class';
+import { GetAddressGps, GetAddressString } from './GeoMapFunction';
 import { deleteParticipant, postParticipant } from './API/partcipantsApi';
 import { getEventById } from './API/eventsApi';
 import { getAddresses, postAddress } from './API/addressApi';
@@ -45,7 +45,7 @@ export const getImageBlob2 = (event: any, setImgBlob: any, formik: any) => {
 export const getUsersDetail = (arrayUser: User[], arraySearch: Profile[]) => {
     return arraySearch.map((user: any) => { return { ...user, ...arrayUser.find((element: any) => element.id === user.id) } })
 }
-export const getAdress = (id: number, arraySearch: Address[]): Address | undefined => {
+export const getAddress = (id: number, arraySearch: Address[]): Address | undefined => {
     return arraySearch.filter((element: any) => element.id === id)[0]
 }
 export const getUserDetail = (id: number, arraySearch: Profile[]): Profile | undefined => {
@@ -256,18 +256,18 @@ export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefin
 
 
 ///// GET ADRESS FROM FORM 
-export const FindAdressData = async (addressSaisie: string, array: Address[], data: any, formik: { values: any }) => {
-    const gps = await GetAdressGps(addressSaisie);
-    const addressFull = await GetAdressString(gps?.lat!, gps?.lng!)
-    const findAdress = array.find((element: Address) => (element.city === addressFull?.city) && (element.address === addressFull?.address) && (element.zipcode === addressFull?.zipcode));
-    if (!findAdress) {
-        data.address.push({ id: data.address.length + 1, ...addressFull })
-        formik.values.address_id = data.address.length;
-        formik.values.address = addressFull?.address
-        return data.address[data.address.length - 1]
-    }
-    else return findAdress
-}
+// export const FindAdressData = async (addressSaisie: string, array: Address[], data: any, formik: { values: any }) => {
+//     const gps = await GetAddressGps(addressSaisie);
+//     const addressFull = await GetAddressString(gps?.lat!, gps?.lng!)
+//     const findAdress = array.find((element: Address) => (element.city === addressFull?.city) && (element.address === addressFull?.address) && (element.zipcode === addressFull?.zipcode));
+//     if (!findAdress) {
+//         data.address.push({ id: data.address.length + 1, ...addressFull })
+//         formik.values.address_id = data.address.length;
+//         formik.values.address = addressFull?.address
+//         return data.address[data.address.length - 1]
+//     }
+//     else return findAdress
+// }
 
 //// GET CATEGORI SERVICE 
 export const GetCategory = (service: Service, categories: Label[]): string => {
@@ -359,28 +359,30 @@ export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
 }
 
 //
-export const GenereMyActions = (element: Post | EventP | Service | Survey, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): action[] => {
+export const GenereMyActions = (element: Post | EventP | Service | Survey | Issue | Pool, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): action[] => {
     const navigate = useNavigate()
+    let title = ''
+    'title' in element ? title = element.title : 'litige'
     const actions = [
         {
             icon: handleOpen ? 'Supprimer' : 'close',
             title: "Confirmer la suppression",
-            body: "Confirmer la suppression de " + element.title,
+            body: "Confirmer la suppression de " + title,
             function: async () => { await deleteRoute(element.id); handleOpen && handleOpen(); },
         },
         {
             icon: handleOpen ? 'Modifier' : 'edit',
             title: "Confirmer la modification",
-            body: "Confirmer la modification de " + element.title,
+            body: "Confirmer la modification de " + title,
             function: () => { navigate(`/${type}/edit/${element.id}`); handleOpen && handleOpen(); },
         },
 
     ];
     icon3 && actions.length < 3 && actions.push({
         icon: handleOpen ? 'Relancer' : 'groups',
-        title: "Relancer " + element.title,
-        body: "Relancer " + element.title,
-        function: () => { console.log(`Voulez-vous relancer ${element.title}?`) }
+        title: "Relancer " + title,
+        body: "Relancer " + title,
+        function: () => { console.log(`Voulez-vous relancer ${title}?`) }
     })
     return actions
 }

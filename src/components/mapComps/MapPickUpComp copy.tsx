@@ -1,80 +1,43 @@
 import { useState, useEffect, useRef } from 'react';
-// import { createRoot } from 'react-dom/client';
-import {
-    APIProvider,
-    ControlPosition,
-    MapControl,
-    AdvancedMarker,
-    Map,
-    useMap,
-    useMapsLibrary,
-    useAdvancedMarkerRef,
-    // AdvancedMarkerRef
-} from '@vis.gl/react-google-maps';
+import { GM_API_KEY } from '../../../env.local';
+import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 
-const API_KEY: any = "AIzaSyDNjhPXdHwsECXX68PZ_P3LikGEUdYNBNA"
 
-export default function MapPickUpComp() {
-
+export default function MapPickUpComp(props: { address: any, setAddress: any, text?: string, inputStyle?: boolean }) {
+    //
+    const { address, setAddress, text } = props
     const [selectedPlace, setSelectedPlace] =
         useState<google.maps.places.PlaceResult | null>(null);
-    const [markerRef, marker] = useAdvancedMarkerRef();
 
+    5 < 4 && console.log("avoid compile error ", selectedPlace)
     return (
         <APIProvider
-            apiKey={API_KEY}
+            apiKey={GM_API_KEY}
             solutionChannel='GMP_devsite_samples_v3_rgmautocomplete'>
-            <Map
-                mapId={'bf51a910020fa25a'}
-                defaultZoom={3}
-                defaultCenter={{ lat: 0, lng: 0 }}
-                gestureHandling={'greedy'}
-                disableDefaultUI={true}
-            >
-                <AdvancedMarker ref={markerRef} position={null} />
-            </Map>
-            <MapControl position={ControlPosition.TOP}>
-                <div className="autocomplete-control">
-                    <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-                </div>
-            </MapControl>
-            <MapHandler place={selectedPlace} marker={marker} />
+            <PlaceAutocomplete onPlaceSelect={setSelectedPlace} address={address} setAddress={setAddress} text={text} inputStyle={props.inputStyle} />
         </APIProvider>
     );
 };
 
-interface MapHandlerProps {
-    place: google.maps.places.PlaceResult | null;
-    marker: google.maps.marker.AdvancedMarkerElement | null;
-}
-
-const MapHandler = ({ place, marker }: MapHandlerProps) => {
-    const map = useMap();
-    useEffect(() => {
-        if (!map || !place || !marker) return;
-        if (place.geometry?.viewport) {
-            map.fitBounds(place.geometry?.viewport);
-        }
-        marker.position = place.geometry?.location;
-    }, [map, place, marker]);
-
-    return null;
-};
 
 interface PlaceAutocompleteProps {
     onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
+    address: string,
+    setAddress: any,
+    text?: string,
+    inputStyle?: boolean
 }
 
-const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
-    const [placeAutocomplete, setPlaceAutocomplete] =
-        useState<google.maps.places.Autocomplete | null>(null);
+
+const PlaceAutocomplete = ({ onPlaceSelect, setAddress, text, inputStyle }: PlaceAutocompleteProps) => {
+    const [placeAutocomplete, setPlaceAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const places = useMapsLibrary('places');
 
     useEffect(() => {
         if (!places || !inputRef.current) return;
         const options = {
-            fields: ['geometry', 'name', 'formatted_address']
+            fields: ['formatted_address', 'address_components', 'address_components', 'place_id', 'geometry']
         };
         setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
     }, [places]);
@@ -84,16 +47,26 @@ const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
         if (!placeAutocomplete) return;
         placeAutocomplete.addListener('place_changed', () => {
             onPlaceSelect(placeAutocomplete.getPlace());
+            setAddress(inputRef.current?.value);
         });
-    }, [onPlaceSelect, placeAutocomplete]);
+    }, [onPlaceSelect, placeAutocomplete, inputRef]);
 
+    const changeValue = () => {
+        setAddress(inputRef.current?.value)
+
+    }
+    const placeHolder = text ? text : "choisir une adresse"
+    const roundedCyan = 'px-3 py-3 rounded-full border border-cyan-500 text-center text-xs placeholder:font-bold placeholder:uppercase placeholder:text-md placeholder:text-cyan-500  placeholder:capitalize'
+    const classic = "placeholder:text-blue-gray-500 placeholder:!text-sm pt-4 border-b-[1px] border-b-gray-400 text-small pb-1"
 
     return (
-        <div className="flex justify-center flex-col gap-4 h-full w-full rounded-full bg-transparent">
-            <input className='p-4 rounded-full ' ref={inputRef} />
-            <p className='bg-white p-5'>{inputRef.current?.value} </p>
+
+        <div className="flex justify-center flex-col  h-full w-full rounded-full bg-transparent">
+            <input className={`${inputStyle ? classic : roundedCyan} focus:outline-none bg-white`} name="adress" ref={inputRef} onChange={changeValue} placeholder={placeHolder} />
         </div>
     );
 };
+
+
 
 

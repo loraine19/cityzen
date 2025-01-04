@@ -8,10 +8,10 @@ import SubHeader from "../../components/UIX/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
 import ServiceComp from "../../components/servicesComps/ServiceComp";
 import { label } from "../../types/label";
-import { Service } from "../../types/class";
+import { Service, ServiceStep } from "../../types/class";
 import UserContext from "../../contexts/user.context"
 import { serviceCategories, getValue, getLabel } from '../../functions/GetDataFunctions';
-import { getServices, getServicesDo, getServicesGet, getServicesImIn, getServicesImInGet, getServicesImInDo } from '../../functions/API/servicesApi';
+import { getServices, getServicesDo, getServicesGet, getServicesImIn, getServicesImInGet, getServicesImInDo, getServicesImInStatus } from '../../functions/API/servicesApi';
 
 export default function ServicesPage() {
     const { user } = useContext(UserContext)
@@ -19,12 +19,17 @@ export default function ServicesPage() {
     const [notif, setNotif] = useState<string>('');
     const [services, setServices] = useState<Service[]>([]);
     const [mines, setMines] = useState<boolean>(false);
-    const [arrayToFilter, setArrayToFilter] = useState<Service[]>([]);
+    const [arrayToFilter] = useState<Service[]>([]);
     const [doServices, setDoServices] = useState<Service[]>([]);
     const [getsServices, setGetServices] = useState<Service[]>([]);
     const [myservices, setMyservices] = useState<Service[]>([]);
     const [myServicesGet, setMyServicesGet] = useState<Service[]>([]);
     const [myServicesDo, setMyServicesDo] = useState<Service[]>([]);
+    const [myServicesNew, setMyServicesNew] = useState<Service[]>([]);
+    const [myServicesWait, setMyServicesWait] = useState<Service[]>([]);
+    const [myServicesDoing, setMyServicesDoing] = useState<Service[]>([]);
+    const [myServicesDone, setMyServicesDone] = useState<Service[]>([]);
+    const [myServicesLitige, setMyServicesLitige] = useState<Service[]>([]);
     const [tabSelected, setTabSelected] = useState<string>('');
     const [serviceList, setServiceList] = useState<Service[]>([]);
     const [tabledList, setTabledList] = useState<Service[]>([]);
@@ -39,6 +44,12 @@ export default function ServicesPage() {
         const myservices = await getServicesImIn();
         const myServicesGet = await getServicesImInGet();
         const myServicesDo = await getServicesImInDo();
+        const myServicesNew = await getServicesImInStatus('STEP_0');
+        const myServicesWait = await getServicesImInStatus('STEP_1');
+        const myServicesDoing = await getServicesImInStatus('STEP_2');
+        const myServicesDone = await getServicesImInStatus('STEP_3');
+        const myServicesLitige = await getServicesImInStatus('STEP_4');
+
         const doServices = await getServicesDo();
         const getsServices = await getServicesGet();
         setServices(services);
@@ -47,6 +58,11 @@ export default function ServicesPage() {
         setGetServices(getsServices);
         setMyServicesGet(myServicesGet);
         setMyServicesDo(myServicesDo);
+        setMyServicesNew(myServicesNew);
+        setMyServicesWait(myServicesWait);
+        setMyServicesDoing(myServicesDoing);
+        setMyServicesDone(myServicesDone);
+        setMyServicesLitige(myServicesLitige);
         switch (tabSelected) {
             case "myservices": setServiceList(myservices); break;
             case "get": setServiceList(getsServices); break;
@@ -62,7 +78,7 @@ export default function ServicesPage() {
     }, []);
 
 
-    const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé"];
+    const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé", "litige"];
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray);
 
     const selectBox = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,16 +92,18 @@ export default function ServicesPage() {
         const filters = [
             boxSelected.includes(boxArray[0]) ? myServicesDo : [],
             boxSelected.includes(boxArray[1]) ? myServicesGet : [],
-            boxSelected.includes(boxArray[2]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 0) : [],
-            boxSelected.includes(boxArray[3]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 1) : [],
-            boxSelected.includes(boxArray[4]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 2) : [],
-            boxSelected.includes(boxArray[5]) ? arrayToFilter.filter(service => (service.userId === user.userId || service.userIdResp === user.userId) && service.status === 3) : [],
+            boxSelected.includes(boxArray[2]) ? myServicesNew : [],
+            boxSelected.includes(boxArray[3]) ? myServicesWait : [],
+            boxSelected.includes(boxArray[4]) ? myServicesDoing : [],
+            boxSelected.includes(boxArray[5]) ? myServicesDone : [],
+            boxSelected.includes(boxArray[6]) ? myServicesLitige : [],
         ];
+        console.log(filters)
         return [...new Set(filters.flat())];
     };
 
     useEffect(() => {
-        if (mines) setServices(filterCheck(boxSelected));
+        if (mines) setServiceList(filterCheck(boxSelected));
     }, [boxSelected]);
 
     const filterTab = async (newArray: Service[], value: string) => {

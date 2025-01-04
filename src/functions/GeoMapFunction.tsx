@@ -1,64 +1,44 @@
-import {
-    setKey,
-    setLanguage,
-    setRegion,
-    fromAddress,
-    fromLatLng,
-} from "react-geocode";
-import { AddressDTO } from "../types/class";
+import { setKey, setLanguage, setRegion, fromAddress, fromLatLng } from "react-geocode";
+import { AddressDTO } from "../types/class"
+import { GM_API_KEY } from "../../env.local";
 
-
-setKey("AIzaSyDNjhPXdHwsECXX68PZ_P3LikGEUdYNBNA");
 setLanguage("fr");
 setRegion("fr");
+setKey(GM_API_KEY);
+console.log('GM_API_KEY', GM_API_KEY)
 
 // Get latitude & longitude from address.
-export const GetAdressGps = async (adress: string) => {
+export const GetAddressGps = async (address: string) => {
     try {
-        let adressGps = { lat: 0, lng: 0 }
-        const { results } = await fromAddress(adress);
-        adressGps = results[0].geometry.location;
-        return (adressGps)
+        let addressGps = { lat: 0, lng: 0 }
+        const { results } = await fromAddress(address);
+        addressGps = results[0].geometry.location;
+        return (addressGps)
     }
     catch (error) { console.log(error) }
 }
 
-// Get latitude & longitude from address.
-export const GetAdressString = async (lat: number, lng: number) => {
-    try {
-        let adressString = {} as any
-        const { results } = await fromLatLng(lat, lng);
-        adressString = {
-            address: results[0].address_components[0]?.long_name + " " + results[0].address_components[1].long_name,
-            city: results[0].address_components[2]?.long_name,
-            zipcode: (results[0].address_components[6]?.long_name),
-            lat: lat,
-            lng: lng,
-            formated: results[0].formatted_address
-        }
-
-        return (adressString)
-    }
-    catch (error) { console.log(error) }
-}
 
 export const GetAddressDataByGps = async (lat: number, lng: number) => {
-    try {
-        let adressString = {} as any
-        const { results } = await fromLatLng(lat, lng);
-        adressString = {
-            address: results[0].address_components[0]?.long_name + " " + results[0].address_components[1].long_name,
-            city: results[0].address_components[2]?.long_name,
-            zipcode: (results[0].address_components[6]?.long_name),
-            lat: results[0].geometry.location.lat,
-            lng: results[0].geometry.location.lng,
+    if (lat !== 0 && lng !== 0) {
+        try {
+            let addressString = {} as any
+            const { results } = await fromLatLng(lat, lng);
+            addressString = {
+                address: results[0].address_components[0]?.long_name + " " + results[0].address_components[1].long_name,
+                city: results[0].address_components[2]?.long_name,
+                zipcode: (results[0].address_components[6]?.long_name),
+                lat: results[0].geometry.location.lat,
+                lng: results[0].geometry.location.lng,
+            }
+            return (addressString)
         }
-        return (adressString)
+        catch (error) { console.log(error) }
     }
-    catch (error) { console.log(error) }
 }
 
 export const GetAddressObject = async (address: string) => {
+
     try {
         let addressObject = {} as AddressDTO
         const { results } = await fromAddress(address)

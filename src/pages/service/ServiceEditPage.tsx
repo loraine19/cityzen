@@ -1,38 +1,49 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import DataContext from '../../contexts/data.context';
-import { Service } from '../../types/class';
+import { useEffect, useState } from 'react';
+import { Service, HardLevel, SkillLevel } from '../../types/class';
 import { ConfirmModal } from '../../components/UIX/ConfirmModal';
 import { ServiceForm } from '../../components/servicesComps/ServiceForm';
+import { getServiceById, patchService } from '../../functions/API/servicesApi'
 
 
 export default function ServiceEditPage() {
-
+    const [service, setService] = useState<Service>({} as Service);
     const { id } = useParams()
-    const { data, setDataInLocal } = useContext(DataContext)
-    const { services } = data
 
-    const found = (services.find((Service: Service) => Service.id == parseInt(id!)))
-    useEffect(() => { !found && navigate(`/annonce ${id}`) }, [id])
-    const [selectedService] = useState<Service>(found ? (found) : (services[0]))
+    const fetch = async () => {
+        const idS = id ? parseInt(id) : 0;
+        const fetched = await getServiceById(idS);
+        setService(fetched);
+        console.log(fetched)
+        formik.values.category = fetched.category;
+        formik.values.title = fetched.title;
+        formik.values.description = fetched.description;
+        formik.values.image = fetched.image;
+        formik.values.category = fetched.category;
+        formik.values.createdAt = fetched.createdAt;
+        formik.values.hard = ((HardLevel[fetched.hard]) as unknown as HardLevel);
+        formik.values.skill = ((SkillLevel[fetched.skill]) as unknown as SkillLevel)
+        formik.values.type = fetched.type;
+        setValue(fetched.category.toString().toLowerCase())
+        //navigate(`/evenement/${id}`
+    };
+
+    useEffect(() => {
+        fetch()
+    }, []);
     const navigate = useNavigate();
-    const [newService] = useState<Service>(selectedService);
+    const [newService] = useState<Service>(service);
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
-        skill: string(),
-        hard: string()
-
     })
     const [value, setValue] = useState("");
-
-
     const [open, setOpen] = useState(false);
     const formik = useFormik({
-        initialValues: newService as Service,
+        initialValues: newService,
         validationSchema: formSchema,
         onSubmit: values => {
             formik.values = values
@@ -41,10 +52,12 @@ export default function ServiceEditPage() {
         }
     });
 
-    const index = data.services.findIndex((element: any) => element.id === newService.id);
-    function saveService() {
-        data.services[index] = formik.values as Service
-        setDataInLocal({ ...data, services: data.services })
+    const updateFunction = async () => {
+        formik.values.hard = HardLevel[formik.values.hard] as unknown as HardLevel;
+        formik.values.skill = SkillLevel[formik.values.skill] as unknown as SkillLevel;
+        const { ...rest } = formik.values
+        const updateData = { ...rest }
+        return await patchService(service.id, updateData)
     }
 
 
@@ -54,10 +67,12 @@ export default function ServiceEditPage() {
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={() => {
-                    saveService();
-                    navigate(`/service?serach=mines`);
-                    setOpen(false)
+                handleConfirm={async () => {
+                    const ok = await updateFunction();
+                    if (ok) {
+                        navigate(`/service/${ok.id}`);
+                        setOpen(false)
+                    }
                 }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />

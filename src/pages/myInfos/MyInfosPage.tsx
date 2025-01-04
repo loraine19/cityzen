@@ -13,12 +13,13 @@ import { GetAddressObject } from '../../functions/GeoMapFunction';
 import { getAddresses, postAddress } from '../../functions/API/addressApi';
 import parse from 'html-react-parser';
 import { patchProfile } from '../../functions/API/profilesApi';
+import { AddressInputOpen } from '../../components/mapComps/AddressInputOpen';
 
 export default function MyInfosPage() {
     const [user, setUser] = useState<User>({} as User);
     const [Address, setAddress] = useState<Address>({} as Address);
     const navigate = useNavigate();
-    const [newAddress, setNewAddress] = useState<string>(`${Address.address} ${Address.zipcode} ${Address.city}`);
+    // const [newAddress, setNewAddress] = useState<string>(`${Address.address} ${Address.zipcode} ${Address.city}`);
     const [newProfile, setNewProfile] = useState<ProfileDTO>({} as ProfileDTO);
     const [imgBlob, setImgBlob] = useState<string>("")
     const [skillList, setSkillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
@@ -39,7 +40,7 @@ export default function MyInfosPage() {
             const { Profile } = user
             setNewProfile(user.Profile)
             setAddress(Profile.Address)
-            setNewAddress(`${Profile.Address.address} ${Profile.Address.zipcode} ${Profile.Address.city}`)
+            //setNewAddress(`${Profile.Address.address} ${Profile.Address.zipcode} ${Profile.Address.city}`)
             setSkillList(Profile.skills.toString().split(','))
             setImgBlob(user.Profile.image as string)
             formik.values.firstName = Profile.firstName
@@ -61,7 +62,10 @@ export default function MyInfosPage() {
         firstName: string().required("Le prémon est obligatoire").min(2, "minmum 2 lettres"),
         lastName: string().required("Le Nom est obligatoire").min(2, "minmum 2 lettres"),
         phone: string().required("Le Numéro est obligatoire").min(10, "minmum 2 caractères").max(14, "maxmum 14 caractères").matches(/^\+33/, "Le Numéro doit commencer par +33"),
-        Address: object().required("L'adresse est obligatoire")
+        Address: object({
+            city: string().required("Ville est obligatoire"),
+            zipcode: string().required("Code postal est obligatoire"),
+        })
     })
 
     /// FORMIK SUBMIT
@@ -78,11 +82,11 @@ export default function MyInfosPage() {
     /// UPDATE FORMIK VALUES ON CHANGE 
     useEffect(() => {
         async function updateAddress() {
-            formik.values.Address = await GetAddressObject(newAddress);
+            formik.values.Address = Address
             formik.values.addressId = formik.values.Address?.id
         }
         updateAddress()
-    }, [newProfile, newAddress])
+    }, [newProfile, Address])
 
 
 
@@ -97,6 +101,7 @@ export default function MyInfosPage() {
         const addressList = await getAddresses()
         const addressFind = addressList.find((address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
         if (!addressFind) {
+            console.log('post', AdressToSearch)
             const post = await postAddress(AdressToSearch)
             post ? (formik.values.Address = post) : (formik.values.Address = '')
         }
@@ -104,6 +109,7 @@ export default function MyInfosPage() {
             addressFind?.id !== newProfile.addressId && (formik.values.Address = addressFind);
         }
         formik.values.addressId = formik.values.Address.id
+        console.log("formik.values.Address", formik.values.Address)
     }
 
     /// DESTRCUCTURING FORMIK VALUES
@@ -135,7 +141,7 @@ export default function MyInfosPage() {
                     }
                 }}
                 title={"Confimrer la modification"}
-                element={parse((JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")) as unknown as string} />
+                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
 
             <div className=" w-respLarge flex justify-between p-4">
                 <Link to={`/signin`}>
@@ -181,13 +187,14 @@ export default function MyInfosPage() {
                             <Input label="Nom" name="lastName" variant="standard" onChange={formik.handleChange} value={lastName} />
                             <Typography className='text-xs error'>{formik.errors.phone as string} </Typography>
                             <Input label="Télephone" name="phone" variant="standard" onChange={formik.handleChange} value={phone} />
-                            <Typography className='text-xs error'>{formik.errors.addressId as string} </Typography>
-                            <Typography className='text-xs max-w-50  max-h-4 overflow-auto'>{formik.errors.addressId as string}  </Typography>
 
-                            <div className="relative w-full min-w-[200px] h-11 pb-2">
+                            <AddressInputOpen address={formik.values.Address} setAddress={setAddress}
+                                placeHolder={Address.address ? Address?.address + " " + Address?.zipcode + " " + Address?.city : ''} />
+                            <Typography className='text-xs error pt-2'>
+                                {formik.errors.Address?.zipcode && formik.errors.Address?.city ? `${formik.errors.Address.zipcode} ${formik.errors.Address.city}` : '' as string}
+                            </Typography>
 
-                                <MapPickUpComp address={Address} setAddress={setNewAddress} inputStyle={true} text={newAddress} />
-                                <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] after:content[''] after:block after:w-full after:absolute after:-bottom-1.5 after:border-b-2 after:scale-x-0 peer-focus:after:scale-x-100 after:transition-transform after:duration-300 peer-placeholder-shown:leading-[4.25] text-gray-500 peer-focus:text-gray-900 after:border-gray-500 peer-focus:after:border-gray-900">addresse </label></div>
+
                             <Select className="p-5 capitaliz " label="Assistance" name="level" variant='standard'
                                 value={value}
                                 onChange={(val: any) => { setValue(val); formik.values.assistance = val }}>

@@ -1,17 +1,15 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress, Avatar } from "@material-tailwind/react";
-import { adressGps } from '../../types/type'
 import { Link } from "react-router-dom";
 import { AvatarStack } from "./AvatarStack";
-import { MapComp } from "../mapComps/MapComp";
-import { useContext, useEffect, useState } from "react";
-import { GetAdressGps } from "../../functions/GeoMapFunction";
+import { useContext, useState } from "react";
 import { dayMS, eventdateInfo, toggleParticipant } from "../../functions/GetDataFunctions";
 import { EventP, Participant } from '../../types/class';
 import { defaultEventImage } from "../../datas/enumsCategories";
 import UserContext from "../../contexts/user.context";
+import Skeleton from "react-loading-skeleton";
+import AddressMapOpen from "../mapComps/AddressMapOpen";
 
 type EventCardProps = { Event: EventP, change?: (e: any) => void, setEvent?: any }
-
 export function EventDetailCard(props: EventCardProps) {
     const event = props.Event
     const setEvent = props.setEvent
@@ -23,21 +21,12 @@ export function EventDetailCard(props: EventCardProps) {
     const daysBefore: number = ((date.getTime() - (new Date(Date.now())).getTime()) / dayMS)
     const pourcentParticipants: number = Math.floor((Participants.length) / participantsMin * 100)
     const dateClass = daysBefore < 15 && pourcentParticipants < 100 ? "OrangeChip" : "GrayChip";
-    const [adressGps, setAdressGps] = useState<adressGps>({ lat: 0, lng: 0 })
-
     const imgCategory: string | undefined | Blob = (defaultEventImage.find(categoryD => categoryD.type === category.toString()) ?
         defaultEventImage.find(categoryD => categoryD.type === category.toString())?.image : defaultEventImage[0].image);
 
     const [image] = useState<string>(props.Event.image ? (props.Event.image) as any : (imgCategory));
-    const userOrga = User.Profile
 
-    useEffect(() => {
-        const loadGps = async () => {
-            const adressGpsLoaded = await GetAdressGps(Address.address + " " + Address.zipcode + " " + Address.city);
-            adressGpsLoaded && setAdressGps(adressGpsLoaded)
-        }
-        loadGps()
-    }, [Address])
+    const userOrga = User.Profile
 
 
     return (
@@ -70,20 +59,20 @@ export function EventDetailCard(props: EventCardProps) {
                     <div className=" flex  flex-col flex-1 gap-x-3 py-1 lg:flex-row">
                         <div className=" relative flex flex-col  flex-auto overflow-auto">
                             <div className="h-max break-all absolute ">
-                                <Typography>
+                                <Typography >
                                     {description}
                                 </Typography>
                             </div>
                         </div>
-                        <div className=" !w-full  flex-1 rounded-full">
-                            <MapComp adressGpsEvent={adressGps} />
+                        <div className=" !w-full !mt-1 flex-1 rounded-full">
+                            {Address ? <AddressMapOpen address={Address} message={title} /> : <Skeleton />}
                         </div>
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter flex justify-between items-center">
                     <div className="flex items-center gap-8">
                         <div className="flex items-center pb-2 gap-2">
-                            <Avatar src={userOrga?.image} size="sm" alt="avatar" withBorder={true} />
+                            <Avatar src={userOrga?.image as string} size="sm" alt="avatar" withBorder={true} />
                             <div>
                                 <Typography variant="small" className="font-normal !p-0">{userOrga?.firstName} - {userOrga?.lastName}</Typography>
                                 <Typography variant="small" color="gray" className="truncate text-ellipsis">

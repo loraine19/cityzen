@@ -5,6 +5,7 @@ import App from './App.tsx'
 import 'material-symbols';
 import { ThemeProvider } from "@material-tailwind/react";
 
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>

@@ -1,33 +1,40 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { Profile, Service } from "../../types/class";
-import { useContext } from "react";
-import DataContext from "../../contexts/data.context";
-import { GetCategory, GetPoints, isLate } from "../../functions/GetDataFunctions";
-import { serviceCategories } from "../../datas/enumsCategories";
+import { Link, useNavigate } from "react-router-dom";
+import { Service, ServiceType } from '../../types/class';
+import { useContext, useEffect, useState } from "react"
+import { getLabel, GetPoints, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../functions/GetDataFunctions";
+import UserContext from "../../contexts/user.context";
 
-export default function ServiceComp(props:
-    {
-        service: Service,
-        mines?: boolean,
-        isFlaged?: boolean
-    }) {
-
-    const { data } = useContext(DataContext);
-    const { service, } = props
-    const { id, title, description, created_at, user_id, user_id_resp } = props.service
+export default function ServiceIssueCard(props: { service: Service }) {
+    const { user } = useContext(UserContext)
+    const userId = user.userId
+    const [service, setService] = useState<Service>(props.service)
+    console.log(service)
+    const { id, title, description, createdAt, User, UserResp } = props.service
     const haveImage = false
-    const userAuthor = data.profiles.find((user: Profile) => user.user_id === user_id)
-    const userResp = data.profiles.find((user: Profile) => user.user_id === user_id_resp)
-    const type = service.type === "get" ? "la demande" : "l' offre"
-    const points = GetPoints(service, userAuthor, userResp)
-    const category = GetCategory(service, serviceCategories)
-    const late = isLate(created_at, 15)
-    const isResp = service.status === 1 ? true : false
-    const isValidated = service.status === 2 ? true : false
-    const isFinish = service.status === 3 ? true : false
-    let button = isResp && "en attente" || isValidated && "en cours" || isFinish && "terminé" || 'nouveau'
+    const type = getLabel(service.type, serviceTypes)
+    const points = GetPoints(service, User.Profile)
+    const category = getLabel(service.category, serviceCategories)
+    const navigate = useNavigate();
+    const late: boolean = isLate(createdAt, 15)
+    const [status, setStatus] = useState<string>(getLabel(service.status, serviceStatus));
+    const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false);
+    const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
+    const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
+    const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
 
+    const updateStatusFlags = (status: string) => {
+        setIsNew(status === 'nouveau');
+        setIsResp(status === 'en attente');
+        setIsValidated(status === 'en cours');
+        setIsFinish(status === 'terminé');
+    };
+
+    useEffect(() => {
+        setService(props.service)
+        setStatus(getLabel(service.status, serviceStatus));
+        updateStatusFlags(status)
+    }, [props.service])
 
     return (
         <>
@@ -42,17 +49,17 @@ export default function ServiceComp(props:
                                     </Chip>
                                 </button>
                                 <button onClick={(e: any) => { console.log(e) }}>
-                                    <Chip value={type} className={`${service.type === "get" ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
+                                    <Chip value={type} className={`${service.type === ServiceType.GET ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
                                     </Chip>
                                 </button>
                             </div>
 
 
                             <div className="flex items-center gap-2 flex-row">
-                                <Chip value={button} className={` rounded-full h-max flex items-center gap-2 font-medium `}>
+                                <Chip value={status} className={` rounded-full h-max flex items-center gap-2 font-medium `}>
 
                                 </Chip>
-                                <Chip value={(new Date(created_at)).toLocaleDateString('fr-FR')} className={`${late ? "RedChip" : "GrayChip"} rounded-full  h-max flex items-center gap-2 shadow font-medium `}>
+                                <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')} className={`${late ? "RedChip" : "GrayChip"} rounded-full  h-max flex items-center gap-2 shadow font-medium `}>
                                 </Chip>
 
                             </div>
@@ -71,9 +78,9 @@ export default function ServiceComp(props:
                                     {description}...
                                 </Typography>
                                 <div className="flex flex-col  px-0 gap-2">
-                                    <Avatar src={userAuthor?.avatar} size="sm" alt="avatar" withBorder={true} />
+                                    <Avatar src={User.Profile?.image as string} size="sm" alt="avatar" withBorder={true} />
                                     <div className=" flex flex-col">
-                                        <Typography variant="small" className="font-normal !p-0">{userAuthor?.firstName} - {userAuthor?.lastName}</Typography>
+                                        <Typography variant="small" className="font-normal !p-0">{User.Profile?.firstName} - {User.Profile?.lastName}</Typography>
 
                                     </div>
                                 </div>
@@ -87,9 +94,9 @@ export default function ServiceComp(props:
                                 </Typography>
                                 <div
                                     className="flex flex-col items-end gap-2 ">
-                                    <Avatar src={userResp?.avatar} size="sm" alt="avatar" withBorder={true} />
+                                    <Avatar src={UserResp.Profile?.image as string} size="sm" alt="avatar" withBorder={true} />
                                     <div className="flex flex-col">
-                                        <Typography variant="small" className="font-normal !p-0">{userResp?.firstName} - {userResp?.lastName}</Typography>
+                                        <Typography variant="small" className="font-normal !p-0">{UserResp.Profile?.firstName} - {UserResp.Profile?.lastName}</Typography>
 
                                     </div>
 

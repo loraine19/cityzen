@@ -3,7 +3,7 @@ import NavBarBottom from "../components/UIX/NavBarBottom";
 import { Link } from "react-router-dom";
 import { Avatar, Card, CardBody, CardHeader, Typography, Option, Select, Button } from "@material-tailwind/react";
 import { useEffect, useState, useContext } from "react";
-import { adressGps, notif } from "../types/type";
+import { addressGps, notif } from "../types/type";
 import { MapComp } from "../components/mapComps/MapComp";
 import CalendarComp from "../components/calendarComps/CalendarComp";
 import { getDays, getNotifications, GetPathElement, getUsersDetail } from "../functions/GetDataFunctions";
@@ -13,14 +13,35 @@ import { EventP, Profile, } from "../types/class";
 import { getUserMe } from "../functions/API/usersApi";
 import { getEvents } from "../functions/API/eventsApi";
 import { refreshAccess } from "../functions/API/useApi";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import AddressMapOpen from "../components/mapComps/AddressMapOpen";
+
 
 export default function DashboardPage() {
     const { setUserCont, userNotif } = useContext(UserContext)
     const [user, setUser] = useState<Profile>({} as Profile);
     const [events, setEvents] = useState<EventP[]>([] as EventP[]);
     const { data, resetData } = useContext(DataContext)
+    const [loading, setLoading] = useState<boolean>(true);
+    useEffect(() => {
+        const fetch = async () => {
+            const me = await getUserMe()
+            const userProfile = me.Profile as Profile;
+            setUser(userProfile);
+            setUserCont(userProfile);
+            localStorage.setItem('user', JSON.stringify(userProfile));
+            setAddressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
+            const events = await getEvents()
+            setEvents(events);
+            setEvents(getDays(events));
+            me && setLoading(false);
+        }
+        fetch()
+    }, []);
     const { users, posts, surveys, pools, services, profiles } = data
     const UsersProfile = (getUsersDetail(users, profiles))
+
 
     const selectUser = (e: string) => {
         const find: Profile | undefined = UsersProfile.find((user) => user.id === parseInt(e));
@@ -32,7 +53,7 @@ export default function DashboardPage() {
     //const notificationList = getNotifications(posts, surveys, pools, services, idS);
     //  const [notifList, setNotifList] = useState<notif[]>(notificationList ? notificationList : []);
     let { firstName, image, points, } = user;
-    const [adressGps, setAdressGps] = useState<adressGps>({ lat: 0, lng: 0 });
+    const [addressGps, setAddressGps] = useState<addressGps>({ lat: 0, lng: 0 });
 
     useEffect(() => {
         const fetch = async () => {
@@ -40,25 +61,26 @@ export default function DashboardPage() {
             const userProfile = me.Profile as Profile;
             setUser(userProfile);
             setUserCont(userProfile);
+            console.log("userProfile", me)
             localStorage.setItem('user', JSON.stringify(userProfile));
-            setAdressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
+            setAddressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
             const events = await getEvents()
             setEvents(events);
             setEvents(getDays(events));
+            me && setLoading(false);
         }
         fetch()
     }, []);
 
-    const fetchRefreshToken = async () => {
-        const token = await refreshAccess();
-        console.log(token)
-    };
+    const fetchRefreshToken = async () => await refreshAccess()
 
     const notifList = getNotifications(posts, events as any, surveys, pools, services, idS);
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
+
+    //if (loading) return <div>loading...</div>
 
     return (
         <div className="Body gray">
@@ -110,7 +132,7 @@ export default function DashboardPage() {
                                         variant="h6"
                                         color="blue-gray"
                                     >
-                                        {user.firstName}
+                                        {user.firstName || <Skeleton />}
                                     </Typography>
                                 </div>
                             </CardHeader>
@@ -140,9 +162,9 @@ export default function DashboardPage() {
                                     color="blue-gray"
                                     className="font-extrabold"
                                 >
-                                    {points}{" "}
-                                    <span className="text-xs font-light ml-[-0.3rem]">
-                                        pts
+                                    {loading ? <Skeleton width={50} height={50} circle={true} /> : points}
+                                    <span className={`${loading && 'hidden'} text-xs font-light `}>
+                                        {' pts'}
                                     </span>
                                 </Typography>
                             </CardBody>
@@ -160,7 +182,8 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col w-full max-h-8 overflow-y-auto ">
-                                    {notifList && (notifList.map((notifL: notif, index) => <div className="w-full font-light text-sm flex px-1 justify-between" key={index}><div><span className="text-orange-800 capitalize font-normal">{GetPathElement(notifL.type)}</span> : {notifL.element.title} </div><Link to={`/${GetPathElement(notifL.type)}/${notifL.element.id}`}><span className="material-symbols-rounded  text-orange-800 !text-2xl pb-1">arrow_circle_right</span></Link></div>))}</div>
+                                    {notifList && (notifList.map((notifL: notif, index) => <div className="w-full font-light text-sm flex px-1 justify-between" key={index}><div><span className="text-orange-800 capitalize font-normal">{GetPathElement(notifL.type)}</span> : {notifL.element.title} </div><Link to={`/${GetPathElement(notifL.type)}/${notifL.element.id}`}><span className="material-symbols-rounded  text-orange-800 !text-2xl pb-1">arrow_circle_right</span></Link></div>))}
+                                </div>
                             </CardBody>
                         </Card>
                     </div>
@@ -179,7 +202,7 @@ export default function DashboardPage() {
                                         </Typography>
                                     </div>
                                 </div>
-                                <MapComp adressGpsEvent={adressGps} />
+                                {loading ? <Skeleton /> : <AddressMapOpen address={user.Address} />}
                             </CardBody>
                         </Card>
                     </div>

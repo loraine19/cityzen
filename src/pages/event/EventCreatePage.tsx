@@ -2,7 +2,7 @@ import parse from 'html-react-parser';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EventForm } from '../../components/eventComps/EventForm';
 import { EventP } from '../../types/class';
 import { addressIn } from '../../functions/GetDataFunctions';
@@ -19,10 +19,15 @@ export default function EventCreatePage() {
         participantsMin: number().required("Participants est obligatoire").min(1, "minmum 1 personne"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
         category: string().required("Catégorie est obligatoire"),
-        Address: object().required("Adresse est obligatoire")
+        Address: object({
+            city: string().required("Ville est obligatoire"),
+            zipcode: string().required("Code postal est obligatoire"),
+        })
     })
     const [value, setValue] = useState("");
     9 > 10 && console.log("avoid compile error ", value)
+
+
 
     const formik = useFormik({
         initialValues: newEvent as EventP,
@@ -33,6 +38,8 @@ export default function EventCreatePage() {
             setOpen(true)
         }
     });
+
+    useEffect(() => { console.log("formik.values", formik.errors) }, [formik.values]);
 
     const postFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
@@ -58,7 +65,7 @@ export default function EventCreatePage() {
                     }
                 }}
                 title={"Confimrer la modification"}
-                element={parse((JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")) as unknown as string} />
+                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
             {newEvent &&
                 <EventForm formik={formik} setValue={setValue} />}
         </div >

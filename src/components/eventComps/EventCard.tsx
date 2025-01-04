@@ -92,7 +92,7 @@ export function EventCard(props: EventCardProps) {
                             </Chip></button>
                         <AvatarStack avatarDatas={event.Participants} />
                     </div> :
-                        <ModifBtnStack disabledEdit={disabledEditCTA} actions={actions} update={update} />}
+                        <ModifBtnStack disabled2={disabledEditCTA} actions={actions} update={update} />}
                     <div className="flex items-center gap-2">
                         <button onClick={() => toggleParticipant(event.id, userId, setEvent)}>
                             <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center gap-2"

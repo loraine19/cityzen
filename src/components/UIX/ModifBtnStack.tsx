@@ -6,12 +6,13 @@ import { action } from "../../types/class";
 type ModifBtnStackProps = {
     actions: action[];
     icon3?: boolean;
-    disabledEdit?: boolean;
+    disabled1?: boolean;
+    disabled2?: boolean;
     update?: () => void;
 }
 
 export default function ModifBtnStack(props: ModifBtnStackProps) {
-    const { actions, disabledEdit, update } = props;
+    const { actions, disabled1, disabled2, update } = props;
     const [buttons] = useState<action[]>(actions);
     const [icon3] = useState<boolean>(props.icon3 ? true : false);
     const [open, setOpen] = useState(false);
@@ -33,11 +34,11 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
 
             <Button
                 variant="outlined"
-                className="flex items-center justify-center rounded-full h-9 w-9 p-1 "
+                className={`"flex items-center justify-center rounded-full h-9 w-9 p-1 " ${disabled2 && "BtnDis"}`}
                 onClick={() => { setOpen(true), setIndex(0) }}
-                disabled={disabledEdit}
+                disabled={disabled2}
             >
-                <span className="material-symbols-outlined unFillThin !text-[1.5rem]">
+                <span className="material-symbols-outlined unFillThin !text-[1.5rem] mt-0.5">
                     {buttons[0].icon}
                 </span>
             </Button>
@@ -45,8 +46,9 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
             <Button
                 color="red"
                 variant="outlined"
-                className="flex items-center justify-center error rounded-full h-9 w-9 p-1 "
+                className={`${disabled1 && "BtnDis"} flex items-center justify-center error rounded-full h-9 w-9 p-1 `}
                 onClick={() => { setOpen(true), setIndex(1) }}
+                disabled={disabled1}
             >
                 <span className="material-symbols-outlined  fillThin !text-[1.5rem]">
                     {buttons[1].icon}

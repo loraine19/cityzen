@@ -11,7 +11,7 @@ export default function SelectSearch(props: selectSearchProps) {
     const { cat, setCat, category, search } = props
     //  useEffect(() => { setCat(cat) }, [cat])
     return (
-        <div className="flex m-auto !rounded-full h-7 w-[90%] items-center bg-white shadow !mb-1.5" >
+        <div className="flex m-auto !rounded-full h-7 md:w-[90%] items-center bg-white shadow !mb-1.5" >
             <Menu placement="bottom-start">
                 <MenuHandler>
                     <Button

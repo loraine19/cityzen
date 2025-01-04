@@ -15,7 +15,7 @@ export default function AnnounceEditPage() {
     const navigate = useNavigate();
     const [value, setValue] = useState("");
 
-    const fetchEvent = async () => {
+    const fetch = async () => {
         const idS = id ? parseInt(id) : 0;
         const fetched = await getPostById(idS);
         setNewPost(fetched);
@@ -31,7 +31,7 @@ export default function AnnounceEditPage() {
     };
 
     useEffect(() => {
-        fetchEvent()
+        fetch()
     }, []);
 
 

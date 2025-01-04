@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context";
 import ModifBtnStack from "../UIX/ModifBtnStack";
-import { action, Flag, Service } from "../../types/class";
-import { GenereMyActions, getLabel, GetPoints, isFlaged, isLate, serviceCategories, serviceStatus, serviceTypes, toggleResp } from "../../functions/GetDataFunctions";
+import { action, Flag, Service, ServiceStep } from "../../types/class";
+import { GenereMyActions, getEnumVal, getLabel, GetPoints, isFlaged, isLate, serviceCategories, serviceStatus, serviceTypes, toggleResp } from "../../functions/GetDataFunctions";
 import { deleteService } from "../../functions/API/servicesApi";
 import { getFlagsService } from "../../functions/API/flagsApi";
 
@@ -20,8 +20,6 @@ export default function ServiceComp(props:
     const [flags, setFlags] = useState<Flag[]>([])
     const isMine = service.User.id === userId
     const IResp = UserResp?.id === userId
-    // console.log(isMine, IResp)
-    // console.log(userId, User.id, UserResp?.id)
     const haveImage = service.image ? true : false
     const type = getLabel(service.type, serviceTypes)
     const points = GetPoints(service, User.Profile)
@@ -33,6 +31,7 @@ export default function ServiceComp(props:
     const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
     const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
     const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
+    const statusValue = getEnumVal(service.status, ServiceStep)
     const updateStatusFlags = (status: string) => {
         setIsNew(status === 'nouveau');
         setIsResp(status === 'en attente');
@@ -120,9 +119,6 @@ export default function ServiceComp(props:
                     </div>
                     <div className="flex flex-col h-full">
                         <div className="CardOverFlow">
-                            <Typography color="blue-gray" variant="small">
-                                {service.status === 1 ? "en attente" : service.status === 2 ? "en cours" : service.status === 3 ? "terminé" : "..."}
-                            </Typography>
                             <Typography color="blue-gray" className="mb-2">
                                 {description}...
                             </Typography>
@@ -132,14 +128,14 @@ export default function ServiceComp(props:
                 <CardFooter className="CardFooter">
                     {isMine && mines &&
 
-                        <ModifBtnStack actions={myActions} icon3={late} update={update} />}
+                        <ModifBtnStack actions={myActions} icon3={late} update={update} disabled1={statusValue > 2} disabled2={statusValue > 2} />}
 
                     {IResp && mines &&
-                        <ModifBtnStack actions={takenCTA} />}
+                        <ModifBtnStack actions={takenCTA} disabled1={statusValue > 2} disabled2={statusValue > 2} />}
 
 
                     {!mines && <div className="flex items-center px-0 gap-2">
-                        <Avatar src={User.Profile?.image} size="sm" alt="avatar" withBorder={true} />
+                        <Avatar src={User.Profile?.image as string} size="sm" alt="avatar" withBorder={true} />
                         <div className=" lg:flex lg:flex-col">
                             <Typography variant="small" className="font-normal !p-0">{User.Profile?.firstName} - {User.Profile?.lastName}</Typography>
                             <Typography variant="small" color="gray" >

@@ -2,9 +2,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NavBarTop from '../../components/UIX/NavBarTop';
 import SubHeader from '../../components/UIX/SubHeader';
 import { useContext, useEffect, useState } from 'react';
-import CTAMines from '../../components/UIX/CATMines';
+import CTAMines from '../../components/UIX/CTAMines';
 import UserContext from '../../contexts/user.context';
-import { getLabel, serviceTypes, serviceCategories, toggleResp, GenereMyActions, serviceStatus, toggleValidResp, generateContact } from '../../functions/GetDataFunctions';
+import { getLabel, serviceTypes, serviceCategories, toggleResp, GenereMyActions, serviceStatus, toggleValidResp, generateContact, GetPoints } from '../../functions/GetDataFunctions';
 import DataContext from '../../contexts/data.context';
 import { action, Service } from '../../types/class';
 import ServiceDetailComp from '../../components/servicesComps/ServiceDetailComp';
@@ -26,6 +26,7 @@ export default function ServiceDetailPage() {
     const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
     const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
     const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
+    const [points, setPoints] = useState<number[]>([0]);
     const updateStatus = (status: string) => {
         setIsNew(status === 'nouveau');
         setIsResp(status === 'en attente');
@@ -37,12 +38,14 @@ export default function ServiceDetailPage() {
         setLoading(true);
         const idS = id ? parseInt(id) : 0;
         const service = await getServiceById(idS);
+        console.log(service)
         setService(service);
         setCategory(getLabel(service.category.toString(), serviceCategories));
         setType(getLabel(service.type.toString(), serviceTypes));
         setMine(service.User.id === userId);
         setIResp(service.userIdResp === userId);
         updateStatus(getLabel(service.status, serviceStatus))
+        setPoints(GetPoints(service));
         setLoading(false)
     };
 
@@ -67,7 +70,7 @@ export default function ServiceDetailPage() {
         {
             icon: `terminer `,
             title: `Terminer le service`,
-            body: service.title,
+            body: `${service.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${points} points`,
             function: async () => { await putServiceFinish(service.id); fetch() }
         },
         {
@@ -141,16 +144,7 @@ export default function ServiceDetailPage() {
                 }
                 {
                     isFinish && <CTAMines
-                        actions={
-                            [
-                                {
-                                    icon: `ce service est terminé`,
-                                    title: ``,
-                                    body: service.title,
-                                    function: () => { }
-                                }
-                            ]
-                        }
+                        actions={[{ icon: `ce service est terminé`, title: ``, body: ``, function: () => { } }]}
                         disabled1={true}
                     />
                 }
@@ -158,3 +152,4 @@ export default function ServiceDetailPage() {
         </div>
     );
 }
+

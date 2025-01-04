@@ -1,14 +1,11 @@
-import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api'
-import { useCallback, useEffect, useState } from 'react'
-import { adressGps } from '../../types/type'
+import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
+import { useState, useEffect } from 'react';
+import { addressGps } from '../../types/type';
+import { GM_API_KEY } from '../../../env.local';
+import Skeleton from 'react-loading-skeleton';
 
-type MapCompProps = {
-    adressGpsEvent: adressGps
-}
-
-export function MapComp(props: MapCompProps) {
-    const { adressGpsEvent } = props
-
+export function MapComp(props: { addressGpsEvent?: addressGps }) {
+    const { addressGpsEvent } = props;
     const containerStyle = {
         width: '100%',
         height: '100%',
@@ -16,36 +13,34 @@ export function MapComp(props: MapCompProps) {
         padding: '3rem',
         display: 'flex',
         flex: 1,
-    }
+    };
 
-    const [center, setCenter] = useState<adressGps>(adressGpsEvent)
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: 'AIzaSyDNjhPXdHwsECXX68PZ_P3LikGEUdYNBNA',
-    })
+    const [center, setCenter] = useState<addressGps>(addressGpsEvent ? addressGpsEvent : { lat: 0, lng: 0 });
+    const { isLoaded } = useJsApiLoader({ id: 'google-map-script', googleMapsApiKey: GM_API_KEY });
+    const [map, setMap] = useState<any>(null);
+    const notLoad = addressGpsEvent?.lat === 0 && addressGpsEvent?.lng === 0;
 
     useEffect(() => {
-        setCenter(adressGpsEvent);
-    }, [adressGpsEvent])
-
-    const [map, setMap] = useState(null)
-
-    0 > 1 && console.log("avoid compile error ", map)
-
-    const onLoad = useCallback(function callback(map: any) {
-        if (adressGpsEvent) {
-            map.setZoom(16)
-            setMap(map)
+        console.log('useEffect called', { addressGpsEvent, notLoad });
+        if (addressGpsEvent && !notLoad) {
+            setCenter(addressGpsEvent);
         }
-    }, [])
+    }, [addressGpsEvent, notLoad]);
 
-    const onUnmount = useCallback(function callback() {
-        setMap(null)
-    }, [])
+    const onLoad = (map: any) => {
+        console.log('onLoad called', { addressGpsEvent, notLoad });
+        if (addressGpsEvent && !notLoad) {
+            map.setZoom(16);
+            setMap(map);
+        }
+    };
 
-    return isLoaded ? (
+    const onUnmount = () => {
+        setMap(null);
+    };
+
+    return isLoaded && !notLoad ? (
         <GoogleMap
-
             mapContainerStyle={containerStyle}
             center={center}
             zoom={15}
@@ -53,11 +48,8 @@ export function MapComp(props: MapCompProps) {
             onUnmount={onUnmount}
         >
             <MarkerF position={center} />
-            <></>
         </GoogleMap>
     ) : (
-        <>
-            Chargement de la carte....
-        </>
-    )
+        <Skeleton count={1} className={'flex'} style={{ width: '100%', height: '100%', borderRadius: '0.8rem', padding: '3rem' }} />
+    );
 }

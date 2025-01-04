@@ -1,14 +1,15 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { Flag, HardLevel, Service, ServiceStep, SkillLevel } from "../../types/class";
+import { Link, useNavigate } from "react-router-dom";
+import { Flag, HardLevel, Service, SkillLevel } from "../../types/class";
 import { getEnumVal, getLabel, GetPoints, isFlaged, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../functions/GetDataFunctions";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context";
 import { getFlagsService } from "../../functions/API/flagsApi";
 
-export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void, isFlaged?: boolean }) {
+export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void }) {
     const { user } = useContext(UserContext)
     const userId = (user.userId)
+    const navigate = useNavigate();
     const { service } = props
     const { id, title, description, image, createdAt, User, UserResp } = props.service
     const [flagged, setFlagged] = useState<boolean>(false)
@@ -48,14 +49,15 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         <div className="flex items-center gap-2 mb-1">
                             <Chip value={`${category}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
                             </Chip>
-
                             <Chip value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
                             </Chip>
                         </div>
                         <div className="flex items-center gap-2 flex-col sm:flex-row">
-                            <Chip value={status}
-                                className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}>
-                            </Chip>
+                            <button onClick={() => { status === 'litige' && navigate(`/conciliation/${id}`) }}>
+                                <Chip value={status}
+                                    className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || status === 'litige' && "RedChip underline"} rounded-full h-max flex items-center gap-2 font-medium `}>
+                                </Chip>
+                            </button>
                             <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')}
                                 className={`${late ? "RedChip" : "GrayChip"} 
                                 rounded-full  h-max flex items-center gap-2 shadow font-medium `}>
@@ -63,7 +65,6 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         </div>
                     </div>
                     {image &&
-
                         <img
                             src={image as any}
                             alt={title}
@@ -117,7 +118,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                                         <Typography variant="small" color="gray" >
                                             {UserResp.Profile?.skills} -
                                         </Typography>
-                                        <Avatar src={UserResp.Profile?.image} size="sm" alt="avatar" withBorder={true} color="blue-gray" />
+                                        <Avatar src={UserResp.Profile?.image as string} size="sm" alt="avatar" withBorder={true} color="blue-gray" />
                                     </div>
                                     <Chip value={status} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}></Chip>
                                 </div>}
@@ -127,7 +128,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
 
                 <CardFooter className="CardFooter">
                     {userAuthor?.userId !== user.userId && <div className="flex items-center px-0 gap-2">
-                        <Avatar src={userAuthor?.image} size="sm" alt="avatar" withBorder={true} />
+                        <Avatar src={userAuthor?.image as string} size="sm" alt="avatar" withBorder={true} />
                         <div className="flex flex-col">
                             <Typography variant="small" className="font-normal !p-0">{userAuthor?.firstName} - {userAuthor?.lastName}</Typography>
                             <Typography variant="small" color="gray" >

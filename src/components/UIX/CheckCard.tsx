@@ -17,28 +17,28 @@ export default function CheckCard(props: chechCardProps,) {
             <List className="flex-row flex w-full justify-evenly items-center gap-4 py-1 overflow-auto
          ">
                 {categoriesArray.map((category, index) => (
-                    <ListItem className="min-w-max pr-4 py-0.5 pl-1 rounded-full !m-0 bg-white shadow" key={index}>
+                    <ListItem className="min-w-max py-0.5 px-1 rounded-full !m-0 bg-white shadow" key={index}>
                         <label
                             htmlFor={category}
-                            className="flex w-max cursor-pointer items-center    "
+                            className="flex w-max cursor-pointer items-center"
                         >
-                            <ListItemPrefix>
+                            <ListItemPrefix className="!mr-0">
                                 <Checkbox
                                     name="boxs"
                                     defaultChecked={check}
                                     id={category}
                                     value={category}
-                                    color="cyan"
+                                    color="gray"
                                     ripple={false}
-                                    className="h-6 w-6 rounded-full border-none bg-cyan-500/30 transition-all  hover:before:opacity-0 opacity-90"
+                                    className="h-6 w-6 rounded-full border-none bg-gray-500/30 transition-all  hover:before:opacity-0 opacity-90"
                                     containerProps={{
                                         className: "!p-0",
                                     }}
-                                    onChange={(e) => { change(e); console.log(e) }}
+                                    onChange={(e) => change(e)}
 
                                 />
                             </ListItemPrefix>
-                            <Typography color="blue-gray" className=" text-sm whitespace-nowrap">
+                            <Typography color="blue-gray" className="text-sm whitespace-nowrap px-2">
                                 {category}
                             </Typography>
                         </label>

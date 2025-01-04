@@ -2,20 +2,23 @@ import NavBarTop from '../UIX/NavBarTop';
 import SubHeader from '../UIX/SubHeader';
 import { useContext, useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Radio } from '@material-tailwind/react';
-import { announceCategories } from "../../datas/enumsCategories";
-import { getImageBlob, GetPoints } from '../../functions/GetDataFunctions';
+import { getImageBlob, GetPoints, serviceCategories } from '../../functions/GetDataFunctions';
 import UserContext from '../../contexts/user.context';
+import { Label } from '../../types/class';
 
 export function ServiceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
-    const { created_at, title, description, image } = formik.values
+    const { createdAt, title, description, image } = formik.values
     const haveImage = image ? true : false
     const { user } = useContext(UserContext)
 
-    ///// BLOB FUNCTION 
 
-    const [img] = useState<string>(image);
-    const [imgBlob, setImgBlob] = useState<string | undefined>(img);
+    ///// BLOB FUNCTION 
+    const [imgBlob, setImgBlob] = useState<string>(formik.values.image as string);
+    useEffect(() => {
+        !imgBlob && setImgBlob(formik.values.image as string)
+    }, [formik.values.image, imgBlob])
+
     const skill: number[] = [0, 1, 2, 3, 4]
     const hard: number[] = [0, 1, 2, 3, 4]
     const [points, setPoints] = useState<number[]>(GetPoints(formik.values, user))
@@ -24,8 +27,9 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
         setPoints(GetPoints(formik.values, user))
     }, [formik.values.skill, formik.values.hard, formik.values.type])
 
-    const isGet = formik.values.type === "get"
-    const isDo = formik.values.type === "do"
+    const isGet = formik.values.type === 'GET'
+    const isDo = formik.values.type === 'DO'
+
     return (
         <>
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
@@ -34,8 +38,8 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                     <SubHeader type={formik.values.title ? `Modifier mon service` : "Créer mon service"} place={formik.values.title} closeBtn />
                     <div className="w-respLarge">
                         <div className="flex gap-10">
-                            <Radio name="type" label="Demande" value="get" color='orange' defaultChecked={isGet} onChange={formik.handleChange} />
-                            <Radio name="type" label="Offre" value="do" color='cyan' defaultChecked={isDo} onChange={formik.handleChange} />
+                            <Radio name="type" label="Demande" value="GET" color='orange' checked={isGet} onChange={formik.handleChange} />
+                            <Radio name="type" label="Offre" value="DO" color='cyan' checked={isDo} onChange={formik.handleChange} />
                         </div>
                         <Select className="rounded-full shadow  bg-white border-none capitalize"
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
@@ -44,10 +48,10 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                             value={formik.values.category}
                             onChange={(val: any) => { setValue(val); formik.values.category = val }}
                         >
-                            {announceCategories.map((category: string, index: number) => {
+                            {serviceCategories.map((category: Label, index: number) => {
                                 return (
-                                    <Option className={category === "tous" ? "hidden" : "rounded-full my-1 capitalize"} value={category} key={index} >
-                                        {category}
+                                    <Option className={category.value === '' ? "hidden" : "rounded-full my-1 capitalize"} value={category.value} key={index} >
+                                        {category.label}
                                     </Option>)
                             })}
                         </Select>
@@ -64,7 +68,8 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                             className=" flex flex-col items-center justify-center w-full h-full cursor-pointer">
                                             <span className="material-symbols-rounded">{imgBlob ? "edit" : "add_a_photo"}</span>
                                             <div className="flex flex-col w-full items-center justify-center">
-                                                <input id="image" type="file" name="image" className="hidden" onChange={(e) => getImageBlob(e, setImgBlob, formik)} />
+                                                <input id="image" type="file" name="image" className="hidden"
+                                                    onChange={(e) => getImageBlob(e, setImgBlob, formik)} />
                                             </div>
                                         </label>
                                     </Button>
@@ -73,7 +78,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                     </Button>
                                 </div>
                                 <Typography className='text-xs px-4'>{formik.values.image != formik.values.image && formik.values.image as string} </Typography>
-                                <Chip value={(new Date(created_at)).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
+                                <Chip value={(new Date(createdAt ? createdAt : Date.now())).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
                                 </Chip>
                             </div>
                             {image &&

@@ -180,6 +180,23 @@ export class Service {
     updatedAt: Date = new Date();
 }
 
+export class Issue {
+    id: number = 0;
+    serviceId: number = 0;
+    Service: Service = new Service();
+    userId: number = 0;
+    User: User = new User();
+    UserModo: User = new User();
+    userIdModo: number = 0;
+    UserModo2: User = new User();
+    userIdModo2: number = 0;
+    description: string = '';
+    image: string | File = '';
+    status: IssueStep = IssueStep.STEP_0;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
+}
+
 export class Flag {
     user: User = new User();
     userId: number = 0;
@@ -256,8 +273,10 @@ export const serviceStep = Object.values(ServiceStep).filter(step => typeof step
 
 export enum IssueStep {
     STEP_0,
-    STEP_1
+    STEP_1,
+    STEP_2
 }
+export const issueStep = Object.values(IssueStep).filter(step => typeof step === 'string');
 
 export enum EventCategory {
     CATEGORY_1,
@@ -475,7 +494,7 @@ export class ServiceDTO {
     address?: AddressDTO;
     addressId?: number;
     userId?: number;
-    image?: string;
+    image?: string | File;
     title?: string;
     category?: ServiceCategory;
     userIdResp?: number;
@@ -485,6 +504,15 @@ export class ServiceDTO {
     status?: ServiceStep;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export class IssueDTO {
+    id?: number;
+    serviceId?: number;
+    userId?: number;
+    description?: string;
+    image?: string | File;
+    status?: IssueStep;
 }
 
 export class FlagDTO {
