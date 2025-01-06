@@ -40,6 +40,7 @@ export const PlaceAutocomplete = ({ setAddress, text, inputStyle }: PlaceAutocom
         if (!placeAutocomplete) return;
         placeAutocomplete.addListener('place_changed', () => {
             const place = placeAutocomplete.getPlace();
+            console.log(place);
             setAddress(inputRef.current?.value);
         });
     }, [placeAutocomplete, setAddress]);

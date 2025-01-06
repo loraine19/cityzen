@@ -21,7 +21,7 @@ export default function SelectSearch(props: selectSearchProps) {
                         size="sm"
                         className="flex items-center  bg-none rounded-full py-1 !px-4"
                     >
-                        <span className="material-symbols-outlined">arrow_drop_down</span>
+                        <span className="material-symbols-outlined notranslate ">arrow_drop_down</span>
                     </Button>
                 </MenuHandler>
                 <MenuList className="flex flex-col">
@@ -57,7 +57,7 @@ export default function SelectSearch(props: selectSearchProps) {
                 onClick={() => search(cat)}
                 className="flex items-center  bg-none rounded-full py-1 !px-4"
             >
-                <span className="material-symbols-outlined">search</span>
+                <span className="material-symbols-outlined notranslate ">search</span>
             </Button>
 
         </div>

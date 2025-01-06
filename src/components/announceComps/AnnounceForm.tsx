@@ -62,7 +62,7 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
                                     </Button>
                                 </div>
                                 <Typography className='text-xs px-4'>{formik.values.image != formik.values.image && formik.values.image as string} </Typography>
-                                <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
+                                <Chip value={(new Date(createdAt || new Date())).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
                                 </Chip>
                             </div>
                             {image &&

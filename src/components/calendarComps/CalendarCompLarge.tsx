@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react';
 import { EventCard } from '../eventComps/EventCard';
-import { dayMS, getWeeks, shortDateString } from '../../functions/GetDataFunctions'
+import { dayMS, eventCategories, getLabel, getWeeks, shortDateString } from '../../functions/GetDataFunctions'
 import { EventP } from '../../types/class';
 
 export default function CalendarCompLarge(props: { eventList: EventP[] }) {
@@ -88,7 +88,7 @@ export default function CalendarCompLarge(props: { eventList: EventP[] }) {
                                                             /{event.days.length}  </span>
                                                         :
                                                         <span className='capitalize font-normal flex text-ellipsis overflow-hidden'>
-                                                            {event.category}
+                                                            {getLabel(event.category, eventCategories)}
                                                             <span className='hidden lg:flex'>  &nbsp;- &nbsp; {event.title}</span>
                                                         </span>
                                                     }

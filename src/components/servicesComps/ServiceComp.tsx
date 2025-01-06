@@ -18,6 +18,7 @@ export default function ServiceComp(props:
     const { id, title, description, image, createdAt, User, UserResp } = service
     const [flagged, setFlagged] = useState<boolean>(false)
     const [flags, setFlags] = useState<Flag[]>([])
+    1 > 2 && console.log(flags)
     const isMine = service.User.id === userId
     const IResp = UserResp?.id === userId
     const haveImage = service.image ? true : false
@@ -27,16 +28,19 @@ export default function ServiceComp(props:
     const navigate = useNavigate();
     const late: boolean = isLate(createdAt, 15)
     const [status, setStatus] = useState<string>(getLabel(service.status, serviceStatus));
-    const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false);
+    const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false)
+    1 > 2 && console.log(isNew)
     const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
     const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
     const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
+    const [inIssue, setInIssue] = useState<boolean>(status === 'litige' ? true : false);
     const statusValue = getEnumVal(service.status, ServiceStep)
     const updateStatusFlags = (status: string) => {
         setIsNew(status === 'nouveau');
         setIsResp(status === 'en attente');
         setIsValidated(status === 'en cours');
         setIsFinish(status === 'terminé');
+        setInIssue(status === 'litige');
     };
 
     useEffect(() => {
@@ -84,13 +88,13 @@ export default function ServiceComp(props:
                             </button>
                             <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat) }}>
                                 <Chip value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} 
-                                    rounded-full  h-max flex items-center gap-2 font-medium `}>
+                                   shadow rounded-full  h-max flex items-center gap-2 font-medium `}>
                                 </Chip>
                             </button>
                         </div>
                         <div className="flex items-center gap-2 flex-col md:flex-row">
                             <Chip value={status}
-                                className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}>
+                                className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} !shadow rounded-full h-max flex items-center gap-2 font-medium `}>
                             </Chip>
                             <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')}
                                 className={`${late ? "RedChip" : "GrayChip"} 
@@ -111,10 +115,8 @@ export default function ServiceComp(props:
                         <Typography variant="h5" color="blue-gray">
                             {title}
                         </Typography>
-                        <Link to={`/flag${flagged ? '/edit' : ''}/service${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${flagged && "fill !text-red-500"} 
-                                material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2
-                            </span>
+                        <Link to={`/flag${flagged ? '/edit' : ''}/service/${id}`} title={`signaler un problème sur ${title}`}>
+                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
                     <div className="flex flex-col h-full">

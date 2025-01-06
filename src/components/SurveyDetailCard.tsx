@@ -76,7 +76,7 @@ export default function SurveyDetailCard() {
     const { user } = useContext(UserContext);
 
     function editMySurveyCard() {
-        if (survey.user_id === user.id) {
+        if (survey.user_id === user.userId) {
             return (
                 <div className="flex flex-col items-center mt-4">
                     <Link to={`/sondage`}>
@@ -171,7 +171,7 @@ export default function SurveyDetailCard() {
                         <div className="flex items-center  justify-between w-full">
                             <div className="flex gap-4 w-full">
                                 <Avatar
-                                    src={user.avatar}
+                                    src={user.image as string}
                                     alt="avatar"
                                     size="md"
                                 />

@@ -14,6 +14,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
     const { id, title, description, image, createdAt, User, UserResp } = props.service
     const [flagged, setFlagged] = useState<boolean>(false)
     const [flags, setFlags] = useState<Flag[]>([])
+    1 > 2 && console.log(flags)
     const haveImage = service.image ? true : false
     const userAuthor = User.Profile
     const isMine = (User.id === userId || UserResp?.id === userId)
@@ -26,6 +27,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
     const IResp = UserResp?.id === userId
     const isValidated = status === 'en cours' ? true : false
     const isFinish = status === 'terminé' ? true : false
+    const inIssue = status === 'litige' ? true : false
     const hard = getEnumVal(service.hard, HardLevel)
     const skill = getEnumVal(service.skill, SkillLevel)
     //    const statusVal = getEnumVal(service.status, ServiceStep)
@@ -49,13 +51,13 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         <div className="flex items-center gap-2 mb-1">
                             <Chip value={`${category}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
                             </Chip>
-                            <Chip value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
+                            <Chip value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} shadow rounded-full  h-max flex items-center gap-2 font-medium `}>
                             </Chip>
                         </div>
                         <div className="flex items-center gap-2 flex-col sm:flex-row">
                             <button onClick={() => { status === 'litige' && navigate(`/conciliation/${id}`) }}>
                                 <Chip value={status}
-                                    className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || status === 'litige' && "RedChip underline"} rounded-full h-max flex items-center gap-2 font-medium `}>
+                                    className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} shadow rounded-full h-max flex items-center gap-2 font-medium `}>
                                 </Chip>
                             </button>
                             <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')}
@@ -77,12 +79,11 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         <Typography variant="h5" color="blue-gray" className="mb-2">
                             {title}
                         </Typography>
-
-                        <Link to={`/flag/post${id}`} title={`signaler un problème sur ${title}`}>
+                        <Link to={`/flag${flagged ? '/edit' : ''}/service/${id}`} title={`signaler un problème sur ${title}`}>
                             <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
-                    <div className="flex justify-between items-end">
+                    <div className="flex justify-between items-end ">
                         <div className="flex  items-center gap-2 mb-1">
                             <Chip value={skill} size="lg" className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
                                 icon={<span className={`pl-1 material-symbols-outlined unFillThin !text-[1.5rem]`} title="Compétence">design_services</span>}>
@@ -102,15 +103,14 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                                 {isFinish && 'avez fait ' || !isValidated && !isFinish && "avez repondu" || isValidated && !isFinish && ' faite'}
                             </Typography>
                         }
-
                     </div>
-                    <div className="CardOverFlow h-full flex flex-col gap-4 ">
+                    <div className="CardOverFlow h-full flex flex-col gap-4 !pt-1 ">
                         <div className="flex h-full">
-                            <Typography color="blue-gray" className="flex-1 pr-4 overflow-y-auto">
+                            <Typography color="blue-gray" className="flex-1 pr-4 max-h-20 overflow-y-auto">
                                 {description}
                             </Typography>
                             {UserResp &&
-                                <div className="flex flex-col items-end  gap-3">
+                                <div className="flex flex-col items-end gap-3">
                                     <div className="flex flex-col items-end ">
                                         <Typography variant="small" className="font-normal !p-0">
                                             {UserResp.Profile?.firstName} - {UserResp.Profile?.lastName}
@@ -120,12 +120,12 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                                         </Typography>
                                         <Avatar src={UserResp.Profile?.image as string} size="sm" alt="avatar" withBorder={true} color="blue-gray" />
                                     </div>
-                                    <Chip value={status} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip"} rounded-full h-max flex items-center gap-2 font-medium `}></Chip>
+                                    <Chip value={status} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} rounded-full h-max flex items-center gap-2 font-medium shadow`}>
+                                    </Chip>
                                 </div>}
                         </div>
                     </div>
                 </CardBody>
-
                 <CardFooter className="CardFooter">
                     {userAuthor?.userId !== user.userId && <div className="flex items-center px-0 gap-2">
                         <Avatar src={userAuthor?.image as string} size="sm" alt="avatar" withBorder={true} />

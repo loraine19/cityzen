@@ -58,7 +58,7 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                             {title}
                         </Typography>
 
-                        <Link to={`/flag/post${id}`} title={`signaler un problème sur ${title}`}>
+                        <Link to={`/flag${flagged ? '/edit' : ''}/post/${id}`} title={`signaler un problème sur ${title}`}>
                             <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
@@ -71,7 +71,7 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
 
                 <CardFooter className="CardFooter mb-2">
                     <div className="flex items-center px-0 gap-2">
-                        <Avatar src={userOrga?.image} size="sm" alt="avatar" withBorder={true} />
+                        <Avatar src={userOrga?.image as string} size="sm" alt="avatar" withBorder={true} />
                         <div className="flex flex-col">
                             <Typography variant="small" className="font-normal !p-0">{userOrga?.firstName} - {userOrga?.lastName}</Typography>
                             <Typography variant="small" color="gray" >

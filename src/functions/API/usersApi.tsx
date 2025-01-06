@@ -13,6 +13,8 @@ export const getUserById = async (id: number): Promise<User> => handleApiCall(()
 
 export const getUserMe = async (): Promise<User> => handleApiCall(() => api.get(`${dataType}/me`));
 
+export const getUserModos = async (): Promise<User[]> => handleApiCall(() => api.get(`${dataType}/modos`));
+
 export const postUser = async (user: UserDTO): Promise<User> => handleApiCall(() => api.post(dataType, user));
 
 export const patchUser = async (id: number, user: UserDTO): Promise<User> => handleApiCall(() => api.patch(`${dataType}/${id}`, user));
@@ -24,3 +26,7 @@ export const signIn = async (credentials: { email: string, password: string }): 
 
 export const signUp = async (user: any): Promise<Auth> => handleApiCall(() => api.post('auth/signup', user));
 
+
+//NOTIF
+
+export const getNotifs = async (): Promise<any> => handleApiCall(() => api.get(`notifs`));

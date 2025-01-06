@@ -18,6 +18,7 @@ export function MapComp(props: { addressGpsEvent?: addressGps }) {
     const [center, setCenter] = useState<addressGps>(addressGpsEvent ? addressGpsEvent : { lat: 0, lng: 0 });
     const { isLoaded } = useJsApiLoader({ id: 'google-map-script', googleMapsApiKey: GM_API_KEY });
     const [map, setMap] = useState<any>(null);
+    console.log(map)
     const notLoad = addressGpsEvent?.lat === 0 && addressGpsEvent?.lng === 0;
 
     useEffect(() => {

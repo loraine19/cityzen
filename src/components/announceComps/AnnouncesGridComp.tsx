@@ -11,21 +11,21 @@ export default function AnnouncesGridComp(props: { line: Post[], mines?: boolean
             <div className={"grid grid-cols-[1fr_1fr] grid-rows-[(24*1fr)] gap-x-4 gap-y-2"}>
                 {line[0] &&
                     <div className={line[0].image ? short : short}>
-                        <AnnouncesComp post={line[0]} mines={mines} change={change} update={update} />
+                        <AnnouncesComp key={line[0].id} post={line[0]} mines={mines} change={change} update={update} />
                     </div>}
 
                 {line[1] &&
                     <div className={line[1].image ? long : long}>
-                        <AnnouncesComp post={line[1]} mines={mines} change={change} update={update} />
+                        <AnnouncesComp key={line[1].id} post={line[1]} mines={mines} change={change} update={update} />
                     </div>}
                 {line[2] &&
                     <div className={line[2].image ? long : long}>
-                        <AnnouncesComp post={line[2]} mines={mines} change={change} update={update} />
+                        <AnnouncesComp key={line[2].id} post={line[2]} mines={mines} change={change} update={update} />
                     </div>}
 
                 {line[3] &&
                     <div className={line[2].image ? short : short}>
-                        <AnnouncesComp post={line[3]} mines={mines} change={change} update={update} />
+                        <AnnouncesComp key={line[3].id} post={line[3]} mines={mines} change={change} update={update} />
                     </div>}
             </div >
 

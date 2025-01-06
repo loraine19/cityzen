@@ -2,7 +2,7 @@ import { post } from "../../types/type"
 const postsFaker: post[] = [
   {
     id: 1,
-    user_id: 1,
+    userId: 1,
     title: "Mon premier post",
     description: "Voici mon tout premier post sur ce site !",
     category: "blob",
@@ -13,7 +13,7 @@ const postsFaker: post[] = [
   },
   {
     id: 2,
-    user_id: 2,
+    userId: 2,
     title: "Un article intéressant",
     description: "J'ai trouvé un article très intéressant sur le sujet X.",
     category: "animaux",
@@ -24,7 +24,7 @@ const postsFaker: post[] = [
   },
   {
     id: 3,
-    user_id: 3,
+    userId: 3,
     title: "Partager une recette",
     description: "Voici ma recette de gâteau au chocolat préférée.",
     category: "autres",
@@ -35,7 +35,7 @@ const postsFaker: post[] = [
   },
   {
     id: 4,
-    user_id: 8,
+    userId: 8,
     title: "Un voyage inoubliable",
     description: "J'ai passé de merveilleuses vacances en Italie.",
     category: "perdu-trouvé",
@@ -47,7 +47,7 @@ const postsFaker: post[] = [
   },
   {
     id: 5,
-    user_id: 2,
+    userId: 2,
     title: "Un tutoriel utile",
     description: "Voici un tutoriel pour apprendre à utiliser X.",
     category: "autre",
@@ -58,7 +58,7 @@ const postsFaker: post[] = [
   },
   {
     id: 6,
-    user_id: 4,
+    userId: 4,
     title: "Un livre passionnant",
     description: "J'ai récemment lu un livre fantastique.",
     category: "perdu-trouvé",
@@ -69,7 +69,7 @@ const postsFaker: post[] = [
   },
   {
     id: 7,
-    user_id: 3,
+    userId: 3,
     title: "Un film à voir absolument",
     description: "Ce film est un véritable chef-d'œuvre.",
     category: "à vendre",
@@ -80,7 +80,7 @@ const postsFaker: post[] = [
   },
   {
     id: 8,
-    user_id: 6,
+    userId: 6,
     title: "Une expérience incroyable",
     description: "J'ai vécu une expérience inoubliable.",
     category: "animax",
@@ -91,7 +91,7 @@ const postsFaker: post[] = [
   },
   {
     id: 9,
-    user_id: 6,
+    userId: 6,
     title: "Un conseil utile",
     description: "Voici un conseil pour vous aider dans votre quotidien.",
     category: "blob",
@@ -102,7 +102,7 @@ const postsFaker: post[] = [
   },
   {
     id: 10,
-    user_id: 3,
+    userId: 3,
     title: "Une question à poser",
     description: "J'ai une question à poser à la communauté.",
     category: "animaux",
@@ -111,17 +111,17 @@ const postsFaker: post[] = [
     share: ["phone"],
     users: []
   },
-    {
-      id: 11,
-      user_id: 1,
-      title: "Un petite test",
-      description: "J'ai une question à poser à la communauté.",
-      category: "animaux",
-      image: "image10.png",
-      created_at: "2023-12-21T16:27:07Z",
-      share :["phone"],
-      users: []
-    }
+  {
+    id: 11,
+    userId: 1,
+    title: "Un petite test",
+    description: "J'ai une question à poser à la communauté.",
+    category: "animaux",
+    image: "image10.png",
+    created_at: "2023-12-21T16:27:07Z",
+    share: ["phone"],
+    users: []
+  }
 ]
 
 

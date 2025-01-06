@@ -13,7 +13,7 @@ import { useToken } from '../../functions/API/useToken';
 
 export default function SignInPage() {
     const { saveToken } = useToken();
-    const [newUser, setNewUser] = useState<user>({} as user);
+    const [newUser] = useState<user>({} as user);
     const navigate = useNavigate();
     const [notif, setNotif] = useState<string>("");
 

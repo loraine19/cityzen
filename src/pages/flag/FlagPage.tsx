@@ -1,26 +1,28 @@
 // + calendar view
-import { useContext, useState } from "react";
-import UserContext from "../../contexts/user.context";
-import { deleteElementJoin, getFlagsUser } from "../../functions/GetDataFunctions";
-import { flag, } from "../../types/type";
+import { useEffect, useState } from "react";
 import NavBarBottom from "../../components/UIX/NavBarBottom";
 import NavBarTop from "../../components/UIX/NavBarTop";
 import SubHeader from "../../components/UIX/SubHeader";
 import { FlagCard } from "../../components/flagComps/FlagCard";
-import DataContext from "../../contexts/data.context";
-
+import { getFlagsByUserId } from "../../functions/API/flagsApi";
+import { Flag } from "../../types/class";
+import Skeleton from "react-loading-skeleton";
 
 
 export default function FlagPage() {
-    const { user } = useContext(UserContext)
-    const { data } = useContext(DataContext)
-    const { posts, events, surveys, pools, services, flags } = data
-    const idS = user.id ? user.id : 0
-    const flagList1 = getFlagsUser(posts, events, surveys, pools, services, flags, idS);
-    const [flagList, setflagList] = useState<any[]>(flagList1 ? flagList1 : []);
     const [notifFind] = useState<string>('');
+    const [flags, setFlags] = useState<Flag[]>([])
+    // const [flagList, setFlagList] = useState<Flag[]>([])
+    const [loading, setLoading] = useState<boolean>(true);
 
-    const handleDelete = (flag: flag) => deleteElementJoin(flag, flagList, setflagList)
+    const fetch = async () => {
+        const flags = await getFlagsByUserId()
+        if (flags.length > 0) {
+            setFlags(flags);
+            setLoading(false)
+        }
+    }
+    useEffect(() => { fetch() }, []);
 
 
     /////FILTER FUNCTIONS
@@ -29,15 +31,16 @@ export default function FlagPage() {
             <header className="px-4">
                 <NavBarTop />
                 <div className="flex ">
-                    <SubHeader qty={flagList.length} type={"Signalement "} /></div>
-
-
+                    <SubHeader qty={flags.length} type={"Signalement "} /></div>
                 <div className={notifFind && "w-full flex justify-center p-8"}>{notifFind}</div>
             </header>
 
-            <main className="Grid !content-start !gap-3           ">
-                {flagList.map((element: flag, index: number) =>
-                    <FlagCard key={index} flag={element} handleClick={(element) => handleDelete(element)} />)}
+            <main className="Grid !content-start !gap-3">
+                {loading ?
+                    Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton key={index} height={130} className="!rounded-2xl" />))
+                    :
+                    flags.map((element: Flag, index: number) => <FlagCard key={index} flag={element} update={fetch} />)}
             </main>
             <NavBarBottom />
 

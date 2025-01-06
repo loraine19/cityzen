@@ -1,7 +1,7 @@
-import { eventUser, postUser, userProfile } from '../types/user';
+import { userProfile } from '../types/user';
 import { all, flag, notif, targetUser } from "../types/type";
-import { action, Address, eventCategory, EventP, Flag, Label, Pool, Post, postCategory, Profile, Service, Survey, User, serviceType, serviceCategory, HardLevel, SkillLevel, AssistanceLevel, serviceStep, Issue } from '../types/class';
-import { GetAddressGps, GetAddressString } from './GeoMapFunction';
+import { action, Address, eventCategory, EventP, Flag, Label, Pool, Post, postCategory, Profile, Service, Survey, User, serviceType, serviceCategory, HardLevel, SkillLevel, AssistanceLevel, serviceStep, Issue, flagTarget, flagReason } from '../types/class';
+//import { GetAddressGps, GetAddressString } from './GeoMapFunction';
 import { deleteParticipant, postParticipant } from './API/partcipantsApi';
 import { getEventById } from './API/eventsApi';
 import { getAddresses, postAddress } from './API/addressApi';
@@ -54,17 +54,17 @@ export const getUserDetail = (id: number, arraySearch: Profile[]): Profile | und
 
 
 //// get users in events or post by id 
-export const getUsers = (array: Post[] | EventP[], arrayOfJoin: any[], initialArray: [], lookingID: keyof eventUser | keyof postUser): Post[] | EventP[] => {
-    array.map((element: Post | EventP) => {
-        let users: Profile[] = [];
-        element.Likes = [];
-        arrayOfJoin.filter((row: any) => row[lookingID] === element.id).map((row: any) => {
-            initialArray.map((user: Profile) => (user.id === row.userId) && users.push(user));
-            element.users = users
-        })
-    })
-    return array
-}
+// export const getUsers = (array: Post[] | EventP[], arrayOfJoin: any[], initialArray: [], lookingID: keyof eventUser | keyof postUser): Post[] | EventP[] => {
+//     array.map((element: Post | EventP) => {
+//         let users: Profile[] = [];
+//         element.Likes = [];
+//         arrayOfJoin.filter((row: any) => row[lookingID] === element.id).map((row: any) => {
+//             initialArray.map((user: Profile) => (user.id === row.userId) && users.push(user));
+//             element.users = users
+//         })
+//     })
+//     return array
+// }
 
 // array events, join ( user+ eventId,), iniUser, lookin(key)
 export const getFlagsInElement = (array: any[], arrayOfJoin: any[]): any => {
@@ -87,7 +87,7 @@ export const getFlags = (posts: Post[], events: Event[], surveys: Survey[], pool
     return arrayWithFlags
 }
 
-//// avoir tout les flags d'un user ( return flag[])
+// //// avoir tout les flags d'un user ( return flag[])
 export const getFlagsUser = (posts: Post[], events: Event[], surveys: Survey[], pools: Pool[], services: Service[], arrayOfJoin: any[], idS: number) => {
     let all = getCommuns(posts, events, surveys, pools, services)
     return (arrayOfJoin.filter((flagRow: targetUser) => (flagRow.userId === idS))).map((element1: flag) => {
@@ -154,12 +154,12 @@ export const getNotifications = (posts: Post[], events: Event[], surveys: Survey
     return (notifications)
 }
 
-export const GetPathElement = (type: string) => type === "post" ? "annonce" : type === "event" ? "evenement" : type === "survey" ? "sondage" : type === "pool" ? "cagnotte" : type === "service" ? "service" : ""
+export const GetPathElement = (type: string) => type === "post" ? "annonce" : type === "event" ? "evenement" : type === "survey" ? "sondage" : type === "pool" ? "cagnotte" : type === "service" ? "service" : type === "issue" ? "Conciliation" : ""
 export const GetArrayElement = (type: string) => type === "annonce" ? "posts" : type === "evenement" ? "events" : type === "sondage" ? "surveys" : type === "cagnotte" ? "pools" : type === "service" ? "services" : type === "litige" ? "issues" : ""
 
 
 //// CALENDAR FUNCTIONS 
-export const getWeek = (date: any, eventList: EventP[]) => {
+export const getWeek = (date: any, eventList: any[]) => {
     let week = [];
     date = new Date(date);
     const weekDay = date.getDay();
@@ -226,27 +226,27 @@ export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any)
 }
 
 
-//// LIKE UNLICK // QUICK PARTIPATE
-export const beInElement = (elementLiked: Post | EventP, array: any[], setArray: any, arrayJoin: any, setArrayJoin: any, userProfile: Profile, keyOf?: string) => {
+// //// LIKE UNLICK // QUICK PARTIPATE
+// export const beInElement = (elementLiked: Post | EventP, array: any[], setArray: any, arrayJoin: any, setArrayJoin: any, userProfile: Profile, keyOf?: string) => {
 
-    keyOf ? keyOf = keyOf : keyOf = 'target_id'
-    let index = array.findIndex((element: any) => element.id === elementLiked.id);
-    let users = []
+//     keyOf ? keyOf = keyOf : keyOf = 'target_id'
+//     let index = array.findIndex((element: any) => element.id === elementLiked.id);
+//     let users = []
 
-    if (elementLiked.users?.find((user: any) => user.userId === userProfile?.userId)) {
-        users = elementLiked.users.filter((user: any) => user.userId !== userProfile?.id);
-        let filter = arrayJoin.find((element: any) => element[keyOf] === elementLiked.id && element.userId === userProfile?.userId)
-        arrayJoin.splice(arrayJoin.indexOf(filter), 1)
+//     if (elementLiked.users?.find((user: any) => user.userId === userProfile?.userId)) {
+//         users = elementLiked.users.filter((user: any) => user.userId !== userProfile?.id);
+//         let filter = arrayJoin.find((element: any) => element[keyOf] === elementLiked.id && element.userId === userProfile?.userId)
+//         arrayJoin.splice(arrayJoin.indexOf(filter), 1)
 
-    } else {
-        users.push(userProfile);
-        arrayJoin.push({ userId: userProfile?.userId, [keyOf]: elementLiked.id })
-        array[index].users.push(userProfile)
-    }
-    setArrayJoin([...arrayJoin]);
-    setArray([...array]);
-    elementLiked.users = [...users]
-}
+//     } else {
+//         users.push(userProfile);
+//         arrayJoin.push({ userId: userProfile?.userId, [keyOf]: elementLiked.id })
+//         array[index].users.push(userProfile)
+//     }
+//     setArrayJoin([...arrayJoin]);
+//     setArray([...array]);
+//     elementLiked.users = [...users]
+// }
 
 
 export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefined, keyOf?: string) => {
@@ -278,12 +278,12 @@ export const GetCategory = (service: Service, categories: Label[]): string => {
 
 export const isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
 
-export const AcceptUserResp = (id: number, array: Service[], setArray: any, step: 0 | 1 | 2 | 3) => {
-    let index = array.findIndex((element: Service) => element.id === id);
-    array[index].status = step
-    step === 3 && (array[index].finished_at = new Date())
-    setArray([...array]);
-}
+// export const AcceptUserResp = (id: number, array: Service[], setArray: any, step: 0 | 1 | 2 | 3) => {
+//     let index = array.findIndex((element: Service) => element.id === id);
+//     array[index].status = step
+//     step === 3 && (array[index].finished_at = new Date())
+//     setArray([...array]);
+// }
 
 export const takeElement = (id: number, array: Service[], setArray: any, userProfile: Profile) => {
     let index = array.findIndex((element: Service) => element.id === id);
@@ -359,22 +359,24 @@ export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
 }
 
 //
-export const GenereMyActions = (element: Post | EventP | Service | Survey | Issue | Pool, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): action[] => {
+export const GenereMyActions = (element: Post | EventP | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): action[] => {
     const navigate = useNavigate()
     let title = ''
-    'title' in element ? title = element.title : 'litige'
+    let id = 0;
+    'title' in element ? title = element.title : 'litige';
+    'id' in element ? id = element.id : element.targetId;
     const actions = [
         {
             icon: handleOpen ? 'Supprimer' : 'close',
             title: "Confirmer la suppression",
             body: "Confirmer la suppression de " + title,
-            function: async () => { await deleteRoute(element.id); handleOpen && handleOpen(); },
+            function: async () => { await deleteRoute(id); handleOpen && handleOpen(); },
         },
         {
             icon: handleOpen ? 'Modifier' : 'edit',
             title: "Confirmer la modification",
             body: "Confirmer la modification de " + title,
-            function: () => { navigate(`/${type}/edit/${element.id}`); handleOpen && handleOpen(); },
+            function: () => { navigate(`/${type}/edit/${id}`); handleOpen && handleOpen(); },
         },
 
     ];
@@ -405,6 +407,13 @@ export const serviceCategories = generateLabels(serviceCategory, labelsServices)
 
 const statusServices = ["nouveau", "en attente", "en cours", "terminé", "litige"];
 export const serviceStatus = generateLabels(serviceStep, statusServices);
+
+const labelsFlagTarget = ["evenement", "annonce", "sondage", "service"];
+export const flagTargets = generateLabels(flagTarget, labelsFlagTarget);
+
+const reasonsFlag = ["illicite", "haineux", "dangereux", "irrespecteux", "atteinte à la vie privé"]
+export const flagReasons = generateLabels(flagReason, reasonsFlag);
+
 
 export const getLabel = (value: string | any, array: Label[]): string => {
     const find = array.find((cat) => cat.value === value?.toUpperCase())

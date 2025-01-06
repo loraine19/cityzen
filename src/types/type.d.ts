@@ -5,7 +5,7 @@ import { userProfile } from "./user"
 //// type for post
 export type postBase = {
     id: number,
-    user_id: number,
+    userId: number,
     title: string,
     description: string,
     category: string,
@@ -24,7 +24,7 @@ export type addressGps = { lat: number, lng: number }
 
 export type eventBase = {
     id: number,
-    user_id: number,
+    userId: number,
     adress: string,
     start: string,
     end: string,
@@ -52,7 +52,7 @@ export type avatarData = {
 
 //// TYPE NOTIF 
 export type notif = {
-    user_id: number,
+    userId: number,
     relation: string,
     read: boolean
     target_id: number
@@ -65,7 +65,7 @@ export type notif = {
 
 export type all = {
     id: number,
-    user_id: number,
+    userId: number,
     type: string,
     element: post | event | survey | pool | service,
     created_at: string,
@@ -82,8 +82,8 @@ export interface flag extends targetUser {
 ////TYPES SERVICE 
 export interface service {
     id: number;
-    user_id_get: number;
-    user_id1_do: number;
+    userId_get: number;
+    userId1_do: number;
     type: 'get' | 'do';
     title: string;
     description: string;
@@ -98,9 +98,9 @@ export interface service {
 
 
 //// JOINTURES 
-export type eventUser = { event_id: number, user_id: number }
-export type postUser = { post_id: number, user_id: number }
-export type targetUser = { target_id: number | string, user_id: number, type: string, reason: string, active: boolean, created_at: string, updated_at: string }
+export type eventUser = { event_id: number, userId: number }
+export type postUser = { post_id: number, userId: number }
+export type targetUser = { target_id: number | string, userId: number, type: string, reason: string, active: boolean, created_at: string, updated_at: string }
 
 
 

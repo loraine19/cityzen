@@ -3,15 +3,12 @@ import { object, string } from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, CardHeader, Avatar, IconButton, List, ListItem, ListItemSuffix, } from '@material-tailwind/react';
-import MapPickUpComp from '../../components/mapComps/MapPickUpComp';
 import { AuthHeader } from '../../components/authComps/AuthHeader';
 import { getImageBlob, } from '../../functions/GetDataFunctions';
 import { Address, AssistanceLevel, assistanceLevel, ProfileDTO, User } from '../../types/class';
 import { ConfirmModal } from '../../components/UIX/ConfirmModal';
 import { getUserMe } from '../../functions/API/usersApi';
-import { GetAddressObject } from '../../functions/GeoMapFunction';
 import { getAddresses, postAddress } from '../../functions/API/addressApi';
-import parse from 'html-react-parser';
 import { patchProfile } from '../../functions/API/profilesApi';
 import { AddressInputOpen } from '../../components/mapComps/AddressInputOpen';
 
@@ -29,6 +26,7 @@ export default function MyInfosPage() {
     1 > 2 && console.log("avoid compile error", addressList)
     const [open, setOpen] = useState(false);
     let assistanceLevelSelect = assistanceLevel.filter((level: any) => { if (!isNaN(level)) { return level.toString() } }) as string[]
+    type AddressErrors = { zipcode: string, city: string }
 
     /// ON LOAD PAGE FETCH 
     useEffect(() => {
@@ -122,7 +120,7 @@ export default function MyInfosPage() {
         formik.values.addressId = formik.values.Address.id
         const { Address, ...rest } = formik.values;
         const updateData = { ...rest }
-        const patchedProfile = await patchProfile(user.Profile.id, updateData);
+        const patchedProfile = await patchProfile(user.Profile.userId, updateData);
         return patchedProfile
     }
 
@@ -191,7 +189,7 @@ export default function MyInfosPage() {
                             <AddressInputOpen address={formik.values.Address} setAddress={setAddress}
                                 placeHolder={Address.address ? Address?.address + " " + Address?.zipcode + " " + Address?.city : ''} />
                             <Typography className='text-xs error pt-2'>
-                                {formik.errors.Address?.zipcode && formik.errors.Address?.city ? `${formik.errors.Address.zipcode} ${formik.errors.Address.city}` : '' as string}
+                                {formik.errors.Address && (formik.errors.Address as AddressErrors).zipcode && (formik.errors.Address as AddressErrors).city ? `${(formik.errors.Address as AddressErrors).zipcode} ${(formik.errors.Address as AddressErrors).city}` : '' as string}
                             </Typography>
 
 

@@ -1,4 +1,4 @@
-import { IssueDTO, Issue, IssueStep } from "../../types/class";
+import { IssueDTO, Issue } from "../../types/class";
 import { useApi, createFormData, handleApiCall, } from "./useApi";
 
 
@@ -45,6 +45,7 @@ export const patchIssue = async (id: number, element: IssueDTO): Promise<Issue> 
 };
 
 export const postIssue = async (element: IssueDTO): Promise<Issue> => {
+    console.log("element", element)
     const formData = createFormData(element);
     return handleApiCall(() => api.post(dataType, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }

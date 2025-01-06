@@ -5,101 +5,119 @@ import { useContext, useEffect, useState } from 'react';
 import CTAMines from '../../components/UIX/CTAMines';
 import UserContext from '../../contexts/user.context';
 import { getLabel, serviceTypes, serviceCategories, toggleResp, GenereMyActions, serviceStatus, toggleValidResp, generateContact, GetPoints } from '../../functions/GetDataFunctions';
-import DataContext from '../../contexts/data.context';
-import { action, Service } from '../../types/class';
+import { action, Service, ServiceStep } from '../../types/class';
 import ServiceDetailComp from '../../components/servicesComps/ServiceDetailComp';
 import { deleteService, getServiceById, putServiceFinish } from '../../functions/API/servicesApi';
 
 export default function ServiceDetailPage() {
     const { id } = useParams();
     const { user } = useContext(UserContext);
-    const userId = user.userId
+    const userId = user.userId;
     const [service, setService] = useState<Service>({} as Service);
     const [mine, setMine] = useState<boolean>(false);
     const [IResp, setIResp] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
     const [category, setCategory] = useState<string>('');
-    const [type, setType] = useState<string>('');
-    const [status, setStatus] = useState<string>('');
-    const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false);
-    const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
-    const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
-    const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
+    const [type, setType] = useState<string>('')
+    const [isNew, setIsNew] = useState<boolean>(false);
+    const [isResp, setIsResp] = useState<boolean>(false);
+    const [isValidated, setIsValidated] = useState<boolean>(false);
+    const [isFinish, setIsFinish] = useState<boolean>(false);
+    const [inIssue, setInIssue] = useState<boolean>(false);
+    const [statusValue, setStatusValue] = useState<number>(0);
     const [points, setPoints] = useState<number[]>([0]);
+
     const updateStatus = (status: string) => {
         setIsNew(status === 'nouveau');
         setIsResp(status === 'en attente');
         setIsValidated(status === 'en cours');
         setIsFinish(status === 'terminé');
+        setInIssue(status === 'litige');
     };
 
     const fetch = async () => {
         setLoading(true);
         const idS = id ? parseInt(id) : 0;
         const service = await getServiceById(idS);
-        console.log(service)
         setService(service);
         setCategory(getLabel(service.category.toString(), serviceCategories));
         setType(getLabel(service.type.toString(), serviceTypes));
         setMine(service.User.id === userId);
         setIResp(service.userIdResp === userId);
-        updateStatus(getLabel(service.status, serviceStatus))
+        const statusLabel = getLabel(service.status, serviceStatus);
+        updateStatus(statusLabel);
         setPoints(GetPoints(service));
-        setLoading(false)
-    };
+        setStatusValue(parseInt(ServiceStep[service.status]));
+        setLoading(false);
+    }
 
-    useEffect(() => { fetch() }, []);
-    useEffect(() => { updateStatus(getLabel(service.status, serviceStatus)) }, [service]);
-    const MyActionsStart: action[] = GenereMyActions(service, "service", deleteService, () => { });
-    const MyActions: action[] = isNew && MyActionsStart || [...MyActionsStart,
-    {
-        icon: `Valider `,
-        title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
-        body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
-        function: () => { toggleValidResp(service.id, service.UserResp.id, setService); updateStatus(getLabel(service.status, serviceStatus)) }
-    },
-    {
-        icon: `Refuser`,
-        title: `"Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
-        body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
-        function: () => { toggleValidResp(service.id, 0, setService); updateStatus(getLabel(service.status, serviceStatus)) }
-    }]
+    useEffect(() => { fetch() }, [id]);
+
+    useEffect(() => {
+        const statusLabel = getLabel(service.status, serviceStatus);
+        updateStatus(statusLabel);
+    }, [service]);
+
+    const MyActions: action[] = GenereMyActions(service, "service", deleteService, () => { });
+
+    const MyActionsResp: action[] = [
+        ...MyActions,
+        {
+            icon: 'Valider',
+            title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
+            body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+            function: () => {
+                toggleValidResp(service.id, service.UserResp.id, setService);
+                updateStatus(getLabel(service.status, serviceStatus));
+            }
+        },
+        {
+            icon: 'Refuser',
+            title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
+            body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+            function: () => {
+                toggleValidResp(service.id, 0, setService);
+                updateStatus(getLabel(service.status, serviceStatus));
+            }
+        }
+    ];
 
     const MyActionsValidate: action[] = [
         {
-            icon: `terminer `,
-            title: `Terminer le service`,
+            icon: 'Besoin d\'aide ?',
+            title: 'Ouvrir une demande de conciliation',
+            body: `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.UserResp)}`,
+            function: () => { navigate(`/conciliation/create/${service.id}`);; }
+        }, {
+            icon: 'terminer',
+            title: 'Terminer le service',
             body: `${service.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${points} points`,
-            function: async () => { await putServiceFinish(service.id); fetch() }
-        },
-        {
-            icon: `litige`,
-            title: `Signaler un litige`,
-            body: `Avant d'ouvrir un litige pouvez contacter ${generateContact(service.UserResp)}`,
-            function: () => { console.log('litige') }
+            function: async () => {
+                await putServiceFinish(service.id);
+                fetch();
+            }
         }
-    ]
 
+    ];
 
-    const isNewAction: action[] = [
+    const respAction: action[] = [
         {
             icon: isResp ? 'Annuler votre réponse' : isValidated ? "Besoin d'aide ?" : '',
-            title: isResp ? 'Annuler votre réponse' : isValidated ? "Déclarer un litige ?" : '',
-            body: isResp ? service.title : isValidated ? `Avant d'ouvrir un litige pouvez contacter ${generateContact(service.User)}` : '',
-
+            title: isResp ? 'Annuler votre réponse' : isValidated ? "Ouvrir une demande de conciliation?" : '',
+            body: isResp ? service.title : isValidated ? `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` : '',
             function: () => {
                 if (isResp) {
                     toggleResp(service.id, userId, setService);
                     updateStatus(getLabel(service.status, serviceStatus));
                 }
                 if (isValidated) {
-                    console.log('litige');
+                    navigate(`/conciliation/create/${service.id}`);
                 }
             }
         },
         {
-            icon: isNew ? 'Répondre au service' : isValidated ? 'Service en cours' : '',
+            icon: isNew ? 'Répondre au service' : '',
             title: 'Répondre au service',
             body: service.title,
             function: () => {
@@ -107,8 +125,18 @@ export default function ServiceDetailPage() {
                 updateStatus(getLabel(service.status, serviceStatus));
             }
         }
+    ];
+
+    const MyActionsLitige: action[] = [
+        {
+            icon: 'Voir le litige',
+            title: 'Voir le litige',
+            body: 'Voir le litige',
+            function: () => { navigate(`/conciliation/${service.id}`); }
+        }
     ]
 
+    const FinishAction = [{ icon: 'ce service est terminé', title: '', body: '', function: () => { } }]
 
     if (loading) {
         return <div>Loading...</div>;
@@ -130,26 +158,12 @@ export default function ServiceDetailPage() {
                 </div>
             </main>
             <footer>
-                {mine && !isFinish ?
-                    <CTAMines
-                        actions={isValidated ? MyActionsValidate : MyActions}
-                        disabled1={isFinish}
-                        disabled2={isFinish}
-                    />
-                    :
-                    <CTAMines
-                        disabled2={isValidated}
-                        actions={isNewAction}
-                    />
-                }
-                {
-                    isFinish && <CTAMines
-                        actions={[{ icon: `ce service est terminé`, title: ``, body: ``, function: () => { } }]}
-                        disabled1={true}
-                    />
-                }
+                {mine && isNew && <CTAMines actions={MyActions} />}
+                {mine && (isResp || isValidated) && <CTAMines actions={isValidated ? MyActionsValidate : MyActionsResp} />}
+                {!mine && statusValue < 3 && <CTAMines actions={respAction} />}
+                {isFinish && <CTAMines actions={FinishAction} disabled1={true} />}
+                {(mine || IResp) && inIssue && <CTAMines actions={MyActionsLitige} />}
             </footer>
         </div>
     );
 }
-

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CheckCard from "../../components/UIX/CheckCard";
 import NavBarBottom from "../../components/UIX/NavBarBottom";
@@ -8,18 +8,17 @@ import SubHeader from "../../components/UIX/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
 import ServiceComp from "../../components/servicesComps/ServiceComp";
 import { label } from "../../types/label";
-import { Service, ServiceStep } from "../../types/class";
-import UserContext from "../../contexts/user.context"
+import { Service } from "../../types/class"
 import { serviceCategories, getValue, getLabel } from '../../functions/GetDataFunctions';
 import { getServices, getServicesDo, getServicesGet, getServicesImIn, getServicesImInGet, getServicesImInDo, getServicesImInStatus } from '../../functions/API/servicesApi';
+import Skeleton from "react-loading-skeleton";
+
 
 export default function ServicesPage() {
-    const { user } = useContext(UserContext)
     const [categorySelected, setCategorySelected] = useState<string>(serviceCategories[0].value);
     const [notif, setNotif] = useState<string>('');
     const [services, setServices] = useState<Service[]>([]);
     const [mines, setMines] = useState<boolean>(false);
-    const [arrayToFilter] = useState<Service[]>([]);
     const [doServices, setDoServices] = useState<Service[]>([]);
     const [getsServices, setGetServices] = useState<Service[]>([]);
     const [myservices, setMyservices] = useState<Service[]>([]);
@@ -36,6 +35,7 @@ export default function ServicesPage() {
     const label = getLabel(categorySelected, serviceCategories);
     const [searchParams, setSearchParams] = useSearchParams();
     const [cat, setCat] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(true);
     const params = { tab: searchParams.get("search"), category: searchParams.get("category") };
     !serviceCategories.some(category => category.value === '') && serviceCategories.unshift({ label: 'tous', value: '' })
 
@@ -49,7 +49,6 @@ export default function ServicesPage() {
         const myServicesDoing = await getServicesImInStatus('STEP_2');
         const myServicesDone = await getServicesImInStatus('STEP_3');
         const myServicesLitige = await getServicesImInStatus('STEP_4');
-
         const doServices = await getServicesDo();
         const getsServices = await getServicesGet();
         setServices(services);
@@ -63,6 +62,7 @@ export default function ServicesPage() {
         setMyServicesDoing(myServicesDoing);
         setMyServicesDone(myServicesDone);
         setMyServicesLitige(myServicesLitige);
+        services && services.length > 0 && setLoading(false);
         switch (tabSelected) {
             case "myservices": setServiceList(myservices); break;
             case "get": setServiceList(getsServices); break;
@@ -71,15 +71,17 @@ export default function ServicesPage() {
         }
     };
 
+
     useEffect(() => {
-        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${params.tab}"]`);
+        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${params.tab}"]`)
         const fetch = async () => await UpdateList();
-        fetch().then(() => Tab && Tab.click());
+        fetch().then(() => Tab && Tab.click())
     }, []);
 
 
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé", "litige"];
-    const [boxSelected, setBoxSelected] = useState<string[]>(boxArray);
+    const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
+
 
     const selectBox = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newBoxSelected = e.target.checked
@@ -97,10 +99,9 @@ export default function ServicesPage() {
             boxSelected.includes(boxArray[4]) ? myServicesDoing : [],
             boxSelected.includes(boxArray[5]) ? myServicesDone : [],
             boxSelected.includes(boxArray[6]) ? myServicesLitige : [],
-        ];
-        console.log(filters)
+        ]
         return [...new Set(filters.flat())];
-    };
+    }
 
     useEffect(() => {
         if (mines) setServiceList(filterCheck(boxSelected));
@@ -133,11 +134,11 @@ export default function ServicesPage() {
             service.description.toLowerCase().includes(cat.toLowerCase())
         );
         setServices(value !== '' ? result : tabledList);
+        setSearchParams({ search: tabSelected, category: cat });
     };
 
     useEffect(() => {
-        setNotif(serviceList.length > 0 ? '' :
-            `Aucun service ${tabSelected} ${categorySelected !== '' && categorySelected ? ' ' + cat : ''} n'a été trouvé`);
+        !loading && setNotif(serviceList.length > 0 ? '' : `Aucun service ${tabSelected} ${categorySelected !== '' && categorySelected ? ' ' + cat : ''} n'a été trouvé`);
     }, [services]);
 
     return (
@@ -154,12 +155,15 @@ export default function ServicesPage() {
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
             <main>
-                <div className="grid grid-cols-1 lg:grid-cols-2 pt-4 w-full gap-4">
-                    {serviceList.map((service, index) => (
-                        <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
-                            <ServiceComp key={service.id} service={service} change={search} mines={mines} update={UpdateList} />
-                        </div>
-                    ))}
+                <div className="grid grid-cols-1 lg:grid-cols-2 pt-2 w-full gap-4">
+                    {loading ?
+                        <> <Skeleton count={2} height={300} className="my-2.5 !rounded-xl shadow-lg" />
+                            <Skeleton count={2} height={300} className="my-2.5 !rounded-xl shadow-lg" /></> :
+                        serviceList.map((service, index) => (
+                            <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
+                                <ServiceComp key={service.id} service={service} change={search} mines={mines} update={UpdateList} />
+                            </div>
+                        ))}
                 </div>
             </main>
             <NavBarBottom addBtn={true} />

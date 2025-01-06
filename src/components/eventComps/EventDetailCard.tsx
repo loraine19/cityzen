@@ -9,11 +9,11 @@ import UserContext from "../../contexts/user.context";
 import Skeleton from "react-loading-skeleton";
 import AddressMapOpen from "../mapComps/AddressMapOpen";
 
-type EventCardProps = { Event: EventP, change?: (e: any) => void, setEvent?: any }
+type EventCardProps = { Event: EventP, change?: (e: any) => void, setEvent?: any, flagged?: boolean }
 export function EventDetailCard(props: EventCardProps) {
-    const event = props.Event
-    const setEvent = props.setEvent
-    const { id, title, description, category, participantsMin, start, Participants, User, Address } = event
+    console.log(props)
+    const { Event, flagged, setEvent } = props
+    const { id, title, description, category, participantsMin, start, Participants, User, Address } = Event
     const user = useContext(UserContext)
     const userId = user.user.userId
     const Igo: boolean = Participants.find((participant: Participant) => participant.userId === userId) ? true : false
@@ -52,8 +52,8 @@ export function EventDetailCard(props: EventCardProps) {
                             {title}<br></br>
                             <span className="text-sm font-medium text-blue-gray-500">{eventdateInfo(props.Event)}</span>
                         </Typography>
-                        <Link to={`/flag/event${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className="material-symbols-outlined !text-[1.2rem] opacity-80">flag_2</span>
+                        <Link to={`/flag${flagged ? '/edit' : ''}/event/${id}`} title={`signaler un problème sur ${title}`}>
+                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
                     </div>
                     <div className=" flex  flex-col flex-1 gap-x-3 py-1 lg:flex-row">

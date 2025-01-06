@@ -112,10 +112,15 @@ export default function EventListPage() {
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
             {view === "view_agenda" && (
-                <main className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
-                    {loading ? <Skeleton count={2} height={300} className="my-2.5 !rounded-xl shadow-lg" /> :
-                        eventList.map((event: EventP) => (
-                            <EventCard key={event.id} event={event} change={change} mines={mines} update={UpdateList} />
+                <main className="grid grid-cols-1 md:grid-cols-2 pt-2 w-full gap-3">
+                    {loading ?
+                        Array.from({ length: 10 }).map((_, index) => (
+                            <Skeleton key={index} count={10} height={300} className="my-2.5 !rounded-xl shadow-lg" />))
+                        :
+                        eventList.map((event: EventP, index: number) => (
+                            <div className="pt-7 max-w-[calc(100vw-1rem)] mx-2" key={index}>
+                                <EventCard key={event.id} event={event} change={change} mines={mines} update={UpdateList} />
+                            </div>
                         ))
                     }
                 </main>

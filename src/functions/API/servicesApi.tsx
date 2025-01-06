@@ -1,4 +1,4 @@
-import { ServiceDTO, Service, ServiceStep } from "../../types/class";
+import { ServiceDTO, Service } from "../../types/class";
 import { useApi, createFormData, handleApiCall, } from "./useApi";
 
 

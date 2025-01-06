@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../eventComps/EventCard';
 import { Link } from 'react-router-dom';
-import { dayMS, getDays, getWeeks } from '../../functions/GetDataFunctions'
+import { dayMS, getDays, getWeeks, getLabel, eventCategories } from '../../functions/GetDataFunctions';
 import { EventP } from '../../types/class'
 
 export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
@@ -38,7 +38,7 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
         <div className='flex flex-col flex-1'>
             <div className="flex  justify-between  gap-1 items-center p-0">
                 <div className='flex gap-2 items-center'>
-                    <Link to="/service"><span className="material-symbols-rounded fill text-gray-800 !text-4xl" >supervised_user_circle</span>
+                    <Link to="/service"><span className="material-symbols-rounded notranslate fill text-gray-800 !text-4xl" >supervised_user_circle</span>
                     </Link>
                     <div>
                         <Typography color="blue-gray" className="hidden lg:flex">
@@ -48,14 +48,14 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                 </div>
                 <div className='flex  w-full justify-between items-center flex-row-reverse'>
                     <div className='flex gap-1 items-center'>
-                        <button onClick={removeWeek}><span className='material-symbols-outlined !text-sm'>arrow_back_ios</span></button>
+                        <button onClick={removeWeek}><span className='material-symbols-rounded notranslate !text-sm'>arrow_back_ios</span></button>
                         <button onClick={resetWeek}>{(new Date().toLocaleDateString('fr-FR', { weekday: 'short', month: 'numeric', day: 'numeric' }))}</button>
-                        <button onClick={addWeek}><span className='material-symbols-outlined !text-sm'>arrow_forward_ios</span></button>
+                        <button onClick={addWeek}><span className='material-symbols-rounded notranslate !text-sm'>arrow_forward_ios</span></button>
                     </div>
                     <div className='flex gap-2 items-center lg:hidden'>
-                        <button onClick={removeCol}><span className='material-symbols-outlined !text-lg'>do_not_disturb_on</span></button>
+                        <button onClick={removeCol}><span className='material-symbols-rounded notranslate !text-lg'>do_not_disturb_on</span></button>
                         <button onClick={resetCol}>{col}</button>
-                        <button onClick={addCol}><span className='material-symbols-outlined !text-lg'>add_circle</span></button>
+                        <button onClick={addCol}><span className='material-symbols-rounded notranslate !text-lg'>add_circle</span></button>
                     </div>
                 </div>
             </div>
@@ -71,12 +71,13 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                                     </div>
                                     <div className='flex flex-col h-full w-full' key={index}>
                                         {day.events.length < 1 &&
-                                            <span className='GrayChip m-0.5 py-0.5 lg:py-2 rounded-full' >-</span>}
+                                            <span className='GrayChip m-0.5 py-0.5 lg:py-1.5 rounded-full' >-</span>}
                                         {(day.events).map((event: any, index: number) =>
                                             <Popover key={index}>
                                                 <PopoverHandler>
-                                                    <p key={index} className={'CyanChip display flex px-2 m-0.5 py-0.5 lg:py-1.5 rounded-full lg:truncate line-clamp-1'}>
-                                                        {event.category}
+                                                    <p key={index}
+                                                        className={'CyanChip display flex px-3 m-0.5 py-0.5 lg:py-1.5 rounded-full truncate line-clamp-1 justify-center'}>
+                                                        {getLabel(event.category, eventCategories)}
                                                     </p>
                                                 </PopoverHandler>
                                                 <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>

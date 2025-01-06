@@ -4,7 +4,7 @@ import ModifBtnStack from "../UIX/ModifBtnStack";
 import { Flag, Like, Post } from "../../types/class";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context";
-import { toggleLike, isFlaged, GenereMyActions, postCategories, getLabel, getEnumVal } from "../../functions/GetDataFunctions";
+import { toggleLike, isFlaged, GenereMyActions, postCategories, getLabel } from "../../functions/GetDataFunctions";
 import { getFlagsPost } from "../../functions/API/flagsApi";
 import { deletePost } from "../../functions/API/postsApi";
 
@@ -21,13 +21,13 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
     const userOrga = User.Profile
     const ILike: boolean = post.Likes.find((like: Like) => like.userId === userId) ? true : false
     const label = getLabel(category, postCategories)
-    // console.log(label, category)
     const myActions = GenereMyActions(post, "annonce", deletePost)
 
 
     useEffect(() => {
         const onload = async () => {
             const flags = await getFlagsPost()
+            console.log(flags)
             setFlags(flags)
             setFlagged(isFlaged(post, userId, flags))
         }
@@ -61,11 +61,8 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                         <Typography variant="h5" color="blue-gray" className="mb-2">
                             {title}
                         </Typography>
-                        <Link to={`/flag${flagged ? '/edit' : ''}/post${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${flagged && "fill !text-red-500"} 
-                                material-symbols-outlined !text-[1.2rem] opacity-80`}>
-                                flag_2
-                            </span>
+                        <Link to={`/flag${flagged ? '/edit' : ''}/post/${id}`} title={`signaler un problème sur ${title}`}>
+                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
                         </Link>
 
                     </div>
@@ -80,7 +77,7 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                 <CardFooter className="CardFooter">
                     {!mines ?
                         <div className="flex items-center px-0 gap-2">
-                            <Avatar src={userOrga?.image} size="sm" alt="avatar" withBorder={true} />
+                            <Avatar src={userOrga?.image as string} size="sm" alt="avatar" withBorder={true} />
                             <div className="hidden lg:flex lg:flex-col">
                                 <Typography variant="small" className="font-normal !p-0">{userOrga?.firstName} - {userOrga?.lastName}</Typography>
                                 <Typography variant="small" color="gray" >

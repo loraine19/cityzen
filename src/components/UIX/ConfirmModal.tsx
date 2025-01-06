@@ -8,7 +8,7 @@ export function ConfirmModal(props: { open: boolean, handleOpen: () => void, han
             <Button className="hidden">-</Button>
             <Dialog open={open} handler={handleOpen}>
                 <DialogHeader className="text-center text-xl pt-4 pb-0">{props.title} : </DialogHeader>
-                <DialogBody className="capitalize max-h-[80vh] overflow-auto">
+                <DialogBody className=" max-h-[80vh] overflow-auto">
                     {parse(props.element as string)}
 
                 </DialogBody>

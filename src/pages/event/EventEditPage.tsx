@@ -7,31 +7,36 @@ import { EventP } from '../../types/class';
 import { addressIn } from '../../functions/GetDataFunctions';
 import { ConfirmModal } from '../../components/UIX/ConfirmModal';
 import { getEventById, patchEvent } from '../../functions/API/eventsApi';
+import Skeleton from 'react-loading-skeleton';
 export default function EventDetailPage() {
     const { id } = useParams()
     const [newEvent, setNewEvent] = useState<EventP>({} as EventP);
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const fetchEvent = async () => {
         const idS = id ? parseInt(id) : 0;
-        const fetchedEvent = await getEventById(idS);
-        console.log("fetchedEvent", fetchedEvent)
-        setNewEvent(fetchedEvent);
-        formik.values.category = fetchedEvent.category;
-        formik.values.Address = fetchedEvent.Address;
-        formik.values.start = fetchedEvent.start;
-        formik.values.title = fetchedEvent.title;
-        formik.values.description = fetchedEvent.description;
-        formik.values.participantsMin = fetchedEvent.participantsMin as number;
-        formik.values.end = fetchedEvent.end;
-        formik.values.image = fetchedEvent.image;
-        formik.values.Participants = fetchedEvent.Participants;
-        //navigate(`/evenement/${id}`
-    };
-
-    useEffect(() => {
-        fetchEvent()
-    }, []);
+        try {
+            const fetchedEvent = await getEventById(idS);
+            setNewEvent(fetchedEvent);
+            formik.values.category = fetchedEvent.category;
+            formik.values.Address = fetchedEvent.Address;
+            formik.values.start = fetchedEvent.start;
+            formik.values.title = fetchedEvent.title;
+            formik.values.description = fetchedEvent.description;
+            formik.values.participantsMin = fetchedEvent.participantsMin as number;
+            formik.values.end = fetchedEvent.end;
+            formik.values.image = fetchedEvent.image;
+            formik.values.Participants = fetchedEvent.Participants
+        }
+        catch (error) {
+            navigate('/evenement-' + id)
+        } finally {
+            setLoading(false);
+        }
+    }
+    useEffect(() => { fetchEvent() }, []);
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -45,7 +50,7 @@ export default function EventDetailPage() {
             zipcode: string().required("Code postal est obligatoire"),
         })
     })
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
     value && 9 > 10 && console.log("avoid compile error ", value)
 
 
@@ -55,7 +60,6 @@ export default function EventDetailPage() {
         onSubmit: values => {
             addressIn(formik, newEvent);
             formik.values = values
-            console.log("values", values)
             setOpen(true)
         }
     })
@@ -64,13 +68,12 @@ export default function EventDetailPage() {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
         formik.values.addressId = formik.values.Address.id
-        //formik.values.category = getValue(formik.values.category, eventCategories)
         const { Address, Participants, ...rest } = formik.values;
         const updateData = { ...rest }
         return await patchEvent(newEvent.id, updateData)
     }
 
-    const [open, setOpen] = useState(false);
+
     return (
         <div className="Body cyan">
             <ConfirmModal
@@ -86,7 +89,7 @@ export default function EventDetailPage() {
                 }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-            {newEvent && newEvent.id &&
+            {loading ? <Skeleton count={1} height="100%" /> :
                 <EventForm formik={formik} setValue={setValue} />}
         </div >
     )

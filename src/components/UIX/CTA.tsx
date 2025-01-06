@@ -55,18 +55,18 @@ export default function CTA(props:
                     buttons[index].function();
                     setOpen(false)
                 }}
-                title={buttons[index].title}
-                element={buttons[index].body} />
+                title={buttons[index].title as string}
+                element={buttons[index].body as any} />
 
 
-            <Button className="flex items-center justify-center rounded-full w-full shadow lgBtn"
+            <Button className="flex items-center justify-center rounded-full w-full shadow lgBtn truncate px-2"
                 onClick={() => { setOpen(true), setIndex(0) }}
                 disabled={disabled} >
                 {buttons[0].icon}
             </Button>
 
             {
-                cancelBtn && <Button className="flex items-center justify-center rounded-full w-full lgBtn"
+                cancelBtn && <Button className="flex items-center justify-center rounded-full w-full lgBtn truncate px-2"
                     color="white"
                     onClick={() => { setOpen(true), setIndex(1) }} >
                     {buttons[1].icon}

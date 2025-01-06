@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import UserContext from "../contexts/user.context";
 import { useContext } from "react";
 import { votesFaker } from "../datas/fakers/surveyFaker";
+import { GenereMyActions } from "../functions/GetDataFunctions";
+import { Pool } from "../types/class";
 
 interface PoolCardProps {
     id: number;
@@ -22,6 +24,7 @@ interface PoolCardProps {
 }
 
 export default function PoolCard(props: PoolCardProps) {
+
     // Data
     const { pool } = props;
     const { user } = useContext(UserContext);
@@ -30,6 +33,8 @@ export default function PoolCard(props: PoolCardProps) {
     const votes = votesFaker.filter(
         (vote) => vote.target === "Cagnotte" && vote.target_id === pool.id
     );
+    const deletePool = async () => { console.log('deletePool' + pool.id) }
+    const MyActions = GenereMyActions(pool as unknown as Pool, 'Cagnotte', deletePool,)
 
     // completion percentage for this survey
     const completion = (votes.length * 10 * 100) / 50;
@@ -81,13 +86,12 @@ export default function PoolCard(props: PoolCardProps) {
             </CardBody>
 
             <CardFooter className="pt-0 flex items-center justify-between ">
-                {pool.user_id_create === user.id ? (
+                {pool.user_id_create === user.userId ? (
                     <div className="flex items-center gap-1 mt-4">
                         <ModifBtnStack
+                            actions={MyActions}
                             icon3={false}
-                            id={pool.id}
-                            isPool={true}
-                            disabledEdit={completion === 0 ? false : true}
+                            disabled2={completion === 0 ? false : true}
                         />
                         <Link to={`/cagnotte/${pool.id}`}>
                             <Button className="flex items-center justify-center rounded-full h-9 w-9 p-1 ">
@@ -109,7 +113,7 @@ export default function PoolCard(props: PoolCardProps) {
                     </div>
                     <Progress value={completion} />
                 </div>
-                {pool.user_id_create !== user.id ? (
+                {pool.user_id_create !== user.userId ? (
                     <Link to={`/cagnotte/${pool.id}`}>
                         <Button className="flex items-center justify-center rounded-full h-9 w-9 p-1">
                             <span className="material-symbols-outlined !text-[1.3rem]">

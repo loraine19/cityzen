@@ -24,7 +24,6 @@ export class User {
 }
 
 export class Profile {
-    id: number = 0;
     user: User = new User();
     userId: number = 0;
     userIdSp: number = 0;
@@ -119,6 +118,7 @@ export class Pool {
     userIdBenef: number = 0;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+    User?: User = new User();
 }
 
 export class Vote {
@@ -146,6 +146,7 @@ export class Survey {
     category: SurveyCategory = SurveyCategory.CATEGORY_1;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+    User?: User = new User();
 }
 
 export class GroupUser {
@@ -192,7 +193,8 @@ export class Issue {
     userIdModo2: number = 0;
     description: string = '';
     image: string | File = '';
-    status: IssueStep = IssueStep.STEP_0;
+    date: Date | string = new Date();
+    status: IssueStep | string = IssueStep.STEP_0;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
 }
@@ -205,6 +207,10 @@ export class Flag {
     reason: FlagReason = FlagReason.REASON_1;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+    Service?: Service = new Service();
+    Post?: Post = new Post();
+    Event?: EventP = new EventP();
+    Survey?: Survey = new Survey();
 }
 
 export class Token {
@@ -249,12 +255,6 @@ export enum VoteOpinion {
     WO
 }
 
-export enum FlagTarget {
-    EVENT,
-    POST,
-    SURVEY,
-    SERVICE
-}
 
 export enum Share {
     EMAIL,
@@ -346,6 +346,16 @@ export enum FlagReason {
     REASON_4,
     REASON_5
 }
+export const flagReason = Object.values(FlagReason).filter(reason => typeof reason === 'string');
+
+export enum FlagTarget {
+    EVENT,
+    POST,
+    SURVEY,
+    SERVICE
+}
+export const flagTarget = Object.values(FlagTarget).filter(target => typeof target === 'string');
+
 // DTOs
 export class AddressDTO implements Partial<Address> {
     id?: number;
@@ -383,7 +393,7 @@ export class ProfileDTO implements Partial<Profile> {
 }
 
 export class ProfileUpdateDTO implements Partial<ProfileDTO> {
-    skills: any;
+    skills?: any;
     assistance?: AssistanceLevel | undefined;
     addressId?: number | undefined;
 }
@@ -507,12 +517,14 @@ export class ServiceDTO {
 }
 
 export class IssueDTO {
-    id?: number;
     serviceId?: number;
     userId?: number;
     description?: string;
     image?: string | File;
-    status?: IssueStep;
+    status?: IssueStep | string;
+    userIdModo?: number;
+    userIdModo2?: number;
+    date?: Date | string;
 }
 
 export class FlagDTO {
@@ -547,4 +559,10 @@ export class action {
 export class Label {
     label: string = '';
     value: string | any = '';
+}
+
+export class ModalValues {
+    confirm: () => any = () => { };
+    title: string = '';
+    element: string = ''
 }

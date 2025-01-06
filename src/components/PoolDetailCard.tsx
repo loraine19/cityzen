@@ -135,7 +135,7 @@ export default function PoolDetailCard() {
                         <div className="flex items-center  justify-between w-full">
                             <div className="flex gap-4 w-full">
                                 <Avatar
-                                    src={user.avatar}
+                                    src={user.image as string}
                                     alt="avatar"
                                     size="md"
                                 />

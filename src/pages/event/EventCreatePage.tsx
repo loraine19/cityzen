@@ -1,8 +1,7 @@
-import parse from 'html-react-parser';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { EventForm } from '../../components/eventComps/EventForm';
 import { EventP } from '../../types/class';
 import { addressIn } from '../../functions/GetDataFunctions';
@@ -27,8 +26,6 @@ export default function EventCreatePage() {
     const [value, setValue] = useState("");
     9 > 10 && console.log("avoid compile error ", value)
 
-
-
     const formik = useFormik({
         initialValues: newEvent as EventP,
         validationSchema: formSchema,
@@ -38,8 +35,6 @@ export default function EventCreatePage() {
             setOpen(true)
         }
     });
-
-    useEffect(() => { console.log("formik.values", formik.errors) }, [formik.values]);
 
     const postFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()

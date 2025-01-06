@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import parse from 'html-react-parser';
 import NavBarTop from '../../components/UIX/NavBarTop';
 import SubHeader from '../../components/UIX/SubHeader';
 import CTAMines from '../../components/UIX/CTAMines';
@@ -41,13 +40,13 @@ export default function AnnounceDetailPage() {
         {
             icon: 'Appel',
             title: "Confirmer mon appel à " + post.User?.Profile.firstName,
-            body: parse(`<a href="tel:${post.User?.Profile.phone}" target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Confirmer mon appel ${post.User?.Profile.phone}</a>`),
+            body: `<a href="tel:${post.User?.Profile.phone}" target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Confirmer mon appel ${post.User?.Profile.phone}</a>`,
             function: () => { window.open(`tel:${post.User?.Profile.phone}`); handleOpen(); },
         },
         {
             icon: 'Email',
             title: "Envoyer un email à " + post.User?.Profile.firstName,
-            body: parse(`<a href="mailto:${post.User?.email}?subject=${post.title} target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Envoyer un email à ${post.User?.Profile.firstName}</a>`),
+            body: `<a href="mailto:${post.User?.email}?subject=${post.title} target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Envoyer un email à ${post.User?.Profile.firstName}</a>`,
             function: () => { window.open(`mailto:${post.User?.email}?subject=${post.title}`); handleOpen(); },
         },
     ]
@@ -67,8 +66,8 @@ export default function AnnounceDetailPage() {
             </main>
 
             {isMine ?
-                <CTAMines id={post.id} values={myActions} /> :
-                <CTAMines id={post.id} values={ContactActions}
+                <CTAMines actions={myActions} /> :
+                <CTAMines actions={ContactActions}
                     disabled1={share.find((s: string) => s === "PHONE") ? false : true}
                     disabled2={share.find((s: string) => s === "EMAIL") ? false : true} />}
         </div>

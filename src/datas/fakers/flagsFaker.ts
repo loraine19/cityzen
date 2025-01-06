@@ -1,11 +1,11 @@
 
 
-import { targetUser,  } from "../../types/type";
+import { targetUser, } from "../../types/type";
 
-export const flagsFaker: targetUser[] =[
+export const flagsFaker: targetUser[] = [
   {
     target_id: 1,
-    user_id: 1,
+    userId: 1,
     reason: "haineux",
     type: "event",
     active: true,
@@ -14,7 +14,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 1,
-    user_id: 2,
+    userId: 2,
     reason: "irrespecteux",
     type: "survey",
     active: true,
@@ -23,7 +23,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 1,
-    user_id: 1,
+    userId: 1,
     reason: "dangereux",
     type: "service",
     active: true,
@@ -32,7 +32,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 1,
-    user_id: 1,
+    userId: 1,
     reason: "illicite",
     type: "survey",
     active: true,
@@ -41,7 +41,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 2,
-    user_id: 4,
+    userId: 4,
     reason: "illicite",
     type: "post",
     active: true,
@@ -50,7 +50,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 2,
-    user_id: 3,
+    userId: 3,
     reason: "irrespecteux",
     type: "event",
     active: true,
@@ -59,7 +59,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 2,
-    user_id: 6,
+    userId: 6,
     reason: "dangereux",
     type: "pool",
     active: true,
@@ -68,7 +68,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 3,
-    user_id: 6,
+    userId: 6,
     reason: "illicite",
     type: "service",
     active: true,
@@ -77,7 +77,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 3,
-    user_id: 5,
+    userId: 5,
     reason: "haineux",
     type: "survey",
     active: true,
@@ -86,7 +86,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 3,
-    user_id: 4,
+    userId: 4,
     reason: "irrespecteux",
     type: "post",
     active: true,
@@ -95,7 +95,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 4,
-    user_id: 1,
+    userId: 1,
     reason: "dangereux",
     type: "event",
     active: true,
@@ -104,7 +104,7 @@ export const flagsFaker: targetUser[] =[
   },
   {
     target_id: 4,
-    user_id: 3,
+    userId: 3,
     reason: "illicite",
     type: "pool",
     active: true,

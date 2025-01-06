@@ -17,6 +17,8 @@ import UserContext from "../contexts/user.context";
 import { votesFaker } from "../datas/fakers/surveyFaker";
 import { usersFaker } from "../datas/fakers/usersFaker";
 import RemainingDays from "../functions/RemainingDays";
+import { GenereMyActions } from "../functions/GetDataFunctions";
+import { Survey } from "../types/class";
 
 interface SurveyCardProps {
     survey: survey;
@@ -39,6 +41,9 @@ export default function SurveyCard(props: SurveyCardProps) {
         (votes.length * 100) / (numberOfUsers.length / 2)
     );
 
+    const deleteSurvey = async () => { console.log('deletePool' + survey.id) }
+    const MyActions = GenereMyActions(survey as unknown as Survey, 'Cagnotte', deleteSurvey,)
+
     return (
         <>
             <Card className="mt-6 w-resp ">
@@ -60,12 +65,12 @@ export default function SurveyCard(props: SurveyCardProps) {
                     </Typography>
                 </CardBody>
                 <CardFooter className="pt-0 flex items-center justify-between ">
-                    {survey.user_id === user.id ? (
+                    {survey.user_id === user.userId ? (
                         <div className="flex items-center gap-1 mt-4">
                             <ModifBtnStack
                                 icon3={false}
-                                id={survey.id}
-                                disabledEdit={completion === 0 ? false : true}
+                                actions={MyActions}
+                                disabled2={completion === 0 ? false : true}
                             />
                             <Link
                                 to={`/sondage/${survey.id}`}
@@ -90,7 +95,7 @@ export default function SurveyCard(props: SurveyCardProps) {
                         </div>
                         <Progress value={completion} />
                     </div>
-                    {survey.user_id !== user.id ? (
+                    {survey.user_id !== user.userId ? (
                         <Link to={`/sondage/${survey.id}`}>
                             <Button className="flex items-center justify-center rounded-full h-9 w-9 p-1 ">
                                 <span className="material-symbols-outlined !text-[1.3rem]">

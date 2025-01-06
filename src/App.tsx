@@ -12,7 +12,6 @@ import AnnounceListPage from "./pages/announce/AnnounceListPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import EventCreatePage from "./pages/event/EventCreatePage";
 import EventDetailPage from "./pages/event/EventDetailPage";
-import FlagDetailPage from "./pages/flag/FlagDetailPage";
 import EventEditPage from "./pages/event/EventEditPage";
 import SurveyCreatePage from "./pages/survey/SurveyCreatePage";
 import AnnounceDetailPage from "./pages/announce/AnnounceDetailPage";
@@ -23,7 +22,6 @@ import AnnounceEditPage from "./pages/announce/AnnounceEditPage";
 import MyInfosPage from "./pages/myInfos/MyInfosPage";
 import SignInPage from "./pages/auth/SignInPage";
 import FlagPage from "./pages/flag/FlagPage";
-import FlagEditPage from "./pages/flag/FlagEditPage";
 import SurveyDetailPage from "./pages/survey/SurveyDetailPage";
 import SurveyEditPage from "./pages/survey/SurveyEditPage";
 import SurveyDetailPoolPage from "./pages/survey/SurveyDetailPoolPage";
@@ -33,13 +31,12 @@ import NotificationsPage from "./pages/myInfos/NotificationPage";
 import ServiceEditPage from "./pages/service/ServiceEditPage";
 import IssueCreatePage from "./pages/service/issue/IssueCreatePage";
 import IssueDetailPage from "./pages/service/issue/IssueDetailPage";
-import ConciliationListPage from "./pages/conciliation/ConciliationListPage";
-import ConciliationDetailPage from "./pages/conciliation/ConciliationDetailPage";
 import NotificationPage from "./pages/myInfos/NotificationPage";
 import { DataProvider } from "./contexts/data.context";
 import NotFindPage from "./pages/NotFindPage";
-import { Test } from "./pages/Test";
 import IssueEditPage from "./pages/service/issue/IssueEditPage";
+import FlagCreatePage from "./pages/flag/FlagCreatePage";
+import FlagEditPage from "./pages/flag/FlagEditPage";
 
 
 function App() {
@@ -70,19 +67,19 @@ function App() {
                             <Route path="/service/edit/:id" element={<ServiceEditPage />} />
 
                             <Route path="/litige/:id" element={<IssueDetailPage />} />
-                            <Route path="/litige/create/:id" element={<IssueCreatePage />} />
                             <Route path="/litige/edit/:id" element={<IssueEditPage />} />
+                            <Route path="/conciliation" element={<ServiceListPage />} />
 
-                            <Route path="/conciliation" element={<ConciliationListPage />} />
                             <Route path="/conciliation/:id" element={<IssueDetailPage />} />
+                            <Route path="/conciliation/create/:id" element={<IssueCreatePage />} />
 
                             <Route path="/evenement" element={<EventListPage />} />
                             <Route path="/evenement/create" element={<EventCreatePage />} />
                             <Route path="/evenement/:id" element={<EventDetailPage />} />
                             <Route path="/evenement/edit/:id" element={<EventEditPage />} />
 
-                            <Route path="/flag/:id" element={<FlagDetailPage />} />
-                            <Route path="/flag/edit/:id" element={<FlagEditPage />} />
+                            <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
+                            <Route path="/flag/edit/:target/:id" element={<FlagEditPage />} />
                             <Route path="/flag" element={<FlagPage />} />
 
                             <Route path="/sondage" element={<SurveyListPage />} />
@@ -99,14 +96,13 @@ function App() {
                             <Route path="/myprofile" element={<MyInfosPage />} />
                             <Route path="/notification" element={<NotificationPage />} />
                             <Route path="/rules" element={<RulesPage />} />
-                            <Route path="/flag" element={<FlagPage />} />
-                            <Route path="/flag/edit/:id" element={<FlagEditPage />} />
+
                             <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
                             <Route path="/annonce/create" element={<AnnounceCreatePage />} />
                             <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
 
                             <Route path="/*" element={<NotFindPage />} />
-                            <Route path="/test" element={<Test />} />
+
 
 
                         </Routes>

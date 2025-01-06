@@ -1,12 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { FETCH_URL } from "../../../env.local";
 
-
-//let url = "'https://back.imagindev-app.fr";
-//const url = import.meta.env.BASE_URL;
-const url = 'http://localhost:3000';
-
+const url = FETCH_URL
 const accessToken = Cookies.get('accessToken')
 const refreshToken = Cookies.get('refreshToken')
 
@@ -16,11 +13,10 @@ if (typeof axios === "undefined") {
 
 export const handleApiCall = async (apiCall: () => Promise<any>) => {
     try {
-        const { data } = await apiCall();
-        return data;
+        const { data } = await apiCall(); return data;
     } catch (error) {
-        console.error('apiCall', error);
-        throw error;
+        //   console.error('apiCall', error);
+        // throw error;
     }
 }
 
@@ -49,6 +45,11 @@ export const useApi = () => {
                         refreshAccess()
                     }
                 }
+                if (error.response.data.message.includes("P2025")) {
+                    return null
+                    // window.location.replace('/*')
+                }
+
             }
             return Promise.reject(error);
         }
@@ -70,28 +71,27 @@ export const useApiRefresh = () => {
 export const refreshAccess = async () => {
     const refreshToken = Cookies.get('refreshToken');
     !refreshToken && window.location.replace('/signin');
-    console.log("refreshToken", refreshToken)
     const data = { refreshToken };
     const apiRefresh = useApiRefresh();
     let result;
     try {
         result = await apiRefresh.post('auth/refresh', data);
-        console.log("result refresh", result);
+        console.log("result refresh", result)
+        const expirationDateAccess = getTokenExpirationDate(result.data.accessToken) || new Date();
+        const expirationDateRefresh = getTokenExpirationDate(result.data.refreshToken) || new Date();
+        Cookies.set('accessToken', result.data.accessToken, { expires: expirationDateAccess });
+        Cookies.set('refreshToken', result.data.refreshToken, { expires: expirationDateRefresh });
+        location.reload()
+        return result;
+
     } catch (error) {
         console.error("Error refreshing access token", error);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        location.reload();
         window.location.replace('/signin');
         return;
     }
-    if (!result || !result.data) {
-        window.location.replace('/signin');
-        return;
-    }
-    const expirationDateAccess = getTokenExpirationDate(result.data.accessToken) || new Date();
-    const expirationDateRefresh = getTokenExpirationDate(result.data.refreshToken) || new Date();
-    Cookies.set('accessToken', result.data.accessToken, { expires: expirationDateAccess });
-    Cookies.set('refreshToken', result.data.refreshToken, { expires: expirationDateRefresh });
-    location.reload()
-    return result;
+
 };
 
 

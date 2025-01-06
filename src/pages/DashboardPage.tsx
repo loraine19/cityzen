@@ -1,16 +1,15 @@
 import { AuthHeader } from "../components/authComps/AuthHeader";
 import NavBarBottom from "../components/UIX/NavBarBottom";
 import { Link } from "react-router-dom";
-import { Avatar, Card, CardBody, CardHeader, Typography, Option, Select, Button } from "@material-tailwind/react";
+import { Avatar, Card, CardBody, CardHeader, Typography, Button } from "@material-tailwind/react";
 import { useEffect, useState, useContext } from "react";
 import { addressGps, notif } from "../types/type";
-import { MapComp } from "../components/mapComps/MapComp";
 import CalendarComp from "../components/calendarComps/CalendarComp";
-import { getDays, getNotifications, GetPathElement, getUsersDetail } from "../functions/GetDataFunctions";
+import { getDays, GetPathElement } from "../functions/GetDataFunctions";
 import UserContext from "../contexts/user.context";
 import DataContext from "../contexts/data.context";
 import { EventP, Profile, } from "../types/class";
-import { getUserMe } from "../functions/API/usersApi";
+import { getNotifs, getUserMe } from "../functions/API/usersApi";
 import { getEvents } from "../functions/API/eventsApi";
 import { refreshAccess } from "../functions/API/useApi";
 import Skeleton from 'react-loading-skeleton'
@@ -19,41 +18,16 @@ import AddressMapOpen from "../components/mapComps/AddressMapOpen";
 
 
 export default function DashboardPage() {
-    const { setUserCont, userNotif } = useContext(UserContext)
+    const { setUserCont, userNotif, setUserNotif } = useContext(UserContext)
     const [user, setUser] = useState<Profile>({} as Profile);
     const [events, setEvents] = useState<EventP[]>([] as EventP[]);
     const { data, resetData } = useContext(DataContext)
+    1 > 2 && console.log('data', data)
     const [loading, setLoading] = useState<boolean>(true);
-    useEffect(() => {
-        const fetch = async () => {
-            const me = await getUserMe()
-            const userProfile = me.Profile as Profile;
-            setUser(userProfile);
-            setUserCont(userProfile);
-            localStorage.setItem('user', JSON.stringify(userProfile));
-            setAddressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
-            const events = await getEvents()
-            setEvents(events);
-            setEvents(getDays(events));
-            me && setLoading(false);
-        }
-        fetch()
-    }, []);
-    const { users, posts, surveys, pools, services, profiles } = data
-    const UsersProfile = (getUsersDetail(users, profiles))
-
-
-    const selectUser = (e: string) => {
-        const find: Profile | undefined = UsersProfile.find((user) => user.id === parseInt(e));
-        find && setUserCont(find) && localStorage.setItem('user', JSON.stringify(find));
-        // setUserNotif(notifList.length)
-    };
-    // const idS = user.id ? user.id : 0
-    const idS = 1
-    //const notificationList = getNotifications(posts, surveys, pools, services, idS);
-    //  const [notifList, setNotifList] = useState<notif[]>(notificationList ? notificationList : []);
+    const [notifList, setNotifList] = useState<notif[]>(localStorage.getItem('notifs') ? JSON.parse(localStorage.getItem('notifs') as string) : []);
     let { firstName, image, points, } = user;
     const [addressGps, setAddressGps] = useState<addressGps>({ lat: 0, lng: 0 });
+    1 > 2 && console.log(addressGps)
 
     useEffect(() => {
         const fetch = async () => {
@@ -61,50 +35,34 @@ export default function DashboardPage() {
             const userProfile = me.Profile as Profile;
             setUser(userProfile);
             setUserCont(userProfile);
-            console.log("userProfile", me)
             localStorage.setItem('user', JSON.stringify(userProfile));
             setAddressGps({ lat: Number(userProfile.Address.lat), lng: Number(userProfile.Address.lng) });
             const events = await getEvents()
-            setEvents(events);
             setEvents(getDays(events));
             me && setLoading(false);
+            if (userNotif === 0) {
+                const notif = await getNotifs()
+                if (notif) {
+                    setNotifList(notif);
+                    setUserNotif(notif.length);
+                    localStorage.setItem('notifs', JSON.stringify(notif));
+                }
+            }
         }
         fetch()
     }, []);
 
-    const fetchRefreshToken = async () => await refreshAccess()
 
-    const notifList = getNotifications(posts, events as any, surveys, pools, services, idS);
+    const fetchRefreshToken = async () => await refreshAccess()
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
 
-    //if (loading) return <div>loading...</div>
-
     return (
         <div className="Body gray">
             <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
                 <div className="flex items-center  gap-2">
-                    <div className="flex items-center flex-1">
-                        <Select className="shadowborder-none capitalize !p-0 !m-0" variant="standard" label="" name={"users"}
-                            labelProps={{
-                                className:
-                                    " before:border-none after:border-none !p-0 !m-0 "
-                            }}
-                            containerProps={{ className: "flex p-0 h-6 !m-0 " }}
-                            onChange={(e: any) => { selectUser(e) }}
-                            value={user.id?.toString()}>
-                            {UsersProfile.map(
-                                (user: Profile, index: number) => {
-                                    return (
-                                        <Option value={user.id?.toString()} key={index} >
-                                            {user.firstName}
-                                        </Option>
-                                    )
-                                }
-                            )}
-                        </Select></div>
                     <Button ripple={false} variant="text" size="sm" onClick={() => { resetData() }} className="text-sm !font-light rounded-full flex-1 px-5">Reset local </Button>
                     <button onClick={() => fetchRefreshToken()} className="text-sm !font-light rounded-full flex-1 px-5">refresh token</button>
                 </div>
@@ -112,7 +70,7 @@ export default function DashboardPage() {
                 <Link to="/notification">
                     <div className="absolute flex font-medium  items-center justify-center w-2 h-2 bg-cyan-500 text-white text-sm pt-[0.8rem] pb-[0.7rem] p-3 rounded-full top-8 right-11 shadow z-30 lg:hidden">{userNotif}</div>
                     <button className="absolute top-4 right-4 OrangeChip rounded-full h-7 w-7 p-5 flex justify-center items-center shadow lg:hidden">
-                        <span className="material-symbols-outlined fill OrangeChip !text-2xl">notifications</span>
+                        <span className="material-symbols-rounded notranslate fill OrangeChip !text-2xl">notifications</span>
                     </button>
                 </Link>
             </div>
@@ -147,7 +105,7 @@ export default function DashboardPage() {
                                         </span>
                                     </Link>
                                     <Link to="/">
-                                        <span className=" pt-[0.3rem] pb-[0.2rem] material-symbols-rounded notranslate notranslate fill bg-orange-200 rounded-full p-1 !text-[1rem] text-orange-800">
+                                        <span className=" pt-[0.3rem] pb-[0.2rem] material-symbols-rounded notranslate  fill bg-orange-200 rounded-full p-1 !text-[1rem] text-orange-800">
                                             &#xef3d;
                                         </span>
                                     </Link>
@@ -174,15 +132,19 @@ export default function DashboardPage() {
                         <Card className=" orange100">
                             <CardBody className="h-full flex flex-col py-3 px-4">
                                 <div className="flex gap-2 items-center">
-                                    <Link to="/notification"><span className="material-symbols-rounded fill text-orange-800 !text-4xl" >circle_notifications</span> </Link>
+                                    <Link to="/notification"><span className="material-symbols-rounded notranslate fill text-orange-800 !text-4xl" >circle_notifications</span> </Link>
                                     <div>
                                         <Typography color="blue-gray">
-                                            {userNotif > 0 ? `${userNotif} notifications` : 'pas de notifications'}
+                                            {notifList.length > 0 ? `${notifList.length} notifications` : 'pas de notifications'}
                                         </Typography>
                                     </div>
                                 </div>
                                 <div className="flex flex-col w-full max-h-8 overflow-y-auto ">
-                                    {notifList && (notifList.map((notifL: notif, index) => <div className="w-full font-light text-sm flex px-1 justify-between" key={index}><div><span className="text-orange-800 capitalize font-normal">{GetPathElement(notifL.type)}</span> : {notifL.element.title} </div><Link to={`/${GetPathElement(notifL.type)}/${notifL.element.id}`}><span className="material-symbols-rounded  text-orange-800 !text-2xl pb-1">arrow_circle_right</span></Link></div>))}
+                                    {notifList && (notifList.map((notifL: any, index: number) =>
+                                        <div className="w-full font-light text-sm flex px-1 justify-between" key={index}><div>
+                                            <span className="text-orange-800 capitalize font-normal">{GetPathElement(notifL.element.toLowerCase())}</span> : {notifL?.title} </div>
+                                            <Link to={`/${GetPathElement(notifL.element.toLowerCase())}/${notifL.id}`}>
+                                                <span className="material-symbols-rounded notranslate text-orange-800 !text-2xl pb-1">arrow_circle_right</span></Link></div>))}
                                 </div>
                             </CardBody>
                         </Card>
@@ -192,7 +154,7 @@ export default function DashboardPage() {
                             <CardBody className="h-full min-h-[24vh] lg!min-h-[100%] flex flex-col  p-4">
                                 <div className="flex items-center gap-2">
                                     <Link to="/service">
-                                        <span className="material-symbols-rounded fill text-cyan-600 !text-4xl">
+                                        <span className="material-symbols-rounded notranslate fill text-cyan-600 !text-4xl">
                                             explore_nearby
                                         </span>{" "}
                                     </Link>

@@ -6,7 +6,7 @@ export default function SubHeader(props: { type: string, qty?: number, place?: a
 
     const goBack = (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
     return (
-        <div className="flex justify-between items-center pb-2">
+        <div className="flex justify-between items-start pb-2">
             <h2 className="text-3xl font-thin px-4 ">
                 <span className="font-medium ">{qty} {type} </span>{place ? place : " dans votre quartier"}
             </h2>
