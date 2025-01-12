@@ -1,5 +1,4 @@
 // Import PAGES
-
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./contexts/user.context";
 import ServiceListPage from "./pages/service/ServiceListPage";
@@ -26,7 +25,7 @@ import SurveyDetailPage from "./pages/survey/SurveyDetailPage";
 import SurveyEditPage from "./pages/survey/SurveyEditPage";
 import SurveyDetailPoolPage from "./pages/survey/SurveyDetailPoolPage";
 import SurveyEditPoolPage from "./pages/survey/SurveyEditPoolPage";
-import RulesPage from "./pages/user/RulePage";
+import RulesPage from "./pages/myInfos/RulePage";
 import NotificationsPage from "./pages/myInfos/NotificationPage";
 import ServiceEditPage from "./pages/service/ServiceEditPage";
 import IssueCreatePage from "./pages/service/issue/IssueCreatePage";
@@ -37,6 +36,7 @@ import NotFindPage from "./pages/NotFindPage";
 import IssueEditPage from "./pages/service/issue/IssueEditPage";
 import FlagCreatePage from "./pages/flag/FlagCreatePage";
 import FlagEditPage from "./pages/flag/FlagEditPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
 
 function App() {
@@ -54,9 +54,7 @@ function App() {
                             <Route path="/signup" element={<SignUpPage />} />
                             <Route path="/signup_details" element={<SignUpDetailPage />} />
                             <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
-                            <Route path="/" element={<DashboardPage />} />
-                            <Route path="/signup-details" element={<SignUpDetailPage />} />
-                            <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
+                            <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
 
                             <Route path="/myprofile" element={<MyInfosPage />} />
                             <Route path="/notification" element={<NotificationsPage />} />
@@ -102,9 +100,6 @@ function App() {
                             <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
 
                             <Route path="/*" element={<NotFindPage />} />
-
-
-
                         </Routes>
                     </BrowserRouter>
                 </UserProvider>

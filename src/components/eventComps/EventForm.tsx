@@ -7,8 +7,8 @@ import { Address, Label } from '../../types/class'
 import { AddressInputOpen } from '../mapComps/AddressInputOpen';
 import AddressMapOpen from '../mapComps/AddressMapOpen';
 
-export function EventForm(props: { formik: any, setValue: (value: string) => void }) {
-    const { formik, setValue } = props
+export function EventForm(props: { formik: any }) {
+    const { formik } = props
     const [Address, setAddress] = useState<Address>(formik.values.Address ? formik.values.Address : {} as Address);
     const formatDate = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0])
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100)
@@ -45,9 +45,10 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                         <Select className='rounded-full shadow bg-white border-none capitalize'
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                             name={"category"}
-                            labelProps={{ className: `${formik.errors.category && 'error'} before:border-none after:border-none` }}
+                            error={formik.errors.category ? true : false}
+                            labelProps={{ className: `before:border-none after:border-none` }}
                             value={category || ''}
-                            onChange={(val: any) => { setValue(val); formik.values.category = val }}>
+                            onChange={(val: any) => { formik.values.category = val }}>
                             {eventCategories.map((category: Label, index: number) => {
                                 return (
                                     <Option className={`${category.value === '' && "hidden"} rounded-full my-1 capitalize`} value={category.value} key={index} >
@@ -88,38 +89,41 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                         <Typography className='text-xs px-4'>{image != image && image as string} </Typography>
                         <CardBody className='FixCardBody'>
                             <div className='CardOverFlow gap-3'>
-                                <Input label="titre" name="title" variant="standard" onChange={formik.handleChange} defaultValue={title} />
-                                <Typography className='text-xs error'>{formik.errors.title as string} </Typography>
+                                <Input label={formik.errors.title ? formik.errors.title as string : "titre"}
+                                    name="title" variant="standard" onChange={formik.handleChange} error={formik.errors.title ? true : false} defaultValue={title} />
                                 <div className='flex flex-col lg:flex-row gap-5 h-full'>
                                     <div className='flex flex-col flex-1 pb-2'>
-                                        <Textarea rows={1} resize={true} variant="standard" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
+                                        <Textarea rows={1} resize={true} variant="standard"
+                                            label={formik.errors.description ? formik.errors.description as string : "Description"} error={formik.errors.description ? true : false} name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
                                             defaultValue={description}
                                             containerProps={{ className: "grid h-full" }}
                                             labelProps={{ className: "before:content-none after:content-none" }} />
-                                        <Typography className='text-xs error pt-2'>{formik.errors.description as string}
-                                        </Typography>
                                     </div>
                                     <div className="flex flex-1 flex-col  ">
                                         {Address.lat && Address.lng && <AddressMapOpen address={Address} />}
                                         <div className='relative z-50'>
                                             <AddressInputOpen address={Address} setAddress={setAddress}
-                                                placeHolder={Address.address ? Address?.address + " " + Address?.zipcode + " " + Address?.city : ''} /></div>
-                                        <Typography className='text-xs error pt-2'> {formik.errors.Address?.zipcode && formik.errors.Address?.city ? `${formik.errors.Address.zipcode} ${formik.errors.Address.city}` : ''}</Typography>
+                                                error={formik.errors.Address} /></div>
                                     </div>
                                 </div>
                                 <div className='flex gap-[2vw] pt-4'>
                                     <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
-                                        <Input type="datetime-local" label="date de debut" name="start" variant="standard" onChange={formik.handleChange} min={today} defaultValue={`${start && formatDate(start)}`} />
-                                        <Typography className='pb-1 text-xs error'>{formik.errors.start as string} </Typography></div>
+                                        <Input type="datetime-local"
+                                            label={formik.errors.start ? formik.errors.start as string : "date de debut"}
+                                            error={formik.errors.start ? true : false} name="start" variant="standard"
+                                            onChange={formik.handleChange} min={today} defaultValue={`${start && formatDate(start)}`} />
+                                    </div>
                                     <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
-                                        <Input type="datetime-local" min={today} defaultValue={end && formatDate(end)} label="date de fin" name="end" variant="standard" onChange={formik.handleChange} />
-                                        <Typography className='pb-1 text-xs error'>{formik.errors.end as string} </Typography>
+                                        <Input type="datetime-local" min={today} defaultValue={end && formatDate(end)} label={formik.errors.end ? formik.errors.end as string : "date de fin"} error={formik.errors.end ? true : false} name="end" variant="standard" onChange={formik.handleChange} />
                                     </div>
                                 </div>
                                 <div className='flex w-full gap-[10%]  pt-1'>
                                     <div className='flex flex-col w-full max-w-[30rem]'>
-                                        <Input type='number' label="participants" name="participantsMin" variant="standard" onChange={formik.handleChange} defaultValue={participantsMin} />
-                                        <Typography className='text-xs error'>{formik.errors.participantsMin as string} </Typography>
+                                        <Input type='number'
+                                            label={formik.errors.participantsMin ? formik.errors.participantsMin as string : "participants"}
+                                            name="participantsMin" error={formik.errors.participantsMin ? true : false}
+                                            variant="standard" onChange={formik.handleChange} defaultValue={participantsMin} />
+
                                     </div>
                                     <div className={Participants?.length < 1 ? "hidden " : "flex items-center  gap-1 flex-col justify-center w-full"}>
                                         <div className="mb-2 flex  w-full items-center justify-between gap-4">
@@ -130,7 +134,8 @@ export function EventForm(props: { formik: any, setValue: (value: string) => voi
                                                 {Participants?.length}  /  {participantsMin}
                                             </Typography>
                                         </div>
-                                        <Progress value={pourcentParticipants} color={pourcentParticipants === 100 ? "green" : "cyan"} size="md" />
+                                        <Progress value={pourcentParticipants} size="md"
+                                            color={pourcentParticipants === 100 ? "green" : "cyan"} />
                                     </div>
                                 </div>
                             </div>

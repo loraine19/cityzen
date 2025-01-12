@@ -4,15 +4,12 @@ import { Input, List, ListItem } from '@material-tailwind/react';
 import Skeleton from 'react-loading-skeleton'
 import { Address } from '../../types/class';
 
-interface AddressSuggestion {
-    label: string;
-    value: Address;
-}
+interface AddressSuggestion { label: string; value: Address }
 
-export const AddressInputOpen = (props: { address: Address, setAddress: any, placeHolder: string, }) => {
-    const { setAddress, placeHolder } = props;
+export const AddressInputOpen = (props: { address: Address, setAddress: any, error?: any }) => {
+    const { address, setAddress, error } = props;
     const [inputLoading, setInputLoading] = useState(false)
-    const [inputValue, setInputValue] = useState(placeHolder || '');
+    const [inputValue, setInputValue] = useState(`${address?.address || ''} ${address?.zipcode || ''} ${address?.city || ''}`.trim() || '');
     const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
 
 
@@ -30,14 +27,11 @@ export const AddressInputOpen = (props: { address: Address, setAddress: any, pla
                         countrycodes: 'fr',
                         'accept-language': 'fr',
                         addressdetails: 1,
-                        //street: q,
                     }
                 })
-                console.log(response.data, response.data.length > 0)
-                response.data.length > 0 && response.data
-                    .sort((a: any, b: any) => b.importance - a.importance)
-                const suggestions: AddressSuggestion[] = response.data
-                    .map((result: any) => {
+                if (response.data.length > 0) {
+                    response.data.sort((a: any, b: any) => b.importance - a.importance)
+                    const suggestions: AddressSuggestion[] = response.data.map((result: any) => {
                         const addressParts = [
                             result.address?.house_number,
                             result.address?.road,
@@ -59,8 +53,8 @@ export const AddressInputOpen = (props: { address: Address, setAddress: any, pla
                             },
                         };
                     });
-                suggestions.length > 0 && setSuggestions([...new Set(suggestions)])
-                console.log([...new Set(suggestions)])
+                    setSuggestions([...new Set(suggestions)])
+                }
             } catch (error) {
                 console.error('Error fetching suggestions:', error);
                 setInputLoading(true)
@@ -75,26 +69,25 @@ export const AddressInputOpen = (props: { address: Address, setAddress: any, pla
     };
 
     return (
-        <div className='relative z-50 mt-2 '>
+        <div className='relative z-50'>
             <Input
-                label="Adresse"
+                error={error ? true : false}
+                label={error ? Object.values(error).join(', ') : "Adresse"}
                 variant='standard'
                 type="text"
+                name='address'
                 value={inputValue || ''}
                 onChange={(event) => {
                     if (event.target.value.trim() !== '' || event.target.value === '') {
-                        handleInputChange(event);
+                        handleInputChange(event)
                     }
                 }}
-                placeholder={placeHolder}
                 className='items-center flex-1'
-                icon={inputValue && (
-                    <button onClick={() => { setInputValue('') }}> &#x2715;</button>
-                )}
+                icon={inputValue && (<button onClick={() => { setInputValue('') }}> &#x2715;</button>)}
             />
 
             {inputValue.length > 3 && inputLoading && (
-                <div className='z-50 absolute px-0.5 w-full mt-2' ref={(el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'end' })}>
+                <div className='z-50 absolute px-0.5 w-full ' ref={(el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'end' })}>
                     <List className='bg-white rounded-xl border border-gray-300 overflow-auto w-full shadow-lg max-h-32'>
                         {suggestions.length > 0 ? (
                             suggestions.map((suggestion, index) => (

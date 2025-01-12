@@ -1,10 +1,10 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Flag, HardLevel, Service, SkillLevel } from "../../types/class";
-import { getEnumVal, getLabel, GetPoints, isFlaged, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../functions/GetDataFunctions";
+import { getEnumVal, getLabel, GetPoints, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../functions/GetDataFunctions";
 import { useContext, useEffect, useState } from "react";
-import UserContext from "../../contexts/user.context";
-import { getFlagsService } from "../../functions/API/flagsApi";
+import UserContext from "../../contexts/user.context"
+import { FlagIcon } from "../UIX/SmallComps";
 
 export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void }) {
     const { user } = useContext(UserContext)
@@ -12,9 +12,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
     const navigate = useNavigate();
     const { service } = props
     const { id, title, description, image, createdAt, User, UserResp } = props.service
-    const [flagged, setFlagged] = useState<boolean>(false)
-    const [flags, setFlags] = useState<Flag[]>([])
-    1 > 2 && console.log(flags)
+    const flagged: boolean = service.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
     const haveImage = service.image ? true : false
     const userAuthor = User.Profile
     const isMine = (User.id === userId || UserResp?.id === userId)
@@ -30,17 +28,8 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
     const inIssue = status === 'litige' ? true : false
     const hard = getEnumVal(service.hard, HardLevel)
     const skill = getEnumVal(service.skill, SkillLevel)
-    //    const statusVal = getEnumVal(service.status, ServiceStep)
 
-    useEffect(() => {
-        const onload = async () => {
-            const flags = await getFlagsService()
-            setFlags(flags)
-            setFlagged(isFlaged(service, userId, flags))
-            setPoints(GetPoints(service))
-        }
-        onload()
-    }, [service])
+    useEffect(() => setPoints(GetPoints(service)), [service])
 
     return (
         <>
@@ -79,9 +68,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         <Typography variant="h5" color="blue-gray" className="mb-2">
                             {title}
                         </Typography>
-                        <Link to={`/flag${flagged ? '/edit' : ''}/service/${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
-                        </Link>
+                        <FlagIcon flagged={flagged} id={id} type="service" />
                     </div>
                     <div className="flex justify-between items-end ">
                         <div className="flex  items-center gap-2 mb-1">

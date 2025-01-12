@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import { getTokenExpirationDate } from './useApi';
 
 export const useToken = () => {
     const [accessToken, setAccessToken] = useState(Cookies.get('accessToken'));
     const [refreshToken, setRefreshToken] = useState(Cookies.get('refreshToken'));
-
     const saveToken = (accesToken: string, refreshtoken: string) => {
-        Cookies.set('accessToken', accesToken, { expires: 7 });
-        Cookies.set('refreshToken', refreshtoken, { expires: 7 });
+        const accessToken = accesToken;
+        const refreshToken = refreshtoken
+        const expirationDateAccess = getTokenExpirationDate(accessToken) || new Date();
+        const expirationDateRefresh = getTokenExpirationDate(refreshToken) || new Date();
+        localStorage.setItem('accessToken', expirationDateAccess.toString());
+        localStorage.setItem('refreshToken', expirationDateRefresh.toString());
+        Cookies.set('accessToken', accesToken, { expires: expirationDateAccess });
+        Cookies.set('refreshToken', refreshToken, { expires: expirationDateRefresh });
         setAccessToken(accesToken);
         setRefreshToken(refreshtoken)
     };
-
     return { accessToken, refreshToken, saveToken };
 };

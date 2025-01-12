@@ -1,52 +1,45 @@
 import { useFormik } from 'formik';
-import { bool, object, string, ref } from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { object, string, ref, boolean } from 'yup';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { AuthForm } from '../../components/authComps/AuthForm';
-import { user } from '../../types/user';
 import { AuthHeader } from '../../components/authComps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
-
-
+import { signUp } from '../../functions/API/usersApi';
 
 export default function SignUpPage() {
-    interface newuser extends user {
-        passwordConfirm: string
-    }
-
-    const [newUser, setNewUser] = useState<newuser>({
-        id: 0,
-        email: "",
-        password: "",
-        acceptTerms: false,
-        stayConnected: false,
-        passwordConfirm: ""
-    });
-    const navigate = useNavigate();
 
     const [notif, setNotif] = useState<string>("");
-
+    const [hidden, setHidden] = useState<boolean>(false)
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),
-        password: string().required("Mot de passe est obligatoire").min(8, "minmum 8 lettres"),
-        passwordConfirm: string().oneOf([ref('password')], "les mots de passes doivent correspondre").required("Confirmer le mot de passe"),
-        acceptTerms: bool().oneOf([true], "vous devez accepter : ").required("Vous devez accepter : ")
+        password: string().required("Mot de passe est obligatoire").min(8, "minimum 8 lettres"),
+        passwordConfirm: string().oneOf([ref('password')], "les mots de passes doivent correspondre").required("Confirmation obligatoire"),
+        checkbox: boolean().oneOf([true], "Vous devez accepter les termes et conditions").required("Vous devez accepter les termes et conditions")
     })
 
+
+
     const formik = useFormik({
-        initialValues: newUser,
+        initialValues: {} as any,
         validationSchema: formSchema,
         onSubmit: values => {
-            console.log(values)
-            if (values.email && values.password === values.passwordConfirm && values.acceptTerms) {
-                navigate("/signup_details")
-
-                setNewUser(values)
+            if (values.email && values.password === values.passwordConfirm && values.checkbox) {
+                const connect = async () => {
+                    const result = await signUp({ email: values.email, password: values.password })
+                    console.log(result)
+                    if (result && result.message.includes("created")) {
+                        setNotif(result.message);
+                        formik.resetForm();
+                        setHidden(true)
+                    }
+                    else setNotif(result?.message || "Erreur inconnue")
+                }
+                connect()
             }
-            else setNotif("Non enregitsré ")
+            else setNotif("Veuillez remplir correctement tout les champs")
         },
     });
-
 
     const terms = `"Votre vie privée est importante pour nous !
     Lorsque vous visitez notre site, des compagnies pré - sélectionnées peuvent accéder à certaines informations sur votre appareil et sur cette page Web et les utiliser pour diffuser des annonces pertinentes ou du contenu personnalisé.Veuillez noter que ces annonces nous permettent de maintenir notre service gratuit.Les données à caractère personnel seront traitées sur la base du consentement conformément à l'article 6 (1) (a) du cadre du RGPD dans le droit communautaire, ou en tant qu'intérêt légitime conformément à l'article 6 (1) (f) de ce même cadre.
@@ -59,32 +52,25 @@ export default function SignUpPage() {
 
         <div className="Body gray">
             <AuthHeader />
-            <main className='items-center gap-4 pb-8'>
-                <AuthForm handleChange={formik.handleChange}
-                    handleSubmit={formik.handleSubmit}
+            <main className='items-center gap-4'>
+
+                <AuthForm
                     lead="Creer votre compte"
                     notif={notif}
                     popOverContent={terms}
                     popOverButtonText="les condition d'utilisiation"
                     popOverClass="font-light underline underline-offset-8 text-start "
                     popOverVariant="texte"
-                    checkboxName="acceptTerms"
                     submitText="S'enregistrer"
-                    errorEmail={formik.errors.email}
-                    errorPassword={formik.errors.password}
-                    errorCheck={formik.errors.acceptTerms}
                     confirm={true}
-                    errorConfirm={formik.errors.passwordConfirm}
+                    formik={formik}
+                    hidden={hidden}
                 />
-
-                <Typography variant="small" className="mt-6 flex justify-center">
+                <Typography variant="small" className=" flex justify-center">
                     Vous avez deja un compte?
                 </Typography>
                 <Link to="/signin">
-                    <Button
-                        color="white"
-                        size="lg" className="rounded-full"
-                    >
+                    <Button color="white" size="md" className="rounded-full">
                         Connectez-vous
                     </Button>
                 </Link>

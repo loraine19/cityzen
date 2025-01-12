@@ -5,7 +5,6 @@ import { GM_API_KEY } from "../../env.local";
 setLanguage("fr");
 setRegion("fr");
 setKey(GM_API_KEY);
-console.log('GM_API_KEY', GM_API_KEY)
 
 // Get latitude & longitude from address.
 export const GetAddressGps = async (address: string) => {

@@ -102,7 +102,7 @@ footer {
 }
 
 .BgUser {
-    background-image: url("https://static.vecteezy.com/system/resources/thumbnails/001/840/618/small/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-free-vector.jpg");
+    background-image: url("/person.svg");
     background-size: cover;
     background-position: center;
 }
@@ -116,6 +116,7 @@ footer {
 .w-respLarge {
     width: 100%;
     margin: 0 auto;
+    max-width: calc(100vh - 2rem);
     max-width: 46rem;
 }
 
@@ -140,26 +141,32 @@ footer {
         padding-left: min(0rem);
         padding-right: min(0rem);
     }
-    .active .material-symbols-rounded {
+    .active .material-symbols-rounded,
+    .active .icon {
         text-underline-offset: 10px !important;
     }
 }
 
 /* NAV */
-.material-symbols-rounded {
+.material-symbols-rounded,
+.icon {
     font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
+    font-variation-settings: "wght" 300 !important;
     font-size: 48px;
     font-style: italic;
 }
+.icon .thin,
+.material-symbols-rounded .thin {
+    font-variation-settings: "wght" 100 !important;
+}
 
-.material-symbols-rounded::before {
+.material-symbols-rounded::before,
+.icon::before {
     content: "\200B"; /* Zero-width space to break translation */
 }
 
-.material-symbols-rounded:not() {
-    display: none;
-}
-nav .material-symbols-rounded {
+nav .material-symbols-rounded,
+nav .icon {
     font-size: 29px;
     font-variation-settings: "wght" 300 !important;
 }
@@ -168,15 +175,16 @@ nav li .material-symbols-rounded {
     color: #6b7280;
 }
 
-.active .material-symbols-rounded {
+.active .material-symbols-rounded,
+.active .icon {
     font-variation-settings: "FILL" 1 !important;
     font-size: 32px;
     opacity: 100%;
     text-decoration: underline;
     text-underline-offset: 20px;
-    text-decoration-color: #06b6d4;
     color: #1f2937;
 }
+
 .error {
     color: #b91c1c !important;
 }
@@ -276,10 +284,6 @@ button {
     text-transform: capitalize !important;
 }
 
-/* :first-child {
-    text-transform: none !important;
-} */
-
 .FixCard {
     position: relative;
     display: flex;
@@ -311,7 +315,7 @@ button {
 
 .CardFooter {
     position: relative;
-    padding: 0 1.5rem 0.5rem;
+    padding: 0 1rem 0.5rem;
     display: flex;
     justify-content: space-between;
 }
@@ -331,4 +335,25 @@ button {
     border-radius: 0.8rem;
     display: flex;
     flex: 1;
+}
+.FixedCenter {
+    position: fixed;
+    top: 20% !important;
+    left: 50% !important;
+    padding: 5rem 1rem !important;
+    transform: translateX(-50%) !important;
+    height: calc(100vh - 20%) !important;
+    max-width: 900px !important;
+    width: calc(100vw - 1rem) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 1000 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+.leaflet-control-attribution.leaflet-control {
+    display: none;
 }

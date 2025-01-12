@@ -1,5 +1,5 @@
 import { Post } from '../../types/class';
-import AnnouncesComp from "./AnnouncesComp";
+import AnnouncesComp from "./PostCard";
 
 export default function AnnouncesGridComp(props: { line: Post[], mines?: boolean, change: (e: any) => void, update?: () => void, view?: string, }) {
     const { line, mines, change, update } = props

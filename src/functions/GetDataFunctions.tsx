@@ -1,6 +1,6 @@
 import { userProfile } from '../types/user';
 import { all, flag, notif, targetUser } from "../types/type";
-import { action, Address, eventCategory, EventP, Flag, Label, Pool, Post, postCategory, Profile, Service, Survey, User, serviceType, serviceCategory, HardLevel, SkillLevel, AssistanceLevel, serviceStep, Issue, flagTarget, flagReason } from '../types/class';
+import { action, eventCategory, EventP, Flag, Label, Pool, Post, postCategory, Profile, Service, Survey, User, serviceType, serviceCategory, HardLevel, SkillLevel, AssistanceLevel, serviceStep, Issue, flagTarget, flagReason, surveyCategory } from '../types/class';
 //import { GetAddressGps, GetAddressString } from './GeoMapFunction';
 import { deleteParticipant, postParticipant } from './API/partcipantsApi';
 import { getEventById } from './API/eventsApi';
@@ -19,7 +19,7 @@ export const getDays = (array: any) => {
     array.map((event: any) => {
         let start = new Date(event.start).getTime();
         let end = new Date(event.end).getTime();
-        let dif = Math.ceil(Math.abs((end - start) / dayMS))
+        let dif = Math.floor(Math.abs((end - start) / dayMS)) + 1; // Add 1 to include the last day
         let days = []
         for (let i = 0; i < dif; i++) { days.push(new Date(start + i * dayMS)) }
         event.days = days
@@ -39,34 +39,6 @@ export const getImageBlob2 = (event: any, setImgBlob: any, formik: any) => {
 }
 
 
-
-//// JOINS TABLE FUNCTIONS
-//// GET user profil 
-export const getUsersDetail = (arrayUser: User[], arraySearch: Profile[]) => {
-    return arraySearch.map((user: any) => { return { ...user, ...arrayUser.find((element: any) => element.id === user.id) } })
-}
-export const getAddress = (id: number, arraySearch: Address[]): Address | undefined => {
-    return arraySearch.filter((element: any) => element.id === id)[0]
-}
-export const getUserDetail = (id: number, arraySearch: Profile[]): Profile | undefined => {
-    return arraySearch.filter((element: Profile) => element.userId as number === id)[0]
-}
-
-
-//// get users in events or post by id 
-// export const getUsers = (array: Post[] | EventP[], arrayOfJoin: any[], initialArray: [], lookingID: keyof eventUser | keyof postUser): Post[] | EventP[] => {
-//     array.map((element: Post | EventP) => {
-//         let users: Profile[] = [];
-//         element.Likes = [];
-//         arrayOfJoin.filter((row: any) => row[lookingID] === element.id).map((row: any) => {
-//             initialArray.map((user: Profile) => (user.id === row.userId) && users.push(user));
-//             element.users = users
-//         })
-//     })
-//     return array
-// }
-
-// array events, join ( user+ eventId,), iniUser, lookin(key)
 export const getFlagsInElement = (array: any[], arrayOfJoin: any[]): any => {
     return array.map((element: any) => {
         let flags: any = [];
@@ -186,6 +158,7 @@ export const getWeek = (date: any, eventList: any[]) => {
 }
 
 
+
 ///// Convert Date 
 export const shortDateString = (date: Date) => {
     return date.toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric' })
@@ -226,27 +199,7 @@ export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any)
 }
 
 
-// //// LIKE UNLICK // QUICK PARTIPATE
-// export const beInElement = (elementLiked: Post | EventP, array: any[], setArray: any, arrayJoin: any, setArrayJoin: any, userProfile: Profile, keyOf?: string) => {
 
-//     keyOf ? keyOf = keyOf : keyOf = 'target_id'
-//     let index = array.findIndex((element: any) => element.id === elementLiked.id);
-//     let users = []
-
-//     if (elementLiked.users?.find((user: any) => user.userId === userProfile?.userId)) {
-//         users = elementLiked.users.filter((user: any) => user.userId !== userProfile?.id);
-//         let filter = arrayJoin.find((element: any) => element[keyOf] === elementLiked.id && element.userId === userProfile?.userId)
-//         arrayJoin.splice(arrayJoin.indexOf(filter), 1)
-
-//     } else {
-//         users.push(userProfile);
-//         arrayJoin.push({ userId: userProfile?.userId, [keyOf]: elementLiked.id })
-//         array[index].users.push(userProfile)
-//     }
-//     setArrayJoin([...arrayJoin]);
-//     setArray([...array]);
-//     elementLiked.users = [...users]
-// }
 
 
 export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefined, keyOf?: string) => {
@@ -255,19 +208,6 @@ export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefin
 }
 
 
-///// GET ADRESS FROM FORM 
-// export const FindAdressData = async (addressSaisie: string, array: Address[], data: any, formik: { values: any }) => {
-//     const gps = await GetAddressGps(addressSaisie);
-//     const addressFull = await GetAddressString(gps?.lat!, gps?.lng!)
-//     const findAdress = array.find((element: Address) => (element.city === addressFull?.city) && (element.address === addressFull?.address) && (element.zipcode === addressFull?.zipcode));
-//     if (!findAdress) {
-//         data.address.push({ id: data.address.length + 1, ...addressFull })
-//         formik.values.address_id = data.address.length;
-//         formik.values.address = addressFull?.address
-//         return data.address[data.address.length - 1]
-//     }
-//     else return findAdress
-// }
 
 //// GET CATEGORI SERVICE 
 export const GetCategory = (service: Service, categories: Label[]): string => {
@@ -278,12 +218,7 @@ export const GetCategory = (service: Service, categories: Label[]): string => {
 
 export const isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
 
-// export const AcceptUserResp = (id: number, array: Service[], setArray: any, step: 0 | 1 | 2 | 3) => {
-//     let index = array.findIndex((element: Service) => element.id === id);
-//     array[index].status = step
-//     step === 3 && (array[index].finished_at = new Date())
-//     setArray([...array]);
-// }
+
 
 export const takeElement = (id: number, array: Service[], setArray: any, userProfile: Profile) => {
     let index = array.findIndex((element: Service) => element.id === id);
@@ -327,10 +262,6 @@ export const toggleValidResp = async (serviceId: number, userId: number, setServ
 };
 
 
-export const isFlaged = (element: Post | EventP | Service | Survey, userId: number, flags: Flag[]): boolean => {
-    const flagged = flags.find((flag: Flag) => flag.targetId === element.id && flag.userId === userId) ? true : false
-    return flagged ? flagged : false;
-};
 
 export const Igo = (element: EventP, userId: number): boolean => { return element.Participants.find((particpant: any) => particpant.userId === userId) ? true : false };
 
@@ -414,6 +345,8 @@ export const flagTargets = generateLabels(flagTarget, labelsFlagTarget);
 const reasonsFlag = ["illicite", "haineux", "dangereux", "irrespecteux", "atteinte à la vie privé"]
 export const flagReasons = generateLabels(flagReason, reasonsFlag);
 
+const labelsSurvey = ['sécurité', 'environnement', 'régles', 'suggestion', 'autre'];
+export const surveyCategories = generateLabels(surveyCategory, labelsSurvey);
 
 export const getLabel = (value: string | any, array: Label[]): string => {
     const find = array.find((cat) => cat.value === value?.toUpperCase())
@@ -456,3 +389,129 @@ export const generateContact = (user: User): string => {
         <br> ou télèphone :
         <br> <a href="tel:${user?.Profile.phone}" className="text-orange-500 font-medium underline">${user?.Profile.phone}</a>`;
 };
+
+
+
+export const getWeekFull = (date: any, eventList: any[]) => {
+    let week = [];
+    date = new Date(date);
+    const weekDay = date.getDay();
+    const lundi = date.getTime() - ((weekDay - 1) * dayMS)
+    while (week.length < 7) {
+        for (let i = 0; i < 7; i++) {
+            const nextDay = (new Date((lundi) + (i * dayMS)))
+            let dateInfos = { date: (nextDay), events: [] as EventP[], text: shortDateString(nextDay) }
+            week.push(dateInfos);
+        }
+    }
+    for (const eventT of eventList) {
+        for (let i = 0; i < week.length; i++) {
+            if (eventT.days) {
+                const find = (eventT.days).find((day: Date) => (new Date(day)).toLocaleDateString() === (new Date(week[i].date)).toLocaleDateString())
+                if (find) {
+                    let isEventInWeek = week[i].events.some((e: any) => e.id === eventT.id)
+                    if (isEventInWeek) {
+                        week[i].events.forEach(event => event.days.find((day: Date) => (new Date(day)).toLocaleDateString() === (new Date(week[i].date)).toLocaleDateString()) && (event.actif = true));
+                    }
+                    if (!isEventInWeek) {
+                        for (let j = 0; j < week.length; j++) {
+                            let actif = j === i ? true : false;
+                            week[j].events.push({ actif, ...eventT } as never);
+                        }
+                    }
+                    week[i].events.sort((a: any, b: any) => a.id - b.id)
+                }
+
+            }
+        }
+    }
+    return week
+}
+export const getWeeksFull = (day: any, eventList: EventP[], numberOfwweks: number) => {
+    const weeks: any[] = [];
+    if (weeks.length < numberOfwweks) {
+        for (let i = 0; i < numberOfwweks; i++) {
+            weeks.push(getWeekFull(day, eventList))
+            day = new Date(new Date(day).getTime() + 1 * 7 * dayMS)
+        }
+    }
+    return weeks
+}
+
+
+// export const AcceptUserResp = (id: number, array: Service[], setArray: any, step: 0 | 1 | 2 | 3) => {
+//     let index = array.findIndex((element: Service) => element.id === id);
+//     array[index].status = step
+//     step === 3 && (array[index].finished_at = new Date())
+//     setArray([...array]);
+// }
+
+// export const isFlaged = (element: Post | EventP | Service | Survey, flags: Flag[]): boolean => {
+//     const flagged = flags.find((flag: Flag) => flag.targetId === element.id) ? true : false
+//     return flagged ? flagged : false;
+// };
+
+
+//// JOINS TABLE FUNCTIONS
+//// GET user profil 
+// export const getUsersDetail = (arrayUser: User[], arraySearch: Profile[]) => {
+//     return arraySearch.map((user: any) => { return { ...user, ...arrayUser.find((element: any) => element.id === user.id) } })
+// }
+// export const getAddress = (id: number, arraySearch: Address[]): Address | undefined => {
+//     return arraySearch.filter((element: any) => element.id === id)[0]
+// }
+// export const getUserDetail = (id: number, arraySearch: Profile[]): Profile | undefined => {
+//     return arraySearch.filter((element: Profile) => element.userId as number === id)[0]
+// }
+
+
+//// get users in events or post by id 
+// export const getUsers = (array: Post[] | EventP[], arrayOfJoin: any[], initialArray: [], lookingID: keyof eventUser | keyof postUser): Post[] | EventP[] => {
+//     array.map((element: Post | EventP) => {
+//         let users: Profile[] = [];
+//         element.Likes = [];
+//         arrayOfJoin.filter((row: any) => row[lookingID] === element.id).map((row: any) => {
+//             initialArray.map((user: Profile) => (user.id === row.userId) && users.push(user));
+//             element.users = users
+//         })
+//     })
+//     return array
+// }
+
+// array events, join ( user+ eventId,), iniUser, lookin(key)
+
+//// GET ADRESS FROM FORM 
+// export const FindAdressData = async (addressSaisie: string, array: Address[], data: any, formik: { values: any }) => {
+//     const gps = await GetAddressGps(addressSaisie);
+//     const addressFull = await GetAddressString(gps?.lat!, gps?.lng!)
+//     const findAdress = array.find((element: Address) => (element.city === addressFull?.city) && (element.address === addressFull?.address) && (element.zipcode === addressFull?.zipcode));
+//     if (!findAdress) {
+//         data.address.push({ id: data.address.length + 1, ...addressFull })
+//         formik.values.address_id = data.address.length;
+//         formik.values.address = addressFull?.address
+//         return data.address[data.address.length - 1]
+//     }
+//     else return findAdress
+// }
+
+// //// LIKE UNLICK // QUICK PARTIPATE
+// export const beInElement = (elementLiked: Post | EventP, array: any[], setArray: any, arrayJoin: any, setArrayJoin: any, userProfile: Profile, keyOf?: string) => {
+
+//     keyOf ? keyOf = keyOf : keyOf = 'target_id'
+//     let index = array.findIndex((element: any) => element.id === elementLiked.id);
+//     let users = []
+
+//     if (elementLiked.users?.find((user: any) => user.userId === userProfile?.userId)) {
+//         users = elementLiked.users.filter((user: any) => user.userId !== userProfile?.id);
+//         let filter = arrayJoin.find((element: any) => element[keyOf] === elementLiked.id && element.userId === userProfile?.userId)
+//         arrayJoin.splice(arrayJoin.indexOf(filter), 1)
+
+//     } else {
+//         users.push(userProfile);
+//         arrayJoin.push({ userId: userProfile?.userId, [keyOf]: elementLiked.id })
+//         array[index].users.push(userProfile)
+//     }
+//     setArrayJoin([...arrayJoin]);
+//     setArray([...array]);
+//     elementLiked.users = [...users]
+// }

@@ -5,11 +5,12 @@ import NavBarTop from "../../components/UIX/NavBarTop";
 import SubHeader from "../../components/UIX/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
 import AnnouncesGridComp from "../../components/announceComps/AnnouncesGridComp";
-import AnnouncesComp from "../../components/announceComps/AnnouncesComp";
+import AnnouncesComp from "../../components/announceComps/PostCard";
 import { Post } from '../../types/class';
 import { useSearchParams } from "react-router-dom";
 import { getPosts, getPostsIlike, getPostsMines } from '../../functions/API/postsApi';
 import { getLabel, getValue, postCategories } from "../../functions/GetDataFunctions";
+import Skeleton from "react-loading-skeleton";
 
 export default function AnnounceListPage() {
     const [notif, setNotif] = useState<string>('')
@@ -26,12 +27,13 @@ export default function AnnounceListPage() {
     const params = { tab: searchParams.get("search"), category: searchParams.get("category") };
     !postCategories.some(category => category.label === "tous") && postCategories.unshift({ label: "tous", value: "" });
     const label = getLabel(categorySelected, postCategories).toLowerCase();
+    const [loading, setLoading] = useState<boolean>(true);
 
     const UpdateList = async () => {
         const posts = await getPosts();
         const myPosts = await getPostsMines();
         const IlikePosts = await getPostsIlike();
-        posts.sort((a, b) => b.Likes?.length - a.Likes?.length)
+        posts.length > 0 && setLoading(false);
         setPosts(posts)
         setMyPosts(myPosts)
         setIlikePost(IlikePosts)
@@ -76,7 +78,7 @@ export default function AnnounceListPage() {
     }
 
     useEffect(() => {
-        setNotif(postList.length > 0 ? '' : `Aucune annonce ${tabSelected} ${categorySelected !== '' && categorySelected ? "de la catégorie " + label : ""} n'a été trouvée`);
+        !loading && setNotif(postList.length > 0 ? '' : `Aucune annonce ${tabSelected} ${categorySelected !== '' && categorySelected ? "de la catégorie " + label : ""} n'a été trouvée`);
     }, [postList]);
 
     useEffect(() => {
@@ -119,15 +121,16 @@ export default function AnnounceListPage() {
                     ))
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
-                        {postList.map((post, index) => (
-                            <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
-                                <AnnouncesComp key={post.id} post={post} change={change} update={UpdateList} mines={mines} />
-                            </div>
-                        ))}
+                        {loading ?
+                            Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} height={200} className="!rounded-2xl" />) : postList.map((post, index) => (
+                                <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
+                                    <AnnouncesComp key={post.id} post={post} change={change} update={UpdateList} mines={mines} />
+                                </div>
+                            ))}
                     </div>
                 )}
             </main>
-            <NavBarBottom addBtn={true} />
+            <NavBarBottom addBtn={true} color="orange" />
         </div>
     );
 }

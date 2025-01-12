@@ -4,9 +4,9 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context";
 import ModifBtnStack from "../UIX/ModifBtnStack";
 import { action, Flag, Service, ServiceStep } from "../../types/class";
-import { GenereMyActions, getEnumVal, getLabel, GetPoints, isFlaged, isLate, serviceCategories, serviceStatus, serviceTypes, toggleResp } from "../../functions/GetDataFunctions";
-import { deleteService } from "../../functions/API/servicesApi";
-import { getFlagsService } from "../../functions/API/flagsApi";
+import { GenereMyActions, getEnumVal, getLabel, GetPoints, isLate, serviceCategories, serviceStatus, serviceTypes, toggleResp } from "../../functions/GetDataFunctions";
+import { deleteService } from "../../functions/API/servicesApi"
+import { FlagIcon } from "../UIX/SmallComps";
 
 
 export default function ServiceComp(props:
@@ -16,9 +16,7 @@ export default function ServiceComp(props:
     const { mines, change, update } = props
     const [service, setService] = useState<Service>(props.service)
     const { id, title, description, image, createdAt, User, UserResp } = service
-    const [flagged, setFlagged] = useState<boolean>(false)
-    const [flags, setFlags] = useState<Flag[]>([])
-    1 > 2 && console.log(flags)
+    const flagged: boolean = service.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
     const isMine = service.User.id === userId
     const IResp = UserResp?.id === userId
     const haveImage = service.image ? true : false
@@ -44,12 +42,6 @@ export default function ServiceComp(props:
     };
 
     useEffect(() => {
-        const onload = async () => {
-            const flags = await getFlagsService()
-            setFlags(flags)
-            setFlagged(isFlaged(service, userId, flags))
-        }
-        onload()
         setStatus(getLabel(service.status, serviceStatus));
         updateStatusFlags(status)
     }, [service])
@@ -115,9 +107,7 @@ export default function ServiceComp(props:
                         <Typography variant="h5" color="blue-gray">
                             {title}
                         </Typography>
-                        <Link to={`/flag${flagged ? '/edit' : ''}/service/${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
-                        </Link>
+                        <FlagIcon flagged={flagged} id={id} type="service" />
                     </div>
                     <div className="flex flex-col h-full">
                         <div className="CardOverFlow">

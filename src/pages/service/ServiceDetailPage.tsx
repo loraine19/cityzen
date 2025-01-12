@@ -6,7 +6,7 @@ import CTAMines from '../../components/UIX/CTAMines';
 import UserContext from '../../contexts/user.context';
 import { getLabel, serviceTypes, serviceCategories, toggleResp, GenereMyActions, serviceStatus, toggleValidResp, generateContact, GetPoints } from '../../functions/GetDataFunctions';
 import { action, Service, ServiceStep } from '../../types/class';
-import ServiceDetailComp from '../../components/servicesComps/ServiceDetailComp';
+import ServiceDetailComp from '../../components/servicesComps/ServiceDetailCard';
 import { deleteService, getServiceById, putServiceFinish } from '../../functions/API/servicesApi';
 
 export default function ServiceDetailPage() {

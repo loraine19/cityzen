@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../eventComps/EventCard';
-import { Link } from 'react-router-dom';
-import { dayMS, getDays, getWeeks, getLabel, eventCategories } from '../../functions/GetDataFunctions';
+import { dayMS, getDays, getLabel, eventCategories, getWeeksFull } from '../../functions/GetDataFunctions';
 import { EventP } from '../../types/class'
+import { Icon } from '../UIX/SmallComps';
 
 export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
     type day = { date: Date, events: EventP[], text: String }
@@ -12,6 +12,8 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
     const [startDate, setStartDate] = useState<string>(startDateBackup.toDateString())
     const [eventList, setEventList] = useState<EventP[]>(getDays(props.eventList))
     const [weeks, setWeeks] = useState<day[][]>([])
+    const [open, setOpen] = useState<boolean>(false)
+    const [popId, setPopId] = useState<string>('')
     window.addEventListener('resize', () => {
         if (window.innerWidth < 900) { numberOfwweks = 1 } else { numberOfwweks = 2 }
     })
@@ -30,16 +32,15 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
 
     useEffect(() => {
         setEventList(props.eventList)
-        setWeeks(getWeeks(startDate, eventList, numberOfwweks));
+        setWeeks(getWeeksFull(startDate, eventList, numberOfwweks));
     }, [startDate, props])
 
 
     return (
-        <div className='flex flex-col flex-1'>
+        <div className='flex flex-col flex-1 '>
             <div className="flex  justify-between  gap-1 items-center p-0">
                 <div className='flex gap-2 items-center'>
-                    <Link to="/service"><span className="material-symbols-rounded notranslate fill text-gray-800 !text-4xl" >supervised_user_circle</span>
-                    </Link>
+                    <Icon fill icon="supervised_user_circle" link="/evenements" size="4xl" />
                     <div>
                         <Typography color="blue-gray" className="hidden lg:flex">
                             Évenements
@@ -59,32 +60,51 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                     </div>
                 </div>
             </div>
-            <div className='relative h-full w-full flex flex-1'>
-                <div className=' absolute flex flex-col flex-1 h-full gap-4 overflow-auto w-full rounded-lg '>
+            <div className='relative max-h-full w-full flex flex-1 '>
+                <div className=' absolute flex flex-col flex-1 h-full p-2 gap-2  w-full rounded-2xl bg-white shadow '>
                     {weeks.map((week: any, key: number) => (
-                        <div key={key} className={` ${col === 1 && 'grid-cols-1'} ${col === 2 && 'grid-cols-2'}
-                             ${col === 3 && 'grid-cols-3'} ${col === 4 && 'grid-cols-4'} 
-                             ${col === 5 && 'grid-cols-5'} grid rounded-lg lg:grid-cols-7 gap-y-3`}>
+                        <div key={key} className={` grid rounded-lg lg:grid-cols-7 h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
+                            ${col === 1 && 'grid-cols-1'} 
+                            ${col === 2 && 'grid-cols-2'}
+                            ${col === 3 && 'grid-cols-3'}
+                            ${col === 4 && 'grid-cols-4'} 
+                            ${col === 5 && 'grid-cols-5'} `}>
                             {week.map((day: any, index: number) =>
-                                <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full`} key={index}>
-                                    <div> {day.date.toLocaleDateString('fr-FR', { weekday: 'narrow', month: 'numeric', day: 'numeric' })}
-                                    </div>
-                                    <div className='flex flex-col h-full w-full' key={index}>
-                                        {day.events.length < 1 &&
-                                            <span className='GrayChip m-0.5 py-0.5 lg:py-1.5 rounded-full' >-</span>}
-                                        {(day.events).map((event: any, index: number) =>
-                                            <Popover key={index}>
-                                                <PopoverHandler>
-                                                    <p key={index}
-                                                        className={'CyanChip display flex px-3 m-0.5 py-0.5 lg:py-1.5 rounded-full truncate line-clamp-1 justify-center'}>
-                                                        {getLabel(event.category, eventCategories)}
-                                                    </p>
-                                                </PopoverHandler>
-                                                <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
-                                                    <EventCard event={event} change={() => { }} />
-                                                </PopoverContent>
-                                            </Popover>
-                                        )}
+                                <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full    `} key={index}>
+                                    <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50  '>
+                                        {day.date.toLocaleDateString('fr-FR', { weekday: 'narrow', month: 'numeric', day: 'numeric' })}
+                                    </p>
+                                    <div className='flex flex-col h-full w-full items-center gap-3' key={index}>
+                                        {
+                                            day.events.sort((a: any, b: any) => a.id - b.id).map((event: any, indexEvent: number) => {
+                                                const eventDays = event.days.map((d: any) => new Date(d).toDateString());
+                                                const currentDay = new Date(new Date(day.date).getTime()).toDateString();
+                                                return (
+                                                    <div key={indexEvent} className=' w-full  rounded-xl  '>
+                                                        <Popover open={open && popId === event.id + day.date} >
+                                                            <button className=' w-full rounded-xl' onClick={() => { setOpen(true); setPopId(event.id + day.date) }}>
+                                                                <PopoverHandler>
+                                                                    <div className=
+                                                                        {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  p-[0.4rem]  text-white h-7 truncate flex items-center justify-center font-normal z-50
+                                                        ${(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) && 'rounded-l-2xl !justify-start !z-50 pl-4 !font-medium'}
+                                                        ${(eventDays[eventDays.length - 1] === currentDay || new Date(day.date).getDay() === 0) && 'rounded-r-2xl '}
+                                                    `}>
+                                                                        {(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) ? getLabel(event.category, eventCategories) + '...' : `Jour ${eventDays.indexOf(currentDay) + 1}`}
+                                                                    </div>
+
+                                                                </PopoverHandler>
+                                                            </button>
+                                                            <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
+                                                                <div className="fixed top-[16rem] left-1/2 transform -translate-x-1/2 max-h-[calc(100vh-19rem)] w-[calc(100vw-2rem)] 
+                                                    flex justify-center items-center ">
+                                                                    <EventCard event={event} change={() => { }} />
+                                                                    <Icon bg fill icon="cancel" size="2xl" onClick={() => setOpen(false)} style='absolute -top-12' />
+                                                                </div>
+                                                            </PopoverContent>
+                                                        </Popover>
+                                                    </div>
+                                                )
+                                            })}
                                     </div>
                                 </div>
                             )}

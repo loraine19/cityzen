@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import NavBarTop from '../../components/UIX/NavBarTop';
 import SubHeader from '../../components/UIX/SubHeader';
 import CTAMines from '../../components/UIX/CTAMines';
-import AnnounceDetailComp from '../../components/announceComps/AnnounceDetailComp';
+import AnnounceDetailComp from '../../components/announceComps/PostDetailCard';
 import UserContext from '../../contexts/user.context';
 import { action, Post } from '../../types/class';
 import { deletePost, getPostById } from '../../functions/API/postsApi';
-import { GenereMyActions } from '../../functions/GetDataFunctions';
+import { GenereMyActions, getLabel, postCategories } from '../../functions/GetDataFunctions';
 
 export default function AnnounceDetailPage() {
     const { id } = useParams();
@@ -20,10 +20,12 @@ export default function AnnounceDetailPage() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
     const myActions = GenereMyActions(post, "annonce", deletePost, handleOpen)
+    const label = getLabel(post.category, postCategories);
 
     const fetch = async () => {
         const idS = id ? parseInt(id) : 0;
         const result = await getPostById(idS);
+        console.log(result)
         setPost(result);
         setIsMine(result.userId === userId);
         const share = result.share.toString().split(', ');
@@ -55,7 +57,7 @@ export default function AnnounceDetailPage() {
         <div className="Body orange">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={`annonce ${post.category?.toString().toLowerCase()}`} closeBtn />
+                <SubHeader type={`annonce ${label}`} closeBtn />
             </header>
             <main>
                 {loading ?

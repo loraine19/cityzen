@@ -4,8 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import { FETCH_URL } from "../../../env.local";
 
 const url = FETCH_URL
-const accessToken = Cookies.get('accessToken')
-const refreshToken = Cookies.get('refreshToken')
+let accessToken = Cookies.get('accessToken')
+let refreshToken = Cookies.get('refreshToken')
 
 if (typeof axios === "undefined") {
     throw new Error("Axios doit être chargé pour utiliser ce module.");
@@ -21,10 +21,14 @@ export const handleApiCall = async (apiCall: () => Promise<any>) => {
 }
 
 export const useApi = () => {
+    !accessToken && console.log('useApi', accessToken)
+    if (!accessToken) {
+        accessToken = refreshToken;
+        Cookies.set('accessToken', accessToken || 'merde');
+        console.log('useApitriche', accessToken)
+    }
     const headers = { 'Authorization': 'Bearer ' + accessToken };
-    // Création d'une instance Axios
     const api = axios.create({ baseURL: url, headers: headers });
-    // Juste avant l'envoi de la requète
     api.interceptors.request.use((config) => {
         // on pourrait ajouter des éléments dans le header
         return config;
@@ -41,15 +45,19 @@ export const useApi = () => {
                 console.log("404 error.response", error.response)
                 if (error.response.data.message.includes("expired") || error.response.data.message.includes("jwt")) {
                     for (let i = 0; i < 1; i++) {
-                        console.log("try refreshAccess")
-                        refreshAccess()
+                        console.log("try refreshAccess " + i)
+                        const ok = await refreshAccess()
+                        if (ok) { setTimeout(() => { location.reload(), 100 }) }
+                        else {
+                            //   setTimeout(() => { window.location.replace('/signin') }, 1000);
+                        }
+                        //return null
                     }
                 }
                 if (error.response.data.message.includes("P2025")) {
                     return null
                     // window.location.replace('/*')
                 }
-
             }
             return Promise.reject(error);
         }
@@ -58,6 +66,7 @@ export const useApi = () => {
 }
 
 export const useApiRefresh = () => {
+    console.log('useApiRefresh', refreshToken)
     const headersRefresh = { 'Authorization': 'Bearer ' + refreshToken }
     const api = axios.create({ baseURL: url, headers: headersRefresh })
     api.interceptors.request.use((config) => { return config })
@@ -69,42 +78,40 @@ export const useApiRefresh = () => {
 
 
 export const refreshAccess = async () => {
-    const refreshToken = Cookies.get('refreshToken');
+    let refreshToken = Cookies.get('refreshToken');
     !refreshToken && window.location.replace('/signin');
+
     const data = { refreshToken };
+    console.log(data)
     const apiRefresh = useApiRefresh();
     let result;
     try {
         result = await apiRefresh.post('auth/refresh', data);
-        console.log("result refresh", result)
-        const expirationDateAccess = getTokenExpirationDate(result.data.accessToken) || new Date();
-        const expirationDateRefresh = getTokenExpirationDate(result.data.refreshToken) || new Date();
-        Cookies.set('accessToken', result.data.accessToken, { expires: expirationDateAccess });
-        Cookies.set('refreshToken', result.data.refreshToken, { expires: expirationDateRefresh });
-        location.reload()
+        const newAccessToken = result.data.accessToken;
+        const newRefreshToken = result.data.refreshToken;
+        localStorage.setItem('accessToken', newAccessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
+        Cookies.set('accessToken', newAccessToken);
+        Cookies.set('refreshToken', newRefreshToken);
+        setTimeout(() => { location.reload() }, 1000);
         return result;
-
     } catch (error) {
-        console.error("Error refreshing access token", error);
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        location.reload();
-        window.location.replace('/signin');
-        return;
+        console.log('blocked reload in refresh', error);
+        // setTimeout(() => { window.location.replace('/signin') }, 1000);
+        return null;
     }
-
-};
-
+}
 
 export const getTokenExpirationDate = (token: string): Date | null => {
     const decoded: any = jwtDecode(token);
-    if (!decoded.exp) { console.log(decoded); return null; }
+    if (!decoded.exp) { console.log('decoded exp not found', decoded) }
     return new Date(decoded.exp * 1000);
 };
 
-export const isTokenExpired = (token: string): boolean => {
-    const expirationDate = getTokenExpirationDate(token);
-    return expirationDate ? expirationDate < new Date() : true;
-};
+// export const isTokenExpired = (token: string): boolean => {
+//     const expirationDate = getTokenExpirationDate(token);
+//     return expirationDate ? expirationDate < new Date() : true;
+// };
 
 
 //// CREATION DE FORM DATA
@@ -121,3 +128,9 @@ export const createFormData = (element: any): FormData => {
     }
     return formData;
 };
+
+export const logOut = () => {
+    //  Cookies.remove('accessToken');
+    // Cookies.remove('refreshToken');
+    window.location.replace('/signin');
+}

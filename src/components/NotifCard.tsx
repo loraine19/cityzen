@@ -1,20 +1,20 @@
 import { Card, CardBody, CardFooter, Typography, Chip, Button, CardHeader } from "@material-tailwind/react";
-import { notif } from "../types/type";
 import { Link } from "react-router-dom";
 import { GetPathElement } from "../functions/GetDataFunctions";
 import { useContext } from "react";
 import UserContext from "../contexts/user.context";
+import { Notif } from "../types/class";
 
-type notifCardProps = { notif: any, handleClick: (notif: notif) => void }
+type notifCardProps = { notif: any, handleClick: (notif: Notif) => void }
 
 export function NotifCard(props: notifCardProps) {
     const { user } = useContext(UserContext)
     const { handleClick, notif } = props
-    const { element, createdAt, userId, } = props.notif
+    const { element, createdAt, userId, read } = props.notif
     const relationName = userId === user.userId ? "J'ai ecris " : "J'y participes"
 
     return (
-        <Card className="w-resp !h-max FixCard">
+        <Card className={`${!read ? 'w-resp !h-max FixCard !max-w-[calc(100vw-2rem)]' : 'hidden'}`}>
             <CardHeader className="FixCardHeader NoImage" floated={false}>
                 <div className="flex w-full items-start justify-between">
                     <div className="flex items-center gap-2 mb-1">

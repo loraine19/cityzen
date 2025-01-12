@@ -6,11 +6,10 @@ import SubHeader from '../../components/UIX/SubHeader';
 import CTAMines from '../../components/UIX/CTAMines';
 import { EventDetailCard } from '../../components/eventComps/EventDetailCard';
 import UserContext from '../../contexts/user.context';
-import { eventCategories, GenereMyActions, getLabel, toggleParticipant, isFlaged } from '../../functions/GetDataFunctions';
+import { eventCategories, GenereMyActions, getLabel, toggleParticipant } from '../../functions/GetDataFunctions';
 import { deleteEvent, getEventById } from '../../functions/API/eventsApi';
 import { action, EventP, Participant } from '../../types/class'
 import Skeleton from 'react-loading-skeleton';
-import { getFlagsEvent } from '../../functions/API/flagsApi';
 
 export default function EventDetailPage() {
     const { id } = useParams();
@@ -20,7 +19,6 @@ export default function EventDetailPage() {
     const [isMine, setIsMine] = useState<boolean>(true);
     const [Igo, setIgo] = useState<boolean>(false);
     const [isValidate, setIsValidate] = useState<boolean>(false)
-    const [flagged, setFlagged] = useState<boolean>(false)
     const myActions = GenereMyActions(event, "evenement", deleteEvent, () => { });
     const [loading, setLoading] = useState<boolean>(true);
     const [label, setLabel] = useState<string>('')
@@ -28,11 +26,8 @@ export default function EventDetailPage() {
 
     const fetchEvent = async () => {
         const idS = id ? parseInt(id) : 0;
-        const flags = await getFlagsEvent();;
         try {
             const event = await getEventById(idS);
-            const flagged = isFlaged(event, userId, flags)
-            setFlagged(flagged);
             setEvent(event);
             setLabel(getLabel(event.category.toString(), eventCategories));
             setIsMine(event.userId === userId);
@@ -75,7 +70,7 @@ export default function EventDetailPage() {
                     place={parse(`<br><div className="text-xl whitespace-nowrap text-ellipsis overflow-hidden ">${Address?.address} ${Address?.city}</div>`)} closeBtn />
             </header>
             <main>
-                {!loading ? <EventDetailCard Event={event} setEvent={setEvent} flagged={flagged} /> : <Skeleton count={1} height={800} />}
+                {!loading ? <EventDetailCard Event={event} setEvent={setEvent} /> : <Skeleton count={1} height={800} />}
             </main>
             {isMine ?
                 <CTAMines actions={myActions}

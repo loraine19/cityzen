@@ -35,13 +35,13 @@ export function FlagCard(props: { flag: Flag, update: () => void }) {
     ];
 
     return (
-        <Card className="w-resp FixCard !h-max ">
+        <Card className="w-respLarge FixCard !h-max !max-w-[calc(100vw-1.6rem)] ">
             <CardHeader className="FixCardHeader NoImage" floated={false}>
                 <div className="flex items-start w-full justify-between">
                     <div className="flex items-center gap-2 ">
-                        <Chip value={label} className="rounded-full h-max text-ellipsis  " color="cyan">
+                        <Chip value={label} className="rounded-full h-max truncate " color="cyan">
                         </Chip>
-                        <Chip value={reason} className={` rounded-full OrangeChip h-max flex items-center gap-2 font-medium `}>
+                        <Chip value={reason} className={`rounded-full OrangeChip h-max flex items-center gap-2 font-medium truncate overflow-auto !max-w-[35vw] `}>
                         </Chip>
                     </div>
                     <div className="flex items-center gap-3">
@@ -50,7 +50,7 @@ export function FlagCard(props: { flag: Flag, update: () => void }) {
                 </div>
             </CardHeader>
             <CardBody className="FixCardBody">
-                <Typography color="gray" className="font-normal truncate">
+                <Typography color="gray" className="font-normal truncate max-w-[calc(100vw-1rem)]">
                     {element.title}
                 </Typography>
             </CardBody>

@@ -21,6 +21,7 @@ export class User {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     lastConnection: Date = new Date();
+    status: UserStatus = UserStatus.INACTIVE;
 }
 
 export class Profile {
@@ -72,6 +73,9 @@ export class EventP {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     Participants: Participant[] = [new Participant()];
+    Flags?: Flag[] = [new Flag()];
+    days: any;
+    actif?: boolean;
 }
 
 export class Participant {
@@ -99,6 +103,7 @@ export class Post {
     share: Share = Share.EMAIL;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+    Flags?: Flag[] = [new Flag()];
 }
 
 export class Like {
@@ -119,6 +124,8 @@ export class Pool {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     User?: User = new User();
+    Votes?: Vote[] = [new Vote()];
+    UserBenef?: User = new User();
 }
 
 export class Vote {
@@ -132,6 +139,7 @@ export class Vote {
     opinion: VoteOpinion = VoteOpinion.OK;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+    User?: User = new User();
 }
 
 export class Survey {
@@ -147,6 +155,8 @@ export class Survey {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     User?: User = new User();
+    Votes?: Vote[] = [new Vote()];
+    Flags?: Flag[] = [new Flag()];
 }
 
 export class GroupUser {
@@ -179,6 +189,7 @@ export class Service {
     status: ServiceStep = ServiceStep.STEP_0;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+    Flags?: Flag[] = [new Flag()];
 }
 
 export class Issue {
@@ -231,6 +242,12 @@ export enum TokenType {
     REFRESH,
     RESET,
     VERIFY
+}
+
+export enum UserStatus {
+    ACTIVE,
+    INACTIVE,
+
 }
 
 export enum Role {
@@ -313,6 +330,7 @@ export enum SurveyCategory {
     CATEGORY_4,
     CATEGORY_5
 }
+export const surveyCategory = Object.values(SurveyCategory).filter(category => typeof category === 'string');
 
 export enum AssistanceLevel {
     LEVEL_0,
@@ -561,8 +579,28 @@ export class Label {
     value: string | any = '';
 }
 
+export interface Notif {
+    title: string;
+    id: number;
+    element: ElementNotif;
+    updatedAt: Date;
+    [key: string]: any;
+}
+
+
+export enum ElementNotif {
+    POST,
+    EVENT,
+    SERVICE,
+    ISSUE,
+    SURVEY,
+    POOL,
+    FLAG,
+
+}
+
 export class ModalValues {
-    confirm: () => any = () => { };
+    confirm: any;
     title: string = '';
-    element: string = ''
+    element: any = '';
 }

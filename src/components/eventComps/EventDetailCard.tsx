@@ -1,41 +1,35 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress, Avatar } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
 import { AvatarStack } from "./AvatarStack";
 import { useContext, useState } from "react";
-import { dayMS, eventdateInfo, toggleParticipant } from "../../functions/GetDataFunctions";
-import { EventP, Participant } from '../../types/class';
+import { eventdateInfo, toggleParticipant } from "../../functions/GetDataFunctions";
+import { EventP, Flag, Participant } from '../../types/class';
 import { defaultEventImage } from "../../datas/enumsCategories";
 import UserContext from "../../contexts/user.context";
 import Skeleton from "react-loading-skeleton";
 import AddressMapOpen from "../mapComps/AddressMapOpen";
+import { DateChip, FlagIcon } from "../UIX/SmallComps";
 
-type EventCardProps = { Event: EventP, change?: (e: any) => void, setEvent?: any, flagged?: boolean }
+type EventCardProps = { Event: EventP, change?: (e: any) => void, setEvent?: any }
 export function EventDetailCard(props: EventCardProps) {
-    console.log(props)
-    const { Event, flagged, setEvent } = props
-    const { id, title, description, category, participantsMin, start, Participants, User, Address } = Event
+    const { Event, setEvent } = props
+    const { id, title, description, category, participantsMin, Participants, User, Address, Flags, end, start } = Event
     const user = useContext(UserContext)
     const userId = user.user.userId
     const Igo: boolean = Participants.find((participant: Participant) => participant.userId === userId) ? true : false
-    const date = new Date(start)
-    const daysBefore: number = ((date.getTime() - (new Date(Date.now())).getTime()) / dayMS)
+    const flagged: boolean = Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
     const pourcentParticipants: number = Math.floor((Participants.length) / participantsMin * 100)
-    const dateClass = daysBefore < 15 && pourcentParticipants < 100 ? "OrangeChip" : "GrayChip";
     const imgCategory: string | undefined | Blob = (defaultEventImage.find(categoryD => categoryD.type === category.toString()) ?
         defaultEventImage.find(categoryD => categoryD.type === category.toString())?.image : defaultEventImage[0].image);
 
     const [image] = useState<string>(props.Event.image ? (props.Event.image) as any : (imgCategory));
-
-    const userOrga = User.Profile
-
+    const author = User.Profile
 
     return (
         <div className="pt-6 pb-1 h-full flex">
             <Card className="w-respLarge FixCard">
                 <CardHeader className="FixCardHeader min-h-[28vh]">
                     <div className="absolute h-full w-full z-70 p-4  flex flex-col  justify-between items-end ">
-                        <Chip value={date.toLocaleDateString('fr-FR')} className={`${dateClass}` + ` w-max rounded-full h-max flex items-center gap-2 shadow font-medium `}>
-                        </Chip>
+                        <DateChip createdAt={start} ended={new Date(end).getTime() > Date.now()} />
                         <div className={image ? "h-max w-full !rounded-full  backdrop-blur flex items-center gap-2 shadow p-2" : " !rounded-full bg-cyan-200 backdrop-blur flex items-center gap-2 shadow p-2"}>
                             {pourcentParticipants > 0 ? <Progress value={pourcentParticipants} color={pourcentParticipants >= 100 ? "green" : "gray"} size="md"
                                 label={pourcentParticipants >= 100 ? " Validé" : ' '} /> :
@@ -52,9 +46,7 @@ export function EventDetailCard(props: EventCardProps) {
                             {title}<br></br>
                             <span className="text-sm font-medium text-blue-gray-500">{eventdateInfo(props.Event)}</span>
                         </Typography>
-                        <Link to={`/flag${flagged ? '/edit' : ''}/event/${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
-                        </Link>
+                        <FlagIcon flagged={flagged} id={id} type="event" />
                     </div>
                     <div className=" flex  flex-col flex-1 gap-x-3 py-1 lg:flex-row">
                         <div className=" relative flex flex-col  flex-auto overflow-auto">
@@ -72,11 +64,11 @@ export function EventDetailCard(props: EventCardProps) {
                 <CardFooter className="CardFooter flex justify-between items-center">
                     <div className="flex items-center gap-8">
                         <div className="flex items-center pb-2 gap-2">
-                            <Avatar src={userOrga?.image as string} size="sm" alt="avatar" withBorder={true} />
+                            <Avatar src={author?.image as string} size="sm" alt="avatar" withBorder={true} />
                             <div>
-                                <Typography variant="small" className="font-normal !p-0">{userOrga?.firstName} - {userOrga?.lastName}</Typography>
+                                <Typography variant="small" className="font-normal !p-0">{author?.firstName} - {author?.lastName}</Typography>
                                 <Typography variant="small" color="gray" className="truncate text-ellipsis">
-                                    ◦ {userOrga?.skills}
+                                    ◦ {author?.skills}
                                 </Typography>
                             </div>
                         </div>

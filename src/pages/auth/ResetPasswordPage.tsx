@@ -1,34 +1,45 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { useState } from 'react';
-import { user } from '../../types/user';
+import { useEffect, useState } from 'react';
+import { user, } from '../../types/user';
 import { AuthHeader } from '../../components/authComps/AuthHeader';
-import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';;
-import { Link } from 'react-router-dom';
-import { resetPassword } from '../../functions/API/usersApi';
+import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { resetPasswordUpdate } from '../../functions/API/usersApi';
 import { FETCH_URL } from '../../../env.local';
 
-export default function ForgotPasswordPage() {
 
+export default function ResetPasswordPage() {
+    const [searchParams] = useSearchParams();
     const [newUser,] = useState<user>({} as user);
-    const [notif, setNotif] = useState<string>("");
-    console.log('r', FETCH_URL)
+    const [notif,] = useState<string>("");
+    const params = { email: searchParams.get("email"), token: searchParams.get("token") }
+    const { email, token } = params
+
     const formSchema = object({
-        email: string().email("Email non valide").required("Email est obligatoire"),
+        password: string().required("password est obligatoire"),
     })
+
+    console.log('r', FETCH_URL)
     const formik = useFormik({
         initialValues: newUser,
         validationSchema: formSchema,
-        onSubmit: values => {
+        onSubmit: async values => {
             formik.values = values
-            let res;
-            let email = formik.values.email.trim()
-            const send = async () => res = await resetPassword(email)
-            send()
-            console.log(res, formik.values.email)
-            setNotif(`si l'email ${formik.values.email} est enregistré, un lien de reinitialisation vous à ete envoyé`)
+            const updatepassword = await resetPasswordUpdate(email as string, formik.values.password, token as string)
+            if (updatepassword) {
+                alert("mot de pass changé")
+                window.location.href = "/signin"
+            }
         },
     });
+
+
+    useEffect(() => {
+        if (token) {
+            console.log(token)
+        }
+    }, [token]);
 
 
 
@@ -47,21 +58,20 @@ export default function ForgotPasswordPage() {
                     <Card className='w-respLarge flex py-4 flex-col items-center'>
                         <CardBody className='flex flex-col text-center gap-4'>
                             <Typography variant="h5" color="blue-gray" className="mb-2">
-                                Mot de pass oublié
+                                Reinitialisation du mot de pass
                             </Typography>
                             <Typography color="gray" className="mb-4">
-                                Entrez votre adresse email et nous vous enverrons un lien pour changer votre mot de pass
+                                en cours de developpement
+                                ecrire votre nouveaux mot de passe pour
                             </Typography>
                             <Typography className='text py-2'>{notif}   </Typography>
-
-
-                            <Input label={formik?.errors.email ? formik?.errors.email : "Email"} name="email" variant="static" error={formik?.errors.email ? true : false} onChange={formik.handleChange} />
-
+                            <Input label={'email'} name="email" variant="static" value={email as string} disabled={true} />
+                            <Input label={formik.errors.email ? formik.errors.email : "Mot de passe"} name="password" variant="static" error={formik?.errors.password ? true : false} onChange={formik.handleChange} />
                         </CardBody>
                     </Card>
                 </main>
                 <footer>
-                    <Button type="submit" size="lg" className="w-full rounded-full shadow-xl">
+                    <Button type="submit" size="lg" className="w-full rounded-full shadow-xl" >
                         Envoyer
                     </Button>
                 </footer>

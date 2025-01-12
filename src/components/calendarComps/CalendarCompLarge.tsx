@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react';
+import { Card, Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../eventComps/EventCard';
-import { dayMS, eventCategories, getLabel, getWeeks, shortDateString } from '../../functions/GetDataFunctions'
+import { dayMS, getWeeksFull, shortDateString } from '../../functions/GetDataFunctions'
 import { EventP } from '../../types/class';
 
 export default function CalendarCompLarge(props: { eventList: EventP[] }) {
     const { eventList } = props
-    type day = { date: Date, events: EventP[], text: String }
+    interface EventPA { events: EventP & { actif: boolean }[] & { days: Date[] } }
+    interface EventPA extends EventP {
+        actif: boolean;
+        days: Date[];
+    }
+    type day = { date: Date, events: EventPA[], text: String }
     const numberOfwweks = 2
     const [startDateBackup] = useState<Date>(new Date().getDay() > 0 ? new Date() : new Date(new Date().getTime() - 1 * dayMS));
     const [startDate, setStartDate] = useState<string>(startDateBackup.toDateString());
@@ -17,6 +22,7 @@ export default function CalendarCompLarge(props: { eventList: EventP[] }) {
     const removeWeek = () => { setStartDate((new Date(new Date(startDate).getTime() - 7 * dayMS)).toDateString()) }
     const resetWeek = () => { setStartDate(startDateBackup.toDateString()) }
 
+
     let num = 3
     const [col, setCol] = useState<number>(num)
     const addCol = () => { col < 4 ? (num = col + 1) : (num = 4), setCol(num) }
@@ -25,26 +31,21 @@ export default function CalendarCompLarge(props: { eventList: EventP[] }) {
 
     //// USE EFFECT
     useEffect(() => {
-        setWeeks(getWeeks(startDate, eventList, numberOfwweks));
+        setWeeks(getWeeksFull(startDate, eventList, numberOfwweks));
     }, [startDate, props])
 
 
-    const dayNumber: number | any = (eventStart: Date, CalendarDay: Date): number | undefined => {
-        return Math.round((new Date(CalendarDay).getTime() - eventStart.getTime()) / dayMS)
-    }
-    const firstDay = " text-left  rounded-full w-[calc(100%+0.5rem)] !z-20"
-    const lastDay = "  rounded-full  !w-[calc(100%+0.5rem)]"
-    const middleDay = "justify-center text-center w-[calc(100%+3.5rem)] !z-10"
+
 
     return (
-        <Card className=" flex h-full bg-opacity-45 my-1 p-2 flex-col rounded-lg text-center text-sm overflow-x-auto">
+        <Card className="relative flex h-full bg-opacity-45 my-1 p-2 flex-col rounded-lg text-center text-sm overflow-x-auto">
             <div className='flex w-full justify-between'>
                 <div className='flex gap-2 items-center lg:hidden'>
                     <button onClick={removeCol} disabled={col <= 1 ? true : false} ><span className='material-symbols-outlined !text-lg'>do_not_disturb_on</span></button>
                     <button onClick={resetCol}>{col}</button>
                     <button onClick={addCol} disabled={col >= 7 ? true : false}><span className='material-symbols-outlined !text-lg' >add_circle</span></button>
                 </div>
-                <div className='flex lg:flex-1 justify-around p-1'>
+                <div className='flex lg:flex-1 justify-around'>
                     <button onClick={removeWeek}>
                         <span className='material-symbols-outlined !text-sm'>arrow_back_ios</span>
                     </button>
@@ -57,54 +58,61 @@ export default function CalendarCompLarge(props: { eventList: EventP[] }) {
                 </div>
             </div>
             <div className='flex flex-col flex-1 w-full h-max gap-1 overflow-auto'>
-                {weeks.map((week: any, key: number) => (
-                    <div key={key} className={` ${col === 1 && 'grid-cols-1'} ${col === 2 && 'grid-cols-2'}
-                     ${col === 3 && 'grid-cols-3'} ${col === 4 && 'grid-cols-4'} 
-                     ${col === 5 && 'grid-cols-5'}   grid min-h-max h-[100%] grid-cols-${col} rounded-lg  lg:grid-cols-7 `}>
-                        {week.map((day: any, index1: number) =>
-                            <div className='text-xs flex flex-col py-1 px-2 text-center h-full' key={index1}>
+                {weeks.map((week: any, indexWeek: number) => (
+                    <div key={indexWeek} className={` 
+                     ${col === 1 && 'grid-cols-1'}
+                     ${col === 2 && 'grid-cols-2'}
+                     ${col === 3 && 'grid-cols-3'} 
+                     ${col === 4 && 'grid-cols-4'} 
+                     ${col === 5 && 'grid-cols-5'}  
+                      grid min-h-max h-[100%] grid-cols-${col} rounded-lg  lg:grid-cols-7 pt-12 `}>
+                        {week.map((day: any, indexDay: number) => (
+                            <div className='text-xs flex flex-col py-1 px-2 text-center h-full' key={indexDay}>
                                 <div> {day.text} </div>
-                                <Card className={`${new Date(day.date).toDateString() === new Date().toDateString()
-                                    && 'orange100'}  pb-3 pt-2 gap-1 lg:gap-2 flex items-center flex-col h-full min-h-20`}>
-                                    {day.events?.length < 1 ? <p className='opacity-40 text-xs p-0'>pas <br></br> d'événements</p> : <p className=' opacity-60'>{day.events?.length} événements</p>}
-                                    {(day.events).map((event: any, index: number) =>
-                                        <Popover key={index}>
-                                            <PopoverHandler>
-                                                <Button size="sm" key={index} color="cyan"
-                                                    className={
-                                                        `${((
-                                                            (event.days.length > 1 && dayNumber(new Date(event.days[0]), new Date(day.date)) === 0)) || index1 === 0) && firstDay} 
-                                                          ${((
-                                                            (event.days.length > 1 && dayNumber(new Date(event.days[0]), new Date(day.date)) === event.days.length - 1) && event.days.length !== 2) || index1 === 6) && lastDay} 
-                                                           ${(event.days.length > 1 &&
-                                                            dayNumber(new Date(event.days[0]), new Date(day.date)) != 0 &&
-                                                            dayNumber(new Date(event.days[0]), new Date(day.date)) != (event.days.length) && index1 !== 0 && index1 !== 6
-                                                        ) &&
-                                                        middleDay} ${event.days.length > 1 && event.days.length === 2 &&
-                                                        dayNumber(new Date(event.days[0]), new Date(day.date)) != 0 && `rounded-l-none rounded-r-full !w-[calc(100%+1.7rem)] -ml-4`} 
-                                                    flex items-center justify-center  py-0.5 lg:py-1  truncate `}>
-                                                    {dayNumber(new Date(event.days[0]), new Date(day.date)) !== 0 && index1 !== 0 ?
-                                                        <span className='lowercase font-normal flex !text-2xs opacity-60  '> jour  {(dayNumber(new Date(event.days[0]), new Date(day.date))) + 1 + " "}
-                                                            /{event.days.length}  </span>
-                                                        :
-                                                        <span className='capitalize font-normal flex text-ellipsis overflow-hidden'>
-                                                            {getLabel(event.category, eventCategories)}
-                                                            <span className='hidden lg:flex'>  &nbsp;- &nbsp; {event.title}</span>
-                                                        </span>
-                                                    }
-                                                </Button>
-                                            </PopoverHandler>
-                                            <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
-                                                <EventCard
-                                                    event={event} change={() => { }} />
-                                            </PopoverContent>
-                                        </Popover>
-                                    )}
+                                <Card className={` ${new Date(day.date).toDateString() === new Date().toDateString()
+                                    && 'orange100'}  py-3 gap-1 lg:gap-2 flex items-center flex-col-reverser h-full min-h-20 max-h-[12rem] z-10`}>
+                                    <Typography className='text-[0.5rem] -m-2'> {day.events.length > 0 ? day.events.length : ' aucun évenement'}</Typography>
+                                    {
+                                        day.events.sort((a: any, b: any) => a.id - b.id).map((event: EventPA, indexEvent: number) => {
+                                            const eventDays = event.days.map((d: any) => new Date(d).toDateString());
+                                            const currentDay = new Date(new Date(day.date).getTime()).toDateString();
+
+                                            return (
+                                                <div key={indexEvent} className='h-8 w-[calc(100%+1rem)] rounded-xl  '>
+                                                    <Popover key={event.id}>
+                                                        <PopoverHandler>
+                                                            <div className=
+                                                                {`${event?.actif ? 'bg-cyan-500' : 'invisible'} shadow-lg p-1 text-xs text-white h-8 truncate flex items-center justify-center  z-50
+                                                        ${(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) && 'rounded-l-2xl !justify-start z-50 pl-4'}
+                                                        ${(eventDays[eventDays.length - 1] === currentDay
+                                                                        || new Date(day.date).getDay() === 0)
+                                                                    && 'rounded-r-2xl'}
+                                                    `}>
+                                                                {(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) ? event?.title + '...' :
+                                                                    `Jour ${eventDays.indexOf(currentDay) + 1} / ${event?.days.length}`}
+                                                            </div>
+                                                        </PopoverHandler>
+                                                        <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
+                                                            <div className="fixed top-[16rem] left-1/2 transform -translate-x-1/2 max-h-[calc(100vh-19rem)] w-[calc(100vw-2rem)] 
+                                                    flex justify-center items-center ">
+                                                                <EventCard event={event} change={() => { }} />
+                                                            </div>
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                </div>
+                                            )
+                                        })}
                                 </Card>
                             </div>
-                        )}
+                        ))}
                     </div>
-                ))}
+                ))
+                }
+            </div >
+            <div className='absolute top-[2rem] flex flex-col flex-1 w-[calc(100%-1rem)] h-[calc(100%-2rem)]  gap-1 overflow-auto'>
+
             </div>
         </Card >)
 }
+
+

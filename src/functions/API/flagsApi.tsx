@@ -11,6 +11,7 @@ export const getFlagsEvent = async (): Promise<Flag[]> => handleApiCall(() => ap
 export const getFlagsService = async (): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/service`));
 export const getFlagsPost = async (): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/post`));
 export const getFlagsByEventId = async (eventId: number): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/event/${eventId}`));
+export const getFlagsSurvey = async (): Promise<Flag[]> => handleApiCall(() => api.get(`${dataType}/survey`));
 export const getMyFlag = async (target: string, targetId: number): Promise<Flag> => handleApiCall(() => api.get(`${dataType}/mine/${target.toUpperCase()}/${targetId}`));
 
 

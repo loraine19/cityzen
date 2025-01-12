@@ -6,7 +6,7 @@ import NavBarTop from "../../components/UIX/NavBarTop";
 import SelectSearch from "../../components/UIX/SelectSearch";
 import SubHeader from "../../components/UIX/SubHeader";
 import TabsMenu from "../../components/TabsMenu";
-import ServiceComp from "../../components/servicesComps/ServiceComp";
+import ServiceComp from "../../components/servicesComps/ServiceCard";
 import { label } from "../../types/label";
 import { Service } from "../../types/class"
 import { serviceCategories, getValue, getLabel } from '../../functions/GetDataFunctions';
@@ -62,6 +62,7 @@ export default function ServicesPage() {
         setMyServicesDoing(myServicesDoing);
         setMyServicesDone(myServicesDone);
         setMyServicesLitige(myServicesLitige);
+        setBoxSelected(boxArray)
         services && services.length > 0 && setLoading(false);
         switch (tabSelected) {
             case "myservices": setServiceList(myservices); break;
@@ -83,13 +84,6 @@ export default function ServicesPage() {
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
 
 
-    const selectBox = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newBoxSelected = e.target.checked
-            ? [...boxSelected, e.target.value]
-            : boxSelected.filter(value => value !== e.target.value);
-        setBoxSelected(newBoxSelected);
-    };
-
     const filterCheck = (boxSelected: string[]) => {
         const filters = [
             boxSelected.includes(boxArray[0]) ? myServicesDo : [],
@@ -108,7 +102,7 @@ export default function ServicesPage() {
     }, [boxSelected]);
 
     const filterTab = async (newArray: Service[], value: string) => {
-        if (value !== tabSelected) { setCategorySelected(''); setCat("tous"); await UpdateList() }
+        if (value !== tabSelected) { setCategorySelected(''); setCat("tous"); setBoxSelected(boxArray); await UpdateList() }
         setServiceList(newArray);
         setTabledList(newArray);
         setTabSelected(value);
@@ -148,7 +142,7 @@ export default function ServicesPage() {
                 <SubHeader qty={serviceList.length} type={`service ${categorySelected !== '' ? label : ''}`} />
                 <TabsMenu labels={serviceTabs} subMenu={false} />
                 {mines ? (
-                    <CheckCard categoriesArray={boxArray} change={selectBox} setBoxSelected={setBoxSelected} />
+                    <CheckCard categoriesArray={boxArray} boxSelected={boxSelected} setBoxSelected={setBoxSelected} />
                 ) : (
                     <SelectSearch cat={cat} setCat={setCat} category={serviceCategories} search={search} />
                 )}

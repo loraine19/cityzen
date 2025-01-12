@@ -17,11 +17,9 @@ const DataContext = createContext<DataContextType>({
 });
 
 
-const localData = JSON.parse(localStorage.getItem("CollectifData") || "{}");
-(Object.keys(localData).length === 0) && localStorage.setItem("CollectifData", JSON.stringify(dataJson));
-
-
 export function DataProvider({ children }: DataProviderType) {
+    const localData = JSON.parse(localStorage.getItem("CollectifData") || "{}");
+    (Object.keys(localData).length === 0) && localStorage.setItem("CollectifData", JSON.stringify(dataJson));
     const [data] = useState<any>(localData);
     return <DataContext.Provider
         value={{
@@ -29,7 +27,11 @@ export function DataProvider({ children }: DataProviderType) {
             setDataInLocal: (data: any) => {
                 localStorage.setItem('CollectifData', JSON.stringify(data));
             },
-            resetData: () => { confirm("Voulez-vous reinitialiser les données ?"); localStorage.setItem("CollectifData", JSON.stringify(dataJson)); window.location.reload() }
+            resetData: () => {
+                confirm("Voulez-vous reinitialiser les données ?");
+                localStorage.setItem("CollectifData", JSON.stringify(dataJson));
+                window.location.reload()
+            }
         }}> {
             children
         }

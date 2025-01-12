@@ -32,6 +32,7 @@ export default function EventListPage() {
 
     const UpdateList = async () => {
         const events = await getEvents();
+        console.log(events)
         const IgoEvents = await getEventsIgo();
         const validatedEvents = await getEventsValidated();
         const myEvents = await getEventsMines();

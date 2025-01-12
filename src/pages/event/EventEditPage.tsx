@@ -50,9 +50,6 @@ export default function EventDetailPage() {
             zipcode: string().required("Code postal est obligatoire"),
         })
     })
-    const [value, setValue] = useState('');
-    value && 9 > 10 && console.log("avoid compile error ", value)
-
 
     const formik = useFormik({
         initialValues: newEvent as EventP,
@@ -90,7 +87,7 @@ export default function EventDetailPage() {
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
             {loading ? <Skeleton count={1} height="100%" /> :
-                <EventForm formik={formik} setValue={setValue} />}
+                <EventForm formik={formik} />}
         </div >
     )
 }

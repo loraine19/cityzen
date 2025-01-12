@@ -6,7 +6,6 @@ import { AnnounceForm } from '../../components/announceComps/AnnounceForm';
 import { Post } from '../../types/class'
 import { ConfirmModal } from '../../components/UIX/ConfirmModal';
 import { postPost } from '../../functions/API/postsApi'
-import parse from 'html-react-parser'
 
 export default function AnnounceCreatePage() {
     const [newPost,] = useState<Post>({} as Post);
@@ -53,7 +52,7 @@ export default function AnnounceCreatePage() {
                     if (ok) { navigate(`/annonce`); setOpen(false) }
                 }}
                 title={"Confimrer la modification"}
-                element={parse((JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")) as unknown as string} />
+                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
             <AnnounceForm formik={formik} setValue={setValue} />
         </div >
     )

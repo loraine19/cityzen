@@ -1,34 +1,22 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { Flag, Like, Post } from "../../types/class";
+import { Flag, Survey, Vote } from "../../types/class";
 import UserContext from "../../contexts/user.context";
-import { useContext, useEffect, useState } from "react";
-import { getFlagsPost } from "../../functions/API/flagsApi";
-import { isFlaged, toggleLike } from "../../functions/GetDataFunctions";
+import { useContext, useState } from "react";
+import { toggleLike } from "../../functions/GetDataFunctions";
+import { DateChip, FlagIcon } from "../UIX/SmallComps";
 
 
-export default function AnnounceDetailComp(props: { post: Post, mines?: boolean, change: (e: any) => void }) {
-    const [post, setPost] = useState<Post>(props.post)
+export default function SurveyDetailCard(props: { element: Survey, mines?: boolean, change: (e: any) => void }) {
+    const [element, setElement] = useState<Survey>(props.element)
     const { change } = props
-    const { id, title, description, image, category, createdAt, Likes } = post
-    console.log(props)
+    const { id, title, description, image, category, createdAt, Votes, Flags } = element
     const user = useContext(UserContext)
     const userId = user.user.userId
-    const haveImage = post.image ? true : false
-    const userOrga = post?.User?.Profile
-    const [flags, setFlags] = useState<Flag[]>([])
-    1 > 2 && console.log(flags)
-    const [flagged, setFlagged] = useState<boolean>(false)
-    const ILike: boolean = post.Likes?.find((like: Like) => like.userId === userId) ? true : false
+    const haveImage = element.image ? true : false
+    const author = element?.User?.Profile
+    const flagged: boolean = Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
+    const ILike: boolean = Votes?.find((vote: Vote) => vote.userId === userId) ? true : false
 
-    useEffect(() => {
-        const onload = async () => {
-            const flags = await getFlagsPost()
-            setFlags(flags)
-            setFlagged(isFlaged(post, userId, flags))
-        }
-        onload()
-    }, [post])
 
     return (
         <>
@@ -40,17 +28,13 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                             <Chip value={category} className="rounded-full h-max text-ellipsis shadow" color="cyan">
                             </Chip>
                         </button>
-                        <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
-                        </Chip>
+                        <DateChip createdAt={createdAt} />
                     </div>
                     {image &&
-
                         <img
                             src={image as any}
                             alt={title}
-                            className="h-full w-full object-cover"
-                        />
-                    }
+                            className="h-full w-full object-cover" />}
                 </CardHeader>
                 <CardBody className="FixCardBody">
                     <div className="flex w-full items-center justify-between">
@@ -58,9 +42,7 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                             {title}
                         </Typography>
 
-                        <Link to={`/flag${flagged ? '/edit' : ''}/post/${id}`} title={`signaler un problème sur ${title}`}>
-                            <span className={`${flagged && "fill !text-red-500"} material-symbols-outlined !text-[1.2rem] opacity-80`}>flag_2</span>
-                        </Link>
+                        <FlagIcon flagged={flagged} id={id} type="survey" />
                     </div>
                     <div className="CardOverFlow">
                         <Typography color="blue-gray" className="mb-2">
@@ -71,18 +53,18 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
 
                 <CardFooter className="CardFooter mb-2">
                     <div className="flex items-center px-0 gap-2">
-                        <Avatar src={userOrga?.image as string} size="sm" alt="avatar" withBorder={true} />
+                        <Avatar src={author?.image as string} size="sm" alt="avatar" withBorder={true} />
                         <div className="flex flex-col">
-                            <Typography variant="small" className="font-normal !p-0">{userOrga?.firstName} - {userOrga?.lastName}</Typography>
+                            <Typography variant="small" className="font-normal !p-0">{author?.firstName} - {author?.lastName}</Typography>
                             <Typography variant="small" color="gray" >
-                                {userOrga?.skills}
+                                {author?.skills}
                             </Typography>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-2 ">
-                        <button onClick={() => toggleLike(post.id, userId, setPost)}>
-                            <Chip value={`${Likes?.length}`} variant="ghost" className="pr-3 pl-6 pt-2 rounded-full h-full flex items-center "
+                        <button onClick={() => toggleLike(element.id, userId, setElement)}>
+                            <Chip value={`${Votes?.length}`} variant="ghost" className="pr-3 pl-6 pt-2 rounded-full h-full flex items-center "
                                 icon={<span className={`${ILike && 'fill !text-cyan-500'} material-symbols-outlined  !text-[1.2rem] pl-2 pt-0.5`}>thumb_up    </span>}>
                             </Chip></button>
 

@@ -17,7 +17,6 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
     const [icon3] = useState<boolean>(props.icon3 ? true : false);
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0)
-
     return (
         <div className="flex gap-2 items-center ">
             <ConfirmModal
@@ -38,7 +37,7 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
                 onClick={() => { setOpen(true), setIndex(0) }}
                 disabled={disabled2}
             >
-                <span className="material-symbols-outlined unFillThin !text-[1.5rem] mt-0.5">
+                <span className="icon notranslate unFillThin !text-[1.5rem] mt-0.5">
                     {buttons[0].icon}
                 </span>
             </Button>
@@ -50,7 +49,7 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
                 onClick={() => { setOpen(true), setIndex(1) }}
                 disabled={disabled1}
             >
-                <span className="material-symbols-outlined  fillThin !text-[1.5rem]">
+                <span className="icon notranslate fillThin !text-[1.5rem]">
                     {buttons[1].icon}
                 </span>
             </Button>
@@ -61,7 +60,7 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
                 className={"flex items-center justify-center rounded-full h-9 w-9 p-1"}
                 onClick={() => { setOpen(true), setIndex(2) }}
             >
-                <span className="material-symbols-outlined fillThin !text-[1.5rem]">
+                <span className="icon notranslate fillThin !text-[1.5rem]">
                     {buttons[2].icon}
                 </span>
             </Button>}
