@@ -2,39 +2,39 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DataProvider } from "./contexts/data.context";
 import { UserProvider } from "./contexts/user.context";
-import AnnounceCreatePage from "./components/pages/announce/AnnounceCreatePage";
-import AnnounceDetailPage from "./components/pages/announce/AnnounceDetailPage";
-import AnnounceEditPage from "./components/pages/announce/AnnounceEditPage";
-import AnnounceListPage from "./components/pages/announce/AnnounceListPage";
-import ForgotPasswordPage from "./components/pages/auth/ForgotPasswordPage";
-import ResetPasswordPage from "./components/pages/auth/ResetPasswordPage";
-import SignInPage from "./components/pages/auth/SignInPage";
-import SignUpDetailPage from "./components/pages/auth/SignUpDetailPage";
-import SignUpPage from "./components/pages/auth/SignUpPage";
-import DashboardPage from "./components/pages/DashboardPage";
-import EventCreatePage from "./components/pages/event/EventCreatePage";
-import EventDetailPage from "./components/pages/event/EventDetailPage";
-import EventEditPage from "./components/pages/event/EventEditPage";
-import EventListPage from "./components/pages/event/EventListPage";
-import FlagCreatePage from "./components/pages/flag/FlagCreatePage";
-import FlagEditPage from "./components/pages/flag/FlagEditPage";
-import FlagPage from "./components/pages/flag/FlagPage";
-import MyInfosPage from "./components/pages/myInfos/MyInfosPage";
-import NotificationPage from "./components/pages/myInfos/NotificationPage";
-import NotificationsPage from "./components/pages/myInfos/NotificationPage";
-import RulesPage from "./components/pages/myInfos/RulePage";
-import NotFindPage from "./components/pages/NotFindPage";
-import ServiceCreatePage from "./components/pages/service/ServiceCreatePage";
-import ServiceDetailPage from "./components/pages/service/ServiceDetailPage";
-import ServiceEditPage from "./components/pages/service/ServiceEditPage";
-import ServiceListPage from "./components/pages/service/ServiceListPage";
-import IssueCreatePage from "./components/pages/service/issue/IssueCreatePage";
-import IssueDetailPage from "./components/pages/service/issue/IssueDetailPage";
-import IssueEditPage from "./components/pages/service/issue/IssueEditPage";
-import PoolDetailPage from "./components/pages/survey/PoolDetaiPage";
-import SurveyCreatePage from "./components/pages/survey/SurveyCreatePage";
-import SurveyDetailPage from "./components/pages/survey/SurveyDetailPage";
-import SurveyListPage from "./components/pages/survey/SurveyListPage";
+
+import ServiceCreatePage from "./components/shared/service/ServiceCreatePage";
+import ServiceDetailPage from "./components/shared/service/ServiceDetailPage";
+import ServiceEditPage from "./components/shared/service/ServiceEditPage";
+import ServiceListPage from "./components/shared/service/ServiceListPage";
+import IssueCreatePage from "./components/shared/service/issue/IssueCreatePage";
+import IssueDetailPage from "./components/shared/service/issue/IssueDetailPage";
+import IssueEditPage from "./components/shared/service/issue/IssueEditPage";
+import AnnounceCreatePage from "./components/shared/announce/AnnounceCreatePage";
+import AnnounceDetailPage from "./components/shared/announce/AnnounceDetailPage";
+import AnnounceEditPage from "./components/shared/announce/AnnounceEditPage";
+import AnnounceListPage from "./components/shared/announce/AnnounceListPage";
+import ForgotPasswordPage from "./components/shared/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./components/shared/auth/ResetPasswordPage";
+import SignInPage from "./components/shared/auth/SignInPage";
+import SignUpDetailPage from "./components/shared/auth/SignUpDetailPage";
+import SignUpPage from "./components/shared/auth/SignUpPage";
+import DashboardPage from "./components/shared/dashboard/DashboardPage";
+import NotFindPage from "./components/shared/dashboard/NotFindPage";
+import EventCreatePage from "./components/shared/event/EventCreatePage";
+import EventDetailPage from "./components/shared/event/EventDetailPage";
+import EventEditPage from "./components/shared/event/EventEditPage";
+import EventListPage from "./components/shared/event/EventListPage";
+import FlagCreatePage from "./components/shared/flag/FlagCreatePage";
+import FlagEditPage from "./components/shared/flag/FlagEditPage";
+import FlagPage from "./components/shared/flag/FlagPage";
+import PoolDetailPage from "./components/shared/poolSurvey/PoolDetaiPage";
+import SurveyCreatePage from "./components/shared/poolSurvey/SurveyCreatePage";
+import SurveyDetailPage from "./components/shared/poolSurvey/SurveyDetailPage";
+import SurveyListPage from "./components/shared/poolSurvey/SurveyListPage";
+import MyInfosPage from "./components/shared/myInfos/MyInfosPage";
+import NotificationPage from "./components/shared/myInfos/NotificationPage";
+
 
 
 function App() {
@@ -55,7 +55,7 @@ function App() {
                             <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
 
                             <Route path="/myprofile" element={<MyInfosPage />} />
-                            <Route path="/notification" element={<NotificationsPage />} />
+                            <Route path="/notification" element={<NotificationPage />} />
 
                             <Route path="/service" element={<ServiceListPage />} />
                             <Route path="/service/:id" element={<ServiceDetailPage />} />
@@ -91,7 +91,6 @@ function App() {
                             <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
                             <Route path="/myprofile" element={<MyInfosPage />} />
                             <Route path="/notification" element={<NotificationPage />} />
-                            <Route path="/rules" element={<RulesPage />} />
 
                             <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
                             <Route path="/annonce/create" element={<AnnounceCreatePage />} />

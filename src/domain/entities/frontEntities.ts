@@ -1,7 +1,7 @@
 
 
 //// for front only 
-export class action {
+export class Action {
     icon?: string;
     title?: string;
     body?: string | Element | JSX.Element | Element[] | JSX.Element[];
@@ -12,7 +12,7 @@ export class Label {
     value: string | any = '';
 }
 
-export class label {
+export class TabLabel {
     label: string = '';
     value: string | any = '';
     result: any;

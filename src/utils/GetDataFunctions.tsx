@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { EventP, eventCategory } from "../domain/entities/Events";
 import { Flag, flagTarget, flagReason } from "../domain/entities/Flag";
-import { Label, action, defaultEventImage } from "../domain/entities/frontEntities";
+import { Label, Action, defaultEventImage } from "../domain/entities/frontEntities";
 import { Issue } from "../domain/entities/Issue";
 import { Pool } from "../domain/entities/Pool";
 import { Post, postCategory } from "../domain/entities/Post";
@@ -10,13 +10,13 @@ import { Service, serviceType, serviceCategory, serviceStep, HardLevel, SkillLev
 import { Survey, surveyCategory } from "../domain/entities/Survey";
 import { User } from "../domain/entities/User";
 import { Address } from "../domain/entities/Address";
-import { EventService } from "../data/repositories/EventRepository";
-import { PostService } from "../data/repositories/PostRepository";
-import { LikeService } from "../data/repositories/LikeRepository";
-import { ParticipantService } from "../data/repositories/ParticipantRepository";
-import { ServiceService } from "../data/repositories/ServiceRepository";
-import { AddressService } from "../data/repositories/AddressRepository";
 import { notifCategory } from "../domain/entities/Notif";
+import { AddressService } from "../domain/repositories/AddressRepository";
+import { EventService } from "../domain/repositories/EventRepository";
+import { LikeService } from "../domain/repositories/LikeRepository";
+import { ParticipantService } from "../domain/repositories/ParticipantRepository";
+import { PostService } from "../domain/repositories/PostRepository";
+import { ServiceService } from "../domain/repositories/ServiceRepository";
 const { getServiceById, putService, putServiceValidation } = new ServiceService();
 const { getAddresses, postAddress } = new AddressService();
 
@@ -231,7 +231,7 @@ export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
 }
 
 //
-export const GenereMyActions = (element: Post | EventP | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): action[] => {
+export const GenereMyActions = (element: Post | EventP | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
     const navigate = useNavigate()
     let title = ''
     let id = 0;

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import './assets/index.css'
 import App from './App.tsx'
 import 'material-symbols';
 import { ThemeProvider } from "@material-tailwind/react";

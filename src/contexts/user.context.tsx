@@ -1,11 +1,10 @@
 import { ReactNode, useState, useEffect, createContext } from "react";
 import { Notif } from "../domain/entities/Notif";
 import { Profile } from "../domain/entities/Profile";
-import { User } from "../domain/entities/User"
 import { dayMS } from "../utils/GetDataFunctions";
-import { NotifService } from "../data/repositories/NotifReposotory";
-import { UserService } from "../data/repositories/UserRepository";
-
+import { useUser } from "../domain/usecases/useUser";
+import { useNotification } from "../domain/usecases/useNotif";
+import { UserService } from "../domain/repositories/UserRepository";
 
 interface UserContextType {
     userProfile: Profile;
@@ -34,57 +33,87 @@ const UserContext = createContext<UserContextType>({
 });
 
 export function UserProvider({ children }: UserProviderType) {
-    const [userProfile, setUserProfile] = useState<Profile>({} as Profile);
+    const { user, loadingUser, errorUser, getUserMe } = useUser();
     const [notifList, setNotifList] = useState<Notif[]>([]);
     const [userNotif, setUserNotif] = useState<number>(0);
     const [userEmail, setUserEmail] = useState<string>('example@me.com');
-
-
-    const updateNotifs = async () => {
-        const fifteenDaysAgo = new Date().getTime() - 15 * dayMS;
-        const localNotif = JSON.parse(localStorage.getItem('notifList') || '[]').filter((notif: Notif) => {
-            return new Date(notif.updatedAt).getTime() > fifteenDaysAgo;
-        });
-        const { getNotifs } = new NotifService();
-
-
-        const fetchedNotif = await getNotifs();
-        const updatedNotifList = new Set([...localNotif, ...fetchedNotif]);
-        const sortedNotifList = Array.from(updatedNotifList).reduce((acc, current) => {
-            const existing = acc.find((item: Notif) => item.id === current.id);
-            if (existing) {
-                if (new Date(current.updatedAt) > new Date(existing.updatedAt) ||
-                    (new Date(current.updatedAt).getTime() === new Date(existing.updatedAt).getTime() && current.read)) {
-                    return acc.map((item: Notif) => item.id === current.id ? current : item);
-                }
-                return acc;
-            }
-            return [...acc, current];
-        }, []);
-        localStorage.setItem('notifList', JSON.stringify(sortedNotifList));
-        setNotifList(sortedNotifList);
-        setUserNotif(sortedNotifList.filter((notif: Notif) => !notif.read).length || 0);
-        return sortedNotifList;
-    };
+    const { getNotifs, notifs } = useNotification();
+    const [userProfile, setUserProfile] = useState<Profile>({} as Profile);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const { getUserMe } = new UserService();
-            const fetchedUser: User = await getUserMe();
+        const load = async () => {
+            console.log(user)
+            if (!user) {
+                await getUserMe();
+                if (user) {
+                    setUserProfile(user.Profile as Profile);
+                }
+            } else {
+                setUserProfile(user.Profile as Profile);
+            }
+        }
+        load();
+        console.log('setting user from context', user)
+        // console.log('after load2', user, loadingUser, errorUser);
+    }, [user]);
+
+
+
+
+    // const updateNotifs = () => {
+    //     const fifteenDaysAgo = new Date().getTime() - 15 * dayMS;
+    //     const localNotif = JSON.parse(localStorage.getItem('notifList') || '[]').filter((notif: Notif) => {
+    //         return new Date(notif.updatedAt).getTime() > fifteenDaysAgo;
+    //     });
+    //     const updatedNotifList = new Set([...localNotif, ...notifs]);
+    //     const sortedNotifList = Array.from(updatedNotifList).reduce((acc, current) => {
+    //         const existing = acc.find((item: Notif) => item.id === current.id);
+    //         if (existing) {
+    //             if (new Date(current.updatedAt) > new Date(existing.updatedAt) ||
+    //                 (new Date(current.updatedAt).getTime() === new Date(existing.updatedAt).getTime() && current.read)) {
+    //                 return acc.map((item: Notif) => item.id === current.id ? current : item);
+    //             }
+    //             return acc;
+    //         }
+    //         return [...acc, current];
+    //     }, [user]);
+    //     localStorage.setItem('notifList', JSON.stringify(sortedNotifList));
+    //     setNotifList(sortedNotifList);
+    //     setUserNotif(sortedNotifList.filter((notif: Notif) => !notif.read).length || 0);
+    //     return sortedNotifList;
+    // };
+
+    useEffect(() => {
+        if (user) {
             const localUser = JSON.parse(localStorage.getItem('user') || '{}');
             if (!localUser) {
-                localStorage.setItem('user', JSON.stringify(fetchedUser.Profile));
+                localStorage.setItem('user', JSON.stringify(user.Profile));
             }
-            setUserProfile(fetchedUser.Profile);
-            setUserEmail(fetchedUser.email);
-            const notifs = await updateNotifs();
-            setNotifList(notifs);
-            setUserNotif(notifs.filter((notif: Notif) => !notif.read).length || 0);
-        };
-        fetchData();
+            user && setUserProfile(userProfile);
+            user && setUserEmail(user.email);
+        }
     }, []);
 
-    return <UserContext.Provider value={{ userProfile, setUserProfile, userNotif, setUserNotif, notifList, setNotifList, updateNotifs, userEmail }}>{children}</UserContext.Provider>;
+    // useEffect(() => {
+    //     getNotifs();
+    //     const notifs = updateNotifs();
+    //     setNotifList(notifs);
+    //     setUserNotif(notifs.filter((notif: Notif) => !notif.read).length || 0);
+    // }, [getNotifs]);
+
+    const updateNotifs = () => { return notifList; };
+    return <UserContext.Provider
+        value={{
+            userProfile,
+            setUserProfile,
+            userNotif,
+            setUserNotif,
+            notifList,
+            setNotifList,
+            updateNotifs,
+            userEmail
+        }}>{children}
+    </UserContext.Provider>;
 }
 
 export default UserContext;
