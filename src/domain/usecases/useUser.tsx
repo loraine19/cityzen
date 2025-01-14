@@ -5,17 +5,7 @@ import { handleError } from "./useCaseUtils";
 
 /**
  * Hook personnalisé pour gérer les utilisateurs.
- 
- * @returns {Object} - Un objet contenant les informations et les fonctions liées aux utilisateurs.
- * @property {User | null} user - L'utilisateur actuel.
- * @property {Function} updateUser - Fonction pour mettre à jour un utilisateur.
- * @property {User[]} users - La liste des utilisateurs.
- * @property {Function} getUsers - Fonction pour récupérer la liste des utilisateurs.
- * @property {boolean} loadingUser - Indicateur de chargement pour la mise à jour de l'utilisateur.
- * @property {string | null} errorUser - Message d'erreur en cas de problème lors de la mise à jour de l'utilisateur.
- *
- * @example
- * const { user, updateUser, users, getUsers, loadingUpdate, loadingGet, errorUpdate, errorGet } = useUser();
+ * const { user, updateUser, users, getUsers } = useUser();
  *
  * useEffect(() => {
  *   getUsers();
@@ -35,106 +25,6 @@ import { handleError } from "./useCaseUtils";
  *
  */
 
-
-/**
- * Exemple d'utilisation du hook useUser dans un composant fonctionnel.
- *
- * @example
- * const MyComponent = () => {
- *   const { user, getUserMe, users, getUsers, updateUser, deleteUser, loadingUser, errorUser } = useUser();
- *
- *   useEffect(() => {
- *     getUserMe();
- *   }, [getUserMe]);
- *
- *   const handleUpdateUser = async (newUser) => {
- *     await updateUser(newUser);
- *   };
- *
- *   const handleDeleteUser = async (userId) => {
- *     await deleteUser(userId);
- *   };
- *
- *   if (loadingUser) {
- *     return <div>Chargement...</div>;
- *   }
- *
- *   if (errorUser) {
- *     return <div>Erreur: {errorUser}</div>;
- *   }
- *
- *   return (
- *     <div>
- *       <h1>Utilisateur actuel</h1>
- *       {user ? <div>{user.name}</div> : <div>Aucun utilisateur</div>}
- *       <h2>Liste des utilisateurs</h2>
- *       <ul>
- *         {users.map((u) => (
- *           <li key={u.id}>{u.name}</li>
- *         ))}
- *       </ul>
- *     </div>
- *   );
- * };
-import React, { createContext, useContext, useEffect } from "react";
-import { useUser } from "./useUser";
-
-const UserContext = createContext<UseUserReturn | undefined>(undefined);
-
-const user = useUser();
-
-export const UserProvider: React.FC = ({ children }) => {
-    return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
-};
-
-export const useUserContext = (): UseUserReturn => {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error("useUserContext must be used within a UserProvider");
-    }
-    return context;
-};
-
-// Example of using the context in a component
-const MyComponent = () => {
-    const { user, getUserMe, users, getUsers, updateUser, deleteUser, loadingUser, errorUser } = useUserContext();
-
-    useEffect(() => {
-        getUserMe();
-    }, [getUserMe]);
-
-    const handleUpdateUser = async (newUser: User) => {
-        await updateUser(newUser);
-    };
-
-    const handleDeleteUser = async (userId: number) => {
-        await deleteUser(userId);
-    };
-
-    if (loadingUser) {
-        return <div>Chargement...</div>;
-    }
-
-    if (errorUser) {
-        return <div>Erreur: {errorUser}</div>;
-    }
-
-    return (
-        <div>
-            <h1>Utilisateur actuel</h1>
-            {user ? <div>{user.name}</div> : <div>Aucun utilisateur</div>}
-            <h2>Liste des utilisateurs</h2>
-            <ul>
-                {users.map((u) => (
-                    <li key={u.id}>{u.name}</li>
-                ))}
-            </ul>
-        </div>
-    );
-};
-
-export default MyComponent;
- */
 
 
 export const useUser = (): UseUserReturn => {
