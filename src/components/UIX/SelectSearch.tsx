@@ -1,5 +1,5 @@
 import { Button, Input, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
-import { Label } from "../../types/class";
+import { Label } from "../../domain/entities/frontEntities";
 
 type selectSearchProps = {
     cat: string;
@@ -9,7 +9,6 @@ type selectSearchProps = {
 };
 export default function SelectSearch(props: selectSearchProps) {
     const { cat, setCat, category, search } = props
-    //  useEffect(() => { setCat(cat) }, [cat])
     return (
         <div className="flex m-auto !rounded-full h-7 md:w-[90%] items-center bg-white shadow !mb-1.5" >
             <Menu placement="bottom-start">
@@ -21,7 +20,7 @@ export default function SelectSearch(props: selectSearchProps) {
                         size="sm"
                         className="flex items-center  bg-none rounded-full py-1 !px-4"
                     >
-                        <span className="material-symbols-outlined notranslate ">arrow_drop_down</span>
+                        <span className="icon notranslate ">arrow_drop_down</span>
                     </Button>
                 </MenuHandler>
                 <MenuList className="flex flex-col">
@@ -57,7 +56,7 @@ export default function SelectSearch(props: selectSearchProps) {
                 onClick={() => search(cat)}
                 className="flex items-center  bg-none rounded-full py-1 !px-4"
             >
-                <span className="material-symbols-outlined notranslate ">search</span>
+                <span className="icon notranslate ">search</span>
             </Button>
 
         </div>

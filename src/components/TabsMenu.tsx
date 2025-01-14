@@ -1,8 +1,8 @@
 import { Tabs, TabsHeader, Tab } from "@material-tailwind/react";
-import { label } from "../types/label";
+
 
 interface TabsMenuProps {
-    labels: label[];
+    labels: any[];
     subMenu?: boolean;
 }
 

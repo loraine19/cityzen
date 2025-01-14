@@ -1,9 +1,9 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { Flag } from "../../types/class";
-import { flagTargets, getLabel } from "../../functions/GetDataFunctions";
-import { User } from "../../types/class";
+import { flagTargets, getLabel } from "../../utils/GetDataFunctions";
+import { Flag } from "../../domain/entities/Flag";
+import { User } from "../../domain/entities/User";
 
 export default function FlagDetailComp(props: { flag: Flag, element?: any, label?: string }) {
     const { flag } = props

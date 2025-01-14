@@ -1,10 +1,11 @@
 import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix, IconButton } from "@material-tailwind/react";
-import { getImageBlob } from "../../functions/GetDataFunctions";
-import { Address, assistanceLevel, Profile } from '../../types/class';
+import { getImageBlob } from "../../utils/GetDataFunctions";
 import { AddressInputOpen } from "../mapComps/AddressInputOpen";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../../contexts/user.context";
+import { Profile, assistanceLevel } from "../../domain/entities/Profile";
+import { Address } from "../../domain/entities/Address";
 
 interface AddressErrors { zipcode: string, city: string }
 export const ProfileForm = (props: { formik: any, user?: Profile, setSkillList?: any }) => {

@@ -1,4 +1,3 @@
-import dataJson from "../datas/fakers/data.json";
 import { createContext, useState, ReactNode } from "react";
 
 interface DataContextType {
@@ -19,7 +18,7 @@ const DataContext = createContext<DataContextType>({
 
 export function DataProvider({ children }: DataProviderType) {
     const localData = JSON.parse(localStorage.getItem("CollectifData") || "{}");
-    (Object.keys(localData).length === 0) && localStorage.setItem("CollectifData", JSON.stringify(dataJson));
+    (Object.keys(localData).length === 0)
     const [data] = useState<any>(localData);
     return <DataContext.Provider
         value={{
@@ -29,7 +28,7 @@ export function DataProvider({ children }: DataProviderType) {
             },
             resetData: () => {
                 confirm("Voulez-vous reinitialiser les données ?");
-                localStorage.setItem("CollectifData", JSON.stringify(dataJson));
+
                 window.location.reload()
             }
         }}> {

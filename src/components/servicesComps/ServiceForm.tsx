@@ -2,29 +2,27 @@ import NavBarTop from '../UIX/NavBarTop';
 import SubHeader from '../UIX/SubHeader';
 import { useContext, useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Radio } from '@material-tailwind/react';
-import { getImageBlob, GetPoints, serviceCategories } from '../../functions/GetDataFunctions';
+import { getImageBlob, GetPoints, serviceCategories } from '../../utils/GetDataFunctions';
 import UserContext from '../../contexts/user.context';
-import { Label } from '../../types/class';
+import { Label } from '../../domain/entities/frontEntities';
 
 export function ServiceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
     const { createdAt, title, description, image } = formik.values
+    const { userProfile } = useContext(UserContext)
     const haveImage = image ? true : false
-    const { user } = useContext(UserContext)
+    const [imgBlob, setImgBlob] = useState<string>(formik.values.image as string)
 
-
-    ///// BLOB FUNCTION 
-    const [imgBlob, setImgBlob] = useState<string>(formik.values.image as string);
     useEffect(() => {
         !imgBlob && setImgBlob(formik.values.image as string)
     }, [formik.values.image, imgBlob])
 
     const skill: number[] = [0, 1, 2, 3, 4]
     const hard: number[] = [0, 1, 2, 3, 4]
-    const [points, setPoints] = useState<number[]>(GetPoints(formik.values, user))
+    const [points, setPoints] = useState<number[]>(GetPoints(formik.values, userProfile))
 
     useEffect(() => {
-        setPoints(GetPoints(formik.values, user))
+        setPoints(GetPoints(formik.values, userProfile))
     }, [formik.values.skill, formik.values.hard, formik.values.type])
 
     const isGet = formik.values.type === 'GET'
@@ -90,13 +88,10 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                 />
                             }
                         </CardHeader>
-
-
                         <CardBody className='FixCardBody '>
                             <div className='CardOverFlow h-full justify-between gap-4'>
                                 <Input label="titre" name="title" variant="standard" onChange={formik.handleChange} value={title} />
                                 <Typography className='text-xs error'>{formik.errors.title as string} </Typography>
-
                                 <div className='flex flex-col lg:flex-row gap-5 pt-3 h-full '>
                                     <div className='flex flex-col flex-1 pt-1 '>
                                         <Textarea rows={2} resize={true} variant="static" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
@@ -107,14 +102,10 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                                 className: "before:content-none after:content-none",
                                             }} />
                                         <Typography className='text-xs error pt-2'>{formik.errors.description as string} </Typography>
-
                                     </div>
-
                                 </div>
-
                                 <div className="flex flex-col justify-center pt-4 h-full  ">
                                     <Typography className='text-xs pb-3'>Difficulté du service: </Typography>
-
                                     <div className="flex gap-9">
                                         <div className="flex flex-1 items-center">
                                             <Select className="shadowborder-none capitalize max-w-20 " variant="standard" label="Compétence" name={"skill"}
@@ -123,7 +114,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                                         " before:border-none after:border-none  "
                                                 }}
                                                 containerProps={{ className: "min-w-max h-8 " }}
-                                                onChange={(e: any) => { formik.values.skill = parseInt(e); setPoints(GetPoints(formik.values, user)) }}
+                                                onChange={(e: any) => { formik.values.skill = parseInt(e); setPoints(GetPoints(formik.values, userProfile)) }}
                                                 value={formik.values.skill?.toString()}>
                                                 {skill.map(
                                                     (skill: number, index: number) => {
@@ -143,7 +134,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                                         " before:border-none after:border-none border-none "
                                                 }}
                                                 containerProps={{ className: "min-w-max h-8 " }}
-                                                onChange={(e: any) => { formik.values.hard = parseInt(e); setPoints(GetPoints(formik.values, user)) }}
+                                                onChange={(e: any) => { formik.values.hard = parseInt(e); setPoints(GetPoints(formik.values, userProfile)) }}
                                                 value={formik.values.hard?.toString()}>
                                                 {hard.map(
                                                     (hard: number, index: number) => {
@@ -156,7 +147,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                                                 )}
                                             </Select></div>
                                         <Chip value={`${points.join(' à ')}  pts`} className="flex-1 GrayChip  lowercase !font-medium  rounded-full h-full flex items-center justify-center gap-2"
-                                            icon={<span className={`${formik.values.type === "do" ? " !text-green-500" : "!text-orange-500"} ${user.points > points[0] && "fill"}  material-symbols-outlined flex flex-1 -mt-0.5 `}>fiber_manual_record</span>}>
+                                            icon={<span className={`${formik.values.type === "do" ? " !text-green-500" : "!text-orange-500"} ${userProfile.points > points[0] && "fill"}  material-symbols-outlined flex flex-1 -mt-0.5 `}>fiber_manual_record</span>}>
 
 
                                         </Chip>

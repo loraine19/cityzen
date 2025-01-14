@@ -53,12 +53,12 @@ export default function CheckCard(props: checkCardProps) {
             </List>
             <div className="flex gap-1 opacity-95 items-center px-1 rounded-full">
 
-                <Icon icon="cancel" size="3xl" color="red" style="thin hover:!p-0" onClick={() => {
+                <Icon icon="cancel" size="2xl" color="red" style="thin hover:!p-0" onClick={() => {
                     setBoxSelected([]);
                     setCheckedState(new Array(categoriesArray.length).fill(false));
                 }}
                 ></Icon>
-                <Icon icon="check_circle" size="3xl" color="green" style="thin !p-0 hover:!p-0" onClick={() => {
+                <Icon icon="check_circle" size="2xl" color="green" style="thin !p-0 hover:!p-0" onClick={() => {
                     setBoxSelected(categoriesArray);
                     setCheckedState(new Array(categoriesArray.length).fill(true));
                 }} />

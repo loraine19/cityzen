@@ -1,7 +1,7 @@
 import { Button } from "@material-tailwind/react";
 import { useState } from "react"
 import { ConfirmModal } from "./ConfirmModal"
-import { action } from "../../types/class";
+import { action } from "../../domain/entities/frontEntities";
 
 type CTAMinesProps = {
     actions: action[],
@@ -16,7 +16,7 @@ export default function CTAMines(props: CTAMinesProps) {
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0)
     return (
-        <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around py-2 overflow-y-auto `}>
+        <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 overflow-y-auto `}>
             <ConfirmModal
                 open={open}
                 handleOpen={() => setOpen(false)}
@@ -32,7 +32,7 @@ export default function CTAMines(props: CTAMinesProps) {
                 <>
                     <Button className={buttons[0].icon === '' ? "hidden" : "  rounded-full w-full !shadow lgBtn truncate"}
                         onClick={() => { setOpen(true), setIndex(0) }}
-                        size={'lg'}
+
                         color="white"
                         disabled={disabled1} >
                         {buttons[0].icon}
@@ -40,20 +40,19 @@ export default function CTAMines(props: CTAMinesProps) {
 
                     <Button className={buttons[1]?.icon === '' || !buttons[1]?.icon ? "hidden" : " rounded-full w-full !shadow lgBtn truncate"}
                         onClick={() => { setOpen(true), setIndex(1) }}
-                        size={'lg'}
+
                         disabled={disabled2} >
                         {buttons[1]?.icon}
                     </Button>
 
-                    <Button className={buttons[2]?.icon === '' || !buttons[2]?.icon ? "hidden" : " rounded-full w-full !shadow lgBtn truncate"}
+                    <Button className={buttons[2]?.icon === '' || !buttons[2]?.icon ? "hidden" : "GreenChip rounded-full w-full !shadow lgBtn truncate"}
                         color="green"
-                        size={'lg'}
+
                         onClick={() => { setOpen(true), setIndex(2) }}>
                         {buttons[2]?.icon}
                     </Button>
-                    <Button className={buttons[3]?.icon === '' || !buttons[3]?.icon ? "hidden" : " rounded-full w-full !shadow lgBtn truncate"}
-                        color="red"
-                        size={'lg'}
+                    <Button className={buttons[3]?.icon === '' || !buttons[3]?.icon ? "hidden" : "RedChip rounded-full w-full !shadow lgBtn truncate"}
+
                         onClick={() => { setOpen(true), setIndex(3) }}>
                         {buttons[3]?.icon}
                     </Button>

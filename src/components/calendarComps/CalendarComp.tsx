@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../eventComps/EventCard';
-import { dayMS, getDays, getLabel, eventCategories, getWeeksFull } from '../../functions/GetDataFunctions';
-import { EventP } from '../../types/class'
+import { dayMS, getDays, getLabel, eventCategories, getWeeksFull } from '../../utils/GetDataFunctions';
 import { Icon } from '../UIX/SmallComps';
+import { EventP } from '../../domain/entities/Events';
 
 export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
     type day = { date: Date, events: EventP[], text: String }
@@ -40,7 +40,8 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
         <div className='flex flex-col flex-1 '>
             <div className="flex  justify-between  gap-1 items-center p-0">
                 <div className='flex gap-2 items-center'>
-                    <Icon fill icon="supervised_user_circle" link="/evenements" size="4xl" />
+                    <Icon fill icon="supervised_user_circle" link="/evenements" size="4xl"
+                        title='Voir tous les événements' />
                     <div>
                         <Typography color="blue-gray" className="hidden lg:flex">
                             Évenements
@@ -49,9 +50,9 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                 </div>
                 <div className='flex  w-full justify-between items-center flex-row-reverse'>
                     <div className='flex gap-1 items-center'>
-                        <button onClick={removeWeek}><span className='material-symbols-rounded notranslate !text-sm'>arrow_back_ios</span></button>
+                        <button onClick={removeWeek}><span className='icon notranslate !text-sm'>arrow_back_ios</span></button>
                         <button onClick={resetWeek}>{(new Date().toLocaleDateString('fr-FR', { weekday: 'short', month: 'numeric', day: 'numeric' }))}</button>
-                        <button onClick={addWeek}><span className='material-symbols-rounded notranslate !text-sm'>arrow_forward_ios</span></button>
+                        <button onClick={addWeek}><span className='icon notranslate !text-sm'>arrow_forward_ios</span></button>
                     </div>
                     <div className='flex gap-2 items-center lg:hidden'>
                         <button onClick={removeCol}><span className='material-symbols-rounded notranslate !text-lg'>do_not_disturb_on</span></button>
@@ -82,7 +83,7 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                                                 return (
                                                     <div key={indexEvent} className=' w-full  rounded-xl  '>
                                                         <Popover open={open && popId === event.id + day.date} >
-                                                            <button className=' w-full rounded-xl' onClick={() => { setOpen(true); setPopId(event.id + day.date) }}>
+                                                            <button title={'Voir événement' + ' ' + event.title} className=' w-full rounded-xl' onClick={() => { setOpen(true); setPopId(event.id + day.date) }}>
                                                                 <PopoverHandler>
                                                                     <div className=
                                                                         {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  p-[0.4rem]  text-white h-7 truncate flex items-center justify-center font-normal z-50

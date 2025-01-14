@@ -1,42 +1,40 @@
 // Import PAGES
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { UserProvider } from "./contexts/user.context";
-import ServiceListPage from "./pages/service/ServiceListPage";
-import SignUpPage from "./pages/auth/SignUpPage";
-import SignUpDetailPage from "./pages/auth/SignUpDetailPage";
-import DashboardPage from "./pages/DashboardPage";
-import EventListPage from "./pages/event/EventListPage";
-import SurveyListPage from "./pages/survey/SurveyListPage";
-import AnnounceListPage from "./pages/announce/AnnounceListPage";
-import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
-import EventCreatePage from "./pages/event/EventCreatePage";
-import EventDetailPage from "./pages/event/EventDetailPage";
-import EventEditPage from "./pages/event/EventEditPage";
-import SurveyCreatePage from "./pages/survey/SurveyCreatePage";
-import AnnounceDetailPage from "./pages/announce/AnnounceDetailPage";
-import AnnounceCreatePage from "./pages/announce/AnnounceCreatePage";
-import ServiceDetailPage from "./pages/service/ServiceDetailPage";
-import ServiceCreatePage from "./pages/service/ServiceCreatePage";
-import AnnounceEditPage from "./pages/announce/AnnounceEditPage";
-import MyInfosPage from "./pages/myInfos/MyInfosPage";
-import SignInPage from "./pages/auth/SignInPage";
-import FlagPage from "./pages/flag/FlagPage";
-import SurveyDetailPage from "./pages/survey/SurveyDetailPage";
-import SurveyEditPage from "./pages/survey/SurveyEditPage";
-import SurveyDetailPoolPage from "./pages/survey/SurveyDetailPoolPage";
-import SurveyEditPoolPage from "./pages/survey/SurveyEditPoolPage";
-import RulesPage from "./pages/myInfos/RulePage";
-import NotificationsPage from "./pages/myInfos/NotificationPage";
-import ServiceEditPage from "./pages/service/ServiceEditPage";
-import IssueCreatePage from "./pages/service/issue/IssueCreatePage";
-import IssueDetailPage from "./pages/service/issue/IssueDetailPage";
-import NotificationPage from "./pages/myInfos/NotificationPage";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DataProvider } from "./contexts/data.context";
-import NotFindPage from "./pages/NotFindPage";
-import IssueEditPage from "./pages/service/issue/IssueEditPage";
-import FlagCreatePage from "./pages/flag/FlagCreatePage";
-import FlagEditPage from "./pages/flag/FlagEditPage";
-import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import { UserProvider } from "./contexts/user.context";
+import AnnounceCreatePage from "./components/pages/announce/AnnounceCreatePage";
+import AnnounceDetailPage from "./components/pages/announce/AnnounceDetailPage";
+import AnnounceEditPage from "./components/pages/announce/AnnounceEditPage";
+import AnnounceListPage from "./components/pages/announce/AnnounceListPage";
+import ForgotPasswordPage from "./components/pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./components/pages/auth/ResetPasswordPage";
+import SignInPage from "./components/pages/auth/SignInPage";
+import SignUpDetailPage from "./components/pages/auth/SignUpDetailPage";
+import SignUpPage from "./components/pages/auth/SignUpPage";
+import DashboardPage from "./components/pages/DashboardPage";
+import EventCreatePage from "./components/pages/event/EventCreatePage";
+import EventDetailPage from "./components/pages/event/EventDetailPage";
+import EventEditPage from "./components/pages/event/EventEditPage";
+import EventListPage from "./components/pages/event/EventListPage";
+import FlagCreatePage from "./components/pages/flag/FlagCreatePage";
+import FlagEditPage from "./components/pages/flag/FlagEditPage";
+import FlagPage from "./components/pages/flag/FlagPage";
+import MyInfosPage from "./components/pages/myInfos/MyInfosPage";
+import NotificationPage from "./components/pages/myInfos/NotificationPage";
+import NotificationsPage from "./components/pages/myInfos/NotificationPage";
+import RulesPage from "./components/pages/myInfos/RulePage";
+import NotFindPage from "./components/pages/NotFindPage";
+import ServiceCreatePage from "./components/pages/service/ServiceCreatePage";
+import ServiceDetailPage from "./components/pages/service/ServiceDetailPage";
+import ServiceEditPage from "./components/pages/service/ServiceEditPage";
+import ServiceListPage from "./components/pages/service/ServiceListPage";
+import IssueCreatePage from "./components/pages/service/issue/IssueCreatePage";
+import IssueDetailPage from "./components/pages/service/issue/IssueDetailPage";
+import IssueEditPage from "./components/pages/service/issue/IssueEditPage";
+import PoolDetailPage from "./components/pages/survey/PoolDetaiPage";
+import SurveyCreatePage from "./components/pages/survey/SurveyCreatePage";
+import SurveyDetailPage from "./components/pages/survey/SurveyDetailPage";
+import SurveyListPage from "./components/pages/survey/SurveyListPage";
 
 
 function App() {
@@ -82,10 +80,10 @@ function App() {
 
                             <Route path="/sondage" element={<SurveyListPage />} />
                             <Route path="/sondage/:id" element={<SurveyDetailPage />} />
-                            <Route path="/sondage/edit/:id" element={<SurveyEditPage />} />
+                            <Route path="/sondage/edit/:id" element={<SurveyCreatePage />} />
                             <Route path="/sondage/create" element={<SurveyCreatePage />} />
-                            <Route path="/cagnotte/:id" element={<SurveyDetailPoolPage />} />
-                            <Route path="/cagnotte/edit/:id" element={<SurveyEditPoolPage />} />
+                            <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
+                            <Route path="/cagnotte/edit/:id" element={<SurveyCreatePage />} />
 
                             <Route path="/annonce" element={<AnnounceListPage />} />
                             <Route path="/annonce/:id" element={<AnnounceDetailPage />} />

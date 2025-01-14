@@ -1,45 +1,39 @@
-import { Card, CardBody, CardFooter, Typography, Chip, Button, CardHeader } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { GetPathElement } from "../functions/GetDataFunctions";
+import { Card, CardBody, CardFooter, Typography, Chip, CardHeader } from "@material-tailwind/react";
+import { GetPathElement } from "../utils/GetDataFunctions";
 import { useContext } from "react";
 import UserContext from "../contexts/user.context";
-import { Notif } from "../types/class";
+import { DateChip, Icon } from "./UIX/SmallComps";
+import { Notif } from "../domain/entities/Notif";
 
 type notifCardProps = { notif: any, handleClick: (notif: Notif) => void }
 
 export function NotifCard(props: notifCardProps) {
-    const { user } = useContext(UserContext)
+    const { userProfile } = useContext(UserContext)
     const { handleClick, notif } = props
-    const { element, createdAt, userId, read } = props.notif
-    const relationName = userId === user.userId ? "J'ai ecris " : "J'y participes"
+    const { element, updatedAt, userId, read } = props.notif
+    const relationName = userId === userProfile.userId ? "J'ai ecris " : "J'y participes"
 
     return (
         <Card className={`${!read ? 'w-resp !h-max FixCard !max-w-[calc(100vw-2rem)]' : 'hidden'}`}>
             <CardHeader className="FixCardHeader NoImage" floated={false}>
                 <div className="flex w-full items-start justify-between">
                     <div className="flex items-center gap-2 mb-1">
-                        <Chip value={GetPathElement(element.toLowerCase())} className="rounded-full h-max text-ellipsis  " color="cyan">
+                        <Chip size='sm' value={GetPathElement(element.toLowerCase())} className="rounded-full h-max text-ellipsis  " color="cyan">
                         </Chip>
-                        <Chip value={relationName} className={`${userId !== user.userId && '!grayscale'} rounded-full OrangeChip h-max flex items-center gap-2 font-medium `}>
+                        <Chip size='sm' value={relationName} className={`${userId !== userProfile.userId && '!grayscale'} rounded-full OrangeChip h-max flex items-center gap-2 font-medium `}>
                         </Chip>
                     </div>
-                    <Button variant="text" onClick={() => handleClick(notif)} className="flex justify-center items-center rounded-full h-8 w-8 p-4 opacity-60">
-                        <span className="material-symbols-outlined unFillThin  !text-4xl" >cancel</span>
-                    </Button>
+                    <Icon icon="cancel" onClick={() => handleClick(notif)} color="red" title="fermer la notification" size="2xl" style="!pt-1 !pl-1 !pr-1 -mt-1" />
                 </div>
             </CardHeader>
-            <CardBody className="FixCardBody">
+            <CardBody className="FixCardBody max-h-max !py-0">
                 <Typography color="gray" className="font-normal truncate ">
                     {notif.title}
                 </Typography>
             </CardBody>
             <CardFooter className="CardFooter items-center !px-4">
-                <Chip value={new Date(createdAt).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2  `}>
-                </Chip>
-                <Link to={`/${GetPathElement(element.toLowerCase())}/${notif.id}`} className="flex items-center gap-2" title={`voir les details de ${notif.title}`}><span className="material-symbols-outlined fill !text-[3rem] text-gray-900  fillThin">
-                    arrow_circle_right
-                </span>
-                </Link>
+                <DateChip start={updatedAt} prefix="mise à jour le " />
+                <Icon icon="arrow_circle_right" link={`/${GetPathElement(element.toLowerCase())}/${notif.id}`} title={`voir les details de ${notif.title}`} size="4xl px-1" fill />
             </CardFooter>
         </Card>
 

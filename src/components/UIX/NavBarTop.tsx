@@ -5,7 +5,8 @@ import UserContext from "../../contexts/user.context";
 import { Icon, NotifBadge } from "./SmallComps";
 
 export default function NavBarTop() {
-    const { user, userNotif } = useContext(UserContext);
+    const { userProfile, userNotif } = useContext(UserContext);
+    const { firstName, image } = userProfile;
     const navigate = useNavigate();
 
 
@@ -17,8 +18,8 @@ export default function NavBarTop() {
                         <Avatar
                             className="BgUser !shadow cursor-pointer"
                             variant="circular"
-                            alt={user.firstName}
-                            src={user.image as string}
+                            alt={firstName}
+                            src={image as string}
                         />
                     </MenuHandler>
                     <MenuList className="!rounded-xl !shadow-xl ">
@@ -53,7 +54,7 @@ export default function NavBarTop() {
                     </MenuList>
                 </Menu>
                 <div className="flex flex-col w-full items-start ">
-                    <Typography variant="h5" color="blue-gray">{user.firstName} </Typography>
+                    <Typography variant="h5" color="blue-gray">{firstName} </Typography>
                     <Typography color="blue-gray" className="-mt-1">Quartier</Typography>
                 </div>
             </div>

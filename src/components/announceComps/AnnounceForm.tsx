@@ -2,8 +2,8 @@ import NavBarTop from '../UIX/NavBarTop';
 import SubHeader from '../UIX/SubHeader';
 import { useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Checkbox } from '@material-tailwind/react'
-import { getImageBlob, getLabel, postCategories } from '../../functions/GetDataFunctions';
-import { Label } from '../../types/class';
+import { getImageBlob, getLabel, postCategories } from '../../utils/GetDataFunctions';
+import { Label } from '../../domain/entities/frontEntities';
 
 export function AnnounceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
@@ -79,28 +79,27 @@ export function AnnounceForm(props: { formik: any, setValue: (value: string) => 
 
                         <CardBody className='FixCardBody '>
                             <div className='CardOverFlow h-full justify-between gap-4'>
-                                <Input label="titre" name="title" variant="standard" onChange={formik.handleChange} value={title} />
-                                <Typography className='text-xs error'>{formik.errors.title as string} </Typography>
+                                <Input label={formik.errors.title ? formik.errors.title as string : "titre"} name="title" variant="standard" onChange={formik.handleChange} value={title} error={formik.errors.title ? true : false} />
+
                                 <div className='flex flex-col lg:flex-row gap-5 pt-3 h-full'>
                                     <div className='flex flex-col flex-1 pt-1'>
-                                        <Textarea rows={2} resize={true} variant="static" label="Description" name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
+                                        <Textarea rows={2} resize={true} variant="static" label={formik.errors.description ? formik.errors.description as string : "Description"} error={formik.errors.description ? true : false} name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
                                             value={description}
                                             containerProps={{
                                                 className: "grid h-full",
                                             }} labelProps={{
                                                 className: "before:content-none after:content-none",
                                             }} />
-                                        <Typography className='text-xs error pt-2'>{formik.errors.description as string} </Typography>
                                     </div>
                                 </div>
 
                                 <div className="flex flex-col justify-center pt-4 h-full w-full">
-                                    <Typography className='text-xs'>Partager : </Typography>
+                                    <Typography className={formik.errors.share && "error" + ' text-xs'}>{formik.errors.share ? formik.errors.share as string : "partager "}
+                                    </Typography>
                                     <div className="flex items-center gap-[10%]">
                                         <Checkbox type="checkbox" name="share" value="PHONE" color="orange" label="telephone" onChange={formik.handleChange} checked={checkShare("phone")} />
                                         <Checkbox type='checkbox' color="orange" name="share" value="EMAIL" label="email" onChange={formik.handleChange} checked={checkShare("email")} />
                                     </div>
-                                    <Typography className='text-xs error'>{formik.errors.share as string} </Typography>
                                 </div>
                             </div>
                         </CardBody>

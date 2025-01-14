@@ -1,5 +1,5 @@
 import { Select, Option } from "@material-tailwind/react";
-import { Label } from "../../types/class";
+import { Label } from "../../domain/entities/frontEntities";
 
 type categoriesSelectProps = {
     categoriesArray: string[] | Label[];

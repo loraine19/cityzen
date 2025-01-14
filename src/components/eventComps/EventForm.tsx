@@ -2,10 +2,11 @@ import NavBarTop from '../UIX/NavBarTop';
 import SubHeader from '../UIX/SubHeader';
 import { useEffect, useState } from 'react';
 import { Card, CardBody, Typography, Input, Button, Select, Option, Textarea, CardHeader, Chip, Progress } from '@material-tailwind/react';
-import { eventCategories, getDefaultImage, getImageBlob, getLabel, dayMS } from '../../functions/GetDataFunctions';
-import { Address, Label } from '../../types/class'
+import { eventCategories, getDefaultImage, getImageBlob, getLabel, dayMS } from '../../utils/GetDataFunctions';
 import { AddressInputOpen } from '../mapComps/AddressInputOpen';
 import AddressMapOpen from '../mapComps/AddressMapOpen';
+import { Label } from '../../domain/entities/frontEntities';
+import { Address } from '../../domain/entities/Address';
 
 export function EventForm(props: { formik: any }) {
     const { formik } = props

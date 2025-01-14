@@ -1,9 +1,10 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
-import { Address } from '../../types/class';
+import { Address } from '../../domain/entities/Address';
 import L from 'leaflet';
-import { Popover, PopoverHandler, PopoverContent, Button } from '@material-tailwind/react';
+import { Popover, PopoverHandler, PopoverContent } from '@material-tailwind/react';
+import { Icon } from '../UIX/SmallComps';
 
 function FlyToMarker({ position }: { position: [number, number] }) {
     const map = useMap();
@@ -32,13 +33,9 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
     return (
         <Popover open={open} >
             <PopoverHandler>
-                <div className='z-0 flex flex-1 min-h-20  !h-[100%] !rounded-2xl  shadow'>
-                    <MapContainer center={position} zoom={16} scrollWheelZoom={false} className=' flex flex-1 min-h-20 !rounded-xl' >
-                        {/* <TileLayer
-    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-/>  <TileLayer
-    url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
-/> */}
+                <div className=' flex flex-1 min-h-20  !h-[100%] !rounded-2xl  shadow'>
+                    <Icon icon='expand_content' fill size='3xl' onClick={() => setOpen(true)} style={'absolute lg:top-16 right-6 rounded-full !z-50 !px-1.5 '} title='Ouvrir la carte' />
+                    <MapContainer center={position} zoom={16} scrollWheelZoom={false} className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
                         <TileLayer
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
                         />
@@ -56,12 +53,7 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                             </Popup>
                         </Marker>
                         {!message && <FlyToMarker position={position} />}
-
                     </MapContainer>
-                    <Button ripple={false} onClick={() => setOpen(true)} color={'cyan'} variant='text' className={`${open && 'hidden'}  absolute top-2 right-2 p-2 rounded-full `}>
-                        <span className='material-symbols-outlined'>expand_content</span>
-                    </Button>
-
                 </div>
             </PopoverHandler >
             <PopoverContent>
@@ -73,7 +65,8 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                             borderRadius: '0.8rem',
                             display: 'flex',
                             flex: 1,
-                            backgroundColor: 'white'
+                            backgroundColor: 'white',
+                            boxShadow: '0 0 15px rgba(0, 0, 0, 0.1)',
                         }}>
                         <TileLayer
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
@@ -92,10 +85,9 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                         </Marker>
                         {!message && <FlyToMarker position={position} />}
                     </MapContainer>
-                    <Button ripple={false} onClick={() => setOpen(false)} variant='text' className='absolute top-8 right-0 rounded-full !z-50 '>
-                        <span className='material-symbols-outlined fillThin !text-3xl'>cancel</span>
-                    </Button>
+                    <Icon icon='cancel' fill bg size='4xl' onClick={() => setOpen(false)} style={'absolute top-8 rounded-full !z-50 !px-1 '} title='Fermer la carte' />
                 </div>
+
 
             </PopoverContent>
         </Popover >

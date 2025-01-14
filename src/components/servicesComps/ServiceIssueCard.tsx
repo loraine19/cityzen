@@ -1,8 +1,9 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { Link, useNavigate } from "react-router-dom";
-import { Service, ServiceType } from '../../types/class';
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react"
-import { getLabel, GetPoints, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../functions/GetDataFunctions";
+import { getLabel, GetPoints, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../utils/GetDataFunctions";
+import { Icon } from "../UIX/SmallComps";
+import { Service, ServiceType } from "../../domain/entities/Service";
 
 export default function ServiceIssueCard(props: { service: Service }) {
     const [service, setService] = useState<Service>(props.service)
@@ -102,10 +103,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                                     {points[1] && <>  <span className="!text-[1.2rem] font-light">à</span> {points[1]}</>}
                                     <span className="!text-[1.2rem] font-light"> points</span></Typography>
                             </div>
-                            <Link to={`/service/${id}`} className="flex items-center gap-2" title={`voir les details de service  ${title}`}><span className="material-symbols-outlined FillThin !text-[2.5rem] text-gray-900  fillThin">
-                                arrow_circle_right
-                            </span>
-                            </Link>
+                            <Icon icon="arrow_circle_right" link={`/service/${id}`} title={`voir les details de service  ${title}`} size="4xl px-1" fill />
                         </div>
                     </CardFooter>
                 </Card >

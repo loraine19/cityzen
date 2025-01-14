@@ -1,20 +1,21 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
 import { AvatarStack } from "./AvatarStack";
 import ModifBtnStack from "../UIX/ModifBtnStack";
-import { eventdateInfo, toggleParticipant, getDefaultImage, GenereMyActions, getLabel, eventCategories } from '../../functions/GetDataFunctions';
+import { eventdateInfo, toggleParticipant, getDefaultImage, GenereMyActions, getLabel, eventCategories } from '../../utils/GetDataFunctions';
 import { useContext, useState } from "react";
-import { EventP, Flag, Participant, } from "../../types/class";
 import UserContext from "../../contexts/user.context";
-import { deleteEvent } from "../../functions/API/eventsApi";
-import { DateChip, FlagIcon } from "../UIX/SmallComps";
+import { DateChip, Icon, Title } from "../UIX/SmallComps";
+import { EventP } from "../../domain/entities/Events";
+import { Flag } from "../../domain/entities/Flag";
+import { Participant } from "../../domain/entities/Participant";
+import { EventService } from "../../data/repositories/EventRepository";
 
 type EventCardProps = { event: EventP, change: (e: any) => void, mines?: boolean, update?: () => void }
 export function EventCard(props: EventCardProps) {
-    const user = useContext(UserContext)
-    const userId = user.user.userId
+    const { userProfile } = useContext(UserContext)
+    const userId = userProfile.userId
     const [event, setEvent] = useState<EventP>(props.event)
-    const { id, title, description, category, participantsMin, start, end } = event
+    const { id, title, description, category, participantsMin, start, end, createdAt } = event
     const { change, mines, update } = props
     const Igo: boolean = event.Participants.find((participant: Participant) => participant.userId === userId) ? true : false
     const flagged: boolean = event.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
@@ -22,6 +23,7 @@ export function EventCard(props: EventCardProps) {
     const disabledEditCTA = pourcentParticipants >= 100 ? true : false
     const imgCategory: string | undefined | Blob = getDefaultImage(category.toString())
     const [image] = useState<string>(props.event.image ? (props.event.image) as any : (imgCategory));
+    const { deleteEvent } = new EventService()
     const actions = GenereMyActions(event, "evenement", deleteEvent)
     let haveImage = image ? true : false
 
@@ -31,7 +33,7 @@ export function EventCard(props: EventCardProps) {
             <CardHeader className={haveImage ? "FixCardHeader !max-h-[26vh] " : "FixCardHeader NoImage"}
                 floated={haveImage}>
                 <div className={` ${haveImage ? "absolute h-full w-full flex flex-col justify-between items-end px-2 py-2" : "flex gap-4"} h-full w-full flex justify-end `}>
-                    <DateChip createdAt={start} ended={new Date(end).getTime() > Date.now()} />
+                    <DateChip start={start} end={end} ended={new Date(end).getTime() < Date.now()} prefix="commence dans " />
                     <div className={`${!haveImage && "bg-blue-gray-100"}  h-max w-full !rounded-full backdrop-blur flex items-center gap-2 shadow p-2`}>
                         {pourcentParticipants > 0 ?
                             <Progress value={pourcentParticipants} color={pourcentParticipants > 100 ? "green" : "gray"} size="md"
@@ -53,17 +55,10 @@ export function EventCard(props: EventCardProps) {
                 }
             </CardHeader>
             <CardBody className="FixCardBody !flex-1">
-                <div className="flex items-center justify-between">
-                    <Typography variant="h5" color="blue-gray" className="flex flex-col mb-1 ellipsis truncate hover:text-clip">
-                        {title}<br></br>
-                        <span className="text-sm font-medium text-blue-gray-500">{eventdateInfo(props.event)}</span>
-                    </Typography>
-                    <FlagIcon flagged={flagged} id={id} type="event" />
-                </div>
+                <Title title={title} flagged={flagged} id={id} CreatedAt={createdAt} subTitle={eventdateInfo(props.event)} />
                 <Typography className=" text-ellipsis overflow-auto max-w-[75vw] h-[1.8rem]">
                     {description}
                 </Typography>
-
             </CardBody>
             <CardFooter className="CardFooter">
                 {!mines ? <div className="flex items-center gap-2">
@@ -76,12 +71,11 @@ export function EventCard(props: EventCardProps) {
                 <div className="flex items-center gap-2">
                     <button onClick={() => toggleParticipant(event.id, userId, setEvent)}>
                         <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center gap-2"
-                            icon={<span className={`${Igo && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem]`}>person</span>}>
-                        </Chip></button>
-                    <Link to={`/evenement/${id}`} className="flex items-center gap-2" title={`voir les details de ${title}`}><span className="material-symbols-outlined fill !text-[3rem] text-gray-900  fillThin">
-                        arrow_circle_right
-                    </span>
-                    </Link>
+                            icon={
+                                <Icon icon="person" fill={Igo} color={Igo ? "cyan" : "gray"} style="-mt-2" title={Igo ? "Je n'y vais plus" : "Je participe"} />}>
+                        </Chip>
+                    </button>
+                    <Icon icon="arrow_circle_right" link={`/evenement/${id}`} title={`voir les details de ${title}`} size="4xl px-1" fill />
                 </div>
             </CardFooter>
         </Card>

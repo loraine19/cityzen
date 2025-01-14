@@ -2,9 +2,9 @@ import { Button } from "@material-tailwind/react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
-import { action } from "../../types/class";
+import { action } from "../../domain/entities/frontEntities";
 import DataContext from "../../contexts/data.context";
-import { GetArrayElement } from "../../functions/GetDataFunctions";
+import { GetArrayElement } from "../../utils/GetDataFunctions";
 
 export default function CTA(props:
     {

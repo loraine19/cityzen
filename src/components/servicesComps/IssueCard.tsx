@@ -1,11 +1,13 @@
 import { Card, CardHeader, Typography, Chip, CardBody, Textarea, Popover, PopoverHandler, PopoverContent, Select, Option, Button, Input } from "@material-tailwind/react"
 import Skeleton from "react-loading-skeleton"
-import { Issue, Service, User } from "../../types/class"
 //import CTAMines from "../UIX/CTAMines"
 import ServiceIssueCard from "./ServiceIssueCard"
 import { useContext, useState } from "react"
 import UserContext from "../../contexts/user.context"
-import { getImageBlob } from "../../functions/GetDataFunctions"
+import { getImageBlob } from "../../utils/GetDataFunctions"
+import { Issue } from "../../domain/entities/Issue"
+import { Service } from "../../domain/entities/Service"
+import { User } from "../../domain/entities/User"
 
 
 export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[], service?: Service, formik?: any }) => {
@@ -14,10 +16,10 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
     const Service = props.service ? props.service : issue.Service
     console.log(modos)
     const { title } = Service
-    const { user } = useContext(UserContext)
+    const { userProfile } = useContext(UserContext)
     // const [statusValue] = useState<number>(typeof status === 'number' ? status : parseInt(IssueStep[issue.status]))
-    const myService = useState<boolean>(user.userId === Service.userId)
-    const IResp = useState<boolean>(user.userId === Service.userIdResp)
+    const myService = useState<boolean>(userProfile.userId === Service.userId)
+    const IResp = useState<boolean>(userProfile.userId === Service.userIdResp)
     const [imgBlob, setImgBlob] = useState<string>(image ? image : '')
     const start = new Date(Service.createdAt).toISOString().slice(0, 16).replace('z', '')
 
@@ -129,7 +131,7 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                         name={"userIdModo2"}
                                         labelProps={{ className: `before:border-none after:border-none ` }}
                                         disabled={IResp[0] && formik ? false : true}
-                                        value={issue?.UserModo2?.id as unknown as string || ''}
+                                        value={issue?.UserModoResp?.id as unknown as string || ''}
                                         onChange={(e) => { formik.values.userIdModo2 = e; console.log(formik.values) }}
                                     >
                                         {modos.map((modo: User) =>
@@ -150,7 +152,7 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                     <Button type="submit" size="lg" className="!lngBtn w-full rounded-full" >
                         enregistrer la demande d'aide
                     </Button>}
-                {/* {user.userId === issue.userId ?
+                {/* {userProfile.userId === issue.userId ?
                     <CTAMines actions={MyActions} disabled1={statusValue > 1} /> :
                     <CTAMines actions={RespActions} disabled1={statusValue > 1} />
                 } */}

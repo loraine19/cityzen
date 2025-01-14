@@ -1,6 +1,6 @@
 import { Avatar } from "@material-tailwind/react";
 import Popover, { PopoverContent, PopoverHandler } from "@material-tailwind/react/components/Popover";
-import { Participant } from "../../types/class";
+import { Participant } from "../../domain/entities/Participant";
 
 type AvatarStackProps = { avatarDatas: Participant[] };
 export function AvatarStack(props: AvatarStackProps) {

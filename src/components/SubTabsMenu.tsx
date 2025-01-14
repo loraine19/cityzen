@@ -1,7 +1,7 @@
 import { Tabs, TabsHeader, Tab } from "@material-tailwind/react";
-import { subLabel } from "../types/subLabel";
 import { useEffect, useState } from "react";
 
+type subLabel = any
 interface SubTabsMenuProps {
     subLabels: subLabel[];
     subTabSelected: string;

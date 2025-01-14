@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Input, List, ListItem } from '@material-tailwind/react';
 import Skeleton from 'react-loading-skeleton'
-import { Address } from '../../types/class';
+import { Address } from '../../domain/entities/Address';
 
 interface AddressSuggestion { label: string; value: Address }
 

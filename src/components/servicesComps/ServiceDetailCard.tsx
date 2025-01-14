@@ -1,14 +1,15 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { Flag, HardLevel, Service, SkillLevel } from "../../types/class";
-import { getEnumVal, getLabel, GetPoints, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../functions/GetDataFunctions";
+import { getEnumVal, getLabel, GetPoints, isLate, serviceCategories, serviceStatus, serviceTypes } from "../../utils/GetDataFunctions";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/user.context"
-import { FlagIcon } from "../UIX/SmallComps";
+import { DateChip, Icon, ProfileDiv, Title } from "../UIX/SmallComps";
+import { Flag } from "../../domain/entities/Flag";
+import { Service, HardLevel, SkillLevel } from "../../domain/entities/Service";
 
 export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void }) {
-    const { user } = useContext(UserContext)
-    const userId = (user.userId)
+    const { userProfile } = useContext(UserContext)
+    const userId = (userProfile.userId)
     const navigate = useNavigate();
     const { service } = props
     const { id, title, description, image, createdAt, User, UserResp } = props.service
@@ -20,6 +21,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
     const [points, setPoints] = useState<number[]>(GetPoints(service))
     const category = getLabel(service.category.toString(), serviceCategories)
     const late: boolean = isLate(createdAt, 15)
+    console.log(late)
     const status = getLabel(service.status, serviceStatus)
     const isResp = status === 'en attente' ? true : false
     const IResp = UserResp?.id === userId
@@ -38,22 +40,17 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                     floated={haveImage}>
                     <div className={`${!haveImage ? "relative" : "absolute"}  top-0 p-2 justify-between w-full flex items-end `}>
                         <div className="flex items-center gap-2 mb-1">
-                            <Chip value={`${category}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
+                            <Chip size="sm" value={`${category}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
                             </Chip>
-                            <Chip value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} shadow rounded-full  h-max flex items-center gap-2 font-medium `}>
+                            <Chip size="sm" value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} shadow rounded-full  h-max flex items-center gap-2 font-medium `}>
                             </Chip>
-                        </div>
-                        <div className="flex items-center gap-2 flex-col sm:flex-row">
                             <button onClick={() => { status === 'litige' && navigate(`/conciliation/${id}`) }}>
-                                <Chip value={status}
+                                <Chip size="sm" value={status}
                                     className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} shadow rounded-full h-max flex items-center gap-2 font-medium `}>
                                 </Chip>
                             </button>
-                            <Chip value={(new Date(createdAt)).toLocaleDateString('fr-FR')}
-                                className={`${late ? "RedChip" : "GrayChip"} 
-                                rounded-full  h-max flex items-center gap-2 shadow font-medium `}>
-                            </Chip>
                         </div>
+                        <DateChip start={createdAt} prefix="publié le " />
                     </div>
                     {image &&
                         <img
@@ -64,30 +61,25 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                     }
                 </CardHeader>
                 <CardBody className="FixCardBody !pb-0">
-                    <div className="flex w-full items-center justify-between">
-                        <Typography variant="h5" color="blue-gray" className="mb-2">
-                            {title}
-                        </Typography>
-                        <FlagIcon flagged={flagged} id={id} type="service" />
-                    </div>
-                    <div className="flex justify-between items-end ">
+                    <Title title={title} flagged={flagged} id={id} />
+                    <div className="flex justify-between items-end pt-2 ">
                         <div className="flex  items-center gap-2 mb-1">
-                            <Chip value={skill} size="lg" className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
-                                icon={<span className={`pl-1 material-symbols-outlined unFillThin !text-[1.5rem]`} title="Compétence">design_services</span>}>
+                            <Chip value={skill} className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
+                                icon={<Icon icon="design_services" size="2xl" fill color="gray" style="pl-4 !-mt-[0.4rem]" title="Compétence" />}>
                             </Chip>
-                            <Chip value={hard} size="lg" className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-5"
-                                icon={<span className={`  material-symbols-outlined unFillThin !text-[1.5rem]`} title="Difficulté">signal_cellular_alt</ span>}>
+                            <Chip value={hard} className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-5"
+                                icon={<Icon icon="signal_cellular_alt" size="2xl" fill color="gray" style="pl-4 !-mt-[0.4rem]" title="Difficulté" />}>
                             </Chip>
                         </div>
                         {UserResp && !IResp &&
                             <Typography variant="h6" color="blue-gray" className="text-right">
-                                {isMine && !isValidated && !isFinish && "Réponse " || isValidated && 'en cours par ' || isFinish && 'effectué par ' || IResp && "Vous :" || ' - '}
+                                {isMine && !isValidated && !isFinish && "Réponse " || isValidated && 'en cours par ' || isFinish && 'effectué par ' || IResp && "Vous :" || '  '}
                             </Typography>
                         }
                         {UserResp && IResp &&
                             <Typography variant="h6" color="blue-gray" className="text-right">
                                 vous
-                                {isFinish && 'avez fait ' || !isValidated && !isFinish && "avez repondu" || isValidated && !isFinish && ' faite'}
+                                {isFinish && 'avez fait ' || !isValidated && !isFinish && " avez repondu " || isValidated && !isFinish && ' faite'}
                             </Typography>
                         }
                     </div>
@@ -103,26 +95,20 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                                             {UserResp.Profile?.firstName} - {UserResp.Profile?.lastName}
                                         </Typography>
                                         <Typography variant="small" color="gray" >
-                                            {UserResp.Profile?.skills} -
+                                            {UserResp.Profile?.skills} ◦
                                         </Typography>
                                         <Avatar src={UserResp.Profile?.image as string} size="sm" alt="avatar" withBorder={true} color="blue-gray" />
                                     </div>
-                                    <Chip value={status} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} rounded-full h-max flex items-center gap-2 font-medium shadow`}>
+                                    <Chip size={"sm"} value={status} className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} rounded-full h-max flex items-center gap-2 font-medium shadow`}>
                                     </Chip>
                                 </div>}
                         </div>
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">
-                    {userAuthor?.userId !== user.userId && <div className="flex items-center px-0 gap-2">
-                        <Avatar src={userAuthor?.image as string} size="sm" alt="avatar" withBorder={true} />
-                        <div className="flex flex-col">
-                            <Typography variant="small" className="font-normal !p-0">{userAuthor?.firstName} - {userAuthor?.lastName}</Typography>
-                            <Typography variant="small" color="gray" >
-                                {userAuthor?.skills}
-                            </Typography>
-                        </div>
-                    </div>}
+                    {userAuthor?.userId !== userId &&
+                        <ProfileDiv profile={userAuthor} />
+                    }
 
                     <div className="flex items-center gap-2">
                         <Typography variant="h2" >

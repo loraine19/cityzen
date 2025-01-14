@@ -1,11 +1,15 @@
-import { createContext, useState, ReactNode, useEffect, } from "react";
-import { User, Profile, Notif, } from "../types/class";
-import { getNotifs, getUserMe } from "../functions/API/usersApi";
-import { dayMS } from "../functions/GetDataFunctions";
+import { ReactNode, useState, useEffect, createContext } from "react";
+import { Notif } from "../domain/entities/Notif";
+import { Profile } from "../domain/entities/Profile";
+import { User } from "../domain/entities/User"
+import { dayMS } from "../utils/GetDataFunctions";
+import { NotifService } from "../data/repositories/NotifReposotory";
+import { UserService } from "../data/repositories/UserRepository";
+
 
 interface UserContextType {
-    user: Profile;
-    setUserCont: (user: Profile) => void;
+    userProfile: Profile;
+    setUserProfile: (profile: Profile) => void;
     userNotif: number;
     setUserNotif: (userNotifs: number) => void;
     notifList: any[];
@@ -19,8 +23,8 @@ interface UserProviderType {
 }
 
 const UserContext = createContext<UserContextType>({
-    user: {} as Profile,
-    setUserCont: () => { },
+    userProfile: {} as Profile,
+    setUserProfile: () => { },
     userNotif: 0,
     setUserNotif: () => { },
     setNotifList: () => { },
@@ -30,7 +34,7 @@ const UserContext = createContext<UserContextType>({
 });
 
 export function UserProvider({ children }: UserProviderType) {
-    const [user, setUserCont] = useState<Profile>({} as Profile);
+    const [userProfile, setUserProfile] = useState<Profile>({} as Profile);
     const [notifList, setNotifList] = useState<Notif[]>([]);
     const [userNotif, setUserNotif] = useState<number>(0);
     const [userEmail, setUserEmail] = useState<string>('example@me.com');
@@ -41,6 +45,9 @@ export function UserProvider({ children }: UserProviderType) {
         const localNotif = JSON.parse(localStorage.getItem('notifList') || '[]').filter((notif: Notif) => {
             return new Date(notif.updatedAt).getTime() > fifteenDaysAgo;
         });
+        const { getNotifs } = new NotifService();
+
+
         const fetchedNotif = await getNotifs();
         const updatedNotifList = new Set([...localNotif, ...fetchedNotif]);
         const sortedNotifList = Array.from(updatedNotifList).reduce((acc, current) => {
@@ -62,12 +69,13 @@ export function UserProvider({ children }: UserProviderType) {
 
     useEffect(() => {
         const fetchData = async () => {
+            const { getUserMe } = new UserService();
             const fetchedUser: User = await getUserMe();
             const localUser = JSON.parse(localStorage.getItem('user') || '{}');
             if (!localUser) {
                 localStorage.setItem('user', JSON.stringify(fetchedUser.Profile));
             }
-            setUserCont(fetchedUser.Profile);
+            setUserProfile(fetchedUser.Profile);
             setUserEmail(fetchedUser.email);
             const notifs = await updateNotifs();
             setNotifList(notifs);
@@ -76,7 +84,7 @@ export function UserProvider({ children }: UserProviderType) {
         fetchData();
     }, []);
 
-    return <UserContext.Provider value={{ user, setUserCont, userNotif, setUserNotif, notifList, setNotifList, updateNotifs, userEmail }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ userProfile, setUserProfile, userNotif, setUserNotif, notifList, setNotifList, updateNotifs, userEmail }}>{children}</UserContext.Provider>;
 }
 
 export default UserContext;

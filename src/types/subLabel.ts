@@ -1,1 +1,0 @@
-export  type subLabel = {label:string, value:string, result:()=>any}

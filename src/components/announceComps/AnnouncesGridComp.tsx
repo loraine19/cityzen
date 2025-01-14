@@ -1,4 +1,4 @@
-import { Post } from '../../types/class';
+import { Post } from "../../domain/entities/Post";
 import AnnouncesComp from "./PostCard";
 
 export default function AnnouncesGridComp(props: { line: Post[], mines?: boolean, change: (e: any) => void, update?: () => void, view?: string, }) {
@@ -8,7 +8,7 @@ export default function AnnouncesGridComp(props: { line: Post[], mines?: boolean
 
     return (
         <>
-            <div className={"grid grid-cols-[1fr_1fr] grid-rows-[(24*1fr)] gap-x-4 gap-y-2"}>
+            <div className={"grid grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] grid-rows-[(24*1fr)] gap-x-4 gap-y-2"}>
                 {line[0] &&
                     <div className={line[0].image ? short : short}>
                         <AnnouncesComp key={line[0].id} post={line[0]} mines={mines} change={change} update={update} />
