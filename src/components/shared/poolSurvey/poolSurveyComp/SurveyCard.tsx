@@ -4,11 +4,12 @@ import UserContext from "../../../../contexts/user.context";
 import { Flag } from "../../../../domain/entities/Flag";
 import { Survey } from "../../../../domain/entities/Survey";
 import { Vote } from "../../../../domain/entities/Vote";
-import { SurveyService } from "../../../../domain/repositories/SurveyRepository";
-import { UserService } from "../../../../domain/repositories/UserRepository";
+import { SurveyService } from "../../../../domain/repositories/SurveyRepository"
 import { dayMS, getLabel, surveyCategories, GenereMyActions } from "../../../../utils/GetDataFunctions";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, FlagIcon, ProgressSmallbar, Icon } from "../../../common/SmallComps";
+import { UserRepositoryImpl } from "../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";
+import { UserApi } from "../../../../infrastructure/api/userApi";
 
 
 type SurveyCardProps = { survey: Survey, change: () => void, mines?: boolean, update?: () => void }
@@ -30,7 +31,7 @@ export function SurveyCard(props: SurveyCardProps) {
     const ended: boolean = pourcent < 100 && endDays <= 0 ? true : false
     const category: string = getLabel(survey.category, surveyCategories)
     const { deleteSurvey } = new SurveyService()
-    const { getUsers } = new UserService()
+    const { getUsers } = new UserRepositoryImpl(new UserApi())
     const actions = GenereMyActions(survey, "survey", deleteSurvey)
     const haveImage = survey.image ? true : false
     const flagged: boolean = survey.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false

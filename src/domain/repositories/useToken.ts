@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { getTokenExpirationDate } from '../../api/useApi';
+import { getTokenExpirationDate } from '../../infrastructure/services/authService';
 
 
 export const useToken = () => {

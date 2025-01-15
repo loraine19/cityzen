@@ -10,11 +10,12 @@ import { User } from '../../../../domain/entities/User';
 import { ModalValues } from '../../../../domain/entities/frontEntities';
 import { IssueService } from '../../../../domain/repositories/IssueRepository';
 import { ServiceService } from '../../../../domain/repositories/ServiceRepository';
-import { UserService } from '../../../../domain/repositories/UserRepository';
 import { ConfirmModal } from '../../../common/ConfirmModal';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from '../servicesComps/IssueCard';
+import { UserApi } from '../../../../infrastructure/api/userApi';
+import { UserRepositoryImpl } from '../../../../infrastructure/repositoriesImpl/UserRespositoryImpl';
 
 
 
@@ -40,7 +41,7 @@ export default function IssueEditPage() {
         element: "Il n'y a aucun modérateur disponible pour le moment, Vous allez être redirigé vers la page de service"
     }
     const [ModalValues, setModalValues] = useState<ModalValues>(redirectModal);
-    const { getUserModos } = new UserService()
+    const { getUserModos } = new UserRepositoryImpl(new UserApi())
     const { getServiceById } = new ServiceService()
     const { getIssueById, postIssue } = new IssueService()
 

@@ -1,6 +1,6 @@
 import { Pool, PoolDTO } from "../../domain/entities/Pool";
 import { Survey } from "../../domain/entities/Survey";
-import { handleApiCall, useApi } from "../../api/useApi";
+import { useApi, handleApiCall } from "../../infrastructure/api/useApi";
 
 const api = useApi();
 const dataTypeComb = "pools-surveys";

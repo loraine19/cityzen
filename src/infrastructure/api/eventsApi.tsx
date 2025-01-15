@@ -1,5 +1,5 @@
-import { EventP, EventDTO } from "../entities/Events";
-import { useApi, handleApiCall, createFormData } from "../api/useApi";
+import { EventP, EventDTO } from "../../domain/entities/Events";
+import { useApi, handleApiCall, createFormData } from "./useApi";
 
 
 

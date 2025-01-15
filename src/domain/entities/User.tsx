@@ -1,14 +1,11 @@
 import { Profile } from './Profile'
+import { GroupUser } from './GroupUser';
 
 export enum UserStatus {
     ACTIVE,
     INACTIVE,
 }
 
-export enum Role {
-    MEMBER,
-    GUEST,
-}
 export class User {
     id: number = 0;
     email: string = '';
@@ -19,6 +16,7 @@ export class User {
     updatedAt: Date = new Date();
     lastConnection: Date = new Date();
     status: UserStatus = UserStatus.INACTIVE;
+    GroupUser: GroupUser = new GroupUser();
 }
 
 

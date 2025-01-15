@@ -3,7 +3,6 @@ import { useEffect, useState, useContext } from "react";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import UserContext from "../../../contexts/user.context";
-import { logOut } from "../../../api/useApi";
 import { EventP } from "../../../domain/entities/Events";
 import { Notif } from "../../../domain/entities/Notif";
 import { EventService } from "../../../domain/repositories/EventRepository";
@@ -13,8 +12,9 @@ import NavBarBottom from "../../common/NavBarBottom";
 import { NotifBadge, Icon } from "../../common/SmallComps";
 import { AuthHeader } from "../auth/authComps/AuthHeader";
 import CalendarComp from "./CalendarComp";
-import { useUser } from "../../../domain/usecases/useUser";
+import { useUser } from "../../../useCases/useUser";
 import { Profile } from "../../../domain/entities/Profile";
+import { logOut } from "../../../infrastructure/services/authService";
 
 export default function DashboardPage() {
     const { userProfile, setUserProfile, userNotif, notifList, userEmail } = useContext(UserContext)
@@ -24,14 +24,15 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const { getEvents } = new EventService()
 
+
     useEffect(() => {
         console.log(user, loadingUser)
         const fetch = async () => {
             console.log(userEmail, userProfile, user)
-            if (!userProfile && !user) {
-                console.log('no user')
+            if (!user) {
+                console.log('no user', user)
                 await getUserMe();
-                setUserProfile(user?.Profile as Profile)
+                setUserProfile(user?.profile as Profile)
                 //(!loadingUser && !user) && window.location.replace('/signup_details')
             }
             const events = await getEvents()

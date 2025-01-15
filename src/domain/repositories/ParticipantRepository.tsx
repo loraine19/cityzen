@@ -1,5 +1,5 @@
 import { Participant, ParticipantDTO } from "../../domain/entities/Participant";
-import { handleApiCall, useApi } from "../../api/useApi";
+import { useApi, handleApiCall } from "../../infrastructure/api/useApi";
 
 const api = useApi();
 const dataType = "participants";

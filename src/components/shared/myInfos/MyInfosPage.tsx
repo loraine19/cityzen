@@ -5,13 +5,15 @@ import { useContext, useEffect, useState } from 'react';
 import { Button } from '@material-tailwind/react';
 import { AuthHeader } from '../auth/authComps/AuthHeader';
 import { ProfileForm } from '../auth/authComps/ProfileForm';
-import { logOut } from '../../../api/useApi';
 import UserContext from '../../../contexts/user.context';
 import { Profile } from '../../../domain/entities/Profile';
 import { AddressService } from '../../../domain/repositories/AddressRepository';
-import { ProfileService } from '../../../domain/repositories/ProfileRepository';
-import { UserService } from '../../../domain/repositories/UserRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
+import { UserRepositoryImpl } from '../../../infrastructure/repositoriesImpl/UserRespositoryImpl';
+import { UserApi } from '../../../infrastructure/api/userApi';
+import { ProfileApi } from '../../../infrastructure/api/profileApi';
+import { ProfileRepositoryImpl } from '../../../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
+import { logOut } from '../../../infrastructure/services/authService';
 
 
 export default function MyInfosPage() {
@@ -20,9 +22,9 @@ export default function MyInfosPage() {
     const [newProfile, setNewProfile] = useState<Profile>({} as Profile);
     const [skillList, setSkillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
     const [open, setOpen] = useState(false);
-    const { getUserMe } = new UserService()
+    const { getUserMe } = new UserRepositoryImpl(new UserApi())
     const { getAddresses, postAddress } = new AddressService()
-    const { patchProfile } = new ProfileService()
+    const { updateProfile } = new ProfileRepositoryImpl(new ProfileApi())
 
     useEffect(() => {
         const fetch = async () => {
@@ -82,7 +84,7 @@ export default function MyInfosPage() {
         formik.values.addressId = formik.values.Address.id
         const { Address, ...rest } = formik.values;
         const updateData = { ...rest }
-        const patchedProfile = await patchProfile(updateData);
+        const patchedProfile = await updateProfile(updateData);
         return patchedProfile
     }
 

@@ -4,9 +4,10 @@ import UserContext from "../../../../contexts/user.context";
 import { Pool } from "../../../../domain/entities/Pool";
 import { Profile } from "../../../../domain/entities/Profile";
 import { Vote } from "../../../../domain/entities/Vote";
-import { UserService } from "../../../../domain/repositories/UserRepository";
 import { dayMS } from "../../../../utils/GetDataFunctions";
 import { DateChip, ProfileDiv, ProgressSmallbar, Icon } from "../../../common/SmallComps";
+import { UserRepositoryImpl } from "../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";
+import { UserApi } from "../../../../infrastructure/api/userApi";
 
 
 
@@ -27,7 +28,7 @@ export default function PoolDetailCard(props: { element: Pool, mines?: boolean, 
     const OkVotes = Votes?.filter((vote: Vote) => vote.opinion as unknown as string === 'OK')
     const [needed, setNeeded] = useState<number>(usersLength - (OkVotes?.length || 0))
 
-    const { getUsers } = new UserService()
+    const { getUsers } = new UserRepositoryImpl(new UserApi())
 
     useEffect(() => {
         const onload = async () => {

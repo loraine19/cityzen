@@ -6,11 +6,12 @@ import UserContext from "../../../../contexts/user.context";
 import { Pool } from "../../../../domain/entities/Pool";
 import { Profile } from "../../../../domain/entities/Profile";
 import { PoolService } from "../../../../domain/repositories/PoolRepository";
-import { UserService } from "../../../../domain/repositories/UserRepository";
 import { dayMS, GenereMyActions } from "../../../../utils/GetDataFunctions";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
 import { Action } from "../../../../domain/entities/frontEntities";
+import { UserRepositoryImpl } from "../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";
+import { UserApi } from "../../../../infrastructure/api/userApi";
 
 
 
@@ -32,7 +33,7 @@ export function PoolCard(props: PoolCardProps) {
     const end: Date = new Date(new Date(createdAt).getTime() + 15 * dayMS)
     const disabledEditCTA: boolean = pourcent >= 100 ? true : false
     const { deletePool } = new PoolService()
-    const { getUsers } = new UserService()
+    const { getUsers } = new UserRepositoryImpl(new UserApi())
 
     const actions: Action[] = GenereMyActions(pool, "pool", deletePool)
     const [needed, setNeeded] = useState<number>(usersLength - (OkVotes?.length || 0))

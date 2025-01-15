@@ -1,5 +1,6 @@
 import { EventDTO, EventP } from "../../domain/entities/Events";
-import { createFormData, handleApiCall, useApi } from "../../api/useApi";
+import { createFormData } from "../../infrastructure/api/apiUtils";
+import { useApi, handleApiCall } from "../../infrastructure/api/useApi";
 
 const api = useApi();
 const dataType = "events";

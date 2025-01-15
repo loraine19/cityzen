@@ -7,13 +7,15 @@ import { AuthHeader } from './authComps/AuthHeader'
 import { ProfileForm } from './authComps/ProfileForm';
 import Skeleton from 'react-loading-skeleton';
 import { Address } from '../../../domain/entities/Address';
-import { logOut } from '../../../api/useApi';
 import UserContext from '../../../contexts/user.context';
 import { Profile } from '../../../domain/entities/Profile';
 import { AddressService } from '../../../domain/repositories/AddressRepository';
-import { ProfileService } from '../../../domain/repositories/ProfileRepository';
-import { UserService } from '../../../domain/repositories/UserRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
+import { UserRepositoryImpl } from '../../../infrastructure/repositoriesImpl/UserRespositoryImpl';
+import { UserApi } from '../../../infrastructure/api/userApi';
+import { ProfileRepositoryImpl } from '../../../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
+import { ProfileApi } from '../../../infrastructure/api/profileApi';
+import { logOut } from '../../../infrastructure/services/authService';
 
 
 export default function SignUpDetailPage() {
@@ -25,9 +27,9 @@ export default function SignUpDetailPage() {
     1 > 2 && console.log("avoid compile error", addressList)
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
-    const { getUserMe } = new UserService()
+    const { getUserMe } = new UserRepositoryImpl(new UserApi())
     const { getAddresses, postAddress } = new AddressService()
-    const { postProfile } = new ProfileService()
+    const { postProfile } = new ProfileRepositoryImpl(new ProfileApi())
 
     /// ON LOAD PAGE FETCH 
     useEffect(() => {

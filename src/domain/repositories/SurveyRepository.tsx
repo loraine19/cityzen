@@ -1,5 +1,6 @@
 import { Survey, SurveyDTO } from "../../domain/entities/Survey";
-import { createFormData, handleApiCall, useApi } from "../../api/useApi";
+import { createFormData } from "../../infrastructure/api/apiUtils";
+import { useApi, handleApiCall } from "../../infrastructure/api/useApi";
 
 const api = useApi();
 const dataType = "surveys";

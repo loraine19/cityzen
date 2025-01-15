@@ -21,5 +21,6 @@ export class GroupUserDTO {
 
 export enum Role {
     MEMBER,
-    GUEST
+    GUEST,
+    MODO
 }
