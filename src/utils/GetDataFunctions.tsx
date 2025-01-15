@@ -268,7 +268,7 @@ const generateLabels = (categories: string[], labels: string[]) => {
 const labelsEvents = ['sport', 'social', 'culturelle', 'blob', 'autre'];
 export const eventCategories = generateLabels(eventCategory, labelsEvents);
 
-const labelsPost = ["perdu-trouvé", "animaux", "à vendre", "blob", "autre"];
+const labelsPost = ["perdu-trouvé", "animaux", "à vendre", "je donne", "autre"];
 export const postCategories = generateLabels(postCategory, labelsPost);
 
 const typesService = ["demande", "offre"];
