@@ -2,17 +2,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { Api, useApi } from "../providers/http/useApi";
 import { User, UserDTO } from "../../domain/entities/User";
+import { UserApi } from "../providers/http/userApi";
 
+//import { useReactTable } from '@tanstack/react-table';
 
-export class UserTSApi {
+export class UserTS {
     private readonly api: Api;
+    private readonly userApi: any;
     private readonly dataType: string = 'users';
 
-    constructor() {
-        this.api = useApi();
-    }
+    constructor() { this.api = useApi(), this.userApi = new UserApi() }
+
 
     async getUsers(): Promise<User> {
+
         const { data } = useQuery({
             queryKey: [this.dataType],
             queryFn: async () => {
@@ -34,16 +37,15 @@ export class UserTSApi {
         return data;
     }
 
-    async getUserMe(): Promise<User> {
-        const { data } = useQuery({
-            queryKey: [`${this.dataType}/me`],
-            queryFn: async () => {
-                const response = await this.api.get(`${this.dataType}/me`);
-                return response.data;
-            }
-        })
-        return data;
-    }
+    // async getUserMe() {
+    //     const res = useQuery({
+    //         queryKey: ['userMe'],
+    //         queryFn: await this.userApi.getUserMe(),
+    //     });
+    //     const { data, error, isLoading } = res
+    //     console.log('Data:', data, 'Error:', error, 'isLoading:', isLoading);
+    //     return { data, error, isLoading }
+    // }
 
     async deleteUser(id: number): Promise<void> {
         const { data } = useQuery({

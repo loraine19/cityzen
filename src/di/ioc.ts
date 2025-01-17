@@ -1,15 +1,26 @@
+//src/di/ioc.ts
 import { createContainer, asClass, asFunction } from 'awilix';
-import { GetUserMeCase } from '../application/user/getUserMe.usecase';
-import { UserViewModel } from '../presenter/views/userViewModel';
+import { GetUserUseCase } from '../application/user/getUserMe.usecase';
+import { userViewModel, } from '../presenter/views/userViewModel';
+import { UserRepositoryImpl } from '../infrastructure/repositoriesImpl/UserRespositoryImpl';
+import { UserApi } from '../infrastructure/providers/http/userApi';
 
 const container = createContainer();
 container.register({
-    // ... autres enregistrements
 
-    getUserMeCase: asClass(GetUserMeCase),
+    // UseCases
+    getUserUseCase: asClass(GetUserUseCase),
 
-    // ... autres enregistrements
-    UserViewModel: asFunction(UserViewModel)
+    //Repositories
+    userRepository: asClass(UserRepositoryImpl),
+
+    // Data Source
+    userData: asClass(UserApi),
+    //todoData: asClass(TodoLocastorage),
+
+    // ViewModels
+    userViewModel: asFunction(userViewModel),
+
 });
 
 export default container;

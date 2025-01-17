@@ -1,37 +1,35 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { User, UserDTO } from "../../domain/entities/User";
-import { UserRepository } from "../../domain/repositories-ports/UserRepositoryBase";
-import { UserApi } from "../providers/http/userApi";
+import { UserRepositoryBase } from "../../domain/repositories-ports/UserRepositoryBase";
+import { UserApi } from '../providers/http/userApi';
 
+const userApi = new UserApi();
 
-export class UserRepositoryImpl implements UserRepository {
-    constructor(private userApi: UserApi) { }
-    async getUsers(): Promise<User[]> {
-        return this.userApi.getUsers()
-    }
+export class UserRepositoryImpl implements UserRepositoryBase {
+
 
     async getUserMe(): Promise<User> {
-        return this.userApi.getUserMe()
+        return userApi.getUserMe();
     }
 
     async getUserModos(): Promise<User[]> {
-        return this.userApi.getUsersModos()
+        return userApi.getUsersModos()
+    }
+
+    async getUsers(): Promise<User[]> {
+        return userApi.getUsers();
     }
 
     async createUser(data: UserDTO): Promise<User> {
-        return this.userApi.postUser(data)
+        return userApi.postUser(data)
     }
 
     async updateUser(data: UserDTO): Promise<User> {
-        return this.userApi.patchUser(data)
+        return userApi.patchUser(data)
     }
 
     async deleteUser(id: number): Promise<void> {
-        return this.userApi.deleteUser(id)
+        return userApi.deleteUser(id)
     }
 }
 
-
-// Example usage
-//const userRepository = new UserRepositoryImpl();
-//userRepository.getUserMe().then(user => console.log(user));

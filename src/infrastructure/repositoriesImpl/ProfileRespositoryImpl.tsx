@@ -14,7 +14,6 @@ export class ProfileRepositoryImpl implements ProfileRepository {
         return this.profileApi.getProfileMe();
     }
 
-
     async postProfile(data: ProfileDTO): Promise<Profile> {
         return this.profileApi.postProfile(data);
     }

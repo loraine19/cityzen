@@ -1,9 +1,10 @@
+//src/presenter/components/shared/dashboard/DashboardPage.tsx
 import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import DI from '../../../../di/ioc'
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import UserContext from "../../../../contexts/user.context";
+// import UserContext from "../../../../contexts/user.context";
 import { EventP } from "../../../../domain/entities/Events";
 import { Notif } from "../../../../domain/entities/Notif";
 import { EventService } from "../../../../domain/repositories-ports/EventRepository";
@@ -15,33 +16,44 @@ import { AuthHeader } from "../auth/authComps/AuthHeader";
 import CalendarComp from "./CalendarComp";
 import { Profile } from "../../../../domain/entities/Profile";
 import { logOut } from "../../../../infrastructure/services/authService";
+import { UserTS } from '../../../../infrastructure/adapters/userTS';
+import { useQuery } from "@tanstack/react-query";
+import { UserApi } from "../../../../infrastructure/providers/http/userApi";
+
+
 
 export default function DashboardPage() {
-    // const { userProfile, setUserProfile, userNotif, notifList, userEmail } = useContext(UserContext)
-    const { user } = DI.resolve('userViewModel')
-    let { firstName, image, points, Address } = user.Profile || {};
+    const call = new UserApi();
+    const { user, loading } = DI.resolve('userViewModel');
+    let { firstName, image, points, Address } = loading ? {} as Profile : user?.Profile as Profile;
     const [events, setEvents] = useState<EventP[]>([] as EventP[]);
-    const [loading, setLoading] = useState<boolean>(true);
     const { getEvents } = new EventService()
-    const [userNotif, setUserNotif] = useState<number>(0);
-    const [notifList, setNotifList] = useState<Notif[]>([]);
+    const [userNotif] = useState<number>(0);
+    const [notifList] = useState<Notif[]>([]);
+
 
 
     useEffect(() => {
         console.log(user)
         const fetch = async () => {
-            if (!user) {
-                console.log('no user', user)
-                // await getUserMe();
-                // setUserProfile(user?.profile as Profile)
-                //(!loadingUser && !user) && window.location.replace('/signup_details')
-            }
             const events = await getEvents()
             setEvents(getDays(events));
-            events && setLoading(false);
+            //events && setLoading(false);
+            // const cc = async () => {
+            //     const res = useQuery({
+            //         queryKey: ['userMe'],
+            //         queryFn: await call.getUserMe(),
+            //     });
+            //     const { data, error, isLoading } = res
+            //     console.log('Data:', data, 'Error:', error, 'isLoading:', isLoading);
+            //     return { data, error, isLoading }
+            // }
+            // cc()
         }
         fetch()
-    }, [user]);
+    }, []);
+
+
 
 
 

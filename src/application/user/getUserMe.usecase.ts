@@ -1,7 +1,8 @@
+//src/application/user/getUserMe.usecase.ts
 import { User } from "../../domain/entities/User";
 import { UserRepositoryBase } from "../../domain/repositories-ports/UserRepositoryBase";
 
-export class GetUserMeCase {
+export class GetUserUseCase {
     private userRepository: UserRepositoryBase;
 
     constructor({ userRepository }: { userRepository: UserRepositoryBase }) {
@@ -9,6 +10,9 @@ export class GetUserMeCase {
     }
 
     public async execute(): Promise<User> {
-        return this.userRepository.getUserMe();
+        const user = await this.userRepository.getUserMe();
+        // console.log('User', user);
+        return user;
     }
 }
+

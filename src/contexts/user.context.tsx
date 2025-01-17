@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect, createContext } from "react";
+import DI from "../di/ioc"; // Adjust the import path as necessary
 import { Notif } from "../domain/entities/Notif";
 import { Profile } from "../domain/entities/Profile"
-import { useUser } from "../application/useCases/useUser";
 import { useNotification } from "../application/useCases/useNotif";
 
 interface UserContextType {
@@ -31,11 +31,13 @@ const UserContext = createContext<UserContextType>({
 });
 
 export function UserProvider({ children }: UserProviderType) {
-    const { user, loadingUser, errorUser, getUserMe } = useUser();
+    const { getUserMe } = DI.resolve('userViewModel');
+    const user = {} as any
+
     const [notifList, setNotifList] = useState<Notif[]>([]);
     const [userNotif, setUserNotif] = useState<number>(0);
     const [userEmail, setUserEmail] = useState<string>('example@me.com');
-    const { getNotifs, notifs } = useNotification();
+    //   const { getNotifs, notifs } = useNotification();
     const [userProfile, setUserProfile] = useState<Profile>({} as Profile);
 
     useEffect(() => {
