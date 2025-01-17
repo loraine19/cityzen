@@ -1,22 +1,31 @@
-import { Role } from '../domain/entities/GroupUser';
-import { User, UserStatus } from '../domain/entities/User';
+//src/useCases/useUser.tsx
+import { useEffect, useState } from "react";
+import { User } from "../../domain/entities/User";
+import { handleError } from "../../application/useCases/useCaseUtils";
 
-interface UserViewModel {
-  id: number;
-  fullName: string;
-  email: string;
-  isModo: boolean;
-  isActivated: boolean;
-}
+export const UserViewModel = ({ getUserMeCase }: any) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(false);
+  const [errorUser, setErrorUser] = useState<string | null>(null);
+  const labelEntity = 'utilisateur';
+  console.log('userViewModel', user)
 
-class UserViewModel {
-  constructor(user: User) {
-    this.id = user.id;
-    this.email = user.email;
-    this.isModo = user.GroupUser.role === Role.MODO;
-    this.isActivated = user.status === UserStatus.ACTIVE;
-  }
-}
-export const getUserViewModel = (user: User): UserViewModel => {
-  return new UserViewModel(user);
+  useEffect(() => {
+    const getUserMe = async () => {
+      console.log(user)
+      setLoadingUser(true);
+      setErrorUser(null);
+      try {
+        const res = await getUserMeCase.execute();
+        setUser(res);
+        console.log(res)
+      }
+      catch (error) {
+        handleError(error, `lors de chargement de l'${labelEntity}`, setErrorUser)
+      }
+      finally { setLoadingUser(false) }
+    }
+    getUserMe();
+  }, [])
+  return { loadingUser, errorUser, user };
 }

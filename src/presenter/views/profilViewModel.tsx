@@ -1,4 +1,5 @@
-import { Profile } from '../domain/entities/Profile';
+import { Profile } from "../../domain/entities/Profile";
+
 
 interface ProfileViewModel {
   fullName: string;

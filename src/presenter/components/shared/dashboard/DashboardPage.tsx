@@ -1,4 +1,5 @@
 import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
+import DI from '../../../../di/ioc'
 import { useEffect, useState, useContext } from "react";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -12,27 +13,27 @@ import NavBarBottom from "../../common/NavBarBottom";
 import { NotifBadge, Icon } from "../../common/SmallComps";
 import { AuthHeader } from "../auth/authComps/AuthHeader";
 import CalendarComp from "./CalendarComp";
-import { useUser } from "../../../../application/useCases/useUser";
 import { Profile } from "../../../../domain/entities/Profile";
 import { logOut } from "../../../../infrastructure/services/authService";
 
 export default function DashboardPage() {
-    const { userProfile, setUserProfile, userNotif, notifList, userEmail } = useContext(UserContext)
-    let { firstName, image, points, Address } = userProfile || {};
-    const { loadingUser, user, getUserMe } = useUser()
+    // const { userProfile, setUserProfile, userNotif, notifList, userEmail } = useContext(UserContext)
+    const { user, loadingUser } = DI.resolve('userViewModel')
+    let { firstName, image, points, Address } = user.Profile || {};
     const [events, setEvents] = useState<EventP[]>([] as EventP[]);
     const [loading, setLoading] = useState<boolean>(true);
     const { getEvents } = new EventService()
+    const [userNotif, setUserNotif] = useState<number>(0);
+    const [notifList, setNotifList] = useState<Notif[]>([]);
 
 
     useEffect(() => {
         console.log(user, loadingUser)
         const fetch = async () => {
-            console.log(userEmail, userProfile, user)
             if (!user) {
                 console.log('no user', user)
-                await getUserMe();
-                setUserProfile(user?.profile as Profile)
+                // await getUserMe();
+                // setUserProfile(user?.profile as Profile)
                 //(!loadingUser && !user) && window.location.replace('/signup_details')
             }
             const events = await getEvents()
