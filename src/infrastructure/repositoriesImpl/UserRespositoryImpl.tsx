@@ -1,7 +1,7 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { User, UserDTO } from "../../domain/entities/User";
-import { UserRepository } from "../../domain/repositories/UserRepository";
-import { UserApi } from "../api/userApi";
+import { UserRepository } from "../../domain/repositories-ports/UserRepositoryBase";
+import { UserApi } from "../providers/http/userApi";
 
 
 export class UserRepositoryImpl implements UserRepository {

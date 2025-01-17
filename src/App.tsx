@@ -3,37 +3,38 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DataProvider } from "./contexts/data.context";
 import { UserProvider } from "./contexts/user.context";
 
-import ServiceCreatePage from "./components/shared/service/ServiceCreatePage";
-import ServiceDetailPage from "./components/shared/service/ServiceDetailPage";
-import ServiceEditPage from "./components/shared/service/ServiceEditPage";
-import ServiceListPage from "./components/shared/service/ServiceListPage";
-import IssueCreatePage from "./components/shared/service/issue/IssueCreatePage";
-import IssueDetailPage from "./components/shared/service/issue/IssueDetailPage";
-import IssueEditPage from "./components/shared/service/issue/IssueEditPage";
-import AnnounceCreatePage from "./components/shared/announce/AnnounceCreatePage";
-import AnnounceDetailPage from "./components/shared/announce/AnnounceDetailPage";
-import AnnounceEditPage from "./components/shared/announce/AnnounceEditPage";
-import AnnounceListPage from "./components/shared/announce/AnnounceListPage";
-import ForgotPasswordPage from "./components/shared/auth/ForgotPasswordPage";
-import ResetPasswordPage from "./components/shared/auth/ResetPasswordPage";
-import SignInPage from "./components/shared/auth/SignInPage";
-import SignUpDetailPage from "./components/shared/auth/SignUpDetailPage";
-import SignUpPage from "./components/shared/auth/SignUpPage";
-import DashboardPage from "./components/shared/dashboard/DashboardPage";
-import NotFindPage from "./components/shared/dashboard/NotFindPage";
-import EventCreatePage from "./components/shared/event/EventCreatePage";
-import EventDetailPage from "./components/shared/event/EventDetailPage";
-import EventEditPage from "./components/shared/event/EventEditPage";
-import EventListPage from "./components/shared/event/EventListPage";
-import FlagCreatePage from "./components/shared/flag/FlagCreatePage";
-import FlagEditPage from "./components/shared/flag/FlagEditPage";
-import FlagPage from "./components/shared/flag/FlagPage";
-import PoolDetailPage from "./components/shared/poolSurvey/PoolDetaiPage";
-import SurveyCreatePage from "./components/shared/poolSurvey/SurveyCreatePage";
-import SurveyDetailPage from "./components/shared/poolSurvey/SurveyDetailPage";
-import SurveyListPage from "./components/shared/poolSurvey/SurveyListPage";
-import MyInfosPage from "./components/shared/myInfos/MyInfosPage";
-import NotificationPage from "./components/shared/myInfos/NotificationPage";
+import ServiceCreatePage from "./presenter/components/shared/service/ServiceCreatePage";
+import ServiceDetailPage from "./presenter/components/shared/service/ServiceDetailPage";
+import ServiceEditPage from "./presenter/components/shared/service/ServiceEditPage";
+import ServiceListPage from "./presenter/components/shared/service/ServiceListPage";
+import IssueCreatePage from "./presenter/components/shared/service/issue/IssueCreatePage";
+import IssueDetailPage from "./presenter/components/shared/service/issue/IssueDetailPage";
+import IssueEditPage from "./presenter/components/shared/service/issue/IssueEditPage";
+import AnnounceCreatePage from "./presenter/components/shared/announce/AnnounceCreatePage";
+import AnnounceDetailPage from "./presenter/components/shared/announce/AnnounceDetailPage";
+import AnnounceEditPage from "./presenter/components/shared/announce/AnnounceEditPage";
+import AnnounceListPage from "./presenter/components/shared/announce/AnnounceListPage";
+import ForgotPasswordPage from "./presenter/components/shared/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./presenter/components/shared/auth/ResetPasswordPage";
+import SignInPage from "./presenter/components/shared/auth/SignInPage";
+import SignUpDetailPage from "./presenter/components/shared/auth/SignUpDetailPage";
+import SignUpPage from "./presenter/components/shared/auth/SignUpPage";
+import DashboardPage from "./presenter/components/shared/dashboard/DashboardPage";
+import NotFindPage from "./presenter/components/shared/dashboard/NotFindPage";
+import EventCreatePage from "./presenter/components/shared/event/EventCreatePage";
+import EventDetailPage from "./presenter/components/shared/event/EventDetailPage";
+import EventEditPage from "./presenter/components/shared/event/EventEditPage";
+import EventListPage from "./presenter/components/shared/event/EventListPage";
+import FlagCreatePage from "./presenter/components/shared/flag/FlagCreatePage";
+import FlagEditPage from "./presenter/components/shared/flag/FlagEditPage";
+import FlagPage from "./presenter/components/shared/flag/FlagPage";
+import PoolDetailPage from "./presenter/components/shared/poolSurvey/PoolDetaiPage";
+import SurveyCreatePage from "./presenter/components/shared/poolSurvey/SurveyCreatePage";
+import SurveyDetailPage from "./presenter/components/shared/poolSurvey/SurveyDetailPage";
+import SurveyListPage from "./presenter/components/shared/poolSurvey/SurveyListPage";
+import MyInfosPage from "./presenter/components/shared/myInfos/MyInfosPage";
+import NotificationPage from "./presenter/components/shared/myInfos/NotificationPage";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 
 
@@ -43,6 +44,7 @@ function App() {
     return (
         <>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');</style>
+
             <DataProvider>
                 <UserProvider>
                     <BrowserRouter  >
@@ -98,9 +100,11 @@ function App() {
 
                             <Route path="/*" element={<NotFindPage />} />
                         </Routes>
+                        <ReactQueryDevtools />
                     </BrowserRouter>
                 </UserProvider>
             </DataProvider>
+
         </>
     );
 }

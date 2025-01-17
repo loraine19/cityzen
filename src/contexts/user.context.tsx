@@ -1,8 +1,8 @@
 import { ReactNode, useState, useEffect, createContext } from "react";
 import { Notif } from "../domain/entities/Notif";
 import { Profile } from "../domain/entities/Profile"
-import { useUser } from "../useCases/useUser";
-import { useNotification } from "../useCases/useNotif";
+import { useUser } from "../application/useCases/useUser";
+import { useNotification } from "../application/useCases/useNotif";
 
 interface UserContextType {
     userProfile: Profile;

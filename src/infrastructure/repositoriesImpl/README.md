@@ -1,46 +1,49 @@
-Objectif:
+import { Auth } from '../../domain/entities/Auth';
+import { AuthRepositoryBase } from '../../domain/repositories/AuthRepositoryBase';
 
-Ce dossier contient les implémentations concrètes des repositories. Un repository définit l'interface pour accéder aux données d'une entité spécifique (ici, les utilisateurs).
-
-Structure:
-
-UserRepositoryImpl.ts:
-Implémente l'interface UserRepository en utilisant les UserApi.
-Convertit les données reçues des API en objets métier.
-Gère les erreurs spécifiques à la base de données (connexions, requêtes, etc.).
-Exemple de code (UserRepositoryImpl.ts):
-
-TypeScript
-
-import { User } from '../../domain/entities/User';
-import { UserApi } from '../api/UserApi';
-
-export class UserRepositoryImpl implements UserRepository {
-constructor(private userApi: UserApi) {}
-
-async getUserById(userId: string): Promise<User> {
-const userData = await this.userApi.getUserById(userId);
-return new User(userData);
+export interface ISigninData {
+signIn(email: string, password: string): Promise<Auth>;
 }
 
-// ... autres méthodes
+export class AuthRepository implements AuthRepositoryBase {
+private authData: ISigninData;
+
+    constructor({ authApi }: { authApi: ISigninData }) {
+        this.authData = authApi;
+    }
+
+    public async signin(email: string, password: string): Promise<Auth> {
+        let response = await this.authData.signIn(email, password);
+        return response;
+    }
+
 }
-Utilisation:
 
-Les useCases utilisent les repositories pour effectuer les opérations sur les données.
-Remarques:
+import { Todo } from '../../domain/entities/Todo';
+import { TodoRepositoryBase } from '../../domain/repositories/TodoRepositoryBase';
 
-Couche d'abstraction: Les repositories forment une couche d'abstraction entre la logique métier et la source de données.
-Flexibilité: Changer de source de données (base de données, API) ne nécessite que de modifier l'implémentation du repository.
-Pour les autres dossiers (domain, useCases, application)
-Vous pouvez suivre le même principe pour rédiger des README précis et concis. Voici quelques exemples :
+export interface ITodoData {
+findAll(): Promise<Todo[]>;
+}
 
-domain: Définit les entités métier (User, Product, etc.) et les règles métier.
-useCases: Contient la logique métier des applications (obtenir un utilisateur, créer un produit, etc.).
-application: Contient les ViewModels et autres éléments liés à la présentation.
-Conseils supplémentaires:
+export class TodoRepository implements TodoRepositoryBase {
+private todoData: ITodoData;
 
-Utiliser des exemples de code: Des exemples concrets facilitent la compréhension.
-Mettre à jour régulièrement: Les README doivent être mis à jour en parallèle du développement.
-Utiliser des outils de documentation: Des outils comme JSDoc peuvent générer automatiquement de la documentation à partir de votre code.
-En suivant ces guidelines, vous aurez une documentation claire et concise pour votre projet, ce qui facilitera la collaboration et la maintenance à long terme.
+constructor({ todoData }: { todoData: ITodoData }) {
+this.todoData = todoData;
+}
+
+public async getTodos(): Promise<Todo[]> {
+let response = await this.todoData.findAll();
+return response;
+}
+
+public async createTodo(): Promise<boolean> {
+return true;
+}
+
+public async getTodoById(id: string): Promise<Todo> {
+return { id: 1, title: 'TODO 1', description: 'Description 1', completed: false };
+}
+
+}

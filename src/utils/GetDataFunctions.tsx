@@ -11,12 +11,12 @@ import { Survey, surveyCategory } from "../domain/entities/Survey";
 import { User } from "../domain/entities/User";
 import { Address } from "../domain/entities/Address";
 import { notifCategory } from "../domain/entities/Notif";
-import { AddressService } from "../domain/repositories/AddressRepository";
-import { EventService } from "../domain/repositories/EventRepository";
-import { LikeService } from "../domain/repositories/LikeRepository";
-import { ParticipantService } from "../domain/repositories/ParticipantRepository";
-import { PostService } from "../domain/repositories/PostRepository";
-import { ServiceService } from "../domain/repositories/ServiceRepository";
+import { AddressService } from "../domain/repositories-ports/AddressRepository";
+import { EventService } from "../domain/repositories-ports/EventRepository";
+import { LikeService } from "../domain/repositories-ports/LikeRepository";
+import { ParticipantService } from "../domain/repositories-ports/ParticipantRepository";
+import { PostService } from "../domain/repositories-ports/PostRepository";
+import { ServiceService } from "../domain/repositories-ports/ServiceRepository";
 const { getServiceById, putService, putServiceValidation } = new ServiceService();
 const { getAddresses, postAddress } = new AddressService();
 
