@@ -1,7 +1,7 @@
 import { User } from "../../domain/entities/User";
 import { UserRepositoryBase } from "../../domain/repositories-ports/UserRepositoryBase";
 
-export class GetUserMeUseCase {
+export class GetUserMeCase {
     private userRepository: UserRepositoryBase;
 
     constructor({ userRepository }: { userRepository: UserRepositoryBase }) {

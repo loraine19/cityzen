@@ -18,7 +18,7 @@ import { logOut } from "../../../../infrastructure/services/authService";
 
 export default function DashboardPage() {
     // const { userProfile, setUserProfile, userNotif, notifList, userEmail } = useContext(UserContext)
-    const { user, loadingUser } = DI.resolve('userViewModel')
+    const { user } = DI.resolve('userViewModel')
     let { firstName, image, points, Address } = user.Profile || {};
     const [events, setEvents] = useState<EventP[]>([] as EventP[]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -28,7 +28,7 @@ export default function DashboardPage() {
 
 
     useEffect(() => {
-        console.log(user, loadingUser)
+        console.log(user)
         const fetch = async () => {
             if (!user) {
                 console.log('no user', user)
@@ -50,7 +50,7 @@ export default function DashboardPage() {
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
 
-    if (loadingUser) {
+    if (loading) {
         return <Skeleton count={5} />;
     }
     else return (

@@ -1,31 +1,15 @@
 import { createContainer, asClass, asFunction } from 'awilix';
-import { GetUserMeUseCase } from '../application/user/getUserMe.usecase';
-import { UserRepositoryImpl } from '../infrastructure/repositoriesImpl/UserRespositoryImpl';
-import { UserApi } from '../infrastructure/providers/http/userApi';
+import { GetUserMeCase } from '../application/user/getUserMe.usecase';
 import { UserViewModel } from '../presenter/views/userViewModel';
 
 const container = createContainer();
-
 container.register({
+    // ... autres enregistrements
 
-    // UseCases
-    getUserMeUseCase: asClass(GetUserMeUseCase),
+    getUserMeCase: asClass(GetUserMeCase),
 
-
-    //Repositories
-    userRepository: asClass(UserRepositoryImpl),
-
-    // Data Source
-    //  todoData: asClass(TodoApi),
-
-    // Providers
-    userApi: asClass(UserApi),
-
-
-    // ViewModels
-    userViewModel: asFunction(UserViewModel),
-
-
+    // ... autres enregistrements
+    UserViewModel: asFunction(UserViewModel)
 });
 
 export default container;
