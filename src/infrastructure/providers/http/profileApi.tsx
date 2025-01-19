@@ -1,8 +1,8 @@
 //src/infrastructure/api/profileApi.tsx
 import { Profile, ProfileDTO } from "../../../domain/entities/Profile";
-import { createFormData } from "./apiUtils";
-import { Api, useApi } from "./useApi";
-import { handleApiCall } from "./useApi";
+import { createFormData } from "./utilsApi";
+import { Api, useApi } from "./UseApi";
+import { handleApiCall } from "./UseApi";
 
 
 export class ProfileApi {

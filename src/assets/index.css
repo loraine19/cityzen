@@ -266,11 +266,7 @@ button {
     text-transform: none !important;
 }
 .lgBtn {
-    @apply py-4 lg:py-5;
-    font-size: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @apply flex items-center justify-center rounded-full w-full !shadow truncate;
 }
 ::first-letter {
     text-transform: capitalize !important;

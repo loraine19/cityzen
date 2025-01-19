@@ -3,8 +3,7 @@ import { GetEventsUseCase } from '../../application/useCases/eventCase/getEvents
 import { EventService } from '../../infrastructure/services/eventService';
 import { GetUserUseCase } from '../../application/useCases/userCase/getUserMe.usecase';
 
-export const eventViewModel = ({ getEventsUseCase, getUserUseCase }: { getEventsUseCase: GetEventsUseCase, getUserUseCase: GetUserUseCase }) => {
-  const eventService = new EventService();
+export const eventViewModel = ({ getEventsUseCase, getUserUseCase, eventService }: { getEventsUseCase: GetEventsUseCase, getUserUseCase: GetUserUseCase, eventService: EventService }) => {
 
   //// Get user id
   const { data: user, isLoading: loadingUser } = useQuery({

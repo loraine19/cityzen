@@ -3,6 +3,7 @@ import { dayMS } from "../../../infrastructure/services/utilsService"
 import { Link, } from "react-router-dom";
 import { NotifView } from "../../../domain/entities/Notif";
 import { Profile } from "../../../domain/entities/Profile";
+import Skeleton from "react-loading-skeleton";
 
 export function DateChip(props: { start: Date | string, end?: Date | string, ended?: boolean, prefix?: string }) {
     const { start, end, prefix, ended } = props
@@ -106,7 +107,7 @@ export function Icon(props: {
             {icon}
         </button>
     const linkIcon =
-        <Link to={link} title={title} className={`${classIcon} ${classActive}  `}>
+        <Link to={link} title={title} rel="noopener noreferrer" className={`${classIcon} ${classActive}  `}>
             {icon}
         </Link>
     return link ? linkIcon : onClick ? button : span
@@ -158,6 +159,7 @@ export function ProgressSmallbar(props: { value: number, label?: string, size?: 
 
 
 export function ProfileDiv(props: { profile: Profile, size?: string }) {
+    if (!props.profile) return <Skeleton />
     const { profile } = props
     const { image, firstName, lastName, skills } = profile;
     const size = !props.size ? "sm" : props.size
@@ -172,7 +174,6 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
                         <Avatar src={image as string} size="sm" alt="avatar" withBorder={true} />
                         <div className="flex flex-col">
                             <Typography variant="h6" color="blue-gray">{firstName} {lastName}</Typography>
-
                             <Typography variant="small" className="font-normal text-blue-gray-500">{skills}</Typography>
                         </div>
                     </div>
@@ -204,7 +205,7 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
         <>
             <div className="flex items-center w-full   justify-between  gap-2">
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)]">
-                    <Typography variant="h5" color="blue-gray" className=" flex whitespace-nowrap overflow-x-auto  ">{title} {title.length > 39 && <span className="sticky -right-1 bg-white px-2 "> ... </span>}
+                    <Typography variant="h5" color="blue-gray" className=" flex whitespace-nowrap overflow-x-auto  ">{title} {title?.length > 39 && <span className="sticky -right-1 bg-white px-2 "> ... </span>}
                     </Typography>
                     {CreatedAt && <span className="text-xs">{new Date(CreatedAt).toLocaleDateString('fr-FR')}</span>}
                 </div>

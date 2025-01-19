@@ -1,6 +1,6 @@
 import { Issue, IssueDTO } from "../entities/Issue";
-import { createFormData } from "../../infrastructure/providers/http/apiUtils";
-import { useApi, handleApiCall } from "../../infrastructure/providers/http/useApi";
+import { createFormData } from "../../infrastructure/providers/http/utilsApi";
+import { useApi, handleApiCall } from "../../infrastructure/providers/http/UseApi";
 
 const api = useApi();
 const dataType = "issues";

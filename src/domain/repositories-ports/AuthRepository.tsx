@@ -1,5 +1,5 @@
 import { Auth } from "../entities/Token";
-import { useApi, handleApiCall } from "../../infrastructure/providers/http/useApi";
+import { useApi, handleApiCall } from "../../infrastructure/providers/http/UseApi";
 
 const api = useApi();
 

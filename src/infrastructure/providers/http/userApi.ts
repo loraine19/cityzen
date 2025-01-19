@@ -1,7 +1,7 @@
 //src/infrastructure/api/userApi.tsx
 import { User, UserDTO } from "../../../domain/entities/User";
-import { Api, useApi } from "./useApi";
-import { handleApiCall } from "./useApi";
+import { Api, useApi } from "./UseApi";
+import { handleApiCall } from "./UseApi";
 
 
 export class UserApi {

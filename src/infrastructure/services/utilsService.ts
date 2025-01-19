@@ -60,14 +60,7 @@ export const shortDateString = (date: Date) => {
 }
 
 
-export const eventdateInfo = (event: EventView) => {
-    return (
-        'de ' + new Date(event.start).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })
-        + " à " +
-        (new Date(event.start).toDateString() === new Date(event.end).toDateString() ?
-            new Date(event?.end).toISOString().slice(11, 16) :
-            new Date(event?.end).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })))
-}
+
 
 
 ///// DELET ELEMENT NOTIF / FLAG 

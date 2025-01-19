@@ -8,36 +8,22 @@ import { EventView } from '../../../../domain/entities/Event';
 import { addressIn } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
+import DI from '../../../../di/ioc';
 
 export default function EventDetailPage() {
     const { id } = useParams()
-    const [newEvent, setNewEvent] = useState<EventView>({} as EventView);
+    const idS = id ? parseInt(id) : 0;
+
+    const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
+    const { event, loadingEvent } = eventIdViewModelFactory(idS);
+    const [eventLoad, setEventLoad] = useState<EventView>({} as EventView);
+    useEffect(() => { console.log(event, loadingEvent); !loadingEvent && setEventLoad(event) }, [loadingEvent]);
+    const [newEvent] = useState<EventView>({} as EventView);
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
-    const [loading, setLoading] = useState(true)
-    const { getEventById, patchEvent } = new EventApi()
-    const fetchEvent = async () => {
-        const idS = id ? parseInt(id) : 0;
-        try {
-            const fetchedEvent = await getEventById(idS);
-            setNewEvent(fetchedEvent);
-            formik.values.category = fetchedEvent.category;
-            formik.values.Address = fetchedEvent.Address;
-            formik.values.start = fetchedEvent.start;
-            formik.values.title = fetchedEvent.title;
-            formik.values.description = fetchedEvent.description;
-            formik.values.participantsMin = fetchedEvent.participantsMin as number;
-            formik.values.end = fetchedEvent.end;
-            formik.values.image = fetchedEvent.image;
-            formik.values.Participants = fetchedEvent.Participants
-        }
-        catch (error) {
-            navigate('/evenement-' + id)
-        } finally {
-            setLoading(false);
-        }
-    }
-    useEffect(() => { fetchEvent() }, []);
+    const { patchEvent } = new EventApi()
+
+
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -61,6 +47,16 @@ export default function EventDetailPage() {
             setOpen(true)
         }
     })
+
+    formik.values.category = eventLoad.category;
+    formik.values.Address = eventLoad.Address;
+    formik.values.start = eventLoad.start;
+    formik.values.title = eventLoad.title;
+    formik.values.description = eventLoad.description;
+    formik.values.participantsMin = eventLoad.participantsMin as number;
+    formik.values.end = eventLoad.end;
+    formik.values.image = eventLoad.image;
+    formik.values.Participants = eventLoad.Participants
 
     const updateFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
@@ -87,7 +83,7 @@ export default function EventDetailPage() {
                 }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-            {loading ? <Skeleton count={1} height="100%" /> :
+            {loadingEvent ? <Skeleton count={1} height="100%" /> :
                 <EventForm formik={formik} />}
         </div >
     )

@@ -1,6 +1,6 @@
 import { Event, EventDTO } from "../../../domain/entities/Event";
-import { createFormData } from "./apiUtils";
-import { useApi, handleApiCall, Api } from "./useApi";
+import { createFormData } from "./utilsApi";
+import { useApi, handleApiCall, Api } from "./UseApi";
 
 export class EventApi {
     private readonly api: Api;

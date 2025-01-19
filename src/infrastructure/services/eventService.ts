@@ -3,8 +3,8 @@ import { EventView, Event } from "../../domain/entities/Event";
 import { Flag } from "../../domain/entities/Flag";
 import { dayMS, defaultEventImage } from "../../domain/entities/frontEntities";
 import { Participant } from "../../domain/entities/Participant";
-import { ParticipantService } from "../../domain/repositories-ports/ParticipantRepository";
-import { EventApi } from "../providers/http/eventApi";
+import { EventRepositoryBase } from "../../domain/repositories-ports/EventRepositoryBase";
+import { ParticipantRepositoryBase } from "../../domain/repositories-ports/ParticipantRepositoryBase";
 import { eventCategories, getLabel, shortDateString } from "./utilsService";
 
 interface EventServiceI {
@@ -12,8 +12,14 @@ interface EventServiceI {
     getInfosInEvent(event: Event, userId: number): EventView;
 }
 
+
 export class EventService implements EventServiceI {
-    constructor() { }
+
+    constructor(
+        private participantRepository: ParticipantRepositoryBase, // Injectez l'interface
+        private eventRepository: EventRepositoryBase
+    ) { }
+
 
     //// UTILS
     getWeeksFull = (startDate: any, eventList: EventView[], numberOfWeeks: number): { date: Date, events: EventView[], text: string }[][] => {
@@ -57,10 +63,20 @@ export class EventService implements EventServiceI {
         return weeks;
     }
 
+    eventdateInfo = (event: Event) => {
+        return (
+            'de ' + new Date(event.start).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })
+            + " à " +
+            (new Date(event.start).toDateString() === new Date(event.end).toDateString() ?
+                new Date(event?.end).toISOString().slice(11, 16) :
+                new Date(event?.end).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })))
+    }
+
+
+    ////PRIVATE
     toggleParticipant = async (event: Event, userId: number) => {
-        const { postParticipant, deleteParticipant } = new ParticipantService();
         const isParticipant = event.Participants.find((participant: any) => participant.userId === userId) ? true : false;
-        isParticipant ? await deleteParticipant(event.id) : await postParticipant({ userId: userId, eventId: event.id });
+        isParticipant ? await this.participantRepository.deleteParticipant(event.id) : await this.participantRepository.postParticipant({ userId: userId, eventId: event.id });
     }
 
     generateCalendarLink(event: Event): string {
@@ -72,8 +88,6 @@ export class EventService implements EventServiceI {
         return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}&target=_blank`;
     }
 
-
-    ////PRIVATE
     private getImageForCategory(category: string): string {
         return defaultEventImage.find(categoryD => categoryD.type === category.toString())?.image || defaultEventImage[0].image;
     }
@@ -98,9 +112,11 @@ export class EventService implements EventServiceI {
             mine: event.userId === userId,
             pourcent: Math.floor((event.Participants?.length || 0) / event.participantsMin * 100),
             agendaLink: this.generateCalendarLink(event),
+            eventDateInfo: this.eventdateInfo(event),
+            isValidate: event.Participants.length >= event.participantsMin,
             toogleParticipate: async () => {
                 await this.toggleParticipant(event, userId);
-                const updatedEvent = await new EventApi().getEventById(event.id);
+                const updatedEvent = await this.eventRepository.getEventById(event.id);
                 return this.mapEventToEventView(updatedEvent, userId);
             },
         };

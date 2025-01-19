@@ -55,13 +55,14 @@ export class EventPUpdateDTO implements Partial<EventDTO> { }
 export interface EventView extends Event {
     actif?: boolean;
     days: Date[] | string[];
-    Igo?: boolean;
-    label?: string;
-    pourcent?: number;
-    flagged?: boolean;
-    mine?: boolean;
-    isValidate?: boolean;
-    agendaLink?: string;
-    toogleParticipate?: () => Promise<EventView>;
+    Igo: boolean;
+    label: string;
+    pourcent: number;
+    flagged: boolean;
+    mine: boolean;
+    isValidate: boolean;
+    agendaLink: string;
+    eventDateInfo: string;
+    toogleParticipate: () => Promise<EventView>;
 
 }
