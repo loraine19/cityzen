@@ -11,11 +11,10 @@ import UserContext from '../../../../contexts/user.context';
 import { Profile } from '../../../../domain/entities/Profile';
 import { AddressService } from '../../../../domain/repositories-ports/AddressRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { UserRepositoryImpl } from '../../../../infrastructure/repositoriesImpl/UserRespositoryImpl';
-import { UserApi } from '../../../../infrastructure/providers/http/userApi';
 import { ProfileRepositoryImpl } from '../../../../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
 import { ProfileApi } from '../../../../infrastructure/providers/http/profileApi';
 import { logOut } from '../../../../infrastructure/services/authService';
+import { UserApi } from '../../../../infrastructure/providers/http/userApi';
 
 
 export default function SignUpDetailPage() {
@@ -27,7 +26,7 @@ export default function SignUpDetailPage() {
     1 > 2 && console.log("avoid compile error", addressList)
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
-    const { getUserMe } = new UserRepositoryImpl()
+    const { getUserMe } = new UserApi()
     const { getAddresses, postAddress } = new AddressService()
     const { postProfile } = new ProfileRepositoryImpl(new ProfileApi())
 

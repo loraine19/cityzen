@@ -8,7 +8,6 @@ import { SurveyService } from "../../../../../domain/repositories-ports/SurveyRe
 import { dayMS, getLabel, surveyCategories, GenereMyActions } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, FlagIcon, ProgressSmallbar, Icon } from "../../../common/SmallComps";
-import { UserRepositoryImpl } from "../../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 
 
@@ -31,7 +30,7 @@ export function SurveyCard(props: SurveyCardProps) {
     const ended: boolean = pourcent < 100 && endDays <= 0 ? true : false
     const category: string = getLabel(survey.category, surveyCategories)
     const { deleteSurvey } = new SurveyService()
-    const { getUsers } = new UserRepositoryImpl(new UserApi())
+    const { getUsers } = new UserApi()
     const actions = GenereMyActions(survey, "survey", deleteSurvey)
     const haveImage = survey.image ? true : false
     const flagged: boolean = survey.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false

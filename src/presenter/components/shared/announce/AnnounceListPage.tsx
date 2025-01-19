@@ -105,7 +105,7 @@ export default function AnnounceListPage() {
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader qty={postList.length} type={`annonce ${categorySelected !== '' ? label : ''}`} />
-                <TabsMenu labels={announceTabs} subMenu={false} />
+                <TabsMenu labels={announceTabs} />
                 <div className="flex items-center justify-center gap-4 lg:px-8">
                     <CategoriesSelect categoriesArray={postCategories} change={change} categorySelected={categorySelected} />
                     <button onClick={switchClick}>

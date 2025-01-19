@@ -1,5 +1,4 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
-import { action } from "@material-tailwind/react/types/components/alert";
 import { useContext, useState } from "react";
 import UserContext from "../../../../../contexts/user.context";
 import { Flag } from "../../../../../domain/entities/Flag";
@@ -10,6 +9,7 @@ import { PostService } from "../../../../../domain/repositories-ports/PostReposi
 import { getLabel, postCategories, GenereMyActions, toggleLike } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
+import { Action } from "../../../../../domain/entities/frontEntities";
 
 
 
@@ -25,7 +25,7 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
     const ILike: boolean = post.Likes.find((like: Like) => like.userId === userId) ? true : false
     const label: string = getLabel(category, postCategories)
     const { deletePost } = new PostService()
-    const myActions: action[] = GenereMyActions(post, "annonce", deletePost)
+    const myActions: Action[] = GenereMyActions(post, "annonce", deletePost)
 
     return (
         <>

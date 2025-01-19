@@ -38,7 +38,7 @@ export function UserProvider({ children }: UserProviderType) {
     const { notifs, loadingNotifs } = DI.resolve('notifsViewModel');
     const [notifList, setNotifList] = useState<NotifView[]>(notifs ? notifs : []);
     const [userNotif, setUserNotif] = useState<number>(0);
-    const [userEmail, setUserEmail] = useState<string>('example@me.com');
+    const [userEmail] = useState<string>('example@me.com');
     const [userProfile, setUserProfile] = useState<Profile>(user ? user.Profile : {} as Profile);
 
     useEffect(() => {

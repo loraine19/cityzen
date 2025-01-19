@@ -10,7 +10,6 @@ import { dayMS, GenereMyActions } from "../../../../../infrastructure/services/u
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
-import { UserRepositoryImpl } from "../../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 
 
@@ -33,7 +32,7 @@ export function PoolCard(props: PoolCardProps) {
     const end: Date = new Date(new Date(createdAt).getTime() + 15 * dayMS)
     const disabledEditCTA: boolean = pourcent >= 100 ? true : false
     const { deletePool } = new PoolService()
-    const { getUsers } = new UserRepositoryImpl(new UserApi())
+    const { getUsers } = new UserApi()
 
     const actions: Action[] = GenereMyActions(pool, "pool", deletePool)
     const [needed, setNeeded] = useState<number>(usersLength - (OkVotes?.length || 0))

@@ -141,7 +141,7 @@ export default function ServicesPage() {
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader qty={serviceList.length} type={`service ${categorySelected !== '' ? label : ''}`} />
-                <TabsMenu labels={serviceTabs} subMenu={false} />
+                <TabsMenu labels={serviceTabs} />
                 {mines ? (
                     <CheckCard categoriesArray={boxArray} boxSelected={boxSelected} setBoxSelected={setBoxSelected} />
                 ) : (

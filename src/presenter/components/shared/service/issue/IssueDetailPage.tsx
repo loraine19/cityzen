@@ -12,8 +12,7 @@ import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from '../servicesComps/IssueCard';
 import { Action } from '../../../../../domain/entities/frontEntities';
-import { UserApi } from '../../../../../infrastructure/providers/http/userApi';
-import { UserRepositoryImpl } from '../../../../../infrastructure/repositoriesImpl/UserRespositoryImpl';
+import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
 
 
 export default function IssueDetailPage() {
@@ -26,13 +25,13 @@ export default function IssueDetailPage() {
     const [modos, setModos] = useState<User[]>([])
     const [statusValue, setStatusValue] = useState<number>(0);
     const { getIssueById, deleteIssue } = new IssueService()
-    const { getUserModos } = new UserRepositoryImpl(new UserApi())
+    const { getUsersModos } = new UserApi()
     const { getServiceById } = new ServiceService()
 
     const fetch = async () => {
         const idS = id ? parseInt(id) : 0;
         const issue = await getIssueById(idS);
-        const modos = await getUserModos()
+        const modos = await getUsersModos()
         const service = await getServiceById(idS)
         setIssue(issue);
         setService(issue.Service)

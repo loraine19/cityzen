@@ -106,7 +106,7 @@ export default function SurveyListPage() {
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader qty={list.length > 0 ? list.length : 'aucun'} type={tabSelected === "pools" && "cagnottes" || tabSelected === "surveys" && "sondages" || 'sondages ou cagnottes'} />
-                <TabsMenu labels={tabs} subMenu={false} />
+                <TabsMenu labels={tabs} />
                 <CheckCard
                     categoriesArray={boxArray}
                     boxSelected={boxSelected}

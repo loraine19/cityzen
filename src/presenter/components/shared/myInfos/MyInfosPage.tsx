@@ -9,7 +9,6 @@ import UserContext from '../../../../contexts/user.context';
 import { Profile } from '../../../../domain/entities/Profile';
 import { AddressService } from '../../../../domain/repositories-ports/AddressRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { UserRepositoryImpl } from '../../../../infrastructure/repositoriesImpl/UserRespositoryImpl';
 import { UserApi } from '../../../../infrastructure/providers/http/userApi';
 import { ProfileApi } from '../../../../infrastructure/providers/http/profileApi';
 import { ProfileRepositoryImpl } from '../../../../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
@@ -22,7 +21,7 @@ export default function MyInfosPage() {
     const [newProfile, setNewProfile] = useState<Profile>({} as Profile);
     const [skillList, setSkillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
     const [open, setOpen] = useState(false);
-    const { getUserMe } = new UserRepositoryImpl(new UserApi())
+    const { getUserMe } = new UserApi()
     const { getAddresses, postAddress } = new AddressService()
     const { updateProfile } = new ProfileRepositoryImpl(new ProfileApi())
 
