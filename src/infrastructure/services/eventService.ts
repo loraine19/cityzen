@@ -67,9 +67,9 @@ export class EventService implements EventServiceI {
         const start = new Date(event.start).toISOString().replace(/-|:|\.\d\d\d/g, "");
         const end = new Date(event.end).toISOString().replace(/-|:|\.\d\d\d/g, "");
         const title = encodeURIComponent(event.title);
-        const location = encodeURIComponent(event.Address.address + " " + event.Address.city || "");
+        const location = encodeURIComponent(`${event.Address.address} , ${event.Address.zipcode} ${event.Address.city}` || "");
         const details = encodeURIComponent(event.description || "");
-        return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+        return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}&target=_blank`;
     }
 
 

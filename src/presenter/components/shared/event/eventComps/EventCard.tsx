@@ -12,7 +12,7 @@ type EventCardProps = { event: EventView, change: (e: any) => void, mines?: bool
 
 export function EventCard({ event: initialEvent, change, mines, update }: EventCardProps) {
     const [event, setEvent] = useState<EventView>(initialEvent);
-    const { id, title, description, category, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate } = event;
+    const { id, title, description, category, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink } = event;
     const disabledEditCTA = pourcent >= 100;
     const { deleteEvent } = new EventApi();
     const actions = GenereMyActions(event, "evenement", deleteEvent);
@@ -22,8 +22,14 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
         <Card className="FixCard w-resp !h-max">
             <CardHeader className={haveImage ? "FixCardHeader !max-h-[26vh]" : "FixCardHeader NoImage"} floated={haveImage}>
                 <div className={`${haveImage ? "absolute h-full w-full flex flex-col justify-between items-end px-2 py-2" : "flex gap-4"} h-full w-full flex justify-end`}>
-                    <DateChip start={start} end={end} ended={new Date(end).getTime() < Date.now()} prefix="commence dans" />
+                    <div className="flex w-full justify-between items-center gap-2">
+                        <button onClick={change}>
+                            <Chip size='sm' value={label} className="rounded-full h-max CyanChip shadow" />
+                        </button>
+                        <DateChip start={start} end={end} ended={new Date(end).getTime() < Date.now()} prefix="commence dans" />
+                    </div>
                     <div className={`${!haveImage && "bg-blue-gray-100"} h-max w-full !rounded-full backdrop-blur flex items-center gap-2 shadow p-2`}>
+
                         {pourcent > 0 ? (
                             <Progress value={pourcent} color={pourcent > 100 ? "green" : "gray"} size="md" label={pourcent > 100 ? "Validé" : " "} />
                         ) : (
@@ -47,10 +53,8 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
             </CardBody>
             <CardFooter className="CardFooter">
                 {!mines ? (
-                    <div className="flex items-center gap-2">
-                        <button onClick={change}>
-                            <Chip value={label} className="rounded-full h-max CyanChip shadow" />
-                        </button>
+                    <div className="flex w-full items-center gap-2">
+                        <Icon icon='calendar_add_on' link={agendaLink as string} title={`ajouter a mon agenda ${title}`} fill bg size='2xl' style='!max-w-[1rem] !px-[5%] flex-0 -mr-4' color={Igo ? "cyan" : "gray"} />
                         <AvatarStack avatarDatas={event.Participants} />
                     </div>
                 ) : (

@@ -22,7 +22,7 @@ export default function CalendarCompLarge() {
 
     let num = 3
     const [col, setCol] = useState<number>(num)
-    const addCol = () => { col < 4 ? (num = col + 1) : (num = 4), setCol(num) }
+    const addCol = () => { col < 7 ? (num = col + 1) : (num = 7), setCol(num) }
     const removeCol = () => { col > 1 ? (num = col - 1) : (num = 1), setCol(num) }
     const resetCol = () => { num = 2, setCol(num) }
 
@@ -36,11 +36,15 @@ export default function CalendarCompLarge() {
         <Card className="relative overflow-auto flex h-[calc(100%-1rem)] bg-opacity-45 mt-2 px-2 flex-col rounded-lg text-center text-sm">
             <div className='z-50 flex w-full justify-between sticky top-0  p-1'>
                 <div className='flex gap-2 items-center bg-white rounded-2xl px-1 '>
-                    <button onClick={removeCol} disabled={col <= 1 ? true : false} ><span className='material-symbols-outlined !text-lg'>do_not_disturb_on</span></button>
+                    <button onClick={removeCol} disabled={col <= 1 ? true : false} >
+                        <span className='material-symbols-outlined !text-lg'>do_not_disturb_on</span>
+                    </button>
                     <button onClick={resetCol}>{col}</button>
-                    <button onClick={addCol} disabled={col >= 7 ? true : false}><span className='material-symbols-outlined !text-lg' >add_circle</span></button>
+                    <button onClick={addCol} disabled={col >= 7 ? true : false}>
+                        <span className='material-symbols-outlined !text-lg' >add_circle</span>
+                    </button>
                 </div>
-                <div className='flex lg:flex-1 bg-white rounded-2xl p-1 justify-around'>
+                <div className='flex lg:flex-1  rounded-2xl p-1 justify-around'>
                     <button onClick={removeWeek}>
                         <span className='material-symbols-outlined !text-sm'>arrow_back_ios</span>
                     </button>
@@ -76,11 +80,12 @@ export default function CalendarCompLarge() {
                      ${col === 2 && 'grid-cols-2'}
                      ${col === 3 && 'grid-cols-3'} 
                      ${col === 4 && 'grid-cols-4'} 
-                     ${col === 5 && 'grid-cols-5'}  
+                     ${col === 5 && 'grid-cols-5'} 
+                     ${col === 6 && 'grid-cols-6'}
+                       ${col === 7 && 'grid-cols-7'} 
                       grid  grid-cols-${col} rounded-lg  lg:grid-cols-7 h-full`}>
                         {week.map((day: any, indexDay: number) => (
                             <div className=' text-xs  h-[calc(50vh-9.5rem)]  flex flex-col py-1 px-2 text-center ' key={indexDay}>
-
                                 <Card className={` ${new Date(day.date).toDateString() === new Date().toDateString()
                                     && 'orange100'}  gap-1 lg:gap-2 flex items-center z-10 h-full`}>
                                     <div className='flex overflow-auto h-full flex-col z-50 max-h-52 w-[calc(100%+1.5rem)] gap-2 '>

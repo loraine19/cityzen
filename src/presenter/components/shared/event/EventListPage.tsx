@@ -8,7 +8,7 @@ import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
-import CalendarCompLarge from "../dashboard/CalendarComp";
+import CalendarComp from "../dashboard/CalendarComp";
 import { EventCard } from "./eventComps/EventCard";
 import DI from "../../../../di/ioc";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
@@ -120,7 +120,7 @@ export default function EventListPage() {
             )}
             {view === "event" && !loading &&
                 <main>
-                    <CalendarCompLarge />
+                    <CalendarComp />
                 </main>}
             <NavBarBottom addBtn={true} />
         </div>

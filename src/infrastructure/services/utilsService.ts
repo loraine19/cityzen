@@ -50,32 +50,7 @@ export const GetPathElement = (type: string) => type === "post" ? "annonce" : ty
 export const GetArrayElement = (type: string) => type === "annonce" ? "posts" : type === "evenement" ? "events" : type === "sondage" ? "surveys" : type === "cagnotte" ? "pools" : type === "service" ? "services" : type === "litige" ? "issues" : ""
 
 
-//// CALENDAR FUNCTIONS 
-export const getWeek = (date: any, eventList: any[]) => {
-    let week = [];
-    date = new Date(date);
-    const weekDay = date.getDay();
-    const lundi = date.getTime() - ((weekDay - 1) * dayMS)
-    while (week.length < 7) {
-        for (let i = 0; i < 7; i++) {
-            const nextDay = (new Date((lundi) + (i * dayMS)))
-            let dateInfos = { date: (nextDay), events: [], text: shortDateString(nextDay) }
-            week.push(dateInfos);
-        }
-    }
-    for (const eventT of eventList) {
-        for (let i = 0; i < week.length; i++) {
-            if (eventT.days) {
-                if ((eventT.days).find((day: Date) =>
-                    (new Date(day)).toLocaleDateString() === (new Date(week[i].date)).toLocaleDateString())) {
-                    week[i].events.push(eventT as never)
-                    week[i].events.sort((a: any, b: any) => new Date(b.days.length).getTime() - new Date(a.days.length).getTime())
-                }
-            }
-        }
-    }
-    return week
-}
+
 
 
 
@@ -90,20 +65,10 @@ export const eventdateInfo = (event: EventView) => {
         'de ' + new Date(event.start).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })
         + " à " +
         (new Date(event.start).toDateString() === new Date(event.end).toDateString() ?
-            new Date(event.end).toISOString().slice(11, 16) :
-            new Date(event.end).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })))
+            new Date(event?.end).toISOString().slice(11, 16) :
+            new Date(event?.end).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })))
 }
 
-export const getWeeks = (day: any, eventList: EventView[], numberOfwweks: number) => {
-    const weeks: any[] = [];
-    if (weeks.length < numberOfwweks) {
-        for (let i = 0; i < numberOfwweks; i++) {
-            weeks.push(getWeek(day, eventList))
-            day = new Date(new Date(day).getTime() + 1 * 7 * dayMS)
-        }
-    }
-    return weeks
-}
 
 ///// DELET ELEMENT NOTIF / FLAG 
 
@@ -117,9 +82,6 @@ export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any)
     confirm(" voulez vous supprimer " + array[index].element.title + " ?") && array.splice(index, 1); setArray([...array])
 
 }
-
-
-
 
 
 export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefined, keyOf?: string) => {
@@ -139,7 +101,6 @@ export const GetCategory = (service: Service, categories: Label[]): string => {
 export const isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
 
 
-
 export const takeElement = (id: number, array: Service[], setArray: any, userProfile: Profile) => {
     let index = array.findIndex((element: Service) => element.id === id);
     if (array[index].userIdResp === userProfile?.userId) {
@@ -155,7 +116,6 @@ export const takeElement = (id: number, array: Service[], setArray: any, userPro
 
 
 //// NEW FUNCTIONS
-
 
 
 export const toggleLike = async (postId: number, userId: number, setPost: any) => {
@@ -181,8 +141,6 @@ export const toggleValidResp = async (serviceId: number, userId: number, setServ
 };
 
 
-
-export const Igo = (element: EventView, userId: number): boolean => { return element.Participants.find((particpant: any) => particpant.userId === userId) ? true : false };
 
 export async function addressIn(formik: any, newElement: EventView | Profile) {
     const AdressToSearch = formik.values.Address

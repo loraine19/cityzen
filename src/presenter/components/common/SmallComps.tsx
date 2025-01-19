@@ -89,7 +89,7 @@ export function Icon(props: {
     const { title, icon, disabled } = props
     let size = props.size || "2xl"
     size === '5xl' && (size = '[2.8rem]')
-    const pad = props.bg ? '!px-[10%]' : 'px-1'
+    const pad = props.bg ? 'px-[11%]' : 'px-1'
     const fill = props.fill ? "fillThin" : ""
     const onClick = props.onClick
     const color = !disabled ? props.color : "gray"
@@ -97,7 +97,7 @@ export function Icon(props: {
     const bg = (props.bg && props.color) && `bg-${color}-500 bg-opacity-30 ` || props.bg && "!bg-gray-300" || ''
     const style = props.style || ""
     const link = props.link || ""
-    const classIcon = `icon notranslate pt-0.5 flex items-center justify-center !text-${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
+    const classIcon = `icon notranslate pt-0.5  flex items-center justify-center !text-${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
     const classActive = `hover:!bg-${color}-500 hover:bg-opacity-50 hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out ${!bg && `hover:!bg-gray-300 `}`
     const span =
         <span title={title} className={`${classIcon} `}> {icon}</span>

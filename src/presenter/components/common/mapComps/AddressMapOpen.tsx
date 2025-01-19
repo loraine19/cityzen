@@ -36,7 +36,7 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
     return (
         <Popover open={open} >
             <PopoverHandler>
-                <div className=' flex flex-1 min-h-28  !h-[100%] !rounded-2xl  shadow'>
+                <div className=' flex flex-1 min-h-[5.5rem]  !h-[100%] !rounded-2xl  shadow'>
                     <Icon icon='expand_content' fill size='3xl' onClick={() => setOpen(true)} style={'absolute lg:top-16 right-6 rounded-full !z-50 !px-1.5 '} title='Ouvrir la carte' />
                     <MapContainer center={position} zoom={16} scrollWheelZoom={false} className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
                         <TileLayer

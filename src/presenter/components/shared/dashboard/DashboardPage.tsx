@@ -123,7 +123,7 @@ export default function DashboardPage() {
                     <div className={eventClasse}>
                         <Card className="h-full flex-1  gray100">
                             <CardBody className="h-full flex flex-col p-4 ">
-                                <CalendarComp />
+                                <CalendarComp logo={true} />
                             </CardBody>
                         </Card>
                     </div>

@@ -7,7 +7,9 @@ import DI from '../../../../di/ioc'
 import { EventService } from '../../../../infrastructure/services/eventService';
 import { day } from '../../../../domain/entities/frontEntities';
 
-export default function CalendarCompLarge() {
+
+export default function CalendarCompLarge(props: { logo?: boolean }) {
+    const { logo } = props
     const { events, loadingEvents, errorEvents } = DI.resolve('eventViewModel');
     const eventService = DI.resolve<EventService>('eventService');
     const [numberOfwweks, setNumberOfwweks] = useState<number>(2)
@@ -41,7 +43,7 @@ export default function CalendarCompLarge() {
     return (
         <div className='flex flex-col flex-1 '>
             <div className="flex  justify-between  gap-1 items-center p-0">
-                <div className='flex gap-2 items-center'>
+                {logo && <div className='flex gap-2 items-center'>
                     <Icon fill icon="supervised_user_circle" link="/evenements" size="4xl"
                         title='Voir tous les événements' />
                     <div>
@@ -49,19 +51,27 @@ export default function CalendarCompLarge() {
                             Évenements
                         </Typography>
                     </div>
-                </div>
+                </div>}
                 <div className='flex  w-full justify-between items-center flex-row-reverse'>
                     <div className='flex gap-1 items-center'>
                         <button onClick={removeWeek}><span className='icon notranslate !text-sm'>arrow_back_ios</span></button>
                         <button onClick={resetWeek}>{(new Date().toLocaleDateString('fr-FR', { weekday: 'short', month: 'numeric', day: 'numeric' }))}</button>
                         <button onClick={addWeek}><span className='icon notranslate !text-sm'>arrow_forward_ios</span></button>
                     </div>
-                    <div className='flex gap-2 items-center lg:hidden'>
+                    <div className='flex gap-5 items-center px-4'>  <div className={`flex gap-2 items-center `}>
+                        jours
                         <button onClick={removeCol}><span className='material-symbols-rounded notranslate !text-lg'>do_not_disturb_on</span></button>
                         <button onClick={resetCol}>{col}</button>
                         <button onClick={addCol}><span className='material-symbols-rounded notranslate !text-lg'>add_circle</span></button>
                     </div>
-                </div>
+                        {!logo &&
+                            <div className='flex gap-2 px-2 items-center'>
+                                semaine
+                                <button onClick={() => setNumberOfwweks(numberOfwweks > 1 ? numberOfwweks - 1 : 1)}><span className='material-symbols-rounded notranslate !text-lg'>remove_circle</span></button>
+                                <button onClick={() => setNumberOfwweks(2)}>{numberOfwweks}</button>
+                                <button onClick={() => setNumberOfwweks(numberOfwweks < 4 ? numberOfwweks + 1 : 4)}><span className='material-symbols-rounded notranslate !text-lg'>add_circle</span></button>
+                            </div>}
+                    </div></div>
             </div>
             <div className='relative max-h-full w-full flex flex-1 '>
                 {loadingEvents || errorEvents ? (
@@ -83,7 +93,7 @@ export default function CalendarCompLarge() {
                     </div>
                 ) : (<div className=' absolute flex flex-col flex-1 h-full p-2 gap-2  w-full rounded-2xl bg-white shadow '>
                     {weeks.map((week: any, key: number) => (
-                        <div key={key} className={` grid rounded-lg lg:grid-cols-7 h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
+                        <div key={key} className={` grid rounded-lg  h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
                             ${col === 1 && 'grid-cols-1'} 
                             ${col === 2 && 'grid-cols-2'}
                             ${col === 3 && 'grid-cols-3'}
