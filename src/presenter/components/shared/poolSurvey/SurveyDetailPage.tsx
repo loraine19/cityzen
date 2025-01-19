@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import UserContext from '../../../../contexts/user.context';
 import { Survey } from '../../../../domain/entities/Survey';
 import { SurveyService } from '../../../../domain/repositories-ports/SurveyRepository';
-import { GenereMyActions, getLabel, surveyCategories } from '../../../../utils/GetDataFunctions';
+import { GenereMyActions, getLabel, surveyCategories } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';

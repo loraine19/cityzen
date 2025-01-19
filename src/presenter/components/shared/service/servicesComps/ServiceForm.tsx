@@ -2,7 +2,7 @@ import { Radio, Select, Card, CardHeader, Button, Typography, Chip, CardBody, In
 import { useContext, useState, useEffect } from "react";
 import UserContext from "../../../../../contexts/user.context";
 import { Label } from "../../../../../domain/entities/frontEntities";
-import { GetPoints, serviceCategories, getImageBlob } from "../../../../../utils/GetDataFunctions";
+import { GetPoints, serviceCategories, getImageBlob } from "../../../../../infrastructure/services/utilsService";
 import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
 

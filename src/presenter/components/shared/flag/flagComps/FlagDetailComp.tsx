@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { User } from "../../../../../domain/entities/User";
 import { Flag } from "../../../../../domain/entities/Flag";
-import { getLabel, flagTargets } from "../../../../../utils/GetDataFunctions";
+import { getLabel, flagTargets } from "../../../../../infrastructure/services/utilsService";
 
 export default function FlagDetailComp(props: { flag: Flag, element?: any, label?: string }) {
     const { flag } = props

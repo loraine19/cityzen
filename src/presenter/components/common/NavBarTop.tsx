@@ -5,10 +5,9 @@ import UserContext from "../../../contexts/user.context";
 import { Icon, NotifBadge } from "./SmallComps";
 
 export default function NavBarTop() {
-    const { userProfile, userNotif } = useContext(UserContext);
-    const { firstName, image } = userProfile;
+    const { user, notifList, } = useContext(UserContext);
+    const { firstName, image } = user && user.Profile || {} as any;
     const navigate = useNavigate();
-
 
     return (
         <div className="flex justify-between w-full items-center py-3">
@@ -58,7 +57,7 @@ export default function NavBarTop() {
                     <Typography color="blue-gray" className="-mt-1">Quartier</Typography>
                 </div>
             </div>
-            <NotifBadge qty={userNotif} />
+            <NotifBadge notifList={notifList} />
         </div>
     )
 }

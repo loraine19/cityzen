@@ -6,7 +6,7 @@ import UserContext from "../../../../../contexts/user.context";
 import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { PoolService } from "../../../../../domain/repositories-ports/PoolRepository";
-import { dayMS, GenereMyActions } from "../../../../../utils/GetDataFunctions";
+import { dayMS, GenereMyActions } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";

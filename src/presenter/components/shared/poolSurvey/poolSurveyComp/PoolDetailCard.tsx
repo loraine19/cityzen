@@ -4,7 +4,7 @@ import UserContext from "../../../../../contexts/user.context";
 import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Vote } from "../../../../../domain/entities/Vote";
-import { dayMS } from "../../../../../utils/GetDataFunctions";
+import { dayMS } from "../../../../../infrastructure/services/utilsService";
 import { DateChip, ProfileDiv, ProgressSmallbar, Icon } from "../../../common/SmallComps";
 import { UserRepositoryImpl } from "../../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";

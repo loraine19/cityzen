@@ -18,38 +18,37 @@ export default function NavBarBottom(props: { handleClick?: () => void, addBtn?:
         <footer className="pt-0.5 pb-2 px-2 z-30">
             <Navbar className="flex rounded-full shadow-lg h-16 items-center justify-between p-0 !bg-white"
             >
-                <div className="w-full self-center p-4 pb-3">
-                    <ul className={`flex flex-row justify-around `}>
-
+                <div className="w-full self-center px-4 h-full -mb-1">
+                    <ul className={`flex flex-row justify-around gap-4 pl-2 h-full  `}>
                         < Typography
                             as="li"
                             variant="small"
                             color="blue-gray"
-                            className="flex items-center font-medium " >
-                            <NavLink to="/" className="flex flex-col items-center gap-0 lg:flex-row lg:gap-2 " >
+                            className="flex flex-1  justify-center items-center font-medium " >
+                            <NavLink to="/" className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full ${isActive && 'border-b-4 border-blue-gray-600 '}`} >
                                 <span className={`icon notranslate `}
                                 >home</span>
-                                <span className="text-[0.7rem] font-light lg:block lg:text-sm">Home</span>
+                                <span className="text-[0.7rem] -mt-1 font-light lg:block lg:text-sm">Home</span>
                             </NavLink>
                         </Typography >
                         < Typography
                             as="li"
                             variant="small"
                             color="blue-gray"
-                            className="flex items-center font-medium " >
-                            <NavLink to="/service" className="flex flex-col items-center gap-0 lg:flex-row lg:gap-2" >
+                            className="flex flex-1 justify-center items-center font-medium " >
+                            <NavLink to="/service" className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full ${isActive && 'border-b-4 border-cyan-600'}`}>
                                 <span className="icon notranslate UCyan">partner_exchange</span>
-                                <span className="text-[0.7rem] font-light lg:block lg:text-sm">Service</span>
+                                <span className="text-[0.7rem] -mt-1 font-light lg:block lg:text-sm">Service</span>
                             </NavLink>
                         </Typography >
                         < Typography
                             as="li"
                             variant="small"
                             color="blue-gray"
-                            className="flex items-center font-medium " >
-                            <NavLink to="/evenement" className="flex flex-col items-center gap-0 lg:flex-row lg:gap-2">
-                                <span className="icon notranslate UCyan">event</span>
-                                <span className="text-[0.7rem] font-light lg:block lg:text-sm">Évenements</span>
+                            className="flex flex-1 h-full justify-center items-center font-medium " >
+                            <NavLink to="/evenement" className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full ${isActive && 'border-b-4 border-cyan-600'}`}>
+                                <span className="icon notranslate ">event</span>
+                                <span className="text-[0.7rem] -mt-1 font-light lg:block lg:text-sm">Évenements</span>
                             </NavLink>
                         </Typography >
 
@@ -57,10 +56,10 @@ export default function NavBarBottom(props: { handleClick?: () => void, addBtn?:
                             as="li"
                             variant="small"
                             color="blue-gray"
-                            className="flex items-center font-medium " >
-                            <NavLink to="/annonce" className="flex flex-col items-center gap-0 lg:flex-row lg:gap-2">
+                            className="flex flex-1 h-full justify-center items-center font-medium " >
+                            <NavLink to="/annonce" className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full ${isActive && 'border-b-4 border-orange-600'}`}>
                                 <span className="icon notranslate UOrange ">dashboard</span>
-                                <span className="text-[0.7rem] font-light lg:block lg:text-sm">Annonces</span>
+                                <span className="text-[0.7rem] -mt-1 font-light lg:block lg:text-sm">Annonces</span>
                             </NavLink>
                         </Typography >
 
@@ -68,10 +67,10 @@ export default function NavBarBottom(props: { handleClick?: () => void, addBtn?:
                             as="li"
                             variant="small"
                             color="blue-gray"
-                            className="flex items-center font-medium " >
-                            <NavLink to="/sondage" className="flex flex-col items-center gap-0 lg:flex-row lg:gap-2">
+                            className="flex flex-1 h-full justify-center  items-center font-medium " >
+                            <NavLink to="/sondage" className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full ${isActive && 'border-b-4 border-orange-600'}`}>
                                 <span className="icon notranslate UOrange">ballot</span>
-                                <span className="text-[0.7rem] font-light lg:block lg:text-sm">Sondage</span>
+                                <span className="text-[0.7rem] -mt-1 font-light lg:block lg:text-sm">Sondage</span>
                             </NavLink>
                         </Typography >
                     </ul >

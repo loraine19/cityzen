@@ -1,9 +1,7 @@
 import { Avatar, Chip, List, ListItem, ListItemPrefix, Menu, MenuHandler, MenuItem, MenuList, Popover, PopoverContent, PopoverHandler, Progress, Typography, } from "@material-tailwind/react";
-import { dayMS, GetPathElement } from "../../../utils/GetDataFunctions"
+import { dayMS } from "../../../infrastructure/services/utilsService"
 import { Link, } from "react-router-dom";
-import UserContext from "../../../contexts/user.context";
-import { useContext } from "react";
-import { Notif } from "../../../domain/entities/Notif";
+import { NotifView } from "../../../domain/entities/Notif";
 import { Profile } from "../../../domain/entities/Profile";
 
 export function DateChip(props: { start: Date | string, end?: Date | string, ended?: boolean, prefix?: string }) {
@@ -37,38 +35,45 @@ export function FlagIcon(props: { flagged: boolean, id: number, type: string }) 
     )
 }
 
-export function NotifBadge(props: { qty: number }) {
-    const { qty } = props
+export function NotifBadge(props: { notifList: NotifView[] }) {
+    const { notifList } = props
+    const qty: number = notifList && notifList.filter(notif => notif?.read === false).length
     const unReadNotif: boolean = qty > 0
-    const { notifList } = useContext(UserContext)
     const color = unReadNotif ? 'orange' : 'gray'
 
     return (
         <div className="relative w-max ">
             <div>
                 <Menu placement="bottom-end" >
-                    <MenuHandler>
-                        <Chip className={`${unReadNotif ? "absolute flex font-medium  items-center justify-center w-7 h-7 text-sm pt-2  rounded-full bottom-0 right-9 shadow z-30" : "hidden"}`} color="cyan" value={qty}>
+                    <MenuHandler title="Notifications">
+                        <Chip className={`${unReadNotif ? "absolute flex font-medium  items-center justify-center w-7 h-7 text-sm pt-1.5  rounded-full bottom-0 right-8 shadow z-30" : "hidden"}`} color="cyan" value={qty}>
                         </Chip>
                     </MenuHandler>
                     <MenuList className="flex flex-col  max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3  rounded-2xl backdrop-blur-2xl">
                         <div className="overflow-auto flex flex-col gap-1">
-                            {notifList.map((notif: Notif, index: number) => notif.read === false &&
-                                <MenuItem className="flex flex-col  " key={index}>
-                                    <div className="flex items-center justify-between">
-                                        <Chip value={GetPathElement(notif.element.toString().toLowerCase())} className="rounded-full w-max h-max text-ellipsis pt-1.5  " size='sm' color="cyan">
-                                        </Chip>
-                                        <Typography className="flex items-center gap-1 text-xs font-normal text-blue-gray-500"> mise à jour : {new Date(notif.updatedAt).toLocaleDateString('fr-FR')} à {new Date(notif.updatedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                                        </Typography></div>
-                                    <div className="flex items-center justify-between gap-1">
-                                        <Typography variant="small" color="gray" className="font-semibold truncate">
-                                            {notif.title}
-                                        </Typography>
-                                        <Icon icon="arrow_circle_right" link={`/${GetPathElement(notif.element.toString().toLowerCase())}/${notif.id}`} color="blue-gray" size="3xl" />
-                                    </div>
-                                </MenuItem>
-                            )}
+                            {qty === 0 || !notifList ? (
+                                <div className="flex items-center justify-center p-4">
+                                    <Typography variant="small" color="gray" className="font-normal">
+                                        Aucune nouvelle notification
+                                    </Typography>
+                                </div>)
+                                : (notifList.map((notif: NotifView, index: number) => notif.read === false &&
+                                    <MenuItem className="flex flex-col  " key={index}>
+                                        <div className="flex items-center justify-between">
+                                            <Chip value={notif.elementType} className="rounded-full w-max h-max text-ellipsis pt-1.5  " size='sm' color="cyan">
+                                            </Chip>
+                                            <Typography className="flex items-center gap-1 text-xs font-normal text-blue-gray-500"> {notif.update}
+                                            </Typography></div>
+                                        <div className="flex items-center justify-between gap-1">
+                                            <Typography variant="small" color="gray" className="font-semibold truncate">
+                                                {notif.title}
+                                            </Typography>
+                                            <Icon icon="arrow_circle_right" link={`/${notif.elementType}/${notif.id}`} color="blue-gray" size="3xl" />
+                                        </div>
+                                    </MenuItem>)
+                                )}
                         </div>
+
                     </MenuList>
                 </Menu>
             </div>

@@ -1,4 +1,4 @@
-import { EventP } from "./Events";
+import { Event } from "./Event";
 import { Post } from "./Post";
 import { Service } from "./Service";
 import { Survey } from "./Survey";
@@ -31,7 +31,7 @@ export class Flag {
     updatedAt: Date = new Date();
     Service?: Service = new Service();
     Post?: Post = new Post();
-    Event?: EventP = new EventP();
+    Event?: Event = new Event();
     Survey?: Survey = new Survey();
 }
 

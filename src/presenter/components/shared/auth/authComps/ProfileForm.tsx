@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../../../../../contexts/user.context";
 import { Profile, assistanceLevel } from "../../../../../domain/entities/Profile";
-import { getImageBlob } from "../../../../../utils/GetDataFunctions";
+import { getImageBlob } from "../../../../../infrastructure/services/utilsService";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import { Address } from "../../../../../domain/entities/Address";
 

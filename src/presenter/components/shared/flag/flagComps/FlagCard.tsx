@@ -3,7 +3,7 @@ import { Icon } from "../../../common/SmallComps";
 import { useNavigate } from "react-router-dom";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { FlagService } from "../../../../../domain/repositories-ports/FlagRepository";
-import { getLabel, flagTargets, flagReasons } from "../../../../../utils/GetDataFunctions";
+import { getLabel, flagTargets, flagReasons } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 
 export function FlagCard(props: { flag: Flag, update: () => void }) {

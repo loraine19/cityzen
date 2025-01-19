@@ -7,7 +7,7 @@ import { Pool } from "../../../../domain/entities/Pool";
 import { Survey } from "../../../../domain/entities/Survey";
 import { PoolService, PoolSurveyService } from "../../../../domain/repositories-ports/PoolRepository";
 import { SurveyService } from "../../../../domain/repositories-ports/SurveyRepository";
-import { dayMS } from "../../../../utils/GetDataFunctions";
+import { dayMS } from "../../../../infrastructure/services/utilsService";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";

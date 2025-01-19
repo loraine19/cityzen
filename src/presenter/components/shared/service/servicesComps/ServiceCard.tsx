@@ -5,7 +5,7 @@ import UserContext from "../../../../../contexts/user.context";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, ServiceStep } from "../../../../../domain/entities/Service";
 import { ServiceService } from "../../../../../domain/repositories-ports/ServiceRepository";
-import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal, GenereMyActions, toggleResp } from "../../../../../utils/GetDataFunctions";
+import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal, GenereMyActions, toggleResp } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";

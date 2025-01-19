@@ -3,7 +3,8 @@ export interface Notif {
     id: number;
     element: ElementNotif;
     updatedAt: Date;
-    [key: string]: any;
+    read: boolean;
+    userId: number;
 }
 
 
@@ -15,5 +16,11 @@ export enum ElementNotif {
     SURVEY,
     POOL,
     FLAG,
+}
+
+export interface NotifView extends Notif {
+    elementType: string;
+    relation: string;
+    update: string;
 }
 export const notifCategory = Object.values(ElementNotif).filter(category => typeof category === 'string');

@@ -6,7 +6,7 @@ import UserContext from "../../../../../contexts/user.context"
 import { Issue } from "../../../../../domain/entities/Issue"
 import { Service } from "../../../../../domain/entities/Service"
 import { User } from "../../../../../domain/entities/User"
-import { getImageBlob } from "../../../../../utils/GetDataFunctions"
+import { getImageBlob } from "../../../../../infrastructure/services/utilsService"
 
 
 

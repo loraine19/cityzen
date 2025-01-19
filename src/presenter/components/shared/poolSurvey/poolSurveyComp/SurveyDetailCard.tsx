@@ -5,7 +5,7 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote";
-import { dayMS, getLabel, surveyCategories } from "../../../../../utils/GetDataFunctions";
+import { dayMS, getLabel, surveyCategories } from "../../../../../infrastructure/services/utilsService";
 import { DateChip, FlagIcon, ProgressSmallbar, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { UserRepositoryImpl } from "../../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";
@@ -29,7 +29,7 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
     const category = getLabel(element.category, surveyCategories)
     const OkVotes = Votes?.filter((vote: Vote) => vote.opinion as unknown as string === 'OK')
     const [needed, setNeeded] = useState<number>(usersLength - (OkVotes?.length || 0))
-    const { getUsers } = new UserRepositoryImpl(new UserApi())
+    const { getUsers } = new UserRepositoryImpl()
 
     useEffect(() => {
         const onload = async () => {

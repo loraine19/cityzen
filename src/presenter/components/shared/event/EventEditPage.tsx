@@ -4,18 +4,18 @@ import { date, number, object, string, ref } from 'yup';
 import { useEffect, useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
 import Skeleton from 'react-loading-skeleton';
-import { EventP } from '../../../../domain/entities/Events';
-import { EventService } from '../../../../domain/repositories-ports/EventRepository';
-import { addressIn } from '../../../../utils/GetDataFunctions';
+import { EventView } from '../../../../domain/entities/Event';
+import { addressIn } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
+import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
 
 export default function EventDetailPage() {
     const { id } = useParams()
-    const [newEvent, setNewEvent] = useState<EventP>({} as EventP);
+    const [newEvent, setNewEvent] = useState<EventView>({} as EventView);
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(true)
-    const { getEventById, patchEvent } = new EventService()
+    const { getEventById, patchEvent } = new EventApi()
     const fetchEvent = async () => {
         const idS = id ? parseInt(id) : 0;
         try {
@@ -53,7 +53,7 @@ export default function EventDetailPage() {
     })
 
     const formik = useFormik({
-        initialValues: newEvent as EventP,
+        initialValues: newEvent as EventView,
         validationSchema: formSchema,
         onSubmit: values => {
             addressIn(formik, newEvent);

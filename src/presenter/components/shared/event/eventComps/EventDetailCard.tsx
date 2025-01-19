@@ -1,30 +1,21 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, } from "@material-tailwind/react";
 import { AvatarStack } from "./AvatarStack";
-import { useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import UserContext from "../../../../../contexts/user.context";
-import { EventP } from "../../../../../domain/entities/Events";
-import { Flag } from "../../../../../domain/entities/Flag";
-import { defaultEventImage } from "../../../../../domain/entities/frontEntities";
-import { Participant } from "../../../../../domain/entities/Participant";
-import { getLabel, eventCategories, eventdateInfo, toggleParticipant } from "../../../../../utils/GetDataFunctions";
+import { EventView } from "../../../../../domain/entities/Event";
+import { eventdateInfo } from "../../../../../infrastructure/services/utilsService";
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
-import { DateChip, ProgressLargebar, FlagIcon, ProfileDiv } from "../../../common/SmallComps";
+import { DateChip, ProgressLargebar, ProfileDiv, Title } from "../../../common/SmallComps";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-
-type EventCardProps = { Event: EventP, change?: (e: any) => void, setEvent?: any }
+type EventCardProps = { Event: EventView, change?: (e: any) => void, setEvent?: any }
 export function EventDetailCard(props: EventCardProps) {
-    const { Event, setEvent } = props
-    const { id, title, description, category, participantsMin, Participants, User, Address, Flags, end, start } = Event
-    const { userProfile } = useContext(UserContext)
-    const userId: number = userProfile.userId
-    const Igo: boolean = Participants.find((participant: Participant) => participant.userId === userId) ? true : false
-    const flagged: boolean = Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
-    const pourcentParticipants: number = Math.floor((Participants.length) / participantsMin * 100)
-    const imgCategory: string | undefined | Blob = (defaultEventImage.find(categoryD => categoryD.type === category.toString()) ?
-        defaultEventImage.find(categoryD => categoryD.type === category.toString())?.image : defaultEventImage[0].image);
-    const [image] = useState<string>(props.Event.image ? (props.Event.image) as any : (imgCategory));
-    const author = User.Profile
+    const [Event, setEvent] = useState<EventView>(props.Event)
+    const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink } = Event
+    const author = User?.Profile
+    useEffect(() => {
+        setEvent(props.Event)
+    }, [props])
 
     return (
         <div className="pt-6 pb-1 h-full flex">
@@ -32,25 +23,29 @@ export function EventDetailCard(props: EventCardProps) {
                 <CardHeader className="FixCardHeader min-h-[28vh]">
                     <div className="absolute h-full w-full z-70 p-4  flex flex-col  justify-between items-end ">
                         <div className="flex w-full items-center justify-between gap-2">
-                            <Chip value={getLabel(category, eventCategories)} className="rounded-full h-max shadow" color="cyan">
+                            <Chip value={label} className="CyanChip rounded-full h-max shadow" size='sm'>
                             </Chip>
                             <DateChip start={start} end={end} ended={new Date(end).getTime() < Date.now()} prefix={'commence dans '} />
                         </div>
-                        <ProgressLargebar value={pourcentParticipants} float={true} label="Participants" />
+                        <ProgressLargebar value={pourcent || 0} float={true} label="Participants" />
                     </div>
-                    <img src={image} alt={title} className="h-full w-full object-cover" />
+                    < img src={image as string} alt={title} className="h-full w-full object-cover" />
                 </CardHeader>
                 <CardBody className="FixCardBody">
-                    <div className="flex items-center justify-between">
-                        <Typography variant="h5" color="blue-gray" className="flex flex-col mb-1">
-                            {title}<br></br>
-                            <span className="text-sm font-medium text-blue-gray-500">{eventdateInfo(props.Event)}</span>
-                        </Typography>
-                        <FlagIcon flagged={flagged} id={id} type="event" />
-                    </div>
-                    <div className=" flex  flex-col flex-1 gap-x-3 py-1 lg:flex-row">
-                        <div className=" relative flex flex-col  flex-auto overflow-auto">
+
+
+                    <Title title={title} flagged={flagged} id={id} CreatedAt={start} subTitle={eventdateInfo(props.Event)} />
+
+
+
+                    <div className=" flex   flex-1 gap-x-3 py-1 md:flex-row">
+                        <div className=" relative flex lex-col  flex-auto overflow-auto">
                             <div className="h-max break-all absolute ">
+                                <Link to={agendaLink as string}
+                                    className={`${Igo ? 'GreenChip' : 'GrayChip'} w-max rounded-full mb-1 py-0.5 px-2 text-xs font-medium flex items-center gap-1`} title="ajouter a mon agenda">
+                                    <span className="material-symbols-outlined !text-[1.2rem] !m-0 !pt-0.5">calendar_add_on</span>
+                                    ajouter a mon agenda
+                                </Link>
                                 <Typography >
                                     {description}
                                 </Typography>
@@ -65,7 +60,7 @@ export function EventDetailCard(props: EventCardProps) {
                     <ProfileDiv profile={author} />
                     <div className="flex items-center gap-2">
                         <AvatarStack avatarDatas={Participants} />
-                        <button onClick={() => toggleParticipant(id, userId, setEvent)}>
+                        <button onClick={async () => toogleParticipate && setEvent(await toogleParticipate())}>
                             <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center pr-3 pl-6 pt-2"
                                 icon={<span className={`${Igo && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem] pt-0.5 pl-2`}>person</span>}>
                             </Chip>

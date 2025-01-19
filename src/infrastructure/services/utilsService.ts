@@ -1,42 +1,27 @@
 import { useNavigate } from "react-router";
-import { EventP, eventCategory } from "../domain/entities/Events";
-import { Flag, flagTarget, flagReason } from "../domain/entities/Flag";
-import { Label, Action, defaultEventImage } from "../domain/entities/frontEntities";
-import { Issue } from "../domain/entities/Issue";
-import { Pool } from "../domain/entities/Pool";
-import { Post, postCategory } from "../domain/entities/Post";
-import { Profile, AssistanceLevel } from "../domain/entities/Profile";
-import { Service, serviceType, serviceCategory, serviceStep, HardLevel, SkillLevel } from "../domain/entities/Service";
-import { Survey, surveyCategory } from "../domain/entities/Survey";
-import { User } from "../domain/entities/User";
-import { Address } from "../domain/entities/Address";
-import { notifCategory } from "../domain/entities/Notif";
-import { AddressService } from "../domain/repositories-ports/AddressRepository";
-import { EventService } from "../domain/repositories-ports/EventRepository";
-import { LikeService } from "../domain/repositories-ports/LikeRepository";
-import { ParticipantService } from "../domain/repositories-ports/ParticipantRepository";
-import { PostService } from "../domain/repositories-ports/PostRepository";
-import { ServiceService } from "../domain/repositories-ports/ServiceRepository";
+import { EventView, eventCategory } from "../../domain/entities/Event";
+import { Flag, flagTarget, flagReason } from "../../domain/entities/Flag";
+import { Label, Action, defaultEventImage } from "../../domain/entities/frontEntities";
+import { Issue } from "../../domain/entities/Issue";
+import { Pool } from "../../domain/entities/Pool";
+import { Post, postCategory } from "../../domain/entities/Post";
+import { Profile, AssistanceLevel } from "../../domain/entities/Profile";
+import { Service, serviceType, serviceCategory, serviceStep, HardLevel, SkillLevel } from "../../domain/entities/Service";
+import { Survey, surveyCategory } from "../../domain/entities/Survey";
+import { User } from "../../domain/entities/User";
+import { Address } from "../../domain/entities/Address";
+import { notifCategory } from "../../domain/entities/Notif";
+import { AddressService } from "../../domain/repositories-ports/AddressRepository";
+import { LikeService } from "../../domain/repositories-ports/LikeRepository";
+import { PostService } from "../../domain/repositories-ports/PostRepository";
+import { ServiceService } from "../../domain/repositories-ports/ServiceRepository";
 const { getServiceById, putService, putServiceValidation } = new ServiceService();
 const { getAddresses, postAddress } = new AddressService();
 
-
-
-
-
 export const dayMS = 24 * 60 * 60 * 1000
-///// CALL BACK ADD DATA IN EVENTS
-export const getDays = (array: any) => {
-    array.map((event: any) => {
-        let start = new Date(event.start).getTime();
-        let end = new Date(event.end).getTime();
-        let dif = Math.floor(Math.abs((end - start) / dayMS)) + 1; // Add 1 to include the last day
-        let days = []
-        for (let i = 0; i < dif; i++) { days.push(new Date(start + i * dayMS)) }
-        event.days = days
-    })
-    return array
-}
+///// CALL BACK ADD DATA IN EVENTS 
+// migrate to EventService.ts
+
 
 ///// BLOB FUNCTION 
 export const getImageBlob2 = (event: any, setImgBlob: any, formik: any) => {
@@ -100,7 +85,7 @@ export const shortDateString = (date: Date) => {
 }
 
 
-export const eventdateInfo = (event: EventP) => {
+export const eventdateInfo = (event: EventView) => {
     return (
         'de ' + new Date(event.start).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })
         + " à " +
@@ -109,7 +94,7 @@ export const eventdateInfo = (event: EventP) => {
             new Date(event.end).toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric', minute: 'numeric', hour: 'numeric' })))
 }
 
-export const getWeeks = (day: any, eventList: EventP[], numberOfwweks: number) => {
+export const getWeeks = (day: any, eventList: EventView[], numberOfwweks: number) => {
     const weeks: any[] = [];
     if (weeks.length < numberOfwweks) {
         for (let i = 0; i < numberOfwweks; i++) {
@@ -171,14 +156,7 @@ export const takeElement = (id: number, array: Service[], setArray: any, userPro
 
 //// NEW FUNCTIONS
 
-export const toggleParticipant = async (eventId: number, userId: number, setEvent: any) => {
-    const { getEventById, } = new EventService();
-    const { postParticipant, deleteParticipant } = new ParticipantService();
-    const response = await getEventById(eventId);
-    const isParticipant = response.Participants.find((participant: any) => participant.userId === userId) ? true : false;
-    isParticipant ? await deleteParticipant(eventId) : await postParticipant({ userId: userId, eventId: eventId });
-    setEvent(await getEventById(eventId));
-};
+
 
 export const toggleLike = async (postId: number, userId: number, setPost: any) => {
     const { getPostById } = new PostService();
@@ -204,9 +182,9 @@ export const toggleValidResp = async (serviceId: number, userId: number, setServ
 
 
 
-export const Igo = (element: EventP, userId: number): boolean => { return element.Participants.find((particpant: any) => particpant.userId === userId) ? true : false };
+export const Igo = (element: EventView, userId: number): boolean => { return element.Participants.find((particpant: any) => particpant.userId === userId) ? true : false };
 
-export async function addressIn(formik: any, newElement: EventP | Profile) {
+export async function addressIn(formik: any, newElement: EventView | Profile) {
     const AdressToSearch = formik.values.Address
     const addressList = await getAddresses()
     const addressFind = addressList.find((address: Address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
@@ -231,7 +209,7 @@ export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
 }
 
 //
-export const GenereMyActions = (element: Post | EventP | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
+export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
     const navigate = useNavigate()
     let title = ''
     let id = 0;
@@ -335,51 +313,5 @@ export const generateContact = (user: User): string => {
 };
 
 
-
-export const getWeekFull = (date: any, eventList: any[]) => {
-    let week = [];
-    date = new Date(date);
-    const weekDay = date.getDay();
-    const lundi = date.getTime() - ((weekDay - 1) * dayMS)
-    while (week.length < 7) {
-        for (let i = 0; i < 7; i++) {
-            const nextDay = (new Date((lundi) + (i * dayMS)))
-            let dateInfos = { date: (nextDay), events: [] as EventP[], text: shortDateString(nextDay) }
-            week.push(dateInfos);
-        }
-    }
-    for (const eventT of eventList) {
-        for (let i = 0; i < week.length; i++) {
-            if (eventT.days) {
-                const find = (eventT.days).find((day: Date) => (new Date(day)).toLocaleDateString() === (new Date(week[i].date)).toLocaleDateString())
-                if (find) {
-                    let isEventInWeek = week[i].events.some((e: any) => e.id === eventT.id)
-                    if (isEventInWeek) {
-                        week[i].events.forEach(event => event.days.find((day: Date) => (new Date(day)).toLocaleDateString() === (new Date(week[i].date)).toLocaleDateString()) && (event.actif = true));
-                    }
-                    if (!isEventInWeek) {
-                        for (let j = 0; j < week.length; j++) {
-                            let actif = j === i ? true : false;
-                            week[j].events.push({ actif, ...eventT } as never);
-                        }
-                    }
-                    week[i].events.sort((a: any, b: any) => a.id - b.id)
-                }
-
-            }
-        }
-    }
-    return week
-}
-export const getWeeksFull = (day: any, eventList: EventP[], numberOfwweks: number) => {
-    const weeks: any[] = [];
-    if (weeks.length < numberOfwweks) {
-        for (let i = 0; i < numberOfwweks; i++) {
-            weeks.push(getWeekFull(day, eventList))
-            day = new Date(new Date(day).getTime() + 1 * 7 * dayMS)
-        }
-    }
-    return weeks
-}
 
 

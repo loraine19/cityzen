@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../event/eventComps/EventCard';
-import { dayMS, getDays, getLabel, eventCategories, getWeeksFull } from '../../../../utils/GetDataFunctions';
-import { EventP } from '../../../../domain/entities/Events';
+import { dayMS, getLabel, eventCategories } from '../../../../infrastructure/services/utilsService';
 import { Icon } from '../../common/SmallComps';
+import DI from '../../../../di/ioc'
+import { EventService } from '../../../../infrastructure/services/eventService';
+import { day } from '../../../../domain/entities/frontEntities';
 
-export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
-    type day = { date: Date, events: EventP[], text: String }
-    let numberOfwweks = 2
+export default function CalendarCompLarge() {
+    const { events, loadingEvents, errorEvents } = DI.resolve('eventViewModel');
+    const eventService = DI.resolve<EventService>('eventService');
+    const [numberOfwweks, setNumberOfwweks] = useState<number>(2)
     const [startDateBackup] = useState<Date>(new Date().getDay() > 0 ? new Date() : new Date(new Date().getTime() - 1 * dayMS));
     const [startDate, setStartDate] = useState<string>(startDateBackup.toDateString())
-    const [eventList, setEventList] = useState<EventP[]>(getDays(props.eventList))
     const [weeks, setWeeks] = useState<day[][]>([])
     const [open, setOpen] = useState<boolean>(false)
     const [popId, setPopId] = useState<string>('')
-    window.addEventListener('resize', () => {
-        if (window.innerWidth < 900) { numberOfwweks = 1 } else { numberOfwweks = 2 }
-    })
 
     //// NAVIGATE WEEK BTN 
     const addWeek = () => { setStartDate((new Date(new Date(startDate).getTime() + 7 * dayMS)).toDateString()) }
@@ -24,16 +23,19 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
     const resetWeek = () => { setStartDate(startDateBackup.toDateString()) }
     let num = 3
     const [col, setCol] = useState<number>(num)
-    const addCol = () => { col < 5 ? (num = col + 1) : (num = 5), setCol(num) }
+    const addCol = () => { col < 7 ? (num = col + 1) : (num = 7), setCol(num) }
     const removeCol = () => { col > 1 ? (num = col - 1) : (num = 1), setCol(num) }
     const resetCol = () => { num = 2, setCol(num) }
 
     //// USE EFFECT 
+    window.addEventListener('resize', () => {
+        if (window.innerWidth < 900) { setNumberOfwweks(1) } else { setNumberOfwweks(2) }
+    })
+    useEffect(() => { if (window.innerWidth < 900) { setNumberOfwweks(1); } else { setNumberOfwweks(2) } }, [])
 
     useEffect(() => {
-        setEventList(props.eventList)
-        setWeeks(getWeeksFull(startDate, eventList, numberOfwweks));
-    }, [startDate, props])
+        setWeeks(eventService.getWeeksFull(startDate, events, numberOfwweks));
+    }, [startDate, numberOfwweks])
 
 
     return (
@@ -62,14 +64,33 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                 </div>
             </div>
             <div className='relative max-h-full w-full flex flex-1 '>
-                <div className=' absolute flex flex-col flex-1 h-full p-2 gap-2  w-full rounded-2xl bg-white shadow '>
+                {loadingEvents || errorEvents ? (
+                    <div className='absolute flex flex-col flex-1 h-full p-2 gap-2 w-full rounded-2xl bg-white shadow'>
+                        <div className='grid rounded-lg lg:grid-cols-7 h-full overflow-auto pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20'>
+                            {[...Array(7)].map((_, index) => (
+                                <div key={index} className='text-xs flex flex-col text-center h-full'>
+                                    <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50'>
+                                        &nbsp;
+                                    </p>
+                                    <div className='flex flex-col h-full w-full items-center gap-3'>
+                                        {[...Array(3)].map((_, eventIndex) => (
+                                            <div key={eventIndex} className='w-full rounded-xl bg-gray-300 h-7 animate-pulse'></div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : (<div className=' absolute flex flex-col flex-1 h-full p-2 gap-2  w-full rounded-2xl bg-white shadow '>
                     {weeks.map((week: any, key: number) => (
                         <div key={key} className={` grid rounded-lg lg:grid-cols-7 h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
                             ${col === 1 && 'grid-cols-1'} 
                             ${col === 2 && 'grid-cols-2'}
                             ${col === 3 && 'grid-cols-3'}
                             ${col === 4 && 'grid-cols-4'} 
-                            ${col === 5 && 'grid-cols-5'} `}>
+                            ${col === 5 && 'grid-cols-5'}
+                            ${col === 6 && 'grid-cols-6'}
+                            ${col === 7 && 'grid-cols-7'}`}>
                             {week.map((day: any, index: number) =>
                                 <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full    `} key={index}>
                                     <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50  '>
@@ -111,8 +132,9 @@ export default function CalendarCompLarge(props: { eventList: EventP[]; }) {
                             )}
                         </div>
                     ))}
-                </div>
-            </div >
+                </div>)
+                }
+            </div>
         </div>
     )
 }

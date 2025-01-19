@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UserContext from "../../../../../contexts/user.context";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, HardLevel, SkillLevel } from "../../../../../domain/entities/Service";
-import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal } from "../../../../../utils/GetDataFunctions";
+import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal } from "../../../../../infrastructure/services/utilsService";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 
 

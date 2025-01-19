@@ -6,7 +6,7 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
 import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
-import { getLabel, postCategories, toggleLike } from "../../../../../utils/GetDataFunctions";
+import { getLabel, postCategories, toggleLike } from "../../../../../infrastructure/services/utilsService";
 
 
 

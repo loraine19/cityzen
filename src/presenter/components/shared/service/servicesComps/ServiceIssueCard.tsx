@@ -2,7 +2,7 @@ import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react"
 import { Service, ServiceType } from "../../../../../domain/entities/Service";
-import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus } from "../../../../../utils/GetDataFunctions";
+import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus } from "../../../../../infrastructure/services/utilsService";
 import { Icon } from "../../../common/SmallComps";
 
 

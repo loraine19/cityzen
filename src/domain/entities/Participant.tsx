@@ -1,9 +1,9 @@
-import { EventP } from "./Events";
+import { Event } from "./Event";
 import { User } from "./User";
 
 export class Participant {
     User: User = new User();
-    event: EventP = new EventP();
+    event: Event = new Event();
     eventId: number = 0;
     user: User = new User();
     userId: number = 0;

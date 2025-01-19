@@ -1,3 +1,4 @@
+import { EventView } from "./Event";
 
 
 //// for front only 
@@ -35,3 +36,8 @@ export const defaultEventImage = [
     { type: eventCategories[3], image: "https://museum.toulouse-metropole.fr/wp-content/uploads/sites/6/2023/09/blob.png" },
     { type: eventCategories[4], image: "https://blog.collinsdictionary.com/wp-content/uploads/sites/39/2023/03/autre-blog.jpg" }
 ]
+
+
+export const dayMS = 24 * 60 * 60 * 1000;
+
+export type day = { date: Date, events: EventView[], text: String }

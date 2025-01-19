@@ -5,7 +5,7 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { SurveyService } from "../../../../../domain/repositories-ports/SurveyRepository"
-import { dayMS, getLabel, surveyCategories, GenereMyActions } from "../../../../../utils/GetDataFunctions";
+import { dayMS, getLabel, surveyCategories, GenereMyActions } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, FlagIcon, ProgressSmallbar, Icon } from "../../../common/SmallComps";
 import { UserRepositoryImpl } from "../../../../../infrastructure/repositoriesImpl/UserRespositoryImpl";

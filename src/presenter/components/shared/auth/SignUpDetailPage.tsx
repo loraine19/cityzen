@@ -27,7 +27,7 @@ export default function SignUpDetailPage() {
     1 > 2 && console.log("avoid compile error", addressList)
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
-    const { getUserMe } = new UserRepositoryImpl(new UserApi())
+    const { getUserMe } = new UserRepositoryImpl()
     const { getAddresses, postAddress } = new AddressService()
     const { postProfile } = new ProfileRepositoryImpl(new ProfileApi())
 

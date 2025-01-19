@@ -1,29 +1,12 @@
-import { useEffect, useState } from 'react'
-import { User } from '../../domain/entities/User';
-import { GetUserUseCase } from '../../application/user/getUserMe.usecase'
-import { handleError } from '../../application/useCases/useCaseUtils'
+import { GetUserUseCase } from '../../application/useCases/userCase/getUserMe.usecase'
+import { useQuery } from '@tanstack/react-query';
 
+export const userViewModel = ({ getUserUseCase }: { getUserUseCase: GetUserUseCase }) => {
 
-interface UserViewModelProps { getUserUseCase: GetUserUseCase }
+  const { data: user, isLoading: loadingUser, error: errorUser } = useQuery({
+    queryKey: ['userMe'],
+    queryFn: async () => await getUserUseCase.execute(),
+  })
 
-export const userViewModel = ({ getUserUseCase }: UserViewModelProps) => {
-  const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetch = async () => {
-      setLoading(true)
-      try {
-        const res = await getUserUseCase.execute();
-        setUser(res)
-      } catch (error) {
-        handleError(error, 'Error fetching user', setError)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetch()
-  }, [])
-  return { user, loading, error }
+  return { user, loadingUser, errorUser }
 }

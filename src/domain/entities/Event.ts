@@ -12,13 +12,11 @@ export enum EventCategory {
     CATEGORY_5
 }
 
-export class EventP {
-    actif?: boolean;
+export class Event {
     Address: Address = new Address();
     addressId: number = 0;
     category: EventCategory | string = EventCategory.CATEGORY_1;
     createdAt: Date = new Date();
-    days: any;
     description: string = '';
     end: Date | string = new Date();
     Flags?: Flag[] = [new Flag()];
@@ -34,10 +32,11 @@ export class EventP {
     updatedAt: Date = new Date();
     userId: number = 0;
     User: User = new User();
+
 }
 export const eventCategory = Object.values(EventCategory).filter(category => typeof category === 'string');
 
-export class EventDTO implements Partial<EventP> {
+export class EventDTO implements Partial<Event> {
     addressId: number = 0;
     category: EventCategory | string = EventCategory.CATEGORY_1;
     description: string = '';
@@ -52,3 +51,17 @@ export class EventDTO implements Partial<EventP> {
 }
 
 export class EventPUpdateDTO implements Partial<EventDTO> { }
+
+export interface EventView extends Event {
+    actif?: boolean;
+    days: Date[] | string[];
+    Igo?: boolean;
+    label?: string;
+    pourcent?: number;
+    flagged?: boolean;
+    mine?: boolean;
+    isValidate?: boolean;
+    agendaLink?: string;
+    toogleParticipate?: () => Promise<EventView>;
+
+}

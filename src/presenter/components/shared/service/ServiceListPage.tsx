@@ -3,7 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import { useSearchParams } from "react-router-dom";
 import { Service } from "../../../../domain/entities/Service";
 import { ServiceService } from "../../../../domain/repositories-ports/ServiceRepository";
-import { serviceCategories, getLabel, getValue } from "../../../../utils/GetDataFunctions";
+import { serviceCategories, getLabel, getValue } from "../../../../infrastructure/services/utilsService";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";

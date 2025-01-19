@@ -4,7 +4,7 @@ import { Action } from '../../../../domain/entities/frontEntities';
 import UserContext from '../../../../contexts/user.context';
 import { Pool } from '../../../../domain/entities/Pool';
 import { PoolService } from '../../../../domain/repositories-ports/PoolRepository';
-import { GenereMyActions } from '../../../../utils/GetDataFunctions';
+import { GenereMyActions } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';

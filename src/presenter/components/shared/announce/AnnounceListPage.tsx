@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { Post } from "../../../../domain/entities/Post";
 import { PostService } from "../../../../domain/repositories-ports/PostRepository";
-import { postCategories, getLabel, getValue } from "../../../../utils/GetDataFunctions";
+import { postCategories, getLabel, getValue } from "../../../../infrastructure/services/utilsService";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";

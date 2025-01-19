@@ -6,15 +6,15 @@ import { Option, Button, Select, Switch } from '@material-tailwind/react';
 import Skeleton from 'react-loading-skeleton';
 import { Flag } from '../../../../domain/entities/Flag';
 import { Label } from '../../../../domain/entities/frontEntities';
-import { EventService } from '../../../../domain/repositories-ports/EventRepository';
 import { FlagService } from '../../../../domain/repositories-ports/FlagRepository';
 import { PostService } from '../../../../domain/repositories-ports/PostRepository';
 import { ServiceService } from '../../../../domain/repositories-ports/ServiceRepository';
-import { getLabel, flagTargets, flagReasons } from '../../../../utils/GetDataFunctions';
+import { getLabel, flagTargets, flagReasons } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import FlagDetailComp from './flagComps/FlagDetailComp';
+import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
 
 export default function FlagCreatePage() {
     const { id, target } = useParams()
@@ -25,7 +25,7 @@ export default function FlagCreatePage() {
     const navigate = useNavigate();
     const [flag, setFlag] = useState<Flag>({} as Flag)
     const { postFlag } = new FlagService()
-    const { getEventById, } = new EventService()
+    const { getEventById, } = new EventApi()
     const { getServiceById } = new ServiceService()
     const { getPostById } = new PostService()
 

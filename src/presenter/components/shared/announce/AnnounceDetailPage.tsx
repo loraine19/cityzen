@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import UserContext from '../../../../contexts/user.context';
 import { PostService } from '../../../../domain/repositories-ports/PostRepository';
 import { Post } from '../../../../domain/entities/Post';
-import { GenereMyActions, getLabel, postCategories } from '../../../../utils/GetDataFunctions';
+import { GenereMyActions, getLabel, postCategories } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';

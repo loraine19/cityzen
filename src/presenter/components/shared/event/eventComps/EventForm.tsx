@@ -2,7 +2,7 @@ import { Select, Card, CardHeader, Chip, Button, Typography, CardBody, Input, Te
 import { useState, useEffect } from "react";
 import { Label } from "../../../../../domain/entities/frontEntities";
 import { Address } from "../../../../../domain/entities/Address";
-import { dayMS, getDefaultImage, getLabel, eventCategories, getImageBlob } from "../../../../../utils/GetDataFunctions";
+import { dayMS, getDefaultImage, getLabel, eventCategories, getImageBlob } from "../../../../../infrastructure/services/utilsService";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
 import NavBarTop from "../../../common/NavBarTop";

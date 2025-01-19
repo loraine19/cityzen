@@ -18,7 +18,7 @@ export class User {
     status: UserStatus;
     GroupUser: GroupUser;
 
-    constructor(userData: any) {
+    constructor() {
         this.id = 0;
         this.email = '';
         this.password = '';

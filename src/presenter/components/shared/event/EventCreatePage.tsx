@@ -3,15 +3,15 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import { EventP } from '../../../../domain/entities/Events';
-import { EventService } from '../../../../domain/repositories-ports/EventRepository';
-import { addressIn } from '../../../../utils/GetDataFunctions';
+import { EventView } from '../../../../domain/entities/Event';
+import { addressIn } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
+import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
 
 export default function EventCreatePage() {
-    const [newEvent] = useState<EventP>({} as EventP);
+    const [newEvent] = useState<EventView>({} as EventView);
     const navigate = useNavigate();
-    const { postEvent } = new EventService()
+    const { postEvent } = new EventApi()
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -27,7 +27,7 @@ export default function EventCreatePage() {
     })
 
     const formik = useFormik({
-        initialValues: newEvent as EventP,
+        initialValues: newEvent as EventView,
         validationSchema: formSchema,
         onSubmit: values => {
             addressIn(formik, newEvent);

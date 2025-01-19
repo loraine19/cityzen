@@ -1,14 +1,11 @@
 //src/presenter/components/shared/dashboard/DashboardPage.tsx
 import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import DI from '../../../../di/ioc'
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-// import UserContext from "../../../../contexts/user.context";
-import { EventP } from "../../../../domain/entities/Events";
 import { Notif } from "../../../../domain/entities/Notif";
-import { EventService } from "../../../../domain/repositories-ports/EventRepository";
-import { getDays, GetPathElement } from "../../../../utils/GetDataFunctions";
+import { GetPathElement } from "../../../../infrastructure/services/utilsService";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
 import { NotifBadge, Icon } from "../../common/SmallComps";
@@ -16,61 +13,27 @@ import { AuthHeader } from "../auth/authComps/AuthHeader";
 import CalendarComp from "./CalendarComp";
 import { Profile } from "../../../../domain/entities/Profile";
 import { logOut } from "../../../../infrastructure/services/authService";
-import { UserTS } from '../../../../infrastructure/adapters/userTS';
-import { useQuery } from "@tanstack/react-query";
-import { UserApi } from "../../../../infrastructure/providers/http/userApi";
-
-
+import UserContext from "../../../../contexts/user.context";
 
 export default function DashboardPage() {
-    const call = new UserApi();
-    const { user, loading } = DI.resolve('userViewModel');
-    let { firstName, image, points, Address } = loading ? {} as Profile : user?.Profile as Profile;
-    const [events, setEvents] = useState<EventP[]>([] as EventP[]);
-    const { getEvents } = new EventService()
-    const [userNotif] = useState<number>(0);
-    const [notifList] = useState<Notif[]>([]);
 
-
-
-    useEffect(() => {
-        console.log(user)
-        const fetch = async () => {
-            const events = await getEvents()
-            setEvents(getDays(events));
-            //events && setLoading(false);
-            // const cc = async () => {
-            //     const res = useQuery({
-            //         queryKey: ['userMe'],
-            //         queryFn: await call.getUserMe(),
-            //     });
-            //     const { data, error, isLoading } = res
-            //     console.log('Data:', data, 'Error:', error, 'isLoading:', isLoading);
-            //     return { data, error, isLoading }
-            // }
-            // cc()
-        }
-        fetch()
-    }, []);
-
-
-
-
-
+    const { user, loadingUser, errorUser } = DI.resolve('userViewModel');
+    // const { notifs } = DI.resolve('notifsViewModel');
+    const { notifList } = useContext(UserContext);
+    let { firstName, image, points, Address } = !user ? {} as Profile : user?.Profile as Profile;
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
 
-    if (loading) {
-        return <Skeleton count={5} />;
-    }
-    else return (
+    if (errorUser) return <div>error : {errorUser}</div>
+
+    return (
         <div className="Body gray">
             <div className="relative flex-col w-full flex items-center  justify-center ">
                 <div className="absolute flex justify-between  w-full max-w-[1000px] !m-auto  p-2">
                     <Icon icon="exit_to_app" size="2xl" style="px-3" onClick={logOut} title="se déconnecter" />
-                    <NotifBadge qty={userNotif} />
+                    <NotifBadge notifList={notifList} />
                 </div>
                 <AuthHeader />
             </div>
@@ -101,15 +64,14 @@ export default function DashboardPage() {
                                     <Icon link="/inbox" icon="diversity_3" color="orange" fill bg size="lg" title="ouvrir la page conciliation" />
                                     <Icon link="/" icon="two_pager" color='green' fill bg size="lg"
                                         title="ouvrir la page réglement" />
-
                                 </div>
                                 <Typography
                                     variant="h2"
                                     color="blue-gray"
                                     className="font-extrabold"
                                 >
-                                    {loading ? <Skeleton width={50} height={50} circle={true} /> : points}
-                                    <span className={`${loading && 'hidden'} text-xs font-light `}>
+                                    {loadingUser ? <Skeleton width={50} height={50} circle={true} /> : points}
+                                    <span className={`${loadingUser && 'hidden'} text-xs font-light `}>
                                         {' pts'}
                                     </span>
                                 </Typography>
@@ -123,7 +85,7 @@ export default function DashboardPage() {
                                     <Icon fill icon="circle_notifications" link="/notifications" size="4xl" color="orange" title="voir mes notifications" />
                                     <div>
                                         <Typography color="blue-gray">
-                                            {userNotif > 0 ? `${userNotif} notifications` : 'pas de notifications'}
+                                            {notifList && notifList.length > 0 ? `${notifList.length} notifications` : 'pas de notifications'}
                                         </Typography>
                                     </div>
                                 </div>
@@ -153,14 +115,15 @@ export default function DashboardPage() {
                                         </Typography>
                                     </div>
                                 </div>
-                                <div className="flex-1 flex"> {loading ? <Skeleton /> : <AddressMapOpen address={Address} />}</div>
+                                <div className="flex-1 flex">
+                                    {loadingUser ? <Skeleton /> : <AddressMapOpen address={Address} />}</div>
                             </CardBody>
                         </Card>
                     </div>
                     <div className={eventClasse}>
                         <Card className="h-full flex-1  gray100">
                             <CardBody className="h-full flex flex-col p-4 ">
-                                <CalendarComp eventList={events} />
+                                <CalendarComp />
                             </CardBody>
                         </Card>
                     </div>

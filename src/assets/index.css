@@ -121,7 +121,7 @@ footer {
 }
 
 .Grid {
-    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] gap-3;
+    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-3;
     grid-auto-rows: (auto, 40vh);
 }
 
@@ -170,23 +170,23 @@ nav .icon {
 
 nav li .icon {
     @apply text-blue-gray-500;
+    @apply !-mb-0.5;
 }
 
 .active .icon {
     font-variation-settings: "FILL" 1 !important;
-    font-size: 32px;
+    font-size: 31px;
+
     opacity: 100%;
-    text-decoration: underline !important;
-    text-underline-offset: 20px;
-    color: #1f2937;
+    @apply text-blue-gray-700 !decoration-4;
 }
 
 .active .UOrange {
-    @apply text-orange-600;
+    @apply !decoration-orange-600;
 }
 
 .active .UCyan {
-    @apply text-cyan-600;
+    @apply !border-b-2 !border-red-100;
 }
 .error {
     @apply text-red-600;
@@ -205,10 +205,10 @@ nav li .icon {
 
 /* CHIP LIGHT COLOR */
 .OrangeChip {
-    @apply bg-orange-200 text-orange-900 min-w-max px-3;
+    @apply bg-orange-100 text-orange-800 min-w-max px-3;
 }
 .GreenChip {
-    @apply bg-green-200 text-green-900 min-w-max px-3;
+    @apply bg-green-100 text-green-800 min-w-max px-3;
 }
 .RedChip {
     @apply bg-red-200 text-red-900 min-w-max px-3;
@@ -266,6 +266,7 @@ button {
     text-transform: none !important;
 }
 .lgBtn {
+    @apply py-4 lg:py-5;
     font-size: 1rem;
     display: flex;
     justify-content: center;

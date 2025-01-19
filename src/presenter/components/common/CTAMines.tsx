@@ -25,14 +25,13 @@ export default function CTAMines(props: CTAMinesProps) {
                     buttons[index].function();
                     setOpen(false)
                 }}
-                title={buttons[index].title as string}
+                title={buttons[index]?.title as string}
                 element={buttons[index].body as any} />
 
             {
                 <>
                     <Button className={buttons[0].icon === '' ? "hidden" : "  rounded-full w-full !shadow lgBtn truncate"}
                         onClick={() => { setOpen(true), setIndex(0) }}
-
                         color="white"
                         disabled={disabled1} >
                         {buttons[0].icon}
