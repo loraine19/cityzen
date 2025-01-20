@@ -1,3 +1,20 @@
+export class AccessDTO {
+    email: string = '';
+    password: string = '';
+}
+
+export class VerifyDTO {
+    email: string = '';
+    password: string = '';
+    verifyToken: string = '';
+}
+
+export class ResetDTO {
+    email: string = '';
+    password: string = '';
+    resetToken: string = '';
+}
+
 export enum TokenType {
     REFRESH,
     RESET,
@@ -31,3 +48,5 @@ export class AuthDTO {
     accessToken?: string;
     refreshToken?: string;
 }
+
+

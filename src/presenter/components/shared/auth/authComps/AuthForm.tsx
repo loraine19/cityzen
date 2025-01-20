@@ -77,7 +77,7 @@ export function AuthForm(props: authFormProps) {
                             <Checkbox
                                 type="checkbox" name="checkbox"
                                 className={formik.errors.checkbox ? "error bg-red-300/50" : ""}
-                                onChange={(e) => { formik.values.checkbox = e.target.checked; console.log(formik.values, formik.errors) }} />
+                                onChange={(e: any) => { formik.values.checkbox = e.target.checked; console.log(formik.values, formik.errors) }} />
                             <div className=' w-full flex flex-col'>
 
                                 <PopUp variant={"text"} classNames={popOverClass} text={popOverButtonText} content={popOverContent} />

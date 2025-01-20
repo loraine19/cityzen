@@ -11,22 +11,21 @@ import NavBarBottom from "../../common/NavBarBottom";
 import { NotifBadge, Icon } from "../../common/SmallComps";
 import { AuthHeader } from "../auth/authComps/AuthHeader";
 import CalendarComp from "./CalendarComp";
-import { Profile } from "../../../../domain/entities/Profile";
 import { logOut } from "../../../../infrastructure/services/authService";
 import UserContext from "../../../../contexts/user.context";
 
 export default function DashboardPage() {
 
     const { user, loadingUser, errorUser } = DI.resolve('userViewModel');
+    console.log(user, loadingUser, errorUser)
     // const { notifs } = DI.resolve('notifsViewModel');
     const { notifList } = useContext(UserContext);
-    let { firstName, image, points, Address } = !user ? {} as Profile : user?.Profile as Profile;
+
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
 
-    if (errorUser) return <div>error : {errorUser}</div>
 
     return (
         <div className="Body gray">
@@ -43,8 +42,8 @@ export default function DashboardPage() {
                         <Card className="lg:h-full p-0 flex-1 flex ">
                             <CardHeader className="flex flex-col items-center !p-0 justify-centerp-0 bg-transparent shadow-none">
                                 <Avatar
-                                    src={image as string}
-                                    alt={firstName}
+                                    src={user?.Profile?.image as string}
+                                    alt={user?.Profile?.firstName}
                                     variant="circular"
                                     className="!shadow-sm !shadow-gray-400 w-16 h-16 lg:w-20 lg:h-20 BgUser"
                                 />
@@ -53,7 +52,7 @@ export default function DashboardPage() {
                                         variant="h6"
                                         color="blue-gray"
                                     >
-                                        {firstName || <Skeleton />}
+                                        {user?.Profile?.firstName || <Skeleton />}
                                     </Typography>
                                 </div>
                             </CardHeader>
@@ -70,7 +69,7 @@ export default function DashboardPage() {
                                     color="blue-gray"
                                     className="font-extrabold"
                                 >
-                                    {loadingUser ? <Skeleton width={50} height={50} circle={true} /> : points}
+                                    {loadingUser ? <Skeleton width={50} height={50} circle={true} /> : user?.Profile?.points}
                                     <span className={`${loadingUser && 'hidden'} text-xs font-light `}>
                                         {' pts'}
                                     </span>
@@ -116,7 +115,7 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className="flex-1 flex">
-                                    {loadingUser ? <Skeleton /> : <AddressMapOpen address={Address} />}</div>
+                                    {user?.Profile?.Address ? <AddressMapOpen address={user?.Profile?.Address} /> : <Skeleton />}</div>
                             </CardBody>
                         </Card>
                     </div>

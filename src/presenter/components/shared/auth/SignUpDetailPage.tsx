@@ -9,38 +9,22 @@ import Skeleton from 'react-loading-skeleton';
 import { Address } from '../../../../domain/entities/Address';
 import UserContext from '../../../../contexts/user.context';
 import { Profile } from '../../../../domain/entities/Profile';
-import { AddressService } from '../../../../domain/repositories-ports/AddressRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { ProfileRepositoryImpl } from '../../../../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
-import { ProfileApi } from '../../../../infrastructure/providers/http/profileApi';
 import { logOut } from '../../../../infrastructure/services/authService';
-import { UserApi } from '../../../../infrastructure/providers/http/userApi';
-
+import DI from '../../../../di/ioc';
 
 export default function SignUpDetailPage() {
     const { setUserProfile } = useContext(UserContext)
     const navigate = useNavigate();
     const [newProfile] = useState<Profile>({} as Profile);
     const [skillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
-    const [addressList, setAddressList] = useState<Address[]>([])
-    1 > 2 && console.log("avoid compile error", addressList)
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const { getUserMe } = new UserApi()
-    const { getAddresses, postAddress } = new AddressService()
-    const { postProfile } = new ProfileRepositoryImpl(new ProfileApi())
-
-    /// ON LOAD PAGE FETCH 
-    useEffect(() => {
-        const fetch = async () => {
-            const user = await getUserMe()
-            formik.values.userId = user.id
-            const addresses = await getAddresses()
-            setAddressList(addresses)
-            user && addresses && setLoading(false)
-        }
-        fetch()
-    }, []);
+    const { addresses } = DI.resolve('addressViewModel')()
+    const { postAddress } = DI.resolve('postAddressViewModel')()
+    const { postProfile } = DI.resolve('postProfileViewModel')()
+    const { user, loadingUser } = DI.resolve('userViewModel')
+    console.log(postAddress)
+    const [addressList, setAddressList] = useState<Address[]>(addresses ? addresses : [])
 
     /// FORMIK SCHEMA
     const formSchema = object({
@@ -56,6 +40,7 @@ export default function SignUpDetailPage() {
         validationSchema: formSchema,
         onSubmit: values => {
             addressIn()
+            formik.values.userId = user?.id || 0
             !formik.values.assistance.includes("LEVEL_") && (formik.values.assistance = `LEVEL_${formik.values.assistance}`);
             formik.values.skills = skillList.toString();
             formik.values = values
@@ -83,6 +68,7 @@ export default function SignUpDetailPage() {
         formik.values.addressId = formik.values.Address.id
         const { Address, ...rest } = formik.values;
         const Data = { ...rest }
+        console.log('Data', Data)
         const postedProfile = await postProfile(Data);
         return postedProfile
     }
@@ -107,16 +93,14 @@ export default function SignUpDetailPage() {
             <div className="w-respLarge flex-col flex justify-between ">
                 <AuthHeader />
                 <div className="flex justify-between items-center pb-3">
-                    <Typography color="blue-gray">Bienvenue, veuillez remplir votre profil pour pouvoir utiliser Collect'if</Typography>
+                    <Typography color="blue-gray" className='w-resp px-4 flex justify-center pb-2'>Bienvenue, veuillez remplir votre profil pour pouvoir utiliser Collect'if</Typography>
                     <Button variant="text" className="flex justify-center items-center rounded-full h-8 w-8 opacity-80"
                         onClick={() => logOut()}>
                         <span className="material-symbols-outlined fillThin !text-4xl" >logout</span>
                     </Button>
-
                 </div>
-
             </div>
-            {loading ?
+            {loadingUser ?
                 <Skeleton /> :
                 <ProfileForm formik={formik} />}
         </div >

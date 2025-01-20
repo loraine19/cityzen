@@ -1,6 +1,7 @@
 //src/infrastructure/providers/http/participantApi.ts
-import { useApi, handleApiCall, Api } from "./UseApi";
+import { useApi, Api } from "./UseApi";
 import { Participant, ParticipantDTO } from "../../../domain/entities/Participant";
+import { handleApiCall } from "./utilsApi";
 
 export class ParticipantApi {
     private readonly api: Api;

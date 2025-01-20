@@ -11,12 +11,12 @@ import { Survey, surveyCategory } from "../../domain/entities/Survey";
 import { User } from "../../domain/entities/User";
 import { Address } from "../../domain/entities/Address";
 import { notifCategory } from "../../domain/entities/Notif";
-import { AddressService } from "../../domain/repositories-ports/AddressRepository";
 import { LikeService } from "../../domain/repositories-ports/LikeRepository";
 import { PostService } from "../../domain/repositories-ports/PostRepository";
 import { ServiceService } from "../../domain/repositories-ports/ServiceRepository";
+import { AddressApi } from "../providers/http/addressApi";
 const { getServiceById, putService, putServiceValidation } = new ServiceService();
-const { getAddresses, postAddress } = new AddressService();
+const { getAddresses, postAddress } = new AddressApi();
 
 export const dayMS = 24 * 60 * 60 * 1000
 ///// CALL BACK ADD DATA IN EVENTS 

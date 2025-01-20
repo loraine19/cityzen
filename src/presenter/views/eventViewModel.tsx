@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import { GetEventsUseCase } from '../../application/useCases/eventCase/getEvents.usecase';
+import { GetEventsUseCase } from '../../application/useCases/getEvents.usecase';
 import { EventService } from '../../infrastructure/services/eventService';
-import { GetUserUseCase } from '../../application/useCases/userCase/getUserMe.usecase';
+import { UserUseCase } from '../../application/useCases/user.usecase';
 
-export const eventViewModel = ({ getEventsUseCase, getUserUseCase, eventService }: { getEventsUseCase: GetEventsUseCase, getUserUseCase: GetUserUseCase, eventService: EventService }) => {
+export const eventViewModel = ({ getEventsUseCase, userUseCase, eventService }: { getEventsUseCase: GetEventsUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
 
   //// Get user id
   const { data: user, isLoading: loadingUser } = useQuery({
     queryKey: ['userMe'],
-    queryFn: async () => await getUserUseCase.execute()
+    queryFn: async () => await userUseCase.getUserMe()
   })
-  const userId = loadingUser ? 0 : user.id
+  const userId = loadingUser ? 0 : user?.id
 
   //// Get all events and add infos
   const { data: eventsData, isLoading: loadingEvents, error: errorEvents } = useQuery({

@@ -7,12 +7,11 @@ import { AuthHeader } from '../auth/authComps/AuthHeader';
 import { ProfileForm } from '../auth/authComps/ProfileForm';
 import UserContext from '../../../../contexts/user.context';
 import { Profile } from '../../../../domain/entities/Profile';
-import { AddressService } from '../../../../domain/repositories-ports/AddressRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { UserApi } from '../../../../infrastructure/providers/http/userApi';
-import { ProfileApi } from '../../../../infrastructure/providers/http/profileApi';
-import { ProfileRepositoryImpl } from '../../../../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
+
 import { logOut } from '../../../../infrastructure/services/authService';
+import DI from '../../../../di/ioc';
+import { Address } from '../../../../domain/entities/Address';
 
 
 export default function MyInfosPage() {
@@ -21,15 +20,18 @@ export default function MyInfosPage() {
     const [newProfile, setNewProfile] = useState<Profile>({} as Profile);
     const [skillList, setSkillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
     const [open, setOpen] = useState(false);
-    const { getUserMe } = new UserApi()
-    const { getAddresses, postAddress } = new AddressService()
-    const { updateProfile } = new ProfileRepositoryImpl(new ProfileApi())
+    const { addresses } = DI.resolve('addressViewModel')()
+    const { postAddress } = DI.resolve('postAddressViewModel')()
+    const { profileMe, errorProfile, loadingProfile, } = DI.resolve('profileMeViewModel')()
+    const { updateProfile } = DI.resolve('updateProfileViewModel')()
+    console.log("profile", profileMe)
+
+    const { user, loadingUser, errorUser } = DI.resolve('userViewModel')
+    console.log(user, loadingUser, errorUser)
 
     useEffect(() => {
         const fetch = async () => {
-            const user = await getUserMe()
             const { Profile } = user
-            setNewProfile(user.Profile)
             formik.values.firstName = Profile.firstName
             formik.values.lastName = Profile.lastName
             formik.values.phone = Profile.phone.toString()
@@ -66,8 +68,8 @@ export default function MyInfosPage() {
     /// ADDRESS FUNCTION
     async function addressIn() {
         const AdressToSearch = formik.values.Address
-        const addressList = await getAddresses()
-        const addressFind = addressList.find((address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
+        const addressList = addresses
+        const addressFind = addressList.find((address: Address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
         if (!addressFind) {
             const post = await postAddress(AdressToSearch)
             post ? (formik.values.Address = post) : (formik.values.Address = '')

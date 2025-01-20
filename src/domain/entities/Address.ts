@@ -17,3 +17,7 @@ export class AddressDTO implements Partial<Address> {
     lng: number = 0;
 }
 export class AddressUpdateDTO implements Partial<AddressDTO> { }
+
+export class AddressView extends Address {
+    addressString: string = '';
+}

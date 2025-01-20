@@ -5,10 +5,10 @@ import { AuthHeader } from './authComps/AuthHeader';
 import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';;
 import { Link } from 'react-router-dom';
 import { User } from '../../../../domain/entities/User';
-import { AuthService } from '../../../../domain/repositories-ports/AuthRepository';
+import { ResetPasswordApi } from '../../../../infrastructure/providers/http/resetPassword.api';
 
 export default function ForgotPasswordPage() {
-    const { resetPassword } = new AuthService()
+    const { resetPassword } = new ResetPasswordApi()
     const [newUser] = useState<User>({} as User);
     const [notif, setNotif] = useState<string>("");
     const formSchema = object({

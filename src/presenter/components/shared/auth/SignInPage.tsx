@@ -1,13 +1,14 @@
+//src/presenter/components/shared/auth/SignInPage.tsx
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthForm } from './authComps/AuthForm';
 import { AuthHeader } from './authComps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
 import { useToken } from '../../../../domain/repositories-ports/useToken';
-import { User } from '../../../../domain/entities/User';
-import { AuthService } from '../../../../domain/repositories-ports/AuthRepository';
+import DI from '../../../../di/ioc';
+import { Auth } from '../../../../domain/entities/Auth';
 
 
 export default function SignInPage() {
@@ -15,35 +16,74 @@ export default function SignInPage() {
     const [searchParams] = useSearchParams();
     const params = { email: searchParams.get("email"), token: searchParams.get("token") }
     const { email, token } = params
-    const [newUser] = useState<User>({
-        email: email ? email : "",
-    } as User);
-    // const navigate = useNavigate();
-    const { signIn, signInVerify } = new AuthService()
     const [notif, setNotif] = useState<string>(email ? 'vous pouvez maintenant vous connecter' : "");
 
+    ////SIGN IN
+    const { errorAuth, signIn } = DI.resolve('authSignInViewModel')()
+
+    ////SIGN IN VERIFY
+    const { errorAuthVerify, signInVerify } = DI.resolve('authSignInVerifyViewModel')();
+
+    ////USE EFFECT
+    useEffect(() => {
+        console.log(errorAuth, errorAuthVerify)
+    }, [errorAuth, errorAuthVerify])
+
+    ////FORMIK
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),
         password: string().required("Mot de passe est obligatoire").min(8, "minimum 8 lettres"),
-
     })
-
     const formik = useFormik({
-        initialValues: newUser,
+        initialValues: {} as any,
         validationSchema: formSchema,
         onSubmit: async (values) => {
             if (values.email && values.password) {
+                ////SIGN IN VERIFY
+                if (token) {
 
-                const result = token ? await signInVerify({ email: values.email, password: values.password, verifyToken: token }) : await signIn({ email: values.email, password: values.password })
-                if (result && result.accessToken) {
-                    saveToken(result.accessToken, result.refreshToken)
-                    !token ? window.location.replace("/") : window.location.replace("/signup_details")
+                    const authVerify = await signInVerify({ email, password: values.password, verifyToken: token })
+                    console.log(authVerify)
+                    if (authVerify) {
+                        saveToken(authVerify.accessToken, authVerify.refreshToken);
+                        setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...')
+                        setTimeout(() => {
+                            window.location.replace("/signup_details")
+                        }, 2000);
+                    }
+                    else if (errorAuthVerify || errorAuth) {
+                        setNotif('Compte non activé, veuillez vérifier votre email' + errorAuthVerify + errorAuth)
+                        formik.values = {} as any
+                    }
+                    else if (!authVerify) {
+                        setNotif('identifiants iconnus ...')
+                    }
+
                 }
-                else if (result && !result.accessToken) {
-                    setNotif('Compte non activé, veuillez vérifier votre email')
-                    formik.values = {} as any
+                ////SIGN IN
+                else if (!token) {
+                    const auth: Auth = await signIn({ email: values.email, password: values.password })
+                    console.log(auth)
+                    if (auth && auth.accessToken) {
+
+                        saveToken(auth.accessToken, auth.refreshToken);
+                        setNotif('Vous êtes connecté, redirection ...')
+                        setTimeout(() => {
+                            window.location.replace("/")
+                        }, 2000);
+                    }
+                    else if (auth && !auth.accessToken) {
+                        setNotif('Compte non activé, nous vous avons envoyé un nouvel email de vérification')
+                    }
+                    else if (errorAuth || errorAuthVerify) {
+                        setNotif('Email ou mot de passe incorrect' + errorAuth + errorAuthVerify)
+                        formik.values = {} as any
+                    }
+                    else {
+                        setNotif('erreur iconnue ...')
+                    }
+
                 }
-                else setNotif('Email ou mot de passe incorrect')
             }
         },
     });
@@ -65,7 +105,9 @@ export default function SignInPage() {
                     submitText="Se connecter"
                     confirm={false} />
                 <Link to="/motdepasse_oublie">
-                    <Typography className="text-xs font-medium p-2 text-center underline underline-offset-8 uppercase">Mot de pass oublié</Typography>
+                    <Typography className="text-xs font-medium p-2 text-center underline underline-offset-8 uppercase">
+                        Mot de pass oublié
+                    </Typography>
                 </Link>
 
                 <Typography variant="small" className=" flex justify-center">
@@ -74,12 +116,10 @@ export default function SignInPage() {
 
                 <Link to="/signup">
                     <Button
-                        size="lg" className="rounded-full"
-                        color="white">
+                        size="md" className="rounded-full mb-2">
                         inscrivez-vous
                     </Button>
                 </Link>
-
             </main>
         </div>
     )

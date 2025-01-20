@@ -17,9 +17,7 @@ interface UserContextType {
     userEmail: string;
 }
 
-interface UserProviderType {
-    children: ReactNode;
-}
+interface UserProviderType { children: ReactNode }
 
 const UserContext = createContext<UserContextType>({
     user: {} as User,

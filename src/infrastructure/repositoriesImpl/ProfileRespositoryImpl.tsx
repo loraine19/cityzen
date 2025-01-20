@@ -1,32 +1,28 @@
 //src/infrastructure/repositoriesImpl/ProfileRepositoryImpl.tsx
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
-import { ProfileRepository } from "../../domain/repositories-ports/ProfileRepository";
-import { ProfileApi } from "../providers/http/profileApi";
+import { ProfileRepositoryBase } from "../../domain/repositories-ports/ProfileRepositoryBase";
 
-export class ProfileRepositoryImpl implements ProfileRepository {
-    constructor(private profileApi: ProfileApi) { }
 
-    async getProfiles(): Promise<Profile[]> {
-        return this.profileApi.getProfiles();
-    }
+interface IData extends ProfileRepositoryBase {
+    api: any;
+    dataType: any;
+}
+
+export class ProfileRepositoryImpl implements ProfileRepositoryBase {
+    private profileData: IData;
+    constructor({ profileData }: { profileData: IData }) { this.profileData = profileData }
 
     async getProfileMe(): Promise<Profile> {
-        return this.profileApi.getProfileMe();
+        return this.profileData.getProfileMe();
     }
 
     async postProfile(data: ProfileDTO): Promise<Profile> {
-        return this.profileApi.postProfile(data);
+        return this.profileData.postProfile(data);
     }
 
     async updateProfile(data: ProfileDTO): Promise<Profile> {
-        return this.profileApi.patchProfile(data);
-    }
-
-    async deleteProfile(id: number): Promise<void> {
-        return this.profileApi.deleteProfile(id);
+        console.log('updateProfile', data)
+        return this.profileData.updateProfile(data);
     }
 }
 
-// Example usage
-//const profileRepository = new ProfileRepositoryImpl();
-//profileRepository.getProfileMe().then(profile => console.log(profile));

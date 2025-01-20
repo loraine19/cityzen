@@ -1,7 +1,7 @@
 //src/infrastructure/api/userApi.tsx
 import { Notif } from "../../../domain/entities/Notif";
 import { Api, useApi } from "./UseApi";
-import { handleApiCall } from "./UseApi";
+import { handleApiCall } from "./utilsApi";
 
 
 export class NotifApi {

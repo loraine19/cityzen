@@ -1,25 +1,29 @@
 //src/presenter/views/eventIdViewModel.tsx
 import { useQuery } from '@tanstack/react-query';
-import { GetEventsUseCase } from '../../application/useCases/eventCase/getEvents.usecase';
 import { EventService } from '../../infrastructure/services/eventService';
-import { GetUserUseCase } from '../../application/useCases/userCase/getUserMe.usecase';
+import { UserUseCase } from '../../application/useCases/user.usecase';
+import { GetEventsUseCase } from '../../application/useCases/getEvents.usecase';
 
-export const eventIdViewModel = ({ getEventsUseCase, getUserUseCase, eventService }: { getEventsUseCase: GetEventsUseCase, getUserUseCase: GetUserUseCase, eventService: EventService }) => {
+export const eventIdViewModel = ({ getEventsUseCase, userUseCase, eventService }: { getEventsUseCase: GetEventsUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
   return (id: number) => {
 
-    //// Get user id
+    //// TS CALL USER CONNECTED 
     const { data: user, isLoading: loadingUser } = useQuery({
       queryKey: ['userMe'],
-      queryFn: async () => await getUserUseCase.execute()
+      queryFn: async () => await userUseCase.getUserMe()
     })
-    const userId = loadingUser ? 0 : user.id
 
-    //// Get event by id and add infos
+    //// TS CALL EVENT BY ID
     const { data: eventByIdData, isLoading: loadingEvent, error: errorEvent } = useQuery({
       queryKey: ['eventById', id],
       queryFn: async () => await getEventsUseCase.executeById(id),
     })
+
+    //// USING SERVICE
+    const userId = loadingUser ? 0 : user.id
     const event = eventByIdData ? eventService.getInfosInEvent(eventByIdData, userId) : {} as Event;
+
+    //// RETURN FORMATTED DATA
     return { event, loadingEvent, errorEvent }
   }
 

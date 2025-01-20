@@ -1,5 +1,6 @@
 import { Flag, FlagDTO } from "../entities/Flag";
-import { useApi, handleApiCall } from "../../infrastructure/providers/http/UseApi";
+import { useApi } from "../../infrastructure/providers/http/UseApi";
+import { handleApiCall } from "../../infrastructure/providers/http/utilsApi";
 
 
 const api = useApi();

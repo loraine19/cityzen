@@ -2,15 +2,9 @@
 import { User, UserDTO } from "../../domain/entities/User";
 import { UserRepositoryBase } from "../../domain/repositories-ports/UserRepositoryBase";
 
-export interface IUserData {
+export interface IUserData extends UserRepositoryBase {
     api: any;
     dataType: any;
-    getUserMe(): Promise<User>;
-    getUsersModos(): Promise<User[]>;
-    getUsers(): Promise<User[]>;
-    postUser(data: UserDTO): Promise<User>;
-    patchUser(data: UserDTO): Promise<User>;
-    deleteUser(id: number): Promise<void>;
 }
 
 export class UserRepositoryImpl implements UserRepositoryBase {
@@ -21,6 +15,10 @@ export class UserRepositoryImpl implements UserRepositoryBase {
         return this.userData.getUserMe();
     }
 
+    public async getUserById(id: number): Promise<User> {
+        return this.userData.getUserById(id);
+    }
+
     public async getUsersModos(): Promise<User[]> {
         return this.userData.getUsersModos();
     }
@@ -29,12 +27,8 @@ export class UserRepositoryImpl implements UserRepositoryBase {
         return this.userData.getUsers();
     }
 
-    public async createUser(data: UserDTO): Promise<User> {
-        return this.userData.postUser(data);
-    }
-
     public async updateUser(data: UserDTO): Promise<User> {
-        return this.userData.patchUser(data);
+        return this.userData.updateUser(data);
     }
 
     public async deleteUser(id: number): Promise<void> {

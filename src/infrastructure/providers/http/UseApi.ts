@@ -18,14 +18,7 @@ if (typeof axios === "undefined") {
     throw new Error("Axios doit être chargé pour utiliser ce module.");
 }
 
-export const handleApiCall = async (apiCall: () => Promise<any>) => {
-    try {
-        const { data } = await apiCall(); return data;
-    } catch (error) {
-        //   console.error('apiCall', error);
-        // throw error;
-    }
-}
+
 
 const createApi = (accessToken: string): Api => {
     const headers = { Authorization: `Bearer ${accessToken}` };
@@ -84,7 +77,7 @@ export const useApi = (): Api => {
     return createApi(accessToken || "");
 };
 
-export const useApiRefresh = () => {
+export const useApiRefresh = (): Api => {
     const headersRefresh = { 'Authorization': 'Bearer ' + refreshToken }
     const api = axios.create({ baseURL: url, headers: headersRefresh })
     api.interceptors.request.use((config) => { return config })

@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { AuthHeader } from './authComps/AuthHeader';
 import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { User } from '../../../../domain/entities/User';
-import { AuthService } from '../../../../domain/repositories-ports/AuthRepository';
+import { User } from '../../../../domain/entities/User'
 import { FETCH_URL } from '../../../../../env.local';
+import { ResetPasswordApi } from '../../../../infrastructure/providers/http/resetPassword.api';
 
 
 export default function ResetPasswordPage() {
@@ -15,7 +15,7 @@ export default function ResetPasswordPage() {
     const [notif,] = useState<string>("");
     const params = { email: searchParams.get("email"), token: searchParams.get("token") }
     const { email, token } = params
-    const { resetPasswordUpdate } = new AuthService()
+    const { resetPasswordUpdate } = new ResetPasswordApi()
 
     const formSchema = object({
         password: string().required("password est obligatoire"),
@@ -27,7 +27,7 @@ export default function ResetPasswordPage() {
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values
-            const updatepassword = await resetPasswordUpdate(email as string, formik.values.password, token as string)
+            const updatepassword = await resetPasswordUpdate({ email: email as string, password: formik.values.password, resetToken: token as string })
             if (updatepassword) {
                 alert("mot de pass changé")
                 window.location.href = "/signin"

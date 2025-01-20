@@ -44,7 +44,7 @@ export default function NavBarTop() {
                         </MenuItem>
                         <hr className="my-2 border-blue-gray-50" />
                         <MenuItem className="flex items-center gap-2 !rounded-full py-1"
-                            onClick={() => navigate('/logout')}>
+                            onClick={() => navigate('/signin')}>
                             <Icon icon="exit_to_app" fill style="!text-red-500 pb-1" />
                             <Typography variant="small" className="font-medium">
                                 Sign Out

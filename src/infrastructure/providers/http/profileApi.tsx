@@ -1,8 +1,7 @@
 //src/infrastructure/api/profileApi.tsx
 import { Profile, ProfileDTO } from "../../../domain/entities/Profile";
-import { createFormData } from "./utilsApi";
+import { createFormData, handleApiCall } from "./utilsApi";
 import { Api, useApi } from "./UseApi";
-import { handleApiCall } from "./UseApi";
 
 
 export class ProfileApi {
@@ -27,11 +26,8 @@ export class ProfileApi {
         return handleApiCall(() => this.api.put(`${this.dataType}/${id}`, profile))
     }
 
-    async deleteProfile(id: number): Promise<void> {
-        return handleApiCall(() => this.api.delete(`${this.dataType}/${id}`))
-    }
-
-    async patchProfile(element: ProfileDTO): Promise<Profile> {
+    async updateProfile(element: ProfileDTO): Promise<Profile> {
+        console.log('element', element);
         const formData = createFormData(element);
         return handleApiCall(() => this.api.patch(`${this.dataType}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
@@ -39,6 +35,7 @@ export class ProfileApi {
     }
 
     async postProfile(element: ProfileDTO): Promise<Profile> {
+        console.log('element', element);
         const formData = createFormData(element);
         return handleApiCall(() => this.api.post(`${this.dataType}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }

@@ -1,5 +1,6 @@
 import { Like, LikeDTO } from "../entities/Like";
-import { useApi, handleApiCall } from "../../infrastructure/providers/http/UseApi";
+import { useApi, } from "../../infrastructure/providers/http/UseApi";
+import { handleApiCall } from "../../infrastructure/providers/http/utilsApi";
 
 const api = useApi();
 const dataType = "likes";

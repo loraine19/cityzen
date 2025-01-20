@@ -12,3 +12,12 @@ export const createFormData = (element: any): FormData => {
     }
     return formData;
 }
+
+export const handleApiCall = async (apiCall: () => Promise<any>) => {
+    try {
+        const { data } = await apiCall(); return data;
+    } catch (error) {
+        //   console.error('apiCall', error);
+        // throw error;
+    }
+}

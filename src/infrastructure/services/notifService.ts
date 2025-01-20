@@ -2,12 +2,12 @@
 import { Notif, NotifView } from "../../domain/entities/Notif";
 import { GetPathElement } from "./utilsService";
 
-interface NotifService {
+interface NotifServiceI {
     loadNotifs(notifs: Notif[], userId: number): NotifView[];
     readNotif(notif: Notif): void;
 }
 
-class NotifServiceImpl implements NotifService {
+export class NotifService implements NotifServiceI {
     constructor() { }
 
     loadNotifs(notifs: Notif[], userId: number): NotifView[] {
@@ -28,7 +28,7 @@ class NotifServiceImpl implements NotifService {
     }
 }
 
-export default NotifServiceImpl;
+
 
 
 

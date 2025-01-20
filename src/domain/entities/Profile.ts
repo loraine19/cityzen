@@ -43,3 +43,10 @@ export class ProfileDTO implements Partial<Profile> {
 }
 
 export class ProfileUpdateDTO implements Partial<ProfileDTO> { }
+
+export class ProfileView extends Profile {
+    addressString: string = '';
+    assistanceNumber: number = 0;
+    conciliateur?: boolean = false;
+    fullName?: string = '';
+}
