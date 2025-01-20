@@ -48,8 +48,8 @@ container.register({
     eventViewModel: asFunction(eventViewModel),
     eventIdViewModel: asFunction(eventIdViewModel),
     eventData: asClass(EventApi),
-    eventService: asClass(EventService).classic().inject(() => ({
-        deps: ['participantRepository', 'eventRepository']
+    eventService: asClass(EventService).inject(() => ({
+        deps: ['participantRepository', 'eventRepository', 'eventIdViewModel']
     })),
 
     ////PARTICIPANTS
