@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { GetEventsUseCase } from '../../application/useCases/getEvents.usecase';
+import { EventUseCase } from '../../application/useCases/event.usecase';
 import { EventService } from '../../infrastructure/services/eventService';
 import { UserUseCase } from '../../application/useCases/user.usecase';
 
-export const eventViewModel = ({ getEventsUseCase, userUseCase, eventService }: { getEventsUseCase: GetEventsUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
+export const eventViewModel = ({ eventUseCase, userUseCase, eventService }: { eventUseCase: EventUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
 
   //// Get user id
   const { data: user, isLoading: loadingUser } = useQuery({
@@ -15,7 +15,7 @@ export const eventViewModel = ({ getEventsUseCase, userUseCase, eventService }: 
   //// Get all events and add infos
   const { data: eventsData, isLoading: loadingEvents, error: errorEvents } = useQuery({
     queryKey: ['events'],
-    queryFn: async () => await getEventsUseCase.execute(),
+    queryFn: async () => await eventUseCase.getEvents(),
   });
   const events = eventService.getInfosInEvents(eventsData || [], userId);
 
@@ -23,7 +23,7 @@ export const eventViewModel = ({ getEventsUseCase, userUseCase, eventService }: 
   //// Get all events mine and add infos
   const { data: eventsMinesData, isLoading: loadingEventsMines, error: errorEventsMines } = useQuery({
     queryKey: ['eventsMines'],
-    queryFn: async () => await getEventsUseCase.executeMines(),
+    queryFn: async () => await eventUseCase.getEventsMines(),
   });
   const eventsMines = eventService.getInfosInEvents(eventsMinesData || [], userId)
 
@@ -31,7 +31,7 @@ export const eventViewModel = ({ getEventsUseCase, userUseCase, eventService }: 
   //// Get all events igos and add infos
   const { data: eventsIgoData, isLoading: loadingEventsIgo, error: errorEventsIgo } = useQuery({
     queryKey: ['eventsIgo'],
-    queryFn: async () => await getEventsUseCase.executeIgo(),
+    queryFn: async () => await eventUseCase.getEventsIgo(),
   })
   const eventsIgo = eventService.getInfosInEvents(eventsIgoData || [], userId)
 
@@ -39,7 +39,7 @@ export const eventViewModel = ({ getEventsUseCase, userUseCase, eventService }: 
   //// Get all events validated and add infos
   const { data: eventsValidatedData, isLoading: loadingEventsValidated, error: errorEventsValidated } = useQuery({
     queryKey: ['eventsValidated'],
-    queryFn: async () => await getEventsUseCase.executeValidated(),
+    queryFn: async () => await eventUseCase.getEventsValidated(),
   })
   const eventsValidated = eventService.getInfosInEvents(eventsValidatedData || [], userId)
 
@@ -61,3 +61,40 @@ export const eventViewModel = ({ getEventsUseCase, userUseCase, eventService }: 
     errorEventsValidated,
   };
 };
+
+
+export const eventIdViewModel = ({ eventUseCase, userUseCase, eventService }: { eventUseCase: EventUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
+  return (id: number) => {
+
+    //// TS CALL USER CONNECTED 
+    const { data: user, isLoading: loadingUser } = useQuery({
+      queryKey: ['userMe'],
+      queryFn: async () => await userUseCase.getUserMe()
+    })
+
+    //// TS CALL EVENT BY ID
+    const { data: eventByIdData, isLoading: loadingEvent, error: errorEvent } = useQuery({
+      queryKey: ['eventById', id],
+      queryFn: async () => await eventUseCase.getEventById(id),
+    })
+
+    //// USING SERVICE
+    const userId = loadingUser ? 0 : user.id
+    const event = eventByIdData ? eventService.getInfosInEvent(eventByIdData, userId) : {} as Event;
+
+    //// RETURN FORMATTED DATA
+    return { event, loadingEvent, errorEvent }
+  }
+
+
+
+}
+
+export const eventGetByIdViewModel = ({ eventUseCase }: { eventUseCase: EventUseCase }) => {
+  return async (id: number) => {
+    console.log('eventGetByIdViewModel', id)
+    const event = await eventUseCase.getEventById(id)
+    console.log('eventGetByIdViewModel', event)
+    return event
+  }
+}

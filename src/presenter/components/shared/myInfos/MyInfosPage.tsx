@@ -17,12 +17,12 @@ import { Address } from '../../../../domain/entities/Address';
 export default function MyInfosPage() {
     const { setUserProfile } = useContext(UserContext)
     const navigate = useNavigate();
-    const [newProfile, setNewProfile] = useState<Profile>({} as Profile);
+    const [newProfile] = useState<Profile>({} as Profile);
     const [skillList, setSkillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
     const [open, setOpen] = useState(false);
     const { addresses } = DI.resolve('addressViewModel')()
     const { postAddress } = DI.resolve('postAddressViewModel')()
-    const { profileMe, errorProfile, loadingProfile, } = DI.resolve('profileMeViewModel')()
+    const { profileMe } = DI.resolve('profileMeViewModel')()
     const { updateProfile } = DI.resolve('updateProfileViewModel')()
     console.log("profile", profileMe)
 

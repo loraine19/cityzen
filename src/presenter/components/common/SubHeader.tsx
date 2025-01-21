@@ -6,13 +6,12 @@ export default function SubHeader(props: { type: string, qty?: (number | string)
     const goBack = link || '/' + (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
 
     return (
-        <div className="flex justify-between items-start pb-2">
-            <h2 className="text-3xl font-thin px-4 ">
+        <div className="flex w-full justify-between items-start pb-2">
+            <h2 className="text-3xl font-thin px-4 flex-1 ">
                 <span className="font-medium ">{qty} {type} </span>{place ? place : " dans votre quartier"}
             </h2>
-            <div className={closeBtn ? 'flex' : 'hidden'}>
-                <Icon icon="cancel" size="4xl" fill style="thin hover:!p-0" link={goBack} title={"retour à " + goBack?.replace("/", "")} />
-            </div>
+
+            <Icon icon="cancel" size="4xl" fill style={`${closeBtn ? 'flex' : 'hidden'} thin`} link={goBack} title={"retour  " + goBack?.replace("/", "")} />
         </div>
     )
 }

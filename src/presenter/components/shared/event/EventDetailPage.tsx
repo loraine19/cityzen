@@ -39,7 +39,7 @@ export default function EventDetailPage() {
         },
 
     ];
-    useEffect(() => { console.log(event, loadingEvent); !loadingEvent && setEventLoad(event) }, [loadingEvent]);
+    useEffect(() => { !loadingEvent && setEventLoad(event) }, [loadingEvent]);
 
     //    if (loadingEvent || !eventLoad) { return (<>cc</>) }
     return (

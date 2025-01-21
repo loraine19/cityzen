@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Typography, } from '@material-tailwind/react';
 import { AuthHeader } from './authComps/AuthHeader'
 import { ProfileForm } from './authComps/ProfileForm';
@@ -24,7 +24,7 @@ export default function SignUpDetailPage() {
     const { postProfile } = DI.resolve('postProfileViewModel')()
     const { user, loadingUser } = DI.resolve('userViewModel')
     console.log(postAddress)
-    const [addressList, setAddressList] = useState<Address[]>(addresses ? addresses : [])
+    const [addressList] = useState<Address[]>(addresses ? addresses : [])
 
     /// FORMIK SCHEMA
     const formSchema = object({

@@ -6,16 +6,14 @@ import { UserRepositoryImpl } from '../infrastructure/repositoriesImpl/UserRespo
 import { UserApi } from '../infrastructure/providers/http/userApi';
 import { NotifRepositoryImpl } from '../infrastructure/repositoriesImpl/NotifRespositoryImpl';
 import { NotifApi } from '../infrastructure/providers/http/notifApi';
-import { notifsViewModel } from '../presenter/views/notifViewModel';
+import { notifGetViewModel, notifViewModel } from '../presenter/views/notifViewModel';
 import { EventRepositoryImpl } from '../infrastructure/repositoriesImpl/EventRespositoryImpl';
 import { EventApi } from '../infrastructure/providers/http/eventApi';
-import { eventViewModel } from '../presenter/views/eventViewModel';
-import { eventIdViewModel } from '../presenter/views/eventIdViewModel';
 import { EventService } from '../infrastructure/services/eventService';
 import { UserService } from '../infrastructure/services/userService';
 import { ParticipantRepositoryImpl } from '../infrastructure/repositoriesImpl/ParticipantRespositoryImpl';
 import { ParticipantApi } from '../infrastructure/providers/http/participantApi';
-import { participantViewModel } from '../presenter/views/partcipantViewModel';
+import { participantDeleteViewModel, participantPostViewModel, participantViewModel } from '../presenter/views/partcipantViewModel';
 import { AuthApi } from '../infrastructure/providers/http/authApi';
 import { AuthRepositoryImpl } from '../infrastructure/repositoriesImpl/AuthRespositoryImpl';
 import { ResetPasswordApi } from '../infrastructure/providers/http/resetPassword.api';
@@ -28,7 +26,7 @@ import { ProfileRepositoryImpl } from '../infrastructure/repositoriesImpl/Profil
 import { postProfileViewModel, profileMeViewModel, updateProfileViewModel } from '../presenter/views/profileViewModel';
 import { ProfileApi } from '../infrastructure/providers/http/profileApi';
 import { ProfileService } from '../infrastructure/services/profileService';
-import { GetEventsUseCase } from '../application/useCases/getEvents.usecase';
+import { EventUseCase } from '../application/useCases/event.usecase';
 import { NotifUseCase } from '../application/useCases/notif.usecase';
 import { ParticipantUseCase } from '../application/useCases/participants.useCase';
 import { postAddressViewModel } from '../presenter/views/addressViewModel';
@@ -36,6 +34,7 @@ import { AddressUseCase } from '../application/useCases/address.useCase';
 import { AddressRepositoryImpl } from '../infrastructure/repositoriesImpl/AddressRespositoryImpl';
 import { AddressService } from '../infrastructure/services/addressService';
 import { AddressApi } from '../infrastructure/providers/http/addressApi';
+import { eventIdViewModel, eventViewModel } from '../presenter/views/eventViewModel';
 
 // Extend the BuildResolverOptions type to include 'deps'
 export interface ExtendedBuildResolverOptions<T> extends BuildResolverOptions<T> {
@@ -84,25 +83,26 @@ container.register({
     ////NOTIFS
     notifUseCase: asClass(NotifUseCase),
     notifRepository: asClass(NotifRepositoryImpl),
-    notifsViewModel: asFunction(notifsViewModel),
+    notifViewModel: asFunction(notifViewModel),
+    notifGetViewModel: asFunction(notifGetViewModel),
     notifService: asClass(NotifService),
     notifData: asClass(NotifApi),
 
     ////EVENTS
-    getEventsUseCase: asClass(GetEventsUseCase),
+    eventUseCase: asClass(EventUseCase),
     eventRepository: asClass(EventRepositoryImpl),
     eventViewModel: asFunction(eventViewModel),
     eventIdViewModel: asFunction(eventIdViewModel),
     eventData: asClass(EventApi),
-    eventService: asClass(EventService).inject(() => ({
-        deps: ['participantRepository', 'eventRepository', 'eventIdViewModel']
-    })),
+    eventService: asClass(EventService),
 
     ////PARTICIPANTS
     participantUseCase: asClass(ParticipantUseCase),
     participantRepository: asClass(ParticipantRepositoryImpl),
     participantViewModel: asFunction(participantViewModel),
-    participantData: asClass(ParticipantApi)
+    participantData: asClass(ParticipantApi),
+    postParticipant: asFunction(participantPostViewModel),
+    deleteParticipant: asFunction(participantDeleteViewModel)
 
 
 });

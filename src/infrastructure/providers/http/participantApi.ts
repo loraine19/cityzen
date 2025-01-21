@@ -18,7 +18,6 @@ export class ParticipantApi {
     }
 
     async deleteParticipant(eventId: number): Promise<void> {
-        console.log('eventId', eventId)
         return handleApiCall(() => this.api.delete(`${this.dataType}/event${eventId}`));
     }
 

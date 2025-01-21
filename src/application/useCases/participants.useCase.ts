@@ -1,6 +1,8 @@
 //rc/application/useCases/participantCase.ts/participants.useCase.ts
-import { Participant, ParticipantDTO } from "../../../domain/entities/Participant";
-import { ParticipantRepositoryBase } from "../../../domain/repositories-ports/ParticipantRepositoryBase";
+
+import { Participant, ParticipantDTO } from "../../domain/entities/Participant";
+import { ParticipantRepositoryBase } from "../../domain/repositories-ports/ParticipantRepositoryBase";
+
 
 export class ParticipantUseCase {
     private participantRepository: ParticipantRepositoryBase;
@@ -9,16 +11,16 @@ export class ParticipantUseCase {
         this.participantRepository = participantRepository;
     }
 
-    public async executeGetParticipants(): Promise<Participant[]> {
+    public async getParticipants(): Promise<Participant[]> {
         return await this.participantRepository.getParticipants();
     }
 
-    public async executePostParticipant(dataDTO: ParticipantDTO): Promise<Participant> {
+    public async postParticipant(dataDTO: ParticipantDTO): Promise<Participant> {
+        console.log('post')
         return await this.participantRepository.postParticipant(dataDTO);
     }
 
-    public async executeDeleteParticipant(eventId: number): Promise<void> {
-        console.log('ParticipantUseCase execeuteDeleteParticipant');
+    public async deleteParticipant(eventId: number): Promise<void> {
         return await this.participantRepository.deleteParticipant(eventId);
     }
 }

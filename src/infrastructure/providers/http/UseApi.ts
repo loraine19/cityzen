@@ -71,7 +71,7 @@ export const useApi = (): Api => {
     let accessToken = Cookies.get("accessToken");
     if (!accessToken) {
         accessToken = refreshToken;
-        Cookies.set("accessToken", accessToken || "echec");
+        Cookies.set("accessToken", accessToken || '');
     }
 
     return createApi(accessToken || "");

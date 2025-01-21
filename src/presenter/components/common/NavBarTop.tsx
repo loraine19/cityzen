@@ -11,11 +11,11 @@ export default function NavBarTop() {
 
     return (
         <div className="flex justify-between w-full items-center py-3">
-            <div className="flex items-center lg:min-w-40  gap-2">
+            <div className="flex items-center w-full  gap-2">
                 <Menu placement="bottom-start" >
-                    <MenuHandler >
+                    <MenuHandler className="flex items-center gap-2 bg-blue-gray-100">
                         <Avatar
-                            className="BgUser !shadow cursor-pointer"
+                            className="BgUser !shadow cursor-pointer "
                             variant="circular"
                             alt={firstName}
                             src={image as string}

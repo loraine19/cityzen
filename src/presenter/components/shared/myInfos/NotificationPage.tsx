@@ -13,33 +13,33 @@ import { TabLabel } from "../../../../domain/entities/frontEntities";
 
 
 export default function NotificationPage() {
-    const { setUserNotif, notifList, setNotifList, updateNotifs, userNotif } = useContext(UserContext)
+    const { notifList, userNotif, updateNotifs, removeNotif } = useContext(UserContext)
     const [arrayToFilter, setArrayToFilter] = useState<any>(notifList);
     const [tabSelected, setTabSelected] = useState<string>('Tous');
     const [categorySelected, setCategorySelected] = useState<string>(notifCategories[0].value);
     const [notifFind, setNotifFind] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
-    const removeNotification = async (notifId: number, element: ElementNotif) => {
-        const updatedNotifList = notifList.map((notif) => (notif.id !== notifId && notif.element !== element) ? notif : { ...notif, read: true });
-        setArrayToFilter(updatedNotifList);
-        setUserNotif(userNotif - 1);
-        localStorage.setItem('notifList', JSON.stringify(updatedNotifList));
-        updateNotifs();
-    }
+    // const removeNotification = async (notifId: number, element: ElementNotif) => {
+    //     const updatedNotifList = notifList.map((notif) => (notif.id !== notifId && notif.element !== element) ? notif : { ...notif, read: true });
+    //     setArrayToFilter(updatedNotifList);
+    //     setUserNotif(userNotif - 1);
+    //     localStorage.setItem('notifList', JSON.stringify(updatedNotifList));
+    //     updateNotifs();
+    // }
 
-    useEffect(() => {
-        updateNotifs();
-        setNotifList(notifList);
-        setArrayToFilter(notifList);
-        notifList.length > 0 && setLoading(false);
-    }, []);
+    // useEffect(() => {
+    //     updateNotifs();
+    //     setNotifList(notifList);
+    //     setArrayToFilter(notifList);
+    //     notifList.length > 0 && setLoading(false);
+    // }, []);
 
 
     /////FILTER FUNCTIONS
     const filterNotifs = (newArray: any[], value: string) => {
         value !== tabSelected && setCategorySelected(notifCategories[0].value);
-        setNotifList(newArray);
+        // setNotifList(newArray);
         setTabSelected(value);
     }
 
@@ -96,8 +96,8 @@ export default function NotificationPage() {
             ">
                 {loading ? Array.from({ length: userNotif }).map((_, index) =>
                     <Skeleton key={index} height={130} className="!rounded-2xl" />) :
-                    notifList.map((notif: NotifView, index: number) => notif.read === false &&
-                        <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => removeNotification(notif.id, notif.element)} />)}
+                    notifList?.map((notif: NotifView, index: number) => notif.read === false &&
+                        <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => removeNotif(notif.id)} />)}
             </main>
             <NavBarBottom />
 

@@ -1,20 +1,20 @@
-import { ReactNode, useState, useEffect, createContext } from "react";
-import DI from "../di/ioc"; // Adjust the import path as necessary
-import { NotifView } from "../domain/entities/Notif";
-import { Profile } from "../domain/entities/Profile"
-import { dayMS } from "../infrastructure/services/utilsService";
-import { User } from "../domain/entities/User";
+import { createContext, ReactNode, useState } from 'react';
+import DI from '../di/ioc'; // Adjust the import path as necessary
+import { NotifView } from '../domain/entities/Notif';
+import { Profile } from '../domain/entities/Profile';
+import { dayMS } from '../infrastructure/services/utilsService';
+import { User } from '../domain/entities/User';
+import { useNotificationStore } from '../application/stores/notificationStore';
 
 interface UserContextType {
     user: User;
     userProfile: Profile;
     setUserProfile: (profile: Profile) => void;
     userNotif: number;
-    setUserNotif: (userNotifs: number) => void;
-    notifList: NotifView[];
-    setNotifList: (notifList: NotifView[]) => void;
-    updateNotifs: () => void;
     userEmail: string;
+    notifList: NotifView[];
+    updateNotifs: () => NotifView[];
+    removeNotif: (notifId: number) => void;
 }
 
 interface UserProviderType { children: ReactNode }
@@ -24,32 +24,23 @@ const UserContext = createContext<UserContextType>({
     userProfile: {} as Profile,
     setUserProfile: () => { },
     userNotif: 0,
-    setUserNotif: () => { },
-    setNotifList: () => { },
-    updateNotifs: () => { },
-    notifList: [] as NotifView[],
-    userEmail: 'example@me.com'
+    userEmail: 'example@me.com',
+    notifList: [],
+    updateNotifs: () => [],
+    removeNotif: () => { },
 });
 
 export function UserProvider({ children }: UserProviderType) {
     const { user, loadingUser } = DI.resolve('userViewModel')
-    const { notifs, loadingNotifs } = DI.resolve('notifsViewModel');
-    const [notifList, setNotifList] = useState<NotifView[]>(notifs ? notifs : []);
-    const [userNotif, setUserNotif] = useState<number>(0);
-    const [userEmail] = useState<string>('example@me.com');
+    const notifsL = DI.resolve('notifGetViewModel')();
+    const { notifs } = DI.resolve('notifViewModel');
+    console.log('notifList', notifsL, notifs);
+    const notifList = notifs;
+    // const notifList = useNotificationStore((state) => state.notifList);
+    const removeNotif = useNotificationStore((state) => state.removeNotif);
+    const userNotif = useNotificationStore((state) => state.notifList?.filter((notif) => !notif.read).length);
+    const userEmail = user ? user.email : '';
     const [userProfile, setUserProfile] = useState<Profile>(user ? user.Profile : {} as Profile);
-
-    useEffect(() => {
-        const load = async () => {
-            setNotifList(notifs ? notifs : []);
-            setUserNotif(notifs.filter((notif: NotifView) => !notif.read).length || 0);
-        }
-        load();
-    }, [loadingNotifs, loadingUser]);
-
-
-
-
     const updateNotifs = () => {
         const fifteenDaysAgo = new Date().getTime() - 15 * dayMS;
         const localNotif = JSON.parse(localStorage.getItem('notifList') || '[]').filter((notif: NotifView) => {
@@ -68,22 +59,9 @@ export function UserProvider({ children }: UserProviderType) {
             return [...acc, current];
         }, [user]);
         localStorage.setItem('notifList', JSON.stringify(sortedNotifList));
-        setNotifList(sortedNotifList);
-        setUserNotif(sortedNotifList.filter((notif: NotifView) => !notif.read).length || 0);
+        useNotificationStore.setState({ notifList: sortedNotifList });
         return sortedNotifList;
     };
-
-    // useEffect(() => {
-    //     if (user) {
-    //         const localUser = JSON.parse(localStorage.getItem('user') || '{}');
-    //         if (!localUser) {
-    //             localStorage.setItem('user', JSON.stringify(user.Profile));
-    //         }
-    //         user && setUserProfile(userProfile);
-    //         user && setUserEmail(user.email);
-    //     }
-    // }, []);
-
 
 
     return <UserContext.Provider
@@ -92,11 +70,10 @@ export function UserProvider({ children }: UserProviderType) {
             userProfile,
             setUserProfile,
             userNotif,
-            setUserNotif,
+            userEmail,
             notifList,
-            setNotifList,
             updateNotifs,
-            userEmail
+            removeNotif
         }}>
         {children}
     </UserContext.Provider>;

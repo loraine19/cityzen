@@ -4,8 +4,7 @@ import { NotifService } from '../../infrastructure/services/notifService';
 import { NotifUseCase } from '../../application/useCases/notif.usecase';
 import { Notif } from '../../domain/entities/Notif';
 
-export const notifsViewModel = ({ notifUseCase, userUseCase, notifService }: { notifUseCase: NotifUseCase, userUseCase: UserUseCase, notifService: NotifService }) => {
-
+export const notifViewModel = ({ notifUseCase, userUseCase, notifService }: { notifUseCase: NotifUseCase, userUseCase: UserUseCase, notifService: NotifService }) => {
 
   const { data, isLoading: loadingNotifs, error: errorNotifs } = useQuery({
     queryKey: ['notifs'],
@@ -22,4 +21,13 @@ export const notifsViewModel = ({ notifUseCase, userUseCase, notifService }: { n
   const notifs = (!loadingUser && !errorUser) ? notifService.loadNotifs(data, userId) : [] as Notif[];
 
   return { notifs, loadingNotifs, errorNotifs }
+}
+
+export const notifGetViewModel = ({ notifUseCase }: { notifUseCase: NotifUseCase }) => {
+  return async () => {
+    console.log('view')
+    let notifs = [];
+    notifs = await notifUseCase.getNotifs() as Notif[];
+    return notifs
+  }
 }

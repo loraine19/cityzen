@@ -10,8 +10,8 @@ export class NotifApi {
 
     constructor() { this.api = useApi() }
     async getNotifs(): Promise<Notif[]> {
-        return handleApiCall(() => this.api.get(this.dataType));
+        const response = await handleApiCall(() => this.api.get(this.dataType));
+        return response
     }
-
 }
 

@@ -3,7 +3,6 @@ import { EventView, Event } from "../../domain/entities/Event";
 import { Flag } from "../../domain/entities/Flag";
 import { dayMS, defaultEventImage } from "../../domain/entities/frontEntities";
 import { Participant } from "../../domain/entities/Participant";
-import { EventRepositoryBase } from "../../domain/repositories-ports/EventRepositoryBase";
 import { ParticipantRepositoryBase } from "../../domain/repositories-ports/ParticipantRepositoryBase";
 import { eventCategories, getLabel, shortDateString } from "./utilsService";
 
@@ -11,15 +10,13 @@ interface EventServiceI {
     getInfosInEvents(events: Event[], userId: number): EventView[];
     getInfosInEvent(event: Event, userId: number): EventView;
 }
-
-
 export class EventService implements EventServiceI {
 
-    constructor(
-        private participantRepository: ParticipantRepositoryBase, // Injectez l'interface
-        private eventRepository: EventRepositoryBase
-    ) { }
+    private participantUseCase: ParticipantRepositoryBase;
 
+    constructor(participantUseCase: ParticipantRepositoryBase) {
+        this.participantUseCase = participantUseCase
+    }
 
     //// UTILS
     getWeeksFull = (startDate: any, eventList: EventView[], numberOfWeeks: number): { date: Date, events: EventView[], text: string }[][] => {
@@ -75,8 +72,18 @@ export class EventService implements EventServiceI {
 
     ////PRIVATE
     toggleParticipant = async (event: Event, userId: number) => {
+        let participants
         const isParticipant = event.Participants.find((participant: any) => participant.userId === userId) ? true : false;
-        isParticipant ? await this.participantRepository.deleteParticipant(event.id) : await this.participantRepository.postParticipant({ userId: userId, eventId: event.id });
+        if (isParticipant) {
+            await this.participantUseCase.deleteParticipant(event.id);
+            participants = event.Participants.filter((participant: Participant) => participant.userId !== userId)
+        }
+        else {
+            const post = await this.participantUseCase.postParticipant({ userId: userId, eventId: event.id });
+            participants = [post, ...event.Participants];
+        }
+        console.log(participants);
+        return { ...event, Participants: participants };
     }
 
     generateCalendarLink(event: Event): string {
@@ -115,10 +122,10 @@ export class EventService implements EventServiceI {
             eventDateInfo: this.eventdateInfo(event),
             isValidate: event.Participants.length >= event.participantsMin,
             toogleParticipate: async () => {
-                await this.toggleParticipant(event, userId);
-                const updatedEvent = await this.eventRepository.getEventById(event.id);
-                return this.mapEventToEventView(updatedEvent, userId);
-            },
+                const newEvent = await this.toggleParticipant(event, userId);
+                console.log(newEvent);
+                return this.mapEventToEventView(newEvent, userId);
+            }
         };
     }
 
