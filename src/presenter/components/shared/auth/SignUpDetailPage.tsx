@@ -1,20 +1,20 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Typography, } from '@material-tailwind/react';
 import { AuthHeader } from './authComps/AuthHeader'
 import { ProfileForm } from './authComps/ProfileForm';
 import Skeleton from 'react-loading-skeleton';
 import { Address } from '../../../../domain/entities/Address';
-import UserContext from '../../../../contexts/user.context';
 import { Profile } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { LogOutButton } from '../../common/SmallComps';
+import { useUserStore } from '../../../../application/stores/userStore';
 
 export default function SignUpDetailPage() {
-    const { setUserProfile } = useContext(UserContext)
+    const { setUserProfile } = useUserStore();
     const navigate = useNavigate();
     const [newProfile] = useState<Profile>({} as Profile);
     const [skillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])

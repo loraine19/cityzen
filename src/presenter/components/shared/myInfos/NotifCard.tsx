@@ -1,14 +1,16 @@
 import { Card, CardBody, CardFooter, Typography, Chip, CardHeader } from "@material-tailwind/react";
 import { Icon } from "../../common/SmallComps";
-import { useContext } from "react";
-import UserContext from "../../../../contexts/user.context";
 import { NotifView } from "../../../../domain/entities/Notif";
+import { useUserStore } from "../../../../application/stores/userStore";
+import { Profile } from "../../../../domain/entities/Profile";
 
 
 type notifCardProps = { notif: any, handleClick: (notif: NotifView) => void }
 
 export function NotifCard(props: notifCardProps) {
-    const { userProfile } = useContext(UserContext)
+    const { user } = useUserStore()
+    const userProfile: Profile = user.Profile
+
     const { handleClick, notif } = props
     const { update, userId, read, elementType, relation } = props.notif
 

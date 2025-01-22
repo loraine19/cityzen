@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Action } from '../../../../domain/entities/frontEntities';
-import UserContext from '../../../../contexts/user.context';
 import { Pool } from '../../../../domain/entities/Pool';
 import { PoolService } from '../../../../domain/repositories-ports/PoolRepository';
 import { GenereMyActions } from '../../../../infrastructure/services/utilsService';
@@ -9,11 +8,12 @@ import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import PoolDetailCard from './poolSurveyComp/PoolDetailCard';
+import { useUserStore } from '../../../../application/stores/userStore';
 
 export default function PoolDetailPage() {
     const { id } = useParams();
-    const { userProfile } = useContext(UserContext);
-    const userId: number = userProfile.userId;
+    const { user } = useUserStore()
+    const userId: number = user.id
     const [element, setElement] = useState<Pool>({} as Pool);
     const [isMine, setIsMine] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);

@@ -1,12 +1,12 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { DateChip, Icon, ProfileDiv, Title } from "../../../common/SmallComps";
-import { useState, useContext } from "react";
-import UserContext from "../../../../../contexts/user.context";
+import { useState, } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
 import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { getLabel, postCategories, toggleLike } from "../../../../../infrastructure/services/utilsService";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 
 
@@ -14,8 +14,8 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
     const [post, setPost] = useState<Post>(props.post)
     const { change } = props
     const { id, title, description, image, category, createdAt, Likes } = post
-    const { userProfile } = useContext(UserContext)
-    const userId: number = userProfile.userId
+    const { user } = useUserStore()
+    const userId: number = user.id
     const haveImage: boolean = post.image ? true : false
     const Author: Profile = post?.User?.Profile
     const flagged: boolean = post.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false

@@ -21,3 +21,10 @@ export const handleApiCall = async (apiCall: () => Promise<any>) => {
         // throw error;
     }
 }
+
+export class ApiError extends Error {
+    constructor(public status: number, message: string) {
+        super(message);
+        this.name = 'ApiError';
+    }
+}

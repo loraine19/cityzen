@@ -1,18 +1,18 @@
 import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix, IconButton } from "@material-tailwind/react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import UserContext from "../../../../../contexts/user.context";
 import { Profile, assistanceLevel } from "../../../../../domain/entities/Profile";
 import { getImageBlob } from "../../../../../infrastructure/services/utilsService";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import { Address } from "../../../../../domain/entities/Address";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 
 interface AddressErrors { zipcode: string, city: string }
 export const ProfileForm = (props: { formik: any, user?: Profile, setSkillList?: any }) => {
     const [imgBlob, setImgBlob] = useState<string | Blob | ArrayBuffer | null>('');
     const { formik, setSkillList } = props;
-    const { userEmail } = useContext(UserContext)
+    const { user } = useUserStore()
     const [Address, setAddress] = useState<Address>(formik.values.Address || {} as Address);
     const { image, firstName, lastName, phone, skills } = formik.values;
     const [newSkill, setNewSkill] = useState<string | undefined>()
@@ -54,7 +54,7 @@ export const ProfileForm = (props: { formik: any, user?: Profile, setSkillList?:
                             </button>
                         </div>
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
-                            <Typography className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">{userEmail} </Typography>
+                            <Typography className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">{user.email} </Typography>
                             <Link to="/motdepasse_oublie"
                                 className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-right"
                             >

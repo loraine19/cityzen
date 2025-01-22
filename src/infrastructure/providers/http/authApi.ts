@@ -13,7 +13,6 @@ export class AuthApi {
     }
 
     async signInVerify(data: { email: string, password: string, verifyToken: string }): Promise<Auth> {
-        console.log('verifyToken', data.verifyToken);
         return handleApiCall(() => this.api.post(`${this.dataType}/signin/verify`, data));
     }
 

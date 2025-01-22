@@ -1,11 +1,11 @@
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../../../contexts/user.context";
-import { Icon, NotifBadge } from "./SmallComps";
+import { Icon } from "./SmallComps";
+import { NotifBadge } from "./NotifBadge";
+import { useUserStore } from "../../../application/stores/userStore";
 
 export default function NavBarTop() {
-    const { user, notifList, } = useContext(UserContext);
+    const user = useUserStore((state) => state.user);
     const { firstName, image } = user && user.Profile || {} as any;
     const navigate = useNavigate();
 
@@ -57,7 +57,7 @@ export default function NavBarTop() {
                     <Typography color="blue-gray" className="-mt-1">Quartier</Typography>
                 </div>
             </div>
-            <NotifBadge notifList={notifList} />
+            <NotifBadge />
         </div>
     )
 }

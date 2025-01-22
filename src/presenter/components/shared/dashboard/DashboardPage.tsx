@@ -1,33 +1,40 @@
 //src/presenter/components/shared/dashboard/DashboardPage.tsx
 import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import DI from '../../../../di/ioc'
-import { useContext } from "react";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { Notif } from "../../../../domain/entities/Notif";
+import { NotifView } from "../../../../domain/entities/Notif";
 import { GetPathElement } from "../../../../infrastructure/services/utilsService";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
-import { NotifBadge, Icon, LogOutButton } from "../../common/SmallComps";
+import { Icon, LogOutButton } from "../../common/SmallComps";
 import { AuthHeader } from "../auth/authComps/AuthHeader";
-import CalendarComp from "./CalendarComp";
-import UserContext from "../../../../contexts/user.context";
+import CalendarComp from "../../common/CalendarComp";
+import { useNotificationStore } from "../../../../application/stores/notificationStore";
+import { useEffect } from "react";
+import { NotifBadge } from "../../common/NotifBadge";
 
 export default function DashboardPage() {
     const { user, loadingUser } = DI.resolve('userViewModel');
-    const { notifList } = useContext(UserContext);
+    const notifList = useNotificationStore((state) => state.notifList);
+    const updateNotif = useNotificationStore((state) => state.updateNotif);
+    //   const userNotif = useNotificationStore((state) => state.notifList?.filter((notif) => !notif.read).length);
+
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
 
+    useEffect(() => {
+        updateNotif(notifList)
+    }, [notifList])
 
     return (
         <div className="Body gray">
             <div className="relative flex-col w-full flex items-center  justify-center ">
                 <div className="absolute flex justify-between  w-full max-w-[1000px] !m-auto  p-2">
                     <LogOutButton />
-                    <NotifBadge notifList={notifList} />
+                    <NotifBadge />
                 </div>
                 <AuthHeader />
             </div>
@@ -84,10 +91,10 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col w-full max-h-8 overflow-y-auto ">
-                                    {notifList && (notifList.map((notif: Notif, index: number) => notif.read === false &&
+                                    {notifList && (notifList.map((notif: NotifView, index: number) => notif.read === false &&
                                         <div className="w-full font-light text-sm flex px-1 justify-between" key={index}>
                                             <p>
-                                                <span className="text-orange-800 capitalize font-normal">{GetPathElement(notif.element.toString().toLowerCase())}</span> :
+                                                <span className="text-orange-800 capitalize font-normal">{notif?.elementType}</span> :
                                                 {notif?.title}
                                             </p>
                                             <Icon icon="arrow_circle_right" link={`/${GetPathElement(notif.element.toString().toLowerCase())}/${notif.id}`} size="2xl" color="orange"

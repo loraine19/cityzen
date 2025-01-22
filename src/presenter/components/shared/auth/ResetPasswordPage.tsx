@@ -33,7 +33,9 @@ export default function ResetPasswordPage() {
             const updatepassword = await updatePassword({ email: email as string, password: formik.values.password, resetToken: token as string })
             if (updatepassword) {
                 setNotif(updatepassword?.message);
-                setTimeout(() => { window.location.href = '/signin'; }, 1000);
+                setTimeout(() => {
+                    window.location.href = '/signin?msg=' + updatepassword?.message + '?email=' + email
+                }, 1000);
             }
             else { setNotif('une erreur est survenue') }
         },
@@ -54,7 +56,7 @@ export default function ResetPasswordPage() {
                     <Card className='w-respLarge flex py-4 flex-col items-center'>
                         <CardBody className='flex w-full w-resp flex-col text-center gap-4'>
                             <Typography variant="h5" color="blue-gray" className="mb-2">
-                                Reinitialisation du mot de pass
+                                Reinitialisation du mot de passe
                             </Typography>
                             <Typography color="gray" className="mb-4">
                                 {notif}

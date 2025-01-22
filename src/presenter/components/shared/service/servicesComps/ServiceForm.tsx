@@ -1,15 +1,17 @@
 import { Radio, Select, Card, CardHeader, Button, Typography, Chip, CardBody, Input, Textarea, Option } from "@material-tailwind/react";
-import { useContext, useState, useEffect } from "react";
-import UserContext from "../../../../../contexts/user.context";
+import { useState, useEffect } from "react";
 import { Label } from "../../../../../domain/entities/frontEntities";
 import { GetPoints, serviceCategories, getImageBlob } from "../../../../../infrastructure/services/utilsService";
 import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
+import { Profile } from "../../../../../domain/entities/Profile";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 export function ServiceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
     const { createdAt, title, description, image } = formik.values
-    const { userProfile } = useContext(UserContext)
+    const { user } = useUserStore()
+    const userProfile: Profile = user.Profile
     const haveImage = image ? true : false
     const [imgBlob, setImgBlob] = useState<string>(formik.values.image as string)
 

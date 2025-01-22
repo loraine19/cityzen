@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton';
-import UserContext from '../../../../../contexts/user.context';
 import { Issue, IssueStep } from '../../../../../domain/entities/Issue';
 import { Service, ServiceType } from '../../../../../domain/entities/Service';
 import { User } from '../../../../../domain/entities/User';
@@ -13,11 +12,13 @@ import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from '../servicesComps/IssueCard';
 import { Action } from '../../../../../domain/entities/frontEntities';
 import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
+import { useUserStore } from '../../../../../application/stores/userStore';
 
 
 export default function IssueDetailPage() {
     const { id } = useParams()
-    const { userProfile } = useContext(UserContext)
+    const { user } = useUserStore()
+    const userId = user.id
     const [service, setService] = useState<Service>({} as Service)
     const navigate = useNavigate();
     const [loading, setLoading] = useState<boolean>(true);
@@ -68,13 +69,13 @@ export default function IssueDetailPage() {
         <div className="Body gray">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={"Conciliation"} place={` sur ${issue.Service?.type === ServiceType.GET ? "une demande" : "une offre"} de service  ${userProfile.userId === service.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`} closeBtn />
+                <SubHeader type={"Conciliation"} place={` sur ${issue.Service?.type === ServiceType.GET ? "une demande" : "une offre"} de service  ${userId === service.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`} closeBtn />
             </header>
             {loading ?
                 <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
                 <IssueForm issue={issue} loading={loading} modos={modos} />
             }
-            {userProfile.userId === issue.userId ?
+            {userId === issue.userId ?
                 <CTAMines actions={MyActions} disabled1={statusValue < 1} /> :
                 <CTAMines actions={RespActions} disabled1={statusValue > 1} />
             }

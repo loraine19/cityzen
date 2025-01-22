@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import UserContext from '../../../../contexts/user.context';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom'
 import { PostService } from '../../../../domain/repositories-ports/PostRepository';
 import { Post } from '../../../../domain/entities/Post';
 import { GenereMyActions, getLabel, postCategories } from '../../../../infrastructure/services/utilsService';
@@ -9,11 +8,12 @@ import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import AnnounceDetailComp from './announceComps/PostDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
+import { useUserStore } from '../../../../application/stores/userStore';
 
 export default function AnnounceDetailPage() {
     const { id } = useParams();
-    const { userProfile } = useContext(UserContext);
-    const userId = userProfile.userId;
+    const { user } = useUserStore()
+    const userId = user.id
     const [post, setPost] = useState<Post>({} as Post);
     const [isMine, setIsMine] = useState<boolean>(false);
     const [share, setShare] = useState<string[]>([]);

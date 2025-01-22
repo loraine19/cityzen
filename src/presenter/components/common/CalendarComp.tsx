@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
-import { EventCard } from '../event/eventComps/EventCard';
-import { dayMS, getLabel, eventCategories } from '../../../../infrastructure/services/utilsService';
-import { Icon } from '../../common/SmallComps';
-import DI from '../../../../di/ioc'
-import { EventService } from '../../../../infrastructure/services/eventService';
-import { day } from '../../../../domain/entities/frontEntities';
+import { EventCard } from '../shared/event/eventComps/EventCard';
+import { dayMS, getLabel, eventCategories } from '../../../infrastructure/services/utilsService';
+import { Icon } from './SmallComps';
+import DI from '../../../di/ioc'
+import { EventService } from '../../../infrastructure/services/eventService';
+import { day } from '../../../domain/entities/frontEntities';
 
 
 export default function CalendarCompLarge(props: { logo?: boolean }) {
@@ -36,15 +36,17 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
     useEffect(() => { if (window.innerWidth < 900) { setNumberOfwweks(1); } else { setNumberOfwweks(2) } }, [])
 
     useEffect(() => {
-        setWeeks(eventService.getWeeksFull(startDate, events, numberOfwweks));
-    }, [startDate, numberOfwweks])
+        !loadingEvents && setWeeks(eventService.getWeeksFull(startDate, events, numberOfwweks));
+    }, [startDate, numberOfwweks, loadingEvents])
+
+
 
 
     return (
         <div className='flex flex-col flex-1 '>
             <div className="flex  justify-between  gap-1 items-center p-0">
                 {logo && <div className='flex gap-2 items-center'>
-                    <Icon fill icon="supervised_user_circle" link="/evenements" size="4xl"
+                    <Icon fill icon="calendar_view_month" link="/evenement" size="4xl"
                         title='Voir tous les événements' />
                     <div>
                         <Typography color="blue-gray" className="hidden lg:flex">
@@ -76,14 +78,14 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
             <div className='relative max-h-full w-full flex flex-1 '>
                 {loadingEvents || errorEvents ? (
                     <div className='absolute flex flex-col flex-1 h-full p-2 gap-2 w-full rounded-2xl bg-white shadow'>
-                        <div className='grid rounded-lg lg:grid-cols-7 h-full overflow-auto pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20'>
-                            {[...Array(7)].map((_, index) => (
-                                <div key={index} className='text-xs flex flex-col text-center h-full'>
+                        <div className={`grid grid-cols-${num} rounded-lg h-full overflow-auto pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20`}>
+                            {[...Array(num)].map((_, index) => (
+                                <div key={index} className='text-xs w-full flex flex-col text-center h-full'>
                                     <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50'>
                                         &nbsp;
                                     </p>
                                     <div className='flex flex-col h-full w-full items-center gap-3'>
-                                        {[...Array(3)].map((_, eventIndex) => (
+                                        {[...Array(numberOfwweks)].map((_, eventIndex) => (
                                             <div key={eventIndex} className='w-full rounded-xl bg-gray-300 h-7 animate-pulse'></div>
                                         ))}
                                     </div>

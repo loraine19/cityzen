@@ -1,16 +1,16 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../../../../../contexts/user.context";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, HardLevel, SkillLevel } from "../../../../../domain/entities/Service";
 import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal } from "../../../../../infrastructure/services/utilsService";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 
 export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void }) {
-    const { userProfile } = useContext(UserContext)
-    const userId = (userProfile.userId)
+    const { user } = useUserStore()
+    const userId: number = user.id
     const navigate = useNavigate();
     const { service } = props
     const { id, title, description, image, createdAt, User, UserResp } = props.service

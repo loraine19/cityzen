@@ -1,12 +1,12 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, } from "@material-tailwind/react";
-import { useState, useContext, useEffect } from "react";
-import UserContext from "../../../../../contexts/user.context";
+import { useState, useEffect } from "react";
 import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { dayMS } from "../../../../../infrastructure/services/utilsService";
 import { DateChip, ProfileDiv, ProgressSmallbar, Icon } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 
 
@@ -14,8 +14,8 @@ export default function PoolDetailCard(props: { element: Pool, mines?: boolean, 
     const [element] = useState<Pool>(props.element)
     const { change } = props
     const { title, description, createdAt, Votes, User, UserBenef } = element
-    const { userProfile } = useContext(UserContext)
-    const userId: number = userProfile.userId
+    const { user } = useUserStore()
+    const userId: number = user.id
     const haveImage: boolean = false
     const author: Profile = User?.Profile || {} as Profile
     const [usersLength, setUsersLength] = useState<number>(0)

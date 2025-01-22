@@ -1,6 +1,5 @@
-import { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import UserContext from '../../../../contexts/user.context';
 import { Service, ServiceStep } from '../../../../domain/entities/Service';
 import { ServiceService } from '../../../../domain/repositories-ports/ServiceRepository';
 import { getEnumVal, getLabel, serviceCategories, serviceTypes, isLate, GetPoints, GenereMyActions, toggleValidResp, generateContact, toggleResp } from '../../../../infrastructure/services/utilsService';
@@ -9,12 +8,13 @@ import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import ServiceDetailComp from './servicesComps/ServiceDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
+import { useUserStore } from '../../../../application/stores/userStore';
 
 
 export default function ServiceDetailPage() {
     const { id } = useParams();
-    const { userProfile } = useContext(UserContext);
-    const userId = userProfile.userId;
+    const { user } = useUserStore()
+    const userId = user.id
     const [service, setService] = useState<Service>({} as Service);
     const [mine, setMine] = useState<boolean>(false);
     const [IResp, setIResp] = useState<boolean>(false);

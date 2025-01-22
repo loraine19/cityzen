@@ -1,8 +1,7 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { Icon } from '../../../common/SmallComps'
-import { useContext, useState, useEffect } from "react";
-import UserContext from "../../../../../contexts/user.context";
+import { useState, useEffect } from "react";
 import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { PoolService } from "../../../../../domain/repositories-ports/PoolRepository";
@@ -11,13 +10,14 @@ import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 
 
 type PoolCardProps = { pool: Pool, change: (e: any) => void, mines?: boolean, update?: () => void }
 export function PoolCard(props: PoolCardProps) {
-    const { userProfile } = useContext(UserContext)
-    const userId: number = userProfile.userId
+    const { user } = useUserStore()
+    const userId: number = user.id
     const [pool] = useState<Pool>(props.pool)
     const { id, title, description, createdAt, UserBenef } = pool
     const Votes: Vote[] = pool.Votes || []

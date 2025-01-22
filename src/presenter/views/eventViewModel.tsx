@@ -85,9 +85,6 @@ export const eventIdViewModel = ({ eventUseCase, userUseCase, eventService }: { 
     //// RETURN FORMATTED DATA
     return { event, loadingEvent, errorEvent }
   }
-
-
-
 }
 
 export const eventGetByIdViewModel = ({ eventUseCase }: { eventUseCase: EventUseCase }) => {

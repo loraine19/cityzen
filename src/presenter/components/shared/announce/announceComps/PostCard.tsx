@@ -1,6 +1,5 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
-import { useContext, useState } from "react";
-import UserContext from "../../../../../contexts/user.context";
+import { useState } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
 import { Post } from "../../../../../domain/entities/Post";
@@ -10,12 +9,13 @@ import { getLabel, postCategories, GenereMyActions, toggleLike } from "../../../
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 
 
 export default function AnnouncesComp(props: { post: Post, mines?: boolean, change: (e: any) => void, update?: () => void }) {
-    const { userProfile } = useContext(UserContext)
-    const userId: number = userProfile.userId
+    const { user } = useUserStore()
+    const userId: number = user.id
     const { mines, change, update } = props
     const [post, setPost] = useState<Post>(props.post)
     const { id, title, description, image, category, createdAt, Likes, User } = post

@@ -1,12 +1,13 @@
 import { Card, CardHeader, Typography, Chip, CardBody, Textarea, Popover, PopoverHandler, PopoverContent, Select, Option, Button, Input } from "@material-tailwind/react"
 import Skeleton from "react-loading-skeleton"
 import ServiceIssueCard from "./ServiceIssueCard"
-import { useContext, useState } from "react"
-import UserContext from "../../../../../contexts/user.context"
+import { useState } from "react"
 import { Issue } from "../../../../../domain/entities/Issue"
 import { Service } from "../../../../../domain/entities/Service"
 import { User } from "../../../../../domain/entities/User"
 import { getImageBlob } from "../../../../../infrastructure/services/utilsService"
+import { useUserStore } from "../../../../../application/stores/userStore"
+import { Profile } from "../../../../../domain/entities/Profile"
 
 
 
@@ -14,9 +15,10 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
     const { issue, loading, modos, formik } = props
     const { createdAt, description, image } = formik ? formik.values : issue
     const Service = props.service ? props.service : issue.Service
-    console.log(modos)
     const { title } = Service
-    const { userProfile } = useContext(UserContext)
+    const { user } = useUserStore()
+    const userProfile: Profile = user.Profile
+
     // const [statusValue] = useState<number>(typeof status === 'number' ? status : parseInt(IssueStep[issue.status]))
     const myService = useState<boolean>(userProfile.userId === Service.userId)
     const IResp = useState<boolean>(userProfile.userId === Service.userIdResp)

@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import UserContext from "../../../../contexts/user.context";
 import { NotifView } from "../../../../domain/entities/Notif";
 import { notifCategories } from "../../../../infrastructure/services/utilsService";
 import NavBarBottom from "../../common/NavBarBottom";
@@ -9,9 +8,10 @@ import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import { NotifCard } from "./NotifCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { useNotificationStore } from "../../../../application/stores/notificationStore";
 
 export default function NotificationPage() {
-    const { notifList, userNotif, updateNotifs, removeNotif } = useContext(UserContext)
+    const { notifList, updateNotif, removeNotif } = useNotificationStore()
     const [list, setList] = useState<NotifView[]>(notifList)
     const [arrayToFilter] = useState<any>(notifList);
     const [tabSelected, setTabSelected] = useState<string>('Tous');
@@ -19,20 +19,6 @@ export default function NotificationPage() {
     const [notifFind, setNotifFind] = useState<string>('');
     const [loading] = useState<boolean>(false);
 
-    // const removeNotification = async (notifId: number, element: ElementNotif) => {
-    //     const updatedNotifList = notifList.map((notif) => (notif.id !== notifId && notif.element !== element) ? notif : { ...notif, read: true });
-    //     setArrayToFilter(updatedNotifList);
-    //     setUserNotif(userNotif - 1);
-    //     localStorage.setItem('notifList', JSON.stringify(updatedNotifList));
-    //     updateNotifs();
-    // }
-
-    // useEffect(() => {
-    //     updateNotifs();
-    //     setNotifList(notifList);
-    //     setArrayToFilter(notifList);
-    //     notifList.length > 0 && setLoading(false);
-    // }, []);
 
 
     useEffect(() => { console.log(notifList); setList(notifList) }, [notifList])
@@ -75,7 +61,7 @@ export default function NotificationPage() {
 
     //// USE EFFECT 
     useEffect(() => {
-        userNotif > 0 ? setNotifFind('') : setNotifFind(`Aucun Notification ${tabSelected} ${categorySelected != notifCategories[0].value && categorySelected ? categorySelected : ""} na été trouvé`);
+        notifList.length > 0 ? setNotifFind('') : setNotifFind(`Aucun Notification ${tabSelected} ${categorySelected != notifCategories[0].value && categorySelected ? categorySelected : ""} na été trouvé`);
     }, [notifList])
 
 
@@ -84,7 +70,7 @@ export default function NotificationPage() {
             <header className=" px-4">
                 <NavBarTop />
                 <div className="flex ">
-                    <SubHeader qty={userNotif} type={"Notifications " + `${categorySelected != notifCategories[0].value ? categorySelected : ""} `} closeBtn link={'/'} /></div>
+                    <SubHeader qty={notifList.length} type={"Notifications " + `${categorySelected != notifCategories[0].value ? categorySelected : ""} `} closeBtn link={'/'} /></div>
                 <div className="max-w-[100vw] overflow-auto flex px-2 !py-0">
                     <TabsMenu labels={notifTabs} />
                 </div>
@@ -94,11 +80,11 @@ export default function NotificationPage() {
 
             <main className="Grid !content-start !gap-3
             ">
-                {loading ? Array.from({ length: userNotif }).map((_, index) =>
+                {loading ? Array.from({ length: 10 }).map((_, index) =>
                     <Skeleton key={index} height={130} className="!rounded-2xl" />) :
                     list?.map((notif: NotifView, index: number) => notif.read === false &&
                         <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => {
-                            removeNotif(notif.id); updateNotifs()
+                            removeNotif(notif.id); updateNotif(list)
                         }} />)}
             </main>
             <NavBarBottom />

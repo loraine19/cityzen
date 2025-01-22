@@ -6,81 +6,67 @@ import { useState } from 'react';
 import { AuthForm } from './authComps/AuthForm';
 import { AuthHeader } from './authComps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
-import { useToken } from '../../../../domain/repositories-ports/useToken';
 import DI from '../../../../di/ioc';
 
 export default function SignInPage() {
-    const { saveToken } = useToken();
+    const { saveToken } = DI.resolve('authService');
     const [searchParams] = useSearchParams();
-    const params = { email: searchParams.get("email"), token: searchParams.get("token") }
-    const { email, token } = params
-    const [notif, setNotif] = useState<string>(email ? 'vous pouvez maintenant vous connecter' : "");
-
-    ////SIGN IN
-    const { errorAuth, signIn } = DI.resolve('authSignInViewModel')()
-
-    ////SIGN IN VERIFY
+    const email = searchParams.get("email");
+    const token = searchParams.get("token");
+    const msg = searchParams.get("msg");
+    const [notif, setNotif] = useState<string>(email && 'vous pouvez maintenant vous connecter' || msg || '');
+    const { errorAuth, signIn } = DI.resolve('authSignInViewModel')();
     const { errorAuthVerify, signInVerify } = DI.resolve('authSignInVerifyViewModel')();
 
-    ////FORMIK
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),
         password: string().required("Mot de passe est obligatoire").min(6, "minimum 6 charactères"),
-    })
+    });
+
     const formik = useFormik({
-        initialValues: {} as any,
+        initialValues: { email: '', password: '' },
         validationSchema: formSchema,
         onSubmit: async (values) => {
-            if (values.email && values.password) {
-                ////SIGN IN VERIFY
-                if (token) {
-                    const authVerify = await signInVerify({ email, password: values.password, verifyToken: token })
-                    console.log(authVerify)
-                    if (authVerify) {
-                        saveToken(authVerify.accessToken, authVerify.refreshToken);
-                        setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...')
-                        setTimeout(() => { window.location.replace("/signup_details") }, 1000);
-                    }
-                    else if (authVerify && !authVerify.accessToken) {
-                        setNotif(authVerify.message)
-                    }
-                    else if (errorAuthVerify || errorAuth) {
-                        setNotif('erreur : ' + errorAuthVerify + errorAuth)
-                        formik.values = {} as any
-                    }
-                    else if (!authVerify) {
-                        setNotif('identifiants iconnus ...')
-                    }
-
-                }
-                ////SIGN IN
-                else if (!token) {
-                    const auth: any = await signIn({ email: values.email, password: values.password })
-                    console.log(auth)
-                    if (auth && auth?.accessToken) {
-                        saveToken(auth.accessToken, auth.refreshToken);
-                        setNotif('Vous êtes connecté, redirection ...')
-                        setTimeout(() => { window.location.replace("/") }, 1000);
-                    }
-                    else if (auth && !auth.accessToken) {
-                        setNotif(auth.message)
-                    }
-                    else if (errorAuth || errorAuthVerify) {
-                        setNotif('Email ou mot de passe incorrect' + errorAuth + errorAuthVerify)
-                        formik.values = {} as any
-                    }
-                    else {
-                        setNotif('Identifiants iconnus ...')
-                    }
-
-                }
-            }
+            token ? await handleSignInVerify(values) : await handleSignIn(values)
         },
     });
-    const terms = "Vous resterez connecté pour 48h ..."
+
+    const handleSignInVerify = async (values: { email: string; password: string }) => {
+        const authVerify = await signInVerify({ email, password: values.password, verifyToken: token });
+        if (authVerify?.accessToken) {
+            saveToken(authVerify.accessToken, authVerify.refreshToken);
+            setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
+            setTimeout(() => { window.location.replace("/signup_details") }, 1000);
+        } else {
+            handleAuthError(authVerify?.message, errorAuthVerify);
+        }
+    };
+
+    const handleSignIn = async (values: { email: string; password: string }) => {
+        const auth = await signIn({ email: values.email, password: values.password });
+        if (auth?.accessToken) {
+            saveToken(auth.accessToken, auth.refreshToken);
+            setNotif('Vous êtes connecté, redirection ...');
+            setTimeout(() => { window.location.replace("/") }, 1000);
+        } else {
+            handleAuthError(auth?.message, errorAuth);
+        }
+    };
+
+    const handleAuthError = (message: string | undefined, error: string | undefined) => {
+        if (message) {
+            setNotif(message);
+        } else if (error) {
+            setNotif('Erreur : ' + error);
+        } else {
+            setNotif('Identifiants inconnus ...');
+        }
+        formik.resetForm();
+    }
+
+    const terms = "Vous resterez connecté pour 48h ...";
 
     return (
-
         <div className="Body gray pb-2">
             <AuthHeader />
             <main className='items-center gap-4 pb-2'>
@@ -90,26 +76,25 @@ export default function SignInPage() {
                     notif={notif}
                     popOverContent={terms}
                     popOverButtonText="Rester connecté"
-                    popOverClass="font-light text-start "
+                    popOverClass="font-light text-start"
                     popOverVariant="texte"
                     submitText="Se connecter"
-                    confirm={false} />
+                    confirm={false}
+                />
                 <Link to="/motdepasse_oublie">
                     <Typography className="text-xs font-medium p-2 text-center underline underline-offset-8 uppercase">
                         Mot de pass oublié
                     </Typography>
                 </Link>
-                <Typography variant="small" className=" flex justify-center">
+                <Typography variant="small" className="flex justify-center">
                     Pas encore de compte ?
                 </Typography>
                 <Link to="/signup">
-                    <Button
-                        size="md" className="rounded-full mb-2">
+                    <Button size="md" className="rounded-full mb-2">
                         inscrivez-vous
                     </Button>
                 </Link>
             </main>
         </div>
-    )
+    );
 }
-

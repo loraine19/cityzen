@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useParams } from 'react-router-dom';
-import UserContext from '../../../../contexts/user.context';
 import { Survey } from '../../../../domain/entities/Survey';
 import { SurveyService } from '../../../../domain/repositories-ports/SurveyRepository';
 import { GenereMyActions, getLabel, surveyCategories } from '../../../../infrastructure/services/utilsService';
@@ -10,12 +9,13 @@ import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import SurveyDetailCard from './poolSurveyComp/SurveyDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
+import { useUserStore } from '../../../../application/stores/userStore';
 
 
 export default function SurveyDetailPage() {
     const { id } = useParams();
-    const { userProfile } = useContext(UserContext);
-    const userId: number = userProfile.userId;
+    const { user } = useUserStore()
+    const userId: number = user.id
     const [element, setElement] = useState<Survey>({} as Survey);
     const [isMine, setIsMine] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);

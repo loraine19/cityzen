@@ -1,16 +1,16 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate, } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import UserContext from '../../../../contexts/user.context';
+import { useState } from 'react';
 import { Service, HardLevel, SkillLevel } from '../../../../domain/entities/Service';
 import { ServiceService } from '../../../../domain/repositories-ports/ServiceRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { ServiceForm } from './servicesComps/ServiceForm';
+import { useUserStore } from '../../../../application/stores/userStore';
 
 
 export default function ServiceCreatePage() {
-    const { userProfile } = useContext(UserContext)
+    const { user } = useUserStore()
     const { postService } = new ServiceService()
     const navigate = useNavigate();
     const [newService] = useState<Service>({ hard: 0, skill: 0 } as Service);
@@ -36,7 +36,7 @@ export default function ServiceCreatePage() {
         formik.values.hard = HardLevel[formik.values.hard] as unknown as HardLevel;
         formik.values.skill = SkillLevel[formik.values.skill] as unknown as SkillLevel;
         const { ...rest } = formik.values;
-        const postData = { ...rest, userId: userProfile.userId }
+        const postData = { ...rest, userId: user.id }
         return await postService(postData)
     }
 

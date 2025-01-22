@@ -1,7 +1,6 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import UserContext from "../../../../../contexts/user.context";
+import { useEffect, useState } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, ServiceStep } from "../../../../../domain/entities/Service";
 import { ServiceService } from "../../../../../domain/repositories-ports/ServiceRepository";
@@ -9,13 +8,14 @@ import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceSt
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
+import { useUserStore } from "../../../../../application/stores/userStore";
 
 
 
 export default function ServiceComp(props:
     { service: Service, mines?: boolean, change: (e: any) => void, update?: () => void }) {
-    const { userProfile } = useContext(UserContext)
-    const userId = userProfile.userId
+    const { user } = useUserStore()
+    const userId: number = user.id
     const { mines, change, update } = props
     const [service, setService] = useState<Service>(props.service)
     const { id, title, description, image, createdAt, User, UserResp } = service
@@ -123,7 +123,7 @@ export default function ServiceComp(props:
                     <div className="flex items-center gap-2">
 
                         <Chip size="md" value={`${points.join(' à ')}   pts`} className={` GrayChip  lowercase !font-medium  rounded-full    ${mines && 'hidden md:flex'}`} icon=
-                            {<Icon icon="fiber_manual_record" title={`Ce service ${type === "offre" ? 'coute' : 'offre'} ${points.join(' à ')}pts`} fill={userProfile.points > points[0]} color={type === "offre" ? "green" : "orange"} size="2xl" style="!py-0 -mt-1.5" />}>
+                            {<Icon icon="fiber_manual_record" title={`Ce service ${type === "offre" ? 'coute' : 'offre'} ${points.join(' à ')}pts`} fill={user.Profile.points > points[0]} color={type === "offre" ? "green" : "orange"} size="2xl" style="!py-0 -mt-1.5" />}>
                         </Chip>
 
                         <Icon icon="arrow_circle_right" link={`/service/${id}`} title={`voir les details de service  ${title}`} size="4xl px-1" fill />
