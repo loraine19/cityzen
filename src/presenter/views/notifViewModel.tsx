@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { UserUseCase } from '../../application/useCases/user.usecase'
+import { UserUseCase } from '../../application/useCases/user.usecase';
 import { NotifService } from '../../infrastructure/services/notifService';
 import { NotifUseCase } from '../../application/useCases/notif.usecase';
 import { Notif } from '../../domain/entities/Notif';
@@ -23,11 +23,11 @@ export const notifViewModel = ({ notifUseCase, userUseCase, notifService }: { no
   return { notifs, loadingNotifs, errorNotifs }
 }
 
-export const notifGetViewModel = ({ notifUseCase }: { notifUseCase: NotifUseCase }) => {
+export const notifGetViewModel = ({ notifUseCase, notifService, userUseCase }: { notifUseCase: NotifUseCase, notifService: NotifService, userUseCase: UserUseCase }) => {
   return async () => {
-    console.log('view')
-    let notifs = [];
-    notifs = await notifUseCase.getNotifs() as Notif[];
-    return notifs
+    const notifs = await notifUseCase.getNotifs() as Notif[];
+    const user = await userUseCase.getUserMe();
+    const userId = user?.id
+    return notifService.loadNotifs(notifs, userId) || [] as Notif[];
   }
 }

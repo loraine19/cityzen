@@ -82,7 +82,6 @@ export class EventService implements EventServiceI {
             const post = await this.participantUseCase.postParticipant({ userId: userId, eventId: event.id });
             participants = [post, ...event.Participants];
         }
-        console.log(participants);
         return { ...event, Participants: participants };
     }
 

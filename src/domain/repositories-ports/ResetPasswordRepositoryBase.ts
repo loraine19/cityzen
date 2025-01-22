@@ -1,7 +1,8 @@
-import { Auth, ResetDTO } from "../entities/Auth";
+import { ResetDTO } from "../entities/Auth";
+import { MessageBack } from "../entities/frontEntities";
 
 export interface ResetPasswordRepositoryBase {
-    resetPassword(email: string): Promise<{ message: string }>;
-    resetPasswordUpdate(dataDTO: ResetDTO): Promise<Auth>;
+    resetPassword(email: string): Promise<MessageBack>;
+    resetPasswordUpdate(dataDTO: ResetDTO): Promise<MessageBack>;
 }
 

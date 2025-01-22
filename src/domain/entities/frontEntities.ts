@@ -1,3 +1,4 @@
+import { Api } from "../../infrastructure/providers/http/UseApi";
 import { EventView } from "./Event";
 
 
@@ -41,3 +42,20 @@ export const defaultEventImage = [
 export const dayMS = 24 * 60 * 60 * 1000;
 
 export type day = { date: Date, events: EventView[], text: String }
+
+
+export class
+    MessageBack {
+    message: string;
+    code?: number;
+
+    constructor(message: string, code?: number) {
+        this.message = message;
+        this.code = code
+    }
+}
+
+export type UseApiProps = {
+    api: Api;
+    dataType: string;
+}

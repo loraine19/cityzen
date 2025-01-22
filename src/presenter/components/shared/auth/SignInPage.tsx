@@ -2,14 +2,12 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AuthForm } from './authComps/AuthForm';
 import { AuthHeader } from './authComps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
 import { useToken } from '../../../../domain/repositories-ports/useToken';
 import DI from '../../../../di/ioc';
-import { Auth } from '../../../../domain/entities/Auth';
-
 
 export default function SignInPage() {
     const { saveToken } = useToken();
@@ -24,15 +22,10 @@ export default function SignInPage() {
     ////SIGN IN VERIFY
     const { errorAuthVerify, signInVerify } = DI.resolve('authSignInVerifyViewModel')();
 
-    ////USE EFFECT
-    useEffect(() => {
-        console.log(errorAuth, errorAuthVerify)
-    }, [errorAuth, errorAuthVerify])
-
     ////FORMIK
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),
-        password: string().required("Mot de passe est obligatoire").min(8, "minimum 8 lettres"),
+        password: string().required("Mot de passe est obligatoire").min(6, "minimum 6 charactères"),
     })
     const formik = useFormik({
         initialValues: {} as any,
@@ -41,18 +34,18 @@ export default function SignInPage() {
             if (values.email && values.password) {
                 ////SIGN IN VERIFY
                 if (token) {
-
                     const authVerify = await signInVerify({ email, password: values.password, verifyToken: token })
                     console.log(authVerify)
                     if (authVerify) {
                         saveToken(authVerify.accessToken, authVerify.refreshToken);
                         setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...')
-                        setTimeout(() => {
-                            window.location.replace("/signup_details")
-                        }, 2000);
+                        setTimeout(() => { window.location.replace("/signup_details") }, 1000);
+                    }
+                    else if (authVerify && !authVerify.accessToken) {
+                        setNotif(authVerify.message)
                     }
                     else if (errorAuthVerify || errorAuth) {
-                        setNotif('Compte non activé, veuillez vérifier votre email' + errorAuthVerify + errorAuth)
+                        setNotif('erreur : ' + errorAuthVerify + errorAuth)
                         formik.values = {} as any
                     }
                     else if (!authVerify) {
@@ -62,25 +55,22 @@ export default function SignInPage() {
                 }
                 ////SIGN IN
                 else if (!token) {
-                    const auth: Auth = await signIn({ email: values.email, password: values.password })
+                    const auth: any = await signIn({ email: values.email, password: values.password })
                     console.log(auth)
-                    if (auth && auth.accessToken) {
-
+                    if (auth && auth?.accessToken) {
                         saveToken(auth.accessToken, auth.refreshToken);
                         setNotif('Vous êtes connecté, redirection ...')
-                        setTimeout(() => {
-                            window.location.replace("/")
-                        }, 2000);
+                        setTimeout(() => { window.location.replace("/") }, 1000);
                     }
                     else if (auth && !auth.accessToken) {
-                        setNotif('Compte non activé, nous vous avons envoyé un nouvel email de vérification')
+                        setNotif(auth.message)
                     }
                     else if (errorAuth || errorAuthVerify) {
                         setNotif('Email ou mot de passe incorrect' + errorAuth + errorAuthVerify)
                         formik.values = {} as any
                     }
                     else {
-                        setNotif('erreur iconnue ...')
+                        setNotif('Identifiants iconnus ...')
                     }
 
                 }
@@ -109,11 +99,9 @@ export default function SignInPage() {
                         Mot de pass oublié
                     </Typography>
                 </Link>
-
                 <Typography variant="small" className=" flex justify-center">
                     Pas encore de compte ?
                 </Typography>
-
                 <Link to="/signup">
                     <Button
                         size="md" className="rounded-full mb-2">

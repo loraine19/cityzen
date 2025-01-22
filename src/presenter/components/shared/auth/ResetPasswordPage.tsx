@@ -1,48 +1,43 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AuthHeader } from './authComps/AuthHeader';
 import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { User } from '../../../../domain/entities/User'
-import { FETCH_URL } from '../../../../../env.local';
-import { ResetPasswordApi } from '../../../../infrastructure/providers/http/resetPassword.api';
+import { User } from '../../../../domain/entities/User';
+import { Icon } from '../../../components/common/SmallComps';
+import DI from '../../../../di/ioc';
 
 
 export default function ResetPasswordPage() {
     const [searchParams] = useSearchParams();
     const [newUser,] = useState<User>({} as User);
-    const [notif,] = useState<string>("");
+    const [notif, setNotif] = useState<string>(' Entrez votre nouveau mot de passe');
     const params = { email: searchParams.get("email"), token: searchParams.get("token") }
     const { email, token } = params
-    const { resetPasswordUpdate } = new ResetPasswordApi()
+    const { updatePassword } = DI.resolve('resetPasswordUpdateViewModel')()
+    const passwordType = { value: 'password', icon: 'visibility' }
+    const textType = { value: 'text', icon: 'visibility_off' }
+    const [passWordInput, setPassWordInput] = useState<{ value: string, icon: string }>(passwordType)
+
 
     const formSchema = object({
         password: string().required("password est obligatoire"),
     })
 
-    console.log('r', FETCH_URL)
     const formik = useFormik({
         initialValues: newUser,
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values
-            const updatepassword = await resetPasswordUpdate({ email: email as string, password: formik.values.password, resetToken: token as string })
+            const updatepassword = await updatePassword({ email: email as string, password: formik.values.password, resetToken: token as string })
             if (updatepassword) {
-                alert("mot de pass changé")
-                window.location.href = "/signin"
+                setNotif(updatepassword?.message);
+                setTimeout(() => { window.location.href = '/signin'; }, 1000);
             }
+            else { setNotif('une erreur est survenue') }
         },
     });
-
-
-    useEffect(() => {
-        if (token) {
-            console.log(token)
-        }
-    }, [token]);
-
-
 
 
     return (
@@ -54,25 +49,30 @@ export default function ResetPasswordPage() {
                         <span className="material-symbols-outlined fillThin !text-4xl" >cancel</span>
                     </Button>
                 </Link></div>
-            <form onSubmit={formik.handleSubmit} className='flex flex-col gap-8  py-[5vh] '>
+            <form onSubmit={formik.handleSubmit} className='flex flex-col gap-8 w-full  py-[5vh] '>
                 <main className='flex  flex-col items-center gap-4 pb-2'>
                     <Card className='w-respLarge flex py-4 flex-col items-center'>
-                        <CardBody className='flex flex-col text-center gap-4'>
+                        <CardBody className='flex w-full w-resp flex-col text-center gap-4'>
                             <Typography variant="h5" color="blue-gray" className="mb-2">
                                 Reinitialisation du mot de pass
                             </Typography>
                             <Typography color="gray" className="mb-4">
-                                en cours de developpement
-                                ecrire votre nouveaux mot de passe pour
+                                {notif}
                             </Typography>
-                            <Typography className='text py-2'>{notif}   </Typography>
                             <Input label={'email'} name="email" variant="static" value={email as string} disabled={true} />
-                            <Input label={formik.errors.email ? formik.errors.email : "Mot de passe"} name="password" variant="static" error={formik?.errors.password ? true : false} onChange={formik.handleChange} />
+                            <Input type={passWordInput.value}
+                                icon={
+                                    <Icon onClick={() => {
+                                        passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
+                                    }} icon={passWordInput.icon} style='!-mt-4' />
+                                }
+
+                                label={formik.errors.email ? formik.errors.email : "Mot de passe"} name="password" variant="static" error={formik?.errors.password ? true : false} onChange={formik.handleChange} />
                         </CardBody>
                     </Card>
                 </main>
-                <footer>
-                    <Button type="submit" size="lg" className="w-full rounded-full shadow-xl" >
+                <footer className="flex justify-center w-respLarge">
+                    <Button type="submit" size="lg" className="lgBtn" >
                         Envoyer
                     </Button>
                 </footer>

@@ -23,27 +23,20 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+::first-letter {
+    @apply !capitalize;
+}
+
+/* MAIN SECTIONS */
+body,
+#root,
+.Body {
+    @apply flex flex-col w-full h-screen;
+}
+
 #root {
     margin: auto;
-    height: 100vh;
-    width: 100%;
     color: #242424;
-    display: flex;
-    flex-direction: column;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100%;
-}
-
-.Body {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100%;
 }
 
 main {
@@ -78,10 +71,6 @@ footer {
     padding-right: min(0.5rem);
 }
 
-.eventCyan {
-    background-image: linear-gradient(#f9fafb #b3eaf0);
-}
-
 .cyan {
     background-image: linear-gradient(#f9fafb, #a5f3fc);
 }
@@ -97,25 +86,18 @@ footer {
 .orange {
     background-image: linear-gradient(#f9fafb, #fed7aa);
 }
+
 .orange100 {
     background-image: linear-gradient(#f9fafb, #ffedd5);
 }
 
-.BgUser {
-    background-image: url("/person.svg");
-    background-size: cover;
-    background-position: center;
-}
-
 /* CARD */
 .w-resp {
-    width: 100%;
-    margin: 0 auto;
-    max-width: 36rem;
+    @apply w-full my-0 mx-auto max-w-[36rem];
 }
+
 .w-respLarge {
-    width: 100%;
-    margin: 0 auto;
+    @apply w-full my-0 mx-auto;
     max-width: calc(100vh - 2rem);
     max-width: 46rem;
 }
@@ -126,9 +108,6 @@ footer {
 }
 
 @media (min-width: 1024px) {
-    .w-resp {
-        max-width: 36rem;
-    }
     .Grid {
         @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] gap-3;
     }
@@ -137,21 +116,14 @@ footer {
         padding-left: min(0rem);
         padding-right: min(0rem);
     }
-    .active .material-symbols-rounded,
-    .active .icon {
-        text-underline-offset: 10px !important;
-    }
 }
 
-/* NAV */
+/* ICON */
 .icon {
     font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
     font-variation-settings: "wght" 300 !important;
     font-size: 48px;
     font-style: italic;
-}
-
-.icon {
     font-family: "Material Symbols Outlined";
 }
 
@@ -169,15 +141,12 @@ nav .icon {
 }
 
 nav li .icon {
-    @apply text-blue-gray-500;
-    @apply !-mb-0.5;
+    @apply text-blue-gray-500 !-mb-0.5;
 }
 
 .active .icon {
     font-variation-settings: "FILL" 1 !important;
     font-size: 31px;
-
-    opacity: 100%;
     @apply text-blue-gray-700 !decoration-4;
 }
 
@@ -188,6 +157,7 @@ nav li .icon {
 .active .UCyan {
     @apply !border-b-2 !border-red-100;
 }
+
 .error {
     @apply text-red-600;
 }
@@ -199,6 +169,7 @@ nav li .icon {
 .fillThin {
     font-variation-settings: "FILL" 1, "wght" 200 !important;
 }
+
 .unFillThin {
     font-variation-settings: "FILL" 0, "wght" 300, "opsz" 48, "GRAD" 200 !important;
 }
@@ -207,22 +178,25 @@ nav li .icon {
 .OrangeChip {
     @apply bg-orange-100 text-orange-800 min-w-max px-3;
 }
+
 .GreenChip {
     @apply bg-green-100 text-green-800 min-w-max px-3;
 }
+
 .RedChip {
     @apply bg-red-200 text-red-900 min-w-max px-3;
 }
+
 .CyanChip {
     @apply bg-cyan-200 text-cyan-900 min-w-max px-3;
 }
+
 .GrayChip,
 .lgBtn:disabled {
     @apply bg-gray-300 text-gray-600 min-w-max px-3;
 }
 
-/*CHIP OUTLINED*/
-
+/* CHIP OUTLINED */
 .CyanChipOutlined {
     @apply text-cyan-600 border-cyan-600 border;
 }
@@ -231,46 +205,22 @@ nav li .icon {
     @apply text-orange-600 border-orange-600 border;
 }
 
-/* Gray 800*/
-
+/*BUTTONS*/
 button:disabled {
     opacity: 90% !important;
 }
 
-/* width */
-
-::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #ffffff20;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #ffffff;
-}
-
-::-webkit-scrollbar-thumb:active {
-    background: #ffffff;
-}
-
 button {
-    white-space: nowrap;
     font-weight: 500 !important;
     text-transform: none !important;
+    @apply whitespace-nowrap;
 }
+
 .lgBtn {
     @apply flex items-center justify-center rounded-full w-full !shadow truncate;
 }
-::first-letter {
-    text-transform: capitalize !important;
-}
+
+/* CARD */
 
 .FixCard {
     position: relative;
@@ -313,17 +263,18 @@ button {
     flex: none;
 }
 
-/* .FixCard 
-.FixCardHeader
-.FixCardBody
-.CardOverFlow */
-.Map {
-    width: 100%;
-    height: 100%;
-    border-radius: 0.8rem;
-    display: flex;
-    flex: 1;
+/* COMP */
+
+.BgUser {
+    background-image: url("/person.svg");
+    background-size: cover;
+    background-position: center;
 }
+
+.Map {
+    @apply w-full h-full flex flex-1 rounded-2xl;
+}
+
 .FixedCenter {
     position: fixed;
     top: 20% !important;
@@ -350,6 +301,23 @@ title {
     @apply !rounded-full;
     background-color: #a5f3fc !important;
 }
+
 .SimpleInput {
     @apply rounded-none border-0 border-b border-gray-400 pr-0.5 shadow-none ring-0 hover:border-gray-900 focus:border-gray-900 data-[icon-placement=start]:!pl-[26px] dark:border-gray-600 dark:hover:border-gray-50 dark:focus:border-gray-50 focus:outline-none;
+}
+
+/* SCROLL BARE */
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ffffff20;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+    @apply bg-white/50;
 }

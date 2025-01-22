@@ -44,7 +44,7 @@ export default function EventListPage() {
     }, [loadingEvents]);
 
     const filterTab = async (newArray: EventView[], value: string) => {
-        if (value !== tabSelected) { setCategorySelected(''); await UpdateList(); }
+        if (value !== tabSelected) { setCategorySelected(''); UpdateList(); }
         setEventList(newArray)
         setTabledList(newArray)
         setTabSelected(value)

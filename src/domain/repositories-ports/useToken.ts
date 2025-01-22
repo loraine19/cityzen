@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { getTokenExpirationDate } from '../../infrastructure/services/authService';
+import DI from '../../di/ioc';
 
 
 export const useToken = () => {
+    const { getTokenExpirationDate } = DI.resolve('authService')
     const [accessToken, setAccessToken] = useState(Cookies.get('accessToken'));
     const [refreshToken, setRefreshToken] = useState(Cookies.get('refreshToken'));
     const saveToken = (accesToken: string, refreshtoken: string) => {

@@ -4,6 +4,7 @@ import { Link, } from "react-router-dom";
 import { NotifView } from "../../../domain/entities/Notif";
 import { Profile } from "../../../domain/entities/Profile";
 import Skeleton from "react-loading-skeleton";
+import DI from "../../../di/ioc";
 
 export function DateChip(props: { start: Date | string, end?: Date | string, ended?: boolean, prefix?: string }) {
     const { start, end, prefix, ended } = props
@@ -213,4 +214,9 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
                 }
             </div>
             {subTitle && <Typography variant="small" color="blue-gray" className="truncate font-normal">{subTitle}</Typography>}</>)
+}
+
+export const LogOutButton = () => {
+    const { logOut } = DI.resolve('authService');
+    return <Icon icon="exit_to_app" size="2xl" style="px-3" onClick={logOut} title="se déconnecter" />
 }

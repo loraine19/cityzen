@@ -1,4 +1,3 @@
-// Import PAGES
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { UserProvider } from "./contexts/user.context";
 import ServiceCreatePage from "./presenter/components/shared/service/ServiceCreatePage";
@@ -35,28 +34,23 @@ import PoolDetailPage from "./presenter/components/shared/poolSurvey/PoolDetaiPa
 import { PrivateRoute } from "./presenter/components/shared/utilsPage/PrivateRouter";
 import NotFindPage from "./presenter/components/shared/utilsPage/NotFindPage";
 
-
-
 function App() {
-
-
     return (
         <>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');</style>
 
-
-            <BrowserRouter  >
-                <Routes >
-                    <Route path="/signin" element={<SignInPage />} />
-                    <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/signup_details" element={<SignUpDetailPage />} />
-                    <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
-                    <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
-                </Routes>
+            <BrowserRouter>
                 <UserProvider>
                     <Routes>
-                        <Route path="/" element={<PrivateRoute />}>
+                        <Route path="/signin" element={<SignInPage />} />
+                        <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/signup_details" element={<SignUpDetailPage />} />
+                        <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
+                        <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
 
+
+
+                        <Route path="/" element={<PrivateRoute />}>
                             <Route path="/" element={<DashboardPage />} />
                             <Route path="/myprofile" element={<MyInfosPage />} />
                             <Route path="/notification" element={<NotificationPage />} />
@@ -95,15 +89,13 @@ function App() {
                             <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
 
                             <Route path="/*" element={<NotFindPage />} />
-
                         </Route>
-                    </Routes>
-                </UserProvider>
 
+                    </Routes>
+
+                </UserProvider>
                 <ReactQueryDevtools />
             </BrowserRouter>
-
-
         </>
     );
 }

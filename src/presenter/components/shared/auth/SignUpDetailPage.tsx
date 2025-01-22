@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
-import { Button, Typography, } from '@material-tailwind/react';
+import { Typography, } from '@material-tailwind/react';
 import { AuthHeader } from './authComps/AuthHeader'
 import { ProfileForm } from './authComps/ProfileForm';
 import Skeleton from 'react-loading-skeleton';
@@ -10,8 +10,8 @@ import { Address } from '../../../../domain/entities/Address';
 import UserContext from '../../../../contexts/user.context';
 import { Profile } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { logOut } from '../../../../infrastructure/services/authService';
 import DI from '../../../../di/ioc';
+import { LogOutButton } from '../../common/SmallComps';
 
 export default function SignUpDetailPage() {
     const { setUserProfile } = useContext(UserContext)
@@ -94,10 +94,7 @@ export default function SignUpDetailPage() {
                 <AuthHeader />
                 <div className="flex justify-between items-center pb-3">
                     <Typography color="blue-gray" className='w-resp px-4 flex justify-center pb-2'>Bienvenue, veuillez remplir votre profil pour pouvoir utiliser Collect'if</Typography>
-                    <Button variant="text" className="flex justify-center items-center rounded-full h-8 w-8 opacity-80"
-                        onClick={() => logOut()}>
-                        <span className="material-symbols-outlined fillThin !text-4xl" >logout</span>
-                    </Button>
+                    <LogOutButton />
                 </div>
             </div>
             {loadingUser ?

@@ -9,9 +9,10 @@ import UserContext from '../../../../contexts/user.context';
 import { Profile } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 
-import { logOut } from '../../../../infrastructure/services/authService';
+//import { logOut } from '../../../../infrastructure/services/authService';
 import DI from '../../../../di/ioc';
 import { Address } from '../../../../domain/entities/Address';
+import { LogOutButton } from '../../common/SmallComps';
 
 
 export default function MyInfosPage() {
@@ -109,10 +110,7 @@ export default function MyInfosPage() {
 
             <div className="w-respLarge flex-col !max-w-[100vw] flex justify-between pt-1">
                 <div className="flex justify-between items-center gap-4">
-                    <Button variant="text" className="flex justify-center items-center rounded-full h-8 w-8 opacity-80"
-                        onClick={() => logOut()}>
-                        <span className="material-symbols-outlined fillThin !text-4xl" >logout</span>
-                    </Button>
+                    <LogOutButton />
                     <Link to={`/`}>
                         <Button variant="text" className="flex justify-center items-center rounded-full h-8 w-8 opacity-80">
                             <span className="material-symbols-outlined fillThin !text-4xl" >cancel</span>

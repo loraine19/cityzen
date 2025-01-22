@@ -29,12 +29,17 @@ import { ProfileService } from '../infrastructure/services/profileService';
 import { EventUseCase } from '../application/useCases/event.usecase';
 import { NotifUseCase } from '../application/useCases/notif.usecase';
 import { ParticipantUseCase } from '../application/useCases/participants.useCase';
-import { postAddressViewModel } from '../presenter/views/addressViewModel';
+import { addressViewModel, postAddressViewModel } from '../presenter/views/addressViewModel';
 import { AddressUseCase } from '../application/useCases/address.useCase';
 import { AddressRepositoryImpl } from '../infrastructure/repositoriesImpl/AddressRespositoryImpl';
 import { AddressService } from '../infrastructure/services/addressService';
 import { AddressApi } from '../infrastructure/providers/http/addressApi';
 import { eventIdViewModel, eventViewModel } from '../presenter/views/eventViewModel';
+import { AuthService } from '../infrastructure/services/authService';
+import { ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
+import { ResetPasswordService } from '../infrastructure/services/resetPasswordService';
+import { resetPasswordUpdateViewModel, resetPasswordViewModel } from '../presenter/views/resetPasswordViewModel';
+
 
 // Extend the BuildResolverOptions type to include 'deps'
 export interface ExtendedBuildResolverOptions<T> extends BuildResolverOptions<T> {
@@ -51,18 +56,23 @@ container.register({
     authSignInVerifyViewModel: asFunction(authSignInVerifyViewModel),
     authSignUpViewModel: asFunction(authSignUpViewModel),
     authData: asClass(AuthApi),
+    authService: asClass(AuthService),
 
     ////ADDRESS
     addressUseCase: asClass(AddressUseCase),
     addressRepository: asClass(AddressRepositoryImpl),
-    addressViewModel: asFunction(authSignInViewModel),
+    addressViewModel: asFunction(addressViewModel),
     postAddressViewModel: asFunction(postAddressViewModel),
     addressService: asClass(AddressService),
     addressData: asClass(AddressApi),
 
     ////RESET PASSWORD
-    ResetPasswordRespository: asClass(ResetPasswordRepositoryImpl),
-    ResetPasswordData: asClass(ResetPasswordApi),
+    resetPasswordRepository: asClass(ResetPasswordRepositoryImpl),
+    resetPasswordData: asClass(ResetPasswordApi),
+    resetPasswordUseCase: asClass(ResetPasswordUseCase),
+    resetPasswordService: asClass(ResetPasswordService),
+    resetPasswordUpdateViewModel: asFunction(resetPasswordUpdateViewModel),
+    resetPasswordViewModel: asFunction(resetPasswordViewModel),
 
     ////USER
     userUseCase: asClass(UserUseCase),
@@ -103,8 +113,17 @@ container.register({
     participantData: asClass(ParticipantApi),
     postParticipant: asFunction(participantPostViewModel),
     deleteParticipant: asFunction(participantDeleteViewModel)
-
-
 });
+
+// Log all registered components
+console.log('Registered components:', container.registrations);
+
+// TEST RESOLVE EXA
+// console.log('resetPasswordRepository:', container.resolve('resetPasswordRepository'));
+// console.log('resetPasswordData:', container.resolve('resetPasswordData'));
+// console.log('resetPasswordUseCase:', container.resolve('resetPasswordUseCase'));
+// console.log('resetPasswordService:', container.resolve('resetPasswordService'));
+// console.log('resetPasswordViewModel:', container.resolve('resetPasswordViewModel'));
+
 
 export default container;

@@ -92,9 +92,7 @@ export const eventIdViewModel = ({ eventUseCase, userUseCase, eventService }: { 
 
 export const eventGetByIdViewModel = ({ eventUseCase }: { eventUseCase: EventUseCase }) => {
   return async (id: number) => {
-    console.log('eventGetByIdViewModel', id)
     const event = await eventUseCase.getEventById(id)
-    console.log('eventGetByIdViewModel', event)
     return event
   }
 }

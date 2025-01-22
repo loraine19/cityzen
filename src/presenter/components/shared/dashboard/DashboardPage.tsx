@@ -8,19 +8,14 @@ import { Notif } from "../../../../domain/entities/Notif";
 import { GetPathElement } from "../../../../infrastructure/services/utilsService";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
-import { NotifBadge, Icon } from "../../common/SmallComps";
+import { NotifBadge, Icon, LogOutButton } from "../../common/SmallComps";
 import { AuthHeader } from "../auth/authComps/AuthHeader";
 import CalendarComp from "./CalendarComp";
-import { logOut } from "../../../../infrastructure/services/authService";
 import UserContext from "../../../../contexts/user.context";
 
 export default function DashboardPage() {
-
-    const { user, loadingUser, errorUser } = DI.resolve('userViewModel');
-    console.log(user, loadingUser, errorUser)
-    // const { notifs } = DI.resolve('notifsViewModel');
+    const { user, loadingUser } = DI.resolve('userViewModel');
     const { notifList } = useContext(UserContext);
-
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
@@ -31,7 +26,7 @@ export default function DashboardPage() {
         <div className="Body gray">
             <div className="relative flex-col w-full flex items-center  justify-center ">
                 <div className="absolute flex justify-between  w-full max-w-[1000px] !m-auto  p-2">
-                    <Icon icon="exit_to_app" size="2xl" style="px-3" onClick={logOut} title="se déconnecter" />
+                    <LogOutButton />
                     <NotifBadge notifList={notifList} />
                 </div>
                 <AuthHeader />

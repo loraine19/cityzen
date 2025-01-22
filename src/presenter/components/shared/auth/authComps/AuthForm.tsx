@@ -1,6 +1,7 @@
 import { Card, CardBody, Typography, Input, CardFooter, Checkbox, Button } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 import PopUp from '../../../common/PopUp';
+import { Icon } from '../../../common/SmallComps';
 
 type authFormProps = {
     lead: string,
@@ -40,14 +41,9 @@ export function AuthForm(props: authFormProps) {
 
                         <Input
                             icon={
-                                <span
-                                    className="material-symbols-outlined cursor-pointer"
-                                    onClick={() => {
-                                        passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
-                                    }}
-                                >
-                                    {passWordInput.icon}
-                                </span>
+                                <Icon onClick={() => {
+                                    passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
+                                }} icon={passWordInput.icon} style='!-mt-4 -ml-4' />
                             }
                             error={formik?.errors.password}
                             label={formik?.errors.password ? formik?.errors.password : "Mot de passe"}
@@ -59,14 +55,10 @@ export function AuthForm(props: authFormProps) {
                         />
                         <div className={!confirm ? "hidden" : ""}>
                             <Input icon={
-                                <span
-                                    className="material-symbols-outlined cursor-pointer"
-                                    onClick={() => {
-                                        passWordInput2.value === 'password' ? setPassWordInput2(textType) : setPassWordInput2(passwordType)
-                                    }}
-                                >
-                                    {passWordInput2.icon}
-                                </span>
+                                <Icon onClick={() => {
+                                    passWordInput2.value === 'password' ? setPassWordInput2(textType) : setPassWordInput2(passwordType)
+                                }} icon={passWordInput2.icon} style='!-mt-4 !-ml-4' />
+
                             } error={formik.errors.passwordConfirm} label={formik?.errors.passwordConfirm ? formik?.errors.passwordConfirm : "Confirmer le mot de passe"} name="passwordConfirm" type={passWordInput2.value} variant="standard" onChange={formik.handleChange} />
                         </div>
                     </CardBody>

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import UserContext from "../../../../contexts/user.context";
-import { ElementNotif, NotifView } from "../../../../domain/entities/Notif";
+import { NotifView } from "../../../../domain/entities/Notif";
 import { notifCategories } from "../../../../infrastructure/services/utilsService";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -10,15 +10,14 @@ import TabsMenu from "../../common/TabsMenu";
 import { NotifCard } from "./NotifCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 
-
-
 export default function NotificationPage() {
     const { notifList, userNotif, updateNotifs, removeNotif } = useContext(UserContext)
-    const [arrayToFilter, setArrayToFilter] = useState<any>(notifList);
+    const [list, setList] = useState<NotifView[]>(notifList)
+    const [arrayToFilter] = useState<any>(notifList);
     const [tabSelected, setTabSelected] = useState<string>('Tous');
     const [categorySelected, setCategorySelected] = useState<string>(notifCategories[0].value);
     const [notifFind, setNotifFind] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading] = useState<boolean>(false);
 
     // const removeNotification = async (notifId: number, element: ElementNotif) => {
     //     const updatedNotifList = notifList.map((notif) => (notif.id !== notifId && notif.element !== element) ? notif : { ...notif, read: true });
@@ -36,10 +35,11 @@ export default function NotificationPage() {
     // }, []);
 
 
+    useEffect(() => { console.log(notifList); setList(notifList) }, [notifList])
     /////FILTER FUNCTIONS
     const filterNotifs = (newArray: any[], value: string) => {
         value !== tabSelected && setCategorySelected(notifCategories[0].value);
-        // setNotifList(newArray);
+        setList(newArray);
         setTabSelected(value);
     }
 
@@ -96,8 +96,10 @@ export default function NotificationPage() {
             ">
                 {loading ? Array.from({ length: userNotif }).map((_, index) =>
                     <Skeleton key={index} height={130} className="!rounded-2xl" />) :
-                    notifList?.map((notif: NotifView, index: number) => notif.read === false &&
-                        <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => removeNotif(notif.id)} />)}
+                    list?.map((notif: NotifView, index: number) => notif.read === false &&
+                        <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => {
+                            removeNotif(notif.id); updateNotifs()
+                        }} />)}
             </main>
             <NavBarBottom />
 

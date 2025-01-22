@@ -1,17 +1,19 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } from "@material-tailwind/react";
 import { AvatarStack } from "./AvatarStack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { EventView } from "../../../../../domain/entities/Event";
 import { GenereMyActions } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, Icon } from "../../../common/SmallComps";
 import { EventApi } from "../../../../../infrastructure/providers/http/eventApi";
+import UserContext from "../../../../../contexts/user.context";
 
 
 type EventCardProps = { event: EventView, change: (e: any) => void, mines?: boolean, update?: () => void }
 
 export function EventCard({ event: initialEvent, change, mines, update }: EventCardProps) {
     const [event, setEvent] = useState<EventView>(initialEvent);
+    const { updateNotifs } = useContext(UserContext)
     const { id, title, description, category, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink, eventDateInfo } = event;
     const disabledEditCTA = pourcent >= 100;
     const { deleteEvent } = new EventApi();
@@ -60,7 +62,7 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
                     <ModifBtnStack disabled2={disabledEditCTA} actions={actions} update={update} />
                 )}
                 <div className="flex items-center gap-2">
-                    <button onClick={async () => toogleParticipate && setEvent(await toogleParticipate())}>
+                    <button onClick={async () => { toogleParticipate && setEvent(await toogleParticipate()); updateNotifs() }}>
                         <Chip
                             value={participantsMin}
                             variant="ghost"

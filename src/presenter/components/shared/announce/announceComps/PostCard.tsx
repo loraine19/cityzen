@@ -66,7 +66,7 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                                 className="pl-5  rounded-full h-full flex items-center"
                                 icon={<Icon icon="thumb_up" size="xl" fill={ILike} color={ILike ? "cyan" : "gray"} style=" -mt-1.5 !pl-1.5" />}>
                             </Chip></button>
-                        <Icon icon="arrow_circle_right" link={`/service/${id}`} title={`voir les details de service  ${title}`} size="4xl px-1" fill />
+                        <Icon icon="arrow_circle_right" link={`/annonce/${id}`} title={`voir les details de l'annonce  ${title}`} size="4xl px-1" fill />
                     </div>
                 </CardFooter>
             </Card >
