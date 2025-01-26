@@ -3,18 +3,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Option, Button, Select, Switch } from '@material-tailwind/react';
-import Skeleton from 'react-loading-skeleton';
 import { Flag } from '../../../../domain/entities/Flag';
 import { Label } from '../../../../domain/entities/frontEntities';
-import { FlagService } from '../../../../domain/repositories-ports/FlagRepository';
-import { PostService } from '../../../../domain/repositories-ports/PostRepository';
-import { ServiceService } from '../../../../domain/repositories-ports/ServiceRepository';
+import { FlagService } from '../../../../domain/repositoriesBase/FlagRepository';
+import { PostService } from '../../../../domain/repositoriesBase/PostRepository';
+import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
 import { getLabel, flagTargets, flagReasons } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import FlagDetailComp from './flagComps/FlagDetailComp';
 import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
+import { Skeleton } from '../../common/Skeleton';
 
 export default function FlagCreatePage() {
     const { id, target } = useParams()

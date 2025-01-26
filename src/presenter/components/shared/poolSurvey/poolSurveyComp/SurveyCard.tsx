@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote";
-import { SurveyService } from "../../../../../domain/repositories-ports/SurveyRepository"
+import { SurveyService } from "../../../../../domain/repositoriesBase/SurveyRepository"
 import { dayMS, getLabel, surveyCategories, GenereMyActions } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { DateChip, FlagIcon, ProgressSmallbar, Icon } from "../../../common/SmallComps";
+import { DateChip, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 type SurveyCardProps = { survey: Survey, change: () => void, mines?: boolean, update?: () => void }
@@ -46,10 +46,10 @@ export function SurveyCard(props: SurveyCardProps) {
     }, [survey])
 
     return (
-        <Card className={`CardFix  ${haveImage ? "!h-full " : "!h-[calc(100%+1.5rem)] -mt-6"}`}>
+        <Card className={haveImage ? "FixCard " : "FixCardNoImage  "}>
             <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeader NoImage"}
                 floated={haveImage}>
-                <div className={` ${haveImage && "absolute p-2"} h-max w-full flex justify-between `}>
+                <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                     <div className="flex items-center gap-2">
                         <button onClick={() => { change() }}>
                             <Chip value='Sondage' size="sm" className="!px-3 min-w-max rounded-full h-max OrangeChip" ></Chip>
@@ -65,20 +65,14 @@ export function SurveyCard(props: SurveyCardProps) {
                         className="h-full w-full object-cover"
                     />}
             </CardHeader>
-            <CardBody className={` FixCardBody !flex-1`}>
-                <div className="flex sticky top-0 bg-white w-full items-center justify-between">
-                    <Typography variant="h5" color="blue-gray" className="mb-2">
-                        {title}
-                    </Typography>
-                    <FlagIcon flagged={flagged} id={id} type="survey" />
-                </div>
-                <div className="flex flex-col h-full">
-                    <div className="CardOverFlow">
-                        <Typography color="blue-gray" className="mb-2">
-                            {description}...
-                        </Typography>
-                    </div>
-                </div>
+            <CardBody className={` FixCardBody`}>
+                <Title title={title} flagged={flagged} id={id} />
+
+                <Typography color="blue-gray" className=" overflow-auto mb-2 pb-2">
+                    {description}
+                </Typography>
+
+
             </CardBody>
             <CardFooter className="CardFooter items-center gap-6">
                 {!mines ?
@@ -86,8 +80,14 @@ export function SurveyCard(props: SurveyCardProps) {
                     :
                     <ModifBtnStack disabled2={disabledEditCTA} actions={actions} update={update} />}
                 <div className="flex items-center justify-between gap-2">
-                    <Chip value={Votes?.length} variant="ghost" className="min-w-max rounded-full h-max flex items-center gap-2"
-                        icon={<Icon icon="smart_card_reader" fill={ImIn} color={ImIn && "green" || ''} size="xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1 pl-1" />}>
+                    <Chip value={Votes?.length} variant="ghost"
+                        className="min-w-max rounded-full px-4"
+                        icon={<Icon
+                            icon="smart_card_reader"
+                            fill={ImIn} color={ImIn && "green" || ''}
+                            size="xl"
+                            title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`}
+                            style="-mt-1.5 pl-2.5" />}>
                     </Chip>
                     <Icon icon="arrow_circle_right" title={`voir les details de ${title}`} link={`/sondage/${id}`} fill size="4xl px-1" />
                 </div>

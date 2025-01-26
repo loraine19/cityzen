@@ -1,5 +1,5 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
-import { AuthRepositoryBase } from "../../domain/repositories-ports/AuthRepositoryBase";
+import { AuthRepositoryBase } from "../../domain/repositoriesBase/AuthRepositoryBase";
 import { AccessDTO, Auth, VerifyDTO } from "../../domain/entities/Auth";
 
 interface IData extends AuthRepositoryBase {

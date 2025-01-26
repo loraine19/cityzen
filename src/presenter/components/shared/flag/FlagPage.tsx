@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
 import { Flag } from "../../../../domain/entities/Flag";
-import { FlagService } from "../../../../domain/repositories-ports/FlagRepository";
+import { FlagService } from "../../../../domain/repositoriesBase/FlagRepository";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import { FlagCard } from "./flagComps/FlagCard";
+import { SkeletonGrid } from "../../common/Skeleton";
 
 
 
@@ -32,14 +32,18 @@ export default function FlagPage() {
             <header className="px-4">
                 <NavBarTop />
                 <div className="flex ">
-                    <SubHeader qty={flags.length} type={"Signalement "} /></div>
+                    <SubHeader qty={flags.length} type={"Signalement "} closeBtn={true} link="/" /></div>
                 <div className={notifFind && "w-full flex justify-center p-8"}>{notifFind}</div>
             </header>
 
             <main className="Grid ">
                 {loading ?
-                    Array.from({ length: 10 }).map((_, index) => (
-                        <Skeleton key={index} height={130} className="!rounded-2xl" />))
+                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                        <SkeletonGrid
+                            key={index}
+                            count={4}
+                            small={true} />
+                    ))
                     :
                     flags.map((element: Flag, index: number) => <FlagCard key={index} flag={element} update={fetch} />)}
             </main>

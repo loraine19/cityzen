@@ -4,15 +4,14 @@ import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { dayMS } from "../../../../../infrastructure/services/utilsService";
-import { DateChip, ProfileDiv, ProgressSmallbar, Icon } from "../../../common/SmallComps";
+import { DateChip, ProfileDiv, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 
 export default function PoolDetailCard(props: { element: Pool, mines?: boolean, change: (e: any) => void }) {
     const [element] = useState<Pool>(props.element)
-    const { change } = props
     const { title, description, createdAt, Votes, User, UserBenef } = element
     const { user } = useUserStore()
     const userId: number = user.id
@@ -40,24 +39,20 @@ export default function PoolDetailCard(props: { element: Pool, mines?: boolean, 
 
     return (
         <>
-            <Card className="FixCard w-respLarge" >
-                <CardHeader className={haveImage ? "FixCardHeader min-h-[28vh]" : "FixCardHeader NoImage"}
-                    floated={haveImage}>
-                    <div className={`${!haveImage ? "relative" : "absolute"}  top-0 p-2 justify-between w-full flex items-end `}>
-                        <button onClick={(e: any) => change(e)}>
-                            <Chip value={'Cagnotte'} className="rounded-full h-max text-ellipsis shadow" color="cyan">
-                            </Chip>
-                        </button>
+            <Card className="FixCardNoImage w-respLarge" >
+                <CardHeader className={"FixCardHeaderNoImage"}
+                    floated={false}>
+                    <div className={`ChipDivNoImage`}>
+
+                        <Chip value={'Cagnotte'} size='sm' className="CyanChip">
+                        </Chip>
+
                         <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
                     </div>
                 </CardHeader>
                 <CardBody className="FixCardBody">
-                    <div className="flex w-full items-center justify-between">
-                        <Typography variant="h5" color="blue-gray" className="flex  justify-between items-center w-full">
-                            {title} <span className="text-xs font-normal"> Posté le {new Date(createdAt).toLocaleDateString()}</span>
-                        </Typography>
-                    </div>
-                    <div className="CardOverFlow h-full justify-between pb-4 mb-8">
+                    <Title title={title} CreatedAt={createdAt} />
+                    <div className="CardOverFlow h-full justify-between pb-4 mb-6">
                         <Typography color="blue-gray" className="mb-2">
                             {description}
                         </Typography>

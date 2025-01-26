@@ -1,30 +1,30 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Typography, } from '@material-tailwind/react';
-import { AuthHeader } from './authComps/AuthHeader'
-import { ProfileForm } from './authComps/ProfileForm';
-import Skeleton from 'react-loading-skeleton';
-import { Address } from '../../../../domain/entities/Address';
-import { Profile } from '../../../../domain/entities/Profile';
+import { AuthHeader } from './auth.Comps/AuthHeader'
+import { ProfileForm } from './auth.Comps/ProfileForm';
+import { Address, AddressDTO } from '../../../../domain/entities/Address';
+import { Profile, ProfileDTO } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { LogOutButton } from '../../common/SmallComps';
-import { useUserStore } from '../../../../application/stores/userStore';
+import { useUserStore } from '../../../../application/stores/user.store';
+import { Skeleton } from '../../common/Skeleton';
+import { User } from '../../../../domain/entities/User';
 
 export default function SignUpDetailPage() {
-    const { setUserProfile } = useUserStore();
+    const [newProfile] = useState<Profile>({} as Profile)
+    const { setUserProfile } = useUserStore()
     const navigate = useNavigate();
-    const [newProfile] = useState<Profile>({} as Profile);
-    const [skillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
+    const user: User = useUserStore((state) => state.user);
+    const [skillList, setSkillList] = useState<string[]>(user.Profile?.skills ? user.Profile.skills : [])
+    const [assistance, setAssistance] = useState<string | undefined>()
+    const [Address, setAddress] = useState<Address>(user.Profile?.Address)
     const [open, setOpen] = useState(false);
-    const { addresses } = DI.resolve('addressViewModel')()
-    const { postAddress } = DI.resolve('postAddressViewModel')()
-    const { postProfile } = DI.resolve('postProfileViewModel')()
-    const { user, loadingUser } = DI.resolve('userViewModel')
-    console.log(postAddress)
-    const [addressList] = useState<Address[]>(addresses ? addresses : [])
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
+    const postProfile = async (data: ProfileDTO) => await DI.resolve('profileUseCase').postProfile(data)
 
     /// FORMIK SCHEMA
     const formSchema = object({
@@ -38,10 +38,10 @@ export default function SignUpDetailPage() {
     const formik = useFormik({
         initialValues: newProfile as any,
         validationSchema: formSchema,
-        onSubmit: values => {
-            addressIn()
-            formik.values.userId = user?.id || 0
-            !formik.values.assistance.includes("LEVEL_") && (formik.values.assistance = `LEVEL_${formik.values.assistance}`);
+        onSubmit: async values => {
+            const updatedAddress: Address = await updateAddress(formik.values.Address)
+            formik.values.assistance = assistance
+            formik.values.Address = updatedAddress;
             formik.values.skills = skillList.toString();
             formik.values = values
             setOpen(true)
@@ -49,29 +49,22 @@ export default function SignUpDetailPage() {
     })
 
 
-    /// ADDRESS FUNCTION
-    async function addressIn() {
-        const AdressToSearch = formik.values.Address
-        const addressFind = addressList.find((address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
-        if (!addressFind) {
-            const post = await postAddress(AdressToSearch)
-            post ? (formik.values.Address = post) : (formik.values.Address = '')
-        }
-        else {
-            addressFind?.id !== newProfile.addressId && (formik.values.Address = addressFind);
-        }
-        formik.values.addressId = formik.values.Address.id
-    }
+
 
     /// UPDATE FUNCTION API
-    const PostFunction = async () => {
+    const updateFunction = async () => {
         formik.values.addressId = formik.values.Address.id
-        const { Address, ...rest } = formik.values;
-        const Data = { ...rest }
-        console.log('Data', Data)
-        const postedProfile = await postProfile(Data);
-        return postedProfile
+        const { createdAt, updatedAt, userId, Address, ...rest } = formik.values;
+        const updateData = { assistance, ...rest }
+        const postedProfile = await postProfile(updateData);
+        if (postedProfile) {
+            setUserProfile(postedProfile)
+            navigate("/");
+            setOpen(false)
+        }
     }
+
+    useEffect(() => { formik.values.Address = Address }, [Address])
 
     return (
         <div className="Body gray flex">
@@ -79,14 +72,7 @@ export default function SignUpDetailPage() {
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await PostFunction()
-                    if (ok) {
-                        setUserProfile(ok);
-                        navigate("/");
-                        setOpen(false);
-                    }
-                }}
+                handleConfirm={async () => { await updateFunction() }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
 
@@ -97,9 +83,9 @@ export default function SignUpDetailPage() {
                     <LogOutButton />
                 </div>
             </div>
-            {loadingUser ?
+            {!user ?
                 <Skeleton /> :
-                <ProfileForm formik={formik} />}
+                <ProfileForm formik={formik} setAssistance={setAssistance} setSkillList={setSkillList} setAddress={setAddress} />}
         </div >
     )
 }

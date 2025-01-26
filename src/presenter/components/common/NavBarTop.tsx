@@ -2,7 +2,7 @@ import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@mate
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./SmallComps";
 import { NotifBadge } from "./NotifBadge";
-import { useUserStore } from "../../../application/stores/userStore";
+import { useUserStore } from "../../../application/stores/user.store";
 
 export default function NavBarTop() {
     const user = useUserStore((state) => state.user);
@@ -13,7 +13,7 @@ export default function NavBarTop() {
         <div className="flex justify-between w-full items-center py-3">
             <div className="flex items-center w-full  gap-2">
                 <Menu placement="bottom-start" >
-                    <MenuHandler className="flex items-center gap-2 bg-blue-gray-100">
+                    <MenuHandler className="flex items-center gap-2 BgUser !rounded-full !shadow cursor-pointer">
                         <Avatar
                             className="BgUser !shadow cursor-pointer "
                             variant="circular"
@@ -33,7 +33,7 @@ export default function NavBarTop() {
                             onClick={() => navigate('/myprofile')}>
                             <Icon icon="person_edit" fill />
                             <Typography variant="small" className="font-medium">
-                                Profile
+                                Modifier mon profil
                             </Typography>
                         </MenuItem>
                         <MenuItem className="flex items-center gap-2 !rounded-full !py-1">
@@ -47,7 +47,7 @@ export default function NavBarTop() {
                             onClick={() => navigate('/signin')}>
                             <Icon icon="exit_to_app" fill style="!text-red-500 pb-1" />
                             <Typography variant="small" className="font-medium">
-                                Sign Out
+                                Déconnexion
                             </Typography>
                         </MenuItem>
                     </MenuList>

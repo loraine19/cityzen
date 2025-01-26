@@ -1,9 +1,8 @@
-import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
-import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { User } from "../../../../../domain/entities/User";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { getLabel, flagTargets } from "../../../../../infrastructure/services/utilsService";
+import { Icon, ProfileDiv } from "../../../common/SmallComps";
 
 export default function FlagDetailComp(props: { flag: Flag, element?: any, label?: string }) {
     const { flag } = props
@@ -12,19 +11,16 @@ export default function FlagDetailComp(props: { flag: Flag, element?: any, label
     const element = props.element ? props.element : Post || Event || Survey || Service || { title: "", description: "", User: {} as User }
     const { title, description, User } = element
     const id = flag.targetId
-    const navigate = useNavigate();
     const label = props.label ? props.label : getLabel(target, flagTargets)
 
     return (
         <>
             <Card className="FixCard w-respLarge" >
-                <CardHeader className="FixCardHeader NoImage"
+                <CardHeader className="FixCardHeaderNoImage"
                     floated={false}>
-                    <div className=" justify-between w-full flex items-end ">
-                        <button onClick={() => navigate(`/${label}`)}>
-                            <Chip value={label} className="rounded-full h-max text-ellipsis shadow" color="cyan">
-                            </Chip>
-                        </button>
+                    <div className="ChipDivNoImage">
+                        <Chip value={label} className="CyanChip">
+                        </Chip>
                         <Chip value={(new Date(createdAt ? createdAt : now)).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
                         </Chip>
                     </div>
@@ -44,23 +40,10 @@ export default function FlagDetailComp(props: { flag: Flag, element?: any, label
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">
-                    <div className="flex items-center px-0 gap-2">
-                        <Avatar src={User?.Profile?.image as string} size="sm" alt="avatar" withBorder={true} />
-                        <div className="flex flex-col">
-                            <Typography variant="small" className="font-normal !p-0">{User?.Profile?.firstName} - {User?.Profile?.lastName}</Typography>
-                            <Typography variant="small" color="gray" >
-                                {User?.Profile?.skills}
-                            </Typography>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Link to={`/${label}/${id}`}
-                            className="flex items-center gap-2" title={`voir les details de ${title}`}>
-                            <span className="material-symbols-outlined fill !text-[3rem] text-gray-900  fillThin">
-                                arrow_circle_right
-                            </span>
-                        </Link>
-                    </div>
+                    <ProfileDiv profile={User.Profile} />
+
+                    <Icon icon="arrow_circle_right" link={`/${label}/${id}`} title={`voir les details de ${title}`} size="4xl px-1" fill />
+
                 </CardFooter>
             </Card>
         </>

@@ -1,14 +1,14 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useState } from 'react';
-import { AuthHeader } from './authComps/AuthHeader';
+import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';;
 import { Link } from 'react-router-dom';
 import { User } from '../../../../domain/entities/User';
 import DI from '../../../../di/ioc';
 
 export default function ForgotPasswordPage() {
-    const resetPasswordViewModelFactory = DI.resolve('resetPasswordViewModel');
+    const resetPassword = async (email: string) => await DI.resolve('resetPasswordUseCase').resetPassword(email)
     const [newUser] = useState<User>({} as User);
     const [hidden, setHidden] = useState<boolean>(false)
     const [notif, setNotif] = useState<string>(' Entrez votre adresse email et nous vous enverrons un lien pour changer votre mot de passe');
@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
         onSubmit: async values => {
             formik.values = values
             let email = formik.values.email.trim()
-            const response = await resetPasswordViewModelFactory(email)
+            const response = await resetPassword(email)
             setNotif(response ? response.message : 'Verifiez votre email')
             setHidden(true)
         },

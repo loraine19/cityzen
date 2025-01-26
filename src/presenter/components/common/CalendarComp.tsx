@@ -9,8 +9,9 @@ import { day } from '../../../domain/entities/frontEntities';
 
 
 export default function CalendarCompLarge(props: { logo?: boolean }) {
-    const { logo } = props
-    const { events, loadingEvents, errorEvents } = DI.resolve('eventViewModel');
+    const { logo } = props || {}
+    const eventViewModelFactory = DI.resolve('eventViewModel');
+    const { events, loadingEvents, errorEvents, fetchNextPage, hasNextPage } = eventViewModelFactory();
     const eventService = DI.resolve<EventService>('eventService');
     const [numberOfwweks, setNumberOfwweks] = useState<number>(2)
     const [startDateBackup] = useState<Date>(new Date().getDay() > 0 ? new Date() : new Date(new Date().getTime() - 1 * dayMS));
@@ -36,6 +37,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
     useEffect(() => { if (window.innerWidth < 900) { setNumberOfwweks(1); } else { setNumberOfwweks(2) } }, [])
 
     useEffect(() => {
+        hasNextPage && fetchNextPage()
         !loadingEvents && setWeeks(eventService.getWeeksFull(startDate, events, numberOfwweks));
     }, [startDate, numberOfwweks, loadingEvents])
 

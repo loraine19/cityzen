@@ -1,5 +1,5 @@
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
-import { ProfileRepositoryBase } from "../../domain/repositories-ports/ProfileRepositoryBase";
+import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
 
 export class ProfileUseCase {
     private profileRepository: ProfileRepositoryBase;

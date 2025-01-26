@@ -1,7 +1,7 @@
 import { Menu, MenuHandler, Chip, MenuList, Typography, MenuItem } from "@material-tailwind/react"
 import { NotifView } from "../../../domain/entities/Notif"
 import { Icon } from "./SmallComps"
-import { useNotificationStore } from "../../../application/stores/notificationStore";
+import { useNotificationStore } from "../../../application/stores/notification.store";
 
 export function NotifBadge() {
     const notifList = useNotificationStore((state) => state.notifList);

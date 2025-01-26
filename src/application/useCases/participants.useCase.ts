@@ -1,7 +1,7 @@
 //rc/application/useCases/participantCase.ts/participants.useCase.ts
 
 import { Participant, ParticipantDTO } from "../../domain/entities/Participant";
-import { ParticipantRepositoryBase } from "../../domain/repositories-ports/ParticipantRepositoryBase";
+import { ParticipantRepositoryBase } from "../../domain/repositoriesBase/ParticipantRepositoryBase";
 
 
 export class ParticipantUseCase {

@@ -3,7 +3,7 @@ import { object, string } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Service, HardLevel, SkillLevel } from '../../../../domain/entities/Service';
-import { ServiceService } from '../../../../domain/repositories-ports/ServiceRepository';
+import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { ServiceForm } from './servicesComps/ServiceForm';
 

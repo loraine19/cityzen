@@ -1,5 +1,5 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
-import { ResetPasswordRepositoryBase } from "../../domain/repositories-ports/ResetPasswordRepositoryBase";
+import { ResetPasswordRepositoryBase } from "../../domain/repositoriesBase/ResetPasswordRepositoryBase";
 import { ResetDTO } from "../../domain/entities/Auth";
 import { MessageBack } from "../../domain/entities/frontEntities";
 import { Api } from "../providers/http/UseApi";

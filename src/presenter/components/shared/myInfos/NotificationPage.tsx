@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
 import { NotifView } from "../../../../domain/entities/Notif";
 import { notifCategories } from "../../../../infrastructure/services/utilsService";
 import NavBarBottom from "../../common/NavBarBottom";
@@ -8,7 +7,8 @@ import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import { NotifCard } from "./NotifCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
-import { useNotificationStore } from "../../../../application/stores/notificationStore";
+import { useNotificationStore } from "../../../../application/stores/notification.store";
+import { SkeletonGrid } from "../../common/Skeleton";
 
 export default function NotificationPage() {
     const { notifList, updateNotif, removeNotif } = useNotificationStore()
@@ -78,14 +78,18 @@ export default function NotificationPage() {
                 <div className={notifFind && "w-full flex justify-center p-8"}>{notifFind}</div>
             </header>
 
-            <main className="Grid !content-start !gap-3
-            ">
-                {loading ? Array.from({ length: 10 }).map((_, index) =>
-                    <Skeleton key={index} height={130} className="!rounded-2xl" />) :
+            <main className="GridSmall ">
+                {loading ? [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                    <SkeletonGrid
+                        key={index}
+                        count={4}
+                        small={true} />
+                )) :
                     list?.map((notif: NotifView, index: number) => notif.read === false &&
-                        <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => {
-                            removeNotif(notif.id); updateNotif(list)
-                        }} />)}
+                        <div className="SubGrid !pt-4 " key={'div' + index}>
+                            <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => {
+                                removeNotif(notif.id); updateNotif(list)
+                            }} /></div>)}
             </main>
             <NavBarBottom />
 

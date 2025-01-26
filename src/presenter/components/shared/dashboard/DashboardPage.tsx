@@ -1,29 +1,35 @@
 //src/presenter/components/shared/dashboard/DashboardPage.tsx
 import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
-import DI from '../../../../di/ioc'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 import { NotifView } from "../../../../domain/entities/Notif";
-import { GetPathElement } from "../../../../infrastructure/services/utilsService";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
 import { Icon, LogOutButton } from "../../common/SmallComps";
-import { AuthHeader } from "../auth/authComps/AuthHeader";
+import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import CalendarComp from "../../common/CalendarComp";
-import { useNotificationStore } from "../../../../application/stores/notificationStore";
-import { useEffect } from "react";
+import { useNotificationStore } from "../../../../application/stores/notification.store";
+import { useEffect, useState } from "react";
 import { NotifBadge } from "../../common/NotifBadge";
+import { Skeleton } from "../../common/Skeleton";
+import { useUserStore } from "../../../../application/stores/user.store";
+import { ConfirmModal } from "../../common/ConfirmModal";
+import { useSearchParams } from "react-router-dom";
 
 export default function DashboardPage() {
-    const { user, loadingUser } = DI.resolve('userViewModel');
+    const user = useUserStore((state) => state.user);
     const notifList = useNotificationStore((state) => state.notifList);
     const updateNotif = useNotificationStore((state) => state.updateNotif);
-    //   const userNotif = useNotificationStore((state) => state.notifList?.filter((notif) => !notif.read).length);
-
+    const userNotif = useNotificationStore((state) => state.notifList?.filter((notif) => !notif.read).length);
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
+    const [searchParams] = useSearchParams();
+    const msg = searchParams.get("msg");
+    const [open, setOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        msg && setOpen(true)
+    }, [msg])
 
     useEffect(() => {
         updateNotif(notifList)
@@ -31,10 +37,22 @@ export default function DashboardPage() {
 
     return (
         <div className="Body gray">
+            <ConfirmModal
+                open={open}
+                disableConfirm
+                handleOpen={() => { }}
+                handleConfirm={() => { setOpen(false); window.location.href = '/' }}
+                handleCancel={() => { }}
+                title="Notification"
+                element={msg || ''}
+
+            />
             <div className="relative flex-col w-full flex items-center  justify-center ">
-                <div className="absolute flex justify-between  w-full max-w-[1000px] !m-auto  p-2">
+                <div className="absolute flex justify-between lg:justify-end w-full max-w-[1000px] !m-auto  p-2">
                     <LogOutButton />
-                    <NotifBadge />
+                    <div className="lg:hidden">
+                        <NotifBadge />
+                    </div>
                 </div>
                 <AuthHeader />
             </div>
@@ -71,8 +89,8 @@ export default function DashboardPage() {
                                     color="blue-gray"
                                     className="font-extrabold"
                                 >
-                                    {loadingUser ? <Skeleton width={50} height={50} circle={true} /> : user?.Profile?.points}
-                                    <span className={`${loadingUser && 'hidden'} text-xs font-light `}>
+                                    {!user ? <Skeleton className="rounded-full" /> : user?.Profile?.points}
+                                    <span className={`${!user && 'hidden'} text-xs font-light `}>
                                         {' pts'}
                                     </span>
                                 </Typography>
@@ -86,7 +104,7 @@ export default function DashboardPage() {
                                     <Icon fill icon="circle_notifications" link="/notifications" size="4xl" color="orange" title="voir mes notifications" />
                                     <div>
                                         <Typography color="blue-gray">
-                                            {notifList && notifList.length > 0 ? `${notifList.length} notifications` : 'pas de notifications'}
+                                            {notifList && userNotif > 0 ? `${userNotif} notifications` : 'pas de notifications'}
                                         </Typography>
                                     </div>
                                 </div>
@@ -97,7 +115,7 @@ export default function DashboardPage() {
                                                 <span className="text-orange-800 capitalize font-normal">{notif?.elementType}</span> :
                                                 {notif?.title}
                                             </p>
-                                            <Icon icon="arrow_circle_right" link={`/${GetPathElement(notif.element.toString().toLowerCase())}/${notif.id}`} size="2xl" color="orange"
+                                            <Icon icon="arrow_circle_right" link={`/${notif?.elementType}/${notif.id}`} size="2xl" color="orange"
                                                 title={"voir les details de " + notif.title} />
                                         </div>))}
                                 </div>

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
 import { Post } from "../../../../domain/entities/Post";
-import { PostService } from "../../../../domain/repositories-ports/PostRepository";
+import { PostService } from "../../../../domain/repositoriesBase/PostRepository";
 import { postCategories, getLabel, getValue } from "../../../../infrastructure/services/utilsService";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
@@ -11,6 +10,7 @@ import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import AnnouncesGridComp from "./announceComps/AnnouncesGridComp";
 import AnnouncesComp from "./announceComps/PostCard";
+import { SkeletonGrid } from "../../common/Skeleton";
 
 
 export default function AnnounceListPage() {
@@ -117,20 +117,31 @@ export default function AnnounceListPage() {
                 {notif && <div className="w-full flex justify-center p-8">{notif}</div>}
             </header>
             <main>
-                {view === "list" ? (
-                    announcesToGrid.map((line, index) => (
-                        <AnnouncesGridComp key={index} line={line} update={UpdateList} change={change} mines={mines} view={view} />
-                    ))
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 pt-4 w-full gap-4">
-                        {loading ?
-                            Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} height={200} className="!rounded-2xl" />) : postList.map((post, index) => (
-                                <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
-                                    <AnnouncesComp key={post.id} post={post} change={change} update={UpdateList} mines={mines} />
-                                </div>
-                            ))}
+
+                {loading ?
+                    <div className="Grid">
+                        {[...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
+                                key={index}
+                                count={4} />
+                        ))}
                     </div>
-                )}
+                    : <>
+                        {view === "list" ?
+                            announcesToGrid.map((line, index) => (
+                                <AnnouncesGridComp key={index} line={line} update={UpdateList} change={change} mines={mines} view={view} />))
+                            :
+
+                            <div className="Grid">
+                                {postList.map((post, index) => (
+                                    <div className="SubGrid" key={index}>
+                                        <AnnouncesComp key={post.id} post={post} change={change} update={UpdateList} mines={mines} />
+                                    </div>
+                                ))}
+                            </div>
+                        }
+                    </>
+                }
             </main>
             <NavBarBottom addBtn={true} color="orange" />
         </div>

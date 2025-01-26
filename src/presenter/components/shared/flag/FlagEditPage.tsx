@@ -3,14 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Option, Button, Select, Switch } from '@material-tailwind/react';
-import Skeleton from 'react-loading-skeleton';
-import { FlagService } from '../../../../domain/repositories-ports/FlagRepository';
+import { FlagService } from '../../../../domain/repositoriesBase/FlagRepository';
 import { Flag } from '../../../../domain/entities/Flag';
 import { getLabel, flagTargets, flagReasons } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import FlagDetailComp from './flagComps/FlagDetailComp';
+import { Skeleton } from '../../common/Skeleton';
 
 
 export default function FlagEditPage() {

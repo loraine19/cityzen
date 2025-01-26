@@ -1,18 +1,18 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react'
-import Skeleton from 'react-loading-skeleton';
 import { Issue, IssueStep } from '../../../../../domain/entities/Issue';
 import { Service, ServiceType } from '../../../../../domain/entities/Service';
 import { User } from '../../../../../domain/entities/User';
-import { IssueService } from '../../../../../domain/repositories-ports/IssueRepository';
-import { ServiceService } from '../../../../../domain/repositories-ports/ServiceRepository';
+import { IssueService } from '../../../../../domain/repositoriesBase/IssueRepository';
+import { ServiceService } from '../../../../../domain/repositoriesBase/ServiceRepository';
 import CTAMines from '../../../common/CTAMines';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from '../servicesComps/IssueCard';
 import { Action } from '../../../../../domain/entities/frontEntities';
 import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
-import { useUserStore } from '../../../../../application/stores/userStore';
+import { useUserStore } from '../../../../../application/stores/user.store';
+import { Skeleton } from '../../../common/Skeleton';
 
 
 export default function IssueDetailPage() {

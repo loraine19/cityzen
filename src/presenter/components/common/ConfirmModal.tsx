@@ -1,8 +1,8 @@
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
 import parse from 'html-react-parser';
 
-export function ConfirmModal(props: { open: boolean, handleOpen: () => void, handleConfirm: () => void, handleCancel: () => void, title: string, element: string }) {
-    const { open, handleOpen, handleConfirm, handleCancel } = props
+export function ConfirmModal(props: { open: boolean, handleOpen: () => void, handleConfirm: () => void, handleCancel: () => void, title: string, element: string, disableConfirm?: boolean }) {
+    const { open, handleOpen, handleConfirm, handleCancel, disableConfirm } = props
     return (
         <>
             <Button className="hidden">-</Button>
@@ -17,7 +17,7 @@ export function ConfirmModal(props: { open: boolean, handleOpen: () => void, han
                         variant="outlined"
                         color="red"
                         onClick={handleCancel}
-                        className="mr-1 rounded-full"
+                        className={`mr-1 rounded-full ${disableConfirm && 'invisible'}`}
                     >
                         <span>Annuler</span>
                     </Button>

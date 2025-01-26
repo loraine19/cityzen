@@ -1,10 +1,10 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, } from "@material-tailwind/react";
 import { AvatarStack } from "./AvatarStack";
-import Skeleton from "react-loading-skeleton";
 import { EventView } from "../../../../../domain/entities/Event";
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
 import { DateChip, ProgressLargebar, ProfileDiv, Title } from "../../../common/SmallComps";
 import { Link } from "react-router-dom";
+import { Skeleton } from "../../../common/Skeleton";
 
 type EventCardProps = { EventLoad: EventView, change?: (e: any) => void, setEventLoad?: any }
 export function EventDetailCard(props: EventCardProps) {
@@ -13,9 +13,9 @@ export function EventDetailCard(props: EventCardProps) {
     const author = User?.Profile
     return (
         <div className="pt-6 pb-1 h-full flex">
-            <Card className="w-respLarge FixCard">
-                <CardHeader className="FixCardHeader min-h-[28vh]">
-                    <div className="absolute h-full w-full z-70 p-4  flex flex-col  justify-between items-end ">
+            <Card className="w-respLarge FixCard !h-full">
+                <CardHeader className="FixCardHeader">
+                    <div className="ChipDiv flex-col justify-between !h-full">
                         <div className="flex w-full items-center justify-between gap-2">
                             <Chip value={label} className="CyanChip rounded-full h-max shadow" size='sm'>
                             </Chip>

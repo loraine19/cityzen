@@ -2,25 +2,44 @@ import { Avatar, Chip, List, ListItem, ListItemPrefix, Popover, PopoverContent, 
 import { dayMS } from "../../../infrastructure/services/utilsService"
 import { Link, } from "react-router-dom";
 import { Profile } from "../../../domain/entities/Profile";
-import Skeleton from "react-loading-skeleton";
 import DI from "../../../di/ioc";
+import { useState } from "react";
+import parse from "html-react-parser";
+import { Skeleton } from "./Skeleton";
 
 export function DateChip(props: { start: Date | string, end?: Date | string, ended?: boolean, prefix?: string }) {
     const { start, end, prefix, ended } = props
     const now = new Date();
     const endDate: string = end && new Date(end).toLocaleDateString('fr-FR') || ''
     const endDays: number = Math.floor((new Date(start).getTime() + 15 * dayMS - (now.getTime())) / dayMS)
-    const dateClass =
-        !end && "GrayChip" ||
-        endDays <= 0 && "RedChip" ||
-        endDays < 5 && "OrangeChip" ||
-        endDays > 19 && "GreenChip" || 'GrayChip'
-    const value =
-        prefix && !ended && !end && `${prefix} ${new Date(start).toLocaleDateString('fr-FR')}`
-        || ended && `finis le ${endDate}`
-        || endDays > 5 && `${prefix} ${endDays} jours`
-        || endDays > 0 && `il reste ${endDays} jours`
-
+    const dateClass = (() => {
+        switch (true) {
+            case !end:
+                return "GrayChip";
+            case endDays <= 0:
+                return "RedChip";
+            case endDays < 5:
+                return "OrangeChip";
+            case endDays > 19:
+                return "GreenChip";
+            default:
+                return "GrayChip";
+        }
+    })();
+    const value = (() => {
+        switch (true) {
+            case prefix && !ended && !end:
+                return `${prefix} ${new Date(start).toLocaleDateString('fr-FR')}`;
+            case ended:
+                return `finis le ${endDate}`;
+            case endDays > 5:
+                return `${prefix} ${endDays} jours`;
+            case endDays > 0:
+                return `il reste ${endDays} jours`;
+            default:
+                return '';
+        }
+    })();
     return (
         <Chip size="sm" value={value}
             className={`${dateClass} rounded-full w-max h-max lowercase shadow`}>
@@ -42,12 +61,11 @@ export function FlagIcon(props: { flagged: boolean, id: number, type: string }) 
 export function Icon(props: {
     icon: string, style?: string, fill?: boolean, size?: string, onClick?: () => void, color?: string, bg?: boolean, title?: string, link?: string, disabled?: boolean
 }) {
-    const { title, icon, disabled } = props
+    const { title, icon, disabled, onClick } = props
     let size = props.size || "2xl"
     size === '5xl' && (size = '[2.8rem]')
-    const pad = props.bg ? 'px-[11%]' : 'px-1'
+    const pad = props.bg ? 'px-[10%] pb-[2%]' : 'px-1'
     const fill = props.fill ? "fillThin" : ""
-    const onClick = props.onClick
     const color = !disabled ? props.color : "gray"
     const textColor = props.color && `text-${color}-700` || "text-gray-900"
     const bg = (props.bg && props.color) && `bg-${color}-500 bg-opacity-30 ` || props.bg && "!bg-gray-300" || ''
@@ -55,17 +73,20 @@ export function Icon(props: {
     const link = props.link || ""
     const classIcon = `icon notranslate pt-0.5  flex items-center justify-center !text-${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
     const classActive = `hover:!bg-${color}-500 hover:bg-opacity-50 hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out ${!bg && `hover:!bg-gray-300 `}`
-    const span =
-        <span title={title} className={`${classIcon} `}> {icon}</span>
-    const button =
-        <button type="button" onClick={onClick} title={!disabled ? title : title + ' est desactivée'} className={`${classIcon} ${!disabled && classActive} `} disabled={disabled}>
+    if (onClick) {
+        return <button type="button" onClick={onClick} title={!disabled ? title : title + ' est desactivée'} className={`${classIcon} ${!disabled && classActive} `} disabled={disabled}>
             {icon}
         </button>
-    const linkIcon =
-        <Link to={link} title={title} rel="noopener noreferrer" className={`${classIcon} ${classActive}  `}>
+    }
+    if (link) {
+        return <Link to={link} title={title} rel="noopener noreferrer" className={`${classIcon} ${classActive}  `}>
             {icon}
         </Link>
-    return link ? linkIcon : onClick ? button : span
+    }
+    else {
+        return <span title={title} className={`${classIcon} `}> {icon}</span>;
+    }
+
 
 }
 
@@ -89,14 +110,12 @@ export function ProgressLargebar(props: { value: number, float?: boolean, label?
 export function ProgressSmallbar(props: { value: number, label?: string, size?: string, needed: number }) {
     const { value, label, needed } = props
     const size = props.size ? props.size : "md"
-    const textSize = size === "lg" && 'h5'
-        || size === "md" && 'small' || 'normal';
-
+    const textSize = size === "lg" && 'h5' || size === "md" && 'small' || 'normal';
     const label2 = ` ${value > 0 ? value + '%' : ''}`
     const label3 = needed > 0 && value > 0 ? ` il manques ${needed} ${label}` : ''
 
     return (
-        < div className={`h-max w-full flex -m-1 flex-col px-2 pb-3 gap-2 ${size === "lg" && "mb-4"}`}>
+        < div className={`h-max w-full flex -m-1 flex-col px-2 pb-3 gap-2 ${size === "lg" && "mb-2"}`}>
             <div className=" flex  w-full items-center justify-between gap-2">
                 <Typography color={value < 1 ? "red" : "blue-gray"} variant={textSize as any} >
                     {value > 0 ? `Validé à ` : `Pas encore de ${label}`}
@@ -143,8 +162,8 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
                 </PopoverContent>
             </Popover>
             <div className="flex flex-col">
-                <Typography variant={size === "xl" ? "h5" : "h6"} color="blue-gray" className="border-b border-blue-gray-200 pr-4">{firstName} {lastName}</Typography>
-
+                <Typography variant={size === "xl" ? "h5" : "h6"} color="blue-gray" className="border-b border-blue-gray-200 pr-4">{firstName} {lastName}
+                </Typography>
                 <Typography variant={size === "xl" ? "h6" : "small"} className="font-normal text-blue-gray-500">◦ {skills}</Typography>
             </div>
         </div>
@@ -155,12 +174,17 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
 
 
 export function Title(props: { title: string, flagged?: boolean, id?: number, CreatedAt?: string | Date, subTitle?: string }) {
-    const { title, flagged, id, CreatedAt, subTitle } = props
+    const { flagged, id, CreatedAt, subTitle } = props
+    const titleElement = document.getElementById(props.title);
+    const maxLength = titleElement && titleElement.scrollWidth > titleElement.clientWidth ? 90 : 42;
+    const [title, setTitle] = useState<string>(props.title?.length > maxLength ? props.title.slice(0, maxLength - 3) + '...' + (parse('&nbsp;').toString()).repeat(props.title?.length - maxLength) : props.title)
     return (
         <>
             <div className="flex items-center w-full   justify-between  gap-2">
-                <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)]">
-                    <Typography variant="h5" color="blue-gray" className=" flex whitespace-nowrap overflow-x-auto  ">{title} {title?.length > 39 && <span className="sticky -right-1 bg-white px-2 "> ... </span>}
+                <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
+                    <Typography onScroll={() => { setTitle(props.title) }} id={props.title} variant="h6" color="blue-gray" className="w-full flex whitespace-nowrap overflow-x-auto "
+                        title={props.title}>
+                        {title}
                     </Typography>
                     {CreatedAt && <span className="text-xs">{new Date(CreatedAt).toLocaleDateString('fr-FR')}</span>}
                 </div>
@@ -172,5 +196,5 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
 
 export const LogOutButton = () => {
     const { logOut } = DI.resolve('authService');
-    return <Icon icon="exit_to_app" size="2xl" style="px-3" onClick={logOut} title="se déconnecter" />
+    return <Icon icon="exit_to_app" size="2xl" style="px-2.5 pt-1.5 pb-1" onClick={logOut} title="se déconnecter" />
 }

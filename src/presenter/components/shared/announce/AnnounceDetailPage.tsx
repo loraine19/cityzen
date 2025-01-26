@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
-import { PostService } from '../../../../domain/repositories-ports/PostRepository';
+import { PostService } from '../../../../domain/repositoriesBase/PostRepository';
 import { Post } from '../../../../domain/entities/Post';
 import { GenereMyActions, getLabel, postCategories } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
@@ -8,7 +8,7 @@ import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import AnnounceDetailComp from './announceComps/PostDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
-import { useUserStore } from '../../../../application/stores/userStore';
+import { useUserStore } from '../../../../application/stores/user.store';
 
 export default function AnnounceDetailPage() {
     const { id } = useParams();

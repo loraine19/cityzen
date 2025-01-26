@@ -1,6 +1,6 @@
 //src/application/user/getUserMe.usecase.ts
 import { User } from "../../domain/entities/User";
-import { UserRepositoryBase } from "../../domain/repositories-ports/UserRepositoryBase";
+import { UserRepositoryBase } from "../../domain/repositoriesBase/UserRepositoryBase";
 
 export class UserUseCase {
     private userRepository: UserRepositoryBase;

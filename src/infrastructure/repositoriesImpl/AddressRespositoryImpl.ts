@@ -1,5 +1,5 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
-import { AddressRepositoryBase } from "../../domain/repositories-ports/AddressRepositoryBase";
+import { AddressRepositoryBase } from "../../domain/repositoriesBase/AddressRepositoryBase";
 import { Address, AddressDTO } from "../../domain/entities/Address";
 
 interface IData extends AddressRepositoryBase {

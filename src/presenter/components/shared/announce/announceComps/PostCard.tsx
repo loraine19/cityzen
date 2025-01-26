@@ -4,12 +4,12 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
 import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
-import { PostService } from "../../../../../domain/repositories-ports/PostRepository";
+import { PostService } from "../../../../../domain/repositoriesBase/PostRepository";
 import { getLabel, postCategories, GenereMyActions, toggleLike } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 
@@ -29,12 +29,12 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
 
     return (
         <>
-            <Card className={`CardFix  ${haveImage ? "!h-full " : "!h-[calc(100%+1.5rem)] -mt-6"}`}>
-                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeader NoImage"}
+            <Card className={haveImage ? "FixCard " : "FixCardNoImage  "}>
+                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
-                    <div className={` ${haveImage && "absolute p-2"} h-max w-full flex justify-between `}>
+                    <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <button onClick={(e: any) => change(e)}>
-                            <Chip size="sm" value={`${label}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
+                            <Chip size="sm" value={`${label}`} className={'CyanChip'}>
                             </Chip>
                         </button>
                         <DateChip start={createdAt} prefix="publié le " />
@@ -46,7 +46,7 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                             className="h-full w-full object-cover"
                         />}
                 </CardHeader>
-                <CardBody className={` FixCardBody !flex-1`}>
+                <CardBody className={` FixCardBody`}>
                     <Title title={title} flagged={flagged} id={id} />
                     <div className="flex flex-col h-full">
                         <div className="CardOverFlow">

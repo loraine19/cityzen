@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
 import { useSearchParams } from "react-router-dom";
 import { Service } from "../../../../domain/entities/Service";
-import { ServiceService } from "../../../../domain/repositories-ports/ServiceRepository";
+import { ServiceService } from "../../../../domain/repositoriesBase/ServiceRepository";
 import { serviceCategories, getLabel, getValue } from "../../../../infrastructure/services/utilsService";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
@@ -12,6 +11,7 @@ import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import ServiceComp from "./servicesComps/ServiceCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { SkeletonGrid } from "../../common/Skeleton";
 
 
 export default function ServicesPage() {
@@ -150,12 +150,16 @@ export default function ServicesPage() {
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
             <main>
-                <div className="grid grid-cols-1 lg:grid-cols-2 pt-2 w-full gap-4">
+                <div className="Grid">
                     {loading ?
-                        <> <Skeleton count={2} height={300} className="my-2.5 !rounded-xl shadow-lg" />
-                            <Skeleton count={2} height={300} className="my-2.5 !rounded-xl shadow-lg" /></> :
+                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
+                                key={index}
+                                count={4} />
+                        ))
+                        :
                         serviceList.map((service, index) => (
-                            <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
+                            <div className="SubGrid" key={index}>
                                 <ServiceComp key={service.id} service={service} change={search} mines={mines} update={UpdateList} />
                             </div>
                         ))}

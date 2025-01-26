@@ -3,49 +3,31 @@ import { object, string } from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Button } from '@material-tailwind/react';
-import { AuthHeader } from '../auth/authComps/AuthHeader';
-import { ProfileForm } from '../auth/authComps/ProfileForm';
-import { Profile } from '../../../../domain/entities/Profile';
+import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
+import { ProfileForm } from '../auth/auth.Comps/ProfileForm';
+import { ProfileDTO, } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 
 //import { logOut } from '../../../../infrastructure/services/authService';
 import DI from '../../../../di/ioc';
-import { Address } from '../../../../domain/entities/Address';
+import { Address, AddressDTO } from '../../../../domain/entities/Address';
 import { LogOutButton } from '../../common/SmallComps';
-import { useUserStore } from '../../../../application/stores/userStore';
+import { useUserStore } from '../../../../application/stores/user.store';
+import { User } from '../../../../domain/entities/User';
+import { Skeleton } from '../../common/Skeleton';
 
 
 export default function MyInfosPage() {
     const { setUserProfile } = useUserStore()
     const navigate = useNavigate();
-    const [newProfile] = useState<Profile>({} as Profile);
-    const [skillList, setSkillList] = useState<string[]>(newProfile.skills ? newProfile.skills : [])
+    const user: User = useUserStore((state) => state.user);
+    const [skillList, setSkillList] = useState<string[]>(user.Profile?.skills ? user.Profile.skills : [])
+    const [assistance, setAssistance] = useState<string | undefined>()
+    const [Address, setAddress] = useState<Address>(user.Profile?.Address)
     const [open, setOpen] = useState(false);
-    const { addresses } = DI.resolve('addressViewModel')()
-    const { postAddress } = DI.resolve('postAddressViewModel')()
-    const { profileMe } = DI.resolve('profileMeViewModel')()
-    const { updateProfile } = DI.resolve('updateProfileViewModel')()
-    console.log("profile", profileMe)
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
+    const updateProfile = async (data: ProfileDTO) => await DI.resolve('profileUseCase').updateProfile(data)
 
-    const { user, loadingUser, errorUser } = DI.resolve('userViewModel')
-    console.log(user, loadingUser, errorUser)
-
-    useEffect(() => {
-        const fetch = async () => {
-            const { Profile } = user
-            formik.values.firstName = Profile.firstName
-            formik.values.lastName = Profile.lastName
-            formik.values.phone = Profile.phone.toString()
-            formik.values.image = Profile.image
-            formik.values.addressId = Profile.addressId
-            formik.values.Address = Profile.Address
-            formik.values.assistance = Profile.assistance.toString().replace(/LEVEL_/g, "")
-            formik.values.skills = Profile.skills
-        }
-        fetch()
-    }, []);
-
-    /// FORMIK SCHEMA
     const formSchema = object({
         firstName: string().required("Le prémon est obligatoire").min(2, "minmum 2 lettres"),
         lastName: string().required("Le Nom est obligatoire").min(2, "minmum 2 lettres"),
@@ -53,43 +35,34 @@ export default function MyInfosPage() {
         Address: object({ city: string().required("Ville est obligatoire"), zipcode: string().required("Code postal est obligatoire") })
     })
 
-    /// FORMIK SUBMIT
     const formik = useFormik({
-        initialValues: newProfile as any,
+        enableReinitialize: true,
+        initialValues: { ...user.Profile } as any,
         validationSchema: formSchema,
-        onSubmit: values => {
-            addressIn()
-            !formik.values.assistance.includes("LEVEL_") && (formik.values.assistance = `LEVEL_${formik.values.assistance}`);
+        onSubmit: async values => {
+            const updatedAddress: Address = await updateAddress(formik.values.Address)
+            formik.values.Address = updatedAddress;
+            formik.values.assistance = assistance
             formik.values.skills = skillList.toString();
             formik.values = values
             setOpen(true)
         }
     })
 
-    /// ADDRESS FUNCTION
-    async function addressIn() {
-        const AdressToSearch = formik.values.Address
-        const addressList = addresses
-        const addressFind = addressList.find((address: Address) => address.address === AdressToSearch.address && address.city === AdressToSearch.city)
-        if (!addressFind) {
-            const post = await postAddress(AdressToSearch)
-            post ? (formik.values.Address = post) : (formik.values.Address = '')
-        }
-        else {
-            addressFind?.id !== newProfile.addressId && (formik.values.Address = addressFind);
-        }
+
+    const update = async () => {
         formik.values.addressId = formik.values.Address.id
+        const { createdAt, updatedAt, userId, Address, ...rest } = formik.values;
+        const updateData = { assistance, ...rest }
+        const updated = await updateProfile(updateData);
+        if (updated) {
+            setUserProfile(updated)
+            navigate("/");
+            setOpen(false)
+        }
     }
 
-    /// UPDATE FUNCTION API
-    const updateFunction = async () => {
-        formik.values.addressId = formik.values.Address.id
-        const { Address, ...rest } = formik.values;
-        const updateData = { ...rest }
-        const patchedProfile = await updateProfile(updateData);
-        return patchedProfile
-    }
-
+    useEffect(() => { formik.values.Address = Address }, [Address])
 
     return (
         <div className="Body gray flex">
@@ -97,16 +70,11 @@ export default function MyInfosPage() {
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await updateFunction()
-                    if (ok) {
-                        setUserProfile(ok)
-                        navigate("/");
-                        setOpen(false)
-                    }
-                }}
+                handleConfirm={async () => { await update() }}
                 title={"Confimrer la modification"}
-                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+                element={
+                    `<p className="font-bold text-lg">Voulez vous vraiment modifier vos informations personnelles ?</p>`
+                } />
 
             <div className="w-respLarge flex-col !max-w-[100vw] flex justify-between pt-1">
                 <div className="flex justify-between items-center gap-4">
@@ -119,8 +87,9 @@ export default function MyInfosPage() {
                 </div>
                 <AuthHeader />
             </div>
-            <ProfileForm formik={formik} user={newProfile} setSkillList={setSkillList} />
-
+            {!user.Profile ?
+                <Skeleton /> :
+                <ProfileForm formik={formik} setAssistance={setAssistance} setSkillList={setSkillList} setAddress={setAddress} />}
         </div >
     )
 }

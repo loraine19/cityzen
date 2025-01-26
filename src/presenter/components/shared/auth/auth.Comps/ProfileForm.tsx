@@ -1,24 +1,24 @@
 import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix, IconButton } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Profile, assistanceLevel } from "../../../../../domain/entities/Profile";
+import { assistanceLevel } from "../../../../../domain/entities/Profile";
 import { getImageBlob } from "../../../../../infrastructure/services/utilsService";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
-import { Address } from "../../../../../domain/entities/Address";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { Address } from '../../../../../domain/entities/Address';
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
-interface AddressErrors { zipcode: string, city: string }
-export const ProfileForm = (props: { formik: any, user?: Profile, setSkillList?: any }) => {
-    const [imgBlob, setImgBlob] = useState<string | Blob | ArrayBuffer | null>('');
-    const { formik, setSkillList } = props;
+export const ProfileForm = (props: { formik: any, setSkillList?: any, setAssistance?: any, setAddress?: any }) => {
+    const { formik, setSkillList, setAssistance } = props;
+    const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image || './person.svg');
+
     const { user } = useUserStore()
-    const [Address, setAddress] = useState<Address>(formik.values.Address || {} as Address);
-    const { image, firstName, lastName, phone, skills } = formik.values;
+    const [Address, setAddress] = useState<Address>(formik.values.Address);
+    const { image, firstName, skills } = formik.values || '';
     const [newSkill, setNewSkill] = useState<string | undefined>()
     let assistanceLevelSelect = assistanceLevel.filter((level: any) => { if (!isNaN(level)) { return level.toString() } }) as string[]
 
-    /// SKILLS FUNCTIONS
+
     const removeSkill = (skill: string) => {
         formik.values.skills = formik.values.skills.replace(',' + skill, '')
         setSkillList(formik.values.skills.split(','))
@@ -29,14 +29,14 @@ export const ProfileForm = (props: { formik: any, user?: Profile, setSkillList?:
         setSkillList(formik.values.skills.split(','))
     }
 
-    useEffect(() => { formik.values.Address = Address }, [Address])
+    useEffect(() => { props.setAddress(Address) }, [Address])
 
     return (
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
             <main className='relative flex flew-1 pt-6 -mt-4'>
                 <Card className="w-respLarge h-full justify-between ">
                     <CardHeader className="!bg-transparent shadow-none flex justify-center items-end" floated={true}>
-                        <Avatar src={imgBlob ? imgBlob as String : image} alt={image || imgBlob ? firstName : ''}
+                        <Avatar src={imgBlob as string || image} alt={image || imgBlob ? firstName : ''}
                             className={"shadow-md BgUser !rounded-full !h-[5rem] !w-[5rem] mb-1 bg-blue-gray-400"} />
                         <div className="flex -ml-8">
                             <Button color="gray" className="p-2.5 rounded-full z-20 mb-1">
@@ -63,24 +63,25 @@ export const ProfileForm = (props: { formik: any, user?: Profile, setSkillList?:
                         </div>
                     </CardHeader>
                     <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-1.5 overflow-auto !max-h-[calc(100vh-18rem)]">
-
-                        <Input label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"} name="firstName" variant="standard" onChange={formik.handleChange} value={firstName}
-                            error={Boolean(formik.errors.firstName)} />
-                        <Input label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"} name="lastName" variant="standard" onChange={formik.handleChange} value={lastName}
-                            error={Boolean(formik.errors.lastName)} />
+                        <Input label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"} name="firstName" variant="standard" onChange={formik.handleChange} value={formik.values.firstName}
+                            error={formik.errors.firstName} />
+                        <Input label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"} name="lastName" variant="standard" onChange={formik.handleChange} value={formik.values.lastName}
+                            error={formik.errors.lastName} />
                         <Input label={formik.errors.phone ? formik.errors.phone as string : "Télephone"} name="phone" variant="standard" onChange={formik.handleChange}
-                            value={phone}
+                            value={formik.values.phone}
                             type='tel'
-                            error={Boolean(formik.errors.phone)} />
-                        <Typography className={`${!formik.errors.Address && 'hidden'} bg-red-500 text-xs error `}>
-                            {formik.errors.Address && (formik.errors.Address as AddressErrors).zipcode && (formik.errors.Address as AddressErrors).city ? `${(formik.errors.Address as AddressErrors).zipcode} ${(formik.errors.Address as AddressErrors).city}` : '' as string}
-                        </Typography>
+                            error={formik.errors.phone} />
                         <AddressInputOpen
-                            address={formik.values.Address} setAddress={setAddress} error={Boolean(formik.errors.Address)} />
+                            address={formik.values.Address}
+                            setAddress={setAddress}
+                            error={formik.errors.Address} />
                         <Select className="p-5 capitaliz " label={formik.errors.assistance ? formik.errors.assistance as string : "Assistance"} name="level" variant='standard'
-                            error={Boolean(formik.errors.assistance)}
-                            value={formik.values.assistance as string}
-                            onChange={(val: any) => { formik.values.assistance = val }}>
+                            error={formik.errors.assistance}
+                            value={formik.values?.assistance?.match(/\d+/)[0] || '0'}
+                            onChange={(val: any) => {
+                                setAssistance('LEVEL_' + val);
+                                formik.values.assistance = 'LEVEL_' + val
+                            }}>
                             {assistanceLevelSelect.map((level: string, index: number) => {
                                 return (
                                     <Option value={level.toString()} key={index}>

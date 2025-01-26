@@ -1,5 +1,5 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
-import { EventRepositoryBase } from "../../domain/repositories-ports/EventRepositoryBase";
+import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
 import { Event, EventDTO } from "../../domain/entities/Event";
 
 interface IData extends EventRepositoryBase {
@@ -11,35 +11,23 @@ export class EventRepositoryImpl implements EventRepositoryBase {
     private eventData: IData;
     constructor({ eventData }: { eventData: IData }) { this.eventData = eventData }
 
-    public async getEvents(): Promise<Event[]> {
-        return this.eventData.getEvents();
+    public async getEvents(page?: number, filter?: string, category?: string): Promise<Event[]> {
+        return await this.eventData.getEvents(page, filter, category);
     }
 
     public async getEventById(id: number): Promise<Event> {
         return this.eventData.getEventById(id);
     }
 
-    public async getEventsMines(): Promise<Event[]> {
-        return this.eventData.getEventsMines();
+    public async createEvent(data: EventDTO): Promise<Event> {
+        return this.eventData.createEvent(data);
     }
 
-    public async getEventsIgo(): Promise<Event[]> {
-        return this.eventData.getEventsIgo();
+    public async updateEvent(id: number, data: EventDTO): Promise<Event> {
+        return this.eventData.updateEvent(id, data);
     }
 
-    public async getEventsValidated(): Promise<Event[]> {
-        return this.eventData.getEventsValidated();
-    }
-
-    public async createEvent(eventDTO: EventDTO): Promise<Event> {
-        return this.eventData.createEvent(eventDTO);
-    }
-
-    public async updateUser(eventDTO: EventDTO): Promise<Event> {
-        return this.eventData.updateUser(eventDTO);
-    }
-
-    public async deleteUser(id: number): Promise<void> {
-        return this.eventData.deleteUser(id);
+    public async deleteEvent(id: number): Promise<void> {
+        return this.eventData.deleteEvent(id);
     }
 }

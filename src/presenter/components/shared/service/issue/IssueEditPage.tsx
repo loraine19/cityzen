@@ -2,19 +2,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import Skeleton from 'react-loading-skeleton';
 import { Service, ServiceType } from '../../../../../domain/entities/Service';
 import { Issue } from '../../../../../domain/entities/Issue';
 import { User } from '../../../../../domain/entities/User';
 import { ModalValues } from '../../../../../domain/entities/frontEntities';
-import { IssueService } from '../../../../../domain/repositories-ports/IssueRepository';
-import { ServiceService } from '../../../../../domain/repositories-ports/ServiceRepository';
+import { IssueService } from '../../../../../domain/repositoriesBase/IssueRepository';
+import { ServiceService } from '../../../../../domain/repositoriesBase/ServiceRepository';
 import { ConfirmModal } from '../../../common/ConfirmModal';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from '../servicesComps/IssueCard';
 import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
-import { useUserStore } from '../../../../../application/stores/userStore';
+import { useUserStore } from '../../../../../application/stores/user.store';
+import { Skeleton } from '../../../common/Skeleton';
 
 export default function IssueEditPage() {
     const { id } = useParams();

@@ -1,16 +1,16 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
 import { Vote } from "../../../../../domain/entities/Vote";
-import { Icon } from '../../../common/SmallComps'
+import { Icon, Title } from '../../../common/SmallComps'
 import { useState, useEffect } from "react";
 import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
-import { PoolService } from "../../../../../domain/repositories-ports/PoolRepository";
+import { PoolService } from "../../../../../domain/repositoriesBase/PoolRepository";
 import { dayMS, GenereMyActions } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 
@@ -47,29 +47,24 @@ export function PoolCard(props: PoolCardProps) {
     }, [pool])
 
     return (
-        <Card className={`CardFix  !h-[calc(100%+1.5rem)] -mt-6`}>
-            <CardHeader className={"FixCardHeader NoImage"}
+        <Card className={`FixCardNoImage `}>
+            <CardHeader className={"FixCardHeaderNoImage"}
                 floated={false}>
-                <div className={` gap-4 h-full w-full flex justify-between `}>
-                    <button onClick={(e: any) => change(e)} className="flex items-center gap-2">
-                        <Chip value='Cagnotte' className="rounded-full h-max GreenChip" ></Chip>
+                <div className={`ChipDivNoImage`}>
+                    <button onClick={(e: any) => change(e)}>
+                        <Chip size='sm' value='Cagnotte' className="GreenChip" ></Chip>
                     </button>
                     <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
                 </div>
             </CardHeader>
-            <CardBody className="FixCardBody !flex-1">
-                <div className="flex sticky top-0 bg-white w-full items-center justify-between">
-                    <Typography variant="h5" color="blue-gray" className="mb-2">
-                        {title}
+            <CardBody className="FixCardBody ">
+                <Title title={title} />
+                <div className="CardOverFlow h-full !p-0 flex justify-between flex-col gap-2">
+                    <Typography color="blue-gray" className="max-h-full overflow-auto">
+                        {description}...
                     </Typography>
-                </div>
-                <div className="flex flex-col h-full justify-between pb-6">
-                    <div className="CardOverFlow  ">
-                        <Typography color="blue-gray" className="mb-2">
-                            {description}...
-                        </Typography>
-                    </div>
-                    <ProfileDiv profile={UserBenef?.Profile || {} as Profile} size={'xl'} />
+
+                    <ProfileDiv profile={UserBenef?.Profile || {} as Profile} size={'lg'} />
                 </div>
             </CardBody>
             <CardFooter className="CardFooter items-center gap-6">

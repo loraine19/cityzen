@@ -11,6 +11,9 @@ import SubHeader from "../../../common/SubHeader";
 
 export function EventForm(props: { formik: any }) {
     const { formik } = props
+
+    useEffect(() => { console.log(formik.values) }, [formik.values])
+
     const [Address, setAddress] = useState<Address>(formik.values.Address ? formik.values.Address : {} as Address);
     const formatDate = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0])
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100)
@@ -145,7 +148,7 @@ export function EventForm(props: { formik: any }) {
                     </Card>
                 </main>
                 <footer className="w-respLarge">
-                    <Button type="submit" size="lg" className="w-full rounded-full" >
+                    <Button type="submit" size="lg" className="lgBtn w-full rounded-full" >
                         enregistrer
                     </Button>
                 </footer>

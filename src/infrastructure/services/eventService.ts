@@ -3,7 +3,7 @@ import { EventView, Event } from "../../domain/entities/Event";
 import { Flag } from "../../domain/entities/Flag";
 import { dayMS, defaultEventImage } from "../../domain/entities/frontEntities";
 import { Participant } from "../../domain/entities/Participant";
-import { ParticipantRepositoryBase } from "../../domain/repositories-ports/ParticipantRepositoryBase";
+import { ParticipantRepositoryBase } from "../../domain/repositoriesBase/ParticipantRepositoryBase";
 import { eventCategories, getLabel, shortDateString } from "./utilsService";
 
 interface EventServiceI {
@@ -12,10 +12,10 @@ interface EventServiceI {
 }
 export class EventService implements EventServiceI {
 
-    private participantUseCase: ParticipantRepositoryBase;
+    private participantRepository: ParticipantRepositoryBase;
 
-    constructor(participantUseCase: ParticipantRepositoryBase) {
-        this.participantUseCase = participantUseCase
+    constructor(participantRepository: ParticipantRepositoryBase) {
+        this.participantRepository = participantRepository
     }
 
     //// UTILS
@@ -75,11 +75,11 @@ export class EventService implements EventServiceI {
         let participants
         const isParticipant = event.Participants.find((participant: any) => participant.userId === userId) ? true : false;
         if (isParticipant) {
-            await this.participantUseCase.deleteParticipant(event.id);
+            await this.participantRepository.deleteParticipant(event.id);
             participants = event.Participants.filter((participant: Participant) => participant.userId !== userId)
         }
         else {
-            const post = await this.participantUseCase.postParticipant({ userId: userId, eventId: event.id });
+            const post = await this.participantRepository.postParticipant({ userId: userId, eventId: event.id });
             participants = [post, ...event.Participants];
         }
         return { ...event, Participants: participants };
@@ -95,7 +95,7 @@ export class EventService implements EventServiceI {
     }
 
     private getImageForCategory(category: string): string {
-        return defaultEventImage.find(categoryD => categoryD.type === category.toString())?.image || defaultEventImage[0].image;
+        return defaultEventImage.find(categoryD => categoryD.type === category?.toString())?.image || defaultEventImage[0].image;
     }
     private getDays(event: Event): Date[] {
         const start = new Date(event.start).getTime();
@@ -108,13 +108,14 @@ export class EventService implements EventServiceI {
     }
 
     private mapEventToEventView(event: Event, userId: number): EventView {
+        if (!event) return {} as EventView;
         return {
             ...event,
-            image: event.image ? event.image : this.getImageForCategory(event.category.toString()),
+            image: event.image ? event.image : this.getImageForCategory(event?.category?.toString()),
             days: this.getDays(event),
             label: getLabel(event.category, eventCategories),
             Igo: event.Participants.some((participant: Participant) => participant.userId === userId),
-            flagged: event.Flags ? event.Flags.some((flag: Flag) => flag.userId === userId) : false,
+            flagged: event.Flags ? event?.Flags?.some((flag: Flag) => flag.userId === userId) : false,
             mine: event.userId === userId,
             pourcent: Math.floor((event.Participants?.length || 0) / event.participantsMin * 100),
             agendaLink: this.generateCalendarLink(event),
@@ -129,9 +130,13 @@ export class EventService implements EventServiceI {
     }
 
     //// FOR VIEW
-    getInfosInEvents(events: Event[], userId: number): EventView[] {
+    getInfosInEvents(events: Event[] | Event[][] | undefined, userId: number): EventView[] {
         if (!events) return [];
-        return events.map(event => this.mapEventToEventView(event, userId));
+        if (Array.isArray(events[0])) {
+            const eventArray = (events as Event[][]).map(eventArray => eventArray.map(event => this.mapEventToEventView(event, userId)));
+            return eventArray.flat();
+        }
+        return (events as Event[]).map(event => this.mapEventToEventView(event, userId));
     }
 
     getInfosInEvent(event: Event, userId: number): EventView {

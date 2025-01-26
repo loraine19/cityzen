@@ -3,10 +3,10 @@ import { object, string } from 'yup';
 import { useNavigate, } from 'react-router-dom';
 import { useState } from 'react';
 import { Service, HardLevel, SkillLevel } from '../../../../domain/entities/Service';
-import { ServiceService } from '../../../../domain/repositories-ports/ServiceRepository';
+import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { ServiceForm } from './servicesComps/ServiceForm';
-import { useUserStore } from '../../../../application/stores/userStore';
+import { useUserStore } from '../../../../application/stores/user.store';
 
 
 export default function ServiceCreatePage() {

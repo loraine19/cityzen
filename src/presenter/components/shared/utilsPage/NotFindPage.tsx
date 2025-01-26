@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@material-tailwind/react";
-import { AuthHeader } from "../auth/authComps/AuthHeader";
+import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import NavBarBottom from "../../common/NavBarBottom";
 
 

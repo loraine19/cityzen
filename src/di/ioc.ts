@@ -20,16 +20,14 @@ import { ResetPasswordApi } from '../infrastructure/providers/http/resetPassword
 import { ResetPasswordRepositoryImpl } from '../infrastructure/repositoriesImpl/ResetPasswordRespositoryImpl';
 import { NotifService } from '../infrastructure/services/notifService';
 import { AuthUseCase } from '../application/useCases/auth.useCase';
-import { authSignInVerifyViewModel, authSignInViewModel, authSignUpViewModel } from '../presenter/views/authViewModel';
 import { ProfileUseCase } from '../application/useCases/profile.useCase';
 import { ProfileRepositoryImpl } from '../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
-import { postProfileViewModel, profileMeViewModel, updateProfileViewModel } from '../presenter/views/profileViewModel';
+import { profileMeViewModel } from '../presenter/views/profileViewModel';
 import { ProfileApi } from '../infrastructure/providers/http/profileApi';
 import { ProfileService } from '../infrastructure/services/profileService';
 import { EventUseCase } from '../application/useCases/event.usecase';
 import { NotifUseCase } from '../application/useCases/notif.usecase';
 import { ParticipantUseCase } from '../application/useCases/participants.useCase';
-import { addressViewModel, postAddressViewModel } from '../presenter/views/addressViewModel';
 import { AddressUseCase } from '../application/useCases/address.useCase';
 import { AddressRepositoryImpl } from '../infrastructure/repositoriesImpl/AddressRespositoryImpl';
 import { AddressService } from '../infrastructure/services/addressService';
@@ -38,7 +36,6 @@ import { eventIdViewModel, eventViewModel } from '../presenter/views/eventViewMo
 import { AuthService } from '../infrastructure/services/authService';
 import { ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { ResetPasswordService } from '../infrastructure/services/resetPasswordService';
-import { resetPasswordUpdateViewModel, resetPasswordViewModel } from '../presenter/views/resetPasswordViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -52,17 +49,12 @@ container.register({
     ////AUTH 
     authUseCase: asClass(AuthUseCase),
     authRepository: asClass(AuthRepositoryImpl),
-    authSignInViewModel: asFunction(authSignInViewModel),
-    authSignInVerifyViewModel: asFunction(authSignInVerifyViewModel),
-    authSignUpViewModel: asFunction(authSignUpViewModel),
     authData: asClass(AuthApi),
     authService: asClass(AuthService),
 
     ////ADDRESS
-    addressUseCase: asClass(AddressUseCase),
-    addressRepository: asClass(AddressRepositoryImpl),
-    addressViewModel: asFunction(addressViewModel),
-    postAddressViewModel: asFunction(postAddressViewModel),
+    addressRepository: asClass(AddressRepositoryImpl).singleton(),
+    addressUseCase: asClass(AddressUseCase).singleton(),
     addressService: asClass(AddressService),
     addressData: asClass(AddressApi),
 
@@ -71,8 +63,6 @@ container.register({
     resetPasswordData: asClass(ResetPasswordApi),
     resetPasswordUseCase: asClass(ResetPasswordUseCase),
     resetPasswordService: asClass(ResetPasswordService),
-    resetPasswordUpdateViewModel: asFunction(resetPasswordUpdateViewModel),
-    resetPasswordViewModel: asFunction(resetPasswordViewModel),
 
     ////USER
     userUseCase: asClass(UserUseCase),
@@ -85,8 +75,6 @@ container.register({
     profileUseCase: asClass(ProfileUseCase),
     profileRepository: asClass(ProfileRepositoryImpl),
     profileMeViewModel: asFunction(profileMeViewModel),
-    postProfileViewModel: asFunction(postProfileViewModel),
-    updateProfileViewModel: asFunction(updateProfileViewModel),
     profileService: asClass(ProfileService),
     profileData: asClass(ProfileApi),
 
@@ -119,11 +107,8 @@ container.register({
 console.log('Registered components:', container.registrations);
 
 // TEST RESOLVE EXA
-// console.log('resetPasswordRepository:', container.resolve('resetPasswordRepository'));
-// console.log('resetPasswordData:', container.resolve('resetPasswordData'));
-// console.log('resetPasswordUseCase:', container.resolve('resetPasswordUseCase'));
-// console.log('resetPasswordService:', container.resolve('resetPasswordService'));
-// console.log('resetPasswordViewModel:', container.resolve('resetPasswordViewModel'));
+//console.log('addressUserCase:', container.resolve('addressUseCase').getAddresses());
+
 
 
 export default container;

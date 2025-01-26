@@ -1,4 +1,4 @@
-import { Event, EventDTO } from "../../../domain/entities/Event";
+import { Event, EventDTO, EventPage } from "../../../domain/entities/Event";
 import { createFormData, handleApiCall } from "./utilsApi";
 import { useApi, Api } from "./UseApi";
 
@@ -7,8 +7,12 @@ export class EventApi {
     private readonly dataType: string = 'events';
 
     constructor() { this.api = useApi() }
-    async getEvents(): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(this.dataType));
+    async getEvents(page?: number, filter?: string, category?: string): Promise<EventPage> {
+        const pageR = page ? `?page=${page}` : '';
+        const filterR = filter ? `&filter=${filter}` : '';
+        const categoryR = category ? `&category=${category}` : '';
+        const result = await handleApiCall(() => this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`));
+        return result;
     }
 
     async getEventById(id: number): Promise<Event> {
@@ -17,18 +21,6 @@ export class EventApi {
 
     async getEventsByTag(category: string): Promise<Event[]> {
         return handleApiCall(() => this.api.get(`${this.dataType}/${category}`));
-    }
-
-    async getEventsMines(): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/mines`));
-    }
-
-    async getEventsIgo(): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/igo`));
-    }
-
-    async getEventsValidated(): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/validated`));
     }
 
     async getEventsByUser(id: number): Promise<Event[]> {
@@ -50,7 +42,7 @@ export class EventApi {
         }));
     }
 
-    async patchEvent(id: number, event: EventDTO): Promise<Event> {
+    async updateEvent(id: number, event: EventDTO): Promise<Event> {
         const formData = createFormData(event);
         return handleApiCall(() => this.api.patch(`${this.dataType}/${id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }

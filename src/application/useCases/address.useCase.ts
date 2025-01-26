@@ -1,5 +1,5 @@
 import { Address, AddressDTO } from "../../domain/entities/Address";
-import { AddressRepositoryBase } from "../../domain/repositories-ports/AddressRepositoryBase";
+import { AddressRepositoryBase } from "../../domain/repositoriesBase/AddressRepositoryBase";
 
 
 export class AddressUseCase {
@@ -10,6 +10,7 @@ export class AddressUseCase {
     }
 
     public async getAddresses(): Promise<Address[]> {
+        console.log('useCase getAddresses')
         return this.addressRepository.getAddresses();
     }
 

@@ -50,6 +50,7 @@ function App() {
 
                     <Route path="/" element={<PrivateRoute />}>
                         <Route path="/" element={<DashboardPage />} />
+                        <Route path="/msg" element={<DashboardPage />} />
                         <Route path="/myprofile" element={<MyInfosPage />} />
                         <Route path="/notification" element={<NotificationPage />} />
 

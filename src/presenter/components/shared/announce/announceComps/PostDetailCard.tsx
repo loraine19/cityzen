@@ -6,13 +6,12 @@ import { Like } from "../../../../../domain/entities/Like";
 import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { getLabel, postCategories, toggleLike } from "../../../../../infrastructure/services/utilsService";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 
 export default function AnnounceDetailComp(props: { post: Post, mines?: boolean, change: (e: any) => void }) {
     const [post, setPost] = useState<Post>(props.post)
-    const { change } = props
     const { id, title, description, image, category, createdAt, Likes } = post
     const { user } = useUserStore()
     const userId: number = user.id
@@ -25,13 +24,11 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
     return (
         <>
             <Card className="FixCard w-respLarge" >
-                <CardHeader className={haveImage ? "FixCardHeader min-h-[28vh]" : "FixCardHeader NoImage"}
+                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
-                    <div className={`${!haveImage ? "relative" : "absolute"} top-0 p-2 justify-between w-full flex items-end `}>
-                        <button onClick={(e: any) => change(e)}>
-                            <Chip value={getLabel(category, postCategories)} className="rounded-full h-max text-ellipsis shadow" color="cyan">
-                            </Chip>
-                        </button>
+                    <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
+                        <Chip value={getLabel(category, postCategories)} className={'CyanChip'}>
+                        </Chip>
                         <DateChip start={createdAt} prefix="publié le " />
                     </div>
                     {image && <img src={image as any} alt={title} className="h-full w-full object-cover" />}
@@ -48,8 +45,15 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                     <ProfileDiv profile={Author} />
                     <div className="flex items-center gap-2 ">
                         <button onClick={() => toggleLike(post.id, userId, setPost)}>
-                            <Chip value={`${Likes?.length}`} variant="ghost" className="pr-3 pl-6 pt-2 rounded-full h-full flex items-center "
-                                icon={<Icon icon="thumb_up" fill={ILike} color={ILike ? "cyan" : "gray"} style="-mt-2 pl-1" title={ILike ? "Je n'aime plus" : "j'aime ce post"} />}>
+                            <Chip value={`${Likes?.length}`} variant="ghost"
+                                className="!h-max pr-3 pl-6  rounded-full  flex items-center "
+                                icon={
+                                    <Icon icon="thumb_up"
+                                        size="2xl"
+                                        fill={ILike}
+                                        color={ILike ? "cyan" : "gray"}
+                                        style="-mt-2 pl-4 pt-0 hover:text-cyan-800 "
+                                        title={ILike ? "Je n'aime plus" : "j'aime ce post"} />}>
                             </Chip>
                         </button>
                     </div>

@@ -1,6 +1,6 @@
 //src/infrastructure/repositoriesImpl/ProfileRepositoryImpl.tsx
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
-import { ProfileRepositoryBase } from "../../domain/repositories-ports/ProfileRepositoryBase";
+import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
 
 
 interface IData extends ProfileRepositoryBase {

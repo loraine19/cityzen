@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import parse from 'html-react-parser';
-import Skeleton from 'react-loading-skeleton';
 import { EventView } from '../../../../domain/entities/Event';
 import { GenereMyActions } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
@@ -9,8 +8,8 @@ import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import { EventDetailCard } from './eventComps/EventDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
-import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
 import DI from '../../../../di/ioc';
+import { Skeleton } from '../../common/Skeleton';
 
 
 export default function EventDetailPage() {
@@ -19,9 +18,8 @@ export default function EventDetailPage() {
 
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
-    const [eventLoad, setEventLoad] = useState<EventView>({} as EventView);
-    const { deleteEvent } = new EventApi();
-
+    const [eventLoad, setEventLoad] = useState<EventView>(event);
+    const deleteEvent = async (id: number) => await DI.resolve('eventUseCase').deleteEvent(id);
     const myActions = event && GenereMyActions(event, "evenement", deleteEvent, () => { });
 
     const buttons: Action[] = [
@@ -41,7 +39,6 @@ export default function EventDetailPage() {
     ];
     useEffect(() => { !loadingEvent && setEventLoad(event) }, [loadingEvent]);
 
-    //    if (loadingEvent || !eventLoad) { return (<>cc</>) }
     return (
         <div className="Body cyan">
             <header className="px-4">
@@ -52,7 +49,7 @@ export default function EventDetailPage() {
             <main>
                 {!loadingEvent && eventLoad ?
                     <EventDetailCard EventLoad={eventLoad} setEventLoad={setEventLoad} /> :
-                    <Skeleton count={1} height={800} />}
+                    <Skeleton />}
             </main>
             {eventLoad.mine && !loadingEvent ?
                 <CTAMines actions={myActions}

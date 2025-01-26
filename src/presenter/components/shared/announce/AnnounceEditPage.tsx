@@ -3,7 +3,7 @@ import { object, string, array } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Post } from '../../../../domain/entities/Post';
-import { PostService } from '../../../../domain/repositories-ports/PostRepository';
+import { PostService } from '../../../../domain/repositoriesBase/PostRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { AnnounceForm } from './announceComps/AnnounceForm';
 

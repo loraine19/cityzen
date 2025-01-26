@@ -13,18 +13,21 @@ export const createFormData = (element: any): FormData => {
     return formData;
 }
 
-export const handleApiCall = async (apiCall: () => Promise<any>) => {
-    try {
-        const { data } = await apiCall(); return data;
-    } catch (error) {
-        //   console.error('apiCall', error);
-        // throw error;
-    }
-}
-
 export class ApiError extends Error {
     constructor(public status: number, message: string) {
         super(message);
-        this.name = 'ApiError';
+        this.name = 'API';
+    }
+}
+export const handleApiCall = async (apiCall: () => Promise<any>) => {
+    try {
+        const { data } = await apiCall()
+        return data;
+    }
+    catch (error) {
+        if (error instanceof ApiError) {
+            return { statut: error.status, error: error.message };
+        }
+        return { statut: 500, error: error };
     }
 }

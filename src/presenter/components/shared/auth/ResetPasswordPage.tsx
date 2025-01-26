@@ -1,12 +1,13 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useState } from 'react';
-import { AuthHeader } from './authComps/AuthHeader';
+import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { User } from '../../../../domain/entities/User';
 import { Icon } from '../../../components/common/SmallComps';
 import DI from '../../../../di/ioc';
+import { ResetDTO } from '../../../../domain/entities/Auth';
 
 
 export default function ResetPasswordPage() {
@@ -15,14 +16,15 @@ export default function ResetPasswordPage() {
     const [notif, setNotif] = useState<string>(' Entrez votre nouveau mot de passe');
     const params = { email: searchParams.get("email"), token: searchParams.get("token") }
     const { email, token } = params
-    const { updatePassword } = DI.resolve('resetPasswordUpdateViewModel')()
+    const updatePassword = async (resetDTO: ResetDTO) => await DI.resolve('resetPasswordUseCase').resetPasswordUpdate(resetDTO)
+
     const passwordType = { value: 'password', icon: 'visibility' }
     const textType = { value: 'text', icon: 'visibility_off' }
     const [passWordInput, setPassWordInput] = useState<{ value: string, icon: string }>(passwordType)
 
 
     const formSchema = object({
-        password: string().required("password est obligatoire"),
+        password: string().required("password est obligatoire").min(8, "minimum 8 charactères"),
     })
 
     const formik = useFormik({
@@ -31,12 +33,11 @@ export default function ResetPasswordPage() {
         onSubmit: async values => {
             formik.values = values
             const updatepassword = await updatePassword({ email: email as string, password: formik.values.password, resetToken: token as string })
-            if (updatepassword) {
+            if (updatepassword.message) {
                 setNotif(updatepassword?.message);
-                setTimeout(() => {
-                    window.location.href = '/signin?msg=' + updatepassword?.message + '?email=' + email
-                }, 1000);
+                setTimeout(() => { window.location.href = '/signin?msg=' + updatepassword?.message + '&?email=' + email }, 1000);
             }
+            else if (updatepassword.error) { setNotif(updatepassword?.error) }
             else { setNotif('une erreur est survenue') }
         },
     });
@@ -69,7 +70,7 @@ export default function ResetPasswordPage() {
                                     }} icon={passWordInput.icon} style='!-mt-4' />
                                 }
 
-                                label={formik.errors.email ? formik.errors.email : "Mot de passe"} name="password" variant="static" error={formik?.errors.password ? true : false} onChange={formik.handleChange} />
+                                label={formik.errors.password ? formik.errors.password : "Mot de passe"} name="password" variant="static" error={formik?.errors.password ? true : false} onChange={formik.handleChange} />
                         </CardBody>
                     </Card>
                 </main>

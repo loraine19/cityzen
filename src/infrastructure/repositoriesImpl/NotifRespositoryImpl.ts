@@ -1,6 +1,6 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { Notif } from "../../domain/entities/Notif";
-import { NotifRepositoryBase } from "../../domain/repositories-ports/NotifRepositoryBase";
+import { NotifRepositoryBase } from "../../domain/repositoriesBase/NotifRepositoryBase";
 
 export interface IData {
     api: any;

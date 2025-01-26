@@ -36,9 +36,7 @@ export function AuthForm(props: authFormProps) {
                             name="email"
                             variant="standard"
                             onChange={formik.handleChange}
-                            defaultValue={formik.values.email ? formik.values.email : "test@mail.com"}
                         />
-
                         <Input
                             icon={
                                 <Icon onClick={() => {
@@ -51,7 +49,6 @@ export function AuthForm(props: authFormProps) {
                             variant="standard"
                             onChange={formik.handleChange}
                             type={passWordInput.value}
-                            defaultValue="passwordtest"
                         />
                         <div className={!confirm ? "hidden" : ""}>
                             <Input icon={
@@ -65,17 +62,14 @@ export function AuthForm(props: authFormProps) {
                     <CardFooter className="flex flex-col">
                         <Typography className='text-xs error'>{formik.errors.checkbox} </Typography>
                         <div className=" flex  justify-center items-center  ">
-
                             <Checkbox
                                 type="checkbox" name="checkbox"
                                 className={formik.errors.checkbox ? "error bg-red-300/50" : ""}
-                                onChange={(e: any) => { formik.values.checkbox = e.target.checked; console.log(formik.values, formik.errors) }} />
+                                onChange={(e: any) => { formik.values.checkbox = e.target.checked }} />
                             <div className=' w-full flex flex-col'>
-
                                 <PopUp variant={"text"} classNames={popOverClass} text={popOverButtonText} content={popOverContent} />
                             </div>
                         </div>
-
                         <Button type="submit" color="cyan" size="md" className="rounded-full">
                             {submitText}
                         </Button>

@@ -3,12 +3,12 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useEffect, useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import Skeleton from 'react-loading-skeleton';
-import { EventView } from '../../../../domain/entities/Event';
-import { addressIn } from '../../../../infrastructure/services/utilsService';
+import { EventDTO, EventUpdateDTO } from '../../../../domain/entities/Event';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
 import DI from '../../../../di/ioc';
+import { Skeleton } from '../../common/Skeleton';
+import { Address, AddressDTO } from '../../../../domain/entities/Address';
+import { useUserStore } from '../../../../application/stores/user.store';
 
 export default function EventDetailPage() {
     const { id } = useParams()
@@ -16,13 +16,21 @@ export default function EventDetailPage() {
 
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
-    const [eventLoad, setEventLoad] = useState<EventView>({} as EventView);
-    useEffect(() => { console.log(event, loadingEvent); !loadingEvent && setEventLoad(event) }, [loadingEvent]);
-    const [newEvent] = useState<EventView>({} as EventView);
+    const user = useUserStore((state) => state.user);
+
+    const [eventDto, setEventDto] = useState<EventDTO>(new EventDTO(event));
+
+    useEffect(() => {
+        setEventDto(new EventDTO(event));
+        console.log(event.userId, user.id)
+        event && event.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
+    }, [loadingEvent]);
+
+
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
-    const { patchEvent } = new EventApi()
-
+    const updateEvent = async (id: number, data: EventUpdateDTO) => await DI.resolve('eventUseCase').updateEvent(id, data)
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
 
 
     const formSchema = object({
@@ -39,32 +47,31 @@ export default function EventDetailPage() {
     })
 
     const formik = useFormik({
-        initialValues: newEvent as EventView,
+        enableReinitialize: true,
+        initialValues: eventDto,
         validationSchema: formSchema,
-        onSubmit: values => {
-            addressIn(formik, newEvent);
+        onSubmit: async values => {
+            const updatedAddress: Address = await updateAddress(formik.values.Address)
+            formik.values.Address = updatedAddress;
             formik.values = values
             setOpen(true)
         }
     })
 
-    formik.values.category = eventLoad.category;
-    formik.values.Address = eventLoad.Address;
-    formik.values.start = eventLoad.start;
-    formik.values.title = eventLoad.title;
-    formik.values.description = eventLoad.description;
-    formik.values.participantsMin = eventLoad.participantsMin as number;
-    formik.values.end = eventLoad.end;
-    formik.values.image = eventLoad.image;
-    formik.values.Participants = eventLoad.Participants
+
 
     const updateFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
         formik.values.addressId = formik.values.Address.id
-        const { Address, Participants, ...rest } = formik.values;
+        const { Address, ...rest } = formik.values;
         const updateData = { ...rest }
-        return await patchEvent(newEvent.id, updateData)
+        const updated = await updateEvent(event.id, updateData)
+        if (updated) {
+            navigate("/evenement/" + updated.id);
+            location.reload()
+            setOpen(false)
+        }
     }
 
 
@@ -74,16 +81,11 @@ export default function EventDetailPage() {
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await updateFunction()
-                    if (ok) {
-                        navigate("/evenement/" + newEvent.id);
-                        setOpen(false);
-                    }
-                }}
+                handleConfirm={async () => await updateFunction()}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-            {loadingEvent ? <Skeleton count={1} height="100%" /> :
+            {loadingEvent || formik.values === null ?
+                <Skeleton /> :
                 <EventForm formik={formik} />}
         </div >
     )

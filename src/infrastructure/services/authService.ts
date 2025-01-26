@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { dayMS } from "../../domain/entities/frontEntities";
 
 interface AuthServiceI {
     logOut(): void;
@@ -12,6 +13,8 @@ export class AuthService implements AuthServiceI {
     logOut = () => {
         Cookies.remove('accessToken');
         Cookies.remove('refreshToken');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         window.location.replace('/signin');
     }
 
@@ -21,14 +24,12 @@ export class AuthService implements AuthServiceI {
         return new Date(decoded.exp * 1000);
     }
 
-    saveToken = (accesToken: string, refreshtoken: string) => {
-        const accessToken = accesToken;
-        const refreshToken = refreshtoken
-        const expirationDateAccess = this.getTokenExpirationDate(accessToken) || new Date();
-        const expirationDateRefresh = this.getTokenExpirationDate(refreshToken) || new Date();
-        localStorage.setItem('accessToken', expirationDateAccess.toString());
-        localStorage.setItem('refreshToken', expirationDateRefresh.toString());
-        Cookies.set('accessToken', accesToken, { expires: expirationDateAccess });
+    saveToken = (accessToken: string, refreshToken: string) => {
+        const expirationDateAccess = this.getTokenExpirationDate(accessToken) || new Date(Date.now() + 7 * dayMS);
+        const expirationDateRefresh = this.getTokenExpirationDate(refreshToken) || new Date(Date.now() + 7 * dayMS);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        Cookies.set('accessToken', accessToken, { expires: expirationDateAccess });
         Cookies.set('refreshToken', refreshToken, { expires: expirationDateRefresh });
     }
 }

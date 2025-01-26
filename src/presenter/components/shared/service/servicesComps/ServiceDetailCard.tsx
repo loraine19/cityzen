@@ -5,7 +5,7 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, HardLevel, SkillLevel } from "../../../../../domain/entities/Service";
 import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal } from "../../../../../infrastructure/services/utilsService";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 export default function ServiceDetailComp(props: { service: Service, mines?: boolean, change: (e: any) => void }) {
@@ -36,10 +36,10 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
 
     return (
         <>
-            <Card className="FixCard w-respLarge" >
-                <CardHeader className={haveImage ? "FixCardHeader min-h-[28vh]" : "FixCardHeader NoImage"}
+            <Card className="FixCard w-respLarge !h-full" >
+                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
-                    <div className={`${!haveImage ? "relative" : "absolute"}  top-0 p-2 justify-between w-full flex items-end `}>
+                    <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-center gap-2 mb-1">
                             <Chip size="sm" value={`${category}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
                             </Chip>
@@ -48,6 +48,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                             <button onClick={() => { status === 'litige' && navigate(`/conciliation/${id}`) }}>
                                 <Chip size="sm" value={status}
                                     className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} shadow rounded-full h-max flex items-center gap-2 font-medium `}>
+
                                 </Chip>
                             </button>
                         </div>
@@ -61,7 +62,7 @@ export default function ServiceDetailComp(props: { service: Service, mines?: boo
                         />
                     }
                 </CardHeader>
-                <CardBody className="FixCardBody !pb-0">
+                <CardBody className="FixCardBody">
                     <Title title={title} flagged={flagged} id={id} />
                     <div className="flex justify-between items-end pt-2 ">
                         <div className="flex  items-center gap-2 mb-1">

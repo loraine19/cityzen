@@ -3,10 +3,11 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
-import { AuthForm } from './authComps/AuthForm';
-import { AuthHeader } from './authComps/AuthHeader';
+import { AuthForm } from './auth.Comps/AuthForm';
+import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
 import DI from '../../../../di/ioc';
+import { AccessDTO, VerifyDTO } from '../../../../domain/entities/Auth';
 
 export default function SignInPage() {
     const { saveToken } = DI.resolve('authService');
@@ -15,8 +16,9 @@ export default function SignInPage() {
     const token = searchParams.get("token");
     const msg = searchParams.get("msg");
     const [notif, setNotif] = useState<string>(email && 'vous pouvez maintenant vous connecter' || msg || '');
-    const { errorAuth, signIn } = DI.resolve('authSignInViewModel')();
-    const { errorAuthVerify, signInVerify } = DI.resolve('authSignInVerifyViewModel')();
+
+    const signIn = async (accessData: AccessDTO) => await DI.resolve('authUseCase').signIn(accessData)
+    const signInVerify = async (verifyData: VerifyDTO) => await DI.resolve('authUseCase').signInVerify(verifyData)
 
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),
@@ -27,42 +29,39 @@ export default function SignInPage() {
         initialValues: { email: '', password: '' },
         validationSchema: formSchema,
         onSubmit: async (values) => {
-            token ? await handleSignInVerify(values) : await handleSignIn(values)
+            token ? await handleSignInVerify(values.email, values.password, token) : await handleSignIn(values.email, values.password)
         },
     });
 
-    const handleSignInVerify = async (values: { email: string; password: string }) => {
-        const authVerify = await signInVerify({ email, password: values.password, verifyToken: token });
+    const handleSignInVerify = async (email: string, password: string, token: string) => {
+        const verifyData = { email, password, verifyToken: token }
+        const authVerify = await signInVerify(verifyData);
         if (authVerify?.accessToken) {
             saveToken(authVerify.accessToken, authVerify.refreshToken);
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/signup_details") }, 1000);
         } else {
-            handleAuthError(authVerify?.message, errorAuthVerify);
+            setNotif(authVerify?.error || 'Erreur de connexion');
+            formik.resetForm();
         }
+
     };
 
-    const handleSignIn = async (values: { email: string; password: string }) => {
-        const auth = await signIn({ email: values.email, password: values.password });
+    const handleSignIn = async (email: string, password: string) => {
+        const accessData = { email, password }
+        const auth = await signIn(accessData);
+        console.log('auth', auth)
         if (auth?.accessToken) {
             saveToken(auth.accessToken, auth.refreshToken);
             setNotif('Vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/") }, 1000);
         } else {
-            handleAuthError(auth?.message, errorAuth);
+            setNotif(auth?.error || 'Erreur de connexion');
+            formik.resetForm();
         }
-    };
-
-    const handleAuthError = (message: string | undefined, error: string | undefined) => {
-        if (message) {
-            setNotif(message);
-        } else if (error) {
-            setNotif('Erreur : ' + error);
-        } else {
-            setNotif('Identifiants inconnus ...');
-        }
-        formik.resetForm();
     }
+
+
 
     const terms = "Vous resterez connecté pour 48h ...";
 

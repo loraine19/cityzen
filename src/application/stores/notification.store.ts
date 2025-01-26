@@ -17,7 +17,7 @@ export const useNotificationStore = create<NotificationStore>((set) => {
     set({ notifList: notifs });
     console.log('notifListStore', notifs)
   };
-  fetchNotifications();
+  !window.location.pathname.includes('/sign') && fetchNotifications();
   return {
     notifList: [],
     setNotifList: (newNotifList: NotifView[]) => set({ notifList: newNotifList }),

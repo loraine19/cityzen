@@ -36,21 +36,31 @@ export class Event {
 }
 export const eventCategory = Object.values(EventCategory).filter(category => typeof category === 'string');
 
-export class EventDTO implements Partial<Event> {
+export class EventDTO {
+    Address: Address = new Address();
     addressId: number = 0;
     category: EventCategory | string = EventCategory.CATEGORY_1;
     description: string = '';
     end: Date | string = new Date();
-    groupId: number = 0;
     image: string | File = '';
-    name: string = '';
     participantsMin: number = 0;
     start: Date | string = new Date();
     title: string = '';
-    userId: number = 0;
+    userId?: number = 0;
+    Participants?: Participant[];
+
+    constructor(init?: Partial<EventDTO>) {
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof EventDTO];
+                }
+            });
+        }
+    }
 }
 
-export class EventPUpdateDTO implements Partial<EventDTO> { }
+export class EventUpdateDTO implements Partial<EventDTO> { }
 
 export interface EventView extends Event {
     actif?: boolean;
@@ -65,4 +75,14 @@ export interface EventView extends Event {
     eventDateInfo: string;
     toogleParticipate: () => Promise<EventView>;
 
+}
+
+export type EventPage = { events: Event[], count: number };
+
+export type EventViewPage = { events: EventView[], count: number };
+
+export enum EventFilter {
+    MINE = 'MINE',
+    IGO = 'IGO',
+    VALIDATED = 'VALIDATE'
 }

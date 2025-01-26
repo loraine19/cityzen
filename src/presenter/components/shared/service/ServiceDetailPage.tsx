@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Service, ServiceStep } from '../../../../domain/entities/Service';
-import { ServiceService } from '../../../../domain/repositories-ports/ServiceRepository';
+import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
 import { getEnumVal, getLabel, serviceCategories, serviceTypes, isLate, GetPoints, GenereMyActions, toggleValidResp, generateContact, toggleResp } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import ServiceDetailComp from './servicesComps/ServiceDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
-import { useUserStore } from '../../../../application/stores/userStore';
+import { useUserStore } from '../../../../application/stores/user.store';
 
 
 export default function ServiceDetailPage() {

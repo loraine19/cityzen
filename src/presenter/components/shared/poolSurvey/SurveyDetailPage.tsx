@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
 import { useParams } from 'react-router-dom';
 import { Survey } from '../../../../domain/entities/Survey';
-import { SurveyService } from '../../../../domain/repositories-ports/SurveyRepository';
+import { SurveyService } from '../../../../domain/repositoriesBase/SurveyRepository';
 import { GenereMyActions, getLabel, surveyCategories } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import SurveyDetailCard from './poolSurveyComp/SurveyDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
-import { useUserStore } from '../../../../application/stores/userStore';
+import { useUserStore } from '../../../../application/stores/user.store';
+import { Skeleton } from '../../common/Skeleton';
 
 
 export default function SurveyDetailPage() {
@@ -63,7 +63,7 @@ export default function SurveyDetailPage() {
             </header>
             <main>
                 {loading ?
-                    <Skeleton height={400} className='!rounded-2xl flex pt-6 pb-1 h-full' /> :
+                    <Skeleton className='!rounded-2xl flex pt-6 pb-1 h-full' /> :
                     <div className="flex pt-6 pb-1 h-full">
                         <SurveyDetailCard element={element} mines={isMine} change={() => { }} />
                     </div>}

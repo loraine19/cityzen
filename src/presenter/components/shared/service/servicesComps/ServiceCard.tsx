@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, ServiceStep } from "../../../../../domain/entities/Service";
-import { ServiceService } from "../../../../../domain/repositories-ports/ServiceRepository";
+import { ServiceService } from "../../../../../domain/repositoriesBase/ServiceRepository";
 import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal, GenereMyActions, toggleResp } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 
@@ -73,23 +73,22 @@ export default function ServiceComp(props:
 
     return (
         <>
-            <Card className={`CardFix  ${haveImage ? "!h-full " : "!h-[calc(100%+1.5rem)] -mt-6"}`}>
-                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeader NoImage"}
+            <Card className={haveImage ? "FixCard" : "FixCardNoImage"}>
+                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
-                    <div className={` ${haveImage && "absolute p-2"} h-max w-full flex justify-between overflow-auto`}>
+                    <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
                             <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat) }}>
                                 <Chip size="sm" value={`${category}`}
-                                    className="rounded-full h-max text-ellipsis shadow " color="cyan">
+                                    className="CyanChip">
                                 </Chip>
                             </button>
                             <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat) }}>
-                                <Chip size="sm" value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"} 
-                                   shadow rounded-full  h-max flex items-center gap-2 font-medium `}>
+                                <Chip size="sm" value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"}`}>
                                 </Chip>
                             </button>
                             <Chip size="sm" value={status}
-                                className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} !shadow rounded-full h-max flex items-center gap-2 font-medium `}>
+                                className={` ${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} `}>
                             </Chip>
                         </div>
                         <DateChip start={createdAt} prefix="publié le " />
@@ -98,7 +97,7 @@ export default function ServiceComp(props:
                         <img
                             src={image as any}
                             alt={title}
-                            className="h-full w-full object-cover"
+                            className="CardImage"
                         />
                     }
                 </CardHeader>

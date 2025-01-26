@@ -11,9 +11,9 @@ import { Survey, surveyCategory } from "../../domain/entities/Survey";
 import { User } from "../../domain/entities/User";
 import { Address } from "../../domain/entities/Address";
 import { notifCategory } from "../../domain/entities/Notif";
-import { LikeService } from "../../domain/repositories-ports/LikeRepository";
-import { PostService } from "../../domain/repositories-ports/PostRepository";
-import { ServiceService } from "../../domain/repositories-ports/ServiceRepository";
+import { LikeService } from "../../domain/repositoriesBase/LikeRepository";
+import { PostService } from "../../domain/repositoriesBase/PostRepository";
+import { ServiceService } from "../../domain/repositoriesBase/ServiceRepository";
 import { AddressApi } from "../providers/http/addressApi";
 const { getServiceById, putService, putServiceValidation } = new ServiceService();
 const { getAddresses, postAddress } = new AddressApi();
@@ -151,7 +151,7 @@ export async function addressIn(formik: any, newElement: EventView | Profile) {
 
 export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
     let file = event.target.files[0];
-    formik.values.image = file
+    formik.values.image = file as File;
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
@@ -171,7 +171,7 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
             icon: handleOpen ? 'Supprimer' : 'close',
             title: "Confirmer la suppression",
             body: "Confirmer la suppression de " + title,
-            function: async () => { await deleteRoute(id); handleOpen && handleOpen(); },
+            function: async () => { await deleteRoute(id); handleOpen && handleOpen() && location.reload() },
         },
         {
             icon: handleOpen ? 'Modifier' : 'edit',

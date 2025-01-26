@@ -1,13 +1,13 @@
 import { Card, CardHeader, Typography, Chip, CardBody, Textarea, Popover, PopoverHandler, PopoverContent, Select, Option, Button, Input } from "@material-tailwind/react"
-import Skeleton from "react-loading-skeleton"
 import ServiceIssueCard from "./ServiceIssueCard"
 import { useState } from "react"
 import { Issue } from "../../../../../domain/entities/Issue"
 import { Service } from "../../../../../domain/entities/Service"
 import { User } from "../../../../../domain/entities/User"
 import { getImageBlob } from "../../../../../infrastructure/services/utilsService"
-import { useUserStore } from "../../../../../application/stores/userStore"
+import { useUserStore } from "../../../../../application/stores/user.store"
 import { Profile } from "../../../../../domain/entities/Profile"
+import { Skeleton } from "../../../common/Skeleton"
 
 
 

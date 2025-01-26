@@ -1,5 +1,5 @@
 import { AccessDTO, Auth, VerifyDTO } from "../../domain/entities/Auth";
-import { AuthRepositoryBase } from "../../domain/repositories-ports/AuthRepositoryBase";
+import { AuthRepositoryBase } from "../../domain/repositoriesBase/AuthRepositoryBase";
 
 export class AuthUseCase {
     private authRepository: AuthRepositoryBase;

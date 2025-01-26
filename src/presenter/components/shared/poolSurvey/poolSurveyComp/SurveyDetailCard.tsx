@@ -5,9 +5,9 @@ import { Profile } from "../../../../../domain/entities/Profile";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { dayMS, getLabel, surveyCategories } from "../../../../../infrastructure/services/utilsService";
-import { DateChip, FlagIcon, ProgressSmallbar, ProfileDiv, Icon } from "../../../common/SmallComps";
+import { DateChip, FlagIcon, ProgressSmallbar, ProfileDiv, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
-import { useUserStore } from "../../../../../application/stores/userStore";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 export default function SurveyDetailCard(props: { element: Survey, mines?: boolean, change: (e: any) => void }) {
@@ -42,11 +42,11 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
     return (
         <>
             <Card className="FixCard w-respLarge" >
-                <CardHeader className={haveImage ? "FixCardHeader min-h-[28vh]" : "FixCardHeader NoImage"}
+                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
-                    <div className={`${!haveImage ? "relative" : "absolute"}  top-0 p-2 justify-between w-full flex items-end `}>
+                    <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <button onClick={(e: any) => change(e)}>
-                            <Chip value={category} className="min-w-max rounded-full h-max text-ellipsis shadow" color="cyan">
+                            <Chip size='sm' value={category} className="CyanChip">
                             </Chip>
                         </button>
                         <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
@@ -58,12 +58,7 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
                             className="h-full w-full object-cover" />}
                 </CardHeader>
                 <CardBody className="FixCardBody">
-                    <div className="flex w-full items-center justify-between">
-                        <Typography variant="h5" color="blue-gray" className=" flex pr-4 justify-between items-center w-full">
-                            {title} <span className="text-xs font-normal"> Posté le {new Date(createdAt).toLocaleDateString()}</span>
-                        </Typography>
-                        <FlagIcon flagged={flagged} id={id} type="survey" />
-                    </div>
+                    <Title title={title} flagged={flagged} id={id} CreatedAt={createdAt} />
                     <div className="CardOverFlow h-full">
                         <Typography color="blue-gray" className="mb-2">
                             {description}
@@ -74,8 +69,8 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
                 <CardFooter className="CardFooter mb-2">
                     <ProfileDiv profile={author} />
                     <div className="flex items-center gap-2 ">
-                        <Chip value={Votes?.length} variant="ghost" className="rounded-full h-max flex items-center gap-2"
-                            icon={<Icon icon="smart_card_reader" fill={ImIn} color={ImIn && "green" || ''} size="xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1 pl-1" />}>
+                        <Chip value={Votes?.length} variant="ghost" size='lg' className="rounded-full h-max flex items-center gap-2"
+                            icon={<Icon icon="smart_card_reader" fill={ImIn} color={ImIn && "green" || ''} size="2xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
                         </Chip>
                     </div>
                 </CardFooter>

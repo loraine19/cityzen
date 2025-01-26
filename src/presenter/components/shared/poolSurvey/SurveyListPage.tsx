@@ -2,11 +2,10 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
-import Skeleton from "react-loading-skeleton";
 import { Pool } from "../../../../domain/entities/Pool";
 import { Survey } from "../../../../domain/entities/Survey";
-import { PoolService, PoolSurveyService } from "../../../../domain/repositories-ports/PoolRepository";
-import { SurveyService } from "../../../../domain/repositories-ports/SurveyRepository";
+import { PoolService, PoolSurveyService } from "../../../../domain/repositoriesBase/PoolRepository";
+import { SurveyService } from "../../../../domain/repositoriesBase/SurveyRepository";
 import { dayMS } from "../../../../infrastructure/services/utilsService";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
@@ -15,6 +14,7 @@ import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import { PoolCard } from "./poolSurveyComp/PoolCard";
 import { SurveyCard } from "./poolSurveyComp/SurveyCard";
+import { SkeletonGrid } from "../../common/Skeleton";
 
 
 export default function SurveyListPage() {
@@ -115,18 +115,17 @@ export default function SurveyListPage() {
                 <div className={(!loading && notif ? "w-full flex justify-center p-8" : "hidden")}>{notif}</div>
             </header>
 
-            <main className="grid grid-cols-1 md:grid-cols-2 pt-2 w-full gap-3">
+            <main className="Grid">
                 {loading ?
-                    Array.from({ length: 10 }).map((_, index) => (
-                        <Skeleton
+                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                        <SkeletonGrid
                             key={index}
-                            count={10} height={300}
-                            className="my-2.5 !rounded-xl shadow-lg" />
+                            count={4} />
                     )) :
                     list.map((element: any, index: number) =>
 
                         element.category ?
-                            <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
+                            <div className="SubGrid" key={index}>
                                 <SurveyCard
                                     survey={element}
                                     key={index}
@@ -134,7 +133,7 @@ export default function SurveyListPage() {
                                     mines={mines}
                                     update={UpdateList} />
                             </div> :
-                            <div className="pt-6 h-[calc(40Vh+2rem)] w-respLarge" key={index}>
+                            <div className="SubGrid " key={index}>
                                 <PoolCard
                                     pool={element}
                                     key={index}
