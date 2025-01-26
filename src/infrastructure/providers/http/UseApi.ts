@@ -42,7 +42,7 @@ export const useApi = (): Api => {
                 if (!originalRequest._retry) {
                     originalRequest._retry = true;
                     if (!window.location.pathname.includes('/signin')) {
-                        window.location.replace('/signin?msg=merci de vous connecter dans quelques instants');
+                        setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 5000);
                     }
                     return Promise.reject(new ApiError(error.code, error.message));
                 }
@@ -109,6 +109,7 @@ export const refreshAccess = async (): Promise<boolean> => {
         authService.saveToken(accessToken, newRefreshToken);
         return true;
     } catch (error) {
+
         if (!window.location.pathname.includes('/signin')) {
             setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter'), 5000)
         }

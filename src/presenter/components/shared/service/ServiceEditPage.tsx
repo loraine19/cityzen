@@ -2,32 +2,32 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Service, HardLevel, SkillLevel } from '../../../../domain/entities/Service';
-import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
+import { Service, HardLevel, SkillLevel, ServiceDTO } from '../../../../domain/entities/Service';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { ServiceForm } from './servicesComps/ServiceForm';
+import DI from '../../../../di/ioc';
 
 
 export default function ServiceEditPage() {
-    const [service, setService] = useState<Service>({} as Service);
     const { id } = useParams()
-    const { getServiceById, patchService } = new ServiceService()
+    const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
+    const idS = id ? parseInt(id) : 0;
+    const { service, loadingService, refetch } = serviceIdViewModelFactory(idS);
+    console.log(refetch, loadingService)
+    const updateService = async (id: number, data: ServiceDTO) => await DI.resolve('serviceUseCase').updateService(id, data)
 
     const fetch = async () => {
-        const idS = id ? parseInt(id) : 0;
-        const fetched = await getServiceById(idS);
-        setService(fetched);
-        console.log(fetched)
-        formik.values.category = fetched.category;
-        formik.values.title = fetched.title;
-        formik.values.description = fetched.description;
-        formik.values.image = fetched.image;
-        formik.values.category = fetched.category;
-        formik.values.createdAt = fetched.createdAt;
-        formik.values.hard = ((HardLevel[fetched.hard]) as unknown as HardLevel);
-        formik.values.skill = ((SkillLevel[fetched.skill]) as unknown as SkillLevel)
-        formik.values.type = fetched.type;
-        setValue(fetched.category.toString().toLowerCase())
+
+        formik.values.category = service.category;
+        formik.values.title = service.title;
+        formik.values.description = service.description;
+        formik.values.image = service.image;
+        formik.values.category = service.category;
+        formik.values.createdAt = service.createdAt;
+        formik.values.hard = ((HardLevel[service.hard]) as unknown as HardLevel);
+        formik.values.skill = ((SkillLevel[service.skill]) as unknown as SkillLevel)
+        formik.values.type = service.type;
+        setValue(service.category.toString().toLowerCase())
         //navigate(`/evenement/${id}`
     };
 
@@ -58,7 +58,7 @@ export default function ServiceEditPage() {
         formik.values.skill = SkillLevel[formik.values.skill] as unknown as SkillLevel;
         const { ...rest } = formik.values
         const updateData = { ...rest }
-        return await patchService(service.id, updateData)
+        return await updateService(service.id, updateData)
     }
 
 

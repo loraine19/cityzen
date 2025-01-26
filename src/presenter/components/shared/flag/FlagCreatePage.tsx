@@ -7,7 +7,6 @@ import { Flag } from '../../../../domain/entities/Flag';
 import { Label } from '../../../../domain/entities/frontEntities';
 import { FlagService } from '../../../../domain/repositoriesBase/FlagRepository';
 import { PostService } from '../../../../domain/repositoriesBase/PostRepository';
-import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
 import { getLabel, flagTargets, flagReasons } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
@@ -15,6 +14,7 @@ import SubHeader from '../../common/SubHeader';
 import FlagDetailComp from './flagComps/FlagDetailComp';
 import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
 import { Skeleton } from '../../common/Skeleton';
+import { ServiceApi } from '../../../../infrastructure/providers/http/serviceApi';
 
 export default function FlagCreatePage() {
     const { id, target } = useParams()
@@ -26,7 +26,7 @@ export default function FlagCreatePage() {
     const [flag, setFlag] = useState<Flag>({} as Flag)
     const { postFlag } = new FlagService()
     const { getEventById, } = new EventApi()
-    const { getServiceById } = new ServiceService()
+    const { getServiceById } = new ServiceApi()
     const { getPostById } = new PostService()
 
 

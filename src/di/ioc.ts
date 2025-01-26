@@ -36,6 +36,10 @@ import { eventIdViewModel, eventViewModel } from '../presenter/views/eventViewMo
 import { AuthService } from '../infrastructure/services/authService';
 import { ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { ResetPasswordService } from '../infrastructure/services/resetPasswordService';
+import { ServiceUseCase } from '../application/useCases/service.usecase';
+import { ServiceApi } from '../infrastructure/providers/http/serviceApi';
+import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/ServiceRespositoryImpl';
+import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -100,7 +104,15 @@ container.register({
     participantViewModel: asFunction(participantViewModel),
     participantData: asClass(ParticipantApi),
     postParticipant: asFunction(participantPostViewModel),
-    deleteParticipant: asFunction(participantDeleteViewModel)
+    deleteParticipant: asFunction(participantDeleteViewModel),
+
+    ////SERVICES
+    serviceUseCase: asClass(ServiceUseCase),
+    serviceRepository: asClass(ServiceRepositoryImpl),
+    serviceData: asClass(ServiceApi),
+    serviceViewModel: asFunction(serviceViewModel),
+    serviceIdViewModel: asFunction(serviceIdViewModel),
+    //serviceService: asClass(ServiceService),
 });
 
 // Log all registered components

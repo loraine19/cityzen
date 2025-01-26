@@ -16,6 +16,7 @@ export default function PoolDetailCard(props: { element: Pool, mines?: boolean, 
     const { user } = useUserStore()
     const userId: number = user.id
     const haveImage: boolean = false
+    console.log(haveImage)
     const author: Profile = User?.Profile || {} as Profile
     const [usersLength, setUsersLength] = useState<number>(0)
     const pourcent: number = Votes?.length || 0 / usersLength * 100

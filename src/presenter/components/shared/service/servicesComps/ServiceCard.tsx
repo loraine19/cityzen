@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, ServiceStep } from "../../../../../domain/entities/Service";
-import { ServiceService } from "../../../../../domain/repositoriesBase/ServiceRepository";
 import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal, GenereMyActions, toggleResp } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import DI from "../../../../../di/ioc";
 
 
 
@@ -36,7 +36,7 @@ export default function ServiceComp(props:
     const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
     const [inIssue, setInIssue] = useState<boolean>(status === 'litige' ? true : false);
     const statusValue = getEnumVal(service.status, ServiceStep)
-    const { deleteService } = new ServiceService()
+    const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
 
     const updateStatusFlags = (status: string) => {
         setIsNew(status === 'nouveau');
@@ -88,7 +88,7 @@ export default function ServiceComp(props:
                                 </Chip>
                             </button>
                             <Chip size="sm" value={status}
-                                className={` ${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} `}>
+                                className={`rounded-full !px-3 ${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} `}>
                             </Chip>
                         </div>
                         <DateChip start={createdAt} prefix="publié le " />

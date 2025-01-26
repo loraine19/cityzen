@@ -2,8 +2,8 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { EventUseCase } from '../../application/useCases/event.usecase';
 import { EventService } from '../../infrastructure/services/eventService';
 import { UserUseCase } from '../../application/useCases/user.usecase';
-import { EventView, Event } from '../../domain/entities/Event';
-import { useState } from 'react';
+import { Event } from '../../domain/entities/Event';
+
 
 export const eventViewModel = ({ eventUseCase, userUseCase, eventService }: { eventUseCase: EventUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
   return (filter?: string, category?: string) => {

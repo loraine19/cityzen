@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Service, ServiceStep } from '../../../../domain/entities/Service';
-import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
+import { Service, ServiceStep, ServiceUpdate } from '../../../../domain/entities/Service';
 import { getEnumVal, getLabel, serviceCategories, serviceTypes, isLate, GetPoints, GenereMyActions, toggleValidResp, generateContact, toggleResp } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
@@ -9,13 +8,13 @@ import SubHeader from '../../common/SubHeader';
 import ServiceDetailComp from './servicesComps/ServiceDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import { useUserStore } from '../../../../application/stores/user.store';
+import DI from '../../../../di/ioc';
 
 
 export default function ServiceDetailPage() {
     const { id } = useParams();
     const { user } = useUserStore()
     const userId = user.id
-    const [service, setService] = useState<Service>({} as Service);
     const [mine, setMine] = useState<boolean>(false);
     const [IResp, setIResp] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -29,7 +28,12 @@ export default function ServiceDetailPage() {
     const [inIssue, setInIssue] = useState<boolean>(false);
     const [points, setPoints] = useState<number[]>([0]);
     const [IsLate, setIsLate] = useState<boolean>(false);
-    const { deleteService, getServiceById, putServiceFinish } = new ServiceService();
+
+    const idS = id ? parseInt(id) : 0;
+    const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
+    const { service, loadingService, refetch } = serviceIdViewModelFactory(idS);
+    const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
+    const putServiceFinish = async (id: number) => await DI.resolve('serviceUseCase').updateServiceStep(id, ServiceUpdate.FINISH);
     console.log(IsLate)
 
     const updateStatus = (service: Service) => {
@@ -43,10 +47,7 @@ export default function ServiceDetailPage() {
     };
 
     const fetch = async () => {
-        setLoading(true);
-        const idS = id ? parseInt(id) : 0;
-        const service = await getServiceById(idS);
-        setService(service);
+        setLoading(loadingService);
         setCategory(getLabel(service.category.toString(), serviceCategories));
         setType(getLabel(service.type.toString(), serviceTypes));
         setMine(service.User.id === userId);
@@ -76,7 +77,7 @@ export default function ServiceDetailPage() {
             title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
             body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
             function: () => {
-                toggleValidResp(service.id, service.UserResp.id, setService);
+                toggleValidResp(service.id, service.UserResp.id, refetch);
                 updateStatus(service);
             }
         },
@@ -85,7 +86,7 @@ export default function ServiceDetailPage() {
             title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
             body: `${service.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
             function: () => {
-                toggleValidResp(service.id, 0, setService);
+                toggleValidResp(service.id, 0, refetch);
                 updateStatus(service);
             }
         }
@@ -116,7 +117,7 @@ export default function ServiceDetailPage() {
             body: isResp && service.title || isValidated && `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` || '',
             function: () => {
                 if (isResp) {
-                    toggleResp(service.id, userId, setService);
+                    toggleResp(service.id, userId, refetch);
                     updateStatus(service);
                 }
                 if (isValidated) {
@@ -144,7 +145,7 @@ export default function ServiceDetailPage() {
         body: service.title,
         function: () => {
             if (isNew) {
-                toggleResp(service.id, userId, setService);
+                toggleResp(service.id, userId, refetch);
                 updateStatus(service);
             }
         }

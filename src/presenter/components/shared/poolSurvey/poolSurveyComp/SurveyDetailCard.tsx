@@ -5,7 +5,7 @@ import { Profile } from "../../../../../domain/entities/Profile";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { dayMS, getLabel, surveyCategories } from "../../../../../infrastructure/services/utilsService";
-import { DateChip, FlagIcon, ProgressSmallbar, ProfileDiv, Icon, Title } from "../../../common/SmallComps";
+import { DateChip, ProgressSmallbar, ProfileDiv, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
 

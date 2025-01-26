@@ -75,3 +75,16 @@ export class ServiceDTO {
     hard?: HardLevel;
     status?: ServiceStep;
 }
+
+export enum ServiceUpdate {
+    POST_RESP = 'POSTRESP',
+    VALIDATE_RESP = 'VALIDATERESP',
+    REFUSE_RESP = 'REFUSERESP',
+    FINISH = 'FINISH',
+}
+
+export enum ServiceFilter {
+    GET = 'GET',
+    DO = 'DO',
+    MINE = 'MINE'
+}

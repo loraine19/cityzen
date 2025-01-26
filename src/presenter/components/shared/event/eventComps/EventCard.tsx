@@ -42,7 +42,8 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
                     </div>
                 </div>
                 {image ? (
-                    <img src={image as string}
+                    <img
+                        src={image as string || './load.gif'}
                         alt={title}
                         className="CardImage" />
                 ) : (

@@ -13,9 +13,9 @@ import { Address } from "../../domain/entities/Address";
 import { notifCategory } from "../../domain/entities/Notif";
 import { LikeService } from "../../domain/repositoriesBase/LikeRepository";
 import { PostService } from "../../domain/repositoriesBase/PostRepository";
-import { ServiceService } from "../../domain/repositoriesBase/ServiceRepository";
 import { AddressApi } from "../providers/http/addressApi";
-const { getServiceById, putService, putServiceValidation } = new ServiceService();
+import { ServiceApi } from "../providers/http/serviceApi";
+const { getServiceById, putService, putServiceValidation } = new ServiceApi();
 const { getAddresses, postAddress } = new AddressApi();
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -227,7 +227,7 @@ export const getLabel = (value: string | any, array: Label[]): string => {
 }
 export const getValue = (label: string, array: Label[]): string => {
     const find = (array.find((cat) => cat.label === label)?.value)
-    return find ? find : ' - '
+    return find ? find : ''
 }
 export const getEnumVal = (element: any, enumArray: any) => Object.values(enumArray).indexOf(element);
 

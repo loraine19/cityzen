@@ -2,16 +2,16 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate, } from 'react-router-dom';
 import { useState } from 'react';
-import { Service, HardLevel, SkillLevel } from '../../../../domain/entities/Service';
-import { ServiceService } from '../../../../domain/repositoriesBase/ServiceRepository';
+import { Service, HardLevel, SkillLevel, ServiceDTO } from '../../../../domain/entities/Service';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { ServiceForm } from './servicesComps/ServiceForm';
 import { useUserStore } from '../../../../application/stores/user.store';
+import DI from '../../../../di/ioc';
 
 
 export default function ServiceCreatePage() {
     const { user } = useUserStore()
-    const { postService } = new ServiceService()
+    const postService = async (data: ServiceDTO) => await DI.resolve('serviceUseCase').postService(data)
     const navigate = useNavigate();
     const [newService] = useState<Service>({ hard: 0, skill: 0 } as Service);
     const formSchema = object({

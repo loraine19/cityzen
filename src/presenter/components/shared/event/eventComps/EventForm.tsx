@@ -71,7 +71,7 @@ export function EventForm(props: { formik: any }) {
                                 className={`${dateClass}` + ` absolute top-2 right-2 rounded-full h-max flex items-center gap-2 shadow font-medium `}>
                             </Chip>
                             <img
-                                src={imgBlob}
+                                src={imgBlob || './load.gif'}
                                 alt={title}
                                 width={100}
                                 height={100}

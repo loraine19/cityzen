@@ -3,15 +3,16 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import { EventView } from '../../../../domain/entities/Event';
-import { addressIn } from '../../../../infrastructure/services/utilsService';
+import { EventUpdateDTO, EventView } from '../../../../domain/entities/Event';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
+import DI from '../../../../di/ioc';
+import { Address, AddressDTO } from '../../../../domain/entities/Address';
 
 export default function EventCreatePage() {
     const [newEvent] = useState<EventView>({} as EventView);
     const navigate = useNavigate();
-    const { postEvent } = new EventApi()
+    const postEvent = async (data: EventUpdateDTO) => await DI.resolve('eventUseCase').postEvent(data)
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -29,8 +30,9 @@ export default function EventCreatePage() {
     const formik = useFormik({
         initialValues: newEvent as EventView,
         validationSchema: formSchema,
-        onSubmit: values => {
-            addressIn(formik, newEvent);
+        onSubmit: async values => {
+            const updatedAddress: Address = await updateAddress(formik.values.Address)
+            formik.values.Address = updatedAddress;
             formik.values = values
             setOpen(true)
         }
@@ -42,8 +44,14 @@ export default function EventCreatePage() {
         formik.values.addressId = formik.values.Address.id
         const { Address, Participants, ...rest } = formik.values;
         const updateData = { ...rest }
-        return await postEvent(updateData);
+        const post = await postEvent(updateData);
+        if (post) {
+            navigate("/evenement/" + post.id);
+            location.reload()
+        }
     }
+
+
 
     const [open, setOpen] = useState(false);
     return (
@@ -52,13 +60,7 @@ export default function EventCreatePage() {
                 open={open}
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await postFunction()
-                    if (ok) {
-                        navigate("/evenement/" + ok.id);
-                        setOpen(false);
-                    }
-                }}
+                handleConfirm={async () => { await postFunction() }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
             {newEvent &&

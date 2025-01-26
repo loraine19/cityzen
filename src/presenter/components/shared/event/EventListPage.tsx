@@ -20,29 +20,25 @@ export default function EventListPage() {
     const [category, setCategory] = useState<string>('');
     const eventViewModelFactory = DI.resolve('eventViewModel');
     const { events, loadingEvents, errorEvents, fetchNextPage, hasNextPage, refetch } = eventViewModelFactory(filter, category);
-    const [eventList, setEventList] = useState<EventView[]>(!loadingEvents ? events : []);
     const [view, setView] = useState("view_agenda");
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
-    const [filterParams, setFilterParams] = useSearchParams();
-    const params = { filter: filterParams.get("filter"), category: filterParams.get("category") }
+    const [Params, setParams] = useSearchParams();
+    const params = { filter: Params.get("filter"), category: Params.get("category") }
 
     !eventCategories.some(category => category.value === '') && eventCategories.unshift({ label: 'tous', value: '' })
     type label = TabLabel;
 
-    useEffect(() => {
-        setCategory(params.category || '');
-        setFilter(params.filter || '');
-    }, []);
+    useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
-    const update = async () => { await refetch(); setEventList([...events]) }
+    const update = async () => { await refetch() }
 
     const filterTab = async (value?: EventFilter) => {
-        setFilterParams({ filter: value as string || '', category: category });
+        setParams({ filter: value as string || '', category: category });
         if (value !== filter) { setCategory('') }
         setFilter(value || '');
         value === EventFilter.MINE ? setMines(true) : setMines(false);
-        setFilterParams({ filter: value as string || '', category: category })
+        setParams({ filter: value as string || '', category: category })
         update()
     };
 
@@ -56,7 +52,7 @@ export default function EventListPage() {
     const change = (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
         const selectedCategory = typeof e !== "object" ? e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), eventCategories).toLowerCase();
         setCategory(selectedCategory);
-        setFilterParams({ filter: filter as string || '', category: selectedCategory });
+        setParams({ filter: filter as string || '', category: selectedCategory });
         update()
     }
 
@@ -82,7 +78,6 @@ export default function EventListPage() {
                 setIsBottom(true);
                 if (hasNextPage) {
                     fetchNextPage();
-                    setEventList(events);
                 }
             } else {
                 setIsBottom(false);
@@ -109,7 +104,7 @@ export default function EventListPage() {
             {view === "view_agenda" && (
                 <main ref={divRef}
                     onScroll={handleScroll} className="Grid">
-                    {loadingEvents || !eventList || errorEvents ?
+                    {loadingEvents || errorEvents ?
                         [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                             <SkeletonGrid
                                 key={index}

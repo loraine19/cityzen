@@ -4,7 +4,6 @@ import { Issue, IssueStep } from '../../../../../domain/entities/Issue';
 import { Service, ServiceType } from '../../../../../domain/entities/Service';
 import { User } from '../../../../../domain/entities/User';
 import { IssueService } from '../../../../../domain/repositoriesBase/IssueRepository';
-import { ServiceService } from '../../../../../domain/repositoriesBase/ServiceRepository';
 import CTAMines from '../../../common/CTAMines';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
@@ -13,6 +12,7 @@ import { Action } from '../../../../../domain/entities/frontEntities';
 import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
 import { useUserStore } from '../../../../../application/stores/user.store';
 import { Skeleton } from '../../../common/Skeleton';
+import { ServiceApi } from '../../../../../infrastructure/providers/http/serviceApi';
 
 
 export default function IssueDetailPage() {
@@ -27,7 +27,7 @@ export default function IssueDetailPage() {
     const [statusValue, setStatusValue] = useState<number>(0);
     const { getIssueById, deleteIssue } = new IssueService()
     const { getUsersModos } = new UserApi()
-    const { getServiceById } = new ServiceService()
+    const { getServiceById } = new ServiceApi()
 
     const fetch = async () => {
         const idS = id ? parseInt(id) : 0;

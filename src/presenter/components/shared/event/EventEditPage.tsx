@@ -13,12 +13,12 @@ import { useUserStore } from '../../../../application/stores/user.store';
 export default function EventDetailPage() {
     const { id } = useParams()
     const idS = id ? parseInt(id) : 0;
-
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
     const user = useUserStore((state) => state.user);
-
     const [eventDto, setEventDto] = useState<EventDTO>(new EventDTO(event));
+    const updateEvent = async (id: number, data: EventUpdateDTO) => await DI.resolve('eventUseCase').updateEvent(id, data)
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
 
     useEffect(() => {
         setEventDto(new EventDTO(event));
@@ -29,8 +29,7 @@ export default function EventDetailPage() {
 
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
-    const updateEvent = async (id: number, data: EventUpdateDTO) => await DI.resolve('eventUseCase').updateEvent(id, data)
-    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
+
 
 
     const formSchema = object({

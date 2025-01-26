@@ -32,66 +32,67 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import PoolDetailPage from "./presenter/components/shared/poolSurvey/PoolDetaiPage";
 import { PrivateRoute } from "./presenter/components/shared/utilsPage/PrivateRouter";
 import NotFindPage from "./presenter/components/shared/utilsPage/NotFindPage";
-
+import ErrorBoundary from "./presenter/components/shared/utilsPage/ErrorBoundary";
 function App() {
     return (
         <>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');</style>
 
             <BrowserRouter>
-                <Routes>
-                    <Route path="/signin" element={<SignInPage />} />
-                    <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/signup_details" element={<SignUpDetailPage />} />
-                    <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
-                    <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
+                <ErrorBoundary>
+                    <Routes>
+                        <Route path="/signin" element={<SignInPage />} />
+                        <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/signup_details" element={<SignUpDetailPage />} />
+                        <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
+                        <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
 
 
 
-                    <Route path="/" element={<PrivateRoute />}>
-                        <Route path="/" element={<DashboardPage />} />
-                        <Route path="/msg" element={<DashboardPage />} />
-                        <Route path="/myprofile" element={<MyInfosPage />} />
-                        <Route path="/notification" element={<NotificationPage />} />
+                        <Route path="/" element={<PrivateRoute />}>
+                            <Route path="/" element={<DashboardPage />} />
+                            <Route path="/msg" element={<DashboardPage />} />
+                            <Route path="/myprofile" element={<MyInfosPage />} />
+                            <Route path="/notification" element={<NotificationPage />} />
 
-                        <Route path="/service" element={<ServiceListPage />} />
-                        <Route path="/service/:id" element={<ServiceDetailPage />} />
-                        <Route path="/service/create" element={<ServiceCreatePage />} />
-                        <Route path="/service/edit/:id" element={<ServiceEditPage />} />
+                            <Route path="/service" element={<ServiceListPage />} />
+                            <Route path="/service/:id" element={<ServiceDetailPage />} />
+                            <Route path="/service/create" element={<ServiceCreatePage />} />
+                            <Route path="/service/edit/:id" element={<ServiceEditPage />} />
 
-                        <Route path="/litige/:id" element={<IssueDetailPage />} />
-                        <Route path="/litige/edit/:id" element={<IssueEditPage />} />
-                        <Route path="/conciliation" element={<ServiceListPage />} />
+                            <Route path="/litige/:id" element={<IssueDetailPage />} />
+                            <Route path="/litige/edit/:id" element={<IssueEditPage />} />
+                            <Route path="/conciliation" element={<ServiceListPage />} />
 
-                        <Route path="/conciliation/:id" element={<IssueDetailPage />} />
-                        <Route path="/conciliation/create/:id" element={<IssueCreatePage />} />
+                            <Route path="/conciliation/:id" element={<IssueDetailPage />} />
+                            <Route path="/conciliation/create/:id" element={<IssueCreatePage />} />
 
-                        <Route path="/evenement" element={<EventListPage />} />
-                        <Route path="/evenement/create" element={<EventCreatePage />} />
-                        <Route path="/evenement/:id" element={<EventDetailPage />} />
-                        <Route path="/evenement/edit/:id" element={<EventEditPage />} />
+                            <Route path="/evenement" element={<EventListPage />} />
+                            <Route path="/evenement/create" element={<EventCreatePage />} />
+                            <Route path="/evenement/:id" element={<EventDetailPage />} />
+                            <Route path="/evenement/edit/:id" element={<EventEditPage />} />
 
-                        <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
-                        <Route path="/flag/edit/:target/:id" element={<FlagEditPage />} />
-                        <Route path="/flag" element={<FlagPage />} />
+                            <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
+                            <Route path="/flag/edit/:target/:id" element={<FlagEditPage />} />
+                            <Route path="/flag" element={<FlagPage />} />
 
-                        <Route path="/sondage" element={<SurveyListPage />} />
-                        <Route path="/sondage/:id" element={<SurveyDetailPage />} />
-                        <Route path="/sondage/edit/:id" element={<SurveyCreatePage />} />
-                        <Route path="/sondage/create" element={<SurveyCreatePage />} />
-                        <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
-                        <Route path="/cagnotte/edit/:id" element={<SurveyCreatePage />} />
+                            <Route path="/sondage" element={<SurveyListPage />} />
+                            <Route path="/sondage/:id" element={<SurveyDetailPage />} />
+                            <Route path="/sondage/edit/:id" element={<SurveyCreatePage />} />
+                            <Route path="/sondage/create" element={<SurveyCreatePage />} />
+                            <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
+                            <Route path="/cagnotte/edit/:id" element={<SurveyCreatePage />} />
 
-                        <Route path="/annonce" element={<AnnounceListPage />} />
-                        <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
-                        <Route path="/annonce/create" element={<AnnounceCreatePage />} />
-                        <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
+                            <Route path="/annonce" element={<AnnounceListPage />} />
+                            <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
+                            <Route path="/annonce/create" element={<AnnounceCreatePage />} />
+                            <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
 
-                        <Route path="/*" element={<NotFindPage />} />
-                    </Route>
+                            <Route path="/*" element={<NotFindPage />} />
+                        </Route>
 
-                </Routes>
-
+                    </Routes>
+                </ErrorBoundary>
                 <ReactQueryDevtools />
             </BrowserRouter>
         </>
