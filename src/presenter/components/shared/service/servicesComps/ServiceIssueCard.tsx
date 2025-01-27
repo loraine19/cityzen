@@ -1,21 +1,23 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react"
-import { Service, ServiceType } from "../../../../../domain/entities/Service";
-import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus } from "../../../../../infrastructure/services/utilsService";
+import { Service, serviceCategories, ServiceType, ServiceView } from "../../../../../domain/entities/Service";
+import { getLabel, isLate, } from "../../../../../infrastructure/services/utilsService";
 import { Icon } from "../../../common/SmallComps";
+import { Profile } from "../../../../../domain/entities/Profile";
+import DI from "../../../../../di/ioc";
 
 
-export default function ServiceIssueCard(props: { service: Service }) {
-    const [service, setService] = useState<Service>(props.service)
-    const { id, title, description, createdAt, User, UserResp } = props.service
+export default function ServiceIssueCard(props: { service: ServiceView }) {
+    const [service, setService] = useState<ServiceView>(props.service)
+    const { id, title, description, createdAt, User, UserResp, typeS } = props.service
     const haveImage = false
-    const type = getLabel(service.type, serviceTypes)
+    const GetPoints = (service: Service, user?: Profile): number[] => DI.resolve('serviceService').getPoints(service, user)
     const points = GetPoints(service, User.Profile)
     const category = getLabel(service.category, serviceCategories)
     const navigate = useNavigate();
     const late: boolean = isLate(createdAt, 15)
-    const [status, setStatus] = useState<string>(getLabel(service.status, serviceStatus));
+    const [status] = useState<string>(props.service.status);
     const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false);
     const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
     const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
@@ -31,7 +33,6 @@ export default function ServiceIssueCard(props: { service: Service }) {
 
     useEffect(() => {
         setService(props.service)
-        setStatus(getLabel(service.status, serviceStatus));
         updateStatusFlags(status)
     }, [props.service])
 
@@ -48,7 +49,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                                     </Chip>
                                 </button>
                                 <button onClick={(e: any) => { console.log(e) }}>
-                                    <Chip size='sm' value={type} className={`${service.type === ServiceType.GET ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
+                                    <Chip size='sm' value={typeS} className={`${service.type === ServiceType.GET ? "OrangeChip" : "GreenChip"} rounded-full  h-max flex items-center gap-2 font-medium `}>
                                     </Chip>
                                 </button>
                             </div>

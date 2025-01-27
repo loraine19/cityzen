@@ -61,9 +61,9 @@ export const eventIdViewModel = ({ eventUseCase, userUseCase, eventService }: { 
   }
 }
 
-export const eventGetByIdViewModel = ({ eventUseCase }: { eventUseCase: EventUseCase }) => {
-  return async (id: number) => {
-    const event = await eventUseCase.getEventById(id)
-    return event
-  }
-}
+// export const eventGetByIdViewModel = ({ eventUseCase }: { eventUseCase: EventUseCase }) => {
+//   return async (id: number) => {
+//     const event = await eventUseCase.getEventById(id)
+//     return event
+//   }
+//}

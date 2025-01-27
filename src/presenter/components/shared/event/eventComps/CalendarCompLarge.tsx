@@ -133,9 +133,7 @@ export default function CalendarCompLarge() {
                 )))
                 }
             </div >
-
             <div className='absolute top-[2rem] flex flex-col flex-1 w-[calc(100%-1rem)] h-[calc(100%-2rem)]  gap-1 overflow-auto'>
-
             </div>
         </Card >)
 }

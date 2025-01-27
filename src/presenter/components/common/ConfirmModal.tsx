@@ -2,14 +2,14 @@ import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@materia
 import parse from 'html-react-parser';
 
 export function ConfirmModal(props: { open: boolean, handleOpen: () => void, handleConfirm: () => void, handleCancel: () => void, title: string, element: string, disableConfirm?: boolean }) {
-    const { open, handleOpen, handleConfirm, handleCancel, disableConfirm } = props
+    const { open, handleOpen, handleConfirm, handleCancel, disableConfirm, title, element } = props
     return (
         <>
             <Button className="hidden">-</Button>
             <Dialog open={open} handler={handleOpen}>
-                <DialogHeader className="text-center text-xl pt-4 pb-0">{props.title} : </DialogHeader>
+                <DialogHeader className="text-center text-xl pt-4 pb-0">{title as string} : </DialogHeader>
                 <DialogBody className=" max-h-[80vh] overflow-auto">
-                    {parse(props.element as string)}
+                    {element && parse(element as string) || ''}
 
                 </DialogBody>
                 <DialogFooter className="  flex justify-between pt-0">

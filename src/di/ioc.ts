@@ -40,6 +40,7 @@ import { ServiceUseCase } from '../application/useCases/service.usecase';
 import { ServiceApi } from '../infrastructure/providers/http/serviceApi';
 import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/ServiceRespositoryImpl';
 import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
+import { ServiceService } from '../infrastructure/services/serviceService';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -112,7 +113,7 @@ container.register({
     serviceData: asClass(ServiceApi),
     serviceViewModel: asFunction(serviceViewModel),
     serviceIdViewModel: asFunction(serviceIdViewModel),
-    //serviceService: asClass(ServiceService),
+    serviceService: asClass(ServiceService),
 });
 
 // Log all registered components

@@ -1,19 +1,22 @@
 import { Radio, Select, Card, CardHeader, Button, Typography, Chip, CardBody, Input, Textarea, Option } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { Label } from "../../../../../domain/entities/frontEntities";
-import { GetPoints, serviceCategories, getImageBlob } from "../../../../../infrastructure/services/utilsService";
+import { getImageBlob } from "../../../../../infrastructure/services/utilsService";
 import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import DI from "../../../../../di/ioc";
+import { Service, serviceCategoriesS } from "../../../../../domain/entities/Service";
 
 export function ServiceForm(props: { formik: any, setValue: (value: string) => void }) {
     const { formik, setValue } = props;
-    const { createdAt, title, description, image } = formik.values
+    const { createdAt, title, description, image, } = formik.values
     const { user } = useUserStore()
     const userProfile: Profile = user.Profile
     const haveImage = image ? true : false
     const [imgBlob, setImgBlob] = useState<string>(formik.values.image as string)
+    const GetPoints = (service: Service, profile: Profile): number[] => DI.resolve('serviceService').getPoints(service, profile)
 
     useEffect(() => {
         !imgBlob && setImgBlob(formik.values.image as string)
@@ -21,10 +24,10 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
 
     const skill: number[] = [0, 1, 2, 3, 4]
     const hard: number[] = [0, 1, 2, 3, 4]
-    const [points, setPoints] = useState<number[]>(GetPoints(formik.values, userProfile))
+    const [points, setPoints] = useState<number[]>(formik.values.points)
 
     useEffect(() => {
-        setPoints(GetPoints(formik.values, userProfile))
+        setPoints([0, 1])
     }, [formik.values.skill, formik.values.hard, formik.values.type])
 
     const isGet = formik.values.type === 'GET'
@@ -48,7 +51,7 @@ export function ServiceForm(props: { formik: any, setValue: (value: string) => v
                             value={formik.values.category}
                             onChange={(val: any) => { setValue(val); formik.values.category = val }}
                         >
-                            {serviceCategories.map((category: Label, index: number) => {
+                            {serviceCategoriesS.map((category: Label, index: number) => {
                                 return (
                                     <Option className={category.value === '' ? "hidden" : "rounded-full my-1 capitalize"} value={category.value} key={index} >
                                         {category.label}

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../shared/event/eventComps/EventCard';
-import { dayMS, getLabel, eventCategories } from '../../../infrastructure/services/utilsService';
+import { dayMS, getLabel } from '../../../infrastructure/services/utilsService';
 import { Icon } from './SmallComps';
 import DI from '../../../di/ioc'
 import { EventService } from '../../../infrastructure/services/eventService';
 import { day } from '../../../domain/entities/frontEntities';
+import { eventCategories } from '../../../domain/entities/Event';
 
 
 export default function CalendarCompLarge(props: { logo?: boolean }) {

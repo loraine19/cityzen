@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { EventFilter, EventView } from "../../../../domain/entities/Event";
-import { eventCategories, getValue, getLabel } from "../../../../infrastructure/services/utilsService";
+import { eventCategories, eventCategoriesS, EventFilter, EventView } from "../../../../domain/entities/Event";
+import { getValue, getLabel } from "../../../../infrastructure/services/utilsService";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -9,10 +9,10 @@ import TabsMenu from "../../common/TabsMenu";
 import CalendarComp from "../../common/CalendarComp";
 import { EventCard } from "./eventComps/EventCard";
 import DI from "../../../../di/ioc";
-import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { Icon, LoadMoreButton } from "../../common/SmallComps";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { useSearchParams } from "react-router-dom";
+import { TabLabel } from "../../../../domain/entities/frontEntities";
 // Remove incorrect import
 
 export default function EventListPage() {
@@ -25,9 +25,6 @@ export default function EventListPage() {
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
-
-    !eventCategories.some(category => category.value === '') && eventCategories.unshift({ label: 'tous', value: '' })
-    type label = TabLabel;
 
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
@@ -42,7 +39,7 @@ export default function EventListPage() {
         update()
     };
 
-    const eventTabs: label[] = [
+    const eventTabs: TabLabel[] = [
         { label: "tous", value: "", result: () => filterTab() },
         { label: "validé", value: EventFilter.VALIDATED, result: () => filterTab(EventFilter.VALIDATED) },
         { label: "j'y vais", value: EventFilter.IGO, result: () => filterTab(EventFilter.IGO) },
@@ -95,7 +92,7 @@ export default function EventListPage() {
                 {view === "view_agenda" && <TabsMenu labels={eventTabs} defaultTab={params.filter || ''} />}
                 <div className={`flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect
-                        categoriesArray={eventCategories}
+                        categoriesArray={eventCategoriesS}
                         change={change}
                         categorySelected={category.toString()}
                         disabled={view === "event"} />

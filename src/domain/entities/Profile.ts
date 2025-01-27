@@ -2,11 +2,11 @@ import { Address } from "./Address";
 import { User } from "./User";
 
 export enum AssistanceLevel {
-    LEVEL_0,
-    LEVEL_1,
-    LEVEL_2,
-    LEVEL_3,
-    LEVEL_4
+    LEVEL_0 = 0,
+    LEVEL_1 = 1,
+    LEVEL_2 = 2,
+    LEVEL_3 = 3,
+    LEVEL_4 = 4
 }
 export const assistanceLevel = Object.values(AssistanceLevel).map(level => level);
 

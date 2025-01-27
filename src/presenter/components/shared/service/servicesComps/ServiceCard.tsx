@@ -1,8 +1,8 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Service, ServiceStep } from "../../../../../domain/entities/Service";
-import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal, GenereMyActions, toggleResp } from "../../../../../infrastructure/services/utilsService";
+import { ServiceStep, ServiceView } from "../../../../../domain/entities/Service";
+import { isLate, getEnumVal, GenereMyActions, toggleResp } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
@@ -12,22 +12,15 @@ import DI from "../../../../../di/ioc";
 
 
 export default function ServiceComp(props:
-    { service: Service, mines?: boolean, change: (e: any) => void, update?: () => void }) {
+    { service: ServiceView, mines?: boolean, change: (e: any) => void, update?: () => void }) {
     const { user } = useUserStore()
     const userId: number = user.id
     const { mines, change, update } = props
-    const [service, setService] = useState<Service>(props.service)
-    const { id, title, description, image, createdAt, User, UserResp } = service
-    // const flagged: boolean = service.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
-    const isMine = service?.User?.id === userId
-    const IResp = UserResp?.id === userId
+    const [service, setService] = useState<ServiceView>(props.service)
+    const { id, title, description, image, createdAt, User, flagged, mine, IResp, points, typeS, type, categoryS, statusS } = service
     const haveImage = service.image ? true : false
-    // const type = getLabel(service.type, serviceTypes)
-    const points = GetPoints(service, User?.Profile)
-    const category = getLabel(service.category, serviceCategories)
     const navigate = useNavigate();
     const late: boolean = isLate(createdAt, 15)
-    const [status, setStatus] = useState<string>(getLabel(service.status, serviceStatus));
     const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false)
     1 > 2 && console.log(isNew)
     const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
@@ -46,8 +39,7 @@ export default function ServiceComp(props:
     };
 
     useEffect(() => {
-        setStatus(getLabel(service.status, serviceStatus));
-        updateStatusFlags(status)
+        updateStatusFlags(statusS)
     }, [service])
 
     const myActions = GenereMyActions(service, "service", deleteService, undefined, late)
@@ -77,16 +69,16 @@ export default function ServiceComp(props:
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
-                            <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat) }}>
-                                <Chip size="sm" value={`${category}`}
+                            <button onClick={(e: any) => { let cat = e.toLowerCase(); change(cat); console.log(cat) }}>
+                                <Chip size="sm" value={`${categoryS}`}
                                     className="CyanChip">
                                 </Chip>
                             </button>
                             <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat) }}>
-                                <Chip size="sm" value={type} className={`${type === "demande" ? "OrangeChip" : "GreenChip"}`}>
+                                <Chip size="sm" value={typeS} className={`${typeS === "demande" ? "OrangeChip" : "GreenChip"}`}>
                                 </Chip>
                             </button>
-                            <Chip size="sm" value={status}
+                            <Chip size="sm" value={statusS}
                                 className={`rounded-full !px-3 ${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} `}>
                             </Chip>
                         </div>
@@ -111,7 +103,7 @@ export default function ServiceComp(props:
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">
-                    {isMine && mines &&
+                    {mine && mines &&
                         <ModifBtnStack actions={myActions} icon3={late} update={update} disabled1={statusValue > 2} disabled2={statusValue > 2} />}
                     {IResp && mines &&
                         <ModifBtnStack actions={takenCTA} disabled1={statusValue > 2} disabled2={statusValue > 2} />}
@@ -121,7 +113,7 @@ export default function ServiceComp(props:
                     <div className="flex items-center gap-2">
 
                         <Chip size="md" value={`${points.join(' à ')}   pts`} className={` GrayChip  lowercase !font-medium  rounded-full    ${mines && 'hidden md:flex'}`} icon=
-                            {<Icon icon="fiber_manual_record" title={`Ce service ${type === "offre" ? 'coute' : 'offre'} ${points.join(' à ')}pts`} fill={user.Profile.points > points[0]} color={type === "offre" ? "green" : "orange"} size="2xl" style="!py-0 -mt-1.5" />}>
+                            {<Icon icon="fiber_manual_record" title={`Ce service ${typeS === "offre" ? 'coute' : 'offre'} ${points.join(' à ')}pts`} fill={user.Profile.points > points[0]} color={typeS === "offre" ? "green" : "orange"} size="2xl" style="!py-0 -mt-1.5" />}>
                         </Chip>
 
                         <Icon icon="arrow_circle_right" link={`/service/${id}`} title={`voir les details de service  ${title}`} size="4xl px-1" fill />

@@ -4,7 +4,7 @@ import { Flag } from "../../domain/entities/Flag";
 import { dayMS, defaultEventImage } from "../../domain/entities/frontEntities";
 import { Participant } from "../../domain/entities/Participant";
 import { ParticipantRepositoryBase } from "../../domain/repositoriesBase/ParticipantRepositoryBase";
-import { eventCategories, getLabel, shortDateString } from "./utilsService";
+import { shortDateString } from "./utilsService";
 
 interface EventServiceI {
     getInfosInEvents(events: Event[], userId: number): EventView[];
@@ -113,7 +113,7 @@ export class EventService implements EventServiceI {
             ...event,
             image: event.image ? event.image : this.getImageForCategory(event?.category?.toString()),
             days: this.getDays(event),
-            label: getLabel(event.category, eventCategories),
+            label: event.category?.toString(),
             Igo: event.Participants ? event.Participants.some((participant: Participant) => participant.userId === userId) : false,
             flagged: event.Flags ? event?.Flags?.some((flag: Flag) => flag.userId === userId) : false,
             mine: event.userId === userId,

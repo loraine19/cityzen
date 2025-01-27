@@ -1,3 +1,4 @@
+import { getCategories } from "../../infrastructure/services/utilsService";
 import { Address } from "./Address";
 import { Flag } from "./Flag";
 import { Group } from "./Group";
@@ -5,12 +6,15 @@ import { Participant } from "./Participant";
 import { User } from "./User";
 
 export enum EventCategory {
-    CATEGORY_1,
-    CATEGORY_2,
-    CATEGORY_3,
-    CATEGORY_4,
-    CATEGORY_5
+    CATEGORY_1 = 'sport',
+    CATEGORY_2 = 'social',
+    CATEGORY_3 = 'culturelle',
+    CATEGORY_4 = 'blob',
+    CATEGORY_5 = 'autre',
 }
+
+export const eventCategoriesS = getCategories(EventCategory, true);
+export const eventCategories = getCategories(EventCategory);
 
 export class Event {
     Address: Address = new Address();

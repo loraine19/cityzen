@@ -1,14 +1,18 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ServiceUseCase } from '../../application/useCases/service.usecase';
+import { UserUseCase } from '../../application/useCases/user.usecase';
+import { ServiceService } from '../../infrastructure/services/serviceService';
+import { ServiceView } from '../../domain/entities/Service';
 
-export const serviceViewModel = ({ serviceUseCase }: { serviceUseCase: ServiceUseCase }) => {
+export const serviceViewModel = ({ serviceUseCase, userUseCase, serviceService }: { serviceUseCase: ServiceUseCase, userUseCase: UserUseCase, serviceService: ServiceService }) => {
   return (mine: boolean, type: string, step: string, category: string) => {
 
-    // const { data: user, isLoading: loadingUser } = useQuery({
-    //   queryKey: ['userMe'],
-    //   queryFn: async () => await userUseCase.getUserMe()
-    // })
-    // const userId = loadingUser ? 0 : user?.id
+
+    const { data: user, isLoading: loadingUser } = useQuery({
+      queryKey: ['userMe'],
+      queryFn: async () => await userUseCase.getUserMe()
+    })
+    const userId = loadingUser ? 0 : user?.id
 
 
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
@@ -20,7 +24,7 @@ export const serviceViewModel = ({ serviceUseCase }: { serviceUseCase: ServiceUs
       });
 
     //const events = eventService.getInfosInEvents(data?.pages.flat(), userId)
-    const services = data?.pages.flat() || []
+    const services = serviceService.getInfosInServices(data?.pages.flat(), userId)
 
     return {
       services,
@@ -33,27 +37,25 @@ export const serviceViewModel = ({ serviceUseCase }: { serviceUseCase: ServiceUs
   }
 }
 
-export const serviceIdViewModel = ({ serviceUseCase }: { serviceUseCase: ServiceUseCase }) => {
+export const serviceIdViewModel = ({ serviceUseCase, serviceService, userUseCase }: { serviceUseCase: ServiceUseCase, serviceService: ServiceService, userUseCase: UserUseCase }) => {
   return (id: number) => {
 
+    const { data: user, isLoading: loadingUser } = useQuery({
+      queryKey: ['userMe'],
+      queryFn: async () => await userUseCase.getUserMe()
+    })
+    const userId = loadingUser ? 0 : user?.id
+
     //// TS CALL EVENT BY ID
-    const { data: service, isLoading: loadingService, error: errorSerivce, refetch } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['eventById', id],
       queryFn: async () => await serviceUseCase.getServiceById(id),
     })
 
-    //// USING SERVICE
-    // const userId = loadingUser ? 0 : user.id
-    // const event = eventByIdData ? eventService.getInfosInEvent(eventByIdData, userId) : {} as Event;
 
     //// RETURN FORMATTED DATA
-    return { service, loadingService, errorSerivce, refetch }
+    const service = data ? serviceService.getInfosInService(data, userId) : {} as ServiceView;
+    return { service, isLoading, error, refetch }
   }
 }
 
-// export const eventGetByIdViewModel = ({ serviceUseCase }: { serviceUseCase: serviceUseCase }) => {
-//   return async (id: number) => {
-//     const event = await serviceUseCase.getEventById(id)
-//     return event
-//   }
-// }

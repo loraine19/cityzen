@@ -1,46 +1,53 @@
 import { Address } from './Address';
 import { User } from './User';
 import { Flag } from './Flag';
+import { Label } from './frontEntities';
+import { getCategories } from '../../infrastructure/services/utilsService';
 
 export enum ServiceType {
-    GET,
-    DO
+    GET = 'GET',
+    DO = 'DO'
 }
 export const serviceType = Object.values(ServiceType).filter(type => typeof type === 'string');
 
 export enum ServiceStep {
-    STEP_0,
-    STEP_1,
-    STEP_2,
-    STEP_3,
-    STEP_4
+    STEP_0 = "nouveau",
+    STEP_1 = "en attente",
+    STEP_2 = "en cours",
+    STEP_3 = "terminé",
+    STEP_4 = "litige"
 }
-export const serviceStep = Object.values(ServiceStep).filter(step => typeof step === 'string');
+export const serviceSteps: Label[] = getCategories(ServiceStep);
+
 
 export enum SkillLevel {
-    LEVEL_0,
-    LEVEL_1,
-    LEVEL_2,
-    LEVEL_3,
-    LEVEL_4
+    LEVEL_0 = 0,
+    LEVEL_1 = 1,
+    LEVEL_2 = 2,
+    LEVEL_3 = 3,
+    LEVEL_4 = 4
 }
 
 export enum HardLevel {
-    LEVEL_0,
-    LEVEL_1,
-    LEVEL_2,
-    LEVEL_3,
-    LEVEL_4
+    LEVEL_0 = 0,
+    LEVEL_1 = 1,
+    LEVEL_2 = 2,
+    LEVEL_3 = 3,
+    LEVEL_4 = 4
 }
 
 export enum ServiceCategory {
-    CATEGORY_1,
-    CATEGORY_2,
-    CATEGORY_3,
-    CATEGORY_4,
-    CATEGORY_5
+    CATEGORY_1 = 'bricolage',
+    CATEGORY_2 = 'cours',
+    CATEGORY_3 = 'animaux',
+    CATEGORY_4 = 'blob',
+    CATEGORY_5 = 'autre',
 }
-export const serviceCategory = Object.values(ServiceCategory).filter(category => typeof category === 'string');
+
+export const serviceCategoriesS: Label[] = getCategories(ServiceCategory, true);
+export const serviceCategories: Label[] = getCategories(ServiceCategory);
+
+
 export class Service {
     id: number = 0;
     name: string = '';
@@ -51,6 +58,7 @@ export class Service {
     image: string | File = '';
     title: string = '';
     category: ServiceCategory = ServiceCategory.CATEGORY_1;
+    categoryS: any = '';
     userIdResp: number = 0;
     UserResp: User = new User();
     type: ServiceType = ServiceType.GET;
@@ -106,12 +114,12 @@ export enum ServiceStepFilter {
 export interface ServiceView extends Service {
     actif?: boolean;
     IResp: boolean;
-    label: string;
+    categoryS: string;
     typeS?: string;
     flagged: boolean;
     mine: boolean;
     isLate: boolean;
-    points?: number;
+    points: number[];
     statusS: string;
     toogleResp: () => Promise<ServiceView>;
 }

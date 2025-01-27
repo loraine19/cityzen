@@ -3,13 +3,13 @@ import { Label } from "../../../domain/entities/frontEntities";
 import { Icon } from "./SmallComps";
 
 type selectSearchProps = {
-    cat: string;
-    setCat: any;
+    searchCat: Label;
+    setSearchCat: any;
     category: Label[]
-    search: (value: string) => void
+    search: (label: Label) => void
 };
 export default function SelectSearch(props: selectSearchProps) {
-    const { cat, setCat, category, search } = props
+    const { searchCat, setSearchCat, category, search } = props
     return (
         <div className="flex m-auto !rounded-full h-7 md:w-[90%] items-center bg-white shadow !mb-1.5" >
             <Menu placement="bottom-start">
@@ -25,13 +25,13 @@ export default function SelectSearch(props: selectSearchProps) {
                     </Button>
                 </MenuHandler>
                 <MenuList className="flex flex-col">
-                    {category.map((label: Label, index: number) => {
+                    {category.map((label: any, index: number) => {
                         return (
                             <MenuItem
                                 key={index}
                                 value={label.value}
                                 className="flex items-center gap-2 !text-md"
-                                onClick={() => { setCat(label.label); search(label.label); }}
+                                onClick={() => { setSearchCat(label); search(label) }}
                             >
                                 {label.label}
                             </MenuItem>
@@ -45,16 +45,17 @@ export default function SelectSearch(props: selectSearchProps) {
                 className="bg-none border-none"
                 labelProps={{ className: "before:content-none after:content-none border-none" }}
                 containerProps={{ className: "min-w-0 border-none ", }}
-                value={cat}
-                onChange={(e) => setCat(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && search(cat)}
+                key={searchCat.value}
+                value={searchCat.label}
+                onChange={(e) => setSearchCat({ label: e.target.value, value: null })}
+                onKeyDown={(e) => e.key === 'Enter' && search(searchCat)}
             />
             <Button
                 ripple={false}
                 variant="text"
                 color="blue-gray"
                 size="sm"
-                onClick={() => search(cat)}
+                onClick={() => search(searchCat)}
                 className="flex items-center  bg-none rounded-full py-1 !px-4"
             >
                 <Icon icon="search" />

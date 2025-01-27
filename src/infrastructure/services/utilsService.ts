@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router";
-import { EventView, eventCategory } from "../../domain/entities/Event";
-import { Flag, flagTarget, flagReason } from "../../domain/entities/Flag";
+import { EventView } from "../../domain/entities/Event";
+import { Flag } from "../../domain/entities/Flag";
 import { Label, Action, defaultEventImage } from "../../domain/entities/frontEntities";
 import { Issue } from "../../domain/entities/Issue";
 import { Pool } from "../../domain/entities/Pool";
 import { Post, postCategory } from "../../domain/entities/Post";
-import { Profile, AssistanceLevel } from "../../domain/entities/Profile";
-import { Service, serviceType, serviceCategory, serviceStep, HardLevel, SkillLevel } from "../../domain/entities/Service";
+import { Profile } from "../../domain/entities/Profile";
+import { Service } from "../../domain/entities/Service";
 import { Survey, surveyCategory } from "../../domain/entities/Survey";
 import { User } from "../../domain/entities/User";
 import { Address } from "../../domain/entities/Address";
@@ -15,7 +15,7 @@ import { LikeService } from "../../domain/repositoriesBase/LikeRepository";
 import { PostService } from "../../domain/repositoriesBase/PostRepository";
 import { AddressApi } from "../providers/http/addressApi";
 import { ServiceApi } from "../providers/http/serviceApi";
-const { getServiceById, putService } = new ServiceApi();
+const { getServiceById } = new ServiceApi();
 const { getAddresses, postAddress } = new AddressApi();
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -60,20 +60,14 @@ export const shortDateString = (date: Date) => {
 }
 
 
-
-
-
 ///// DELET ELEMENT NOTIF / FLAG 
-
 export const deleteElement = (id: number, array: any[], setArray: any,) => {
     setArray([...array.filter((element: any) => element.id !== id)]);
-
 }
 
 export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any) => {
     let index = array.findIndex((element: any) => (element.userId + element.type + element.target_id) === (elementJoin.userId + elementJoin.type + elementJoin.target_id));
     confirm(" voulez vous supprimer " + array[index].element.title + " ?") && array.splice(index, 1); setArray([...array])
-
 }
 
 
@@ -83,14 +77,7 @@ export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefin
 }
 
 
-
 //// GET CATEGORI SERVICE 
-export const GetCategory = (service: Service, categories: Label[]): string => {
-    return service.category <= categories.length ? categories[(service.category) - 1].value : "autre"
-}
-
-
-
 export const isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
 
 
@@ -109,8 +96,6 @@ export const takeElement = (id: number, array: Service[], setArray: any, userPro
 
 
 //// NEW FUNCTIONS
-
-
 export const toggleLike = async (postId: number, userId: number, setPost: any) => {
     const { getPostById } = new PostService();
     const { postLike, deleteLike } = new LikeService();
@@ -125,14 +110,12 @@ export const toggleResp = async (serviceId: number, userId: number, setService: 
 
     const response = await getServiceById(serviceId);
     const isResp = response.userIdResp === userId ? true : false;
-    isResp ? await putService(serviceId, 0) : await putService(serviceId, userId);
     setService(await getServiceById(serviceId));
 };
 export const toggleValidResp = async (serviceId: number, userId: number, setService: any) => {
     // await putServiceValidation(serviceId, userId)
     setService(await getServiceById(serviceId));
-};
-
+}
 
 
 export async function addressIn(formik: any, newElement: EventView | Profile) {
@@ -191,29 +174,32 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
 }
 
 //// GENERE LABELS 
+
+
+export const getCategories = (enumArray: any, all?: boolean): Label[] => {
+    const allLabel = { label: 'tous', value: '' }
+    const array = [...Object.keys(enumArray).map(key => ({
+        label: enumArray[key as keyof typeof enumArray],
+        value: key,
+    }))];
+    all && array.unshift(allLabel as Label);
+    return array
+};
+
+
 const generateLabels = (categories: string[], labels: string[]) => {
     return categories.map((category, index) => ({ value: category, label: labels[index] }));
 };
-const labelsEvents = ['sport', 'social', 'culturelle', 'blob', 'autre'];
-export const eventCategories = generateLabels(eventCategory, labelsEvents);
 
 const labelsPost = ["perdu-trouvé", "animaux", "à vendre", "je donne", "autre"];
 export const postCategories = generateLabels(postCategory, labelsPost);
 
-const typesService = ["demande", "offre"];
-export const serviceTypes = generateLabels(serviceType, typesService);
-
-const labelsServices = ["bricolage", "cours", "animaux", "blob", "autre"];
-export const serviceCategories = generateLabels(serviceCategory, labelsServices);
-
-const statusServices = ["nouveau", "en attente", "en cours", "terminé", "litige"];
-export const serviceStatus = generateLabels(serviceStep, statusServices);
 
 const labelsFlagTarget = ["evenement", "annonce", "sondage", "service"];
-export const flagTargets = generateLabels(flagTarget, labelsFlagTarget);
+export const flagTargets = generateLabels(labelsFlagTarget, labelsFlagTarget);
 
 const reasonsFlag = ["illicite", "haineux", "dangereux", "irrespecteux", "atteinte à la vie privé"]
-export const flagReasons = generateLabels(flagReason, reasonsFlag);
+export const flagReasons = generateLabels(reasonsFlag, reasonsFlag);
 
 const labelsSurvey = ['sécurité', 'environnement', 'régles', 'suggestion', 'autre'];
 export const surveyCategories = generateLabels(surveyCategory, labelsSurvey);
@@ -237,21 +223,7 @@ export const getDefaultImage = (category: string) => {
     return foundCategory ? foundCategory.image : defaultEventImage[0].image;
 }
 
-export const GetPoints = (service: Service, user?: Profile): number[] => {
-    const userResp = service.UserResp ? service.UserResp.Profile : null
-    const userP = user ? user : service.User.Profile
-    const hard = getEnumVal(service.hard, HardLevel)
-    const skill = getEnumVal(service.skill, SkillLevel)
-    const userPoints = getEnumVal(userP.assistance, AssistanceLevel)
-    const userRespPoints = userResp ? getEnumVal(userResp.assistance, AssistanceLevel) : 0
-    const type = getLabel(service.type, serviceTypes)
-    const base = Number(((hard / 2 + skill / 2) + 1).toFixed(1))
-    const points =
-        userResp && [base + userRespPoints / 2] ||
-        type === "offre" && [base + userPoints / 2] ||
-        [base, (base + 1.5)]
-    return points
-}
+
 
 
 export const generateContact = (user: User): string => {
