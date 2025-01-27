@@ -13,7 +13,6 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
     const { id, title, description, IResp, image, createdAt, User, UserResp, mine, typeS, categoryS, statusS, hard, skill, flagged, points } = props.service
     const haveImage = service.image ? true : false
     const userAuthor = User.Profile
-    const isNew = statusS === ServiceStep.STEP_0 ? true : false;
     const isResp = statusS === ServiceStep.STEP_1 ? true : false;
     const isValidated = statusS === ServiceStep.STEP_2 ? true : false;
     const isFinish = statusS === ServiceStep.STEP_3 ? true : false;

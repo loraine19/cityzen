@@ -26,16 +26,16 @@ export default function CTAMines(props: CTAMinesProps) {
                     setOpen(false)
                 }}
                 title={buttons[index]?.title as string}
-                element={buttons[index].body as any} />
+                element={buttons[index]?.body as string} />
 
             {
                 <>
-                    <Button className={buttons[0].icon === '' ? "hidden" : "   lgBtn "}
+                    <Button className={buttons[0]?.icon === '' ? "hidden" : "   lgBtn "}
                         onClick={() => { setOpen(true), setIndex(0) }}
                         color="white"
                         size='lg'
                         disabled={disabled1} >
-                        {buttons[0].icon}
+                        {buttons[0]?.icon}
                     </Button>
 
                     <Button className={buttons[1]?.icon === '' || !buttons[1]?.icon ? "hidden" : "  lgBtn "}

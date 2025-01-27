@@ -2,7 +2,7 @@ import { Card, CardHeader, Typography, Chip, CardBody, Textarea, Popover, Popove
 import ServiceIssueCard from "./ServiceIssueCard"
 import { useState } from "react"
 import { Issue } from "../../../../../domain/entities/Issue"
-import { Service } from "../../../../../domain/entities/Service"
+import { Service, ServiceView } from "../../../../../domain/entities/Service"
 import { User } from "../../../../../domain/entities/User"
 import { getImageBlob } from "../../../../../infrastructure/services/utilsService"
 import { useUserStore } from "../../../../../application/stores/user.store"
@@ -144,7 +144,7 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                             </Option>)}
                                     </Select>}
                                 </div>
-                                <ServiceIssueCard service={Service} />
+                                <ServiceIssueCard service={Service as ServiceView} />
                             </div>
                         </CardBody>
                     </Card>}

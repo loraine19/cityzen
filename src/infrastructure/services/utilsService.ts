@@ -85,11 +85,11 @@ export const takeElement = (id: number, array: Service[], setArray: any, userPro
     let index = array.findIndex((element: Service) => element.id === id);
     if (array[index].userIdResp === userProfile?.userId) {
         array[index].userIdResp = 0;
-        array[index].status = 0;
+        // array[index].status = 0;
     }
     else {
         array[index].userIdResp = userProfile?.userId;
-        array[index].status = 1;
+        //   array[index].status = 1;
     }
     setArray([...array]);
 }
@@ -110,11 +110,13 @@ export const toggleResp = async (serviceId: number, userId: number, setService: 
 
     const response = await getServiceById(serviceId);
     const isResp = response.userIdResp === userId ? true : false;
+    console.log(isResp)
     setService(await getServiceById(serviceId));
 };
 export const toggleValidResp = async (serviceId: number, userId: number, setService: any) => {
     // await putServiceValidation(serviceId, userId)
     setService(await getServiceById(serviceId));
+    console.log(userId)
 }
 
 

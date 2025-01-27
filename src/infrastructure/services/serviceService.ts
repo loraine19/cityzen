@@ -1,9 +1,8 @@
 //src/infrastructure/services/serviceService.ts
 import { ServiceUseCase } from "../../application/useCases/service.usecase";
 import { Flag } from "../../domain/entities/Flag";
-import { HardLevel, Service, ServiceCategory, ServiceStep, serviceSteps, ServiceType, ServiceUpdate, ServiceView, SkillLevel, } from "../../domain/entities/Service";
+import { HardLevel, Service, ServiceCategory, ServiceStep, ServiceType, ServiceUpdate, ServiceView, SkillLevel, } from "../../domain/entities/Service";
 import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
-import { getLabel } from './utilsService';
 import DI from '../../di/ioc';
 import { AssistanceLevel, Profile } from "../../domain/entities/Profile";
 

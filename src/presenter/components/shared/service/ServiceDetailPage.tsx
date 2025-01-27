@@ -10,7 +10,6 @@ import { useUserStore } from '../../../../application/stores/user.store';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 
-
 export default function ServiceDetailPage() {
     const { id } = useParams();
     const { user } = useUserStore()
@@ -31,96 +30,105 @@ export default function ServiceDetailPage() {
     const inIssue = service.statusS === ServiceStep.STEP_4 ? true : false;
     const statusInt = getEnumVal(service.statusS, ServiceStep)
 
-
-
-    let MyActions: Action[] = GenereMyActions(service, "service", deleteService, () => { })
-    isLate(service.createdAt, 15) && MyActions.push({
-        icon: 'Relancer',
-        title: 'Relancer le service',
-        body: 'Relancer le service',
-        function: () => { console.log('Relancer le service') }
-    })
-
-
-
-    const MyActionsResp: Action[] = [
-        ...MyActions,
-        {
-            icon: 'Valider',
-            title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
-            body: `${service?.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
-            function: () => {
-                toggleValidResp(service.id, service.UserResp.id, refetch);
-            }
-        },
-        {
-            icon: 'Refuser',
-            title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
-            body: `${service?.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
-            function: () => {
-                toggleValidResp(service.id, 0, refetch);
-            }
-        }
-    ];
-
-    const MyActionsValidate: Action[] = [
-        {
-            icon: 'Besoin d\'aide ?',
-            title: 'Ouvrir une demande de conciliation',
-            body: `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.UserResp)}`,
-            function: () => { navigate(`/conciliation/create/${service.id}`);; }
-        }, {
-            icon: 'terminer',
-            title: 'Terminer le service',
-            body: `${service?.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${service?.points} points`,
-            function: async () => {
-                await putServiceFinish(service.id);
-
-            }
-        }
-
-    ];
-
-    const respAction: Action[] = [
-        {
-            icon: isResp && 'Annuler votre réponse' || isValidated && "Besoin d'aide ?" || '',
-            title: isResp && 'Annuler votre réponse' || isValidated && "Ouvrir une demande de conciliation?" || '',
-            body: isResp && service?.title || isValidated && `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` || '',
-            function: () => {
-                if (isResp) {
-                    toggleResp(service.id, userId, refetch);
-                }
-                if (isValidated) {
-                    navigate(`/conciliation/create/${service.id}`);
-                }
-            }
-        },
-
-    ];
-
-    const MyActionsLitige: Action[] = [
-        {
-            icon: 'Voir le litige',
-            title: 'Voir le litige',
-            body: 'Voir le litige',
-            function: () => { navigate(`/conciliation/${service.id}`); }
-        }
-    ]
-
-
-
-    const PublicAction = [{
-        icon: isNew && 'Répondre au service' || isFinish && 'ce service est terminé' || 'Service en cours',
-        title: isNew && 'Répondre au service' || '',
-        body: service?.title,
-        function: () => {
-            if (isNew) {
-                toggleResp(service.id, userId, refetch);
-            }
-        }
-    }]
-
     const { typeS, categoryS, mine, IResp } = service
+    const generateActions = (): Action[] => {
+        const myAction = GenereMyActions(service, "service", deleteService, () => { });
+        let actions: Action[] = [];
+        switch (true) {
+            case (!IResp && !mine || isFinish):
+                actions = [
+                    {
+                        icon: isNew ? 'Répondre au service' : isFinish ? 'ce service est terminé' : 'Service en cours',
+                        title: isNew ? 'Répondre au service' : '',
+                        body: service?.title,
+                        function: isNew ? () => toggleResp(service.id, userId, refetch) : () => { },
+                    },
+                ];
+                break;
+            case (mine && isNew):
+                actions = [...myAction];
+                if (isLate(service.createdAt, 15)) {
+                    actions.push({
+                        icon: 'Relancer',
+                        title: 'Relancer le service',
+                        body: 'Relancer le service',
+                        function: () => { console.log('Relancer le service'); },
+                    });
+                }
+                break;
+            case (mine && isResp):
+                actions = [
+                    ...myAction,
+                    {
+                        icon: 'Valider',
+                        title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
+                        body: `${service?.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+                        function: () => toggleValidResp(service.id, service.UserResp.id, refetch),
+                    },
+                    {
+                        icon: 'Refuser',
+                        title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
+                        body: `${service?.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+                        function: () => toggleValidResp(service.id, 0, refetch),
+                    },
+                ];
+                break;
+            case (mine && isValidated):
+                actions = [
+                    {
+                        icon: 'Besoin d\'aide ?',
+                        title: 'Ouvrir une demande de conciliation',
+                        body: `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.UserResp)}`,
+                        function: () => navigate(`/conciliation/create/${service.id}`),
+                    },
+                    {
+                        icon: 'terminer',
+                        title: 'Terminer le service',
+                        body: `${service?.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${service?.points} points`,
+                        function: async () => await putServiceFinish(service.id),
+                    },
+                ];
+                break;
+            case (IResp && !isFinish && !inIssue):
+                actions = [
+                    {
+                        icon: isResp ? 'Annuler votre réponse' : isValidated ? "Besoin d'aide ?" : '',
+                        title: isResp ? 'Annuler votre réponse' : isValidated ? "Ouvrir une demande de conciliation?" : '',
+                        body: isResp ? service?.title : isValidated ? `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` : '',
+                        function: () => {
+                            if (isResp) {
+                                toggleResp(service.id, userId, refetch);
+                            }
+                            if (isValidated) {
+                                navigate(`/conciliation/create/${service.id}`);
+                            }
+                        },
+                    },
+                ];
+                break;
+            case (inIssue && IResp || inIssue && mine):
+                actions = [
+                    {
+                        icon: 'Voir le litige',
+                        title: 'Voir le litige',
+                        body: 'Voir le litige',
+                        function: () => navigate(`/conciliation/${service.id}`),
+                    },
+                ];
+                break;
+            default:
+                break;
+        }
+
+        return isLoading ? [] as Action[] : actions;
+    }
+    const ok = generateActions();
+
+
+
+    const disabled1 = (!mine && !IResp && statusInt >= 1) || isFinish
+
+
 
     return (
         <div className="Body cyan">
@@ -140,23 +148,7 @@ export default function ServiceDetailPage() {
                 </div>
             </main>
             <footer>
-                {/* PUBLIC ACTION */}
-                {((!IResp && !mine) || isFinish) &&
-                    <CTAMines actions={PublicAction} disabled1={!isNew} />}
-
-                {/* RESP ACTION */}
-                {(mine && isNew) && <CTAMines actions={MyActions} />}
-                {mine && isResp && <CTAMines actions={MyActionsResp} />}
-                {mine && isValidated && <CTAMines actions={MyActionsValidate} />}
-
-                {/* MINE ACTION */}
-                {(IResp && statusInt < 2) &&
-                    < CTAMines actions={respAction} disabled1={isResp && !IResp} />}
-
-                {/* ISSUE ACTION */}
-                {(inIssue) &&
-                    <CTAMines actions={MyActionsLitige} />}
-
+                {!isLoading && !error && service && <CTAMines actions={ok} disabled1={disabled1} />}
             </footer>
         </div>
     );
