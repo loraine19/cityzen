@@ -15,7 +15,7 @@ import { LikeService } from "../../domain/repositoriesBase/LikeRepository";
 import { PostService } from "../../domain/repositoriesBase/PostRepository";
 import { AddressApi } from "../providers/http/addressApi";
 import { ServiceApi } from "../providers/http/serviceApi";
-const { getServiceById, putService, putServiceValidation } = new ServiceApi();
+const { getServiceById, putService } = new ServiceApi();
 const { getAddresses, postAddress } = new AddressApi();
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -129,7 +129,7 @@ export const toggleResp = async (serviceId: number, userId: number, setService: 
     setService(await getServiceById(serviceId));
 };
 export const toggleValidResp = async (serviceId: number, userId: number, setService: any) => {
-    await putServiceValidation(serviceId, userId)
+    // await putServiceValidation(serviceId, userId)
     setService(await getServiceById(serviceId));
 };
 

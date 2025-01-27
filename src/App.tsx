@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, } from "react-router-dom";
 import ServiceCreatePage from "./presenter/components/shared/service/ServiceCreatePage";
 import ServiceDetailPage from "./presenter/components/shared/service/ServiceDetailPage";
 import ServiceEditPage from "./presenter/components/shared/service/ServiceEditPage";
@@ -33,13 +33,20 @@ import PoolDetailPage from "./presenter/components/shared/poolSurvey/PoolDetaiPa
 import { PrivateRoute } from "./presenter/components/shared/utilsPage/PrivateRouter";
 import NotFindPage from "./presenter/components/shared/utilsPage/NotFindPage";
 import ErrorBoundary from "./presenter/components/shared/utilsPage/ErrorBoundary";
+import { useState } from "react";
 function App() {
+    const [retryCount, setRetryCount] = useState(0);
+    const handleRetry = () => {
+        setTimeout(() => { console.log(retryCount, 'retryCountApp') }, 5000);
+        setRetryCount(retryCount + 1);
+    }
+
     return (
         <>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');</style>
 
             <BrowserRouter>
-                <ErrorBoundary>
+                <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
                     <Routes>
                         <Route path="/signin" element={<SignInPage />} />
                         <Route path="/signup" element={<SignUpPage />} />

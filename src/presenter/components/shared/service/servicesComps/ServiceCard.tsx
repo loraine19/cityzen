@@ -1,7 +1,6 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Flag } from "../../../../../domain/entities/Flag";
 import { Service, ServiceStep } from "../../../../../domain/entities/Service";
 import { getLabel, serviceTypes, GetPoints, serviceCategories, isLate, serviceStatus, getEnumVal, GenereMyActions, toggleResp } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
@@ -19,12 +18,12 @@ export default function ServiceComp(props:
     const { mines, change, update } = props
     const [service, setService] = useState<Service>(props.service)
     const { id, title, description, image, createdAt, User, UserResp } = service
-    const flagged: boolean = service.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
-    const isMine = service.User.id === userId
+    // const flagged: boolean = service.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
+    const isMine = service?.User?.id === userId
     const IResp = UserResp?.id === userId
     const haveImage = service.image ? true : false
-    const type = getLabel(service.type, serviceTypes)
-    const points = GetPoints(service, User.Profile)
+    // const type = getLabel(service.type, serviceTypes)
+    const points = GetPoints(service, User?.Profile)
     const category = getLabel(service.category, serviceCategories)
     const navigate = useNavigate();
     const late: boolean = isLate(createdAt, 15)

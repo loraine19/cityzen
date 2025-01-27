@@ -42,7 +42,7 @@ export const useApi = (): Api => {
                 if (!originalRequest._retry) {
                     originalRequest._retry = true;
                     if (!window.location.pathname.includes('/signin')) {
-                        setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 5000);
+                        setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
                     }
                     return Promise.reject(new ApiError(error.code, error.message));
                 }

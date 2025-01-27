@@ -76,10 +76,14 @@ export class ServiceDTO {
     status?: ServiceStep;
 }
 
+export class ServiceRespDTO {
+    userIdResp?: number;
+}
+
 export enum ServiceUpdate {
-    POST_RESP = 'POSTRESP',
-    VALIDATE_RESP = 'VALIDATERESP',
-    REFUSE_RESP = 'REFUSERESP',
+    POST_RESP = 'POST_RESP',
+    VALID_RESP = 'VALIDATE_RESP',
+    CANCEL_RESP = 'CANCEL_RESP',
     FINISH = 'FINISH',
 }
 
@@ -87,4 +91,27 @@ export enum ServiceFilter {
     GET = 'GET',
     DO = 'DO',
     MINE = 'MINE'
+}
+
+export enum ServiceStepFilter {
+    STEP_0 = 'STEP_0',
+    STEP_1 = 'STEP_1',
+    STEP_2 = 'STEP_2',
+    STEP_3 = 'STEP_3',
+    STEP_4 = 'STEP_4'
+
+}
+
+
+export interface ServiceView extends Service {
+    actif?: boolean;
+    IResp: boolean;
+    label: string;
+    typeS?: string;
+    flagged: boolean;
+    mine: boolean;
+    isLate: boolean;
+    points?: number;
+    statusS: string;
+    toogleResp: () => Promise<ServiceView>;
 }

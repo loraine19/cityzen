@@ -114,7 +114,7 @@ export class EventService implements EventServiceI {
             image: event.image ? event.image : this.getImageForCategory(event?.category?.toString()),
             days: this.getDays(event),
             label: getLabel(event.category, eventCategories),
-            Igo: event.Participants.some((participant: Participant) => participant.userId === userId),
+            Igo: event.Participants ? event.Participants.some((participant: Participant) => participant.userId === userId) : false,
             flagged: event.Flags ? event?.Flags?.some((flag: Flag) => flag.userId === userId) : false,
             mine: event.userId === userId,
             pourcent: Math.floor((event.Participants?.length || 0) / event.participantsMin * 100),

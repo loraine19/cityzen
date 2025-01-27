@@ -10,7 +10,7 @@ import CalendarComp from "../../common/CalendarComp";
 import { EventCard } from "./eventComps/EventCard";
 import DI from "../../../../di/ioc";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
-import { Icon } from "../../common/SmallComps";
+import { Icon, LoadMoreButton } from "../../common/SmallComps";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { useSearchParams } from "react-router-dom";
 // Remove incorrect import
@@ -56,12 +56,14 @@ export default function EventListPage() {
         update()
     }
 
-    const notifUpdate =
-        (events.length === 0 && !loadingEvents) &&
-        `Aucun évènement ${filter !== '' ? getLabel(filter, eventTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ''} na été trouvé`
-        || errorEvents && "Une erreur s'est produite lors du chargement des évènements, veuillez réessayer plus tard"
-        || '';
-    useEffect(() => { setNotif(notifUpdate) }, [events])
+    useEffect(() => {
+        const notifUpdate =
+            (events.length === 0 && !loadingEvents) &&
+            `Aucun évènement ${filter !== '' ? getLabel(filter, eventTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ''} n'a été trouvé`
+            || errorEvents && "Erreur lors du chargement des évènements, veuillez réessayer plus tard"
+            || '';
+        setNotif(notifUpdate);
+    }, [events, loadingEvents, errorEvents, filter, category]);
 
     const switchClick = () => {
         setView(view === "view_agenda" ? "event" : "view_agenda");
@@ -117,8 +119,8 @@ export default function EventListPage() {
                             </div>
                         ))
                     }
-                    <div className="absolute bottom-8 left-0 !w-full flex items-center justify-center ">
-                        <Icon color='cyan' fill icon="keyboard_double_arrow_down" size="4xl" title="voir plus" style={(isBottom && hasNextPage) ? "mb-10" : "hidden"} onClick={handleScroll} /></div>
+                    <LoadMoreButton isBottom={isBottom} hasNextPage={hasNextPage} handleScroll={handleScroll} />
+
                 </main>
             )}
             {view === "event" && !loadingEvents &&

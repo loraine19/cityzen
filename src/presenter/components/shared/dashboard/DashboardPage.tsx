@@ -62,7 +62,7 @@ export default function DashboardPage() {
                         <Card className="lg:h-full p-0 flex-1 flex ">
                             <CardHeader className="flex flex-col items-center !p-0 justify-centerp-0 bg-transparent shadow-none">
                                 <Avatar
-                                    src={user?.Profile?.image as string}
+                                    src={user?.Profile?.image as string || './person.svg'}
                                     alt={user?.Profile?.firstName}
                                     variant="circular"
                                     className="!shadow-sm !shadow-gray-400 w-16 h-16 lg:w-20 lg:h-20 BgUser"

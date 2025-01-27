@@ -1,6 +1,6 @@
 import { createFormData, handleApiCall } from "./utilsApi";
 import { useApi, Api } from "./UseApi";
-import { Service, ServiceDTO } from "../../../domain/entities/Service";
+import { Service, ServiceDTO, ServiceUpdate } from "../../../domain/entities/Service";
 
 export class ServiceApi {
     private readonly api: Api;
@@ -18,8 +18,6 @@ export class ServiceApi {
         console.log('result', result)
         return result;
     }
-
-
 
     async getServiceById(id: number): Promise<Service> {
         return handleApiCall(() => this.api.get(`${this.dataType}/${id}`));
@@ -44,9 +42,9 @@ export class ServiceApi {
         return handleApiCall(() => this.api.delete(`${this.dataType}/${id}`));
     }
     ;
-    putService = async (id: number, userIdResp: number): Promise<Service> => handleApiCall(() => this.api.put(`${this.dataType}/userResp/${id}`, { userIdResp }));
-    putServiceValidation = async (id: number, userIdResp: number): Promise<Service> => handleApiCall(() => this.api.put(`${this.dataType}/validUserResp/${id}`, { userIdResp }));
-    putServiceFinish = async (id: number): Promise<Service> => handleApiCall(() => this.api.put(`${this.dataType}/finish/${id}`));
-
+    async updateServiceStep(id: number, update?: ServiceUpdate): Promise<Service> {
+        const updateR = update ? `?update=${update}` : '';
+        return handleApiCall(() => this.api.put(`${this.dataType}/${id}${updateR}`));
+    }
 
 }

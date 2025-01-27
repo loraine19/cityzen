@@ -64,17 +64,11 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                 </div>
             </PopoverHandler >
             <PopoverContent>
-                <div className='Map flex FixedCenter'>
+                <div className='Map flex flex-col FixedCenter'>
+                    <Icon icon='cancel' fill size='3xl' onClick={() => setOpen(false)} style={' !px-1'} title='Fermer la carte' />
                     <MapContainer center={position} zoom={16} scrollWheelZoom={false}
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: '0.8rem',
-                            display: 'flex',
-                            flex: 1,
-                            backgroundColor: 'white',
-                            boxShadow: '0 0 15px rgba(0, 0, 0, 0.1)',
-                        }}>
+
+                        className='shadow-xl rounded-xl border-2 border-gray-300 flex w-full h-full' >
                         <TileLayer
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
                         />
@@ -96,7 +90,7 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                             <Chip value='itineraire' color='cyan' className='CyanChip rounded-full shadow' size='sm' />
                         </Link>
                     </MapContainer>
-                    <Icon icon='cancel' fill bg size='4xl' onClick={() => setOpen(false)} style={'absolute top-8 rounded-full !z-50 !px-1 '} title='Fermer la carte' />
+
                 </div>
             </PopoverContent>
         </Popover >

@@ -22,7 +22,7 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
     const haveImage = Boolean(image);
 
     return (
-        <Card className="FixCard">
+        <Card className="FixCard w-respLarge">
             <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"} floated={haveImage}>
                 <div className={`${haveImage ? "ChipDiv flex-col justify-between !h-full " : "ChipDivNoImage"}`}>
                     <div className="flex w-full justify-between items-center gap-2">

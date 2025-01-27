@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Service, ServiceFilter, ServiceStep } from "../../../../domain/entities/Service";
+import { Service, ServiceFilter, ServiceStepFilter } from "../../../../domain/entities/Service";
 import { serviceCategories, getLabel, getValue } from "../../../../infrastructure/services/utilsService";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
@@ -12,13 +12,12 @@ import ServiceComp from "./servicesComps/ServiceCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { SkeletonGrid } from "../../common/Skeleton";
 import DI from '../../../../di/ioc';
-import { Icon } from "../../common/SmallComps";
+import { LoadMoreButton } from "../../common/SmallComps";
 
 
 export default function ServicesPage() {
     const [notif, setNotif] = useState<string>('');
     const [tabSelected] = useState<string>('');
-    const [tabledList] = useState<Service[]>([]);
     const [cat, setCat] = useState<string>('')
     !serviceCategories.some(category => category.value === '') && serviceCategories.unshift({ label: 'tous', value: '' })
     const [mine, setMine] = useState<boolean>(false);
@@ -29,6 +28,8 @@ export default function ServicesPage() {
     const label = getLabel(category, serviceCategories);
     const serviceViewModelFactory = DI.resolve('serviceViewModel');
     const { services, isLoading, error, fetchNextPage, hasNextPage, refetch } = serviceViewModelFactory(mine, type, step, category);
+    const [customFilter, setCustomFilter] = useState<boolean>(false);
+    const [customList, setCustomList] = useState<Service[]>([]);
 
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
@@ -38,30 +39,35 @@ export default function ServicesPage() {
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé", "litige"];
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
 
+    const CheckboxesFilter = () => {
+        setCustomFilter(false);
+        let steps = [];
+        let types = [];
+        boxSelected.includes(boxArray[0]) && types.push(ServiceFilter.DO);
+        boxSelected.includes(boxArray[1]) && types.push(ServiceFilter.GET);
+        boxSelected.includes(boxArray[2]) && steps.push(ServiceStepFilter.STEP_0);
+        boxSelected.includes(boxArray[3]) && steps.push(ServiceStepFilter.STEP_1);
+        boxSelected.includes(boxArray[4]) && steps.push(ServiceStepFilter.STEP_2);
+        boxSelected.includes(boxArray[5]) && steps.push(ServiceStepFilter.STEP_3);
+        boxSelected.includes(boxArray[6]) && steps.push(ServiceStepFilter.STEP_4);
+        if (boxSelected.length === 0) {
+            setType('');
+            setStep('');
+        }
+        else {
+            setStep(steps.join(','));
+            setType(types.join(','));
+        }
+    };
 
-    useEffect(() => {
-        //if (mine) setServiceList(filterCheck(boxSelected));
-        boxSelected.includes(boxArray[0]) && setType('DO')
-        boxSelected.includes(boxArray[1]) && setType('GET')
-        if (boxSelected.includes(boxArray[0]) && boxSelected.includes(boxArray[1])) { setType('') }
-        boxSelected.includes(boxArray[2]) && setStep(ServiceStep.STEP_0 as unknown as string)
-        boxSelected.includes(boxArray[3]) && setStep(ServiceStep.STEP_1 as unknown as string)
-        boxSelected.includes(boxArray[4]) && setStep(ServiceStep.STEP_2 as unknown as string)
-        boxSelected.includes(boxArray[5]) && setStep(ServiceStep.STEP_3 as unknown as string)
-        boxSelected.includes(boxArray[6]) && setStep(ServiceStep.STEP_4 as unknown as string)
-        if (boxSelected.length === 0) { setType(''), setStep('') }
+    useEffect(() => { mine && CheckboxesFilter() }, [boxSelected]);
 
-        update()
-        console.log(services)
-    }, [boxSelected]);
-
-    const update = async () => { await refetch() }
 
     const filterTab = async (value?: ServiceFilter) => {
+        setCustomFilter(false);
         setParams({ filter: value as string || '', category: category });
         if (value !== filter) { setCategory('') }
         setFilter(value || '');
-        console.log('value', value)
         setMine(false)
         switch (value) {
             case ServiceFilter.MINE: { setMine(true), setType(''), setStep(''), setBoxSelected(boxArray) }; break;
@@ -70,7 +76,6 @@ export default function ServicesPage() {
             default: { setMine(false), setType(''), setStep('') }; break;
         }
         setParams({ filter: value as string || '', category: category })
-        update()
     };
 
     const serviceTabs: TabLabel[] = [
@@ -81,21 +86,34 @@ export default function ServicesPage() {
     ]
 
     const search = (cat: string) => {
-        let value = getValue(cat, serviceCategories);
-        setCategory(value);
-        const result = tabledList.filter(service =>
-            service.category.toString() === value ||
-            service.title.toLowerCase().includes(cat.toLowerCase()) ||
-            service.description.toLowerCase().includes(cat.toLowerCase())
-        );
-        console.log('result', result)
-        //  setServices(value !== '' ? result : tabledList);
-        setParams({ search: tabSelected, category: value });
+        setCustomFilter(false);
+        const value = getValue(cat, serviceCategories);
+        if (value) {
+            setCategory(value);
+            setParams({ search: tabSelected, category: value });
+        }
+        else {
+            setCustomFilter(true);
+            setCustomList(services && services.filter((service: any) =>
+                service.category.toString() === value ||
+                service.title.toLowerCase().includes(cat.toLowerCase()) ||
+                service.description.toLowerCase().includes(cat.toLowerCase())
+            ))
+        }
     };
 
     useEffect(() => {
         !isLoading && setNotif(services.length > 0 ? '' : `Aucun service ${tabSelected} ${category !== '' && category ? ' ' + cat : ''} n'a été trouvé`);
     }, [services]);
+
+    useEffect(() => {
+        const notifUpdate =
+            (services.length === 0 && !isLoading) &&
+            `Aucun service ${filter !== '' ? getLabel(filter, serviceTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, serviceCategories).toLowerCase() : ''} n'a été trouvé`
+            || error && "Erreur lors du chargement des services, veuillez réessayer plus tard"
+            || '';
+        setNotif(notifUpdate);
+    }, [services, isLoading, error, filter, category]);
 
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
@@ -119,22 +137,24 @@ export default function ServicesPage() {
                 <NavBarTop />
                 <SubHeader qty={services.length} type={`service ${category !== '' ? label : ''}`} />
                 <TabsMenu labels={serviceTabs} />
-                {mine ? (
+                {mine ?
                     <CheckCard categoriesArray={boxArray} boxSelected={boxSelected} setBoxSelected={setBoxSelected} />
-                ) : (
+                    :
                     <SelectSearch cat={cat} setCat={setCat} category={serviceCategories} search={search} />
-                )}
+                }
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
-            <main>
-                <div className="Grid">
-                    {isLoading || error ?
-                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                            <SkeletonGrid
-                                key={index}
-                                count={4} />
-                        ))
-                        :
+            <main ref={divRef}
+                onScroll={handleScroll} className="Grid">
+
+                {isLoading || error ?
+                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                        <SkeletonGrid
+                            key={index}
+                            count={4} />
+                    ))
+                    :
+                    !customFilter ?
                         services.map((service: Service, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <ServiceComp
@@ -142,12 +162,20 @@ export default function ServicesPage() {
                                     service={service}
                                     change={search}
                                     mines={mine}
-                                    update={update} />
+                                    update={refetch} />
+                            </div>)) :
+                        customList.map((service: Service, index: number) => (
+                            <div className="SubGrid" key={index}>
+                                <ServiceComp
+                                    key={service.id}
+                                    service={service}
+                                    change={search}
+                                    mines={mine}
+                                    update={refetch} />
                             </div>
-                        ))}
-                    <div className="absolute bottom-8 bg-blue-gray-600 left-0 !w-full flex items-center justify-center z-50 ">
-                        <Icon color='cyan' fill icon="keyboard_double_arrow_down" size="4xl" title="voir plus" style={(isBottom && hasNextPage) ? "mb-10" : "hidden"} onClick={handleScroll} /></div>
-                </div>
+                        )
+                        )}
+                <LoadMoreButton isBottom={isBottom} hasNextPage={hasNextPage} handleScroll={handleScroll} />
             </main>
             <NavBarBottom addBtn={true} />
         </div>

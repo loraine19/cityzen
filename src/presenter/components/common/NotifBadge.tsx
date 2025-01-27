@@ -26,8 +26,8 @@ export function NotifBadge() {
                                     </Typography>
                                 </div>)
                                 : (notifList.map((notif: NotifView, index: number) => notif.read === false &&
-                                    <MenuItem className="flex flex-col  " key={index}>
-                                        <div className="flex items-center justify-between">
+                                    <MenuItem className="flex flex-col w-full  max-w-[calc(100vw-2rem)] " key={index}>
+                                        <div className="flex items-center w-full justify-between">
                                             <Chip value={notif.elementType} className="rounded-full w-max h-max text-ellipsis pt-1.5  " size='sm' color="cyan">
                                             </Chip>
                                             <Typography className="flex items-center gap-1 text-xs font-normal text-blue-gray-500"> {notif.update}

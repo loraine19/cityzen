@@ -265,7 +265,7 @@ button {
 
 .FixedCenter {
     position: fixed;
-    top: 20% !important;
+    top: 10% !important;
     left: 50% !important;
     padding: 5rem 1rem !important;
     transform: translateX(-50%) !important;

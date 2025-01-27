@@ -57,8 +57,8 @@ container.register({
     authService: asClass(AuthService),
 
     ////ADDRESS
-    addressRepository: asClass(AddressRepositoryImpl).singleton(),
-    addressUseCase: asClass(AddressUseCase).singleton(),
+    addressRepository: asClass(AddressRepositoryImpl),
+    addressUseCase: asClass(AddressUseCase),
     addressService: asClass(AddressService),
     addressData: asClass(AddressApi),
 

@@ -130,12 +130,11 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
 
                                                                 </PopoverHandler>
                                                             </button>
-                                                            <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0'>
-                                                                <div className="fixed top-[16rem] left-1/2 transform -translate-x-1/2 max-h-[calc(100vh-19rem)] w-[calc(100vw-2rem)] 
-                                                    flex justify-center items-center ">
-                                                                    <EventCard event={event} change={() => { }} />
-                                                                    <Icon bg fill icon="cancel" size="2xl" onClick={() => setOpen(false)} style='absolute -top-12' />
-                                                                </div>
+                                                            <PopoverContent className='bg-transparent shadow-none z-50 border-none p-0 FixedCenter flex-col'>
+                                                                <Icon fill icon="cancel" size="3xl" onClick={() => setOpen(false)} style='mb-6' />
+                                                                <EventCard event={event} change={() => { }} />
+
+
                                                             </PopoverContent>
                                                         </Popover>
                                                     </div>

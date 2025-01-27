@@ -39,10 +39,6 @@ export default function SignUpDetailPage() {
         initialValues: newProfile as any,
         validationSchema: formSchema,
         onSubmit: async values => {
-            const updatedAddress: Address = await updateAddress(formik.values.Address)
-            formik.values.assistance = assistance
-            formik.values.Address = updatedAddress;
-            formik.values.skills = skillList.toString();
             formik.values = values
             setOpen(true)
         }
@@ -53,7 +49,11 @@ export default function SignUpDetailPage() {
 
     /// UPDATE FUNCTION API
     const updateFunction = async () => {
-        formik.values.addressId = formik.values.Address.id
+        const updatedAddress: Address = await updateAddress(formik.values.Address)
+        formik.values.assistance = assistance
+        formik.values.Address = updatedAddress;
+        formik.values.skills = skillList.toString();
+        formik.values.addressId = updatedAddress.id
         const { createdAt, updatedAt, userId, Address, ...rest } = formik.values;
         const updateData = { assistance, ...rest }
         const postedProfile = await postProfile(updateData);

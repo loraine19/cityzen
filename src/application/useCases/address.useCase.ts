@@ -10,7 +10,6 @@ export class AddressUseCase {
     }
 
     public async getAddresses(): Promise<Address[]> {
-        console.log('useCase getAddresses')
         return this.addressRepository.getAddresses();
     }
 
