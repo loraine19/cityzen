@@ -3,13 +3,12 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import { EventUpdateDTO, EventView } from '../../../../domain/entities/Event';
+import { EventDTO, EventUpdateDTO, EventView } from '../../../../domain/entities/Event';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { Address, AddressDTO } from '../../../../domain/entities/Address';
 
 export default function EventCreatePage() {
-    const [newEvent] = useState<EventView>({} as EventView);
     const navigate = useNavigate();
     const postEvent = async (data: EventUpdateDTO) => await DI.resolve('eventUseCase').postEvent(data)
     const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
@@ -28,7 +27,7 @@ export default function EventCreatePage() {
     })
 
     const formik = useFormik({
-        initialValues: newEvent as EventView,
+        initialValues: new EventDTO() as EventView,
         validationSchema: formSchema,
         onSubmit: async values => {
             const updatedAddress: Address = await updateAddress(formik.values.Address)
@@ -63,8 +62,8 @@ export default function EventCreatePage() {
                 handleConfirm={async () => { await postFunction() }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-            {newEvent &&
-                <EventForm formik={formik} />}
+
+            <EventForm formik={formik} />
         </div >
     )
 }

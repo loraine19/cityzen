@@ -1,8 +1,7 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { ServiceStep, ServiceView } from "../../../../../domain/entities/Service";
-import { isLate, getEnumVal, GenereMyActions, toggleResp } from "../../../../../infrastructure/services/utilsService";
+import { ServiceStep, ServiceType, ServiceUpdate, ServiceView } from "../../../../../domain/entities/Service";
+import { isLate, getEnumVal, GenereMyActions, } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
@@ -14,35 +13,23 @@ import DI from "../../../../../di/ioc";
 export default function ServiceComp(props:
     { service: ServiceView, mines?: boolean, change: (e: any) => void, update?: () => void }) {
     const { user } = useUserStore()
-    const userId: number = user.id
-    const { mines, change, update } = props
-    const [service, setService] = useState<ServiceView>(props.service)
+    const { mines, change, update, service } = props
     const { id, title, description, image, createdAt, User, flagged, mine, IResp, points, typeS, type, categoryS, statusS } = service
     const haveImage = service.image ? true : false
     const navigate = useNavigate();
-    const late: boolean = isLate(createdAt, 15)
-    const [isNew, setIsNew] = useState<boolean>(status === 'nouveau' ? true : false)
-    1 > 2 && console.log(isNew)
-    const [isResp, setIsResp] = useState<boolean>(status === 'en attente' ? true : false);
-    const [isValidated, setIsValidated] = useState<boolean>(status === 'en cours' ? true : false);
-    const [isFinish, setIsFinish] = useState<boolean>(status === 'terminé' ? true : false);
-    const [inIssue, setInIssue] = useState<boolean>(status === 'litige' ? true : false);
-    const statusValue = getEnumVal(service.status, ServiceStep)
+    const isResp = service.statusS === ServiceStep.STEP_1 ? true : false;
+    const isValidated = service.statusS === ServiceStep.STEP_2 ? true : false;
+    const isFinish = service.statusS === ServiceStep.STEP_3 ? true : false;
+    const inIssue = service.statusS === ServiceStep.STEP_4 ? true : false;
+    const statusInt = getEnumVal(service.statusS, ServiceStep)
+    const isLateValue = isLate(createdAt, 15) && statusInt < 3
+
     const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
+    const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
 
-    const updateStatusFlags = (status: string) => {
-        setIsNew(status === 'nouveau');
-        setIsResp(status === 'en attente');
-        setIsValidated(status === 'en cours');
-        setIsFinish(status === 'terminé');
-        setInIssue(status === 'litige');
-    };
 
-    useEffect(() => {
-        updateStatusFlags(statusS)
-    }, [service])
 
-    const myActions = GenereMyActions(service, "service", deleteService, undefined, late)
+    const myActions = GenereMyActions(service, "service", deleteService, undefined, isLateValue)
     const takenCTA: Action[] = [
         {
             icon: "sync_problem", title: `litige sur  ${title}`,
@@ -52,7 +39,7 @@ export default function ServiceComp(props:
         {
             icon: "person_cancel", title: `annuler ma réponse à ${title}`,
             body: `annuler ma réponse à ${title}`,
-            function: () => { toggleResp(service.id, userId, setService); update && update() },
+            function: async () => { await updateServiceStep(id, ServiceUpdate.CANCEL_RESP); update && update() },
         },
         {
             icon: "groups", title: `Relancer ${title}`,
@@ -104,16 +91,19 @@ export default function ServiceComp(props:
                 </CardBody>
                 <CardFooter className="CardFooter">
                     {mine && mines &&
-                        <ModifBtnStack actions={myActions} icon3={late} update={update} disabled1={statusValue > 2} disabled2={statusValue > 2} />}
+                        <ModifBtnStack actions={myActions} icon3={isLateValue} update={update} disabled1={statusInt > 1} disabled2={statusInt > 1} />}
                     {IResp && mines &&
-                        <ModifBtnStack actions={takenCTA} disabled1={statusValue > 2} disabled2={statusValue > 2} />}
+                        <ModifBtnStack actions={takenCTA} disabled1={statusInt > 1} disabled2={statusInt > 1} />}
                     {!mines &&
                         <ProfileDiv profile={User.Profile} />
                     }
                     <div className="flex items-center gap-2">
 
-                        <Chip size="md" value={`${points.join(' à ')}   pts`} className={` GrayChip  lowercase !font-medium  rounded-full    ${mines && 'hidden md:flex'}`} icon=
-                            {<Icon icon="fiber_manual_record" title={`Ce service ${typeS === "offre" ? 'coute' : 'offre'} ${points.join(' à ')}pts`} fill={user.Profile.points > points[0]} color={typeS === "offre" ? "green" : "orange"} size="2xl" style="!py-0 -mt-1.5" />}>
+                        <Chip size="md"
+                            value={`${points.join(' à ')}   pts`}
+                            className={`!px-4 GrayChip  lowercase !font-medium  rounded-full ${mines && 'hidden md:flex'}`}
+                            icon=
+                            {<Icon icon="toll" title={`Ce service ${service.typeS === ServiceType.GET ? 'vous fais gagner' : 'coute'} ${points.join(' à ')}pts`} fill={user.Profile.points > points[0]} color={service.typeS === ServiceType.GET ? "green" : "orange"} size="2xl" style="!py-0 -mt-1.5 pl-2" />}>
                         </Chip>
 
                         <Icon icon="arrow_circle_right" link={`/service/${id}`} title={`voir les details de service  ${title}`} size="4xl px-1" fill />

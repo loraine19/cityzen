@@ -33,12 +33,32 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
 
     const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${Address.lat},${Address.lng}`;
 
+    const IntenaryChip = () => (<Link
+        style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}
+        to={googleMapsLink}
+        target="_blank"
+        rel="noopener noreferrer">
+        <Chip
+            value='itineraire'
+            className='CyanChip rounded-full shadow'
+            size='sm' />
+    </Link>)
+
     return (
         <Popover open={open} >
             <PopoverHandler>
-                <div className=' relative flex flex-1 min-h-[5.5rem]  !h-[100%] !rounded-2xl  shadow mb-2'>
-                    <Icon icon='expand_content' fill size='2xl' onClick={() => setOpen(true)} style={'absolute lg:top-0 right-0 rounded-full !z-50 !px-1.5 '} title='Ouvrir la carte' />
-                    <MapContainer center={position} zoom={16} scrollWheelZoom={false} className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
+                <div className=' relative flex flex-1 min-h-[5.5rem] !h-[100%] !rounded-2xl  shadow mb-2'>
+                    <Icon
+                        icon='expand_content'
+                        fill size='2xl'
+                        onClick={() => setOpen(true)}
+                        style={'absolute lg:top-0 right-0 rounded-full !z-50 !px-1.5 '}
+                        title='Ouvrir la carte' />
+                    <MapContainer
+                        center={position}
+                        zoom={16}
+                        scrollWheelZoom={false}
+                        className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
                         <TileLayer
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
                         />
@@ -53,21 +73,23 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                         >
                             <Popup>
                                 {message || `${Address?.address} ${Address?.city}`}
-                                <br />
                             </Popup>
                         </Marker>
-                        {!message && <FlyToMarker position={position} />}
-                        <Link style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }} to={googleMapsLink} target="_blank" rel="noopener noreferrer">
-                            <Chip value='itineraire' color='cyan' className='CyanChip rounded-full shadow' size='sm' />
-                        </Link>
+                        {!message &&
+                            <FlyToMarker position={position} />}
+                        <IntenaryChip />
                     </MapContainer>
                 </div>
             </PopoverHandler >
             <PopoverContent>
                 <div className='Map flex flex-col FixedCenter'>
-                    <Icon icon='cancel' fill size='3xl' onClick={() => setOpen(false)} style={' !px-1'} title='Fermer la carte' />
+                    <Icon
+                        icon='cancel'
+                        fill size='3xl'
+                        onClick={() => setOpen(false)}
+                        style={' !px-1'}
+                        title='Fermer la carte' />
                     <MapContainer center={position} zoom={16} scrollWheelZoom={false}
-
                         className='shadow-xl rounded-xl border-2 border-gray-300 flex w-full h-full' >
                         <TileLayer
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
@@ -86,11 +108,8 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                             </Popup>
                         </Marker>
                         {!message && <FlyToMarker position={position} />}
-                        <Link style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }} to={googleMapsLink} target="_blank" rel="noopener noreferrer">
-                            <Chip value='itineraire' color='cyan' className='CyanChip rounded-full shadow' size='sm' />
-                        </Link>
+                        <IntenaryChip />
                     </MapContainer>
-
                 </div>
             </PopoverContent>
         </Popover >

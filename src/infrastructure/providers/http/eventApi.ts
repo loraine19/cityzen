@@ -11,28 +11,11 @@ export class EventApi {
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const categoryR = category ? `&category=${category}` : '';
-        const result = await handleApiCall(() => this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`));
-        return result;
+        return handleApiCall(() => this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`));
     }
 
     async getEventById(id: number): Promise<Event> {
         return handleApiCall(() => this.api.get(`${this.dataType}/${id}`));
-    }
-
-    async getEventsByTag(category: string): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/${category}`));
-    }
-
-    async getEventsByUser(id: number): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/user/${id}`));
-    }
-
-    async getEventsByParticipant(id: number): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/participant/${id}`));
-    }
-
-    async searchEvents(elementToSearch: string): Promise<Event[]> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/search?q=${elementToSearch}`));
     }
 
     async postEvent(event: EventDTO): Promise<Event> {

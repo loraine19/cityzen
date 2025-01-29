@@ -5,8 +5,8 @@ import { Label } from './frontEntities';
 import { getCategories } from '../../infrastructure/services/utilsService';
 
 export enum ServiceType {
-    GET = 'GET',
-    DO = 'DO'
+    GET = 'demande',
+    DO = 'offre'
 }
 export const serviceType = Object.values(ServiceType).filter(type => typeof type === 'string');
 
@@ -122,4 +122,9 @@ export interface ServiceView extends Service {
     points: number[];
     statusS: string;
     toogleResp: () => Promise<ServiceView>;
+}
+
+export type ServicePage = {
+    services: Service[],
+    count: number
 }

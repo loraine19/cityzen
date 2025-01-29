@@ -20,13 +20,15 @@ export const serviceViewModel = ({ serviceUseCase, userUseCase, serviceService }
         queryKey: ['events', mine, type, step, category],
         queryFn: async ({ pageParam = 1 }) => await serviceUseCase.getServices(pageParam, mine, type, step, category) || [],
         initialPageParam: 1,
-        getNextPageParam: (lastPage, pages) => lastPage.length ? pages.length + 1 : undefined
+        getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });
 
-    //const events = eventService.getInfosInEvents(data?.pages.flat(), userId)
-    const services = serviceService.getInfosInServices(data?.pages.flat(), userId)
+    console.log(data)
+    const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
+    const services = serviceService.getInfosInServices(data?.pages.flat().map(page => page.services).flat(), userId)
 
     return {
+      count,
       services,
       refetch,
       fetchNextPage,

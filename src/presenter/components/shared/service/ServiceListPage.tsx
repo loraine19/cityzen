@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { serviceCategories, serviceCategoriesS, ServiceFilter, ServiceStepFilter, ServiceView } from "../../../../domain/entities/Service";
-import { getLabel } from '../../../../infrastructure/services/utilsService';
+import { serviceCategories, serviceCategoriesS, ServiceCategory, ServiceFilter, ServiceStepFilter, ServiceView } from "../../../../domain/entities/Service";
+import { getLabel, handleScroll } from '../../../../infrastructure/services/utilsService';
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -25,7 +25,7 @@ export default function ServicesPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
     const serviceViewModelFactory = DI.resolve('serviceViewModel');
-    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch } = serviceViewModelFactory(mine, type, step, category);
+    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory(mine, type, step, category);
     const [customFilter, setCustomFilter] = useState<boolean>(false);
     const [customList, setCustomList] = useState<ServiceView[]>([]);
 
@@ -34,6 +34,7 @@ export default function ServicesPage() {
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé", "litige"];
+    const filterName = (): string => mine && 'les miens' || filter === ServiceFilter.GET && 'demande' || filter === ServiceFilter.DO && 'offre' || ''
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
 
     const CheckboxesFilter = () => {
@@ -83,6 +84,7 @@ export default function ServicesPage() {
     ]
 
     const search = (searchLabel: Label) => {
+        console.log(searchLabel);
         setCustomFilter(false);
         const value = searchLabel.value;
         const label = searchLabel.label;
@@ -90,7 +92,7 @@ export default function ServicesPage() {
             setCategory(value);
             setParams({ search: tabSelected, category: value });
         }
-        else {
+        else if (label !== 'tous') {
             setCustomFilter(true);
             setCustomList(services && services.filter((service: ServiceView) =>
                 service.category.toString() === value ||
@@ -101,12 +103,12 @@ export default function ServicesPage() {
     };
 
     useEffect(() => {
-        !isLoading && setNotif(services.length > 0 ? '' : `Aucun service ${tabSelected} ${category !== '' && category ? ' ' + searchCat.label.toLowerCase() : ''} n'a été trouvé`);
+        !isLoading && setNotif(count > 0 ? '' : `Aucun service ${tabSelected} ${category !== '' && category ? ' ' + searchCat.label.toLowerCase() : ''} n'a été trouvé`);
     }, [services]);
 
     useEffect(() => {
         const notifUpdate =
-            (services.length === 0 && !isLoading) &&
+            (count === 0 && !isLoading) &&
             `Aucun service ${filter !== '' ? getLabel(filter, serviceTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, serviceCategories).toLowerCase() : ''} n'a été trouvé`
             || error && "Erreur lors du chargement des services, veuillez réessayer plus tard"
             || '';
@@ -115,25 +117,12 @@ export default function ServicesPage() {
 
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
-        }
-    };
 
     return (
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader qty={services.length} type={`service ${category !== '' ? 'pou' : ''}`} />
+                <SubHeader qty={count} type={`services ${filterName()} ${category ? ServiceCategory[category as string as keyof typeof ServiceCategory] : ''}`} />
                 <TabsMenu labels={serviceTabs} />
                 {mine ?
                     <CheckCard categoriesArray={boxArray} boxSelected={boxSelected} setBoxSelected={setBoxSelected} />
@@ -143,7 +132,7 @@ export default function ServicesPage() {
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
             <main ref={divRef}
-                onScroll={handleScroll} className="Grid">
+                onScroll={() => handleScroll(divRef.current, setIsBottom, hasNextPage, fetchNextPage)} className="Grid">
 
                 {isLoading || error ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
@@ -172,7 +161,10 @@ export default function ServicesPage() {
                                     update={refetch} />
                             </div>
                         ))}
-                <LoadMoreButton isBottom={isBottom} hasNextPage={hasNextPage} handleScroll={handleScroll} />
+                <LoadMoreButton
+                    isBottom={isBottom}
+                    hasNextPage={hasNextPage}
+                    handleScroll={() => handleScroll(divRef.current, setIsBottom, hasNextPage, fetchNextPage)} />
             </main>
             <NavBarBottom addBtn={true} />
         </div>

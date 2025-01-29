@@ -22,11 +22,17 @@ export default function NavBarTop() {
                         />
                     </MenuHandler>
                     <MenuList className="!rounded-xl !shadow-xl ">
+                        <MenuItem className="flex items-center gap-2 !rounded-full !py-1">
+                            <Icon icon="toll" fill />
+                            <Typography variant="small" className="font-medium">
+                                {user?.Profile?.points} points
+                            </Typography>
+                        </MenuItem>
                         <MenuItem className="flex items-center gap-2 !rounded-full !py-1"
                             onClick={() => navigate('/')}>
                             <Icon icon="home" fill />
                             <Typography variant="small" className="font-medium">
-                                Home
+                                Accueil
                             </Typography>
                         </MenuItem>
                         <MenuItem className="flex items-center gap-2 !rounded-full !py-1"
@@ -34,12 +40,6 @@ export default function NavBarTop() {
                             <Icon icon="person_edit" fill />
                             <Typography variant="small" className="font-medium">
                                 Modifier mon profil
-                            </Typography>
-                        </MenuItem>
-                        <MenuItem className="flex items-center gap-2 !rounded-full !py-1">
-                            <Icon icon="inbox" fill />
-                            <Typography variant="small" className="font-medium">
-                                Inbox
                             </Typography>
                         </MenuItem>
                         <hr className="my-2 border-blue-gray-50" />

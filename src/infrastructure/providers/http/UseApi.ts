@@ -41,7 +41,7 @@ export const useApi = (): Api => {
                 logWithTime('not api error');
                 if (!originalRequest._retry) {
                     originalRequest._retry = true;
-                    if (!window.location.pathname.includes('/signin')) {
+                    if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
                         setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
                     }
                     return Promise.reject(new ApiError(error.code, error.message));
@@ -99,7 +99,7 @@ export const useApi = (): Api => {
 export const refreshAccess = async (): Promise<boolean> => {
     let refreshToken = Cookies.get('refreshToken') || localStorage.getItem('refreshToken');
     if (window.location.pathname.includes('/sign')) return false;
-    if (!refreshToken && !window.location.pathname.includes('/signin')) {
+    if (!refreshToken && !window.location.pathname.includes('/sign')) {
         window.location.replace('/signin?msg=merci de vous connecter');
     }
     try {
@@ -110,7 +110,7 @@ export const refreshAccess = async (): Promise<boolean> => {
         return true;
     } catch (error) {
 
-        if (!window.location.pathname.includes('/signin')) {
+        if (!window.location.pathname.includes('/sign')) {
             setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter'), 5000)
         }
         return false;

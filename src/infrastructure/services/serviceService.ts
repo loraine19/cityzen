@@ -42,7 +42,7 @@ export class ServiceService implements serviceServiceI {
         const base = Number(((hard / 2 + skill / 2) + 1).toFixed(1))
         const points =
             userResp && [base + userRespPoints / 2] ||
-            ServiceType[service.type] === ServiceType.DO && [base + userPoints / 2] ||
+            ServiceType[service.type as string as keyof typeof ServiceType] === ServiceType.DO && [base + userPoints / 2] ||
             [base, (base + 1.5)]
         return points
     }
@@ -55,10 +55,10 @@ export class ServiceService implements serviceServiceI {
             IResp: service.userIdResp ? service.userIdResp === userId : false,
             flagged: service.Flags ? service?.Flags?.some((flag: Flag) => flag.userId === userId) : false,
             mine: service.userId === userId,
-            typeS: ServiceType[service.type] === ServiceType.GET ? 'demande' : 'offre',
+            typeS: ServiceType[service.type as string as keyof typeof ServiceType],
             isLate: service.createdAt ? this.isLate(service.createdAt, 15) : false,
             points: this.GetPoints(service, service.User?.Profile),
-            categoryS: ServiceCategory[service.category as unknown as keyof typeof ServiceCategory],
+            categoryS: ServiceCategory[service.category as string as keyof typeof ServiceCategory],
             toogleResp: async () => {
                 const newservice = await this.toggleResp(service, userId);
                 console.log(newservice);

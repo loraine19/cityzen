@@ -1,5 +1,5 @@
 
-import { Event, EventDTO } from "../../domain/entities/Event";
+import { Event, EventDTO, EventPage } from "../../domain/entities/Event";
 import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
 
 export class EventUseCase {
@@ -9,22 +9,22 @@ export class EventUseCase {
         this.eventRepository = eventRepository;
     }
 
-    public async getEvents(page?: number, filter?: string, category?: string): Promise<Event[]> {
-        const events = await this.eventRepository.getEvents(page, filter, category);
-        return events;
+    public async getEvents(page?: number, filter?: string, category?: string): Promise<EventPage> {
+        return await this.eventRepository.getEvents(page, filter, category);
     }
 
     public async getEventById(id: number): Promise<Event> {
         return await this.eventRepository.getEventById(id)
     }
 
-    public async createEvent(data: EventDTO): Promise<Event> {
-        return await this.eventRepository.createEvent(data)
+    public async postEvent(data: EventDTO): Promise<Event> {
+        return await this.eventRepository.postEvent(data)
     }
 
     public async updateEvent(id: number, data: EventDTO): Promise<Event> {
         return await this.eventRepository.updateEvent(id, data)
     }
+
 
     public async deleteEvent(id: number): Promise<void> {
         return await this.eventRepository.deleteEvent(id)

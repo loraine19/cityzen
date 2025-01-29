@@ -1,5 +1,5 @@
 
-import { Service, ServiceDTO, ServiceUpdate } from "../../domain/entities/Service";
+import { Service, ServiceDTO, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
 import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
 
 export class ServiceUseCase {
@@ -9,9 +9,8 @@ export class ServiceUseCase {
         this.serviceRepository = serviceRepository;
     }
 
-    public async getServices(page?: number, mine?: boolean, type?: string, step?: string, category?: string): Promise<Service[]> {
-        const events = await this.serviceRepository.getServices(page, mine, type, step, category);
-        return events;
+    public async getServices(page?: number, mine?: boolean, type?: string, step?: string, category?: string): Promise<ServicePage> {
+        return await this.serviceRepository.getServices(page, mine, type, step, category);
     }
 
     public async getServiceById(id: number): Promise<Service> {

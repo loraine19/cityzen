@@ -18,7 +18,7 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0)
     return (
-        <div className="flex gap-2 items-center  w-full">
+        <div className="flex   gap-3 items-center w-full">
             <ConfirmModal
                 open={open}
                 handleOpen={() => setOpen(false)}
@@ -31,18 +31,18 @@ export default function ModifBtnStack(props: ModifBtnStackProps) {
                 title={buttons[index].title as string}
                 element={buttons[index].body as any} />
 
-            <div className={`flex gap-2 items-center`}>
-                <Icon icon={buttons[0].icon as string} color={'red'} onClick={() => { setOpen(true), setIndex(0) }}
-                    bg size="2xl" style={"shadow rounded-full min-w-min"} disabled={disabled1} title={buttons[0].title as string} />
 
-                <Icon icon={buttons[1].icon as string} color={'orange'} onClick={() => { setOpen(true), setIndex(1) }}
-                    bg size="2xl" style={"shadow rounded-full min-w-min "} disabled={disabled2} title={buttons[1].title as string} />
+            <Icon icon={buttons[0].icon as string} color={'red'} onClick={() => { setOpen(true), setIndex(0) }}
+                bg size="2xl" style={"shadow rounded-full"} disabled={disabled1} title={buttons[0].title as string} />
 
-                {icon3 &&
-                    <Icon icon={buttons[2].icon as string} color={'cyan'} onClick={() => { setOpen(true), setIndex(2) }}
-                        bg size="2xl" style={"shadow rounded-full"} title={buttons[2].title as string} />
-                }
-            </div></div>
+            <Icon icon={buttons[1].icon as string} color={'orange'} onClick={() => { setOpen(true), setIndex(1) }}
+                bg size="2xl" style={"shadow rounded-full "} disabled={disabled2} title={buttons[1].title as string} />
+
+            {icon3 &&
+                <Icon icon={buttons[2].icon as string} color={'cyan'} onClick={() => { setOpen(true), setIndex(2) }}
+                    bg size="2xl" style={"shadow rounded-full"} title={buttons[2].title as string} />
+            }
+        </div>
     );
 }
 

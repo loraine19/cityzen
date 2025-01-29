@@ -54,7 +54,7 @@ export function SurveyCard(props: SurveyCardProps) {
                         <button onClick={() => { change() }}>
                             <Chip value='Sondage' size="sm" className="!px-3 min-w-max rounded-full h-max OrangeChip" ></Chip>
                         </button>
-                        <Chip value={category} size="sm" className="!px-3 min-w-max rounded-full h-max" color="cyan"></Chip>
+                        <Chip value={category} size="sm" className="CyanChip"></Chip>
                     </div>
                     <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
                 </div>

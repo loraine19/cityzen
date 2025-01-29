@@ -134,6 +134,8 @@ export async function addressIn(formik: any, newElement: EventView | Profile) {
     formik.values.addressId = formik.values.Address.id
 }
 
+export const formatDateForDB = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0]);
+
 export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
     let file = event.target.files[0];
     formik.values.image = file as File;
@@ -156,7 +158,7 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
             icon: handleOpen ? 'Supprimer' : 'close',
             title: "Confirmer la suppression",
             body: "Confirmer la suppression de " + title,
-            function: async () => { await deleteRoute(id); handleOpen && handleOpen() && location.reload() },
+            function: async () => { await deleteRoute(id); handleOpen && handleOpen() && navigate(`/${type}`) },
         },
         {
             icon: handleOpen ? 'Modifier' : 'edit',
@@ -240,3 +242,17 @@ export const generateContact = (user: User): string => {
 
 
 
+
+export const handleScroll = (divRef: any, setIsBottom: any, hasNextPage: any, fetchNextPage: any) => {
+    if (divRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+        if (scrollTop + clientHeight + 2 >= scrollHeight) {
+            setIsBottom(true);
+            if (hasNextPage) {
+                fetchNextPage();
+            }
+        } else {
+            setIsBottom(false);
+        }
+    }
+};

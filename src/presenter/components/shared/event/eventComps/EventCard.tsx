@@ -15,8 +15,8 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
     const [event, setEvent] = useState<EventView>(initialEvent);
     const { updateNotif, notifList } = useNotificationStore();
     const { id, title, description, category, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink, eventDateInfo } = event;
-    const disabledDelete = pourcent >= 100;
-    const disenbleEdit = pourcent > 0;
+    const disabledDelete = new Date(start).getTime() < Date.now();
+    const disabledEdit = new Date(start).getTime() < Date.now();
     const deleteEvent = async (id: number) => await DI.resolve('eventUseCase').deleteEvent(id);
     const actions = GenereMyActions(event, "evenement", deleteEvent);
     const haveImage = Boolean(image);
@@ -59,19 +59,22 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
             <CardFooter className="CardFooter">
                 {!mines ? (
                     <div className="flex w-full items-center gap-2">
-                        <Icon icon='calendar_add_on' onClick={() => window.open(agendaLink)} title={`ajouter a mon agenda ${title}`} bg size='2xl' style='border-2 border-white !px-0 h-9 !w-9 flex-0 pt-2 -mr-5 hover:z-10' color={Igo ? "cyan" : "gray"} />
+                        <Icon icon='calendar_add_on'
+                            onClick={() => window.open(agendaLink)}
+                            title={`ajouter a mon agenda  : ${title}`}
+                            bg size='2xl' style='border-2 border-white !px-0 h-9 !w-9 flex-0  -mr-5 hover:z-10' color={Igo ? "cyan" : "gray"} />
                         <AvatarStack avatarDatas={event.Participants} />
                     </div>
                 ) : (
-                    <ModifBtnStack disabled1={disenbleEdit} disabled2={disabledDelete} actions={actions} update={update} />
+                    <ModifBtnStack disabled1={disabledDelete} disabled2={disabledEdit} actions={actions} update={update} />
                 )}
                 <div className="flex items-center gap-2">
                     <button onClick={async () => { toogleParticipate && setEvent(await toogleParticipate()); updateNotif(notifList) }}>
                         <Chip
                             value={participantsMin}
                             variant="ghost"
-                            className="rounded-full h-max flex items-center gap-2"
-                            icon={<Icon icon="person" fill={Igo} color={Igo ? "cyan" : "gray"} style="-mt-2" title={Igo ? "Je n'y vais plus" : "Je participe"} />}
+                            className="rounded-full h-max flex items-center px-4 gap-2"
+                            icon={<Icon icon="person" fill={Igo} color={Igo ? "cyan" : "gray"} style="-mt-2 pl-2" title={Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>
                     <Icon icon="arrow_circle_right" link={`/evenement/${id}`} title={`voir les details de ${title}`} size="4xl px-1" fill />

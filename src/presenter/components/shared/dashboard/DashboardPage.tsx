@@ -78,10 +78,20 @@ export default function DashboardPage() {
                             </CardHeader>
                             <CardBody className="flex flex-col items-center justify-center px-4 py-1">
                                 <div className="flex gap-2  justify-center items-center">
-                                    <Icon link="/myprofile" icon="person_edit" color="cyan" fill bg size="lg"
+                                    <Icon
+                                        link="/myprofile"
+                                        icon="person_edit"
+                                        color="cyan" fill bg size="lg" style="!px-[0.4em]"
                                         title="ouvrir la page profil" />
-                                    <Icon link="/inbox" icon="diversity_3" color="orange" fill bg size="lg" title="ouvrir la page conciliation" />
-                                    <Icon link="/" icon="two_pager" color='green' fill bg size="lg"
+                                    <Icon
+                                        link="/conciliation"
+                                        icon="diversity_3"
+                                        color="orange" fill bg size="lg" style="!px-[0.4em]"
+                                        title="ouvrir la page conciliation" />
+                                    <Icon
+                                        link="/"
+                                        icon="two_pager"
+                                        color='green' fill bg size="lg" style="!px-[0.4em]"
                                         title="ouvrir la page réglement" />
                                 </div>
                                 <Typography

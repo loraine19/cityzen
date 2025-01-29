@@ -19,7 +19,7 @@ export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
     const eventViewModelFactory = DI.resolve('eventViewModel');
-    const { events, loadingEvents, errorEvents, fetchNextPage, hasNextPage, refetch } = eventViewModelFactory(filter, category);
+    const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(filter, category)
     const [view, setView] = useState("view_agenda");
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
@@ -55,12 +55,12 @@ export default function EventListPage() {
 
     useEffect(() => {
         const notifUpdate =
-            (events.length === 0 && !loadingEvents) &&
+            (events.length === 0 && !isLoading) &&
             `Aucun évènement ${filter !== '' ? getLabel(filter, eventTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ''} n'a été trouvé`
-            || errorEvents && "Erreur lors du chargement des évènements, veuillez réessayer plus tard"
+            || error && "Erreur lors du chargement des évènements, veuillez réessayer plus tard"
             || '';
         setNotif(notifUpdate);
-    }, [events, loadingEvents, errorEvents, filter, category]);
+    }, [events, isLoading, error, filter, category]);
 
     const switchClick = () => {
         setView(view === "view_agenda" ? "event" : "view_agenda");
@@ -88,7 +88,7 @@ export default function EventListPage() {
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader qty={events.length > 9 ? 'plus de 10 ' : events?.length || 0} type={`évènements ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ""}`} />
+                <SubHeader qty={count || 0} type={`évènements ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ""}`} />
                 {view === "view_agenda" && <TabsMenu labels={eventTabs} defaultTab={params.filter || ''} />}
                 <div className={`flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect
@@ -103,7 +103,7 @@ export default function EventListPage() {
             {view === "view_agenda" && (
                 <main ref={divRef}
                     onScroll={handleScroll} className="Grid">
-                    {loadingEvents || errorEvents ?
+                    {isLoading || error ?
                         [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                             <SkeletonGrid
                                 key={index}
@@ -120,7 +120,7 @@ export default function EventListPage() {
 
                 </main>
             )}
-            {view === "event" && !loadingEvents &&
+            {view === "event" && !isLoading &&
                 <main>
                     <CalendarComp />
                 </main>}

@@ -25,7 +25,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-center gap-2 mb-1">
-                            <Chip size="sm" value={`${categoryS}`} className="rounded-full h-max text-ellipsis shadow " color="cyan">
+                            <Chip size="sm" value={`${categoryS}`} className="CyanChip">
                             </Chip>
                             <Chip size="sm" value={typeS} className={`${typeS === "demande" ? "OrangeChip" : "GreenChip"} shadow rounded-full  h-max flex items-center gap-2 font-medium `}>
                             </Chip>
@@ -51,10 +51,10 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     <div className="flex justify-between items-end pt-2 ">
                         <div className="flex  items-center gap-2 mb-1">
                             <Chip value={SkillLevel[skill]} className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
-                                icon={<Icon icon="design_services" size="2xl" fill color="gray" style="pl-4 !-mt-[0.4rem]" title="Compétence" />}>
+                                icon={<Icon icon="design_services" size="2xl" fill color="gray" style="pl-2.5 !-mt-[0.4rem]" title="Compétence" />}>
                             </Chip>
-                            <Chip value={HardLevel[hard]} className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-5"
-                                icon={<Icon icon="signal_cellular_alt" size="2xl" fill color="gray" style="pl-4 !-mt-[0.4rem]" title="Difficulté" />}>
+                            <Chip value={HardLevel[hard]} className=" GrayChip px-5 rounded-full h-full flex items-center justify-center gap-5"
+                                icon={<Icon icon="signal_cellular_alt" size="2xl" fill color="gray" style="pl-2.5 !-mt-[0.4rem]" title="Difficulté" />}>
                             </Chip>
                         </div>
                         {UserResp && !IResp &&

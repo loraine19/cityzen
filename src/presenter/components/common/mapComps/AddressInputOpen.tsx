@@ -29,7 +29,6 @@ export const AddressInputOpen = (props: { address: Address, setAddress: any, err
                         addressdetails: 2,
                     }
                 })
-                console.log(response.data)
                 if (response.data.length > 0) {
                     response.data.sort((a: any, b: any) => b.importance - a.importance)
                     const suggestions: AddressSuggestion[] = response.data.map((result: any) => {
@@ -72,7 +71,7 @@ export const AddressInputOpen = (props: { address: Address, setAddress: any, err
     };
 
     return (
-        <div className='relative z-50'>
+        <div className='relative z-50 '>
             <Input
                 error={error ? true : false}
                 label={error ? Object.values(error).join(', ') : "Adresse"}
@@ -88,7 +87,7 @@ export const AddressInputOpen = (props: { address: Address, setAddress: any, err
             />
             {inputValue.length > 1 && inputLoading && (
                 <div className='z-50 absolute px-0.5 w-full' ref={(el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'end' })}>
-                    <List className='bg-white rounded-xl border border-gray-300 overflow-auto w-full shadow-lg max-h-38'>
+                    <List className='bg-white rounded-xl border border-gray-300 overflow-auto w-full shadow-lg max-h-[7.5rem] '>
                         {suggestions.length > 0 ? (
                             suggestions.map((suggestion, index) => (
                                 suggestion.label !== suggestions[index - 1]?.label &&

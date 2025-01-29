@@ -33,10 +33,10 @@ export function NotifBadge() {
                                             <Typography className="flex items-center gap-1 text-xs font-normal text-blue-gray-500"> {notif.update}
                                             </Typography></div>
                                         <div className="flex items-center justify-between gap-1">
-                                            <Typography variant="small" color="gray" className="font-semibold truncate">
+                                            <Typography variant="small" color="gray" className="font-semibold truncate max-w-[calc(100%-1rem)]">
                                                 {notif.title}
                                             </Typography>
-                                            <Icon icon="arrow_circle_right" link={`/${notif.elementType}/${notif.id}`} color="blue-gray" size="3xl" />
+                                            <Icon icon="chevron_right" fill link={`/${notif.elementType}/${notif.id}`} size="3xl" />
                                         </div>
                                     </MenuItem>)
                                 )}

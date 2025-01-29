@@ -68,12 +68,13 @@ export default function AnnounceDetailPage() {
                         <AnnounceDetailComp post={post} mines={isMine} change={() => { }} />
                     </div>}
             </main>
-
-            {isMine ?
-                <CTAMines actions={myActions} /> :
-                <CTAMines actions={ContactActions}
-                    disabled1={share.find((s: string) => s === "PHONE") ? false : true}
-                    disabled2={share.find((s: string) => s === "EMAIL") ? false : true} />}
+            <footer>
+                {isMine ?
+                    <CTAMines actions={myActions} /> :
+                    <CTAMines actions={ContactActions}
+                        disabled1={share.find((s: string) => s === "PHONE") ? false : true}
+                        disabled2={share.find((s: string) => s === "EMAIL") ? false : true} />}
+            </footer>
         </div>
     );
 }

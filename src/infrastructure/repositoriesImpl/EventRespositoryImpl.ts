@@ -1,6 +1,6 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
-import { Event, EventDTO } from "../../domain/entities/Event";
+import { Event, EventDTO, EventPage } from "../../domain/entities/Event";
 
 interface IData extends EventRepositoryBase {
     api: any;
@@ -11,7 +11,7 @@ export class EventRepositoryImpl implements EventRepositoryBase {
     private eventData: IData;
     constructor({ eventData }: { eventData: IData }) { this.eventData = eventData }
 
-    public async getEvents(page?: number, filter?: string, category?: string): Promise<Event[]> {
+    public async getEvents(page?: number, filter?: string, category?: string): Promise<EventPage> {
         return await this.eventData.getEvents(page, filter, category);
     }
 
@@ -19,8 +19,8 @@ export class EventRepositoryImpl implements EventRepositoryBase {
         return this.eventData.getEventById(id);
     }
 
-    public async createEvent(data: EventDTO): Promise<Event> {
-        return this.eventData.createEvent(data);
+    public async postEvent(data: EventDTO): Promise<Event> {
+        return this.eventData.postEvent(data);
     }
 
     public async updateEvent(id: number, data: EventDTO): Promise<Event> {

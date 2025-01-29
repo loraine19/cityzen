@@ -68,11 +68,13 @@ export default function SurveyDetailPage() {
                         <SurveyDetailCard element={element} mines={isMine} change={() => { }} />
                     </div>}
             </main>
-
-            {isMine ?
-                <CTAMines actions={myActions} /> :
-                <CTAMines actions={Actions} />}
+            <footer>
+                {isMine ?
+                    <CTAMines actions={myActions} /> :
+                    <CTAMines actions={Actions} />}
+            </footer>
         </div>
+
     );
 }
 

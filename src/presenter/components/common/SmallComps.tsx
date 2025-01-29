@@ -11,16 +11,14 @@ export function DateChip(props: { start: Date | string, end?: Date | string, end
     const { start, end, prefix, ended } = props
     const now = new Date();
     const endDate: string = end && new Date(end).toLocaleDateString('fr-FR') || ''
-    const endDays: number = Math.floor((new Date(start).getTime() + 15 * dayMS - (now.getTime())) / dayMS)
+    const endDays: number = Math.ceil(((new Date(start).getTime()) - (now.getTime())) / dayMS)
     const dateClass = (() => {
         switch (true) {
-            case !end:
-                return "GrayChip";
-            case endDays <= 0:
+            case endDays <= 4 && endDays > 0:
                 return "RedChip";
-            case endDays < 5:
+            case endDays > 4 && endDays <= 15:
                 return "OrangeChip";
-            case endDays > 19:
+            case endDays > 15:
                 return "GreenChip";
             default:
                 return "GrayChip";
@@ -32,12 +30,15 @@ export function DateChip(props: { start: Date | string, end?: Date | string, end
                 return `${prefix} ${new Date(start).toLocaleDateString('fr-FR')}`;
             case ended:
                 return `finis le ${endDate}`;
-            case endDays > 5:
+            case endDays > 4:
                 return `${prefix} ${endDays} jours`;
             case endDays > 0:
                 return `il reste ${endDays} jours`;
+            case endDays === 0:
+                return `aujourd'hui`;
+
             default:
-                return '';
+                return ``;
         }
     })();
     return (
@@ -64,7 +65,7 @@ export function Icon(props: {
     const { title, icon, disabled, onClick } = props
     let size = props.size || "2xl"
     size === '5xl' && (size = '[2.8rem]')
-    const pad = props.bg ? 'px-[10%] pb-[2%]' : 'px-1'
+    const pad = props.bg ? 'px-[0.28em] pb-[0.03em]' : 'px-1'
     const fill = props.fill ? "fillThin" : ""
     const color = !disabled ? props.color : "gray"
     const textColor = props.color && `text-${color}-700` || "text-gray-900"

@@ -1,19 +1,16 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServiceStep, ServiceUpdate } from '../../../../domain/entities/Service';
-import { getEnumVal, isLate, GenereMyActions, toggleValidResp, generateContact, toggleResp } from '../../../../infrastructure/services/utilsService';
+import { getEnumVal, isLate, GenereMyActions, generateContact, } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import ServiceDetailComp from './servicesComps/ServiceDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
-import { useUserStore } from '../../../../application/stores/user.store';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 
 export default function ServiceDetailPage() {
     const { id } = useParams();
-    const { user } = useUserStore()
-    const userId = user.id
     const navigate = useNavigate();
 
     const idS = id ? parseInt(id) : 0;
@@ -21,7 +18,7 @@ export default function ServiceDetailPage() {
     const { service, isLoading, error, refetch } = serviceIdViewModelFactory(idS);
 
     const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
-    const putServiceFinish = async (id: number) => await DI.resolve('serviceUseCase').updateServiceStep(id, ServiceUpdate.FINISH);
+    const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
 
     const isNew = service.statusS === ServiceStep.STEP_0 ? true : false;
     const isResp = service.statusS === ServiceStep.STEP_1 ? true : false;
@@ -29,28 +26,29 @@ export default function ServiceDetailPage() {
     const isFinish = service.statusS === ServiceStep.STEP_3 ? true : false;
     const inIssue = service.statusS === ServiceStep.STEP_4 ? true : false;
     const statusInt = getEnumVal(service.statusS, ServiceStep)
+    const isLateValue = (isLate(service.createdAt, 15) && statusInt < 1)
 
     const { typeS, categoryS, mine, IResp } = service
     const generateActions = (): Action[] => {
-        const myAction = GenereMyActions(service, "service", deleteService, () => { });
+        const myAction = GenereMyActions(service, "service", deleteService, () => { }, isLateValue);
         let actions: Action[] = [];
         switch (true) {
             case (!IResp && !mine || isFinish):
                 actions = [
                     {
                         icon: isNew ? 'Répondre au service' : isFinish ? 'ce service est terminé' : 'Service en cours',
-                        title: isNew ? 'Répondre au service' : '',
+                        title: isNew ? 'Nous envoyerons un message à ' + service.User?.email + ' pour le premier contact' : '',
                         body: service?.title,
-                        function: isNew ? () => toggleResp(service.id, userId, refetch) : () => { },
+                        function: isNew ? async () => { updateServiceStep(service.id, ServiceUpdate.POST_RESP); location.reload() } : () => { },
                     },
                 ];
                 break;
             case (mine && isNew):
                 actions = [...myAction];
-                if (isLate(service.createdAt, 15)) {
+                if (isLateValue && !isResp) {
                     actions.push({
                         icon: 'Relancer',
-                        title: 'Relancer le service',
+                        title: 'Relancer le service - ',
                         body: 'Relancer le service',
                         function: () => { console.log('Relancer le service'); },
                     });
@@ -60,16 +58,16 @@ export default function ServiceDetailPage() {
                 actions = [
                     ...myAction,
                     {
-                        icon: 'Valider',
+                        icon: 'Valider ',
                         title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
-                        body: `${service?.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
-                        function: () => toggleValidResp(service.id, service.UserResp.id, refetch),
+                        body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone} , ${service?.points} points seront débités de votre compte, et crédités à ${service.UserResp?.Profile.firstName} après validation de la fin du service`,
+                        function: async () => { updateServiceStep(service.id, ServiceUpdate.VALID_RESP); location.reload() },
                     },
                     {
-                        icon: 'Refuser',
+                        icon: 'Refuser ',
                         title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
-                        body: `${service?.title} - ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
-                        function: () => toggleValidResp(service.id, 0, refetch),
+                        body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+                        function: async () => { updateServiceStep(service.id, ServiceUpdate.CANCEL_RESP); location.reload() },
                     },
                 ];
                 break;
@@ -84,8 +82,8 @@ export default function ServiceDetailPage() {
                     {
                         icon: 'terminer',
                         title: 'Terminer le service',
-                        body: `${service?.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${service?.points} points`,
-                        function: async () => await putServiceFinish(service.id),
+                        body: `${service?.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${service?.points} points, Nous enverrons un message à ${service.UserResp?.email} `,
+                        function: async () => { updateServiceStep(service.id, ServiceUpdate.FINISH), refetch() }
                     },
                 ];
                 break;
@@ -95,13 +93,9 @@ export default function ServiceDetailPage() {
                         icon: isResp ? 'Annuler votre réponse' : isValidated ? "Besoin d'aide ?" : '',
                         title: isResp ? 'Annuler votre réponse' : isValidated ? "Ouvrir une demande de conciliation?" : '',
                         body: isResp ? service?.title : isValidated ? `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` : '',
-                        function: () => {
-                            if (isResp) {
-                                toggleResp(service.id, userId, refetch);
-                            }
-                            if (isValidated) {
-                                navigate(`/conciliation/create/${service.id}`);
-                            }
+                        function: async () => {
+                            if (isResp) { await updateServiceStep(service.id, ServiceUpdate.CANCEL_RESP); location.reload() };
+                            if (isValidated) navigate(`/conciliation/create/${service.id}`);
                         },
                     },
                 ];

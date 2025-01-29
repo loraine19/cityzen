@@ -16,7 +16,7 @@ export default function CTAMines(props: CTAMinesProps) {
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0)
     return (
-        <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 overflow-y-auto `}>
+        <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 h-max overflow-y-auto `}>
             <ConfirmModal
                 open={open}
                 handleOpen={() => setOpen(false)}

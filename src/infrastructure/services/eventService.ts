@@ -1,5 +1,5 @@
 //src/infrastructure/services/eventService.ts
-import { EventView, Event } from "../../domain/entities/Event";
+import { EventView, Event, EventCategory } from "../../domain/entities/Event";
 import { Flag } from "../../domain/entities/Flag";
 import { dayMS, defaultEventImage } from "../../domain/entities/frontEntities";
 import { Participant } from "../../domain/entities/Participant";
@@ -113,7 +113,7 @@ export class EventService implements EventServiceI {
             ...event,
             image: event.image ? event.image : this.getImageForCategory(event?.category?.toString()),
             days: this.getDays(event),
-            label: event.category?.toString(),
+            label: EventCategory[event.category as unknown as keyof typeof EventCategory],
             Igo: event.Participants ? event.Participants.some((participant: Participant) => participant.userId === userId) : false,
             flagged: event.Flags ? event?.Flags?.some((flag: Flag) => flag.userId === userId) : false,
             mine: event.userId === userId,
@@ -123,7 +123,6 @@ export class EventService implements EventServiceI {
             isValidate: event.Participants.length >= event.participantsMin,
             toogleParticipate: async () => {
                 const newEvent = await this.toggleParticipant(event, userId);
-                console.log(newEvent);
                 return this.mapEventToEventView(newEvent, userId);
             }
         };

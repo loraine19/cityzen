@@ -8,31 +8,30 @@ import { Event } from '../../domain/entities/Event';
 export const eventViewModel = ({ eventUseCase, userUseCase, eventService }: { eventUseCase: EventUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
   return (filter?: string, category?: string) => {
 
-    //// Get user id
     const { data: user, isLoading: loadingUser } = useQuery({
       queryKey: ['userMe'],
       queryFn: async () => await userUseCase.getUserMe()
     })
     const userId = loadingUser ? 0 : user?.id
 
-    //// Get all events and add infos
-    const { data, isLoading: loadingEvents, error: errorEvents, fetchNextPage, hasNextPage, refetch }
+    const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['events', filter, category],
-        queryFn: async ({ pageParam = 1 }) => await eventUseCase.getEvents(pageParam, filter, category) || [],
+        queryFn: async ({ pageParam = 1 }) => await eventUseCase.getEvents(pageParam, filter, category) || { events: [], count: 0 },
         initialPageParam: 1,
-        getNextPageParam: (lastPage, pages) => lastPage.length ? pages.length + 1 : undefined
+        getNextPageParam: (lastPage, pages) => lastPage.events?.length ? pages.length + 1 : undefined
       });
-
-    const events = eventService.getInfosInEvents(data?.pages.flat(), userId)
+    const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
+    const events = eventService.getInfosInEvents(data?.pages.flat().map(page => page.events).flat(), userId)
 
     return {
+      count,
       events,
       refetch,
       fetchNextPage,
       hasNextPage,
-      loadingEvents,
-      errorEvents,
+      isLoading,
+      error
     };
   }
 }

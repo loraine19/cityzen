@@ -20,6 +20,8 @@ export default function EventDetailPage() {
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
     const [eventLoad, setEventLoad] = useState<EventView>(event);
     const deleteEvent = async (id: number) => await DI.resolve('eventUseCase').deleteEvent(id);
+    const disabledDelete = new Date(event?.start).getTime() < Date.now();
+    const disabledEdit = new Date(event?.start).getTime() < Date.now();
     const myActions = event && GenereMyActions(event, "evenement", deleteEvent, () => { });
 
     const buttons: Action[] = [
@@ -51,16 +53,18 @@ export default function EventDetailPage() {
                     <EventDetailCard EventLoad={eventLoad} setEventLoad={setEventLoad} /> :
                     <Skeleton />}
             </main>
-            {eventLoad.mine && !loadingEvent ?
-                <CTAMines actions={myActions}
-                    disabled1={event?.Participants?.length > 0}
-                    disabled2={eventLoad.isValidate} />
-                :
-                <CTAMines
-                    disabled1={false}
-                    disabled2={eventLoad.Igo}
-                    actions={buttons} />
-            }
+            <footer>
+                {eventLoad.mine && !loadingEvent ?
+                    <CTAMines actions={myActions}
+                        disabled1={disabledDelete}
+                        disabled2={disabledEdit} />
+                    :
+                    <CTAMines
+                        disabled1={false}
+                        disabled2={eventLoad.Igo}
+                        actions={buttons} />
+                }
+            </footer>
         </div>
     );
 }
