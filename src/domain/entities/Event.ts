@@ -1,6 +1,7 @@
-import { getCategories } from "../../infrastructure/services/utilsService";
+//import { getEnumLabel } from "../../infrastructure/services/utilsService";
 import { Address } from "./Address";
 import { Flag } from "./Flag";
+import { Label } from "./frontEntities";
 import { Group } from "./Group";
 import { Participant } from "./Participant";
 import { User } from "./User";
@@ -12,9 +13,18 @@ export enum EventCategory {
     CATEGORY_4 = 'blob',
     CATEGORY_5 = 'autre',
 }
+export const getEnumLabel = (enumArray: any, all?: boolean): Label[] => {
+    const allLabel = { label: 'tous', value: '' }
+    const array = [...Object.keys(enumArray).map(key => ({
+        label: enumArray[key as keyof typeof enumArray],
+        value: key,
+    }))];
+    all && array.unshift(allLabel as Label);
+    return array
+};
 
-export const eventCategoriesS = getCategories(EventCategory, true);
-export const eventCategories = getCategories(EventCategory);
+export const eventCategoriesS = getEnumLabel(EventCategory, true);
+export const eventCategories = getEnumLabel(EventCategory);
 
 export class Event {
     Address: Address = new Address();

@@ -1,8 +1,8 @@
+import { ApiService } from "../../infrastructure/providers/http/UseApi";
 import { Post, PostDTO } from "../entities/Post";
-import { createFormData, handleApiCall } from "../../infrastructure/providers/http/utilsApi";
-import { useApi } from "../../infrastructure/providers/http/UseApi";
 
-const api = useApi();
+
+const api: ApiService = new ApiService();
 const dataType = "posts";
 
 export interface PostRepository {
@@ -18,24 +18,24 @@ export interface PostRepository {
 }
 
 export class PostService implements PostRepository {
-    getPosts = async (): Promise<Post[]> => handleApiCall(() => api.get(dataType));
-    getPostsMore = async (): Promise<Post[]> => handleApiCall(() => api.get(dataType));
-    getPostsByTag = async (category: string): Promise<Post[]> => handleApiCall(() => api.get(`${dataType}/${category}`));
-    getPostById = async (id: number): Promise<Post> => handleApiCall(() => api.get(`${dataType}/${id}`));
-    getPostsMines = async (): Promise<Post[]> => handleApiCall(() => api.get(`${dataType}/mines`));
-    getPostsIlike = async (): Promise<Post[]> => handleApiCall(() => api.get(`${dataType}/ilike`));
-    deletePost = async (id: number): Promise<Post> => handleApiCall(() => api.delete(`${dataType}/${id}`));
+    getPosts = async (): Promise<Post[]> => api.get(dataType)
+    getPostsMore = async (): Promise<Post[]> => api.get(dataType)
+    getPostsByTag = async (category: string): Promise<Post[]> => api.get(`${dataType}/${category}`)
+    getPostById = async (id: number): Promise<Post> => api.get(`${dataType}/${id}`)
+    getPostsMines = async (): Promise<Post[]> => api.get(`${dataType}/mines`)
+    getPostsIlike = async (): Promise<Post[]> => api.get(`${dataType}/ilike`)
+    deletePost = async (id: number): Promise<Post> => api.delete(`${dataType}/${id}`)
 
     patchPost = async (id: number, post: PostDTO): Promise<Post> => {
-        const formData = createFormData(post);
-        return handleApiCall(() => api.patch(`${dataType}/${id}`, formData, {
+        const formData = api.createFormData(post);
+        return api.patch(`${dataType}/${id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        }));
+        })
     }
     postPost = async (post: PostDTO): Promise<Post> => {
-        const formData = createFormData(post);
-        return handleApiCall(() => api.post(dataType, formData, {
+        const formData = api.createFormData(post);
+        return api.post(dataType, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        }));
+        })
     }
 }

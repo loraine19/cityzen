@@ -12,20 +12,15 @@ export class UserRepositoryImpl implements UserRepositoryBase {
     constructor({ userData }: { userData: IUserData }) { this.userData = userData }
 
     public async getUserMe(): Promise<User> {
+        console.log('getUserMe', await this.userData.getUserMe());
         return this.userData.getUserMe();
     }
 
-    public async getUserById(id: number): Promise<User> {
-        return this.userData.getUserById(id);
-    }
 
     public async getUsersModos(): Promise<User[]> {
         return this.userData.getUsersModos();
     }
 
-    public async getUsers(): Promise<User[]> {
-        return this.userData.getUsers();
-    }
 
     public async updateUser(data: UserDTO): Promise<User> {
         return this.userData.updateUser(data);

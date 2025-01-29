@@ -1,9 +1,8 @@
+import { ApiService } from "../../infrastructure/providers/http/UseApi";
 import { Pool, PoolDTO } from "../entities/Pool";
 import { Survey } from "../entities/Survey";
-import { useApi, } from "../../infrastructure/providers/http/UseApi";
-import { handleApiCall } from "../../infrastructure/providers/http/utilsApi";
 
-const api = useApi();
+const api: ApiService = new ApiService()
 const dataTypeComb = "pools-surveys";
 const dataType = "pools";
 
@@ -14,9 +13,9 @@ export interface PoolSurveyRepository {
 }
 
 export class PoolSurveyService implements PoolSurveyRepository {
-    getPoolsSurveys = async (): Promise<(Pool | Survey)[]> => handleApiCall(() => api.get(dataTypeComb));
-    getPoolsSurveysMines = async (): Promise<(Pool | Survey)[]> => handleApiCall(() => api.get(`${dataType}/mines`));
-    getPoolsSurveysNew = async (): Promise<(Pool | Survey)[]> => handleApiCall(() => api.get(`${dataType}/new`));
+    getPoolsSurveys = async (): Promise<(Pool | Survey)[]> => api.get(dataTypeComb)
+    getPoolsSurveysMines = async (): Promise<(Pool | Survey)[]> => api.get(`${dataType}/mines`)
+    getPoolsSurveysNew = async (): Promise<(Pool | Survey)[]> => api.get(`${dataType}/new`)
 }
 
 export interface PoolRepository {
@@ -29,10 +28,10 @@ export interface PoolRepository {
 }
 
 export class PoolService implements PoolRepository {
-    getPools = async (): Promise<Pool[]> => handleApiCall(() => api.get(dataType));
-    getPoolById = async (id: number): Promise<Pool> => handleApiCall(() => api.get(`${dataType}/${id}`));
-    getPoolsMines = async (): Promise<Pool[]> => handleApiCall(() => api.get(`${dataType}/mines`));
-    deletePool = async (id: number): Promise<Pool> => handleApiCall(() => api.delete(`${dataType}/${id}`));
-    patchPool = async (id: number, data: PoolDTO): Promise<Pool> => handleApiCall(() => api.patch(`${dataType}/${id}`, data));
-    postPool = async (data: PoolDTO): Promise<Pool> => handleApiCall(() => api.post(dataType, data));
+    getPools = async (): Promise<Pool[]> => api.get(dataType)
+    getPoolById = async (id: number): Promise<Pool> => api.get(`${dataType}/${id}`)
+    getPoolsMines = async (): Promise<Pool[]> => api.get(`${dataType}/mines`)
+    deletePool = async (id: number): Promise<Pool> => api.delete(`${dataType}/${id}`)
+    patchPool = async (id: number, data: PoolDTO): Promise<Pool> => api.patch(`${dataType}/${id}`, data)
+    postPool = async (data: PoolDTO): Promise<Pool> => api.post(dataType, data)
 }

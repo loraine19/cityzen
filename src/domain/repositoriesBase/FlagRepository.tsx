@@ -1,9 +1,8 @@
+import { ApiService } from "../../infrastructure/providers/http/UseApi";
 import { Flag, FlagDTO } from "../entities/Flag";
-import { useApi } from "../../infrastructure/providers/http/UseApi";
-import { handleApiCall } from "../../infrastructure/providers/http/utilsApi";
 
 
-const api = useApi();
+const api: ApiService = new ApiService();
 const dataType = "flags";
 
 export interface FlagRepository {
@@ -22,46 +21,46 @@ export interface FlagRepository {
 
 export class FlagService implements FlagRepository {
     async getFlags(): Promise<Flag[]> {
-        return handleApiCall(() => api.get(dataType));
+        return api.get(dataType)
     }
 
     async getFlagsByUserId(): Promise<Flag[]> {
-        return handleApiCall(() => api.get(`${dataType}/mines`));
+        return api.get(`${dataType}/mines`)
     }
 
     async getFlagsEvent(): Promise<Flag[]> {
-        return handleApiCall(() => api.get(`${dataType}/event`));
+        return api.get(`${dataType}/event`)
     }
 
     async getFlagsService(): Promise<Flag[]> {
-        return handleApiCall(() => api.get(`${dataType}/service`));
+        return api.get(`${dataType}/service`)
     }
 
     async getFlagsPost(): Promise<Flag[]> {
-        return handleApiCall(() => api.get(`${dataType}/post`));
+        return api.get(`${dataType}/post`)
     }
 
     async getFlagsByEventId(eventId: number): Promise<Flag[]> {
-        return handleApiCall(() => api.get(`${dataType}/event/${eventId}`));
+        return api.get(`${dataType}/event/${eventId}`)
     }
 
     async getFlagsSurvey(): Promise<Flag[]> {
-        return handleApiCall(() => api.get(`${dataType}/survey`));
+        return api.get(`${dataType}/survey`)
     }
 
     async getMyFlag(target: string, targetId: number): Promise<Flag> {
-        return handleApiCall(() => api.get(`${dataType}/mine/${target.toUpperCase()}/${targetId}`));
+        return api.get(`${dataType}/mine/${target.toUpperCase()}/${targetId}`)
     }
 
     async postFlag(flag: FlagDTO): Promise<Flag> {
-        return handleApiCall(() => api.post(dataType, flag));
+        return api.post(dataType, flag)
     }
 
     async patchFlag(id: number, flag: FlagDTO): Promise<Flag> {
-        return handleApiCall(() => api.patch(`${dataType}/${id}`, flag));
+        return api.patch(`${dataType}/${id}`, flag)
     }
 
     async deleteFlag(target: string, targetId: number): Promise<Flag> {
-        return handleApiCall(() => api.delete(`${dataType}/mine/${target.toUpperCase()}/${targetId}`));
+        return api.delete(`${dataType}/mine/${target.toUpperCase()}/${targetId}`)
     }
 }

@@ -1,8 +1,7 @@
+import { ApiService } from "../../infrastructure/providers/http/UseApi";
 import { Issue, IssueDTO } from "../entities/Issue";
-import { createFormData, handleApiCall } from "../../infrastructure/providers/http/utilsApi";
-import { useApi } from "../../infrastructure/providers/http/UseApi";
 
-const api = useApi();
+const api: ApiService = new ApiService();
 const dataType = "issues";
 
 // ISSUES
@@ -19,40 +18,40 @@ export interface IssueRepository {
 
 export class IssueService implements IssueRepository {
     async getIssues(): Promise<Issue[]> {
-        return handleApiCall(() => api.get(dataType));
+        return api.get(dataType)
     }
 
     async getIssueById(id: number): Promise<Issue> {
-        return handleApiCall(() => api.get(`${dataType}/${id}`));
+        return api.get(`${dataType}/${id}`)
     }
 
     async getIssuesMines(): Promise<Issue[]> {
-        return handleApiCall(() => api.get(`${dataType}/mines`));
+        return api.get(`${dataType}/mines`)
     }
 
     async getIssuesByResp(id: number): Promise<Issue[]> {
-        return handleApiCall(() => api.get(`${dataType}/resp/${id}`));
+        return api.get(`${dataType}/resp/${id}`)
     }
 
     async deleteIssue(id: number): Promise<Issue> {
-        return handleApiCall(() => api.delete(`${dataType}/${id}`));
+        return api.delete(`${dataType}/${id}`)
     }
 
     async putIssueFinish(id: number): Promise<Issue> {
-        return handleApiCall(() => api.put(`${dataType}/finish/${id}`));
+        return api.put(`${dataType}/finish/${id}`)
     }
 
     async patchIssue(id: number, element: IssueDTO): Promise<Issue> {
-        const formData = createFormData(element);
-        return handleApiCall(() => api.patch(`${dataType}/${id}`, formData, {
+        const formData = api.createFormData(element);
+        return api.patch(`${dataType}/${id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        }));
+        })
     }
 
     async postIssue(element: IssueDTO): Promise<Issue> {
-        const formData = createFormData(element);
-        return handleApiCall(() => api.post(dataType, formData, {
+        const formData = api.createFormData(element);
+        return api.post(dataType, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        }));
+        })
     }
 }

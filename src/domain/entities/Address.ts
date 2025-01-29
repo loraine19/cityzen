@@ -5,8 +5,13 @@ export class Address {
     city: string = '';
     lat: number = 0;
     lng: number = 0;
-    createdAt: Date = new Date();
-    updatedAt: Date = new Date();
+    createdAt?: Date = new Date();
+    updatedAt?: Date = new Date();
+    constructor(data?: Partial<Address>) {
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
 }
 
 export class AddressDTO implements Partial<Address> {

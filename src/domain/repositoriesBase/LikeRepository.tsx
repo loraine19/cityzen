@@ -1,8 +1,7 @@
+import { ApiService } from "../../infrastructure/providers/http/UseApi";
 import { Like, LikeDTO } from "../entities/Like";
-import { handleApiCall } from "../../infrastructure/providers/http/utilsApi";
-import { Api, useApi } from "../../infrastructure/providers/http/UseApi";
 
-const api: Api = useApi()
+const api: ApiService = new ApiService();
 const dataType = "likes"
 
 export interface LikeRepository {
@@ -16,26 +15,26 @@ export interface LikeRepository {
 
 export class LikeService implements LikeRepository {
     async getLikes(): Promise<Like[]> {
-        return handleApiCall(() => api.get(dataType));
+        return api.get(dataType);
     }
 
     async getLikesByEvent(postId: number): Promise<Like[]> {
-        return handleApiCall(() => api.get(`${dataType}/post/${postId}`));
+        return api.get(`${dataType}/post/${postId}`);
     }
     async postLike(like: LikeDTO): Promise<Like> {
-        return handleApiCall(() => api.post(dataType, like));
+        return api.post(dataType, like);
     }
 
     async patchLike(id: number, like: LikeDTO): Promise<Like> {
-        return handleApiCall(() => api.patch(`${dataType}/${id}`, like));
+        return api.patch(`${dataType}/${id}`, like);
     }
 
     async deleteLikeWoReq(userId: number, postId: number): Promise<void> {
-        return handleApiCall(() => api.delete(`${dataType}/user${userId}/post${postId}`));
+        return api.delete(`${dataType}/user${userId}/post${postId}`);
     }
 
     async deleteLike(postId: number): Promise<void> {
-        return handleApiCall(() => api.delete(`${dataType}/post${postId}`));
+        return api.delete(`${dataType}/post${postId}`);
     }
 
 }

@@ -1,58 +1,47 @@
 import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix, IconButton } from "@material-tailwind/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { assistanceLevel } from "../../../../../domain/entities/Profile";
-import { getImageBlob } from "../../../../../infrastructure/services/utilsService";
+import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import { Address } from '../../../../../domain/entities/Address';
 import { useUserStore } from "../../../../../application/stores/user.store";
+import { Label } from "../../../../../domain/entities/frontEntities";
+import { ImageBtn } from "../../../common/ImageBtn";
+import { Icon } from "../../../common/SmallComps";
 
 
-export const ProfileForm = (props: { formik: any, setSkillList?: any, setAssistance?: any, setAddress?: any }) => {
-    const { formik, setSkillList, setAssistance } = props;
+export const ProfileForm = (props: {
+    formik: any,
+    setAssistance?: any, setAddress?: any, setMailSub?: any,
+}) => {
+    const { formik, setAssistance, setMailSub, setAddress, } = props;
     const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image || './person.svg');
-
     const { user } = useUserStore()
-    const [Address, setAddress] = useState<Address>(formik.values.Address);
-    const { image, firstName, skills } = formik.values || '';
     const [newSkill, setNewSkill] = useState<string | undefined>()
-    let assistanceLevelSelect = assistanceLevel.filter((level: any) => { if (!isNaN(level)) { return level.toString() } }) as string[]
+    const [skillList, setSkillList] = useState<string[]>(formik.values.skills.split(','))
 
 
     const removeSkill = (skill: string) => {
-        formik.values.skills = formik.values.skills.replace(',' + skill, '')
-        setSkillList(formik.values.skills.split(','))
+        formik.values.skills = skillList.filter((sk) => sk !== skill).join(',')
+        setSkillList([...skillList.filter((sk) => sk !== skill)])
+
     }
     const addSkill = () => {
-        formik.values.skills = formik.values.skills ? formik.values.skills + ',' + newSkill : newSkill
+        skillList.push(newSkill as string);
+        formik.values.skills = skillList.join(',')
+        setSkillList([...skillList])
         setNewSkill('');
-        setSkillList(formik.values.skills.split(','))
     }
 
-    useEffect(() => { props.setAddress(Address) }, [Address])
 
     return (
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
             <main className='relative flex flew-1 pt-6 -mt-4'>
                 <Card className="w-respLarge h-full justify-between ">
                     <CardHeader className="!bg-transparent shadow-none flex justify-center items-end" floated={true}>
-                        <Avatar src={imgBlob as string || image} alt={image || imgBlob ? firstName : ''}
+                        <ImageBtn setImgBlob={setImgBlob} formik={formik} imgDef="./person.svg" className="-mr-9" />
+                        <Avatar src={imgBlob as string || formik.values.image} alt={formik.values.image || imgBlob ? formik.values.firstName : ''}
                             className={"shadow-md BgUser !rounded-full !h-[5rem] !w-[5rem] mb-1 bg-blue-gray-400"} />
-                        <div className="flex -ml-8">
-                            <Button color="gray" className="p-2.5 rounded-full z-20 mb-1">
-                                <label htmlFor="image"
-                                    className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
-                                    <span className="material-symbols-rounded">{image ? 'edit' : 'add_a_photo'}</span>
-                                    <div className="flex flex-col w-full items-center justify-center">
-                                        <input id="image" type="file" name="image" className="hidden" onChange={(e) => getImageBlob(e, setImgBlob, formik)} />
-                                    </div>
-                                </label>
-                            </Button>
-                            <button type='button' className={imgBlob ? `p-0 absolute bottom-0 z-50 right-[calc(50%-4.5rem)] rounded] text-red-500 h-max !text-sm` : `hidden`}
-                                onClick={() => { setImgBlob(''), formik.values.image = '' }}>
-                                <span className="material-symbols-rounded ">cancel</span>
-                            </button>
-                        </div>
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
                             <Typography className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">{user.email} </Typography>
                             <Link to="/motdepasse_oublie"
@@ -75,17 +64,33 @@ export const ProfileForm = (props: { formik: any, setSkillList?: any, setAssista
                             address={formik.values.Address}
                             setAddress={setAddress}
                             error={formik.errors.Address} />
+                        <Select className="p-5 capitaliz "
+                            label={formik.errors.mailSub ? formik.errors.mailSub as string : "Notifications mails"} name="mailSub" variant='standard'
+                            error={formik.errors.mailSub}
+                            value={formik.values.mailSub}
+                            onChange={(val: any) => {
+                                setMailSub(val);
+                                formik.values.maillSub = val
+                            }}>
+                            {mailSubscriptions.map((label: Label, index: number) => {
+                                return (
+                                    <Option value={label.value} key={index}>
+                                        {label.label}
+                                    </Option>
+                                )
+                            })}
+                        </Select>
                         <Select className="p-5 capitaliz " label={formik.errors.assistance ? formik.errors.assistance as string : "Assistance"} name="level" variant='standard'
                             error={formik.errors.assistance}
-                            value={formik.values?.assistance?.match(/\d+/)[0] || '0'}
+                            value={formik.values.assistance}
                             onChange={(val: any) => {
-                                setAssistance('LEVEL_' + val);
-                                formik.values.assistance = 'LEVEL_' + val
+                                setAssistance(val);
+                                formik.values.assistance = val
                             }}>
-                            {assistanceLevelSelect.map((level: string, index: number) => {
+                            {assistanceLevel.map((label: Label, index: number) => {
                                 return (
-                                    <Option value={level.toString()} key={index}>
-                                        {level}
+                                    <Option value={label.value} key={index}>
+                                        {label.label}
                                     </Option>
                                 )
                             })}
@@ -96,14 +101,11 @@ export const ProfileForm = (props: { formik: any, setSkillList?: any, setAssista
                             icon={<button type='button' onClick={addSkill} className={`material-symbols-rounded !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'}`}>add</button>} />
                         <List className='flex  p-0'>
                             <Typography className='text-xs'>Liste des compétences</Typography>
-                            {skills?.split(',').map((skill: string, index: number) =>
-                                <ListItem ripple={true} key={index} className="!py-0 px-2 rounded-full text-sm">
+                            {skillList.map((skill: string, index: number) =>
+                                <ListItem ripple={true} key={index} className="!py-1 pl-4 rounded-full text-sm">
                                     {skill}
                                     <ListItemSuffix>
-                                        <IconButton variant="text" color="blue-gray"
-                                            onClick={() => removeSkill(skill)}>
-                                            <span className="material-symbols-rounded !text-xl">close</span>
-                                        </IconButton>
+                                        <Icon onClick={() => { console.log(skill, setSkillList); removeSkill(skill) }} icon="close" size="xl" />
                                     </ListItemSuffix>
                                 </ListItem>
                             )}

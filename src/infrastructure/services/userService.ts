@@ -8,7 +8,6 @@ interface UserServiceI {
 export class UserService implements UserServiceI {
     constructor() { }
 
-
     isUserValidated(user: User): boolean {
         return user.status === UserStatus.ACTIVE;
     }

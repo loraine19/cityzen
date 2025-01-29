@@ -1,6 +1,5 @@
-import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { dayMS } from "../../domain/entities/frontEntities";
+import { cryptedStorage, cryptedStorageI } from "./storageService";
 
 interface AuthServiceI {
     logOut(): void;
@@ -8,13 +7,15 @@ interface AuthServiceI {
     saveToken(accesToken: string, refreshtoken: string): void;
 }
 export class AuthService implements AuthServiceI {
+    private storage: cryptedStorageI;
 
-    constructor() { }
+    constructor() {
+        this.storage = new cryptedStorage();
+    }
+
     logOut = () => {
-        Cookies.remove('accessToken');
-        Cookies.remove('refreshToken');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        this.storage.removeItem('access');
+        this.storage.removeItem('refresh');
         window.location.replace('/signin');
     }
 
@@ -25,11 +26,7 @@ export class AuthService implements AuthServiceI {
     }
 
     saveToken = (accessToken: string, refreshToken: string) => {
-        const expirationDateAccess = this.getTokenExpirationDate(accessToken) || new Date(Date.now() + 7 * dayMS);
-        const expirationDateRefresh = this.getTokenExpirationDate(refreshToken) || new Date(Date.now() + 7 * dayMS);
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        Cookies.set('accessToken', accessToken, { expires: expirationDateAccess });
-        Cookies.set('refreshToken', refreshToken, { expires: expirationDateRefresh });
+        this.storage.setItem('access', accessToken);
+        this.storage.setItem('refresh', refreshToken);
     }
 }

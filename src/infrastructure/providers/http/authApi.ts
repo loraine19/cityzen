@@ -1,23 +1,23 @@
 ///src/infrastructure/providers/http/authApi.ts
 import { AccessDTO, Auth } from "../../../domain/entities/Auth";
-import { Api, useApi } from "./UseApi";
-import { handleApiCall } from "./utilsApi";
+import { ApiServiceI, ApiService } from "./UseApi";
+
 
 export class AuthApi {
-    private readonly api: Api;
     private readonly dataType: string = 'auth';
+    private readonly api: ApiServiceI;
+    constructor() { this.api = new ApiService(); }
 
-    constructor() { this.api = useApi() }
     async signIn(credentials: AccessDTO): Promise<Auth> {
-        return handleApiCall(() => this.api.post(`${this.dataType}/signin`, credentials));
+        return this.api.post(`${this.dataType}/signin`, credentials)
     }
 
     async signInVerify(data: { email: string, password: string, verifyToken: string }): Promise<Auth> {
-        return handleApiCall(() => this.api.post(`${this.dataType}/signin/verify`, data));
+        return this.api.post(`${this.dataType}/signin/verify`, data)
     }
 
     async signUp(credentials: AccessDTO): Promise<{ message: string }> {
-        return handleApiCall(() => this.api.post(`${this.dataType}/signup`, credentials));
+        return this.api.post(`${this.dataType}/signup`, credentials)
     }
 
 }

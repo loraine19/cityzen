@@ -1,8 +1,7 @@
+import { ApiService } from "../../infrastructure/providers/http/UseApi";
 import { Survey, SurveyDTO } from "../entities/Survey";
-import { createFormData, handleApiCall } from "../../infrastructure/providers/http/utilsApi";
-import { useApi } from "../../infrastructure/providers/http/UseApi";
 
-const api = useApi();
+const api: ApiService = new ApiService();
 const dataType = "surveys";
 
 export interface SurveyRepository {
@@ -15,20 +14,20 @@ export interface SurveyRepository {
 }
 
 export class SurveyService implements SurveyRepository {
-    getSurveys = async (): Promise<Survey[]> => handleApiCall(() => api.get(dataType));
-    getSurveyById = async (id: number): Promise<Survey> => handleApiCall(() => api.get(`${dataType}/${id}`));
-    getSurveysMines = async (): Promise<Survey[]> => handleApiCall(() => api.get(`${dataType}/mines`));
-    deleteSurvey = async (id: number): Promise<Survey> => handleApiCall(() => api.delete(`${dataType}/${id}`));
+    getSurveys = async (): Promise<Survey[]> => api.get(dataType)
+    getSurveyById = async (id: number): Promise<Survey> => api.get(`${dataType}/${id}`)
+    getSurveysMines = async (): Promise<Survey[]> => api.get(`${dataType}/mines`)
+    deleteSurvey = async (id: number): Promise<Survey> => api.delete(`${dataType}/${id}`)
     patchSurvey = async (id: number, profile: SurveyDTO): Promise<Survey> => {
-        const formData = createFormData(profile);
-        return handleApiCall(() => api.patch(`${dataType}/${id}`, formData, {
+        const formData = api.createFormData(profile);
+        return api.patch(`${dataType}/${id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        }));
+        })
     };
     postSurvey = async (profile: SurveyDTO): Promise<Survey> => {
-        const formData = createFormData(profile);
-        return handleApiCall(() => api.post(dataType, formData, {
+        const formData = api.createFormData(profile);
+        return api.post(dataType, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        }));
+        })
     };
 }

@@ -2,7 +2,7 @@ import { Address } from './Address';
 import { User } from './User';
 import { Flag } from './Flag';
 import { Label } from './frontEntities';
-import { getCategories } from '../../infrastructure/services/utilsService';
+import { getEnumLabel } from '../../infrastructure/services/utilsService';
 
 export enum ServiceType {
     GET = 'demande',
@@ -17,7 +17,7 @@ export enum ServiceStep {
     STEP_3 = "terminé",
     STEP_4 = "litige"
 }
-export const serviceSteps: Label[] = getCategories(ServiceStep);
+export const serviceSteps: Label[] = getEnumLabel(ServiceStep);
 
 
 export enum SkillLevel {
@@ -44,8 +44,8 @@ export enum ServiceCategory {
     CATEGORY_5 = 'autre',
 }
 
-export const serviceCategoriesS: Label[] = getCategories(ServiceCategory, true);
-export const serviceCategories: Label[] = getCategories(ServiceCategory);
+export const serviceCategoriesS: Label[] = getEnumLabel(ServiceCategory, true);
+export const serviceCategories: Label[] = getEnumLabel(ServiceCategory);
 
 
 export class Service {

@@ -39,3 +39,4 @@ export class UserDTO implements Partial<User> {
     password: string = '';
     status?: UserStatus | undefined;
 }
+

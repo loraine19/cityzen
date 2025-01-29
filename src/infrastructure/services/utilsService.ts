@@ -103,11 +103,9 @@ export const toggleLike = async (postId: number, userId: number, setPost: any) =
     const isLiked = response.Likes.find((like: any) => like.userId === userId) ? true : false;
     isLiked ? await deleteLike(postId) : await postLike({ userId: userId, postId: postId });
     setPost(await getPostById(postId));
-};
-
+}
 
 export const toggleResp = async (serviceId: number, userId: number, setService: any) => {
-
     const response = await getServiceById(serviceId);
     const isResp = response.userIdResp === userId ? true : false;
     console.log(isResp)
@@ -180,7 +178,7 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
 //// GENERE LABELS 
 
 
-export const getCategories = (enumArray: any, all?: boolean): Label[] => {
+export const getEnumLabel = (enumArray: any, all?: boolean): Label[] => {
     const allLabel = { label: 'tous', value: '' }
     const array = [...Object.keys(enumArray).map(key => ({
         label: enumArray[key as keyof typeof enumArray],

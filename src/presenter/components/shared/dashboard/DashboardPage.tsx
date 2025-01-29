@@ -25,11 +25,8 @@ export default function DashboardPage() {
     const mapClasse = "flex row-span-6 lg:grid";
     const [searchParams] = useSearchParams();
     const msg = searchParams.get("msg");
-    const [open, setOpen] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(msg ? true : false);
 
-    useEffect(() => {
-        msg && setOpen(true)
-    }, [msg])
 
     useEffect(() => {
         updateNotif(notifList)

@@ -1,24 +1,25 @@
 //src/infrastructure/providers/http/participantApi.ts
-import { useApi, Api } from "./UseApi";
+
 import { Participant, ParticipantDTO } from "../../../domain/entities/Participant";
-import { handleApiCall } from "./utilsApi";
+import { ApiServiceI, ApiService } from "./UseApi";
+
 
 export class ParticipantApi {
-    private readonly api: Api;
     private readonly dataType: string = 'participants';
 
-    constructor() { this.api = useApi() }
+    private readonly api: ApiServiceI;
+    constructor() { this.api = new ApiService(); }
 
     async getParticipants(): Promise<Participant[]> {
-        return handleApiCall(() => this.api.get(this.dataType));
+        return this.api.get(this.dataType)
     }
 
     async postParticipant(dataDTO: ParticipantDTO): Promise<Participant> {
-        return handleApiCall(() => this.api.post(this.dataType, dataDTO))
+        return this.api.post(this.dataType, dataDTO)
     }
 
     async deleteParticipant(eventId: number): Promise<void> {
-        return handleApiCall(() => this.api.delete(`${this.dataType}/event${eventId}`));
+        return this.api.delete(`${this.dataType}/event${eventId}`)
     }
 
 }

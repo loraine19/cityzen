@@ -9,15 +9,10 @@ export class UserUseCase {
         this.userRepository = userRepository;
     }
 
-    public async getUserMe(): Promise<any> {
-        const user = await this.userRepository.getUserMe();
-        return user;
+    public async getUserMe(): Promise<User> {
+        return this.userRepository.getUserMe();
     }
 
-    public async getUserById(id: number): Promise<User> {
-        const user = await this.userRepository.getUserById(id);
-        return user;
-    }
 
 }
 

@@ -1,24 +1,25 @@
 ///src/infrastructure/providers/http/authApi.ts
 import { Address, AddressDTO } from "../../../domain/entities/Address";
-import { Api, useApi } from "./UseApi";
-import { handleApiCall } from "./utilsApi";
+import { ApiServiceI, ApiService } from "./UseApi";
+
 
 export class AddressApi {
-    private readonly api: Api;
-    private readonly dataType: string = 'addresses';
 
-    constructor() { this.api = useApi() }
+    private readonly dataType: string = 'addresses';
+    private readonly api: ApiServiceI;
+    constructor() { this.api = new ApiService(); }
+
 
     async getAddresses(): Promise<Address[]> {
-        return handleApiCall(() => this.api.get(this.dataType));
+        return this.api.get(this.dataType)
     }
 
     async getAddressById(id: number): Promise<Address> {
-        return handleApiCall(() => this.api.get(`${this.dataType}/${id}`));
+        return this.api.get(`${this.dataType}/${id}`)
     }
 
     async postAddress(address: AddressDTO): Promise<Address> {
-        return handleApiCall(() => this.api.post(this.dataType, address));
+        return this.api.post(this.dataType, address)
     }
 
 }
