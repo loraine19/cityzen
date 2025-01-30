@@ -12,7 +12,6 @@ export class UserRepositoryImpl implements UserRepositoryBase {
     constructor({ userData }: { userData: IUserData }) { this.userData = userData }
 
     public async getUserMe(): Promise<User> {
-        console.log('getUserMe', await this.userData.getUserMe());
         return this.userData.getUserMe();
     }
 

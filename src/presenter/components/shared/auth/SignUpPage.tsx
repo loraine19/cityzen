@@ -14,8 +14,8 @@ export default function SignUpPage() {
     const [hidden, setHidden] = useState<boolean>(false)
 
     ////SIGN UP
-    // const { errorAuth, signUp } = DI.resolve('authSignUpViewModel')()
-    const signUp = async (accessData: AccessDTO) => await DI.resolve('authUseCase').signUp(accessData)
+
+    const signUp = async (accessData: AccessDTO) => await DI.resolve('signUpUseCase').execute(accessData)
 
 
     ////FORMIK

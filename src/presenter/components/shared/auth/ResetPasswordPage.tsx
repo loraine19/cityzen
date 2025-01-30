@@ -16,7 +16,7 @@ export default function ResetPasswordPage() {
     const [notif, setNotif] = useState<string>(' Entrez votre nouveau mot de passe');
     const params = { email: searchParams.get("email"), token: searchParams.get("token") }
     const { email, token } = params
-    const updatePassword = async (resetDTO: ResetDTO) => await DI.resolve('resetPasswordUseCase').resetPasswordUpdate(resetDTO)
+    const updatePassword = async (resetDTO: ResetDTO) => await DI.resolve('resetPasswordUpdateUseCase').execute(resetDTO)
 
     const passwordType = { value: 'password', icon: 'visibility' }
     const textType = { value: 'text', icon: 'visibility_off' }

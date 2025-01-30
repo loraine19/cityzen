@@ -17,8 +17,8 @@ export default function EventDetailPage() {
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
     const user = useUserStore((state) => state.user);
     const [eventDto, setEventDto] = useState<EventDTO>(new EventDTO(event));
-    const updateEvent = async (id: number, data: EventUpdateDTO) => await DI.resolve('eventUseCase').updateEvent(id, data)
-    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
+    const updateEvent = async (id: number, data: EventUpdateDTO) => await DI.resolve('updateEventUseCase').execute(id, data)
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('updateAddressUseCase').execute(data)
 
     useEffect(() => {
         setEventDto(new EventDTO(event));

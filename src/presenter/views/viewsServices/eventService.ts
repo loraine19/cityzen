@@ -1,10 +1,11 @@
 //src/infrastructure/services/eventService.ts
-import { EventView, Event, EventCategory } from "../../domain/entities/Event";
-import { Flag } from "../../domain/entities/Flag";
-import { dayMS, defaultEventImage } from "../../domain/entities/frontEntities";
-import { Participant } from "../../domain/entities/Participant";
-import { ParticipantRepositoryBase } from "../../domain/repositoriesBase/ParticipantRepositoryBase";
-import { shortDateString } from "./utilsService";
+import { EventView, Event, EventCategory } from "../../../domain/entities/Event";
+import { Flag } from "../../../domain/entities/Flag";
+import { dayMS, defaultEventImage } from "../../../domain/entities/frontEntities";
+import { Participant } from "../../../domain/entities/Participant";
+import { shortDateString } from "../../../infrastructure/services/utilsService";
+import { ToogleParticipantUseCase } from '../../../application/useCases/participants.useCase';
+import DI from "../../../di/ioc"
 
 interface EventServiceI {
     getInfosInEvents(events: Event[], userId: number): EventView[];
@@ -12,10 +13,10 @@ interface EventServiceI {
 }
 export class EventService implements EventServiceI {
 
-    private participantRepository: ParticipantRepositoryBase;
+    private toogleParticipantUseCase: ToogleParticipantUseCase;
 
-    constructor(participantRepository: ParticipantRepositoryBase) {
-        this.participantRepository = participantRepository
+    constructor() {
+        this.toogleParticipantUseCase = DI.resolve('toogleParticipantUseCase')
     }
 
     //// UTILS
@@ -71,19 +72,7 @@ export class EventService implements EventServiceI {
 
 
     ////PRIVATE
-    toggleParticipant = async (event: Event, userId: number) => {
-        let participants
-        const isParticipant = event.Participants.find((participant: any) => participant.userId === userId) ? true : false;
-        if (isParticipant) {
-            await this.participantRepository.deleteParticipant(event.id);
-            participants = event.Participants.filter((participant: Participant) => participant.userId !== userId)
-        }
-        else {
-            const post = await this.participantRepository.postParticipant({ userId: userId, eventId: event.id });
-            participants = [post, ...event.Participants];
-        }
-        return { ...event, Participants: participants };
-    }
+
 
     generateCalendarLink(event: Event): string {
         const start = new Date(event.start).toISOString().replace(/-|:|\.\d\d\d/g, "");
@@ -122,8 +111,9 @@ export class EventService implements EventServiceI {
             eventDateInfo: this.eventdateInfo(event),
             isValidate: event.Participants.length >= event.participantsMin,
             toogleParticipate: async () => {
-                const newEvent = await this.toggleParticipant(event, userId);
-                return this.mapEventToEventView(newEvent, userId);
+                await this.toogleParticipantUseCase.execute(event, event.id, userId);
+                const newEvent = await DI.resolve('getEventByIdUseCase').execute(event.id);
+                return this.getInfosInEvent(newEvent, userId);
             }
         };
     }

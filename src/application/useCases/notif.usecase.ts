@@ -4,16 +4,16 @@ import { NotifRepositoryBase } from "../../domain/repositoriesBase/NotifReposito
 
 
 
-export class NotifUseCase {
+export class GetNotifUseCase {
     private notifRepository: NotifRepositoryBase;
 
     constructor({ notifRepository }: { notifRepository: NotifRepositoryBase }) {
         this.notifRepository = notifRepository;
     }
-
-    public async getNotifs(): Promise<any> {
+    public async execute(): Promise<any> {
         return await this.notifRepository.getNotifs();
     }
 
 }
+
 

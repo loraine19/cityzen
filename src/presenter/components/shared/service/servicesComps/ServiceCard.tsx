@@ -81,12 +81,10 @@ export default function ServiceComp(props:
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1`}>
                     <Title title={title} flagged={flagged} id={id} />
-                    <div className="flex flex-col h-full">
-                        <div className="CardOverFlow">
-                            <Typography color="blue-gray" className="mb-2">
-                                {description}...
-                            </Typography>
-                        </div>
+                    <div className="flex flex-col h-full overflow-auto">
+                        <Typography color="blue-gray">
+                            {description}
+                        </Typography>
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">

@@ -13,7 +13,6 @@ export class ProfileService implements ProfilServiceI {
         const newProfile: ProfileView = {
             ...profile,
             fullName: profile.firstName + ' ' + profile.lastName,
-            assistanceNumber: profile.assistance.valueOf(),
             addressString: `${profile.Address.address} ${profile.Address.zipcode} ${profile.Address.city}`
         }
         return newProfile;

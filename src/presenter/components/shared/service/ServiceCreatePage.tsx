@@ -11,7 +11,7 @@ import DI from '../../../../di/ioc';
 
 export default function ServiceCreatePage() {
     const { user } = useUserStore()
-    const postService = async (data: ServiceDTO) => await DI.resolve('serviceUseCase').postService(data)
+    const postService = async (data: ServiceDTO) => await DI.resolve('postServiceUseCase').execute(data)
     const navigate = useNavigate();
     const [newService] = useState<Service>({ hard: 0, skill: 0 } as Service);
     const formSchema = object({

@@ -1,44 +1,25 @@
 //src/infrastructure/services/serviceService.ts
-import { ServiceUseCase } from "../../application/useCases/service.usecase";
-import { Flag } from "../../domain/entities/Flag";
-import { HardLevel, Service, ServiceCategory, ServiceStep, ServiceType, ServiceUpdate, ServiceView, SkillLevel, } from "../../domain/entities/Service";
-import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
-import DI from '../../di/ioc';
-import { AssistanceLevel, Profile } from "../../domain/entities/Profile";
+import { Flag } from "../../../domain/entities/Flag";
+import { HardLevel, Service, ServiceCategory, ServiceStep, ServiceType, ServiceView, SkillLevel, } from "../../../domain/entities/Service"
+import { AssistanceLevel, Profile } from "../../../domain/entities/Profile";
 
 interface serviceServiceI {
     getInfosInServices(services: Service[], userId: number): ServiceView[];
     getInfosInService(service: Service, userId: number): ServiceView;
 }
 export class ServiceService implements serviceServiceI {
-
-    private serviceRepository: ServiceRepositoryBase;
-    private serviceUseCase: ServiceUseCase;
-
-    constructor({ serviceRepository, serviceUseCase }:
-        { serviceRepository: ServiceRepositoryBase, serviceUseCase: ServiceUseCase }) {
-        this.serviceRepository = DI.resolve('serviceUseCase');
-        this.serviceUseCase = serviceUseCase;
-        2 < 1 && console.log('attente de la meilleure solution', serviceRepository, this.serviceUseCase)
-    }
-
+    constructor() { }
 
     private isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
 
-    private toggleResp = async (service: Service, userId: number) => {
-        if (service.userIdResp === userId) {
-            return this.serviceRepository.updateServiceStep(service.id, ServiceUpdate.CANCEL_RESP)
-        }
-        return this.serviceRepository.updateServiceStep(service.id, ServiceUpdate.POST_RESP)
-    }
 
     private GetPoints = (service: Service, user?: Profile): number[] => {
         const userResp = service.UserResp ? service.UserResp?.Profile : null
         const userP = user ? user : service.User?.Profile
         const hard = parseInt(HardLevel[service.hard])
         const skill = parseInt(SkillLevel[service.skill])
-        const userPoints = parseInt(AssistanceLevel[userP.assistance])
-        const userRespPoints: number = userResp ? parseInt(AssistanceLevel[userResp.assistance]) : 0
+        const userPoints = parseInt(AssistanceLevel[userP.assistance as keyof typeof AssistanceLevel])
+        const userRespPoints: number = userResp ? parseInt(AssistanceLevel[userResp.assistance as keyof typeof AssistanceLevel]) : 0
         const base = Number(((hard / 2 + skill / 2) + 1).toFixed(1))
         const points =
             userResp && [base + userRespPoints / 2] ||
@@ -59,11 +40,6 @@ export class ServiceService implements serviceServiceI {
             isLate: service.createdAt ? this.isLate(service.createdAt, 15) : false,
             points: this.GetPoints(service, service.User?.Profile),
             categoryS: ServiceCategory[service.category as string as keyof typeof ServiceCategory],
-            toogleResp: async () => {
-                const newservice = await this.toggleResp(service, userId);
-                console.log(newservice);
-                return this.mapServiceToServiceView(newservice, userId);
-            },
             statusS: ServiceStep[service.status as unknown as keyof typeof ServiceStep],
         }
     }

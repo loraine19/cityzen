@@ -4,9 +4,10 @@ import { ApiService } from "./UseApi";
 export class ServiceApi {
     ;
     private readonly dataType: string = 'services';
-
     private readonly api: ApiService;
+
     constructor() { this.api = new ApiService(); }
+
     async getServices(page?: number, mine?: boolean, type?: string, step?: string, category?: string): Promise<ServicePage> {
         const pageR = page ? `?page=${page}` : '';
         const mineR = mine ? `&mine=${mine}` : '';

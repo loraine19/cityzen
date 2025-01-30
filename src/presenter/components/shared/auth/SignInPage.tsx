@@ -17,8 +17,8 @@ export default function SignInPage() {
     const msg = searchParams.get("msg");
     const [notif, setNotif] = useState<string>(email && 'vous pouvez maintenant vous connecter' || msg || '');
 
-    const signIn = async (accessData: AccessDTO) => await DI.resolve('authUseCase').signIn(accessData)
-    const signInVerify = async (verifyData: VerifyDTO) => await DI.resolve('authUseCase').signInVerify(verifyData)
+    const signIn = async (accessData: AccessDTO) => await DI.resolve('signInUseCase').execute(accessData)
+    const signInVerify = async (verifyData: VerifyDTO) => await DI.resolve('signInVerifyUseCase').execute(verifyData)
 
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),

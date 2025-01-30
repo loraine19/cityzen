@@ -52,7 +52,7 @@ export function FlagIcon(props: { flagged: boolean, id: number, type: string }) 
     const { flagged, id, type } = props;
     const to = `/flag${flagged ? '/edit' : ''}/${type}/${id}`
     return (
-        <Icon icon="flag_2" link={to} color={flagged ? 'red' : 'gray'} fill={flagged} size="xl" title={"signaler " + type} style="hover:bg-red-500/30 hover:!px-[0.3rem] hover:text-red-700" />
+        <Icon icon="flag_2" link={to} color={flagged ? 'red' : 'gray'} fill={flagged} size="xl" title={"signaler " + type} style="hover:!bg-red-500/30 hover:text-red-700  " />
     )
 }
 
@@ -63,17 +63,18 @@ export function Icon(props: {
     icon: string, style?: string, fill?: boolean, size?: string, onClick?: () => void, color?: string, bg?: boolean, title?: string, link?: string, disabled?: boolean
 }) {
     const { title, icon, disabled, onClick } = props
-    let size = props.size || "2xl"
+    let size = props.size ? props.size : "2xl"
+    size === 'xl' && (size = '[1.3rem]')
     size === '5xl' && (size = '[2.8rem]')
     const pad = props.bg ? 'px-[0.28em] pb-[0.03em]' : 'px-1'
     const fill = props.fill ? "fillThin" : ""
-    const color = !disabled ? props.color : "gray"
+    const color = (!disabled && props.color) ? props.color : 'gray'
     const textColor = props.color && `text-${color}-700` || "text-gray-900"
     const bg = (props.bg && props.color) && `bg-${color}-500 bg-opacity-30 ` || props.bg && "!bg-gray-300" || ''
     const style = props.style || ""
     const link = props.link || ""
     const classIcon = `icon notranslate pt-0.5  flex items-center justify-center !text-${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
-    const classActive = `hover:!bg-${color}-500 hover:bg-opacity-50 hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out ${!bg && `hover:!bg-gray-300 `}`
+    const classActive = `hover:!bg-${color}-500 hover:!bg-opacity-30 hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out `
     if (onClick) {
         return <button type="button" onClick={onClick} title={!disabled ? title : title + ' est desactivée'} className={`${classIcon} ${!disabled && classActive} `} disabled={disabled}>
             {icon}
@@ -87,8 +88,6 @@ export function Icon(props: {
     else {
         return <span title={title} className={`${classIcon} `}> {icon}</span>;
     }
-
-
 }
 
 
@@ -181,7 +180,7 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
     const [title, setTitle] = useState<string>(props.title?.length > maxLength ? props.title.slice(0, maxLength - 3) + '...' + (parse('&nbsp;').toString()).repeat(props.title?.length - maxLength) : props.title)
     return (
         <>
-            <div className="flex items-center w-full   justify-between  gap-2">
+            <div className="flex items-center w-full  justify-between  gap-2">
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
                     <Typography onScroll={() => { setTitle(props.title) }} id={props.title} variant="h6" color="blue-gray" className="w-full flex whitespace-nowrap overflow-x-auto "
                         title={props.title}>

@@ -4,7 +4,7 @@ import { EventCard } from '../shared/event/eventComps/EventCard';
 import { dayMS, getLabel } from '../../../infrastructure/services/utilsService';
 import { Icon } from './SmallComps';
 import DI from '../../../di/ioc'
-import { EventService } from '../../../infrastructure/services/eventService';
+import { EventService } from '../../views/viewsServices/eventService';
 import { day } from '../../../domain/entities/frontEntities';
 import { eventCategories } from '../../../domain/entities/Event';
 

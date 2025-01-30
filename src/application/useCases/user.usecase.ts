@@ -2,17 +2,21 @@
 import { User } from "../../domain/entities/User";
 import { UserRepositoryBase } from "../../domain/repositoriesBase/UserRepositoryBase";
 
-export class UserUseCase {
+export class GetUserMeUseCase {
     private userRepository: UserRepositoryBase;
 
     constructor({ userRepository }: { userRepository: UserRepositoryBase }) {
         this.userRepository = userRepository;
     }
 
-    public async getUserMe(): Promise<User> {
+    public async execute(): Promise<User> {
         return this.userRepository.getUserMe();
     }
 
 
+}
+
+export const userUsesCases = {
+    GetUserMeUseCase
 }
 

@@ -52,22 +52,22 @@ export class Service {
     id: number = 0;
     name: string = '';
     description: string = '';
-    address: Address = new Address();
+    address: Address = {} as Address;
     userId: number = 0;
-    User: User = new User();
+    User: User = {} as User;
     image: string | File = '';
     title: string = '';
     category: ServiceCategory = ServiceCategory.CATEGORY_1;
     categoryS: any = '';
     userIdResp: number = 0;
-    UserResp: User = new User();
+    UserResp: User = {} as User;
     type: ServiceType = ServiceType.GET;
     skill: SkillLevel = SkillLevel.LEVEL_0;
     hard: HardLevel = HardLevel.LEVEL_0;
     status: ServiceStep = ServiceStep.STEP_0;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
-    Flags?: Flag[] = [new Flag()];
+    Flags?: Flag[] = [{} as Flag];
 }
 
 
@@ -111,7 +111,7 @@ export enum ServiceStepFilter {
 }
 
 
-export interface ServiceView extends Service {
+export class ServiceView extends Service {
     actif?: boolean;
     IResp: boolean;
     categoryS: string;
@@ -121,7 +121,22 @@ export interface ServiceView extends Service {
     isLate: boolean;
     points: number[];
     statusS: string;
-    toogleResp: () => Promise<ServiceView>;
+    constructor(data?: Partial<Service>) {
+        super();
+        this.actif = true;
+        this.IResp = false;
+        this.categoryS = '';
+        this.typeS = '';
+        this.flagged = false;
+        this.mine = false;
+        this.isLate = false;
+        this.points = [];
+        this.statusS = '';
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
+
 }
 
 export type ServicePage = {

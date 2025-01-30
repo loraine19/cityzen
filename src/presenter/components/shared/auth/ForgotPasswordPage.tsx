@@ -8,7 +8,7 @@ import { User } from '../../../../domain/entities/User';
 import DI from '../../../../di/ioc';
 
 export default function ForgotPasswordPage() {
-    const resetPassword = async (email: string) => await DI.resolve('resetPasswordUseCase').resetPassword(email)
+    const resetPassword = async (email: string) => await DI.resolve('resetPasswordUseCase').execute(email)
     const [newUser] = useState<User>({} as User);
     const [hidden, setHidden] = useState<boolean>(false)
     const [notif, setNotif] = useState<string>(' Entrez votre adresse email et nous vous enverrons un lien pour changer votre mot de passe');

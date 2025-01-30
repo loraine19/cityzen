@@ -19,7 +19,6 @@ export default function SignUpDetailPage() {
     const { setUserProfile } = useUserStore()
     const navigate = useNavigate();
     const user: User = useUserStore((state) => state.user);
-    const [skillList, setSkillList] = useState<string[]>(user.Profile?.skills ? user.Profile.skills : [])
     const [assistance, setAssistance] = useState<string | undefined>()
     const [Address, setAddress] = useState<Address>(user.Profile?.Address)
     const [open, setOpen] = useState(false);
@@ -52,7 +51,6 @@ export default function SignUpDetailPage() {
         const updatedAddress: Address = await updateAddress(formik.values.Address)
         formik.values.assistance = assistance
         formik.values.Address = updatedAddress;
-        formik.values.skills = skillList.toString();
         formik.values.addressId = updatedAddress.id
         const { createdAt, updatedAt, userId, Address, ...rest } = formik.values;
         const updateData = { assistance, ...rest }
@@ -85,7 +83,7 @@ export default function SignUpDetailPage() {
             </div>
             {!user ?
                 <Skeleton /> :
-                <ProfileForm formik={formik} setAssistance={setAssistance} setSkillList={setSkillList} setAddress={setAddress} />}
+                <ProfileForm formik={formik} setAssistance={setAssistance} setAddress={setAddress} />}
         </div >
     )
 }

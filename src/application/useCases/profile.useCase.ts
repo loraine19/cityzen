@@ -1,22 +1,44 @@
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
 import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
 
-export class ProfileUseCase {
+export class GetProfileMeUseCase {
     private profileRepository: ProfileRepositoryBase;
 
     constructor({ profileRepository }: { profileRepository: ProfileRepositoryBase }) {
         this.profileRepository = profileRepository;
     }
 
-    public async getProfileMe(): Promise<Profile> {
+    public async execute(): Promise<Profile> {
         return this.profileRepository.getProfileMe();
     }
+}
 
-    public async postProfile(data: ProfileDTO): Promise<Profile> {
+export class PostProfileUseCase {
+    private profileRepository: ProfileRepositoryBase;
+
+    constructor({ profileRepository }: { profileRepository: ProfileRepositoryBase }) {
+        this.profileRepository = profileRepository;
+    }
+
+    public async execute(data: ProfileDTO): Promise<Profile> {
         return this.profileRepository.postProfile(data);
     }
+}
 
-    public async updateProfile(data: ProfileDTO): Promise<Profile> {
+export class UpdateProfileUseCase {
+    private profileRepository: ProfileRepositoryBase;
+
+    constructor({ profileRepository }: { profileRepository: ProfileRepositoryBase }) {
+        this.profileRepository = profileRepository;
+    }
+
+    public async execute(data: ProfileDTO): Promise<Profile> {
         return this.profileRepository.updateProfile(data);
     }
+}
+
+export const profileUsesCases = {
+    GetProfileMeUseCase,
+    PostProfileUseCase,
+    UpdateProfileUseCase
 }

@@ -1,29 +1,24 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { ServiceUseCase } from '../../application/useCases/service.usecase';
-import { UserUseCase } from '../../application/useCases/user.usecase';
-import { ServiceService } from '../../infrastructure/services/serviceService';
+import { ServiceService } from './viewsServices/serviceService';
 import { ServiceView } from '../../domain/entities/Service';
+import DI from '../../di/ioc'
+import { useUserStore } from '../../application/stores/user.store';
 
-export const serviceViewModel = ({ serviceUseCase, userUseCase, serviceService }: { serviceUseCase: ServiceUseCase, userUseCase: UserUseCase, serviceService: ServiceService }) => {
+export const serviceViewModel = ({ serviceService }: { serviceService: ServiceService }) => {
   return (mine: boolean, type: string, step: string, category: string) => {
 
-
-    const { data: user, isLoading: loadingUser } = useQuery({
-      queryKey: ['userMe'],
-      queryFn: async () => await userUseCase.getUserMe()
-    })
-    const userId = loadingUser ? 0 : user?.id
-
+    const userId = useUserStore(state => state.user?.id)
+    const getServices = DI.resolve('getServicesUseCase')
 
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['events', mine, type, step, category],
-        queryFn: async ({ pageParam = 1 }) => await serviceUseCase.getServices(pageParam, mine, type, step, category) || [],
+        queryFn: async ({ pageParam = 1 }) => await getServices.execute(pageParam, mine, type, step, category) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });
 
-    console.log(data)
+
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const services = serviceService.getInfosInServices(data?.pages.flat().map(page => page.services).flat(), userId)
 
@@ -39,23 +34,18 @@ export const serviceViewModel = ({ serviceUseCase, userUseCase, serviceService }
   }
 }
 
-export const serviceIdViewModel = ({ serviceUseCase, serviceService, userUseCase }: { serviceUseCase: ServiceUseCase, serviceService: ServiceService, userUseCase: UserUseCase }) => {
+export const serviceIdViewModel = ({ serviceService }: { serviceService: ServiceService }) => {
   return (id: number) => {
 
-    const { data: user, isLoading: loadingUser } = useQuery({
-      queryKey: ['userMe'],
-      queryFn: async () => await userUseCase.getUserMe()
-    })
-    const userId = loadingUser ? 0 : user?.id
+    const userId = useUserStore(state => state.user?.id)
+    const getServiceById = DI.resolve('getServiceByIdUseCase')
 
     //// TS CALL EVENT BY ID
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['eventById', id],
-      queryFn: async () => await serviceUseCase.getServiceById(id),
+      queryFn: async () => await getServiceById.execute(id),
     })
 
-
-    //// RETURN FORMATTED DATA
     const service = data ? serviceService.getInfosInService(data, userId) : {} as ServiceView;
     return { service, isLoading, error, refetch }
   }

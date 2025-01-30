@@ -1,5 +1,5 @@
 //src/infrastructure/services/notifService.ts
-import { Notif, NotifView } from "../../domain/entities/Notif";
+import { Notif, NotifView } from "../../../domain/entities/Notif";
 import { GetPathElement } from "./utilsService";
 
 interface NotifServiceI {

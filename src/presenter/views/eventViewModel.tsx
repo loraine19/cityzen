@@ -1,23 +1,25 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { EventUseCase } from '../../application/useCases/event.usecase';
-import { EventService } from '../../infrastructure/services/eventService';
-import { UserUseCase } from '../../application/useCases/user.usecase';
+import { EventService } from './viewsServices/eventService';
 import { Event } from '../../domain/entities/Event';
+import DI from '../../di/ioc';
 
 
-export const eventViewModel = ({ eventUseCase, userUseCase, eventService }: { eventUseCase: EventUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
+export const eventViewModel = ({ eventService }: { eventService: EventService }) => {
   return (filter?: string, category?: string) => {
+
+    const getUserMe = DI.resolve('getUserMeUseCase')
+    const getEvents = DI.resolve('getEventsUseCase')
 
     const { data: user, isLoading: loadingUser } = useQuery({
       queryKey: ['userMe'],
-      queryFn: async () => await userUseCase.getUserMe()
+      queryFn: async () => await getUserMe.execute()
     })
     const userId = loadingUser ? 0 : user?.id
 
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['events', filter, category],
-        queryFn: async ({ pageParam = 1 }) => await eventUseCase.getEvents(pageParam, filter, category) || { events: [], count: 0 },
+        queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam, filter, category) || { events: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.events?.length ? pages.length + 1 : undefined
       });
@@ -36,19 +38,21 @@ export const eventViewModel = ({ eventUseCase, userUseCase, eventService }: { ev
   }
 }
 
-export const eventIdViewModel = ({ eventUseCase, userUseCase, eventService }: { eventUseCase: EventUseCase, userUseCase: UserUseCase, eventService: EventService }) => {
+export const eventIdViewModel = ({ eventService }: { eventService: EventService }) => {
   return (id: number) => {
+
+    const getUserMe = DI.resolve('getUserMeUseCase')
+    const getEventById = DI.resolve('getEventByIdUseCase')
 
     //// TS CALL USER CONNECTED 
     const { data: user, isLoading: loadingUser } = useQuery({
       queryKey: ['userMe'],
-      queryFn: async () => await userUseCase.getUserMe()
+      queryFn: async () => await getUserMe.execute()
     })
 
-    //// TS CALL EVENT BY ID
     const { data: eventByIdData, isLoading: loadingEvent, error: errorEvent } = useQuery({
       queryKey: ['eventById', id],
-      queryFn: async () => await eventUseCase.getEventById(id),
+      queryFn: async () => await getEventById.execute(id),
     })
 
     //// USING SERVICE
@@ -60,9 +64,3 @@ export const eventIdViewModel = ({ eventUseCase, userUseCase, eventService }: { 
   }
 }
 
-// export const eventGetByIdViewModel = ({ eventUseCase }: { eventUseCase: EventUseCase }) => {
-//   return async (id: number) => {
-//     const event = await eventUseCase.getEventById(id)
-//     return event
-//   }
-//}

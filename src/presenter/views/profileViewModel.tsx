@@ -1,14 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { ProfileUseCase } from '../../application/useCases/profile.useCase';
+import DI from '../../di/ioc'
 
-
-
-export const profileMeViewModel = ({ profileUseCase }: { profileUseCase: ProfileUseCase }) => {
+export const profileMeViewModel = () => {
     return () => {
-        //// TS CALL PROFILE ME
+        const getProfileMe = DI.resolve('getProfileMeUseCase')
         const { data: profileMe, error: errorProfileMe, isLoading: loadingProfileMe } = useQuery({
             queryKey: ['profileMe'],
-            queryFn: async () => await profileUseCase.getProfileMe()
+            queryFn: async () => await getProfileMe.execute()
         })
         return { profileMe, errorProfileMe, loadingProfileMe };
     };

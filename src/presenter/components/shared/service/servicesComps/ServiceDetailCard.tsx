@@ -96,10 +96,11 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                         <ProfileDiv profile={userAuthor} />
                     }
                     <div className="flex items-center gap-2">
-                        <Typography variant="h2" >
-                            {points[1] && <span className="!text-[1.2rem] font-light">de </span>}
+                        <Typography variant="h3" className={`text-end ${points[1] && "w-full"}`} >
+                            {points[1] && <span className="!text-[1rem] font-light">de </span>}
                             {points[0]}
-                            {points[1] && <>  <span className="!text-[1.2rem] font-light">à</span> {points[1]}</>}
+                            {points[1] && <>  <span className="!text-[1rem] font-light">à </span>
+                                {points[1]}</>}
                             <span className="!text-[1.2rem] font-light"> points</span></Typography>
                     </div>
                 </CardFooter>

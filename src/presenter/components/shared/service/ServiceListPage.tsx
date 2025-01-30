@@ -28,7 +28,6 @@ export default function ServicesPage() {
     const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory(mine, type, step, category);
     const [customFilter, setCustomFilter] = useState<boolean>(false);
     const [customList, setCustomList] = useState<ServiceView[]>([]);
-
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);

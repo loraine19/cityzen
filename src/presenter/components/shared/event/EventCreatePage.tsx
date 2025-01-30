@@ -10,8 +10,8 @@ import { Address, AddressDTO } from '../../../../domain/entities/Address';
 
 export default function EventCreatePage() {
     const navigate = useNavigate();
-    const postEvent = async (data: EventUpdateDTO) => await DI.resolve('eventUseCase').postEvent(data)
-    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
+    const postEvent = async (data: EventUpdateDTO) => await DI.resolve('postEventUseCase').execute(data)
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('updateAddressUseCase').execute(data)
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),

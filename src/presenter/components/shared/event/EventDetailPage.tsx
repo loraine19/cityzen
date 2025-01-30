@@ -19,7 +19,7 @@ export default function EventDetailPage() {
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
     const [eventLoad, setEventLoad] = useState<EventView>(event);
-    const deleteEvent = async (id: number) => await DI.resolve('eventUseCase').deleteEvent(id);
+    const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id);
     const disabledDelete = new Date(event?.start).getTime() < Date.now();
     const disabledEdit = new Date(event?.start).getTime() < Date.now();
     const myActions = event && GenereMyActions(event, "evenement", deleteEvent, () => { });

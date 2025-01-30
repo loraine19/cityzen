@@ -22,13 +22,13 @@ export class User {
         this.id = 0;
         this.email = '';
         this.password = '';
-        this.Profile = new Profile();
+        this.Profile = {} as Profile;
         this.image = '';
         this.createdAt = new Date();
         this.updatedAt = new Date();
         this.lastConnection = new Date();
         this.status = UserStatus.INACTIVE;
-        this.GroupUser = new GroupUser();
+        this.GroupUser = {} as GroupUser;
     }
 }
 

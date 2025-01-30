@@ -13,9 +13,9 @@ interface NotificationStore {
 
 export const useNotificationStore = create<NotificationStore>((set) => {
   const fetchNotifications = async () => {
-    const notifs = await DI.resolve('notifGetViewModel')();
-    set({ notifList: notifs });
-    console.log('notifListStore', notifs)
+    const notifs = await DI.resolve('getNotifsUseCase').execute() as NotifView[];
+    console.log(notifs, DI)
+    set({ notifList: notifs })
   };
   !window.location.pathname.includes('/sign') && fetchNotifications();
   return {
