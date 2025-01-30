@@ -78,7 +78,8 @@ export class ApiService {
     };
 
     private handleRequest = (config: any) => {
-        const token = storage.getItem('access');
+        const token = this.authService.getAccessToken();
+        console.log('token:', token);
         if (token) { config.headers.Authorization = `Bearer ${token}`; }
         return config;
     };

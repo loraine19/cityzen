@@ -4,6 +4,7 @@ import { cryptedStorage, cryptedStorageI } from "./storageService";
 interface AuthServiceI {
     logOut(): void;
     getTokenExpirationDate(token: string): Date | null;
+    getAccessToken(): string;
     saveToken(accesToken: string, refreshtoken: string): void;
 }
 export class AuthService implements AuthServiceI {
@@ -23,6 +24,10 @@ export class AuthService implements AuthServiceI {
         const decoded: any = jwtDecode(token);
         if (!decoded.exp) { console.log('decoded exp not found', decoded) }
         return new Date(decoded.exp * 1000);
+    }
+
+    getAccessToken = (): string => {
+        return this.storage.getItem('access')
     }
 
     saveToken = (accessToken: string, refreshToken: string) => {
