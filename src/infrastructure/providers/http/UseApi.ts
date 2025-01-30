@@ -1,8 +1,6 @@
 import axios, { AxiosInstance } from "axios";
-import { cryptedStorage } from "../../services/storageService";
 import { AuthService } from "../../services/authService";
 
-const storage = new cryptedStorage();
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
 
 class ApiError extends Error {
@@ -61,6 +59,7 @@ export type ApiServiceI = {
 export class ApiService {
     private api: AxiosInstance;
     private authService: AuthService;
+
     constructor() {
         this.authService = new AuthService();
         this.api = axios.create({ baseURL });
@@ -79,7 +78,6 @@ export class ApiService {
 
     private handleRequest = (config: any) => {
         const token = this.authService.getAccessToken();
-        console.log('token:', token);
         if (token) { config.headers.Authorization = `Bearer ${token}`; }
         return config;
     };
@@ -136,7 +134,7 @@ export class ApiService {
     };
 
     private refreshAccess = async (): Promise<boolean> => {
-        const refreshToken = storage.getItem('refresh');
+        const refreshToken = this.authService.getRefreshToken();
         if (window.location.pathname.includes('/sign')) return false;
         if (!refreshToken && !window.location.pathname.includes('/sign')) {
             window.location.replace('/signin?msg=merci de vous connecter');

@@ -26,9 +26,8 @@ export class AuthService implements AuthServiceI {
         return new Date(decoded.exp * 1000);
     }
 
-    getAccessToken = (): string => {
-        return this.storage.getItem('access')
-    }
+    getAccessToken = (): string => this.storage.getItem('access')
+    getRefreshToken = (): string => this.storage.getItem('refresh')
 
     saveToken = (accessToken: string, refreshToken: string) => {
         this.storage.setItem('access', accessToken);
