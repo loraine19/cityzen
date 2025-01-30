@@ -4,9 +4,7 @@ import { AuthService } from "../../services/authService";
 
 const storage = new cryptedStorage();
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
-const authService = new AuthService();
 
-// Classe ApiError de base
 class ApiError extends Error {
     constructor(public status: number | string, message: string) {
         super(message);
@@ -62,8 +60,9 @@ export type ApiServiceI = {
 
 export class ApiService {
     private api: AxiosInstance;
-
+    private authService: AuthService;
     constructor() {
+        this.authService = new AuthService();
         this.api = axios.create({ baseURL });
         this.api.interceptors.request.use(this.handleRequest);
         this.api.interceptors.response.use(
@@ -93,7 +92,6 @@ export class ApiService {
                 if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
                     setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
                 }
-                console.error('xxxxx', new ApiError(error.code, error.message));
                 return Promise.reject(new ApiError(error.code, error.message));
             }
         }
@@ -107,17 +105,13 @@ export class ApiService {
             case 401:
                 if (!originalRequest._retry) {
                     originalRequest._retry = true;
-                    try {
-                        const refreshSuccess = await this.refreshAccess();
-                        if (refreshSuccess) {
-                            this.logWithTime('token refreshed SUCCESS 401');
-                            return this.api(originalRequest);
-                        } else {
-                            newError = new Api401Error('Erreur lors du rafraîchissement du token');
-                            console.error(newError);
-                        }
-                    } catch (refreshError) {
+                    const refreshSuccess = await this.refreshAccess();
+                    if (refreshSuccess) {
+                        this.logWithTime('token refreshed SUCCESS 401');
+                        return this.api(originalRequest);
+                    } else {
                         newError = new Api401Error('Erreur lors du rafraîchissement du token');
+                        console.error(newError);
                     }
                 } else {
                     newError = new Api401Error();
@@ -150,7 +144,7 @@ export class ApiService {
             const response = await axios.post(`${baseURL}/auth/refresh`, { refreshToken },
                 { headers: { Authorization: `Bearer ${refreshToken}` } });
             const { accessToken, refreshToken: newRefreshToken } = response.data;
-            authService.saveToken(accessToken, newRefreshToken);
+            this.authService.saveToken(accessToken, newRefreshToken);
             return true;
         } catch (error) {
             if (!window.location.pathname.includes('/sign')) {
