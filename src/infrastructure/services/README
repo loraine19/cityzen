@@ -1,0 +1,32 @@
+# Services
+
+Ce dossier contient les services qui interagissent avec les ressources externes et fournissent des fonctionnalités techniques spécifiques à l'application.
+
+## Organisation
+
+Les services sont organisés en sous-dossiers en fonction de leur domaine ou de leur fonctionnalité:
+
+-   `auth/`: Services liés à l'authentification (ex: `AuthService`).
+-   `payment/`: Services liés au paiement (ex: `PaymentService`).
+-   `storage/`: Services liés au stockage de fichiers (ex: `FileStorageService`).
+-   `email/`: Services liés à l'envoi d'emails (ex: `EmailService`).
+-   `image/`: Services liés au traitement d'images (ex: `ImageProcessingService`).
+-   `// ...`: Autres dossiers en fonction des besoins de l'application.
+
+## Conventions
+
+-   Chaque service doit être défini dans une classe TypeScript.
+-   Les services doivent être indépendants les uns des autres autant que possible.
+-   Les services doivent être testés unitairement pour garantir leur bon fonctionnement.
+
+## Exemples
+
+-   `AuthService`: Gère l'authentification des utilisateurs, en utilisant une bibliothèque d'authentification comme Passport.js.
+-   `PaymentService`: Gère les paiements, en utilisant une API de paiement comme Stripe.
+-   `ImageProcessingService`: Redimensionne et optimise les images, en utilisant une bibliothèque comme Jimp.
+
+## Remarques
+
+-   Ce dossier ne doit pas contenir de logique métier. La logique métier doit être gérée par les Use Cases.
+-   Les services doivent être utilisés par les Use Cases pour effectuer des actions spécifiques.
+-   Les services peuvent être injectés dans les Use Cases via l'injection de dépendances.

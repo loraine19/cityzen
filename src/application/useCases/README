@@ -1,0 +1,30 @@
+# Use Cases
+
+Ce dossier contient les Use Cases (cas d'utilisation) qui définissent la logique métier de l'application.
+
+## Organisation
+
+Les Use Cases sont organisés en sous-dossiers en fonction de leur domaine ou de leur fonctionnalité:
+
+-   `auth/`: Use Cases liés à l'authentification (ex: `SignInUseCase`).
+-   `event/`: Use Cases liés aux événements (ex: `CreateEventUseCase`).
+-   `user/`: Use Cases liés aux utilisateurs (ex: `GetUserProfileUseCase`).
+-   `// ...`: Autres dossiers en fonction des besoins de l'application.
+
+## Conventions
+
+-   Chaque Use Case doit être défini dans une classe TypeScript.
+-   Chaque Use Case doit avoir une seule responsabilité.
+-   Les Use Cases doivent être indépendants de l'interface utilisateur.
+-   Les Use Cases doivent être testés unitairement pour garantir leur bon fonctionnement.
+
+## Exemples
+
+-   `SignInUseCase`: Authentifie un utilisateur avec son email et son mot de passe.
+-   `CreateEventUseCase`: Crée un nouvel événement.
+-   `GetUserProfileUseCase`: Récupère les informations d'un utilisateur.
+
+## Remarques
+
+-   Les Use Cases appellent souvent des services pour effectuer des actions spécifiques.
+-   Les Use Cases peuvent être appelés par les contrôleurs ou les composants React.
