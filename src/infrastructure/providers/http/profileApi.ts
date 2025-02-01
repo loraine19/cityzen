@@ -1,6 +1,6 @@
 //src/infrastructure/api/profileApi.tsx
 import { Profile, ProfileDTO } from "../../../domain/entities/Profile";
-import { ApiService, ApiServiceI } from "./UseApi";
+import { ApiService, ApiServiceI } from "./apiService";
 
 
 export class ProfileApi {

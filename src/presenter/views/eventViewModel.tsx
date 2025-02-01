@@ -2,19 +2,15 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { EventService } from './viewsServices/eventService';
 import { Event } from '../../domain/entities/Event';
 import DI from '../../di/ioc';
+import { useUserStore } from '../../application/stores/user.store';
 
 
 export const eventViewModel = ({ eventService }: { eventService: EventService }) => {
   return (filter?: string, category?: string) => {
 
-    const getUserMe = DI.resolve('getUserMeUseCase')
-    const getEvents = DI.resolve('getEventsUseCase')
 
-    const { data: user, isLoading: loadingUser } = useQuery({
-      queryKey: ['userMe'],
-      queryFn: async () => await getUserMe.execute()
-    })
-    const userId = loadingUser ? 0 : user?.id
+    const getEvents = DI.resolve('getEventsUseCase')
+    const userId = useUserStore(state => state.user.id)
 
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
@@ -41,14 +37,9 @@ export const eventViewModel = ({ eventService }: { eventService: EventService })
 export const eventIdViewModel = ({ eventService }: { eventService: EventService }) => {
   return (id: number) => {
 
-    const getUserMe = DI.resolve('getUserMeUseCase')
+    const userId = useUserStore(state => state.user.id)
     const getEventById = DI.resolve('getEventByIdUseCase')
 
-    //// TS CALL USER CONNECTED 
-    const { data: user, isLoading: loadingUser } = useQuery({
-      queryKey: ['userMe'],
-      queryFn: async () => await getUserMe.execute()
-    })
 
     const { data: eventByIdData, isLoading: loadingEvent, error: errorEvent } = useQuery({
       queryKey: ['eventById', id],
@@ -56,7 +47,6 @@ export const eventIdViewModel = ({ eventService }: { eventService: EventService 
     })
 
     //// USING SERVICE
-    const userId = loadingUser ? 0 : user.id
     const event = eventByIdData ? eventService.getInfosInEvent(eventByIdData, userId) : {} as Event;
 
     //// RETURN FORMATTED DATA

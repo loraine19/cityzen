@@ -1,4 +1,4 @@
-import { ApiService } from "../../infrastructure/providers/http/UseApi";
+import { ApiService } from "../../infrastructure/providers/http/apiService";
 import { Post, PostDTO } from "../entities/Post";
 
 

@@ -1,7 +1,7 @@
 //src/infrastructure/providers/http/participantApi.ts
 
 import { Participant, ParticipantDTO } from "../../../domain/entities/Participant";
-import { ApiServiceI, ApiService } from "./UseApi";
+import { ApiServiceI, ApiService } from "./apiService";
 
 
 export class ParticipantApi {

@@ -1,6 +1,6 @@
 //src/infrastructure/api/userApi.tsx
 import { Notif } from "../../../domain/entities/Notif";
-import { ApiService, ApiServiceI } from "./UseApi";
+import { ApiService, ApiServiceI } from "./apiService";
 
 
 

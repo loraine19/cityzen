@@ -1,7 +1,7 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
 import { Service, ServiceDTO, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
-import { ApiServiceI } from "../providers/http/UseApi";
+import { ApiServiceI } from "../providers/http/apiService";
 
 
 interface IData extends ServiceRepositoryBase {

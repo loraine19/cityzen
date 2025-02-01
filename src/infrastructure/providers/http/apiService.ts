@@ -10,37 +10,37 @@ class ApiError extends Error {
     }
 }
 
-class Api400Error extends ApiError {
+class BadRequestError extends ApiError {
     constructor(message = "Mauvaise requête") {
         super(400, message);
     }
 }
 
-class Api401Error extends ApiError {
+class UnauthorizedError extends ApiError {
     constructor(message = "Non autorisé") {
         super(401, message);
     }
 }
 
-class Api403Error extends ApiError {
+class ForbiddenError extends ApiError {
     constructor(message = "Accès refusé") {
         super(403, message);
     }
 }
 
-class Api404Error extends ApiError {
+class NotFoundError extends ApiError {
     constructor(message = "Ressource non trouvée") {
         super(404, message);
     }
 }
 
-class Api409Error extends ApiError {
+class ConflictError extends ApiError {
     constructor(message = "Conflit de ressources") {
         super(409, message);
     }
 }
 
-class Api500Error extends ApiError {
+class ServerError extends ApiError {
     constructor(message = "Erreur serveur") {
         super(500, message);
     }
@@ -56,7 +56,7 @@ export type ApiServiceI = {
     createFormData(element: any): FormData;
 }
 
-export class ApiService {
+export class ApiService implements ApiServiceI {
     private api: AxiosInstance;
     private authService: AuthService;
 
@@ -77,29 +77,27 @@ export class ApiService {
     };
 
     private handleRequest = (config: any) => {
-        const token = this.authService.getAccessToken();
-        if (token) { config.headers.Authorization = `Bearer ${token}`; }
+        // remove this beacuse it's not used since I use httpOnly cookie
         return config;
     };
 
     private handleResponseError = async (error: any) => {
         const originalRequest = error.config;
         if (!error.response) {
-            this.logWithTime('not api error');
-            // if (!originalRequest._retry) {
-            //     originalRequest._retry = true;
-            //     if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
-            //         //setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
-            //     }
-            //     return Promise.reject(new ApiError(error.code, error.message));
-            // }
+            if (originalRequest) {
+                originalRequest._retry = true;
+                if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
+                    setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
+                }
+                return Promise.reject(new ApiError(error.code, error.message));
+            }
         }
         const { status, data } = error.response;
         console.error('complete error:', error.response);
         let newError = new ApiError(status, data.message);
         switch (status) {
             case 400:
-                newError = new Api400Error(data.message);
+                newError = new BadRequestError(data.message);
                 break;
             case 401:
                 if (!originalRequest._retry) {
@@ -109,24 +107,24 @@ export class ApiService {
                         this.logWithTime('token refreshed SUCCESS 401');
                         return this.api(originalRequest);
                     } else {
-                        newError = new Api401Error('Erreur lors du rafraîchissement du token');
+                        newError = new UnauthorizedError('Erreur lors du rafraîchissement du token');
                         console.error(newError);
                     }
                 } else {
-                    newError = new Api401Error();
+                    newError = new UnauthorizedError();
                 }
                 break;
             case 403:
-                newError = new Api403Error();
+                newError = new ForbiddenError();
                 break;
             case 404:
-                newError = data.message.includes("Bad Request") ? new Api400Error('Mauvaise requête.') : new Api404Error();
+                newError = data.message.includes("Bad Request") ? new BadRequestError('Mauvaise requête.') : new NotFoundError();
                 break;
             case 409:
-                newError = new Api409Error();
+                newError = new ConflictError();
                 break;
             case 500:
-                newError = new Api500Error();
+                newError = new ServerError();
                 break;
         }
         console.error('newError:', newError);
@@ -135,7 +133,6 @@ export class ApiService {
 
     private refreshAccess = async (): Promise<boolean> => {
         const refreshToken = this.authService.getRefreshToken();
-        console.log('refreshToken:', refreshToken);
         if (window.location.pathname.includes('/sign')) return false;
         if (!refreshToken && !window.location.pathname.includes('/sign')) {
             window.location.replace('/signin?msg=merci de vous connecter');
@@ -143,10 +140,8 @@ export class ApiService {
         try {
             const response = await axios.post(`${baseURL}/auth/refresh`, {},
                 { withCredentials: true, headers: { Authorization: `Bearer ${refreshToken}` } });
-            console.log('response:', response)
-            const { accessToken, refreshToken: newRefreshToken } = response.data;
-            this.authService.saveToken(accessToken, newRefreshToken);
-            //  document.cookie = `access=${accessToken}; Max-Age=60; Path=/; SameSite=Strict`;
+            const { refreshToken: newRefreshToken } = response.data;
+            this.authService.saveToken(newRefreshToken);
             return true;
         } catch (error) {
             console.error('error refresh:', error);

@@ -113,7 +113,7 @@ export class EventService implements EventServiceI {
             toogleParticipate: async () => {
                 await this.toogleParticipantUseCase.execute(event, event.id, userId);
                 const newEvent = await DI.resolve('getEventByIdUseCase').execute(event.id);
-                return this.getInfosInEvent(newEvent, userId);
+                return this.mapEventToEventView(newEvent, userId);
             }
         };
     }

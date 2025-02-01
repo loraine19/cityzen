@@ -1,5 +1,5 @@
 import { Service, ServiceDTO, ServicePage, ServiceUpdate } from "../../../domain/entities/Service";
-import { ApiService } from "./UseApi";
+import { ApiService } from "./apiService";
 
 export class ServiceApi {
     ;

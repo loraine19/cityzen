@@ -1,4 +1,4 @@
-import { Api } from "../../infrastructure/providers/http/UseApi";
+import { Api } from "../../infrastructure/providers/http/apiService";
 import { EventView } from "./Event";
 
 

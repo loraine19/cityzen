@@ -1,6 +1,6 @@
 import { Event, EventDTO, EventPage } from "../../../domain/entities/Event";
 
-import { ApiServiceI, ApiService } from "./UseApi";
+import { ApiServiceI, ApiService } from "./apiService";
 
 export class EventApi {
     private readonly dataType: string = 'events';

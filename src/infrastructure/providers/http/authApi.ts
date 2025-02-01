@@ -1,6 +1,6 @@
 ///src/infrastructure/providers/http/authApi.ts
 import { AccessDTO, Auth } from "../../../domain/entities/Auth";
-import { ApiServiceI, ApiService } from "./UseApi";
+import { ApiServiceI, ApiService } from "./apiService";
 
 
 export class AuthApi {

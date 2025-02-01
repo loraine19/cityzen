@@ -1,7 +1,7 @@
 ///src/infrastructure/providers/http/authApi.ts
 import { ResetDTO } from "../../../domain/entities/Auth";
 import { MessageBack } from "../../../domain/entities/frontEntities";
-import { ApiServiceI, ApiService } from "./UseApi";
+import { ApiServiceI, ApiService } from "./apiService";
 
 
 export class ResetPasswordApi {

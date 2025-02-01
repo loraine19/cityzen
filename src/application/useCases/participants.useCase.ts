@@ -48,7 +48,7 @@ export class ToogleParticipantUseCase {
     public async execute(event: Event, eventId: number, userId: number): Promise<Participant | void> {
         if (event.Participants.find(p => p.userId === userId))
             return await this.participantRepository.deleteParticipant(eventId)
-        else
+        else if (event.Participants.find(p => p.userId !== userId))
             return await this.participantRepository.postParticipant({ eventId, userId });
 
     }

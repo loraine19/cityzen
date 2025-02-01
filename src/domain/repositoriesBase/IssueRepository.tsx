@@ -1,4 +1,4 @@
-import { ApiService } from "../../infrastructure/providers/http/UseApi";
+import { ApiService } from "../../infrastructure/providers/http/apiService";
 import { Issue, IssueDTO } from "../entities/Issue";
 
 const api: ApiService = new ApiService();

@@ -1,4 +1,4 @@
-import { ApiService } from "../../infrastructure/providers/http/UseApi";
+import { ApiService } from "../../infrastructure/providers/http/apiService";
 import { Pool } from "../entities/Pool";
 import { Survey } from "../entities/Survey";
 

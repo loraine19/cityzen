@@ -4,8 +4,8 @@ import { cryptedStorage, cryptedStorageI } from "./storageService";
 interface AuthServiceI {
     logOut(): void;
     getTokenExpirationDate(token: string): Date | null;
-    getAccessToken(): string;
-    saveToken(accesToken: string, refreshtoken: string): void;
+    getRefreshToken(): string;
+    saveToken(refreshtoken: string): void;
 }
 export class AuthService implements AuthServiceI {
     private storage: cryptedStorageI;
@@ -15,7 +15,6 @@ export class AuthService implements AuthServiceI {
     }
 
     logOut = () => {
-        this.storage.removeItem('access');
         this.storage.removeItem('refresh');
         window.location.replace('/signin');
     }
@@ -26,11 +25,9 @@ export class AuthService implements AuthServiceI {
         return new Date(decoded.exp * 1000);
     }
 
-    getAccessToken = (): string => this.storage.getItem('access')
     getRefreshToken = (): string => this.storage.getItem('refresh')
 
-    saveToken = (accessToken: string, refreshToken: string) => {
-        this.storage.setItem('access', accessToken);
+    saveToken = (refreshToken: string) => {
         this.storage.setItem('refresh', refreshToken);
     }
 }
