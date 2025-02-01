@@ -67,8 +67,8 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                             icon={L.icon({
                                 iconUrl: '/marker.svg',
                                 iconSize: [50, 50],
-                                iconAnchor: [10, 50],
-                                popupAnchor: [0, -25],
+                                iconAnchor: [0, 0],
+                                popupAnchor: [0, 0],
                             })}
                         >
                             <Popup>
@@ -97,9 +97,9 @@ export default function AddressMapOpen(props: { address: Address, message?: stri
                         <Marker position={position}
                             icon={L.icon({
                                 iconUrl: '/marker.svg',
-                                iconSize: [90, 55],
-                                iconAnchor: [2, 5],
-                                popupAnchor: [0, -90],
+                                iconSize: [50, 50],
+                                iconAnchor: [0, 0],
+                                popupAnchor: [0, 0],
                             })}>
                             <Popup>
                                 {message || `${Address?.address} ${Address?.city}`}

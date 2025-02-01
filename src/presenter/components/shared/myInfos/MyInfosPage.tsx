@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@material-tailwind/react';
 import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
 import { ProfileForm } from '../auth/auth.Comps/ProfileForm';
@@ -19,12 +19,12 @@ export default function MyInfosPage() {
     const { setUserProfile } = useUserStore()
     const navigate = useNavigate();
     const user: User = useUserStore((state) => state.user);
-    const [assistance, setAssistance] = useState<string | undefined>()
+    const [assistance, setAssistance] = useState<string | undefined>(user.Profile?.assistance)
     const [mailSub, setMailSub] = useState<string | undefined>(user.Profile?.mailSub)
     const [address, setAddress] = useState<AddressDTO>(user.Profile?.Address)
     const [open, setOpen] = useState(false);
-    const updateAddress = async (data: AddressDTO) => await DI.resolve('addressService').updateAddress(data)
-    const updateProfile = async (data: ProfileDTO) => await DI.resolve('profileUseCase').updateProfile(data)
+    const updateAddress = async (data: AddressDTO) => await DI.resolve('updateAddressUseCase').execute(data)
+    const updateProfile = async (data: ProfileDTO) => await DI.resolve('updateProfileUseCase').execute(data)
 
     const formSchema = object({
         firstName: string().required("Le prémon est obligatoire").min(2, "minmum 2 lettres"),
@@ -36,7 +36,7 @@ export default function MyInfosPage() {
 
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: new ProfileDTO(user.Profile),
+        initialValues: user.Profile as any,
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values;
@@ -53,6 +53,7 @@ export default function MyInfosPage() {
         const { Address, ...rest } = formik.values;
         const updateData = { assistance, ...rest }
         const updated = await updateProfile(updateData);
+        console.log(updated)
         if (updated) {
             setUserProfile(updated)
             navigate("/");
@@ -60,7 +61,7 @@ export default function MyInfosPage() {
         }
     }
 
-
+    useEffect(() => { formik.values.Address = address; console.log(address) }, [address])
 
     return (
         <div className="Body gray flex">

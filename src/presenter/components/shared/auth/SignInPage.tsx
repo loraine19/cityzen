@@ -8,6 +8,7 @@ import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
 import DI from '../../../../di/ioc';
 import { AccessDTO, VerifyDTO } from '../../../../domain/entities/Auth';
+import { useUserStore } from '../../../../application/stores/user.store';
 
 export default function SignInPage() {
     const { saveToken } = DI.resolve('authService');
@@ -47,17 +48,18 @@ export default function SignInPage() {
 
     };
 
+    const fetchUser = useUserStore((state) => state.fetchUser);
     const handleSignIn = async (email: string, password: string) => {
         const accessData = { email, password }
         const auth = await signIn(accessData);
-        console.log('auth', auth)
         if (auth?.accessToken) {
             saveToken(auth.accessToken, auth.refreshToken);
+            fetchUser()
             setNotif('Vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/") }, 1000);
         } else {
             setNotif(auth?.error || 'Erreur de connexion');
-            formik.resetForm();
+            setTimeout(() => { formik.resetForm(); }, 1000);
         }
     }
 

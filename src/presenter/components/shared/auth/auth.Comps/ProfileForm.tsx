@@ -1,9 +1,8 @@
-import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix, IconButton } from "@material-tailwind/react";
+import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
-import { Address } from '../../../../../domain/entities/Address';
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { Label } from "../../../../../domain/entities/frontEntities";
 import { ImageBtn } from "../../../common/ImageBtn";
@@ -12,7 +11,9 @@ import { Icon } from "../../../common/SmallComps";
 
 export const ProfileForm = (props: {
     formik: any,
-    setAssistance?: any, setAddress?: any, setMailSub?: any,
+    setAssistance?: any,
+    setAddress?: any,
+    setMailSub?: any,
 }) => {
     const { formik, setAssistance, setMailSub, setAddress, } = props;
     const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image || './person.svg');
@@ -63,7 +64,8 @@ export const ProfileForm = (props: {
                         <AddressInputOpen
                             address={formik.values.Address}
                             setAddress={setAddress}
-                            error={formik.errors.Address} />
+                            error={formik.errors.Address}
+                        />
                         <Select className="p-5 capitaliz "
                             label={formik.errors.mailSub ? formik.errors.mailSub as string : "Notifications mails"} name="mailSub" variant='standard'
                             error={formik.errors.mailSub}
@@ -105,7 +107,7 @@ export const ProfileForm = (props: {
                                 <ListItem ripple={true} key={index} className="!py-1 pl-4 rounded-full text-sm">
                                     {skill}
                                     <ListItemSuffix>
-                                        <Icon onClick={() => { console.log(skill, setSkillList); removeSkill(skill) }} icon="close" size="xl" />
+                                        <Icon onClick={() => { removeSkill(skill) }} icon="close" size="xl" />
                                     </ListItemSuffix>
                                 </ListItem>
                             )}

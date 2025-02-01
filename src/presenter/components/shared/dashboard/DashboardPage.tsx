@@ -16,6 +16,12 @@ import { useSearchParams } from "react-router-dom";
 
 export default function DashboardPage() {
     const user = useUserStore((state) => state.user);
+    const fetchUser = useUserStore((state) => state.fetchUser);
+    const setUser = useUserStore((state) => state.setUser);
+    useEffect(() => {
+        fetchUser()
+    }, [])
+    console.log(user)
     const notifList = useNotificationStore((state) => state.notifList);
     const updateNotif = useNotificationStore((state) => state.updateNotif);
     const userNotif = useNotificationStore((state) => state.notifList?.filter((notif) => !notif.read).length);

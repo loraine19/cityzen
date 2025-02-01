@@ -63,8 +63,8 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                     <div className="flex items-center gap-2">
                         <button onClick={() => { toggleLike(post.id, userId, setPost); update && update() }} className={mines ? `hidden md:flex` : `flex`}>
                             <Chip size="md" value={`${Likes?.length}`} variant="ghost"
-                                className="pl-5  rounded-full h-full flex items-center"
-                                icon={<Icon icon="thumb_up" size="xl" fill={ILike} color={ILike ? "cyan" : "gray"} style=" -mt-1.5 !pl-1.5" />}>
+                                className="pl-4  rounded-full h-full flex items-center"
+                                icon={<Icon icon="thumb_up" size="lg" fill={ILike} color={ILike ? "cyan" : "gray"} style=" -mt-1.5 !pl-2" />}>
                             </Chip></button>
                         <Icon icon="arrow_circle_right" link={`/annonce/${id}`} title={`voir les details de l'annonce  ${title}`} size="4xl px-1" fill />
                     </div>

@@ -37,6 +37,7 @@ import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, Delete
 import { NotifService } from '../presenter/views/viewsServices/notifService';
 import { GetNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
+import { PostProfileUseCase, UpdateProfileUseCase } from '../application/useCases/profile.useCase';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -75,6 +76,8 @@ container.register({
     userData: asClass(UserApi),
 
     ////PROFILE
+    postProfileUseCase: asClass(PostProfileUseCase),
+    updateProfileUseCase: asClass(UpdateProfileUseCase),
     profileRepository: asClass(ProfileRepositoryImpl),
     profileMeViewModel: asFunction(profileMeViewModel),
     profileService: asClass(ProfileService),

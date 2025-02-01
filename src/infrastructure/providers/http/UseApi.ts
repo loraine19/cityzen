@@ -86,13 +86,13 @@ export class ApiService {
         const originalRequest = error.config;
         if (!error.response) {
             this.logWithTime('not api error');
-            if (!originalRequest._retry) {
-                originalRequest._retry = true;
-                if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
-                    setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
-                }
-                return Promise.reject(new ApiError(error.code, error.message));
-            }
+            // if (!originalRequest._retry) {
+            //     originalRequest._retry = true;
+            //     if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
+            //         //setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
+            //     }
+            //     return Promise.reject(new ApiError(error.code, error.message));
+            // }
         }
         const { status, data } = error.response;
         console.error('complete error:', error.response);
@@ -135,17 +135,21 @@ export class ApiService {
 
     private refreshAccess = async (): Promise<boolean> => {
         const refreshToken = this.authService.getRefreshToken();
+        console.log('refreshToken:', refreshToken);
         if (window.location.pathname.includes('/sign')) return false;
         if (!refreshToken && !window.location.pathname.includes('/sign')) {
             window.location.replace('/signin?msg=merci de vous connecter');
         }
         try {
-            const response = await axios.post(`${baseURL}/auth/refresh`, { refreshToken },
-                { headers: { Authorization: `Bearer ${refreshToken}` } });
+            const response = await axios.post(`${baseURL}/auth/refresh`, {},
+                { withCredentials: true, headers: { Authorization: `Bearer ${refreshToken}` } });
+            console.log('response:', response)
             const { accessToken, refreshToken: newRefreshToken } = response.data;
             this.authService.saveToken(accessToken, newRefreshToken);
+            //  document.cookie = `access=${accessToken}; Max-Age=60; Path=/; SameSite=Strict`;
             return true;
         } catch (error) {
+            console.error('error refresh:', error);
             if (!window.location.pathname.includes('/sign')) {
                 setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter'), 5000)
             }
@@ -155,7 +159,7 @@ export class ApiService {
 
     public async get(url: string): Promise<any> {
         try {
-            const response = await this.api.get(url);
+            const response = await this.api.get(url, { withCredentials: true });
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -164,7 +168,7 @@ export class ApiService {
 
     public async delete(url: string): Promise<any> {
         try {
-            const response = await this.api.delete(url);
+            const response = await this.api.delete(url, { withCredentials: true });
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -173,7 +177,7 @@ export class ApiService {
 
     public async put(url: string, data?: any): Promise<any> {
         try {
-            const response = await this.api.put(url, data);
+            const response = await this.api.put(url, data, { withCredentials: true });
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -182,7 +186,8 @@ export class ApiService {
 
     public async post(url: string, data: any, config?: any): Promise<any> {
         try {
-            const response = await this.api.post(url, data, config);
+            const response = await this.api.post(url, data, { ...config, withCredentials: true });
+
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -191,7 +196,7 @@ export class ApiService {
 
     public async patch(url: string, data: any, config?: any): Promise<any> {
         try {
-            const response = await this.api.patch(url, data, config);
+            const response = await this.api.patch(url, data, { ...config, withCredentials: true });
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);

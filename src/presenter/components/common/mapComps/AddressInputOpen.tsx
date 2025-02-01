@@ -6,7 +6,11 @@ import { Skeleton } from '../Skeleton';
 
 interface AddressSuggestion { label: string; value: Address }
 
-export const AddressInputOpen = (props: { address: Address, setAddress: any, error?: any }) => {
+export const AddressInputOpen = (props: {
+    address: Address,
+    setAddress: any,
+    error?: any,
+}) => {
     const { address, setAddress, error } = props;
     const [inputLoading, setInputLoading] = useState(false)
     const [inputValue, setInputValue] = useState(`${address?.address || ''} ${address?.zipcode || ''} ${address?.city || ''}`.trim() || '');
@@ -97,7 +101,8 @@ export const AddressInputOpen = (props: { address: Address, setAddress: any, err
                                     key={index}
                                     onClick={() => {
                                         handleSuggestionSelect(suggestion);
-                                        setAddress(suggestion.value);
+
+                                        setAddress({ ...suggestion.value } as Address);
                                         setInputLoading(false)
                                     }}>
                                     {suggestion.label}

@@ -48,6 +48,8 @@ export function DateChip(props: { start: Date | string, end?: Date | string, end
     )
 }
 
+
+/// Button to flag usable in any component
 export function FlagIcon(props: { flagged: boolean, id: number, type: string }) {
     const { flagged, id, type } = props;
     const to = `/flag${flagged ? '/edit' : ''}/${type}/${id}`
@@ -64,7 +66,7 @@ export function Icon(props: {
 }) {
     const { title, icon, disabled, onClick } = props
     let size = props.size ? props.size : "2xl"
-    size === 'xl' && (size = '[1.3rem]')
+    size === 'xl' && (size = '[1.2rem]')
     size === '5xl' && (size = '[2.8rem]')
     const pad = props.bg ? 'px-[0.28em] pb-[0.03em]' : 'px-1'
     const fill = props.fill ? "fillThin" : ""

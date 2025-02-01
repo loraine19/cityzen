@@ -15,6 +15,7 @@ export class UserApi {
 
 
     async getUserMe(): Promise<User> {
+        console.log(await this.api.get(`${this.dataType}/me`))
         return this.api.get(`${this.dataType}/me`);
     }
 

@@ -21,6 +21,7 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
         const fetchUser = async () => {
             if (!window.location.pathname.includes('/sign')) {
                 const user = await DI.resolve('getUserMeUseCase').execute() as User;
+                console.log(user)
                 !user.Profile && window.location.replace('/signup_details');
                 set({ user: user });
                 set({ profile: user.Profile });
