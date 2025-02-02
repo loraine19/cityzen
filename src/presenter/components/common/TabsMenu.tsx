@@ -2,8 +2,6 @@ import { Tabs, TabsHeader, Tab } from "@material-tailwind/react";
 import { TabLabel } from "../../../domain/entities/frontEntities";
 import { useEffect } from "react";
 
-
-
 export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: string }) {
     const { labels, defaultTab } = props
 

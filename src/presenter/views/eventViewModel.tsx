@@ -8,7 +8,6 @@ import { useUserStore } from '../../application/stores/user.store';
 export const eventViewModel = ({ eventService }: { eventService: EventService }) => {
   return (filter?: string, category?: string) => {
 
-
     const getEvents = DI.resolve('getEventsUseCase')
     const userId = useUserStore(state => state.user.id)
 
@@ -18,7 +17,8 @@ export const eventViewModel = ({ eventService }: { eventService: EventService })
         queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam, filter, category) || { events: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.events?.length ? pages.length + 1 : undefined
-      });
+      })
+
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const events = eventService.getInfosInEvents(data?.pages.flat().map(page => page.events).flat(), userId)
 
@@ -30,7 +30,7 @@ export const eventViewModel = ({ eventService }: { eventService: EventService })
       hasNextPage,
       isLoading,
       error
-    };
+    }
   }
 }
 
@@ -46,10 +46,8 @@ export const eventIdViewModel = ({ eventService }: { eventService: EventService 
       queryFn: async () => await getEventById.execute(id),
     })
 
-    //// USING SERVICE
     const event = eventByIdData ? eventService.getInfosInEvent(eventByIdData, userId) : {} as Event;
 
-    //// RETURN FORMATTED DATA
     return { event, loadingEvent, errorEvent }
   }
 }

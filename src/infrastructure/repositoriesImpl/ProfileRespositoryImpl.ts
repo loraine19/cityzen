@@ -1,4 +1,5 @@
 //src/infrastructure/repositoriesImpl/ProfileRepositoryImpl.tsx
+import { AddressDTO } from "../../domain/entities/Address";
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
 import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
 
@@ -16,13 +17,12 @@ export class ProfileRepositoryImpl implements ProfileRepositoryBase {
         return this.profileData.getProfileMe();
     }
 
-    async postProfile(data: ProfileDTO): Promise<Profile> {
-        return this.profileData.postProfile(data);
+    async postProfile(data: ProfileDTO, address: AddressDTO): Promise<Profile> {
+        return this.profileData.postProfile(data, address);
     }
 
-    async updateProfile(data: ProfileDTO): Promise<Profile> {
-        console.log('updateProfile', data)
-        return this.profileData.updateProfile(data);
+    async updateProfile(data: ProfileDTO, address: AddressDTO): Promise<Profile> {
+        return this.profileData.updateProfile(data, address);
     }
 }
 

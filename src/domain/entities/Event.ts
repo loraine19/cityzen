@@ -52,7 +52,7 @@ export const eventCategory = Object.values(EventCategory).filter(category => typ
 
 export class EventDTO {
     Address: Address = new Address();
-    addressId: number = 0;
+    addressId?: number = 0;
     category: EventCategory | string = EventCategory.CATEGORY_1;
     description: string = '';
     end: Date | string = new Date();

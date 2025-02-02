@@ -45,8 +45,8 @@ export default function EventDetailPage() {
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={`évenement ${eventLoad.label}`}
-                    place={parse(`<br><div className="text-xl whitespace-nowrap text-ellipsis overflow-hidden ">${event?.Address?.address} ${event?.Address?.city}</div>`)} closeBtn />
+                <SubHeader type={`évenement ${eventLoad.label || ''}`}
+                    place={parse(`<br><div className="text-xl whitespace-nowrap text-ellipsis overflow-hidden ">${event?.Address?.address || ''} ${event?.Address?.city || ''}</div>`)} closeBtn />
             </header>
             <main>
                 {!loadingEvent && eventLoad ?

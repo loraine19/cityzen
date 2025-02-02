@@ -1,4 +1,5 @@
 
+import { AddressDTO } from "../../domain/entities/Address";
 import { Event, EventDTO, EventPage } from "../../domain/entities/Event";
 import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
 
@@ -33,8 +34,8 @@ export class PostEventUseCase {
         this.eventRepository = eventRepository;
     }
 
-    public async execute(data: EventDTO): Promise<Event> {
-        return await this.eventRepository.postEvent(data);
+    public async execute(data: EventDTO, address: AddressDTO): Promise<Event> {
+        return await this.eventRepository.postEvent(data, address);
     }
 }
 
@@ -45,8 +46,9 @@ export class UpdateEventUseCase {
         this.eventRepository = eventRepository;
     }
 
-    public async execute(id: number, data: EventDTO): Promise<Event> {
-        return await this.eventRepository.updateEvent(id, data);
+    public async execute(id: number, data: EventDTO, address: AddressDTO): Promise<Event> {
+        console.log(address)
+        return await this.eventRepository.updateEvent(id, data, address);
     }
 }
 

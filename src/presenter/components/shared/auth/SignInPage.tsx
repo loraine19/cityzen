@@ -52,8 +52,8 @@ export default function SignInPage() {
     const handleSignIn = async (email: string, password: string) => {
         const accessData = { email, password }
         const auth = await signIn(accessData);
-        if (auth?.accessToken) {
-            saveToken(auth.accessToken, auth.refreshToken);
+        if (auth?.refreshToken) {
+            saveToken(auth.refreshToken);
             fetchUser()
             setNotif('Vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/") }, 1000);

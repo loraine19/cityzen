@@ -178,10 +178,12 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
 export function Title(props: { title: string, flagged?: boolean, id?: number, CreatedAt?: string | Date, subTitle?: string }) {
     const { flagged, id, CreatedAt, subTitle } = props
     const titleElement = document.getElementById(props.title);
+
     const maxLength = titleElement && titleElement.scrollWidth > titleElement.clientWidth ? 90 : 42;
     const [title, setTitle] = useState<string>(props.title?.length > maxLength ? props.title.slice(0, maxLength - 3) + '...' + (parse('&nbsp;').toString()).repeat(props.title?.length - maxLength) : props.title)
+    console.log(props.title, title)
     return (
-        <>
+        <div className="min-h-max">
             <div className="flex items-center w-full  justify-between  gap-2">
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
                     <Typography onScroll={() => { setTitle(props.title) }} id={props.title} variant="h6" color="blue-gray" className="w-full flex whitespace-nowrap overflow-x-auto "
@@ -193,7 +195,9 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
                 {id && <FlagIcon flagged={flagged ? true : false} id={id} type="service" />
                 }
             </div>
-            {subTitle && <Typography variant="small" color="blue-gray" className="truncate font-normal">{subTitle}</Typography>}</>)
+            {subTitle &&
+                <Typography variant="small" color="blue-gray" className="truncate font-normal">{subTitle}</Typography>}
+        </div>)
 }
 
 export const LogOutButton = () => {

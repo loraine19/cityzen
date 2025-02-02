@@ -34,12 +34,14 @@ import { PrivateRoute } from "./presenter/components/shared/utilsPage/PrivateRou
 import NotFindPage from "./presenter/components/shared/utilsPage/NotFindPage";
 import ErrorBoundary from "./presenter/components/shared/utilsPage/ErrorBoundary";
 import { useState } from "react";
+
 function App() {
     const [retryCount, setRetryCount] = useState(0);
     const handleRetry = () => {
         setTimeout(() => { console.log(retryCount, 'retryCountApp') }, 5000);
         setRetryCount(retryCount + 1);
     }
+
 
     return (
         <>

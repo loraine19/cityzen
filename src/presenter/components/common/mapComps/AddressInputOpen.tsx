@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Input, List, ListItem } from '@material-tailwind/react';
-import { Address } from '../../../../domain/entities/Address';
+import { Address, AddressDTO } from '../../../../domain/entities/Address';
 import { Skeleton } from '../Skeleton';
 
 interface AddressSuggestion { label: string; value: Address }
 
 export const AddressInputOpen = (props: {
-    address: Address,
+    address: AddressDTO | Address,
     setAddress: any,
     error?: any,
 }) => {

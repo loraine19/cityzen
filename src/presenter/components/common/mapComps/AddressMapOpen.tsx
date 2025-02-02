@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Popover, PopoverHandler, PopoverContent, Chip } from '@material-tailwind/react';
 import { Icon } from '../SmallComps';
-import { Address } from '../../../../domain/entities/Address';
+import { Address, AddressDTO } from '../../../../domain/entities/Address';
 import { Link } from 'react-router-dom';
 
 function FlyToMarker({ position }: { position: [number, number] }) {
@@ -21,7 +21,7 @@ function FlyToMarker({ position }: { position: [number, number] }) {
     return null;
 }
 
-export default function AddressMapOpen(props: { address: Address, message?: string }) {
+export default function AddressMapOpen(props: { address: AddressDTO | Address, message?: string }) {
     const { message } = props;
     const Address = props.address;
     const [position, setPosition] = useState<[number, number]>([Address?.lat, Address?.lng]);

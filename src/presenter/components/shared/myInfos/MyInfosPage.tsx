@@ -8,7 +8,7 @@ import { ProfileForm } from '../auth/auth.Comps/ProfileForm';
 import { ProfileDTO, } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
-import { Address, AddressDTO } from '../../../../domain/entities/Address';
+import { AddressDTO } from '../../../../domain/entities/Address';
 import { LogOutButton } from '../../common/SmallComps';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { User } from '../../../../domain/entities/User';
@@ -23,8 +23,7 @@ export default function MyInfosPage() {
     const [mailSub, setMailSub] = useState<string | undefined>(user.Profile?.mailSub)
     const [address, setAddress] = useState<AddressDTO>(user.Profile?.Address)
     const [open, setOpen] = useState(false);
-    const updateAddress = async (data: AddressDTO) => await DI.resolve('updateAddressUseCase').execute(data)
-    const updateProfile = async (data: ProfileDTO) => await DI.resolve('updateProfileUseCase').execute(data)
+    const updateProfile = async (data: ProfileDTO, Address: AddressDTO) => await DI.resolve('updateProfileUseCase').execute(data, Address)
 
     const formSchema = object({
         firstName: string().required("Le prémon est obligatoire").min(2, "minmum 2 lettres"),
@@ -40,8 +39,6 @@ export default function MyInfosPage() {
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values;
-            const updatedAddress: Address = await updateAddress(address)
-            formik.values.Address = updatedAddress;
             formik.values.assistance = assistance;
             formik.values.mailSub = mailSub;
             setOpen(true)
@@ -49,11 +46,9 @@ export default function MyInfosPage() {
     })
 
     const update = async () => {
-        formik.values.addressId = formik.values?.Address?.id || 0
-        const { Address, ...rest } = formik.values;
+        const { ...rest } = formik.values;
         const updateData = { assistance, ...rest }
-        const updated = await updateProfile(updateData);
-        console.log(updated)
+        const updated = await updateProfile(updateData, address)
         if (updated) {
             setUserProfile(updated)
             navigate("/");

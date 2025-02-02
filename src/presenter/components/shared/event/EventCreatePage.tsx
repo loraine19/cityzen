@@ -10,8 +10,8 @@ import { Address, AddressDTO } from '../../../../domain/entities/Address';
 
 export default function EventCreatePage() {
     const navigate = useNavigate();
-    const postEvent = async (data: EventUpdateDTO) => await DI.resolve('postEventUseCase').execute(data)
-    const updateAddress = async (data: AddressDTO) => await DI.resolve('updateAddressUseCase').execute(data)
+    const [Address, setAddress] = useState<AddressDTO>({} as AddressDTO)
+    const postEvent = async (data: EventUpdateDTO, Address: Address) => await DI.resolve('postEventUseCase').execute(data, Address)
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -30,8 +30,6 @@ export default function EventCreatePage() {
         initialValues: new EventDTO() as EventView,
         validationSchema: formSchema,
         onSubmit: async values => {
-            const updatedAddress: Address = await updateAddress(formik.values.Address)
-            formik.values.Address = updatedAddress;
             formik.values = values
             setOpen(true)
         }
@@ -40,10 +38,9 @@ export default function EventCreatePage() {
     const postFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
-        formik.values.addressId = formik.values.Address.id
         const { Address, Participants, ...rest } = formik.values;
         const updateData = { ...rest }
-        const post = await postEvent(updateData);
+        const post = await postEvent(updateData, Address);
         if (post) {
             navigate("/evenement/" + post.id);
             location.reload()
@@ -63,7 +60,10 @@ export default function EventCreatePage() {
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
 
-            <EventForm formik={formik} />
+            <EventForm
+                formik={formik}
+                Address={Address}
+                setAddress={setAddress} />
         </div >
     )
 }

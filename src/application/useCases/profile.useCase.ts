@@ -1,3 +1,4 @@
+import { AddressDTO } from "../../domain/entities/Address";
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
 import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
 
@@ -20,8 +21,8 @@ export class PostProfileUseCase {
         this.profileRepository = profileRepository;
     }
 
-    public async execute(data: ProfileDTO): Promise<Profile> {
-        return this.profileRepository.postProfile(data);
+    public async execute(data: ProfileDTO, address: AddressDTO): Promise<Profile> {
+        return this.profileRepository.postProfile(data, address);
     }
 }
 
@@ -32,8 +33,8 @@ export class UpdateProfileUseCase {
         this.profileRepository = profileRepository;
     }
 
-    public async execute(data: ProfileDTO): Promise<Profile> {
-        return this.profileRepository.updateProfile(data);
+    public async execute(data: ProfileDTO, address: AddressDTO): Promise<Profile> {
+        return this.profileRepository.updateProfile(data, address);
     }
 }
 

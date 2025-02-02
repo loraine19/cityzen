@@ -23,6 +23,7 @@
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "html-react-parser": "^5.1.18",
+    "i": "^0.3.7",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",

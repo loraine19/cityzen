@@ -45,17 +45,16 @@ export class ToogleParticipantUseCase {
         this.participantRepository = participantRepository;
     }
 
-    public async execute(event: Event, eventId: number, userId: number): Promise<Participant | void> {
-        if (event.Participants.find(p => p.userId === userId))
-            return await this.participantRepository.deleteParticipant(eventId)
-        else if (event.Participants.find(p => p.userId !== userId))
-            return await this.participantRepository.postParticipant({ eventId, userId });
-
+    public async execute(event: Event, eventId: number, userId: number): Promise<boolean> {
+        const isParticipant: Participant | undefined = (event?.Participants.find((p: Participant) => p.userId === userId))
+        if (isParticipant) {
+            await this.participantRepository.deleteParticipant(eventId)
+            return true
+        }
+        else {
+            await this.participantRepository.postParticipant({ eventId, userId })
+            return true
+        }
     }
 }
 
-export const participantUsesCases = {
-    GetParticipantsUseCase,
-    PostParticipantUseCase,
-    DeleteParticipantUseCase
-}

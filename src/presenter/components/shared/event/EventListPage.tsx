@@ -116,7 +116,10 @@ export default function EventListPage() {
                             </div>
                         ))
                     }
-                    <LoadMoreButton isBottom={isBottom} hasNextPage={hasNextPage} handleScroll={handleScroll} />
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={handleScroll} />
 
                 </main>
             )}

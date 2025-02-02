@@ -41,7 +41,6 @@ export class ProfileDTO implements Partial<Profile> {
     phone?: string;
     points?: number;
     skills?: string = '';
-    Address?: Address = new Address();
     mailSub?: MailSubscriptions | string = MailSubscriptions.SUB_1
     constructor(data?: Partial<ProfileDTO>) {
         if (data) {
@@ -59,7 +58,7 @@ export class ProfileView extends Profile {
     fullName?: string = '';
 }
 
-enum MailSubscriptions {
+export enum MailSubscriptions {
     SUB_1 = 'seulement les messages obligatoires',
     SUB_2 = 'les messages importants',
     SUB_3 = 'les messages importants et les mise à jour',

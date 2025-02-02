@@ -1,4 +1,5 @@
 //src/infrastructure/api/profileApi.tsx
+import { AddressDTO } from "../../../domain/entities/Address";
 import { Profile, ProfileDTO } from "../../../domain/entities/Profile";
 import { ApiService, ApiServiceI } from "./apiService";
 
@@ -25,17 +26,15 @@ export class ProfileApi {
         return this.api.put(`${this.dataType}/${id}`, profile)
     }
 
-    async updateProfile(element: ProfileDTO): Promise<Profile> {
-        console.log('element', element);
-        const formData = this.api.createFormData(element);
+    async updateProfile(element: ProfileDTO, address: AddressDTO): Promise<Profile> {
+        const formData = this.api.createFormData(element, address);
         return this.api.patch(`${this.dataType}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
     }
 
-    async postProfile(element: ProfileDTO): Promise<Profile> {
-        console.log('element', element);
-        const formData = this.api.createFormData(element);
+    async postProfile(element: ProfileDTO, address: AddressDTO): Promise<Profile> {
+        const formData = this.api.createFormData(element, address);
         return this.api.post(`${this.dataType}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });

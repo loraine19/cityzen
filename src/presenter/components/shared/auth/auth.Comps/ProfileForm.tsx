@@ -19,7 +19,7 @@ export const ProfileForm = (props: {
     const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image || './person.svg');
     const { user } = useUserStore()
     const [newSkill, setNewSkill] = useState<string | undefined>()
-    const [skillList, setSkillList] = useState<string[]>(formik.values.skills.split(','))
+    const [skillList, setSkillList] = useState<string[]>(formik.values?.skills?.split(',') || [])
 
 
     const removeSkill = (skill: string) => {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Select, Card, CardHeader, Button, Typography, CardBody, Input, Textarea, Progress, Option } from "@material-tailwind/react";
-import { Address } from "../../../../../domain/entities/Address";
+import { AddressDTO } from "../../../../../domain/entities/Address";
 import { Label } from "../../../../../domain/entities/frontEntities";
 import { eventCategories } from "../../../../../domain/entities/Event";
 import { dayMS, formatDateForDB, getDefaultImage, getLabel } from "../../../../../infrastructure/services/utilsService";
@@ -11,9 +11,8 @@ import SubHeader from "../../../common/SubHeader";
 import { DateChip } from "../../../common/SmallComps";
 import { ImageBtn } from "../../../common/ImageBtn";
 
-export function EventForm(props: { formik: any }) {
-    const { formik } = props;
-    const [Address, setAddress] = useState<Address>(formik.values.Address ? formik.values.Address : {} as Address);
+export function EventForm(props: { formik: any, Address: AddressDTO, setAddress: any }) {
+    const { formik, Address, setAddress } = props;
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100) || 0;
     const today = new Date(new Date().getTime() + (1 * dayMS)).toISOString().slice(0, 16).replace('Z', '');
 
@@ -24,7 +23,9 @@ export function EventForm(props: { formik: any }) {
 
     //// ADDRESS GPS FUNCTION
     useEffect(() => {
-        Address && Address?.address?.length > 2 && (formik.values.Address = Address);
+        setAddress(Address)
+        Address && (formik.values.Address = Address);
+        console.log('Address', Address)
     }, [Address]);
 
     const { image, title, category, description, start, end, participantsMin, Participants } = formik.values;
@@ -66,6 +67,11 @@ export function EventForm(props: { formik: any }) {
                             <div className={`${start ? 'ChipDiv !justify-end' : 'hidden'}`}>
                                 <DateChip start={start} end={start} prefix={start ? 'Début' : ''} />
                             </div>
+                            <ImageBtn
+                                className="!absolute z-40 !h-max bottom-0 !left-3 mb-1"
+                                formik={formik}
+                                setImgBlob={setImgBlob}
+                                imgDef={imgCategory} />
                             <img
                                 src={imgBlob || './load.gif'}
                                 alt={title || 'image'}
@@ -73,7 +79,7 @@ export function EventForm(props: { formik: any }) {
                                 height={100}
                                 className={image || imgBlob ? "h-full w-full object-cover" : "hidden"}
                             />
-                            <ImageBtn formik={formik} setImgBlob={setImgBlob} imgCategory={imgCategory} />
+
                         </CardHeader>
                         <CardBody className='FixCardBody'>
                             <div className='CardOverFlow gap-3'>

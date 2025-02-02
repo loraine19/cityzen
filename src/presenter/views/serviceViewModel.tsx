@@ -17,8 +17,6 @@ export const serviceViewModel = ({ serviceService }: { serviceService: ServiceSe
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });
-
-
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const services = serviceService.getInfosInServices(data?.pages.flat().map(page => page.services).flat(), userId)
 
@@ -40,7 +38,6 @@ export const serviceIdViewModel = ({ serviceService }: { serviceService: Service
     const userId = useUserStore(state => state.user?.id)
     const getServiceById = DI.resolve('getServiceByIdUseCase')
 
-    //// TS CALL EVENT BY ID
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['eventById', id],
       queryFn: async () => await getServiceById.execute(id),

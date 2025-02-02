@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { serviceCategories, serviceCategoriesS, ServiceCategory, ServiceFilter, ServiceStepFilter, ServiceView } from "../../../../domain/entities/Service";
-import { getLabel, handleScroll } from '../../../../infrastructure/services/utilsService';
+import { getLabel } from '../../../../infrastructure/services/utilsService';
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -116,6 +116,19 @@ export default function ServicesPage() {
 
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
+    const handleScroll = () => {
+        if (divRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+            if (scrollTop + clientHeight + 2 >= scrollHeight) {
+                setIsBottom(true);
+                if (hasNextPage) {
+                    fetchNextPage();
+                }
+            } else {
+                setIsBottom(false);
+            }
+        }
+    };
 
     return (
         <div className="Body cyan">
@@ -131,8 +144,8 @@ export default function ServicesPage() {
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
             <main ref={divRef}
-                onScroll={() => handleScroll(divRef.current, setIsBottom, hasNextPage, fetchNextPage)} className="Grid">
-
+                onScroll={() => handleScroll()}
+                className="Grid">
                 {isLoading || error ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <SkeletonGrid
@@ -163,7 +176,7 @@ export default function ServicesPage() {
                 <LoadMoreButton
                     isBottom={isBottom}
                     hasNextPage={hasNextPage}
-                    handleScroll={() => handleScroll(divRef.current, setIsBottom, hasNextPage, fetchNextPage)} />
+                    handleScroll={() => handleScroll()} />
             </main>
             <NavBarBottom addBtn={true} />
         </div>

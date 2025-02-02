@@ -7,7 +7,7 @@ import { EventDTO, EventUpdateDTO } from '../../../../domain/entities/Event';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
-import { Address, AddressDTO } from '../../../../domain/entities/Address';
+import { AddressDTO } from '../../../../domain/entities/Address';
 import { useUserStore } from '../../../../application/stores/user.store';
 
 export default function EventDetailPage() {
@@ -17,20 +17,17 @@ export default function EventDetailPage() {
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
     const user = useUserStore((state) => state.user);
     const [eventDto, setEventDto] = useState<EventDTO>(new EventDTO(event));
-    const updateEvent = async (id: number, data: EventUpdateDTO) => await DI.resolve('updateEventUseCase').execute(id, data)
-    const updateAddress = async (data: AddressDTO) => await DI.resolve('updateAddressUseCase').execute(data)
+    const [Address, setAddress] = useState<AddressDTO>(eventDto.Address || {} as AddressDTO)
+    const updateEvent = async (id: number, data: EventUpdateDTO, address: AddressDTO) => await DI.resolve('updateEventUseCase').execute(id, data, address)
 
     useEffect(() => {
         setEventDto(new EventDTO(event));
-        console.log(event.userId, user.id)
         event && event.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
     }, [loadingEvent]);
 
 
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
-
-
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -50,8 +47,6 @@ export default function EventDetailPage() {
         initialValues: eventDto,
         validationSchema: formSchema,
         onSubmit: async values => {
-            const updatedAddress: Address = await updateAddress(formik.values.Address)
-            formik.values.Address = updatedAddress;
             formik.values = values
             setOpen(true)
         }
@@ -62,10 +57,9 @@ export default function EventDetailPage() {
     const updateFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
-        formik.values.addressId = formik.values.Address.id
-        const { Address, ...rest } = formik.values;
+        const { ...rest } = formik.values;
         const updateData = { ...rest }
-        const updated = await updateEvent(event.id, updateData)
+        const updated = await updateEvent(event.id, updateData, Address)
         if (updated) {
             navigate("/evenement/" + updated.id);
             location.reload()
@@ -85,7 +79,10 @@ export default function EventDetailPage() {
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
             {loadingEvent || formik.values === null ?
                 <Skeleton /> :
-                <EventForm formik={formik} />}
+                <EventForm
+                    formik={formik}
+                    Address={Address}
+                    setAddress={setAddress} />}
         </div >
     )
 }
