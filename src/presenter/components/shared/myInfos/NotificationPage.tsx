@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { NotifView } from "../../../../domain/entities/Notif";
-import { notifCategories } from "../../../../infrastructure/services/utilsService";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
@@ -9,6 +8,7 @@ import { NotifCard } from "./NotifCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { SkeletonGrid } from "../../common/Skeleton";
+import { notifCategories } from "../../../views/viewsEntities/utilsService";
 
 export default function NotificationPage() {
     const { notifList, updateNotif, removeNotif } = useNotificationStore()

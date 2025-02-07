@@ -56,7 +56,7 @@ export default function MyInfosPage() {
         }
     }
 
-    useEffect(() => { formik.values.Address = address; console.log(address) }, [address])
+    useEffect(() => { formik.values.Address = address }, [address])
 
     return (
         <div className="Body gray flex">

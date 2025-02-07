@@ -1,7 +1,9 @@
 
-import { AddressDTO } from "../../domain/entities/Address";
-import { Event, EventDTO, EventPage } from "../../domain/entities/Event";
+import { Event } from "../../domain/entities/Event"
+import { EventPage } from "../../domain/entities/Event";
 import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
+import { AddressDTO } from "../../infrastructure/DTOs/AddressDTO";
+import { EventDTO } from "../../infrastructure/DTOs/Event";
 
 export class GetEventsUseCase {
     private eventRepository: EventRepositoryBase;
@@ -11,6 +13,7 @@ export class GetEventsUseCase {
     }
 
     public async execute(page?: number, filter?: string, category?: string): Promise<EventPage> {
+        console.log(await this.eventRepository.getEvents(page, filter, category))
         return await this.eventRepository.getEvents(page, filter, category);
     }
 }

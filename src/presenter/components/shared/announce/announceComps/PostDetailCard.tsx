@@ -5,8 +5,8 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
 import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
-import { getLabel, postCategories, toggleLike } from "../../../../../infrastructure/services/utilsService";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import { getLabel, postCategories, toggleLike } from "../../../../views/viewsEntities/utilsService";
 
 
 

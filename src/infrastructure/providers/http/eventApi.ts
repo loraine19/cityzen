@@ -1,5 +1,7 @@
-import { AddressDTO } from "../../../domain/entities/Address";
-import { Event, EventDTO, EventPage } from "../../../domain/entities/Event";
+
+import { Event, EventPage } from "../../../domain/entities/Event";
+import { AddressDTO } from "../../DTOs/AddressDTO";
+import { EventDTO } from "../../DTOs/Event";
 
 import { ApiServiceI, ApiService } from "./apiService";
 

@@ -13,9 +13,13 @@ export class UserApi {
         return this.api.get(`${this.dataType}/modos`);
     }
 
+    async getUserCount(): Promise<number> {
+        return this.api.get(`${this.dataType}/count`);
+    }
+
 
     async getUserMe(): Promise<User> {
-        console.log(await this.api.get(`${this.dataType}/me`))
+        console.log('usermeAP0I')
         return this.api.get(`${this.dataType}/me`);
     }
 

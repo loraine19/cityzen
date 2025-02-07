@@ -4,7 +4,7 @@ export class Group {
     id: number = 0;
     name: string = '';
     description: string = '';
-    address: Address = new Address();
+    address: Address = {} as Address;
     addressId: number = 0;
     area: number = 0;
     rules: string = '';

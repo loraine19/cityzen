@@ -1,12 +1,11 @@
 //import from REACT & REACT ROUTER DOM
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { dayMS, TabLabel } from "../../../../domain/entities/frontEntities";
 import { Pool } from "../../../../domain/entities/Pool";
 import { Survey } from "../../../../domain/entities/Survey";
 import { PoolService, PoolSurveyService } from "../../../../domain/repositoriesBase/PoolRepository";
 import { SurveyService } from "../../../../domain/repositoriesBase/SurveyRepository";
-import { dayMS } from "../../../../infrastructure/services/utilsService";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";

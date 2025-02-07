@@ -1,20 +1,3 @@
-export class AccessDTO {
-    email: string = '';
-    password: string = '';
-}
-
-export class VerifyDTO {
-    email: string = '';
-    password: string = '';
-    verifyToken: string = '';
-}
-
-export class ResetDTO {
-    email: string = '';
-    password: string = '';
-    resetToken: string = '';
-}
-
 export enum TokenType {
     REFRESH,
     RESET,
@@ -28,25 +11,25 @@ export class Token {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     expiredAt: Date = new Date();
+
+    constructor(init?: Event) {
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof Event];
+                }
+            });
+        }
+    }
 }
 
 export class Auth {
-    accessToken: string = '';
     refreshToken: string = '';
+    constructor() {
+        this.refreshToken = '';
+    }
 }
 
-export class TokenDTO {
-    userId?: number;
-    token?: string;
-    type?: TokenType;
-    createdAt?: Date;
-    updatedAt?: Date;
-    expiredAt?: Date;
-}
 
-export class AuthDTO {
-    accessToken?: string;
-    refreshToken?: string;
-}
 
 

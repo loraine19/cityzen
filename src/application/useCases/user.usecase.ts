@@ -16,7 +16,3 @@ export class GetUserMeUseCase {
 
 }
 
-export const userUsesCases = {
-    GetUserMeUseCase
-}
-

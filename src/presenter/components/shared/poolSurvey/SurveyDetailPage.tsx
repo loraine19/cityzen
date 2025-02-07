@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Survey } from '../../../../domain/entities/Survey';
 import { SurveyService } from '../../../../domain/repositoriesBase/SurveyRepository';
-import { GenereMyActions, getLabel, surveyCategories } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -10,6 +9,7 @@ import SurveyDetailCard from './poolSurveyComp/SurveyDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { Skeleton } from '../../common/Skeleton';
+import { GenereMyActions, getLabel, surveyCategories } from '../../../views/viewsEntities/utilsService';
 
 
 export default function SurveyDetailPage() {

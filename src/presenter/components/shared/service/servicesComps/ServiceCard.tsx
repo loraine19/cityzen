@@ -1,12 +1,12 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { ServiceStep, ServiceType, ServiceUpdate, ServiceView } from "../../../../../domain/entities/Service";
-import { isLate, getEnumVal, GenereMyActions, } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import DI from "../../../../../di/ioc";
+import { GenereMyActions, getEnumVal, isLate } from "../../../../views/viewsEntities/utilsService";
 
 
 
@@ -56,12 +56,12 @@ export default function ServiceComp(props:
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
-                            <button onClick={(e: any) => { let cat = e.toLowerCase(); change(cat); console.log(cat) }}>
+                            <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => { const cat = e.currentTarget.innerText.toLowerCase(); change(cat); console.log(cat) }}>
                                 <Chip size="sm" value={`${categoryS}`}
                                     className="CyanChip">
                                 </Chip>
                             </button>
-                            <button onClick={(e: any) => { let cat = e.target.innerText.toLowerCase(); change(cat) }}>
+                            <button onClick={(e: any) => { const cat = e.target.innerText.toLowerCase(); change(cat) }}>
                                 <Chip size="sm" value={typeS} className={`${typeS === "demande" ? "OrangeChip" : "GreenChip"}`}>
                                 </Chip>
                             </button>

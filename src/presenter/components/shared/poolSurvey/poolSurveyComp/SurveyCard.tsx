@@ -4,11 +4,13 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { SurveyService } from "../../../../../domain/repositoriesBase/SurveyRepository"
-import { dayMS, getLabel, surveyCategories, GenereMyActions } from "../../../../../infrastructure/services/utilsService";
+
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import { GenereMyActions, getLabel, surveyCategories } from "../../../../views/viewsEntities/utilsService";
+import { dayMS } from "../../../../../domain/entities/frontEntities";
 
 
 type SurveyCardProps = { survey: Survey, change: () => void, mines?: boolean, update?: () => void }
@@ -30,7 +32,7 @@ export function SurveyCard(props: SurveyCardProps) {
     const ended: boolean = pourcent < 100 && endDays <= 0 ? true : false
     const category: string = getLabel(survey.category, surveyCategories)
     const { deleteSurvey } = new SurveyService()
-    const { getUsers } = new UserApi()
+    const { getUserCount } = new UserApi()
     const actions = GenereMyActions(survey, "survey", deleteSurvey)
     const haveImage = survey.image ? true : false
     const flagged: boolean = survey.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
@@ -38,9 +40,9 @@ export function SurveyCard(props: SurveyCardProps) {
 
     useEffect(() => {
         const onload = async () => {
-            const users = await getUsers()
-            setUsersLength(users.length / 2)
-            setNeeded(users.length / 2 - (survey.Votes?.length || 0))
+            const users = await getUserCount()
+            setUsersLength(users / 2)
+            setNeeded(users / 2 - (survey.Votes?.length || 0))
         }
         onload()
     }, [survey])

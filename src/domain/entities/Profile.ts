@@ -1,6 +1,6 @@
-import { getEnumLabel } from "../../infrastructure/services/utilsService";
 import { Address } from "./Address";
 import { Label } from "./frontEntities";
+import { getEnumLabel } from "./utilsEntity";
 
 export enum AssistanceLevel {
     LEVEL_0 = '0',
@@ -15,7 +15,7 @@ export class Profile {
     userId: number = 0;
     userIdSp: number = 0;
     addressId: number = 0;
-    Address: Address = new Address();
+    Address: Address = {} as Address;
     firstName: string = '';
     lastName: string = '';
     image: string | File = '';
@@ -27,9 +27,15 @@ export class Profile {
     createdAt?: Date = new Date();
     updatedAt?: Date = new Date();
     mailSub: MailSubscriptions | string = MailSubscriptions.SUB_1;
+    constructor(data?: Partial<Profile>) {
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
 }
 
 export class ProfileDTO implements Partial<Profile> {
+    Address = {} as Address;
     userIdSp: number = 0;
     addressId: number = 0;
     profile?: ProfileDTO;
@@ -48,14 +54,6 @@ export class ProfileDTO implements Partial<Profile> {
         }
     }
 
-}
-
-export class ProfileUpdateDTO implements Partial<ProfileDTO> { }
-
-export class ProfileView extends Profile {
-    addressString: string = '';
-    conciliateur?: boolean = false;
-    fullName?: string = '';
 }
 
 export enum MailSubscriptions {

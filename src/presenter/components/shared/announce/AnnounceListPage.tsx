@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Post } from "../../../../domain/entities/Post";
 import { PostService } from "../../../../domain/repositoriesBase/PostRepository";
-import { postCategories, getLabel, getValue } from "../../../../infrastructure/services/utilsService";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -11,6 +10,7 @@ import TabsMenu from "../../common/TabsMenu";
 import AnnouncesGridComp from "./announceComps/AnnouncesGridComp";
 import AnnouncesComp from "./announceComps/PostCard";
 import { SkeletonGrid } from "../../common/Skeleton";
+import { getLabel, getValue, postCategories } from "../../../views/viewsEntities/utilsService";
 
 
 export default function AnnounceListPage() {

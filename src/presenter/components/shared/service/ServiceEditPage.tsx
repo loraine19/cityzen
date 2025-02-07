@@ -13,6 +13,7 @@ export default function ServiceEditPage() {
     const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const idS = id ? parseInt(id) : 0;
     const { service, loadingService, refetch } = serviceIdViewModelFactory(idS);
+    console.log(loadingService, refetch)
     const updateService = async (id: number, data: ServiceDTO) => await DI.resolve('updateServiceUseCase').execute(id, data)
 
     const fetch = async () => {

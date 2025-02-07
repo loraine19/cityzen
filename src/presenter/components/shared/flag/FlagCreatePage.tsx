@@ -7,7 +7,6 @@ import { Flag } from '../../../../domain/entities/Flag';
 import { Label } from '../../../../domain/entities/frontEntities';
 import { FlagService } from '../../../../domain/repositoriesBase/FlagRepository';
 import { PostService } from '../../../../domain/repositoriesBase/PostRepository';
-import { getLabel, flagTargets, flagReasons } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -15,6 +14,7 @@ import FlagDetailComp from './flagComps/FlagDetailComp';
 import { EventApi } from '../../../../infrastructure/providers/http/eventApi';
 import { Skeleton } from '../../common/Skeleton';
 import { ServiceApi } from '../../../../infrastructure/providers/http/serviceApi';
+import { flagReasons, flagTargets, getLabel } from '../../../views/viewsEntities/utilsService';
 
 export default function FlagCreatePage() {
     const { id, target } = useParams()

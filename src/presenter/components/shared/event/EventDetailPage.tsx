@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import parse from 'html-react-parser';
 import { EventView } from '../../../../domain/entities/Event';
-import { GenereMyActions } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -10,6 +9,7 @@ import { EventDetailCard } from './eventComps/EventDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
+import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 
 
 export default function EventDetailPage() {
@@ -18,6 +18,7 @@ export default function EventDetailPage() {
 
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, loadingEvent } = eventIdViewModelFactory(idS);
+    console.log(event);
     const [eventLoad, setEventLoad] = useState<EventView>(event);
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id);
     const disabledDelete = new Date(event?.start).getTime() < Date.now();

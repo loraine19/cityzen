@@ -3,13 +3,14 @@ import { Select, Card, CardHeader, Button, Typography, CardBody, Input, Textarea
 import { AddressDTO } from "../../../../../domain/entities/Address";
 import { Label } from "../../../../../domain/entities/frontEntities";
 import { eventCategories } from "../../../../../domain/entities/Event";
-import { dayMS, formatDateForDB, getDefaultImage, getLabel } from "../../../../../infrastructure/services/utilsService";
+
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
 import { DateChip } from "../../../common/SmallComps";
 import { ImageBtn } from "../../../common/ImageBtn";
+import { dayMS, formatDateForDB, getDefaultImage, getLabel } from "../../../../views/viewsEntities/utilsService";
 
 export function EventForm(props: { formik: any, Address: AddressDTO, setAddress: any }) {
     const { formik, Address, setAddress } = props;

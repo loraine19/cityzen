@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { AuthService } from "../../services/authService";
-import { Address, AddressDTO } from "../../../domain/entities/Address";
+import { AddressDTO } from "../../DTOs/AddressDTO";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
 
@@ -87,13 +87,14 @@ export class ApiService implements ApiServiceI {
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
             this.logWithTime('not api error');
-            if (!originalRequest._retry) {
-                originalRequest._retry = true;
-                if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
-                    setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 90000);
-                }
-                return Promise.reject(new ApiError(error.code, error.message));
-            }
+            // if (!originalRequest._retry) {
+            //     originalRequest._retry = true;
+            //     if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
+            //         setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
+            //     }
+            //     return Promise.reject(new ApiError(error.code, error.message));
+            // }
+            return Promise.reject(new ApiError(error.code, error.message));
         }
         const { status, data } = error.response;
         console.error('complete error:', error.response);
@@ -185,7 +186,6 @@ export class ApiService implements ApiServiceI {
     public async post(url: string, data: any, config?: any): Promise<any> {
         try {
             const response = await this.api.post(url, data, { ...config, withCredentials: true });
-
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -201,8 +201,8 @@ export class ApiService implements ApiServiceI {
         }
     }
 
-    public createFormData = (element: any, address?: AddressDTO): FormData => {
-        address && (element = { ...element, address })
+    public createFormData = (element: any): FormData => {
+        //        Address && (element = { ...element, Address })
         const formData = new FormData();
         for (const [key, value] of Object.entries(element)) {
             if (value instanceof File) {
@@ -212,7 +212,6 @@ export class ApiService implements ApiServiceI {
                     formData.append(key, JSON.stringify(value))
                     : formData.append(key, value.toString());
             }
-
         }
         return formData;
     };

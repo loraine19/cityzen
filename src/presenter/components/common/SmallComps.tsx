@@ -1,11 +1,11 @@
 import { Avatar, Chip, List, ListItem, ListItemPrefix, Popover, PopoverContent, PopoverHandler, Progress, Typography, } from "@material-tailwind/react";
-import { dayMS } from "../../../infrastructure/services/utilsService"
 import { Link, } from "react-router-dom";
 import { Profile } from "../../../domain/entities/Profile";
 import DI from "../../../di/ioc";
 import { useState } from "react";
 import parse from "html-react-parser";
 import { Skeleton } from "./Skeleton";
+import { dayMS } from "../../../domain/entities/frontEntities";
 
 export function DateChip(props: { start: Date | string, end?: Date | string, ended?: boolean, prefix?: string }) {
     const { start, end, prefix, ended } = props
@@ -143,7 +143,7 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
         <div className="flex items-center px-0 gap-2">
             <Popover placement="bottom-start">
                 <PopoverHandler>
-                    <Avatar src={image as string} size={size as any} alt="avatar" withBorder={true} />
+                    <Avatar src={"./person.png"} size={size as any} alt="avatar" withBorder={true} className="BgUser" />
                 </PopoverHandler>
                 <PopoverContent className="w-72">
                     <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
@@ -178,10 +178,8 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
 export function Title(props: { title: string, flagged?: boolean, id?: number, CreatedAt?: string | Date, subTitle?: string }) {
     const { flagged, id, CreatedAt, subTitle } = props
     const titleElement = document.getElementById(props.title);
-
     const maxLength = titleElement && titleElement.scrollWidth > titleElement.clientWidth ? 90 : 42;
     const [title, setTitle] = useState<string>(props.title?.length > maxLength ? props.title.slice(0, maxLength - 3) + '...' + (parse('&nbsp;').toString()).repeat(props.title?.length - maxLength) : props.title)
-    console.log(props.title, title)
     return (
         <div className="min-h-max">
             <div className="flex items-center w-full  justify-between  gap-2">

@@ -52,7 +52,7 @@ export default function IssueDetailPage() {
         icon: statusValue < 2 ? 'Supprimer la conciliation' : '',
         title: 'Supprimer la conciliation',
         body: 'service.title as string',
-        function: async () => { let ok = await deleteIssue(issue.serviceId); ok && navigate('/service?search=myservices') }
+        function: async () => { const ok = await deleteIssue(issue.serviceId); ok && navigate('/service?search=myservices') }
     }]
     const RespActions = [
         {

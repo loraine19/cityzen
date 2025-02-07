@@ -1,13 +1,18 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { ServiceService } from './viewsServices/serviceService';
+import { ServiceService } from './viewsEntities/serviceService';
 import { ServiceView } from '../../domain/entities/Service';
 import DI from '../../di/ioc'
-import { useUserStore } from '../../application/stores/user.store';
 
 export const serviceViewModel = ({ serviceService }: { serviceService: ServiceService }) => {
   return (mine: boolean, type: string, step: string, category: string) => {
 
-    const userId = useUserStore(state => state.user?.id)
+    const { data: user, isLoading: userLoading } = useQuery({
+      queryKey: ['user'],
+      queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
+    })
+    const userId = user?.id
+
+
     const getServices = DI.resolve('getServicesUseCase')
 
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
@@ -18,7 +23,7 @@ export const serviceViewModel = ({ serviceService }: { serviceService: ServiceSe
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
-    const services = serviceService.getInfosInServices(data?.pages.flat().map(page => page.services).flat(), userId)
+    const services = userLoading ? [] : serviceService.getInfosInServices(data?.pages.flat().map(page => page.services).flat(), userId)
 
     return {
       count,
@@ -34,8 +39,11 @@ export const serviceViewModel = ({ serviceService }: { serviceService: ServiceSe
 
 export const serviceIdViewModel = ({ serviceService }: { serviceService: ServiceService }) => {
   return (id: number) => {
-
-    const userId = useUserStore(state => state.user?.id)
+    const { data: user, isLoading: userLoading } = useQuery({
+      queryKey: ['user'],
+      queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
+    })
+    const userId = user?.id
     const getServiceById = DI.resolve('getServiceByIdUseCase')
 
     const { data, isLoading, error, refetch } = useQuery({
@@ -43,7 +51,7 @@ export const serviceIdViewModel = ({ serviceService }: { serviceService: Service
       queryFn: async () => await getServiceById.execute(id),
     })
 
-    const service = data ? serviceService.getInfosInService(data, userId) : {} as ServiceView;
+    const service = userLoading ? {} : data ? serviceService.getInfosInService(data, userId) : {} as ServiceView;
     return { service, isLoading, error, refetch }
   }
 }

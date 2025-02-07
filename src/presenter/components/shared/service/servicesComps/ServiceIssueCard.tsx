@@ -2,10 +2,10 @@ import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react"
 import { Service, serviceCategories, ServiceType, ServiceView } from "../../../../../domain/entities/Service";
-import { getLabel, isLate, } from "../../../../../infrastructure/services/utilsService";
 import { Icon } from "../../../common/SmallComps";
 import { Profile } from "../../../../../domain/entities/Profile";
 import DI from "../../../../../di/ioc";
+import { getLabel, isLate } from "../../../../views/viewsEntities/utilsService";
 
 
 export default function ServiceIssueCard(props: { service: ServiceView }) {

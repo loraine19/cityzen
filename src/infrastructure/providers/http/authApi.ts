@@ -1,5 +1,6 @@
 ///src/infrastructure/providers/http/authApi.ts
-import { AccessDTO, Auth } from "../../../domain/entities/Auth";
+import { Auth } from "../../../domain/entities/Auth";
+import { AccessDTO, DeleteDTO, VerifyDTO } from "../../DTOs/AuthDTO";
 import { ApiServiceI, ApiService } from "./apiService";
 
 
@@ -12,12 +13,21 @@ export class AuthApi {
         return this.api.post(`${this.dataType}/signin`, credentials)
     }
 
-    async signInVerify(data: { email: string, password: string, verifyToken: string }): Promise<Auth> {
-        return this.api.post(`${this.dataType}/signin/verify`, data)
+    async signInVerify(data: VerifyDTO): Promise<Auth> {
+        console.log('verifyDataAPI', data, await this.api.post(`${this.dataType}/signinVerify`, data))
+        return this.api.post(`${this.dataType}/signinVerify`, data)
     }
 
     async signUp(credentials: AccessDTO): Promise<{ message: string }> {
         return this.api.post(`${this.dataType}/signup`, credentials)
+    }
+
+    async deleteAccount(): Promise<{ message: string }> {
+        return this.api.post(`${this.dataType}/deleteAccount`, {})
+    }
+
+    async deleteAccountConfirm(data: DeleteDTO): Promise<{ message: string }> {
+        return this.api.post(`${this.dataType}/deleteAccountConfirm`, data)
     }
 
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { eventCategories, eventCategoriesS, EventFilter, EventView } from "../../../../domain/entities/Event";
-import { getValue, getLabel } from "../../../../infrastructure/services/utilsService";
+import { EventFilter } from "../../../../domain/entities/Event";
+
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -13,19 +13,24 @@ import { Icon, LoadMoreButton } from "../../common/SmallComps";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { getLabel, getValue } from "../../../views/viewsEntities/utilsService";
+import { eventCategories, eventCategoriesS } from "../../../constants";
+import { EventView } from "../../../views/viewsEntities/eventViewEntities";
 // Remove incorrect import
 
 export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
+
     const eventViewModelFactory = DI.resolve('eventViewModel');
     const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(filter, category)
+
     const [view, setView] = useState("view_agenda");
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
-
+    console.log(events)
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
     const update = async () => { await refetch() }
@@ -55,7 +60,7 @@ export default function EventListPage() {
 
     useEffect(() => {
         const notifUpdate =
-            (events.length === 0 && !isLoading) &&
+            (events?.length === 0 && !isLoading) &&
             `Aucun évènement ${filter !== '' ? getLabel(filter, eventTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ''} n'a été trouvé`
             || error && "Erreur lors du chargement des évènements, veuillez réessayer plus tard"
             || '';

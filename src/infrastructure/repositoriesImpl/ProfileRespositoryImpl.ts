@@ -1,12 +1,11 @@
 //src/infrastructure/repositoriesImpl/ProfileRepositoryImpl.tsx
-import { AddressDTO } from "../../domain/entities/Address";
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
 import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
-
+import { ApiServiceI } from "../providers/http/apiService";
 
 interface IData extends ProfileRepositoryBase {
-    api: any;
-    dataType: any;
+    api: ApiServiceI;
+    dataType: string;
 }
 
 export class ProfileRepositoryImpl implements ProfileRepositoryBase {
@@ -17,12 +16,12 @@ export class ProfileRepositoryImpl implements ProfileRepositoryBase {
         return this.profileData.getProfileMe();
     }
 
-    async postProfile(data: ProfileDTO, address: AddressDTO): Promise<Profile> {
-        return this.profileData.postProfile(data, address);
+    async postProfile(data: ProfileDTO): Promise<Profile> {
+        return this.profileData.postProfile(data);
     }
 
-    async updateProfile(data: ProfileDTO, address: AddressDTO): Promise<Profile> {
-        return this.profileData.updateProfile(data, address);
+    async updateProfile(data: ProfileDTO): Promise<Profile> {
+        return this.profileData.updateProfile(data);
     }
 }
 

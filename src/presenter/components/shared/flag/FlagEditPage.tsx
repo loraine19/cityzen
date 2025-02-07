@@ -5,12 +5,12 @@ import { object, string } from 'yup';
 import { Option, Button, Select, Switch } from '@material-tailwind/react';
 import { FlagService } from '../../../../domain/repositoriesBase/FlagRepository';
 import { Flag } from '../../../../domain/entities/Flag';
-import { getLabel, flagTargets, flagReasons } from '../../../../infrastructure/services/utilsService';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import FlagDetailComp from './flagComps/FlagDetailComp';
 import { Skeleton } from '../../common/Skeleton';
+import { flagReasons, flagTargets, getLabel } from '../../../views/viewsEntities/utilsService';
 
 
 export default function FlagEditPage() {

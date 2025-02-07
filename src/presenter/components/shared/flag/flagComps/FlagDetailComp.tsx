@@ -1,8 +1,8 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { User } from "../../../../../domain/entities/User";
 import { Flag } from "../../../../../domain/entities/Flag";
-import { getLabel, flagTargets } from "../../../../../infrastructure/services/utilsService";
 import { Icon, ProfileDiv } from "../../../common/SmallComps";
+import { flagTargets, getLabel } from "../../../../views/viewsEntities/utilsService";
 
 export default function FlagDetailComp(props: { flag: Flag, element?: any, label?: string }) {
     const { flag } = props

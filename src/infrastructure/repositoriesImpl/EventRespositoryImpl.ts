@@ -1,8 +1,9 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
-import { Event, EventDTO, EventPage } from "../../domain/entities/Event";
+import { Event, EventPage } from "../../domain/entities/Event";
 import { ApiServiceI } from "../providers/http/apiService";
-import { AddressDTO } from "../../domain/entities/Address";
+import { AddressDTO } from "../DTOs/AddressDTO";
+import { EventDTO } from "../DTOs/Event";
 
 interface IData extends EventRepositoryBase {
     api: ApiServiceI;

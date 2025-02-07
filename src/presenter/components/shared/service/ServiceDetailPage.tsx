@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServiceStep, ServiceView, } from '../../../../domain/entities/Service';
-import { getEnumVal, isLate, GenereMyActions, generateContact, } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -8,6 +7,7 @@ import ServiceDetailComp from './servicesComps/ServiceDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
+import { generateContact, GenereMyActions, getEnumVal, isLate } from '../../../views/viewsEntities/utilsService';
 
 export default function ServiceDetailPage() {
     const { id } = useParams();

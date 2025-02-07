@@ -37,8 +37,8 @@ export default function SignInPage() {
     const handleSignInVerify = async (email: string, password: string, token: string) => {
         const verifyData = { email, password, verifyToken: token }
         const authVerify = await signInVerify(verifyData);
-        if (authVerify?.accessToken) {
-            saveToken(authVerify.accessToken, authVerify.refreshToken);
+        if (authVerify?.refreshToken) {
+            saveToken(authVerify.refreshToken);
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/signup_details") }, 1000);
         } else {

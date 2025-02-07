@@ -7,36 +7,26 @@ export enum UserStatus {
 }
 
 export class User {
-    id: number;
-    email: string;
-    password: string;
-    Profile: Profile;
-    image: string | File;
-    createdAt: Date;
-    updatedAt: Date;
-    lastConnection: Date;
-    status: UserStatus;
-    GroupUser: GroupUser;
+    id: number = 0;
+    email: string = '';
+    password: string = '';
+    Profile: Profile = {} as Profile;
+    createdAt: Date = new Date();
+    updatedAt: Date = new Date();
+    lastConnection: Date = new Date();
+    status: UserStatus = UserStatus.INACTIVE;
+    GroupUser: GroupUser = {} as GroupUser;
 
-    constructor() {
-        this.id = 0;
-        this.email = '';
-        this.password = '';
-        this.Profile = {} as Profile;
-        this.image = '';
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-        this.lastConnection = new Date();
-        this.status = UserStatus.INACTIVE;
-        this.GroupUser = {} as GroupUser;
+    constructor(init?: User) {
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof User];
+                }
+            });
+        }
     }
 }
 
 
-export class UserUpdateDTO implements Partial<User> { }
-export class UserDTO implements Partial<User> {
-    email: string = '';
-    password: string = '';
-    status?: UserStatus | undefined;
-}
 

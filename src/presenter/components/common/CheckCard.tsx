@@ -45,7 +45,7 @@ export default function CheckCard(props: checkCardProps) {
                                         value={category}
                                         ripple={false}
                                         containerProps={{ className: "hidden" }}
-                                        onChange={(e) => handleCheckboxChange(index, e.target.checked)}
+                                        onChange={(e: any) => handleCheckboxChange(index, e.target.checked)}
                                     />
                                 </ListItemPrefix>
                             </label>

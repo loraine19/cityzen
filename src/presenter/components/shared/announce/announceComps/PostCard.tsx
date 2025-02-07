@@ -5,11 +5,11 @@ import { Like } from "../../../../../domain/entities/Like";
 import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { PostService } from "../../../../../domain/repositoriesBase/PostRepository";
-import { getLabel, postCategories, GenereMyActions, toggleLike } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import { GenereMyActions, getLabel, postCategories, toggleLike } from "../../../../views/viewsEntities/utilsService";
 
 
 

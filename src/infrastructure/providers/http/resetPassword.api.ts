@@ -1,6 +1,6 @@
 ///src/infrastructure/providers/http/authApi.ts
-import { ResetDTO } from "../../../domain/entities/Auth";
 import { MessageBack } from "../../../domain/entities/frontEntities";
+import { ResetDTO } from "../../DTOs/AuthDTO";
 import { ApiServiceI, ApiService } from "./apiService";
 
 
@@ -14,8 +14,8 @@ export class ResetPasswordApi {
         return this.api.post(this.dataType, { email })
     }
 
-    async resetPasswordUpdate(dataDTO: ResetDTO): Promise<MessageBack> {
-        console.log('resetPasswordApi', dataDTO)
-        return this.api.post(`${this.dataType}/update`, dataDTO)
+    async resetPasswordUpdate(data: ResetDTO): Promise<MessageBack> {
+        console.log('resetPasswordApi', data)
+        return this.api.post(`${this.dataType}/update`, data)
     }
 }

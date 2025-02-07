@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Survey } from "../../../../../domain/entities/Survey";
-import { Vote } from "../../../../../domain/entities/Vote";
-import { dayMS, getLabel, surveyCategories } from "../../../../../infrastructure/services/utilsService";
+import { Vote } from "../../../../../domain/entities/Vote"
 import { DateChip, ProgressSmallbar, ProfileDiv, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import { getLabel, surveyCategories } from "../../../../views/viewsEntities/utilsService";
+import { dayMS } from "../../../../../domain/entities/frontEntities";
 
 
 export default function SurveyDetailCard(props: { element: Survey, mines?: boolean, change: (e: any) => void }) {
@@ -28,13 +29,13 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
     const category = getLabel(element.category, surveyCategories)
     const OkVotes = Votes?.filter((vote: Vote) => vote.opinion as unknown as string === 'OK')
     const [needed, setNeeded] = useState<number>(usersLength - (OkVotes?.length || 0))
-    const { getUsers } = new UserApi()
+    const { getUserCount } = new UserApi()
 
     useEffect(() => {
         const onload = async () => {
-            const users = await getUsers()
-            setUsersLength(users.length / 2)
-            setNeeded(users.length / 2 - (Votes?.length || 0))
+            const users = await getUserCount()
+            setUsersLength(users / 2)
+            setNeeded(users / 2 - (Votes?.length || 0))
         }
         onload()
     }, [element])

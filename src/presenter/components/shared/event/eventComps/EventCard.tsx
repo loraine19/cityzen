@@ -2,11 +2,11 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } fr
 import { AvatarStack } from "./AvatarStack";
 import { useState } from "react";
 import { EventView } from "../../../../../domain/entities/Event";
-import { GenereMyActions } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { DateChip, Title, Icon } from "../../../common/SmallComps";
 import DI from "../../../../../di/ioc";
 import { useNotificationStore } from "../../../../../application/stores/notification.store";
+import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 
 
 type EventCardProps = { event: EventView, change: (e: any) => void, mines?: boolean, update?: () => void }

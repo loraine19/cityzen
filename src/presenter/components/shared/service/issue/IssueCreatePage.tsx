@@ -79,7 +79,6 @@ export default function IssueEditPage() {
     })
 
     const postFunction = async () => {
-        formik.values.description = formik.values.description
         formik.values.date = new Date(formik.values.date).toISOString()
         formik.values.serviceId = typeof service.id === 'string' ? parseInt(service.id) : service.id
         const { ...rest } = formik.values;

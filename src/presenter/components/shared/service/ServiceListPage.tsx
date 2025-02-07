@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { serviceCategories, serviceCategoriesS, ServiceCategory, ServiceFilter, ServiceStepFilter, ServiceView } from "../../../../domain/entities/Service";
-import { getLabel } from '../../../../infrastructure/services/utilsService';
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -13,6 +12,7 @@ import { Label, TabLabel } from "../../../../domain/entities/frontEntities";
 import { SkeletonGrid } from "../../common/Skeleton";
 import DI from '../../../../di/ioc';
 import { LoadMoreButton } from "../../common/SmallComps";
+import { getLabel } from "../../../views/viewsEntities/utilsService";
 
 
 export default function ServicesPage() {

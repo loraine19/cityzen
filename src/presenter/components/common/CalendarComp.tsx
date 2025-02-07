@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../shared/event/eventComps/EventCard';
-import { dayMS, getLabel } from '../../../infrastructure/services/utilsService';
 import { Icon } from './SmallComps';
 import DI from '../../../di/ioc'
-import { EventService } from '../../views/viewsServices/eventService';
-import { day } from '../../../domain/entities/frontEntities';
-import { eventCategories } from '../../../domain/entities/Event';
+import { day, dayMS } from '../../../domain/entities/frontEntities';
+import { getLabel } from '../../views/viewsEntities/utilsService';
+import { eventCategories } from '../../constants';
 
 
 export default function CalendarCompLarge(props: { logo?: boolean }) {
     const { logo } = props || {}
     const eventViewModelFactory = DI.resolve('eventViewModel');
+    const eventsWeekViewModelFactory = DI.resolve('eventsWeekViewModel');
+
     const { events, loadingEvents, errorEvents, fetchNextPage, hasNextPage } = eventViewModelFactory();
-    const eventService = DI.resolve<EventService>('eventService');
     const [numberOfwweks, setNumberOfwweks] = useState<number>(2)
     const [startDateBackup] = useState<Date>(new Date().getDay() > 0 ? new Date() : new Date(new Date().getTime() - 1 * dayMS));
     const [startDate, setStartDate] = useState<string>(startDateBackup.toDateString())
@@ -39,7 +39,8 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
 
     useEffect(() => {
         hasNextPage && fetchNextPage()
-        !loadingEvents && setWeeks(eventService.getWeeksFull(startDate, events, numberOfwweks));
+        !loadingEvents && setWeeks(eventsWeekViewModelFactory(startDate, events, numberOfwweks));
+        console.log(events, eventsWeekViewModelFactory(startDate, events, numberOfwweks))
     }, [startDate, numberOfwweks, loadingEvents])
 
 

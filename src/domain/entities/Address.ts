@@ -13,16 +13,3 @@ export class Address {
         }
     }
 }
-
-export class AddressDTO implements Partial<Address> {
-    address: string = '';
-    zipcode: string = '';
-    city: string = '';
-    lat: number = 0;
-    lng: number = 0;
-}
-export class AddressUpdateDTO implements Partial<AddressDTO> { }
-
-export class AddressView extends Address {
-    addressString: string = '';
-}

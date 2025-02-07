@@ -1,10 +1,12 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
+import { Auth } from "../../domain/entities/Auth";
 import { AuthRepositoryBase } from "../../domain/repositoriesBase/AuthRepositoryBase";
-import { AccessDTO, Auth, VerifyDTO } from "../../domain/entities/Auth";
+import { AccessDTO, VerifyDTO, DeleteDTO } from "../DTOs/AuthDTO";
+import { ApiServiceI } from "../providers/http/apiService";
 
 interface IData extends AuthRepositoryBase {
-    api: any;
-    dataType: any;
+    api: ApiServiceI;
+    dataType: string;
 }
 
 export class AuthRepositoryImpl implements AuthRepositoryBase {
@@ -21,6 +23,14 @@ export class AuthRepositoryImpl implements AuthRepositoryBase {
 
     public async signUp(credentials: AccessDTO): Promise<{ message: string }> {
         return this.authData.signUp(credentials);
+    }
+
+    public async deleteAccount(): Promise<{ message: string }> {
+        return this.authData.deleteAccount();
+    }
+
+    public async deleteAccountConfirm(data: DeleteDTO): Promise<{ message: string }> {
+        return this.authData.deleteAccountConfirm(data);
     }
 
 }

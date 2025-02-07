@@ -1,16 +1,19 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { EventService } from './viewsServices/eventService';
 import { Event } from '../../domain/entities/Event';
 import DI from '../../di/ioc';
-import { useUserStore } from '../../application/stores/user.store';
+import { dayMS, shortDateString } from './viewsEntities/utilsService';
+import { EventView } from '../views/viewsEntities/eventViewEntities';
 
 
-export const eventViewModel = ({ eventService }: { eventService: EventService }) => {
+export const eventViewModel = () => {
   return (filter?: string, category?: string) => {
 
-    const getEvents = DI.resolve('getEventsUseCase')
-    const userId = useUserStore(state => state.user.id)
+    const { data: user, isLoading: userLoading } = useQuery({
+      queryKey: ['user'],
+      queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
+    })
 
+    const getEvents = DI.resolve('getEventsUseCase')
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['events', filter, category],
@@ -20,7 +23,9 @@ export const eventViewModel = ({ eventService }: { eventService: EventService })
       })
 
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
-    const events = eventService.getInfosInEvents(data?.pages.flat().map(page => page.events).flat(), userId)
+    const userId = user?.id || 0
+    const flat = data?.pages.flat().map(page => page.events).flat()
+    const events = userLoading ? [] : flat?.map(event => new EventView(event, userId))
 
     return {
       count,
@@ -34,10 +39,15 @@ export const eventViewModel = ({ eventService }: { eventService: EventService })
   }
 }
 
-export const eventIdViewModel = ({ eventService }: { eventService: EventService }) => {
+export const eventIdViewModel = () => {
   return (id: number) => {
 
-    const userId = useUserStore(state => state.user.id)
+    const { data: user, isLoading: userLoading } = useQuery({
+      queryKey: ['user'],
+      queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
+    })
+    const userId = user?.id
+
     const getEventById = DI.resolve('getEventByIdUseCase')
 
 
@@ -46,9 +56,53 @@ export const eventIdViewModel = ({ eventService }: { eventService: EventService 
       queryFn: async () => await getEventById.execute(id),
     })
 
-    const event = eventByIdData ? eventService.getInfosInEvent(eventByIdData, userId) : {} as Event;
+    const event = userLoading ? {} : eventByIdData ? new EventView(eventByIdData, userId) : {} as Event;
 
     return { event, loadingEvent, errorEvent }
   }
 }
+
+export const eventsWeekViewModel = () => {
+  return (startDate: any, eventList: EventView[], numberOfWeeks: number): { date: Date, events: EventView[], text: string }[][] => {
+    const weeks: { date: Date, events: EventView[], text: string }[][] = [];
+    let date = new Date(startDate);
+    for (let weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
+      const week: { date: Date, events: EventView[], text: string }[] = [];
+      const weekDay = date.getDay();
+      const monday = date.getTime() - ((weekDay - 1) * dayMS);
+      for (let i = 0; i < 7; i++) {
+        const nextDay = new Date(monday + (i * dayMS));
+        week.push({ date: nextDay, events: [], text: shortDateString(nextDay) });
+      }
+      for (const event of eventList) {
+        if (event.days) {
+          for (const day of event.days) {
+            const dayString = new Date(day).toLocaleDateString();
+            const weekDay = week.find(w => new Date(w.date).toLocaleDateString() === dayString);
+            if (weekDay) {
+              const isEventInWeek = weekDay.events.some(e => e.id === event.id);
+              if (!isEventInWeek) {
+                week.forEach((w: any) => {
+                  const isActive = new Date(w.date).toLocaleDateString() === dayString;
+                  w.events.push({ ...event, actif: isActive } as EventView);
+                });
+              } else {
+                weekDay.events.forEach(e => {
+                  if (e?.days?.some((d: any) => new Date(d).toLocaleDateString() === dayString)) {
+                    e.actif = true;
+                  }
+                });
+              }
+              weekDay.events.sort((a, b) => a.id - b.id);
+            }
+          }
+        }
+      }
+      weeks.push(week);
+      date = new Date(monday + 7 * dayMS);
+    }
+    return weeks;
+  }
+}
+
 

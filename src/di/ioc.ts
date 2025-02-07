@@ -6,7 +6,6 @@ import { NotifRepositoryImpl } from '../infrastructure/repositoriesImpl/NotifRes
 import { NotifApi } from '../infrastructure/providers/http/notifApi';
 import { EventRepositoryImpl } from '../infrastructure/repositoriesImpl/EventRespositoryImpl';
 import { EventApi } from '../infrastructure/providers/http/eventApi';
-import { EventService } from '../presenter/views/viewsServices/eventService';
 import { UserService } from '../infrastructure/services/userService';
 import { ParticipantRepositoryImpl } from '../infrastructure/repositoriesImpl/ParticipantRespositoryImpl';
 import { ParticipantApi } from '../infrastructure/providers/http/participantApi';
@@ -21,23 +20,24 @@ import { ProfileService } from '../infrastructure/services/profileService';
 import { AddressRepositoryImpl } from '../infrastructure/repositoriesImpl/AddressRespositoryImpl';
 import { AddressService } from '../infrastructure/services/addressService';
 import { AddressApi } from '../infrastructure/providers/http/addressApi';
-import { eventIdViewModel, eventViewModel } from '../presenter/views/eventViewModel';
+import { eventIdViewModel, eventsWeekViewModel, eventViewModel } from '../presenter/views/eventViewModel';
 import { AuthService } from '../infrastructure/services/authService';
 import { ResetPasswordService } from '../infrastructure/services/resetPasswordService';
 import { ServiceApi } from '../infrastructure/providers/http/serviceApi';
 import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/ServiceRespositoryImpl';
 import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
-import { ServiceService } from '../presenter/views/viewsServices/serviceService';
+import { ServiceService } from '../presenter/views/viewsEntities/serviceService';
 import { GetUserMeUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
-import { SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
+import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
 import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
-import { NotifService } from '../presenter/views/viewsServices/notifService';
+import { NotifService } from '../presenter/views/viewsEntities/notifService';
 import { GetNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
 import { PostProfileUseCase, UpdateProfileUseCase } from '../application/useCases/profile.useCase';
+import { notifViewModel } from '../presenter/views/notifViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -52,6 +52,8 @@ container.register({
     signInUseCase: asClass(SignInUseCase),
     signUpUseCase: asClass(SignUpUseCase),
     signInVerifyUseCase: asClass(SignInVerifyUseCase),
+    deleteAccountUseCase: asClass(DeleteAccountUseCase),
+    deleteAccountConfirmUseCase: asClass(DeleteAccountConfirmUseCase),
     authRepository: asClass(AuthRepositoryImpl),
     authData: asClass(AuthApi),
     authService: asClass(AuthService),
@@ -63,7 +65,7 @@ container.register({
     addressData: asClass(AddressApi),
 
     ////RESET PASSWORD
-    resetPasswordUseCases: asClass(ResetPasswordUseCase),
+    resetPasswordUseCase: asClass(ResetPasswordUseCase),
     resetPasswordUpdateUseCase: asClass(ResetPasswordUpdateUseCase),
     resetPasswordRepository: asClass(ResetPasswordRepositoryImpl),
     resetPasswordData: asClass(ResetPasswordApi),
@@ -84,7 +86,8 @@ container.register({
     profileData: asClass(ProfileApi),
 
     ////NOTIFS
-    getNotifsUseCase: asClass(GetNotifUseCase),
+    notifViewModel: asFunction(notifViewModel),
+    getNotifUseCase: asClass(GetNotifUseCase),
     notifService: asClass(NotifService),
     notifRepository: asClass(NotifRepositoryImpl),
     notifData: asClass(NotifApi),
@@ -98,8 +101,8 @@ container.register({
     eventRepository: asClass(EventRepositoryImpl),
     eventViewModel: asFunction(eventViewModel),
     eventIdViewModel: asFunction(eventIdViewModel),
+    eventsWeekViewModel: asFunction(eventsWeekViewModel),
     eventData: asClass(EventApi),
-    eventService: asClass(EventService),
 
     ////PARTICIPANTS
     toogleParticipantUseCase: asClass(ToogleParticipantUseCase),

@@ -4,10 +4,10 @@ import { useState } from "react"
 import { Issue } from "../../../../../domain/entities/Issue"
 import { Service, ServiceView } from "../../../../../domain/entities/Service"
 import { User } from "../../../../../domain/entities/User"
-import { getImageBlob } from "../../../../../infrastructure/services/utilsService"
 import { useUserStore } from "../../../../../application/stores/user.store"
 import { Profile } from "../../../../../domain/entities/Profile"
 import { Skeleton } from "../../../common/Skeleton"
+import { getImageBlob } from "../../../common/ImageBtn"
 
 
 
@@ -120,7 +120,7 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                             labelProps={{ className: `before:border-none after:border-none ` }}
                                             disabled={(myService[0] && formik) ? false : true}
                                             value={issue?.UserModo?.id as unknown as string || ''}
-                                            onChange={(e) => { formik.values.userIdModo = e; console.log(formik.values) }}
+                                            onChange={(e: any) => { formik.values.userIdModo = e; console.log(formik.values) }}
                                         >
                                             {modos.map((modo: User) => <Option key={modo.id}
                                                 className={"rounded-full my-1 capitalize"}
@@ -134,7 +134,7 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                         labelProps={{ className: `before:border-none after:border-none ` }}
                                         disabled={IResp[0] && formik ? false : true}
                                         value={issue?.UserModoResp?.id as unknown as string || ''}
-                                        onChange={(e) => { formik.values.userIdModo2 = e; console.log(formik.values) }}
+                                        onChange={(e: any) => { formik.values.userIdModo2 = e; console.log(formik.values) }}
                                     >
                                         {modos.map((modo: User) =>
                                             <Option

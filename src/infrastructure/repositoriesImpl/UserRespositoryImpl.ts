@@ -20,6 +20,10 @@ export class UserRepositoryImpl implements UserRepositoryBase {
         return this.userData.getUsersModos();
     }
 
+    public async getUserCount(): Promise<number> {
+        return this.userData.getUserCount();
+    }
+
 
     public async updateUser(data: UserDTO): Promise<User> {
         return this.userData.updateUser(data);

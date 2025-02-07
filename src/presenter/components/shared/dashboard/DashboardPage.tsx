@@ -17,10 +17,17 @@ import { useSearchParams } from "react-router-dom";
 export default function DashboardPage() {
     const user = useUserStore((state) => state.user);
     const fetchUser = useUserStore((state) => state.fetchUser);
-    const notifList = useNotificationStore((state) => state.notifList);
-    const updateNotif = useNotificationStore((state) => state.updateNotif);
-    const userNotif = useNotificationStore((state) => state.notifList?.filter((notif) => !notif.read).length);
-    useEffect(() => { !user && fetchUser() }, [])
+    const notifList = useNotificationStore((state: any) => state.notifList);
+    const updateNotif = useNotificationStore((state: any) => state.updateNotif);
+    const userNotif = useNotificationStore((state: any) => state.notifList?.filter((notif: NotifView) => !notif.read).length);
+    useEffect(() => {
+        const fetch = async () => {
+            console.log('fetchUser in store', await fetchUser())
+            if (!user || !user.Profile) { await fetchUser() }
+            await updateNotif()
+        }
+        fetch()
+    }, [])
 
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";

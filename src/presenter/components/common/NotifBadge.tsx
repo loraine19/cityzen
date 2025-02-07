@@ -5,6 +5,7 @@ import { useNotificationStore } from "../../../application/stores/notification.s
 
 export function NotifBadge() {
     const notifList = useNotificationStore((state) => state.notifList);
+    console.log('notifList', notifList)
     const qty: number = notifList && notifList.filter((notif: NotifView) => notif?.read === false).length
     const unReadNotif: boolean = qty > 0
     const color = unReadNotif ? 'orange' : 'gray'

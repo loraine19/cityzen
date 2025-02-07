@@ -21,9 +21,9 @@ export const postCategory = Object.values(PostCategory).filter(category => typeo
 export class Post {
     id: number = 0;
     content: string = '';
-    User: User = new User();
+    User: User = {} as User;
     userId: number = 0;
-    group: Group = new Group();
+    group: Group = {} as Group;
     groupId: number = 0;
     image: string | File = '';
     title: string = '';
@@ -32,8 +32,8 @@ export class Post {
     share: Share = Share.EMAIL;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
-    Likes: Like[] = [new Like()];
-    Flags?: Flag[] = [new Flag()];
+    Likes: Like[] = [];
+    Flags?: Flag[] = [];
 }
 
 export class PostDTO implements Partial<Post> {

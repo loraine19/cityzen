@@ -11,7 +11,7 @@ export class GetNotifUseCase {
         this.notifRepository = notifRepository;
     }
     public async execute(): Promise<any> {
-        return await this.notifRepository.getNotifs();
+        return this.notifRepository.getNotifs();
     }
 
 }

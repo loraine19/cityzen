@@ -3,8 +3,8 @@ import { Icon } from "../../../common/SmallComps";
 import { useNavigate } from "react-router-dom";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { FlagService } from "../../../../../domain/repositoriesBase/FlagRepository";
-import { getLabel, flagTargets, flagReasons } from "../../../../../infrastructure/services/utilsService";
 import ModifBtnStack from "../../../common/ModifBtnStack";
+import { flagReasons, flagTargets, getLabel } from "../../../../views/viewsEntities/utilsService";
 
 export function FlagCard(props: { flag: Flag, update: () => void }) {
     const { targetId, createdAt, target, Post, Event, Survey, Service } = props.flag

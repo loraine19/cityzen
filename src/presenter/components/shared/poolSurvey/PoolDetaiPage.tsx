@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import { Action } from '../../../../domain/entities/frontEntities';
 import { Pool } from '../../../../domain/entities/Pool';
 import { PoolService } from '../../../../domain/repositoriesBase/PoolRepository';
-import { GenereMyActions } from '../../../../infrastructure/services/utilsService';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import PoolDetailCard from './poolSurveyComp/PoolDetailCard';
 import { useUserStore } from '../../../../application/stores/user.store';
+import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 
 export default function PoolDetailPage() {
     const { id } = useParams();

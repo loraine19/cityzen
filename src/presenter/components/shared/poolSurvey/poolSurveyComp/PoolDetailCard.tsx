@@ -3,11 +3,10 @@ import { useState, useEffect } from "react";
 import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Vote } from "../../../../../domain/entities/Vote";
-import { dayMS } from "../../../../../infrastructure/services/utilsService";
 import { DateChip, ProfileDiv, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
-
+import { dayMS } from "../../../../views/viewsEntities/utilsService";
 
 
 export default function PoolDetailCard(props: { element: Pool, mines?: boolean, change: (e: any) => void }) {
@@ -27,13 +26,13 @@ export default function PoolDetailCard(props: { element: Pool, mines?: boolean, 
     const OkVotes = Votes?.filter((vote: Vote) => vote.opinion as unknown as string === 'OK')
     const [needed, setNeeded] = useState<number>(usersLength - (OkVotes?.length || 0))
 
-    const { getUsers } = new UserApi()
+    const { getUserCount } = new UserApi()
 
     useEffect(() => {
         const onload = async () => {
-            const users = await getUsers()
-            setUsersLength(users.length / 2)
-            setNeeded(users.length / 2 - (Votes?.length || 0))
+            const users = await getUserCount()
+            setUsersLength(users / 2)
+            setNeeded(users / 2 - (Votes?.length || 0))
         }
         onload()
     }, [element])

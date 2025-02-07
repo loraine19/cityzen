@@ -5,21 +5,14 @@ import NavBarBottom from "../../common/NavBarBottom";
 
 
 
-export default function DashboardPage() {
+export default function NotFindPage() {
     const navigate = useNavigate();
-
     const url: string = (new URLSearchParams(useLocation().pathname.split("/").join(""))).toString().replace("=", '')
-
-
 
     return (
         <div className="Body gray">
             <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
-                <div className="flex items-center justify-center gap-2">
-
-                </div>
                 <AuthHeader />
-
             </div>
             <main className="flex items-center justify-evenly h-full py-10">
                 <Typography variant="lead" color="blue-gray" className="flex items-center justify-center mt-2">
