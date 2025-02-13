@@ -5,16 +5,16 @@ import { useEffect, useState } from 'react';
 import { Typography, } from '@material-tailwind/react';
 import { AuthHeader } from './auth.Comps/AuthHeader'
 import { ProfileForm } from './auth.Comps/ProfileForm';
-import { AssistanceLevel, Profile, ProfileDTO } from '../../../../domain/entities/Profile';
+import { AssistanceLevel, ProfileDTO } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
-import { LogOutButton } from '../../common/SmallComps';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { Skeleton } from '../../common/Skeleton';
 import { User } from '../../../../domain/entities/User';
 import { MailSubscriptions } from '../../../../domain/entities/Profile';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { Address } from '../../../../domain/entities/Address';
+import { LogOutButton } from '../../common/LogOutBtn';
 
 export default function ProfileCreatePage() {
     const { setUserProfile } = useUserStore()

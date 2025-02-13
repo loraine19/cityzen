@@ -4,8 +4,9 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Popover, PopoverHandler, PopoverContent, Chip } from '@material-tailwind/react';
 import { Icon } from '../SmallComps';
-import { Address, AddressDTO } from '../../../../domain/entities/Address';
+import { Address } from '../../../../domain/entities/Address';
 import { Link } from 'react-router-dom';
+import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 
 function FlyToMarker({ position }: { position: [number, number] }) {
     const map = useMap();

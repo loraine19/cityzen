@@ -1,5 +1,6 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { Auth } from "../../domain/entities/Auth";
+import { MessageBack } from "../../domain/entities/frontEntities";
 import { AuthRepositoryBase } from "../../domain/repositoriesBase/AuthRepositoryBase";
 import { AccessDTO, VerifyDTO, DeleteDTO } from "../DTOs/AuthDTO";
 import { ApiServiceI } from "../providers/http/apiService";
@@ -23,6 +24,11 @@ export class AuthRepositoryImpl implements AuthRepositoryBase {
 
     public async signUp(credentials: AccessDTO): Promise<{ message: string }> {
         return this.authData.signUp(credentials);
+    }
+
+    public async logOut(): Promise<MessageBack> {
+        console.log('repoImpl')
+        return this.authData.logOut();
     }
 
     public async deleteAccount(): Promise<{ message: string }> {

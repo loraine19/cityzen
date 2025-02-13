@@ -3,12 +3,12 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useEffect, useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import { EventDTO, EventUpdateDTO } from '../../../../domain/entities/Event';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
-import { AddressDTO } from '../../../../domain/entities/Address';
 import { useUserStore } from '../../../../application/stores/user.store';
+import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
+import { EventDTO, EventUpdateDTO } from '../../../../infrastructure/DTOs/EventDTO';
 
 export default function EventDetailPage() {
     const { id } = useParams()

@@ -1,4 +1,4 @@
-import { EventView } from "./Event";
+import { EventView } from "./EventDTO";
 
 
 //// for front only 

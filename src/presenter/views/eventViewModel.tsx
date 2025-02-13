@@ -62,10 +62,42 @@ export const eventIdViewModel = () => {
   }
 }
 
+
+
+
 export const eventsWeekViewModel = () => {
-  return (startDate: any, eventList: EventView[], numberOfWeeks: number): { date: Date, events: EventView[], text: string }[][] => {
+  return (startDate: any, numberOfWeeks: number): {
+    weeks: { date: Date, events: EventView[], text: string }[][],
+    isLoading: boolean,
+    error: any,
+    refetch: any,
+    fetchNextPage: any,
+    hasNextPage: any
+  } => {
+
+    const { data: user, isLoading: userLoading } = useQuery({
+      queryKey: ['user'],
+      queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
+    })
+
+    const getEvents = DI.resolve('getEventsUseCase')
+    const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
+      = useInfiniteQuery({
+        queryKey: ['events'],
+        queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam) || { events: [], count: 0 },
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, pages) => lastPage.events?.length ? pages.length + 1 : undefined
+      })
+
+    const userId = user?.id || 0
+
+    const flat = data?.pages.flat().map(page => page.events).flat()
+    if (flat && new Date(flat[flat.length - 1].start).getTime() < new Date(startDate).getTime() + numberOfWeeks * 7 * dayMS) { refetch() }
+    const eventList = userLoading ? [] : flat?.map(event => new EventView(event, userId)) || []
+
     const weeks: { date: Date, events: EventView[], text: string }[][] = [];
-    let date = new Date(startDate);
+    let date = new Date(startDate)
+
     for (let weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
       const week: { date: Date, events: EventView[], text: string }[] = [];
       const weekDay = date.getDay();
@@ -101,7 +133,7 @@ export const eventsWeekViewModel = () => {
       weeks.push(week);
       date = new Date(monday + 7 * dayMS);
     }
-    return weeks;
+    return { weeks, refetch, isLoading, error, fetchNextPage, hasNextPage };
   }
 }
 

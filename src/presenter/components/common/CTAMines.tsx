@@ -22,7 +22,7 @@ export default function CTAMines(props: CTAMinesProps) {
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={() => {
-                    buttons[index].function();
+                    buttons[index]?.function && buttons[index].function();
                     setOpen(false)
                 }}
                 title={buttons[index]?.title as string}

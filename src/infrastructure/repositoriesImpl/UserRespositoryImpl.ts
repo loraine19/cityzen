@@ -1,10 +1,12 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
-import { User, UserDTO } from "../../domain/entities/User";
+import { User } from "../../domain/entities/User";
 import { UserRepositoryBase } from "../../domain/repositoriesBase/UserRepositoryBase";
+import { UserDTO } from "../DTOs/User";
+import { ApiServiceI } from "../providers/http/apiService";
 
 export interface IUserData extends UserRepositoryBase {
-    api: any;
-    dataType: any;
+    api: ApiServiceI;
+    dataType: string;
 }
 
 export class UserRepositoryImpl implements UserRepositoryBase {
@@ -14,7 +16,6 @@ export class UserRepositoryImpl implements UserRepositoryBase {
     public async getUserMe(): Promise<User> {
         return this.userData.getUserMe();
     }
-
 
     public async getUsersModos(): Promise<User[]> {
         return this.userData.getUsersModos();

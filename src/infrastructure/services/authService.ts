@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { cryptedStorage, cryptedStorageI } from "./storageService";
 
 interface AuthServiceI {
-    logOut(): void;
+    // logOut(): void;
     getTokenExpirationDate(token: string): Date | null;
     getRefreshToken(): string;
     saveToken(refreshtoken: string): void;
@@ -14,10 +14,10 @@ export class AuthService implements AuthServiceI {
         this.storage = new cryptedStorage();
     }
 
-    logOut = () => {
-        this.storage.removeItem('refresh');
-        window.location.replace('/signin');
-    }
+    // logOutSe = () => {
+    //     this.storage.removeItem('refresh');
+    //     window.location.replace('/signin');
+    // }
 
     getTokenExpirationDate = (token: string): Date | null => {
         const decoded: any = jwtDecode(token);

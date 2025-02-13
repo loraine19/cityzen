@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Input, List, ListItem } from '@material-tailwind/react';
-import { Address, AddressDTO } from '../../../../domain/entities/Address';
+import { Address } from '../../../../domain/entities/Address';
 import { Skeleton } from '../Skeleton';
+import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 
 interface AddressSuggestion { label: string; value: Address }
 

@@ -1,5 +1,6 @@
 //src/infrastructure/services/notifService.ts
-import { Profile, ProfileView } from '../../domain/entities/Profile';
+import { Profile } from '../../domain/entities/Profile';
+import { ProfileView } from '../../presenter/views/viewsEntities/profileViewEntity';
 
 interface ProfilServiceI {
     profilForProfilView(profil: Profile): ProfileView;

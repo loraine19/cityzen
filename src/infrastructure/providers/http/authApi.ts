@@ -22,6 +22,10 @@ export class AuthApi {
         return this.api.post(`${this.dataType}/signup`, credentials)
     }
 
+    async logOut(): Promise<{ message: string }> {
+        return this.api.post(`${this.dataType}/logout`, {})
+    }
+
     async deleteAccount(): Promise<{ message: string }> {
         return this.api.post(`${this.dataType}/deleteAccount`, {})
     }

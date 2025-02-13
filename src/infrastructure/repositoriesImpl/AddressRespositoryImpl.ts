@@ -1,6 +1,7 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { AddressRepositoryBase } from "../../domain/repositoriesBase/AddressRepositoryBase";
-import { Address, AddressDTO } from "../../domain/entities/Address";
+import { Address } from "../../domain/entities/Address";
+import { AddressDTO } from "../DTOs/AddressDTO";
 
 interface IData extends AddressRepositoryBase {
     api: any;
@@ -20,8 +21,6 @@ export class AddressRepositoryImpl implements AddressRepositoryBase {
     }
 
     public async postAddress(address: AddressDTO): Promise<Address> {
-        console.log(address)
-
         return this.addressData.postAddress(address);
     }
 

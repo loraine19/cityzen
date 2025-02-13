@@ -47,11 +47,11 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                         />}
                 </CardHeader>
                 <CardBody className={` FixCardBody`}>
-                    <Title title={title} flagged={flagged} id={id} />
+                    <Title title={title} flagged={flagged} id={id} type="annonce" />
                     <div className="flex flex-col h-full">
                         <div className="CardOverFlow">
                             <Typography color="blue-gray" className="mb-2">
-                                {description}...
+                                {description}
                             </Typography>
                         </div>
                     </div>

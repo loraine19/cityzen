@@ -7,7 +7,7 @@ import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
 import DI from '../../../../di/ioc';
 import { terms } from '../../../../domain/constants/constants';
-import { AccessDTO } from '../../../../domain/entities/Auth';
+import { AccessDTO } from '../../../../infrastructure/DTOs/AuthDTO';
 
 export default function SignUpPage() {
     const [notif, setNotif] = useState<string>("");

@@ -1,4 +1,4 @@
-import { ResetDTO } from "../entities/Auth";
+import { ResetDTO } from "../../infrastructure/DTOs/AuthDTO";
 import { MessageBack } from "../entities/frontEntities";
 
 export interface ResetPasswordRepositoryBase {

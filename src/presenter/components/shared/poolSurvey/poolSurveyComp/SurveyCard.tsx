@@ -68,7 +68,7 @@ export function SurveyCard(props: SurveyCardProps) {
                     />}
             </CardHeader>
             <CardBody className={` FixCardBody`}>
-                <Title title={title} flagged={flagged} id={id} />
+                <Title title={title} flagged={flagged} id={id} type="sondage" />
 
                 <Typography color="blue-gray" className=" overflow-auto mb-2 pb-2">
                     {description}

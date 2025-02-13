@@ -1,5 +1,6 @@
 // src/data/repositories/UserRepository.tsx
-import { User, UserDTO } from "../entities/User";
+import { UserDTO } from "../../infrastructure/DTOs/User";
+import { User } from "../entities/User";
 
 export abstract class UserRepositoryBase {
     abstract getUserMe(): Promise<User>;

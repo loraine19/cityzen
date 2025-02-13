@@ -12,13 +12,9 @@ export class Token {
     updatedAt: Date = new Date();
     expiredAt: Date = new Date();
 
-    constructor(init?: Event) {
-        if (init) {
-            Object.keys(init).forEach(key => {
-                if (key in this) {
-                    (this as any)[key] = init[key as keyof Event];
-                }
-            });
+    constructor(data?: Partial<Token>) {
+        if (data) {
+            Object.assign(this, data);
         }
     }
 }

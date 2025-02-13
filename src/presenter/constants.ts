@@ -1,4 +1,5 @@
 import { EventCategory } from "../domain/entities/Event";
+import { FlagReason } from "../domain/entities/Flag";
 import { Label } from "../domain/entities/frontEntities";
 
 export const getEnumLabel = (enumArray: any, all?: boolean): Label[] => {
@@ -13,3 +14,5 @@ export const getEnumLabel = (enumArray: any, all?: boolean): Label[] => {
 
 export const eventCategoriesS = getEnumLabel(EventCategory, true);
 export const eventCategories = getEnumLabel(EventCategory);
+
+export const flagReasons = getEnumLabel(FlagReason)

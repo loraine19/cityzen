@@ -7,8 +7,8 @@ import { AuthForm } from './auth.Comps/AuthForm';
 import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button } from '@material-tailwind/react';
 import DI from '../../../../di/ioc';
-import { AccessDTO, VerifyDTO } from '../../../../domain/entities/Auth';
 import { useUserStore } from '../../../../application/stores/user.store';
+import { AccessDTO, VerifyDTO } from '../../../../infrastructure/DTOs/AuthDTO';
 
 export default function SignInPage() {
     const { saveToken } = DI.resolve('authService');

@@ -1,9 +1,9 @@
-import { Event } from "./Event";
-import { User } from "./User";
+import { User } from "../../domain/entities/User";
+
 
 export class Participant {
-    User: User = new User();
-    event: Event = new Event();
+    User: User = {} as User;;
+    event: Event = {} as Event;
     eventId: number = 0;
     userId: number = 0;
     createdAt: Date = new Date();

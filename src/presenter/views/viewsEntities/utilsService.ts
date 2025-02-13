@@ -1,4 +1,3 @@
-import { EventView } from "../../../domain/entities/Event";
 import { Flag } from "../../../domain/entities/Flag";
 import { Action, Label, defaultEventImage } from "../../../domain/entities/frontEntities";
 import { Issue } from "../../../domain/entities/Issue";
@@ -11,6 +10,7 @@ import { Survey, surveyCategory } from "../../../domain/entities/Survey";
 import { User } from "../../../domain/entities/User";
 import { LikeService } from "../../../domain/repositoriesBase/LikeRepository";
 import { PostService } from "../../../domain/repositoriesBase/PostRepository";
+import { EventView } from "./eventViewEntities";
 
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -94,7 +94,7 @@ export const formatDateForDB = (date: any) => (new Date(date).toISOString().slic
 export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
-    'title' in element ? title = element.title : 'litige';
+    'title' in element ? title = element.title ?? 'litige' : 'litige';
     'id' in element ? id = element.id : element.targetId;
     const actions = [
         {

@@ -1,48 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Option, Button, Select, Switch } from '@material-tailwind/react';
-import { FlagService } from '../../../../domain/repositoriesBase/FlagRepository';
-import { Flag } from '../../../../domain/entities/Flag';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import FlagDetailComp from './flagComps/FlagDetailComp';
 import { Skeleton } from '../../common/Skeleton';
-import { flagReasons, flagTargets, getLabel } from '../../../views/viewsEntities/utilsService';
+import DI from '../../../../di/ioc';
+import { FlagView } from '../../../views/viewsEntities/flagViewEntities';
+import { FlagTarget } from '../../../../domain/entities/Flag';
+import { flagReasons } from '../../../constants';
 
 
 export default function FlagEditPage() {
     const { id, target } = useParams()
-    const [loading, setLoading] = useState<boolean>(true);
-    const [flag, setFlag] = useState<Flag>({} as Flag)
-    const label = getLabel(target, flagTargets)
+    const targetKey: FlagTarget = Object.keys(FlagTarget).find(key => FlagTarget[key as keyof typeof FlagTarget] === target) as FlagTarget;
     const navigate = useNavigate();
-    const { getMyFlag, deleteFlag } = new FlagService()
+    const deleteFlag = () => DI.resolve('deleteFlagUseCase').execute(parseInt(id || '0'), targetKey)
+    const { flag, isLoading } = DI.resolve('flagByIdViewModel')(parseInt(id || '0'), targetKey)
+    //  if (!flag || !flag.targetId) window.location.replace(`/msg?msg=Cette page n'existe pas`)
+    console.log(flag)
 
-    const fetch = async () => {
-        setLoading(true);
-        const idS = id ? parseInt(id) : 0;
-        const targetS = target ? target : "";
-        const flag = await getMyFlag(targetS, idS);
-        setFlag(flag);
-        setLoading(false);
-        formik.values.reason = flag.reason
-        formik.values.target = flag.target
-        formik.values.targetId = flag.targetId
-    }
-    useEffect(() => { fetch() }, []);
     const formSchema = object({ reason: string().required("Le type de signalement est obligatoire") })
 
     const formik = useFormik({
-        initialValues: { ...flag } as Flag,
+        initialValues: new FlagView(flag),
         validationSchema: formSchema,
         onSubmit: values => {
-            setFlag(values)
             formik.values = values
             setOpen(true)
-
         }
     });
 
@@ -56,16 +44,16 @@ export default function FlagEditPage() {
                 handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => {
-                    const ok = await deleteFlag(flag.target.toString().toLowerCase(), flag.targetId)
-                    if (ok) { setOpen(false); navigate('/flag') }
+                    await deleteFlag()
+                    setOpen(false); navigate('/flag')
                 }}
                 title={`Confirmer la suppression`}
                 element={`<br> Vous confirmez la suppression du signalement </br>
-                sur  l'${label} pour le motif ${getLabel(flag.reason, flagReasons)}`} />
+                sur  l'${flag?.targetS} pour le motif ${flag?.reasonS}`} />
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={`Signaler `} place={'un ' + label} closeBtn />
+                    <SubHeader type={`Signaler `} place={'un ' + flag?.targetS} closeBtn />
 
                     <div className='w-respLarge h-full flex flex-col gap-2'>
                         <div className='flex justify-between items-center px-2'>
@@ -89,10 +77,12 @@ export default function FlagEditPage() {
                 </header>
 
                 <main className='flex pb-2'>
-                    {loading ? <Skeleton className='w-respLarge m-auto !h-full !rounded-3xl' /> : <FlagDetailComp flag={flag} />}
+                    {isLoading ?
+                        <Skeleton className='w-respLarge m-auto !h-full !rounded-3xl' /> :
+                        <FlagDetailComp flag={flag} />}
                 </main>
 
-                <footer className=" w-respLarge">
+                <footer className="w-respLarge">
                     <Button type="submit" size="lg" className="w-full rounded-full" >
                         retirer mon signalement
                     </Button>

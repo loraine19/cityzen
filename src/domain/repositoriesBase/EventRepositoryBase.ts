@@ -1,7 +1,8 @@
 //src/domain/repositories-ports/EventRepositoryBase.ts
-import { AddressDTO } from "../entities/Address";
-import { EventDTO, EventPage } from "../entities/Event";
-import { Event } from "../entities/Event";
+
+import { AddressDTO } from "../../infrastructure/DTOs/AddressDTO";
+import { EventDTO } from "../../infrastructure/DTOs/EventDTO";
+import { Event, EventPage } from "../entities/Event";
 
 
 

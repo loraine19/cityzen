@@ -1,7 +1,7 @@
 //src/application/useCases/resetPassword.useCase.ts
-import { ResetDTO } from "../../domain/entities/Auth";
 import { MessageBack } from "../../domain/entities/frontEntities";
 import { ResetPasswordRepositoryBase } from "../../domain/repositoriesBase/ResetPasswordRepositoryBase";
+import { ResetDTO } from "../../infrastructure/DTOs/AuthDTO";
 
 
 export class ResetPasswordUseCase {

@@ -4,19 +4,20 @@ export interface cryptedStorageI {
     getItem(name: string): any;
     setItem(name: string, value: any): void;
     removeItem(name: string): void;
+    clear(): void;
 }
 
-export class cryptedStorage {
+const secretKey = import.meta.env.VITE_STORE_KEY as string;
+export class cryptedStorage implements cryptedStorageI {
 
     constructor() { }
-    private secretKey = import.meta.env.VITE_STORE_KEY as string;
 
     private encrypt(data: string): string {
-        return CryptoJS.AES.encrypt(data, this.secretKey).toString();
+        return CryptoJS.AES.encrypt(data, secretKey).toString();
     }
 
     private decrypt(data: string): string {
-        const bytes = CryptoJS.AES.decrypt(data, this.secretKey);
+        const bytes = CryptoJS.AES.decrypt(data, secretKey);
         return bytes.toString(CryptoJS.enc.Utf8);
     }
 
@@ -35,6 +36,10 @@ export class cryptedStorage {
 
     removeItem(name: string): void {
         localStorage.removeItem(name);
+    }
+
+    clear(): void {
+        localStorage.clear();
     }
 }
 

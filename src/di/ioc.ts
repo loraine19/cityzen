@@ -18,7 +18,6 @@ import { profileMeViewModel } from '../presenter/views/profileViewModel';
 import { ProfileApi } from '../infrastructure/providers/http/profileApi';
 import { ProfileService } from '../infrastructure/services/profileService';
 import { AddressRepositoryImpl } from '../infrastructure/repositoriesImpl/AddressRespositoryImpl';
-import { AddressService } from '../infrastructure/services/addressService';
 import { AddressApi } from '../infrastructure/providers/http/addressApi';
 import { eventIdViewModel, eventsWeekViewModel, eventViewModel } from '../presenter/views/eventViewModel';
 import { AuthService } from '../infrastructure/services/authService';
@@ -29,7 +28,7 @@ import { serviceIdViewModel, serviceViewModel } from '../presenter/views/service
 import { ServiceService } from '../presenter/views/viewsEntities/serviceService';
 import { GetUserMeUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
-import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
+import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
 import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
@@ -38,6 +37,11 @@ import { GetNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
 import { PostProfileUseCase, UpdateProfileUseCase } from '../application/useCases/profile.useCase';
 import { notifViewModel } from '../presenter/views/notifViewModel';
+import { cryptedStorage } from '../infrastructure/services/storageService';
+import { FlagApi } from '../infrastructure/providers/http/flagApi';
+import { GetFlagsUseCase, GetFlagByIdUseCase, PostFlagUseCase, DeleteFlagUseCase } from '../application/useCases/flag.usecase';
+import { FlagRepositoryImpl } from '../infrastructure/repositoriesImpl/FlagRespositoryImpl';
+import { flagByIdViewModel, flagsViewModel } from '../presenter/views/flagViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -54,14 +58,16 @@ container.register({
     signInVerifyUseCase: asClass(SignInVerifyUseCase),
     deleteAccountUseCase: asClass(DeleteAccountUseCase),
     deleteAccountConfirmUseCase: asClass(DeleteAccountConfirmUseCase),
+    logOutUseCase: asClass(LogOutUseCase),
+
     authRepository: asClass(AuthRepositoryImpl),
     authData: asClass(AuthApi),
     authService: asClass(AuthService),
+    storage: asClass(cryptedStorage),
 
     ////ADDRESS
     updateAddressUseCase: asClass(UpdateAddressUseCase),
     addressRepository: asClass(AddressRepositoryImpl),
-    addressService: asClass(AddressService),
     addressData: asClass(AddressApi),
 
     ////RESET PASSWORD
@@ -124,12 +130,22 @@ container.register({
     serviceViewModel: asFunction(serviceViewModel),
     serviceIdViewModel: asFunction(serviceIdViewModel),
     serviceService: asClass(ServiceService),
+
+    ////FLAG 
+    flagRepository: asClass(FlagRepositoryImpl),
+    flagData: asClass(FlagApi),
+    getFlagsUseCase: asClass(GetFlagsUseCase),
+    getFlagByIdUseCase: asClass(GetFlagByIdUseCase),
+    postFlagUseCase: asClass(PostFlagUseCase),
+    deleteFlagUseCase: asClass(DeleteFlagUseCase),
+    flagsViewModel: asFunction(flagsViewModel),
+    flagByIdViewModel: asFunction(flagByIdViewModel),
 });
 
 // Log all registered components
 console.log('Registered components:', container.registrations);
 
-// TEST RESOLVE EXA
+// TEST RESOLVE 
 //console.log('addressUserCase:', container.resolve('addressUseCase').getAddresses());
 
 

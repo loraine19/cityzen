@@ -1,5 +1,6 @@
-import { Address, AddressDTO } from "../../domain/entities/Address";
+import { Address } from "../../domain/entities/Address";
 import { AddressRepositoryBase } from "../../domain/repositoriesBase/AddressRepositoryBase";
+import { AddressDTO } from "../../infrastructure/DTOs/AddressDTO";
 
 
 

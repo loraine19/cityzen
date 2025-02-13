@@ -80,7 +80,7 @@ export default function ServiceComp(props:
                     }
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1`}>
-                    <Title title={title} flagged={flagged} id={id} />
+                    <Title title={title} flagged={flagged} id={id} type='service' />
                     <div className="flex flex-col h-full overflow-auto">
                         <Typography color="blue-gray">
                             {description}

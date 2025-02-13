@@ -8,11 +8,11 @@ import { ProfileForm } from '../auth/auth.Comps/ProfileForm';
 import { ProfileDTO, } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
-import { AddressDTO } from '../../../../domain/entities/Address';
-import { LogOutButton } from '../../common/SmallComps';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { User } from '../../../../domain/entities/User';
 import { Skeleton } from '../../common/Skeleton';
+import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
+import { LogOutButton } from '../../common/LogOutBtn';
 
 
 export default function MyInfosPage() {

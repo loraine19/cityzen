@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import parse from 'html-react-parser';
-import { EventView } from '../../../../domain/entities/Event';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -10,6 +9,7 @@ import { Action } from '../../../../domain/entities/frontEntities';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
+import { EventView } from '../../../views/viewsEntities/eventViewEntities';
 
 
 export default function EventDetailPage() {

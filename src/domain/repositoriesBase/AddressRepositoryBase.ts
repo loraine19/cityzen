@@ -1,4 +1,5 @@
-import { Address, AddressDTO } from "../entities/Address";
+import { AddressDTO } from "../../infrastructure/DTOs/AddressDTO";
+import { Address } from "../entities/Address";
 
 
 // ADDRESSES

@@ -1,8 +1,8 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { ResetPasswordRepositoryBase } from "../../domain/repositoriesBase/ResetPasswordRepositoryBase";
-import { ResetDTO } from "../../domain/entities/Auth";
 import { MessageBack } from "../../domain/entities/frontEntities";
 import { ApiServiceI } from "../providers/http/apiService";
+import { ResetDTO } from "../DTOs/AuthDTO";
 
 
 interface IData extends ResetPasswordRepositoryBase {

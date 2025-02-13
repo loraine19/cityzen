@@ -1,6 +1,6 @@
-import { Address } from './Address';
-import { User } from './User';
-import { Flag } from './Flag';
+import { Address } from '../../domain/entities/Address';
+import { Flag } from '../../domain/entities/Flag';
+import { User } from '../../domain/entities/User';
 import { Label } from './frontEntities';
 import { getEnumLabel } from './utilsEntity';
 

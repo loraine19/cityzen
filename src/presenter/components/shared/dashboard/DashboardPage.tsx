@@ -3,7 +3,7 @@ import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwi
 import { NotifView } from "../../../../domain/entities/Notif";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
-import { Icon, LogOutButton } from "../../common/SmallComps";
+import { Icon } from "../../common/SmallComps";
 import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import CalendarComp from "../../common/CalendarComp";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
@@ -13,6 +13,7 @@ import { Skeleton } from "../../common/Skeleton";
 import { useUserStore } from "../../../../application/stores/user.store";
 import { ConfirmModal } from "../../common/ConfirmModal";
 import { useSearchParams } from "react-router-dom";
+import { LogOutButton } from "../../common/LogOutBtn";
 
 export default function DashboardPage() {
     const user = useUserStore((state) => state.user);
@@ -22,7 +23,6 @@ export default function DashboardPage() {
     const userNotif = useNotificationStore((state: any) => state.notifList?.filter((notif: NotifView) => !notif.read).length);
     useEffect(() => {
         const fetch = async () => {
-            console.log('fetchUser in store', await fetchUser())
             if (!user || !user.Profile) { await fetchUser() }
             await updateNotif()
         }
@@ -36,7 +36,6 @@ export default function DashboardPage() {
     const [searchParams] = useSearchParams();
     const msg = searchParams.get("msg");
     const [open, setOpen] = useState<boolean>(msg ? true : false);
-
 
     return (
         <>
@@ -86,17 +85,20 @@ export default function DashboardPage() {
                                         <Icon
                                             link="/myprofile"
                                             icon="person_edit"
-                                            color="cyan" fill bg size="lg" style="!px-[0.4em]"
+                                            color="cyan" fill bg
+                                            size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
                                             link="/conciliation"
                                             icon="diversity_3"
-                                            color="orange" fill bg size="lg" style="!px-[0.4em]"
+                                            color="orange" fill bg
+                                            size="lg"
                                             title="ouvrir la page conciliation" />
                                         <Icon
                                             link="/"
                                             icon="two_pager"
-                                            color='green' fill bg size="lg" style="!px-[0.4em]"
+                                            color='green' fill bg
+                                            size="lg"
                                             title="ouvrir la page réglement" />
                                     </div>
                                     <Typography
@@ -116,7 +118,7 @@ export default function DashboardPage() {
                             <Card className=" orange100">
                                 <CardBody className="h-full flex flex-col py-3 px-4">
                                     <div className="flex gap-2 items-center">
-                                        <Icon fill icon="circle_notifications" link="/notifications" size="4xl" color="orange" title="voir mes notifications" />
+                                        <Icon fill icon="circle_notifications" link="/notification" size="4xl" color="orange" title="voir mes notifications" />
                                         <div>
                                             <Typography color="blue-gray">
                                                 {notifList && userNotif > 0 ? `${userNotif} notifications` : 'pas de notifications'}

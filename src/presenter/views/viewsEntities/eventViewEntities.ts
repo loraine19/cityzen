@@ -1,6 +1,7 @@
 import { Event, EventCategory } from "../../../domain/entities/Event";
 import { Flag } from "../../../domain/entities/Flag";
 import { dayMS } from "../../../domain/entities/frontEntities";
+
 export class EventView extends Event {
     actif?: boolean;
     days?: Date[] | string[];
@@ -15,7 +16,7 @@ export class EventView extends Event {
     toogleParticipate?: () => Promise<EventView>;
 
     constructor(event: Event, userId: number) {
-        super(event); // Appel du constructeur de la classe parente(Product)
+        super(event);
         this.days = this.getDays(event);
         this.Igo = event.Participants.some((p) => p.userId === userId) ? true : false;
         this.mine = event?.userId === userId;

@@ -191,19 +191,19 @@ nav li .icon {
 
 /* CHIP LIGHT COLOR */
 .OrangeChip {
-    @apply bg-orange-100 text-orange-800 min-w-max px-3 rounded-2xl shadow;
+    @apply bg-orange-100 text-orange-800  px-3 rounded-2xl shadow;
 }
 
 .GreenChip {
-    @apply bg-green-100 text-green-800 min-w-max px-3 rounded-2xl shadow;
+    @apply bg-green-100 text-green-800 px-3 rounded-2xl shadow;
 }
 
 .RedChip {
-    @apply bg-red-200 text-red-900 min-w-max px-3 rounded-2xl shadow;
+    @apply bg-red-200 text-red-900  px-3 rounded-2xl shadow;
 }
 
 .CyanChip {
-    @apply bg-cyan-200 text-cyan-900 min-w-max px-3 rounded-2xl shadow;
+    @apply bg-cyan-200 text-cyan-900  px-3 rounded-2xl shadow;
 }
 
 .GrayChip,

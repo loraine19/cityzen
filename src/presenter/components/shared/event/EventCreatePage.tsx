@@ -3,10 +3,12 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import { EventDTO, EventUpdateDTO, EventView } from '../../../../domain/entities/Event';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
-import { Address, AddressDTO } from '../../../../domain/entities/Address';
+import { Address } from '../../../../domain/entities/Address';
+import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
+import { EventUpdateDTO, EventDTO } from '../../../../infrastructure/DTOs/EventDTO';
+
 
 export default function EventCreatePage() {
     const navigate = useNavigate();
@@ -27,7 +29,7 @@ export default function EventCreatePage() {
     })
 
     const formik = useFormik({
-        initialValues: new EventDTO() as EventView,
+        initialValues: new EventDTO(),
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values

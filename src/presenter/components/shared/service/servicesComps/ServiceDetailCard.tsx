@@ -47,7 +47,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     }
                 </CardHeader>
                 <CardBody className="FixCardBody">
-                    <Title title={title} flagged={flagged} id={id} />
+                    <Title title={title} flagged={flagged} id={id} type='service' />
                     <div className="flex justify-between items-end pt-2 ">
                         <div className="flex  items-center gap-2 mb-1">
                             <Chip value={SkillLevel[skill]} className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"

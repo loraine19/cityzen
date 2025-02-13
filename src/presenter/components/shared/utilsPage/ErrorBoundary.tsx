@@ -1,8 +1,8 @@
 import { Component, ReactNode, ErrorInfo } from 'react';
 import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
 import { Button, Typography } from '@material-tailwind/react';
-import { LogOutButton } from '../../common/SmallComps';
 import { ConfirmModal } from '../../common/ConfirmModal';
+import { LogOutButton } from '../../common/LogOutBtn';
 
 interface ErrorBoundaryProps {
     children: ReactNode;

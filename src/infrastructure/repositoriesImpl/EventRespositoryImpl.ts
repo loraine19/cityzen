@@ -3,7 +3,7 @@ import { EventRepositoryBase } from "../../domain/repositoriesBase/EventReposito
 import { Event, EventPage } from "../../domain/entities/Event";
 import { ApiServiceI } from "../providers/http/apiService";
 import { AddressDTO } from "../DTOs/AddressDTO";
-import { EventDTO } from "../DTOs/Event";
+import { EventDTO } from "../DTOs/EventDTO";
 
 interface IData extends EventRepositoryBase {
     api: ApiServiceI;

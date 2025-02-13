@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { User } from "../../domain/entities/User";
 import { Vote } from "./Vote";
 
 export class Pool {
@@ -10,8 +10,8 @@ export class Pool {
     updatedAt: Date = new Date();
     userId: number = 0;
     userIdBenef: number = 0;
-    User?: User = new User();
-    UserBenef?: User = new User();
+    User?: User = {} as User;
+    UserBenef?: User = {} as User;
     Votes?: Vote[] = [new Vote()];
 }
 

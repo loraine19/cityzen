@@ -7,7 +7,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { User } from '../../../../domain/entities/User';
 import { Icon } from '../../../components/common/SmallComps';
 import DI from '../../../../di/ioc';
-import { ResetDTO } from '../../../../domain/entities/Auth';
+import { ResetDTO } from '../../../../infrastructure/DTOs/AuthDTO';
 
 
 export default function ResetPasswordPage() {
@@ -16,7 +16,7 @@ export default function ResetPasswordPage() {
     const [notif, setNotif] = useState<string>(' Entrez votre nouveau mot de passe');
     const params = { email: searchParams.get("email"), token: searchParams.get("token") }
     const { email, token } = params
-    const updatePassword = async (resetDTO: ResetDTO) => await DI.resolve('resetPasswordUpdateUseCase').execute(resetDTO)
+    const updatePassword = async (data: ResetDTO) => await DI.resolve('resetPasswordUpdateUseCase').execute(data)
 
     const passwordType = { value: 'password', icon: 'visibility' }
     const textType = { value: 'text', icon: 'visibility_off' }

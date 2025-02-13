@@ -9,7 +9,6 @@ import { useUserStore } from "../../../../../application/stores/user.store";
 import { getLabel, postCategories, toggleLike } from "../../../../views/viewsEntities/utilsService";
 
 
-
 export default function AnnounceDetailComp(props: { post: Post, mines?: boolean, change: (e: any) => void }) {
     const [post, setPost] = useState<Post>(props.post)
     const { id, title, description, image, category, createdAt, Likes } = post
@@ -19,7 +18,6 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
     const Author: Profile = post?.User?.Profile
     const flagged: boolean = post.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
     const ILike: boolean = post.Likes?.find((like: Like) => like.userId === userId) ? true : false
-
 
     return (
         <>
@@ -34,7 +32,7 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                     {image && <img src={image as any} alt={title} className="h-full w-full object-cover" />}
                 </CardHeader>
                 <CardBody className="FixCardBody">
-                    <Title title={title} flagged={flagged} id={id} />
+                    <Title title={title} flagged={flagged} id={id} type="annonce" />
                     <div className="CardOverFlow">
                         <Typography color="blue-gray" className="mb-2">
                             {description}

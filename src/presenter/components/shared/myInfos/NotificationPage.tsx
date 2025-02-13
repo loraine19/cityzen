@@ -86,9 +86,9 @@ export default function NotificationPage() {
                         small={true} />
                 )) :
                     list?.map((notif: NotifView, index: number) => notif.read === false &&
-                        <div className="SubGrid !pt-4 " key={'div' + index}>
+                        <div className="SubGrid" key={'div' + index}>
                             <NotifCard key={index} notif={notif} handleClick={(notif: NotifView) => {
-                                removeNotif(notif.id); updateNotif(list)
+                                removeNotif(notif.id); updateNotif()
                             }} /></div>)}
             </main>
             <NavBarBottom />

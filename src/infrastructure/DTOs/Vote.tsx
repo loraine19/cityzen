@@ -1,5 +1,6 @@
+import { User } from "../../domain/entities/User";
 import { Pool } from "./Pool";
-import { User } from "./User";
+
 
 export enum VoteTarget {
     SURVEY,

@@ -59,7 +59,7 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
                             className="h-full w-full object-cover" />}
                 </CardHeader>
                 <CardBody className="FixCardBody">
-                    <Title title={title} flagged={flagged} id={id} CreatedAt={createdAt} />
+                    <Title title={title} flagged={flagged} id={id} CreatedAt={createdAt} type='sondage' />
                     <div className="CardOverFlow h-full">
                         <Typography color="blue-gray" className="mb-2">
                             {description}

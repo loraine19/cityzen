@@ -12,13 +12,14 @@ export function NotifCard(props: notifCardProps) {
     const userProfile: Profile = user.Profile
 
     const { handleClick, notif } = props
-    const { update, userId, read, elementType, relation } = props.notif
+    console.log(notif)
+    const { update, userId, read, elementType, relation } = notif
 
     return (
-        <Card className={`${!read ? 'FixCardNoImage w-resp max-h-max !justify-start' : 'hidden'}`}>
-            <CardHeader className={"FixCardHeaderNoImage "} floated={false}>
-                <div className="ChipDivNoImage  ">
-                    <div className="flex items-center gap-2 mb-4">
+        <Card className={`${!read ? 'FixCardNoImage w-resp  !justify-start' : 'hidden'}`}>
+            <CardHeader className={"FixCardHeaderNoImage !my-0 "} floated={false}>
+                <div className="ChipDivNoImage ">
+                    <div className="flex items-center gap-2 mb-4 ">
                         <Chip size='sm' value={elementType} className="rounded-full h-max text-ellipsis  " color="cyan">
                         </Chip>
                         <Chip size='sm' value={relation} className={`${userId !== userProfile.userId && '!grayscale'} rounded-full OrangeChip h-max flex items-center gap-2 font-medium `}>

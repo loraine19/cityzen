@@ -1,5 +1,6 @@
 ///src/infrastructure/providers/http/authApi.ts
-import { Address, AddressDTO } from "../../../domain/entities/Address";
+import { Address } from "../../../domain/entities/Address";
+import { AddressDTO } from "../../DTOs/AddressDTO";
 import { ApiServiceI, ApiService } from "./apiService";
 
 
