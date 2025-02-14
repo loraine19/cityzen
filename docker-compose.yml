@@ -1,0 +1,22 @@
+services:
+  # Database
+  front:
+    container_name: front
+    image: lorainep/collectif:latest
+    restart: unless-stopped
+    ports:
+      - '4443:443'
+      - '8080:80'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./project_data:/data
+    networks :
+      - nest-network
+    env_file:
+      - .env.local
+
+  
+
+networks:
+  nest-network:
+    external: true

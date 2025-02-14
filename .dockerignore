@@ -8,6 +8,9 @@ node_modules
 # Ignore Git repository files
 .git
 
+# Ignore .env file
+.env.local
+
 # Ignore build folder
 dist
 build

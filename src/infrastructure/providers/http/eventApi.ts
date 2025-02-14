@@ -1,6 +1,4 @@
-
 import { Event, EventPage } from "../../../domain/entities/Event";
-import { AddressDTO } from "../../DTOs/AddressDTO";
 import { EventDTO } from "../../DTOs/EventDTO";
 
 import { ApiServiceI, ApiService } from "./apiService";
@@ -22,15 +20,15 @@ export class EventApi {
         return this.api.get(`${this.dataType}/${id}`);
     }
 
-    async postEvent(event: EventDTO, address: AddressDTO): Promise<Event> {
-        const formData = this.api.createFormData(event, address);
+    async postEvent(event: EventDTO): Promise<Event> {
+        const formData = this.api.createFormData(event);
         return this.api.post(this.dataType, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
     }
 
-    async updateEvent(id: number, event: EventDTO, address: AddressDTO): Promise<Event> {
-        const formData = this.api.createFormData(event, address);
+    async updateEvent(id: number, event: EventDTO): Promise<Event> {
+        const formData = this.api.createFormData(event);
         return this.api.patch(`${this.dataType}/${id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });

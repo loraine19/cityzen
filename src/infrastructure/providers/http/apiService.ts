@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 import { AuthService } from "../../services/authService";
-import { AddressDTO } from "../../DTOs/AddressDTO";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
 
@@ -54,7 +53,7 @@ export type ApiServiceI = {
     put(url: string, data?: any): Promise<any>;
     post(url: string, data?: any, config?: any): Promise<any>;
     patch(url: string, data?: any, config?: any): Promise<any>;
-    createFormData(element: any, address?: AddressDTO): FormData;
+    createFormData(element: any): FormData;
 }
 
 export class ApiService implements ApiServiceI {
@@ -91,9 +90,6 @@ export class ApiService implements ApiServiceI {
             //     originalRequest._retry = true;
             //     if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
             //         setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
-            //     }
-            //     return Promise.reject(new ApiError(error.code, error.message));
-            // }
             return Promise.reject(new ApiError(error.code, error.message));
         }
         const { status, data } = error.response;
@@ -112,7 +108,6 @@ export class ApiService implements ApiServiceI {
                         return this.api(originalRequest);
                     } else {
                         newError = new UnauthorizedError('Erreur lors du rafraîchissement du token');
-                        console.error(newError);
                     }
                 } else {
                     newError = new UnauthorizedError();
@@ -202,7 +197,6 @@ export class ApiService implements ApiServiceI {
     }
 
     public createFormData = (element: any): FormData => {
-        //        Address && (element = { ...element, Address })
         const formData = new FormData();
         for (const [key, value] of Object.entries(element)) {
             if (value instanceof File) {
