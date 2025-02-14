@@ -14,7 +14,7 @@ export default function EventDetailPage() {
     const { id } = useParams()
     const idS = id ? parseInt(id) : 0;
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
-    const { event, loadingEvent } = eventIdViewModelFactory(idS);
+    const { event, isLoading } = eventIdViewModelFactory(idS);
     const user = useUserStore((state) => state.user);
     const [eventDto, setEventDto] = useState<EventDTO>(new EventDTO(event));
     const [Address, setAddress] = useState<AddressDTO>(eventDto.Address || {} as AddressDTO)
@@ -23,7 +23,7 @@ export default function EventDetailPage() {
     useEffect(() => {
         setEventDto(new EventDTO(event));
         event && event.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
-    }, [loadingEvent]);
+    }, [isLoading]);
 
 
     const navigate = useNavigate()
@@ -77,7 +77,7 @@ export default function EventDetailPage() {
                 handleConfirm={async () => await updateFunction()}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-            {loadingEvent || formik.values === null ?
+            {isLoading || formik.values === null ?
                 <Skeleton /> :
                 <EventForm
                     formik={formik}

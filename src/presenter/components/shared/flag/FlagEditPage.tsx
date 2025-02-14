@@ -21,7 +21,7 @@ export default function FlagEditPage() {
     const deleteFlag = () => DI.resolve('deleteFlagUseCase').execute(parseInt(id || '0'), targetKey)
     const { flag, isLoading } = DI.resolve('flagByIdViewModel')(parseInt(id || '0'), targetKey)
     //  if (!flag || !flag.targetId) window.location.replace(`/msg?msg=Cette page n'existe pas`)
-    console.log(flag)
+
 
     const formSchema = object({ reason: string().required("Le type de signalement est obligatoire") })
 
@@ -49,11 +49,11 @@ export default function FlagEditPage() {
                 }}
                 title={`Confirmer la suppression`}
                 element={`<br> Vous confirmez la suppression du signalement </br>
-                sur  l'${flag?.targetS} pour le motif ${flag?.reasonS}`} />
+                sur  l'${targetKey} pour le motif ${flag?.reasonS}`} />
             <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={`Signaler `} place={'un ' + flag?.targetS} closeBtn />
+                    <SubHeader type={`Signaler `} place={'un ' + targetKey} closeBtn />
 
                     <div className='w-respLarge h-full flex flex-col gap-2'>
                         <div className='flex justify-between items-center px-2'>

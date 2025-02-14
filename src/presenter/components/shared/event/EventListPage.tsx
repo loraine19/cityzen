@@ -30,10 +30,9 @@ export default function EventListPage() {
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
-    console.log(events)
+
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
-    const update = async () => { await refetch() }
 
     const filterTab = async (value?: EventFilter) => {
         setParams({ filter: value as string || '', category: category });
@@ -41,7 +40,7 @@ export default function EventListPage() {
         setFilter(value || '');
         value === EventFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string || '', category: category })
-        update()
+        refetch();
     };
 
     const eventTabs: TabLabel[] = [
@@ -55,7 +54,7 @@ export default function EventListPage() {
         const selectedCategory = typeof e !== "object" ? e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), eventCategories).toLowerCase();
         setCategory(selectedCategory);
         setParams({ filter: filter as string || '', category: selectedCategory });
-        update()
+        refetch();
     }
 
     useEffect(() => {
@@ -101,9 +100,17 @@ export default function EventListPage() {
                         change={change}
                         categorySelected={category.toString()}
                         disabled={view === "event"} />
-                    <Icon onClick={switchClick} icon={view === "view_agenda" ? "calendar_month" : "list"} size="4xl" color="gray" title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
+                    <Icon
+                        onClick={switchClick}
+                        icon={view === "view_agenda" ? "calendar_month" : "list"}
+                        size="4xl"
+                        color="gray"
+                        title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
                 </div>
-                {view === "view_agenda" && <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>}
+                {view === "view_agenda" &&
+                    <div className={notif && "w-full flex justify-center p-8"}>
+                        {notif}
+                    </div>}
             </header>
             {view === "view_agenda" && (
                 <main ref={divRef}
@@ -117,7 +124,12 @@ export default function EventListPage() {
                         :
                         events.map((event: EventView, index: number) => (
                             <div className="SubGrid" key={index}>
-                                <EventCard key={event.id} event={event} change={change} mines={mines} update={refetch} />
+                                <EventCard
+                                    key={event.id}
+                                    event={event}
+                                    change={change}
+                                    mines={mines}
+                                    refetch={refetch} />
                             </div>
                         ))
                     }

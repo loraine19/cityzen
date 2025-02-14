@@ -9,9 +9,9 @@ import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 
 
-type EventCardProps = { event: EventView, change: (e: any) => void, mines?: boolean, update?: () => void }
+type EventCardProps = { event: EventView, refetch?: () => void, change: (e: any) => void, mines?: boolean }
 
-export function EventCard({ event: initialEvent, change, mines, update }: EventCardProps) {
+export function EventCard({ event: initialEvent, change, mines, refetch }: EventCardProps) {
     const [event, setEvent] = useState<EventView>(initialEvent);
     const { updateNotif } = useNotificationStore();
     const { id, title, description, category, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink, eventDateInfo } = event;
@@ -70,7 +70,9 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
                     CreatedAt={createdAt}
                     subTitle={eventDateInfo}
                     type='evenement' />
-                <Typography className="text-ellipsis overflow-auto max-h-[1.8rem] ">{description}</Typography>
+                <Typography className="text-ellipsis overflow-auto max-h-[1.8rem] ">
+                    {description}
+                </Typography>
             </CardBody>
             <CardFooter className="CardFooter">
                 {!mines ? (
@@ -82,18 +84,32 @@ export function EventCard({ event: initialEvent, change, mines, update }: EventC
                         <AvatarStack avatarDatas={event.Participants} />
                     </div>
                 ) : (
-                    <ModifBtnStack disabled1={disabledDelete} disabled2={disabledEdit} actions={actions} update={update} />
+                    <ModifBtnStack
+                        disabled1={disabledDelete}
+                        disabled2={disabledEdit}
+                        actions={actions}
+                        update={refetch} />
                 )}
                 <div className="flex items-center gap-2">
-                    <button onClick={async () => { toogleParticipate && setEvent(await toogleParticipate()); updateNotif() }}>
+                    <button
+                        onClick={async () => {
+                            const event = toogleParticipate && await toogleParticipate();
+
+                            setEvent(event);
+                            updateNotif()
+                        }}>
                         <Chip
                             value={participantsMin}
                             variant="ghost"
                             className="rounded-full h-max flex items-center px-4 gap-2"
-                            icon={<Icon icon="person" fill={Igo} color={Igo ? "cyan" : "gray"} style="-mt-2 pl-2" title={Igo ? "Je n'y vais plus" : "Je participe"} />}
+                            icon={<Icon icon="person" fill={event?.Igo} color={event?.Igo ? "cyan" : "gray"} style="-mt-2 pl-2" title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>
-                    <Icon icon="arrow_circle_right" link={`/evenement/${id}`} title={`voir les details de ${title}`} size="4xl px-1" fill />
+                    <Icon
+                        icon="arrow_circle_right"
+                        link={`/evenement/${id}`}
+                        title={`voir les details de ${title}`}
+                        size="4xl px-1" fill />
                 </div>
             </CardFooter>
         </Card>

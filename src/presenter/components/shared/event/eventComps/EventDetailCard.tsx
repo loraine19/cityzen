@@ -6,11 +6,12 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "../../../common/Skeleton";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 
-type EventCardProps = { EventLoad: EventView, change?: (e: any) => void, setEventLoad?: any }
+type EventCardProps = { EventLoad: EventView, refetch?: () => void, change?: (e: any) => void }
 export function EventDetailCard(props: EventCardProps) {
-    const { EventLoad, setEventLoad } = props
+    const { EventLoad, refetch } = props
     const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, } = EventLoad;
     const author = User?.Profile
+
     return (
         <div className="pt-6 pb-1 h-full flex">
             <Card className="w-respLarge FixCard !h-full">
@@ -33,7 +34,10 @@ export function EventDetailCard(props: EventCardProps) {
                             float={true}
                             label="Participants" />
                     </div>
-                    < img src={image as string} alt={title} className="h-full w-full object-cover" />
+                    < img
+                        src={image as string}
+                        alt={title}
+                        className="h-full w-full object-cover" />
                 </CardHeader>
                 <CardBody className="FixCardBody">
                     <Title
@@ -62,7 +66,11 @@ export function EventDetailCard(props: EventCardProps) {
                             </div>
                         </div>
                         <div className=" !w-full !mt-1 flex-1 rounded-full">
-                            {Address ? <AddressMapOpen address={Address} message={title} /> : <Skeleton />}
+                            {Address ?
+                                <AddressMapOpen
+                                    address={Address}
+                                    message={title} /> :
+                                <Skeleton />}
                         </div>
                     </div>
                 </CardBody>
@@ -70,7 +78,7 @@ export function EventDetailCard(props: EventCardProps) {
                     <ProfileDiv profile={author} />
                     <div className="flex items-center gap-2">
                         <AvatarStack avatarDatas={Participants} />
-                        <button onClick={async () => toogleParticipate && setEventLoad(await toogleParticipate())}>
+                        <button onClick={async () => { toogleParticipate && await toogleParticipate() && refetch && refetch() }}>
                             <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center pr-3 pl-6 pt-2"
                                 icon={<span className={`${Igo && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem] pt-0.5 pl-2`}>person</span>}>
                             </Chip>

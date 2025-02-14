@@ -51,14 +51,14 @@ export const eventIdViewModel = () => {
     const getEventById = DI.resolve('getEventByIdUseCase')
 
 
-    const { data: eventByIdData, isLoading: loadingEvent, error: errorEvent } = useQuery({
+    const { data: eventByIdData, isLoading, error, refetch } = useQuery({
       queryKey: ['eventById', id],
       queryFn: async () => await getEventById.execute(id),
     })
 
     const event = userLoading ? {} : eventByIdData ? new EventView(eventByIdData, userId) : {} as Event;
 
-    return { event, loadingEvent, errorEvent }
+    return { event, isLoading, error, refetch }
   }
 }
 

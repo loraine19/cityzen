@@ -1,6 +1,7 @@
 import { Event, EventCategory } from "../../../domain/entities/Event";
 import { Flag } from "../../../domain/entities/Flag";
 import { dayMS } from "../../../domain/entities/frontEntities";
+import DI from "../../../di/ioc";
 
 export class EventView extends Event {
     actif?: boolean;
@@ -13,7 +14,7 @@ export class EventView extends Event {
     isValidate: boolean;
     agendaLink: string;
     eventDateInfo: string;
-    toogleParticipate?: () => Promise<EventView>;
+    toogleParticipate: () => Promise<EventView>;
 
     constructor(event: Event, userId: number) {
         super(event);
@@ -26,7 +27,11 @@ export class EventView extends Event {
         this.agendaLink = this.generateCalendarLink(event);
         this.eventDateInfo = this.eventdateInfo(event);
         this.isValidate = event.Participants.length >= event.participantsMin;
-
+        this.toogleParticipate = async () => {
+            await DI.resolve('toogleParticipantUseCase').execute(event, event.id, userId);
+            const updatedEvent = await DI.resolve('getEventByIdUseCase').execute(event.id);
+            return new EventView(updatedEvent, userId)
+        }
     }
 
 

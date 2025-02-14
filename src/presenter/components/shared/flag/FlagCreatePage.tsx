@@ -32,7 +32,7 @@ export default function FlagCreatePage() {
         const idS = id ? parseInt(id) : 0;
         let fetchedElement: any = {};
         switch (target) {
-            case 'événement':
+            case 'evenement':
                 fetchedElement = await getEventById(idS);
                 break;
             case 'service':
@@ -44,6 +44,7 @@ export default function FlagCreatePage() {
             // target === "survey" && setElement(await getSurveyById(idS))
         }
         flag.element = fetchedElement;
+        console.log(flag, 47, fetchedElement)
         formik.setValues({ ...fetchedElement, element: fetchedElement, target: targetKey, targetId: idS });
         setLoading(false);
     };
@@ -112,7 +113,7 @@ export default function FlagCreatePage() {
                 <main className='flex pb-2'>
                     {loading ?
                         <Skeleton className='w-respLarge m-auto !h-full !rounded-3xl' /> :
-                        <FlagDetailComp flag={flag} label={targetKey} />}
+                        <FlagDetailComp flag={new FlagView(flag)} label={targetKey} />}
                 </main>
 
                 <footer className="w-respLarge">

@@ -12,7 +12,7 @@ node_modules
 dist
 build
 
-# Ignore ESLint, Prettier, and other configuration files that aren't needed in the final image
+# Ignore ESLint, Prettier, and other configuration 
 .eslint*
 .prettier*
 .editorconfig

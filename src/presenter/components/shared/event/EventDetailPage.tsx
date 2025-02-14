@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import parse from 'html-react-parser';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
@@ -9,7 +8,6 @@ import { Action } from '../../../../domain/entities/frontEntities';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
-import { EventView } from '../../../views/viewsEntities/eventViewEntities';
 
 
 export default function EventDetailPage() {
@@ -17,9 +15,7 @@ export default function EventDetailPage() {
     const idS = id ? parseInt(id) : 0;
 
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
-    const { event, loadingEvent } = eventIdViewModelFactory(idS);
-    console.log(event);
-    const [eventLoad, setEventLoad] = useState<EventView>(event);
+    const { event, isLoading, refetch } = eventIdViewModelFactory(idS);
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id);
     const disabledDelete = new Date(event?.start).getTime() < Date.now();
     const disabledEdit = new Date(event?.start).getTime() < Date.now();
@@ -27,42 +23,44 @@ export default function EventDetailPage() {
 
     const buttons: Action[] = [
         {
-            icon: eventLoad.Igo ? 'Annuler votre participation' : '',
+            icon: event?.Igo ? 'Annuler votre participation' : '',
             title: `annuler votre participation a ${event?.title}`,
             body: `annuler votre participation a ${event?.title}`,
-            function: async () => eventLoad.toogleParticipate && setEventLoad(await eventLoad.toogleParticipate())
+            function: async () => event?.toogleParticipate && refetch()
         },
         {
-            icon: eventLoad.Igo ? '' : `Participer a ${event?.title}`,
+            icon: event?.Igo ? '' : `Participer a ${event?.title}`,
             title: `Participer a ${event?.title}`,
             body: `Participer a ${event?.title}`,
-            function: async () => eventLoad.toogleParticipate && setEventLoad(await eventLoad.toogleParticipate())
+            function: async () => event?.toogleParticipate && refetch()
         },
 
     ];
-    useEffect(() => { !loadingEvent && setEventLoad(event) }, [loadingEvent]);
+
 
     return (
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={`évenement ${eventLoad.label || ''}`}
+                <SubHeader type={`évenement ${event?.label || ''}`}
                     place={parse(`<br><div className="text-xl whitespace-nowrap text-ellipsis overflow-hidden ">${event?.Address?.address || ''} ${event?.Address?.city || ''}</div>`)} closeBtn />
             </header>
             <main>
-                {!loadingEvent && eventLoad ?
-                    <EventDetailCard EventLoad={eventLoad} setEventLoad={setEventLoad} /> :
+                {!isLoading && event ?
+                    <EventDetailCard
+                        EventLoad={event}
+                        refetch={refetch} /> :
                     <Skeleton />}
             </main>
             <footer>
-                {eventLoad.mine && !loadingEvent ?
+                {event?.mine && !isLoading ?
                     <CTAMines actions={myActions}
                         disabled1={disabledDelete}
                         disabled2={disabledEdit} />
                     :
                     <CTAMines
                         disabled1={false}
-                        disabled2={eventLoad.Igo}
+                        disabled2={event?.Igo}
                         actions={buttons} />
                 }
             </footer>

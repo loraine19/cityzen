@@ -40,7 +40,7 @@ export default function SignInPage() {
         if (authVerify?.refreshToken) {
             saveToken(authVerify.refreshToken);
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
-            setTimeout(() => { window.location.replace("/signup_details") }, 1000);
+            setTimeout(() => { window.location.replace("/profile/create") }, 1000);
         } else {
             setNotif(authVerify?.error || 'Erreur de connexion');
             formik.resetForm();
