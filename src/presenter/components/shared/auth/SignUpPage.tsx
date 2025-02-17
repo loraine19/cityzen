@@ -14,9 +14,7 @@ export default function SignUpPage() {
     const [hidden, setHidden] = useState<boolean>(false)
 
     ////SIGN UP
-
     const signUp = async (accessData: AccessDTO) => await DI.resolve('signUpUseCase').execute(accessData)
-
 
     ////FORMIK
     const formSchema = object({
@@ -64,15 +62,19 @@ export default function SignUpPage() {
                     formik={formik}
                     hidden={hidden}
                 />
+
+            </main>
+            <footer className="flex flex-col items-center gap-2 py-2">
                 <Typography variant="small" className=" flex justify-center">
                     Vous avez deja un compte?
                 </Typography>
                 <Link to="/signin">
-                    <Button size="md" className="rounded-full">
+                    <Button
+                        size="sm" className="rounded-full">
                         Connectez-vous
                     </Button>
                 </Link>
-            </main>
+            </footer>
         </div>
     )
 }

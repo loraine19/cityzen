@@ -1,4 +1,4 @@
-import { Card, CardBody, Typography, Input, CardFooter, Checkbox, Button } from '@material-tailwind/react';
+import { Card, CardBody, Typography, Input, CardFooter, Checkbox, Button, CardHeader } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 import PopUp from '../../../common/PopUp';
 import { Icon } from '../../../common/SmallComps';
@@ -24,13 +24,17 @@ export function AuthForm(props: authFormProps) {
     useEffect(() => { hidden && formik.resetForm() && (formik.values = {}) }, [hidden])
 
     return (
-        <>
-            <Card className="w-respLarge flex h-[calc(100vh-14rem)] p-4">
-                <form onSubmit={formik.handleSubmit} className="flex flex-col h-full">
-                    <CardBody className={`flex flex-1 flex-col gap-4`}>
-                        <Typography variant="lead" color="blue-gray">{lead}</Typography>
-                        <Typography className='text-sm'>{notif} </Typography>
+        <div className='flex justify-center items-center h-full w-resp pt-6'>
+            <Card className=" flex FixCardNoImage !gap-0 ">
+                <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2">
+                    <CardHeader className="FixCardHeaderNoImage flex-col !h-max px-4 !pt-4" floated={false}>
+                        <Typography variant="h5">{lead}</Typography>
+                        <Typography className='text-sm'>{notif}</Typography>
+                    </CardHeader>
+
+                    <CardBody className='FixCardBody gap-3'>
                         <Input
+                            size='md'
                             error={formik?.errors.email}
                             label={formik?.errors.email ? formik?.errors.email : "Email"}
                             name="email"
@@ -38,6 +42,7 @@ export function AuthForm(props: authFormProps) {
                             onChange={formik.handleChange}
                         />
                         <Input
+                            size='md'
                             icon={
                                 <Icon onClick={() => {
                                     passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
@@ -51,31 +56,49 @@ export function AuthForm(props: authFormProps) {
                             type={passWordInput.value}
                         />
                         <div className={!confirm ? "hidden" : ""}>
-                            <Input icon={
-                                <Icon onClick={() => {
-                                    passWordInput2.value === 'password' ? setPassWordInput2(textType) : setPassWordInput2(passwordType)
-                                }} icon={passWordInput2.icon} style='!-mt-4 !-ml-4' />
+                            <Input
+                                size='md'
+                                icon={
+                                    <Icon onClick={() => {
+                                        passWordInput2.value === 'password' ? setPassWordInput2(textType) : setPassWordInput2(passwordType)
+                                    }} icon={passWordInput2.icon} style='!-mt-4 !-ml-4' />
 
-                            } error={formik.errors.passwordConfirm} label={formik?.errors.passwordConfirm ? formik?.errors.passwordConfirm : "Confirmer le mot de passe"} name="passwordConfirm" type={passWordInput2.value} variant="standard" onChange={formik.handleChange} />
+                                }
+                                error={formik.errors.passwordConfirm}
+                                label={formik?.errors.passwordConfirm ? formik?.errors.passwordConfirm : "Confirmer le mot de passe"}
+                                name="passwordConfirm"
+                                type={passWordInput2.value}
+                                variant="standard"
+                                onChange={formik.handleChange} />
                         </div>
                     </CardBody>
-                    <CardFooter className="flex flex-col">
+
+                    <CardFooter className="flex flex-col  !py-4">
                         <Typography className='text-xs error'>{formik.errors.checkbox} </Typography>
                         <div className=" flex  justify-center items-center  ">
                             <Checkbox
-                                type="checkbox" name="checkbox"
+                                type="checkbox"
+                                name="checkbox"
                                 className={formik.errors.checkbox ? "error bg-red-300/50" : ""}
                                 onChange={(e: any) => { formik.values.checkbox = e.target.checked }} />
                             <div className=' w-full flex flex-col'>
-                                <PopUp variant={"text"} classNames={popOverClass} text={popOverButtonText} content={popOverContent} />
+                                <PopUp
+                                    variant={"text"}
+                                    classNames={`${popOverClass} rounded-full !py-2`}
+                                    text={popOverButtonText}
+                                    content={popOverContent} />
                             </div>
                         </div>
-                        <Button type="submit" color="cyan" size="md" className="rounded-full">
+                        <Button
+                            type="submit"
+                            color="cyan"
+                            size="md"
+                            className=" w-[90%] m-auto rounded-full">
                             {submitText}
                         </Button>
                     </CardFooter>
                 </form>
             </Card>
-        </>
+        </div>
     )
 }

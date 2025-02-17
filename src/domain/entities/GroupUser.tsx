@@ -3,9 +3,9 @@ import { User } from './User';
 
 export class GroupUser {
     id: number = 0;
-    group: Group = new Group();
+    group: Group = {} as Group;
     groupId: number = 0;
-    user: User = new User();
+    user: User = {} as User;
     userId: number = 0;
     role: Role = Role.MEMBER;
     createdAt: Date = new Date();

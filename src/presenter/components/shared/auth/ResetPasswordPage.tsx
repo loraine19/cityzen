@@ -2,8 +2,8 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useState } from 'react';
 import { AuthHeader } from './auth.Comps/AuthHeader';
-import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Typography, Button, Card, CardBody, Input, CardFooter, CardHeader } from '@material-tailwind/react';
+import { useSearchParams } from 'react-router-dom';
 import { User } from '../../../../domain/entities/User';
 import { Icon } from '../../../components/common/SmallComps';
 import DI from '../../../../di/ioc';
@@ -47,38 +47,50 @@ export default function ResetPasswordPage() {
         <div className="Body gray gap-8 items-center">
             <div className=" w-respLarge flex justify-between items-center">
                 <AuthHeader />
-                <Link to={`/signin`}>
-                    <Button variant="text" className="flex justify-center items-center rounded-full h-8 w-8 p-4 opacity-80">
-                        <span className="material-symbols-outlined fillThin !text-4xl" >cancel</span>
-                    </Button>
-                </Link></div>
-            <form onSubmit={formik.handleSubmit} className='flex flex-col gap-8 w-full  py-[5vh] '>
-                <main className='flex  flex-col items-center gap-4 pb-2'>
-                    <Card className='w-respLarge flex py-4 flex-col items-center'>
-                        <CardBody className='flex w-full w-resp flex-col text-center gap-4'>
+                <Icon fill size='3xl' icon='cancel' title='fermer' link='/signin' />
+            </div>
+            <form onSubmit={formik.handleSubmit} className='flex flex-col  w-respLarge' >
+                <main className='flex flex-col py-6 gap-4 '>
+                    <Card className='FixCardNoImage flex py-8 w-respLarge'>
+                        <CardHeader className="FixCardHeaderNoImage flex-col !my-0 p-4 " floated={false}>
                             <Typography variant="h5" color="blue-gray" className="mb-2">
                                 Reinitialisation du mot de passe
                             </Typography>
                             <Typography color="gray" className="mb-4">
                                 {notif}
                             </Typography>
-                            <Input label={'email'} name="email" variant="static" value={email as string} disabled={true} />
-                            <Input type={passWordInput.value}
+                        </CardHeader>
+                        <CardBody className='FixCardBody gap-8 mb-4'>
+                            <Input
+                                className='px-4'
+                                label={'email'}
+                                name="email"
+                                variant="static"
+                                value={email as string}
+                                disabled={true} />
+                            <Input
+                                className='px-4'
+                                type={passWordInput.value}
                                 icon={
-                                    <Icon onClick={() => {
-                                        passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
-                                    }} icon={passWordInput.icon} style='!-mt-4' />
+                                    <Icon
+                                        onClick={() => {
+                                            passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
+                                        }}
+                                        icon={passWordInput.icon}
+                                        style='!-mt-4 -ml-4' />
                                 }
 
-                                label={formik.errors.password ? formik.errors.password : "Mot de passe"} name="password" variant="static" error={formik?.errors.password ? true : false} onChange={formik.handleChange} />
+                                label={formik.errors.password ? formik.errors.password : "Mot de passe"}
+                                name="password" variant="static" error={formik?.errors.password ? true : false}
+                                onChange={formik.handleChange} />
                         </CardBody>
+                        <CardFooter className='FixCardFooter'>
+                            <Button type="submit" className="lgBtn" >
+                                Enregistrer
+                            </Button>
+                        </CardFooter>
                     </Card>
                 </main>
-                <footer className="flex justify-center w-respLarge">
-                    <Button type="submit" size="lg" className="lgBtn" >
-                        Envoyer
-                    </Button>
-                </footer>
             </form>
         </div>
     )

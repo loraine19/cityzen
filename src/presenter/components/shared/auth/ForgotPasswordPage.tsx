@@ -2,15 +2,15 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useState } from 'react';
 import { AuthHeader } from './auth.Comps/AuthHeader';
-import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/react';;
-import { Link } from 'react-router-dom';
+import { Typography, Button, Card, CardBody, Input, CardHeader, CardFooter } from '@material-tailwind/react';;
 import { User } from '../../../../domain/entities/User';
 import DI from '../../../../di/ioc';
+import { Icon } from '../../common/SmallComps';
 
 export default function ForgotPasswordPage() {
     const resetPassword = async (email: string) => await DI.resolve('resetPasswordUseCase').execute(email)
     const [hidden, setHidden] = useState<boolean>(false)
-    const [notif, setNotif] = useState<string>(' Entrez votre adresse email et nous vous enverrons un lien pour changer votre mot de passe');
+    const [notif, setNotif] = useState<string>('Entrez votre adresse email et nous vous enverrons un lien pour changer votre mot de passe');
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),
     })
@@ -27,32 +27,31 @@ export default function ForgotPasswordPage() {
     });
 
     return (
-        <div className="Body gray gap-8 items-center">
+        <div className="Body gray items-center gap-4">
             <div className=" w-respLarge flex justify-between items-center">
                 <AuthHeader />
-                <Link to={`/signin`}>
-                    <Button variant="text" className="flex justify-center items-center rounded-full h-8 w-8 p-4 opacity-80">
-                        <span className="material-symbols-outlined fillThin !text-4xl" >cancel</span>
-                    </Button>
-                </Link>
+                <Icon fill size='3xl' icon='cancel' title='fermer' link='/signin' />
             </div>
-            <form onSubmit={formik.handleSubmit} className='flex w-full w-respLarge h-full flex-col gap-8  py-[5vh] '>
-                <main className='flex flex-1 h-full flex-col items-center gap-4 pb-2'>
-                    <Card className='w-respLarge w-full h-full flex py-4 flex-col items-center'>
-                        <CardBody className='flex w-full flex-col text-center gap-4'>
-                            <Typography variant="h5" color="blue-gray" className="mb-2">
+            <form onSubmit={formik.handleSubmit} className='flex flex-col  w-respLarge' >
+                <main className='flex flex-col py-6 gap-4 '>
+                    <Card className='FixCardNoImage flex py-8 w-respLarge'>
+                        <CardHeader className="FixCardHeaderNoImage flex-col !my-0 p-4 " floated={false}>
+                            <Typography variant="h5" color="blue-gray" >
                                 Mot de pass oublié
                             </Typography>
-                            <Typography className='text py-2'>{notif}   </Typography>
+                            <Typography >{notif}</Typography>
+                        </CardHeader>
+                        <CardBody className='FixCardBody gap-8 my-4 '>
                             <Input label={formik?.errors.email ? formik?.errors.email : "Email"} name="email" variant="static" error={formik?.errors.email ? true : false} onChange={formik.handleChange} onInput={() => setHidden(false)} className='w-full' />
                         </CardBody>
+                        <CardFooter className='FixCardFooter'>
+                            <Button type="submit" className={`lgBtn w-max ${hidden && ' invisible'}`}>
+                                Envoyer
+                            </Button>
+                        </CardFooter>
                     </Card>
                 </main>
-                <footer>
-                    <Button type="submit" size="lg" className={`lgBtn ${hidden && ' invisible'}`}>
-                        Envoyer
-                    </Button>
-                </footer>
+
             </form>
         </div>
     )

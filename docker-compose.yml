@@ -1,5 +1,5 @@
 services:
-  # Database
+  # front
   front:
     container_name: front
     image: lorainep/collectif:latest
@@ -11,12 +11,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./project_data:/data
     networks :
-      - nest-network
+      - front
     env_file:
       - .env.local
 
   
 
 networks:
-  nest-network:
+  front:
     external: true

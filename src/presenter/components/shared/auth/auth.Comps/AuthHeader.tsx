@@ -9,7 +9,11 @@ export function AuthHeader() {
                         className="h-16 w-16 object-cover object-center"
                         src="/logo.svg"
                         alt="logo" />
-                    <Typography variant="h1" color="blue-gray" className="font-comfortaa font-bold">Collect'if</Typography>
+                    <Typography
+                        variant="h1"
+                        color="blue-gray"
+                        className="font-comfortaa font-bold">Collect'if
+                    </Typography>
                 </div>
             </header>
         </>

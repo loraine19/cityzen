@@ -4,10 +4,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { PrivateRoute } from "./presenter/components/shared/utilsPage/PrivateRouter";
 import NotFindPage from "./presenter/components/shared/utilsPage/NotFindPage";
 import ErrorBoundary from "./presenter/components/shared/utilsPage/ErrorBoundary";
-const DashboardPage = lazy(() => import("./presenter/components/shared/dashboard/DashboardPage"))
 import SignInPage from "./presenter/components/shared/auth/SignInPage";
 import ProfileCreatePage from "./presenter/components/shared/auth/ProfileCreatePage";
 import SignUpPage from "./presenter/components/shared/auth/SignUpPage";
+import DashboardPage from "./presenter/components/shared/dashboard/DashboardPage";
+import { LoadingPage } from "./presenter/components/shared/utilsPage/LoadingPage";
 
 // Lazy load components
 const ServiceCreatePage = lazy(() => import("./presenter/components/shared/service/ServiceCreatePage"));
@@ -51,7 +52,7 @@ function App() {
 
             <BrowserRouter>
                 <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
-                    <Suspense fallback={<div className="Body gray gap-8 items-center justify-center">Loading...</div>}>
+                    <Suspense fallback={<LoadingPage />}>
                         <Routes>
                             <Route path="/signin" element={<SignInPage />} />
                             <Route path="/signup" element={<SignUpPage />} />

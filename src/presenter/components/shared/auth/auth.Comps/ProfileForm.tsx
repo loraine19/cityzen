@@ -43,10 +43,13 @@ export const ProfileForm = (props: {
                 <Card className="w-respLarge h-full justify-between ">
                     <CardHeader className="!bg-transparent shadow-none flex justify-center items-end" floated={true}>
                         <ImageBtn setImgBlob={setImgBlob} formik={formik} imgDef="./person.svg" className="-ml-20 " />
-                        <Avatar src={imgBlob as string || formik.values.image} alt={formik.values.image || imgBlob ? formik.values.firstName : ''}
+                        <Avatar
+                            src={imgBlob as string || formik.values.image}
+                            alt={formik.values.image || imgBlob ? formik.values.firstName : ''}
                             className={"shadow-md BgUser !rounded-full !h-[5rem] !w-[5rem] mb-1 bg-blue-gray-400"} />
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
-                            <Typography className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">{user.email}
+                            <Typography
+                                className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">{user.email}
                             </Typography>
                             <div className="flex flex-col gap-1">
                                 <Link to="/motdepasse_oublie"

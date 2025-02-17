@@ -82,6 +82,9 @@ export default function SignInPage() {
                     submitText="Se connecter"
                     confirm={false}
                 />
+
+            </main>
+            <footer className="flex flex-col items-center gap-2 py-2">
                 <Link to="/motdepasse_oublie">
                     <Typography className="text-xs font-medium p-2 text-center underline underline-offset-8 uppercase">
                         Mot de pass oublié
@@ -91,11 +94,11 @@ export default function SignInPage() {
                     Pas encore de compte ?
                 </Typography>
                 <Link to="/signup">
-                    <Button size="md" className="rounded-full mb-2">
+                    <Button size="sm" className="rounded-full mb-2">
                         inscrivez-vous
                     </Button>
                 </Link>
-            </main>
+            </footer>
         </div>
     );
 }
