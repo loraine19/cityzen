@@ -23,19 +23,17 @@ export const ProfileForm = (props: {
     const [skillList, setSkillList] = useState<string[]>(formik.values?.skills?.split(',') || [])
     const deleteAccountUseCase = DI.resolve('deleteAccountUseCase')
 
-
     const removeSkill = (skill: string) => {
         formik.values.skills = skillList.filter((sk) => sk !== skill).join(',')
         setSkillList([...skillList.filter((sk) => sk !== skill)])
-
     }
+
     const addSkill = () => {
         skillList.push(newSkill as string);
         formik.values.skills = skillList.join(',')
         setSkillList([...skillList])
         setNewSkill('');
     }
-
 
     return (
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
@@ -111,7 +109,9 @@ export const ProfileForm = (props: {
                                 )
                             })}
                         </Select>
-                        <Select className="p-5 capitaliz " label={formik.errors.assistance ? formik.errors.assistance as string : "Assistance"}
+                        <Select
+                            className="p-5 capitaliz "
+                            label={formik.errors.assistance ? formik.errors.assistance as string : "Assistance"}
                             name="level"
                             variant='standard'
                             error={formik.errors.assistance}
@@ -122,7 +122,9 @@ export const ProfileForm = (props: {
                             }}>
                             {assistanceLevel.map((label: Label, index: number) => {
                                 return (
-                                    <Option value={label.value} key={index}>
+                                    <Option
+                                        value={label.value}
+                                        key={index}>
                                         {label.label}
                                     </Option>
                                 )
@@ -131,14 +133,25 @@ export const ProfileForm = (props: {
                         <Input label="Ajouter une compétences" name="skills" value={newSkill} variant="standard"
                             onChange={(e: any) => { e.preventDefault(); setNewSkill(e.target.value) }}
                             onSubmit={addSkill}
-                            icon={<button type='button' onClick={addSkill} className={`material-symbols-rounded !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'}`}>add</button>} />
+                            icon={<button
+                                type='button'
+                                onClick={addSkill}
+                                className={`material-symbols-rounded !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'}`}>add
+                            </button>} />
+
                         <List className='flex  p-0'>
                             <Typography className='text-xs'>Liste des compétences</Typography>
                             {skillList.map((skill: string, index: number) =>
-                                <ListItem ripple={true} key={index} className="!py-1 pl-4 rounded-full text-sm">
+                                <ListItem
+                                    ripple={true}
+                                    key={index}
+                                    className="!py-1 pl-4 rounded-full text-sm">
                                     {skill}
                                     <ListItemSuffix>
-                                        <Icon onClick={() => { removeSkill(skill) }} icon="close" size="xl" />
+                                        <Icon
+                                            onClick={() => { removeSkill(skill) }}
+                                            icon="close"
+                                            size="xl" />
                                     </ListItemSuffix>
                                 </ListItem>
                             )}
@@ -147,7 +160,10 @@ export const ProfileForm = (props: {
                 </Card>
             </main>
             <footer className="w-respLarge pb-2 flex-2">
-                <Button type="submit" size="md" className="w-full rounded-full" >
+                <Button
+                    type="submit"
+                    size="md"
+                    className="w-full rounded-full" >
                     modifier mon profile
                 </Button>
             </footer>

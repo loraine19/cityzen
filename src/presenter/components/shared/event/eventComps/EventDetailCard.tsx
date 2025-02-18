@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, } from "@material-tailwind/react";
 import { AvatarStack } from "./AvatarStack";
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
-import { DateChip, ProgressLargebar, ProfileDiv, Title } from "../../../common/SmallComps";
+import { DateChip, ProgressLargebar, ProfileDiv, Title, Icon } from "../../../common/SmallComps";
 import { Link } from "react-router-dom";
 import { Skeleton } from "../../../common/Skeleton";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
@@ -79,8 +79,17 @@ export function EventDetailCard(props: EventCardProps) {
                     <div className="flex items-center gap-2">
                         <AvatarStack avatarDatas={Participants} />
                         <button onClick={async () => { toogleParticipate && await toogleParticipate() && refetch && refetch() }}>
-                            <Chip value={participantsMin} variant="ghost" className="rounded-full h-max flex items-center pr-3 pl-6 pt-2"
-                                icon={<span className={`${Igo && "fill !text-cyan-500"} material-symbols-outlined !text-[1.2rem] pt-0.5 pl-2`}>person</span>}>
+                            <Chip
+                                value={participantsMin}
+                                variant="ghost"
+                                className="rounded-full h-max flex items-center pr-3 pl-6"
+                                icon={<Icon icon="person"
+                                    size="2xl"
+                                    fill={Igo}
+                                    color={Igo ? "cyan" : "gray"}
+                                    style=" pl-4 -mt-2 hover:text-cyan-800 "
+                                    title={Igo ? "Je n'y vais plus" : "j'y vais"} />}>
+
                             </Chip>
                         </button>
                     </div>
