@@ -2,7 +2,8 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } fr
 import { AvatarStack } from "./AvatarStack";
 import { useState } from "react";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { DateChip, Title, Icon } from "../../../common/SmallComps";
+import { Title, Icon } from "../../../common/SmallComps";
+import { DateChip } from "../../../common/ChipDate";
 import DI from "../../../../../di/ioc";
 import { useNotificationStore } from "../../../../../application/stores/notification.store";
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
@@ -77,10 +78,13 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
             <CardFooter className="CardFooter">
                 {!mines ? (
                     <div className="flex w-full items-center gap-2">
-                        <Icon icon='calendar_add_on'
+                        <Icon
+                            icon='calendar_add_on'
                             onClick={() => window.open(agendaLink)}
                             title={`ajouter a mon agenda  : ${title}`}
-                            bg size='2xl' style='border-2 border-white !px-0 h-9 !w-9 flex-0  -mr-5 hover:z-10' color={Igo ? "cyan" : "gray"} />
+                            bg size='2xl'
+                            style='border-2 border-white !px-0 h-9 !w-9 flex-0  -mr-5 hover:z-10'
+                            color={Igo ? "cyan" : "gray"} />
                         <AvatarStack avatarDatas={event.Participants} />
                     </div>
                 ) : (

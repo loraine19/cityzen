@@ -11,8 +11,8 @@ import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
-import { PoolCard } from "./poolSurveyComp/PoolCard";
-import { SurveyCard } from "./poolSurveyComp/SurveyCard";
+import { PoolCard } from "./poolSurveyCards/PoolCard";
+import { SurveyCard } from "./poolSurveyCards/SurveyCard";
 import { SkeletonGrid } from "../../common/Skeleton";
 
 

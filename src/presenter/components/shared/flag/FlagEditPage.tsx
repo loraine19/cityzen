@@ -6,7 +6,7 @@ import { Option, Button, Select, Switch } from '@material-tailwind/react';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import FlagDetailComp from './flagComps/FlagDetailComp';
+import FlagDetailComp from './flagCards/FlagDetailComp';
 import { Skeleton } from '../../common/Skeleton';
 import DI from '../../../../di/ioc';
 import { FlagView } from '../../../views/viewsEntities/flagViewEntities';

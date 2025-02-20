@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { serviceCategories, serviceCategoriesS, ServiceCategory, ServiceFilter, ServiceStepFilter, ServiceView } from "../../../../domain/entities/Service";
+import { ServiceCategory, ServiceFilter, ServiceStepFilter } from "../../../../domain/entities/Service";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SelectSearch from "../../common/SelectSearch";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
-import ServiceComp from "./servicesComps/ServiceCard";
+import ServiceComp from "./serviceCards/ServiceCard";
 import { Label, TabLabel } from "../../../../domain/entities/frontEntities";
 import { SkeletonGrid } from "../../common/Skeleton";
 import DI from '../../../../di/ioc';
-import { LoadMoreButton } from "../../common/SmallComps";
 import { getLabel } from "../../../views/viewsEntities/utilsService";
-
+import { LoadMoreButton } from "../../common/LoadMoreBtn";
+import { ServiceView } from "../../../views/viewsEntities/serviceViewEntity";
+import { serviceCategories, serviceCategoriesS } from "../../../constants";
 
 export default function ServicesPage() {
     const [notif, setNotif] = useState<string>('');
@@ -30,6 +31,7 @@ export default function ServicesPage() {
     const [customList, setCustomList] = useState<ServiceView[]>([]);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
+
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé", "litige"];
@@ -55,7 +57,7 @@ export default function ServicesPage() {
             setStep(steps.join(','));
             setType(types.join(','));
         }
-    };
+    }
 
     useEffect(() => { mine && CheckboxesFilter() }, [boxSelected]);
 
@@ -83,7 +85,6 @@ export default function ServicesPage() {
     ]
 
     const search = (searchLabel: Label) => {
-        console.log(searchLabel);
         setCustomFilter(false);
         const value = searchLabel.value;
         const label = searchLabel.label;
@@ -134,12 +135,21 @@ export default function ServicesPage() {
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader qty={count} type={`services ${filterName()} ${category ? ServiceCategory[category as string as keyof typeof ServiceCategory] : ''}`} />
+                <SubHeader
+                    qty={count}
+                    type={`services ${filterName()} ${category ? ServiceCategory[category as string as keyof typeof ServiceCategory] : ''}`} />
                 <TabsMenu labels={serviceTabs} />
                 {mine ?
-                    <CheckCard categoriesArray={boxArray} boxSelected={boxSelected} setBoxSelected={setBoxSelected} />
+                    <CheckCard
+                        categoriesArray={boxArray}
+                        boxSelected={boxSelected}
+                        setBoxSelected={setBoxSelected} />
                     :
-                    <SelectSearch searchCat={searchCat} setSearchCat={setSearchCat} category={serviceCategoriesS} search={search} />
+                    <SelectSearch
+                        searchCat={searchCat}
+                        setSearchCat={setSearchCat}
+                        category={serviceCategoriesS}
+                        search={search} />
                 }
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>

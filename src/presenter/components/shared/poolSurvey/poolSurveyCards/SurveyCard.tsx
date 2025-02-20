@@ -4,16 +4,17 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote";
 import { SurveyService } from "../../../../../domain/repositoriesBase/SurveyRepository"
-
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { DateChip, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
+import { ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { GenereMyActions, getLabel, surveyCategories } from "../../../../views/viewsEntities/utilsService";
 import { dayMS } from "../../../../../domain/entities/frontEntities";
+import { DateChip } from "../../../common/ChipDate";
 
 
 type SurveyCardProps = { survey: Survey, change: () => void, mines?: boolean, update?: () => void }
+
 export function SurveyCard(props: SurveyCardProps) {
     const { user } = useUserStore()
     const userId: number = user.id
@@ -54,11 +55,21 @@ export function SurveyCard(props: SurveyCardProps) {
                 <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                     <div className="flex items-center gap-2">
                         <button onClick={() => { change() }}>
-                            <Chip value='Sondage' size="sm" className="!px-3 min-w-max rounded-full h-max OrangeChip" ></Chip>
+                            <Chip
+                                value='Sondage'
+                                size="sm"
+                                className="!px-3 min-w-max rounded-full h-max OrangeChip" >
+                            </Chip>
                         </button>
-                        <Chip value={category} size="sm" className="CyanChip"></Chip>
+                        <Chip
+                            value={category}
+                            size="sm"
+                            className="CyanChip"></Chip>
                     </div>
-                    <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
+                    <DateChip
+                        start={createdAt}
+                        ended={ended} end={end}
+                        prefix="finis dans" />
                 </div>
                 {image &&
                     <img
@@ -68,21 +79,37 @@ export function SurveyCard(props: SurveyCardProps) {
                     />}
             </CardHeader>
             <CardBody className={` FixCardBody`}>
-                <Title title={title} flagged={flagged} id={id} type="sondage" />
+                <Title
+                    title={title}
+                    flagged={flagged}
+                    id={id}
+                    type="sondage" />
 
-                <Typography color="blue-gray" className=" overflow-auto mb-2 pb-2">
+                <Typography
+                    color="blue-gray"
+                    className=" overflow-auto mb-2 pb-2">
                     {description}
                 </Typography>
 
 
             </CardBody>
-            <CardFooter className="CardFooter items-center gap-6">
+            <CardFooter
+                className="CardFooter items-center gap-6">
                 {!mines ?
-                    <ProgressSmallbar value={pourcent} label="Votes" needed={needed} size="md" />
+                    <ProgressSmallbar
+                        value={pourcent}
+                        label="Votes"
+                        needed={needed}
+                        size="md" />
                     :
-                    <ModifBtnStack disabled2={disabledEditCTA} actions={actions} update={update} />}
+                    <ModifBtnStack
+                        disabled2={disabledEditCTA}
+                        actions={actions}
+                        update={update} />}
                 <div className="flex items-center justify-between gap-2">
-                    <Chip value={Votes?.length} variant="ghost"
+                    <Chip
+                        value={Votes?.length}
+                        variant="ghost"
                         className="min-w-max rounded-full px-4"
                         icon={<Icon
                             icon="smart_card_reader"
@@ -91,7 +118,12 @@ export function SurveyCard(props: SurveyCardProps) {
                             title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`}
                             style="-mt-1.5 pl-2.5" />}>
                     </Chip>
-                    <Icon icon="arrow_circle_right" title={`voir les details de ${title}`} link={`/sondage/${id}`} fill size="4xl px-1" />
+                    <Icon
+                        icon="arrow_circle_right"
+                        title={`voir les details de ${title}`}
+                        link={`/sondage/${id}`}
+                        fill
+                        size="4xl" />
                 </div>
             </CardFooter >
         </Card>

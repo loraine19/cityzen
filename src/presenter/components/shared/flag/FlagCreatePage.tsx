@@ -9,7 +9,7 @@ import { PostService } from '../../../../domain/repositoriesBase/PostRepository'
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import FlagDetailComp from './flagComps/FlagDetailComp';
+import FlagDetailComp from './flagCards/FlagDetailComp';
 import { Skeleton } from '../../common/Skeleton';
 import { getLabel } from '../../../views/viewsEntities/utilsService';
 import DI from '../../../../di/ioc';

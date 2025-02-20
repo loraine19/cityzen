@@ -10,7 +10,7 @@ import { IssueService } from '../../../../../domain/repositoriesBase/IssueReposi
 import { ConfirmModal } from '../../../common/ConfirmModal';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
-import { IssueForm } from '../servicesComps/IssueCard';
+import { IssueForm } from '../serviceCards/IssueCard';
 import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
 import { useUserStore } from '../../../../../application/stores/user.store';
 import { Skeleton } from '../../../common/Skeleton';

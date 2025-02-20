@@ -2,12 +2,13 @@ import { Card, CardHeader, Typography, Chip, CardBody, Textarea, Popover, Popove
 import ServiceIssueCard from "./ServiceIssueCard"
 import { useState } from "react"
 import { Issue } from "../../../../../domain/entities/Issue"
-import { Service, ServiceView } from "../../../../../domain/entities/Service"
+import { Service } from "../../../../../domain/entities/Service"
 import { User } from "../../../../../domain/entities/User"
 import { useUserStore } from "../../../../../application/stores/user.store"
 import { Profile } from "../../../../../domain/entities/Profile"
 import { Skeleton } from "../../../common/Skeleton"
 import { getImageBlob } from "../../../common/ImageBtn"
+import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity"
 
 
 
@@ -28,15 +29,21 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
     return (
         <>
             <main className={`flex flex-1`}>
-                {loading ? <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow" /> :
-                    <Card className=" w-respLarge FixCard z-50">
-                        <CardHeader className={"FixCardHeaderNoImage justify-between shadow-none flex"}
+                {loading ?
+                    <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow" /> :
+                    <Card
+                        className=" w-respLarge FixCard z-50">
+                        <CardHeader
+                            className={"FixCardHeaderNoImage justify-between shadow-none flex"}
                             floated={false}>
-                            <Typography variant="h6" color="blue-gray" >
+                            <Typography
+                                variant="h6"
+                                color="blue-gray" >
                                 {`${issue?.User?.Profile?.firstName ? issue?.User?.Profile?.firstName : 'Vous'} ${issue?.UserModo ? "à demander de l'aide" : "demandez de l'aide"}`}
                             </Typography>
                             {issue?.date ?
-                                <Chip value={(new Date(createdAt ? createdAt : new Date())).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
+                                <Chip
+                                    value={(new Date(createdAt ? createdAt : new Date())).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2 shadow font-medium `}>
                                 </Chip> :
                                 <div className='flex flex-col flex-1 !max-w-max overflow-auto pt-1'>
                                     <Input
@@ -97,7 +104,9 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                         }
                                         {formik &&
                                             <>
-                                                <Button className="shadow absolute right-5 top-0 w-8 h-12 rounded-full z-10" ripple={false}>
+                                                <Button
+                                                    className="shadow absolute right-5 top-0 w-8 h-12 rounded-full z-10"
+                                                    ripple={false}>
                                                     <label htmlFor="image"
                                                         className=" flex flex-col items-center justify-center w-full h-full cursor-pointer">
                                                         <span className="material-symbols-rounded">{(imgBlob && image) ? "edit" : "add_a_photo"}</span>
@@ -106,15 +115,24 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                                         </div>
                                                     </label>
                                                 </Button>
-                                                <Button type='button' variant='text' ripple={false} color="red" className={image ? `p-1 absolute right-4 top-7 z-30 rounded-full ` : `hidden`}
+                                                <Button
+                                                    type='button'
+                                                    variant='text'
+                                                    ripple={false}
+                                                    color="red"
+                                                    className={image ?
+                                                        `p-1 absolute right-4 top-7 z-30 rounded-full ` : `hidden`}
                                                     onClick={() => { formik.values.image = ''; setImgBlob('') }}>
-                                                    <span className="material-symbols-rounded !font-bold !text-2xl">cancel</span>
+                                                    <span className="material-symbols-rounded !font-bold !text-2xl">
+                                                        cancel
+                                                    </span>
                                                 </Button></>}
                                     </div>
                                 </div>
                                 <div className='flex gap-4 !pt-2'>
                                     {modos.length > 0 &&
-                                        <Select className="rounded-full flex !shadow  bg-white border-none capitalize overflow-auto"
+                                        <Select
+                                            className="rounded-full flex !shadow  bg-white border-none capitalize overflow-auto"
                                             label={`Modérateur de ${Service.User.Profile.firstName}`}
                                             name={"userIdModo"}
                                             labelProps={{ className: `before:border-none after:border-none ` }}
@@ -122,13 +140,15 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                             value={issue?.UserModo?.id as unknown as string || ''}
                                             onChange={(e: any) => { formik.values.userIdModo = e; console.log(formik.values) }}
                                         >
-                                            {modos.map((modo: User) => <Option key={modo.id}
-                                                className={"rounded-full my-1 capitalize"}
-                                                value={modo?.id as unknown as string} >
-                                                {modo?.Profile?.firstName}
-                                            </Option>)}
+                                            {modos.map((modo: User) =>
+                                                <Option key={modo.id}
+                                                    className={"rounded-full my-1 capitalize"}
+                                                    value={modo?.id as unknown as string} >
+                                                    {modo?.Profile?.firstName}
+                                                </Option>)}
                                         </Select>}
-                                    {modos.length > 0 && <Select className="rounded-full shadow  bg-white border-none capitalize"
+                                    {modos.length > 0 && <Select
+                                        className="rounded-full shadow  bg-white border-none capitalize"
                                         label={`Modérateur de ${Service.UserResp.Profile.firstName}`}
                                         name={"userIdModo2"}
                                         labelProps={{ className: `before:border-none after:border-none ` }}
@@ -138,20 +158,25 @@ export const IssueForm = (props: { issue: Issue, loading: boolean, modos: User[]
                                     >
                                         {modos.map((modo: User) =>
                                             <Option
-                                                key={modo.id} className={"rounded-full my-1 capitalize"}
+                                                key={modo.id}
+                                                className={"rounded-full my-1 capitalize"}
                                                 value={modo?.id as unknown as string} >
                                                 {modo?.Profile?.firstName}
                                             </Option>)}
                                     </Select>}
                                 </div>
-                                <ServiceIssueCard service={Service as ServiceView} />
+                                <ServiceIssueCard
+                                    service={Service as ServiceView} />
                             </div>
                         </CardBody>
                     </Card>}
             </main>
             <footer className="w-respLarge ">
                 {formik &&
-                    <Button type="submit" size="lg" className="!lngBtn w-full rounded-full" >
+                    <Button
+                        type="submit"
+                        size="lg"
+                        className="!lngBtn w-full rounded-full" >
                         enregistrer la demande d'aide
                     </Button>}
                 {/* {userProfile.userId === issue.userId ?

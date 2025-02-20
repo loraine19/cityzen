@@ -6,22 +6,31 @@ import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { PoolService } from "../../../../../domain/repositoriesBase/PoolRepository";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { DateChip, ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
+import { ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { dayMS, GenereMyActions } from "../../../../views/viewsEntities/utilsService";
+import { DateChip } from "../../../common/ChipDate";
 
+type PoolCardProps = {
+    pool: Pool,
+    change: (e: any) => void,
+    mines?: boolean,
+    update?: () => void
+}
 
-
-type PoolCardProps = { pool: Pool, change: (e: any) => void, mines?: boolean, update?: () => void }
-export function PoolCard(props: PoolCardProps) {
+export function PoolCard({
+    pool,
+    change,
+    mines,
+    update
+}: PoolCardProps) {
     const { user } = useUserStore()
     const userId: number = user.id
-    const [pool] = useState<Pool>(props.pool)
-    const { id, title, description, createdAt, UserBenef } = pool
-    const Votes: Vote[] = pool.Votes || []
-    const { change, mines, update } = props
+    const [poolState] = useState<Pool>(pool)
+    const { id, title, description, createdAt, UserBenef } = poolState
+    const Votes: Vote[] = poolState.Votes || []
     const ImIn: boolean = Votes?.find((vote: Vote) => vote?.User?.id === userId) ? true : false
     const now = new Date(Date.now())
     const [usersLength, setUsersLength] = useState<number>(0)
@@ -34,17 +43,17 @@ export function PoolCard(props: PoolCardProps) {
     const { deletePool } = new PoolService()
     const { getUserCount } = new UserApi()
 
-    const actions: Action[] = GenereMyActions(pool, "pool", deletePool)
+    const actions: Action[] = GenereMyActions(poolState, "pool", deletePool)
     const [needed, setNeeded] = useState<number>(usersLength - (OkVotes?.length || 0))
 
     useEffect(() => {
         const onload = async () => {
             const users = await getUserCount()
             setUsersLength(users / 2)
-            setNeeded(users / 2 - (pool.Votes?.length || 0))
+            setNeeded(users / 2 - (poolState.Votes?.length || 0))
         }
         onload()
-    }, [pool])
+    }, [poolState])
 
     return (
         <Card className={`FixCardNoImage `}>
@@ -52,31 +61,65 @@ export function PoolCard(props: PoolCardProps) {
                 floated={false}>
                 <div className={`ChipDivNoImage`}>
                     <button onClick={(e: any) => change(e)}>
-                        <Chip size='sm' value='Cagnotte' className="GreenChip" ></Chip>
+                        <Chip
+                            size='sm'
+                            value='Cagnotte'
+                            className="GreenChip" >
+
+                        </Chip>
                     </button>
-                    <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
+                    <DateChip
+                        start={createdAt}
+                        ended={ended}
+                        end={end}
+                        prefix="finis dans" />
                 </div>
             </CardHeader>
             <CardBody className="FixCardBody ">
                 <Title title={title} />
                 <div className="CardOverFlow h-full !p-0 flex justify-between flex-col gap-2">
-                    <Typography color="blue-gray" className="max-h-full overflow-auto">
+                    <Typography
+                        color="blue-gray"
+                        className="max-h-full overflow-auto">
                         {description}...
                     </Typography>
-
-                    <ProfileDiv profile={UserBenef?.Profile || {} as Profile} size={'lg'} />
+                    <ProfileDiv
+                        profile={UserBenef?.Profile || {} as Profile}
+                        size={'lg'} />
                 </div>
             </CardBody>
-            <CardFooter className="CardFooter items-center gap-6">
+            <CardFooter
+                className="CardFooter items-center gap-6">
                 {!mines ?
-                    <ProgressSmallbar value={pourcent} label="Votes pour" needed={needed} size="md" />
+                    <ProgressSmallbar
+                        value={pourcent}
+                        label="Votes pour"
+                        needed={needed}
+                        size="md" />
                     :
-                    <ModifBtnStack disabled2={disabledEditCTA} actions={actions} update={update} />}
+                    <ModifBtnStack
+                        disabled2={disabledEditCTA}
+                        actions={actions}
+                        update={update} />}
                 <div className="flex items-center justify-between gap-2">
-                    <Chip value={Votes?.length} variant="ghost" className="rounded-full h-max flex items-center gap-2"
-                        icon={<Icon icon="smart_card_reader" fill={ImIn} color={ImIn && "green" || ''} size="xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1 pl-1" />}>
+                    <Chip
+                        value={Votes?.length}
+                        variant="ghost"
+                        className="rounded-full h-max flex items-center gap-2"
+                        icon={<Icon
+                            icon="smart_card_reader"
+                            fill={ImIn}
+                            color={ImIn && "green" || ''}
+                            size="xl"
+                            title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`}
+                            style="-mt-1 pl-1" />}>
                     </Chip>
-                    <Icon icon="arrow_circle_right" title={`voir les details de ${title}`} link={`/cagnotte/${id}`} fill size="4xl px-1" />
+                    <Icon
+                        icon="arrow_circle_right"
+                        title={`voir les details de ${title}`}
+                        link={`/cagnotte/${id}`}
+                        fill
+                        size="4xl px-1" />
                 </div>
             </CardFooter >
         </Card >

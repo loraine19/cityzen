@@ -1,4 +1,5 @@
-import { Service, ServiceDTO, ServicePage, ServiceUpdate } from "../entities/Service";
+import { ServiceDTO } from "../../infrastructure/DTOs/ServiceDTO";
+import { Service, ServicePage, ServiceUpdate } from "../entities/Service";
 
 
 export abstract class ServiceRepositoryBase {

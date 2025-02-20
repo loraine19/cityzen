@@ -24,6 +24,7 @@ const AnnounceEditPage = lazy(() => import("./presenter/components/shared/announ
 const AnnounceListPage = lazy(() => import("./presenter/components/shared/announce/AnnounceListPage"));
 const ForgotPasswordPage = lazy(() => import("./presenter/components/shared/auth/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("./presenter/components/shared/auth/ResetPasswordPage"));
+const DeleteAccountPage = lazy(() => import("./presenter/components/shared/auth/DeleteAccountPage"));
 
 const EventCreatePage = lazy(() => import("./presenter/components/shared/event/EventCreatePage"));
 const EventDetailPage = lazy(() => import("./presenter/components/shared/event/EventDetailPage"));
@@ -38,6 +39,7 @@ const SurveyListPage = lazy(() => import("./presenter/components/shared/poolSurv
 const MyInfosPage = lazy(() => import("./presenter/components/shared/myInfos/MyInfosPage"));
 const NotificationPage = lazy(() => import("./presenter/components/shared/myInfos/NotificationPage"));
 const PoolDetailPage = lazy(() => import("./presenter/components/shared/poolSurvey/PoolDetaiPage"));
+
 
 function App() {
     const [retryCount, setRetryCount] = useState(0);
@@ -59,6 +61,7 @@ function App() {
                             <Route path="/profile/create" element={<ProfileCreatePage />} />
                             <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
                             <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
+                            <Route path="/delete_account" element={<DeleteAccountPage />} />
 
                             <Route path="/" element={<PrivateRoute />}>
                                 <Route path="/" element={<DashboardPage />} />

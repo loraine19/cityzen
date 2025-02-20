@@ -1,7 +1,8 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, } from "@material-tailwind/react";
 import { AvatarStack } from "./AvatarStack";
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
-import { DateChip, ProgressLargebar, ProfileDiv, Title, Icon } from "../../../common/SmallComps";
+import { ProgressLargebar, ProfileDiv, Title, Icon } from "../../../common/SmallComps";
+import { DateChip } from "../../../common/ChipDate";
 import { Link } from "react-router-dom";
 import { Skeleton } from "../../../common/Skeleton";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";

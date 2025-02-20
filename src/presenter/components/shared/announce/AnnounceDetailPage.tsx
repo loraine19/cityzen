@@ -65,13 +65,17 @@ export default function AnnounceDetailPage() {
                 {loading ?
                     <div>Loading...</div> :
                     <div className="flex pt-6 pb-1 h-full">
-                        <AnnounceDetailComp post={post} mines={isMine} change={() => { }} />
+                        <AnnounceDetailComp
+                            post={post}
+                            mines={isMine}
+                            change={() => { }} />
                     </div>}
             </main>
             <footer>
                 {isMine ?
                     <CTAMines actions={myActions} /> :
-                    <CTAMines actions={ContactActions}
+                    <CTAMines
+                        actions={ContactActions}
                         disabled1={share.find((s: string) => s === "PHONE") ? false : true}
                         disabled2={share.find((s: string) => s === "EMAIL") ? false : true} />}
             </footer>

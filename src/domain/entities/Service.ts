@@ -21,19 +21,19 @@ export const serviceSteps: Label[] = getEnumLabel(ServiceStep);
 
 
 export enum SkillLevel {
-    LEVEL_0 = 0,
-    LEVEL_1 = 1,
-    LEVEL_2 = 2,
-    LEVEL_3 = 3,
-    LEVEL_4 = 4
+    LEVEL_0 = '0',
+    LEVEL_1 = '1',
+    LEVEL_2 = '2',
+    LEVEL_3 = '3',
+    LEVEL_4 = '4'
 }
 
 export enum HardLevel {
-    LEVEL_0 = 0,
-    LEVEL_1 = 1,
-    LEVEL_2 = 2,
-    LEVEL_3 = 3,
-    LEVEL_4 = 4
+    LEVEL_0 = '0',
+    LEVEL_1 = '1',
+    LEVEL_2 = '2',
+    LEVEL_3 = '3',
+    LEVEL_4 = '4'
 }
 
 export enum ServiceCategory {
@@ -44,8 +44,7 @@ export enum ServiceCategory {
     CATEGORY_5 = 'autre',
 }
 
-export const serviceCategoriesS: Label[] = getEnumLabel(ServiceCategory, true);
-export const serviceCategories: Label[] = getEnumLabel(ServiceCategory);
+
 
 
 export class Service {
@@ -68,21 +67,15 @@ export class Service {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     Flags?: Flag[] = [{} as Flag];
+    constructor(data?: Partial<Service>) {
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
 }
 
 
-export class ServiceDTO {
-    description?: string;
-    addressId?: number;
-    image?: string | File;
-    title?: string;
-    category?: ServiceCategory;
-    userIdResp?: number;
-    type?: ServiceType;
-    skill?: SkillLevel;
-    hard?: HardLevel;
-    status?: ServiceStep;
-}
+
 
 export class ServiceRespDTO {
     userIdResp?: number;
@@ -110,34 +103,6 @@ export enum ServiceStepFilter {
 
 }
 
-
-export class ServiceView extends Service {
-    actif?: boolean;
-    IResp: boolean;
-    categoryS: string;
-    typeS?: string;
-    flagged: boolean;
-    mine: boolean;
-    isLate: boolean;
-    points: number[];
-    statusS: string;
-    constructor(data?: Partial<Service>) {
-        super();
-        this.actif = true;
-        this.IResp = false;
-        this.categoryS = '';
-        this.typeS = '';
-        this.flagged = false;
-        this.mine = false;
-        this.isLate = false;
-        this.points = [];
-        this.statusS = '';
-        if (data) {
-            Object.assign(this, data);
-        }
-    }
-
-}
 
 export type ServicePage = {
     services: Service[],

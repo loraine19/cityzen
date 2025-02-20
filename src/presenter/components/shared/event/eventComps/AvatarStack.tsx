@@ -12,9 +12,9 @@ export function AvatarStack(props: AvatarStackProps) {
                     <PopoverHandler>
                         <Avatar
                             variant="circular"
-                            alt={Participant.User.Profile?.firstName + " " + Participant.User.Profile?.lastName}
+                            alt={Participant.User?.Profile?.firstName + " " + Participant.User.Profile?.lastName}
                             className="border-2 border-white hover:z-10 focus:z-10 BgUser"
-                            src={Participant.User.Profile?.image as string || "../public/person.svg"}
+                            src={Participant.User?.Profile?.image as string || "image/person.svg"}
                             size="sm"
                         />
                     </PopoverHandler>

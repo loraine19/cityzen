@@ -22,11 +22,11 @@ export class AuthDTO {
 
 export class DeleteDTO {
     email: string;
-    verifyToken: string;
+    deleteToken: string;
 
-    constructor(email: string = '', verifyToken: string = '') {
+    constructor(email: string = '', deleteToken: string = '') {
         this.email = email;
-        this.verifyToken = verifyToken;
+        this.deleteToken = deleteToken;
     }
 }
 

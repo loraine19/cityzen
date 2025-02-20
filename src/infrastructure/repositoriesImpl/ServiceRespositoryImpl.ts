@@ -1,7 +1,8 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
-import { Service, ServiceDTO, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
+import { Service, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
 import { ApiServiceI } from "../providers/http/apiService";
+import { ServiceDTO } from "../DTOs/ServiceDTO";
 
 
 interface IData extends ServiceRepositoryBase {
@@ -14,7 +15,6 @@ export class ServiceRepositoryImpl implements ServiceRepositoryBase {
     constructor({ serviceData }: { serviceData: IData }) { this.serviceData = serviceData }
 
     public async getServices(page?: number, mine?: boolean, type?: string, step?: string, category?: string): Promise<ServicePage> {
-        console.log('repository', page, mine, type, step, category);
         return await this.serviceData.getServices(page, mine, type, step, category);
     }
 

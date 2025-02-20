@@ -1,8 +1,7 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Button } from '@material-tailwind/react';
 import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
 import { ProfileForm } from '../auth/auth.Comps/ProfileForm';
 import { ProfileDTO, } from '../../../../domain/entities/Profile';
@@ -13,6 +12,7 @@ import { User } from '../../../../domain/entities/User';
 import { Skeleton } from '../../common/Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { LogOutButton } from '../../common/LogOutBtn';
+import { Icon } from '../../common/SmallComps';
 
 
 export default function MyInfosPage() {
@@ -73,11 +73,13 @@ export default function MyInfosPage() {
             <div className="w-respLarge flex-col flex justify-between pt-1">
                 <div className="flex w-respLarge justify-between items-center gap-4">
                     <LogOutButton />
-                    <Link to={`/`}>
-                        <Button variant="text" className="flex justify-center items-center rounded-full h-8 w-8 opacity-80">
-                            <span className="material-symbols-outlined fillThin !text-4xl" >cancel</span>
-                        </Button>
-                    </Link>
+                    <Icon
+                        fill
+                        size='3xl'
+                        icon='cancel'
+                        title='fermer'
+                        link='/' />
+
                 </div>
                 <AuthHeader />
             </div>

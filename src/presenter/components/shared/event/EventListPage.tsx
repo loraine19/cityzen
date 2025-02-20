@@ -9,14 +9,14 @@ import TabsMenu from "../../common/TabsMenu";
 import CalendarComp from "../../common/CalendarComp";
 import { EventCard } from "./eventComps/EventCard";
 import DI from "../../../../di/ioc";
-import { Icon, LoadMoreButton } from "../../common/SmallComps";
+import { Icon } from "../../common/SmallComps";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { getLabel, getValue } from "../../../views/viewsEntities/utilsService";
 import { eventCategories, eventCategoriesS } from "../../../constants";
 import { EventView } from "../../../views/viewsEntities/eventViewEntities";
-// Remove incorrect import
+import { LoadMoreButton } from "../../common/LoadMoreBtn";
 
 export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');

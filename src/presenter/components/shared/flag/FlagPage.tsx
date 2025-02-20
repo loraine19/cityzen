@@ -1,7 +1,7 @@
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
-import { FlagCard } from "./flagComps/FlagCard";
+import { FlagCard } from "./flagCards/FlagCard";
 import { SkeletonGrid } from "../../common/Skeleton";
 import DI from "../../../../di/ioc";
 import { FlagView } from "../../../views/viewsEntities/flagViewEntities";

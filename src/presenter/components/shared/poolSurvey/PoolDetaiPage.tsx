@@ -6,7 +6,7 @@ import { PoolService } from '../../../../domain/repositoriesBase/PoolRepository'
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import PoolDetailCard from './poolSurveyComp/PoolDetailCard';
+import PoolDetailCard from './poolSurveyCards/PoolDetailCard';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 

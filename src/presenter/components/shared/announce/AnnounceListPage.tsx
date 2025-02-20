@@ -104,10 +104,16 @@ export default function AnnounceListPage() {
         <div className="Body orange">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader qty={postList.length} type={`annonce ${categorySelected !== '' ? label : ''}`} />
-                <TabsMenu labels={announceTabs} />
+                <SubHeader
+                    qty={postList.length}
+                    type={`annonce ${categorySelected !== '' ? label : ''}`} />
+                <TabsMenu
+                    labels={announceTabs} />
                 <div className="flex items-center justify-center gap-4 lg:px-8">
-                    <CategoriesSelect categoriesArray={postCategories} change={change} categorySelected={categorySelected} />
+                    <CategoriesSelect
+                        categoriesArray={postCategories}
+                        change={change}
+                        categorySelected={categorySelected} />
                     <button onClick={switchClick}>
                         <span className="material-symbols-outlined text-gray-700 !text-4xl flex items-center">
                             {view === "list" ? "list" : "dashboard"}
@@ -129,13 +135,24 @@ export default function AnnounceListPage() {
                     : <>
                         {view === "list" ?
                             announcesToGrid.map((line, index) => (
-                                <AnnouncesGridComp key={index} line={line} update={UpdateList} change={change} mines={mines} view={view} />))
+                                <AnnouncesGridComp
+                                    key={index}
+                                    line={line}
+                                    update={UpdateList}
+                                    change={change}
+                                    mines={mines}
+                                    view={view} />))
                             :
 
                             <div className="Grid">
                                 {postList.map((post, index) => (
                                     <div className="SubGrid" key={index}>
-                                        <AnnouncesComp key={post.id} post={post} change={change} update={UpdateList} mines={mines} />
+                                        <AnnouncesComp
+                                            key={post.id}
+                                            post={post}
+                                            change={change}
+                                            update={UpdateList}
+                                            mines={mines} />
                                     </div>
                                 ))}
                             </div>

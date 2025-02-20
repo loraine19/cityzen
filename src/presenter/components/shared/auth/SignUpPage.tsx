@@ -8,6 +8,7 @@ import { Typography, Button } from '@material-tailwind/react';
 import DI from '../../../../di/ioc';
 import { terms } from '../../../../domain/constants/constants';
 import { AccessDTO } from '../../../../infrastructure/DTOs/AuthDTO';
+import { SignUpDTO } from '../../../../infrastructure/DTOs/SignUpDTO';
 
 export default function SignUpPage() {
     const [notif, setNotif] = useState<string>("");
@@ -25,7 +26,7 @@ export default function SignUpPage() {
     })
 
     const formik = useFormik({
-        initialValues: {} as any,
+        initialValues: new SignUpDTO(),
         validationSchema: formSchema,
         onSubmit: values => {
             if (values.email && values.password === values.passwordConfirm && values.checkbox) {
@@ -56,21 +57,23 @@ export default function SignUpPage() {
                     popOverContent={terms}
                     popOverButtonText="les condition d'utilisiation"
                     popOverClass="font-light underline underline-offset-8 text-start "
-                    popOverVariant="texte"
                     submitText="S'enregistrer"
-                    confirm={true}
+                    confirm
                     formik={formik}
                     hidden={hidden}
                 />
 
             </main>
             <footer className="flex flex-col items-center gap-2 py-2">
-                <Typography variant="small" className=" flex justify-center">
+                <Typography
+                    variant="small"
+                    className=" flex justify-center">
                     Vous avez deja un compte?
                 </Typography>
                 <Link to="/signin">
                     <Button
-                        size="sm" className="rounded-full">
+                        size="sm"
+                        className="rounded-full">
                         Connectez-vous
                     </Button>
                 </Link>

@@ -4,7 +4,8 @@ import { Flag } from "../../../../../domain/entities/Flag";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Survey } from "../../../../../domain/entities/Survey";
 import { Vote } from "../../../../../domain/entities/Vote"
-import { DateChip, ProgressSmallbar, ProfileDiv, Icon, Title } from "../../../common/SmallComps";
+import { ProgressSmallbar, ProfileDiv, Icon, Title } from "../../../common/SmallComps";
+import { DateChip } from "../../../common/ChipDate";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { getLabel, surveyCategories } from "../../../../views/viewsEntities/utilsService";
@@ -43,14 +44,22 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
     return (
         <>
             <Card className="FixCard w-respLarge" >
-                <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
+                <CardHeader
+                    className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <button onClick={(e: any) => change(e)}>
-                            <Chip size='sm' value={category} className="CyanChip">
+                            <Chip
+                                size='sm'
+                                value={category}
+                                className="CyanChip">
                             </Chip>
                         </button>
-                        <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
+                        <DateChip
+                            start={createdAt}
+                            ended={ended}
+                            end={end}
+                            prefix="finis dans" />
                     </div>
                     {image &&
                         <img
@@ -59,19 +68,36 @@ export default function SurveyDetailCard(props: { element: Survey, mines?: boole
                             className="h-full w-full object-cover" />}
                 </CardHeader>
                 <CardBody className="FixCardBody">
-                    <Title title={title} flagged={flagged} id={id} CreatedAt={createdAt} type='sondage' />
+                    <Title
+                        title={title}
+                        flagged={flagged}
+                        id={id}
+                        CreatedAt={createdAt}
+                        type='sondage' />
                     <div className="CardOverFlow h-full">
-                        <Typography color="blue-gray" className="mb-2">
+                        <Typography
+                            color="blue-gray"
+                            className="mb-2">
                             {description}
                         </Typography>
                     </div>
-                    <ProgressSmallbar value={pourcent} label="Votes" size={'lg'} needed={needed} />
+                    <ProgressSmallbar
+                        value={pourcent}
+                        label="Votes"
+                        size={'lg'}
+                        needed={needed} />
                 </CardBody>
                 <CardFooter className="CardFooter mb-2">
                     <ProfileDiv profile={author} />
                     <div className="flex items-center gap-2 ">
-                        <Chip value={Votes?.length} variant="ghost" size='lg' className="rounded-full h-max flex items-center gap-2"
-                            icon={<Icon icon="smart_card_reader" fill={ImIn} color={ImIn && "green" || ''} size="2xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
+                        <Chip
+                            value={Votes?.length}
+                            variant="ghost" size='lg'
+                            className="rounded-full h-max flex items-center gap-2"
+                            icon={<Icon
+                                icon="smart_card_reader"
+                                fill={ImIn} color={ImIn && "green" || ''}
+                                size="2xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
                         </Chip>
                     </div>
                 </CardFooter>

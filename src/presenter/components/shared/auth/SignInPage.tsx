@@ -27,7 +27,7 @@ export default function SignInPage() {
     });
 
     const formik = useFormik({
-        initialValues: { email: '', password: '' },
+        initialValues: new AccessDTO(),
         validationSchema: formSchema,
         onSubmit: async (values) => {
             token ? await handleSignInVerify(values.email, values.password, token) : await handleSignIn(values.email, values.password)
@@ -78,7 +78,6 @@ export default function SignInPage() {
                     popOverContent={terms}
                     popOverButtonText="Rester connecté"
                     popOverClass="font-light text-start"
-                    popOverVariant="texte"
                     submitText="Se connecter"
                     confirm={false}
                 />

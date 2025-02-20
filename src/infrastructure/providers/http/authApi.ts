@@ -14,7 +14,6 @@ export class AuthApi {
     }
 
     async signInVerify(data: VerifyDTO): Promise<Auth> {
-        console.log('verifyDataAPI', data, await this.api.post(`${this.dataType}/signinVerify`, data))
         return this.api.post(`${this.dataType}/signinVerify`, data)
     }
 

@@ -39,19 +39,27 @@ export const ProfileForm = (props: {
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
             <main className='relative flex flew-1 pt-6 -mt-4'>
                 <Card className="w-respLarge h-full justify-between ">
-                    <CardHeader className="!bg-transparent shadow-none flex justify-center items-end" floated={true}>
-                        <ImageBtn setImgBlob={setImgBlob} formik={formik} imgDef="./person.svg" className="-ml-20 " />
+                    <CardHeader
+                        className="!bg-transparent shadow-none flex justify-center items-end"
+                        floated={true}>
+                        <ImageBtn
+                            setImgBlob={setImgBlob}
+                            formik={formik}
+                            imgDef="../../../image/person.svg"
+                            className="-ml-20 " />
                         <Avatar
-                            src={imgBlob as string || formik.values.image}
+                            src={imgBlob as string || formik.values.image as string || '../../../image/person.svg'}
                             alt={formik.values.image || imgBlob ? formik.values.firstName : ''}
-                            className={"shadow-md BgUser !rounded-full !h-[5rem] !w-[5rem] mb-1 bg-blue-gray-400"} />
+                            className={"shadow-md BgUser !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
                             <Typography
-                                className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">{user.email}
+                                className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">
+                                {user.email}
                             </Typography>
                             <div className="flex flex-col gap-1">
-                                <Link to="/motdepasse_oublie"
-                                    className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-right"
+                                <Link
+                                    to="/motdepasse_oublie"
+                                    className="!font-light !whitespace-break-spaces max-w-[30vw] !text-[0.7rem] !text-right hover:underline hover:text-cyan-500"
                                 >
                                     modifier le mot de passe ?
                                 </Link>
@@ -72,11 +80,17 @@ export const ProfileForm = (props: {
                         </div>
                     </CardHeader>
                     <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-1.5 overflow-auto !max-h-[calc(100vh-18rem)]">
-                        <Input label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"} name="firstName" variant="standard" onChange={formik.handleChange} value={formik.values.firstName}
+                        <Input
+                            label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"} name="firstName"
+                            variant="standard"
+                            onChange={formik.handleChange} value={formik.values.firstName}
                             error={formik.errors.firstName} />
-                        <Input label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"} name="lastName" variant="standard" onChange={formik.handleChange} value={formik.values.lastName}
+                        <Input
+                            label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"}
+                            name="lastName" variant="standard" onChange={formik.handleChange} value={formik.values.lastName}
                             error={formik.errors.lastName} />
-                        <Input label={formik.errors.phone ? formik.errors.phone as string : "Télephone"}
+                        <Input
+                            label={formik.errors.phone ? formik.errors.phone as string : "Télephone"}
                             name="phone"
                             variant="standard"
                             onChange={formik.handleChange}
@@ -88,7 +102,8 @@ export const ProfileForm = (props: {
                             setAddress={setAddress}
                             error={formik.errors.Address}
                         />
-                        <Select className="p-5 capitaliz"
+                        <Select
+                            className="p-5 capitaliz "
                             label={formik.errors.mailSub ? formik.errors.mailSub as string : "Notifications mails"}
                             name="mailSub"
                             variant='standard'
@@ -101,7 +116,7 @@ export const ProfileForm = (props: {
                             {mailSubscriptions.map((label: Label, index: number) => {
                                 return (
                                     <Option
-                                        className="truncate"
+                                        className="!flex"
                                         value={label.value}
                                         key={index}>
                                         {label.label}

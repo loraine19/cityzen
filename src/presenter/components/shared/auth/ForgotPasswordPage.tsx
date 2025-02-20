@@ -32,21 +32,36 @@ export default function ForgotPasswordPage() {
                 <AuthHeader />
                 <Icon fill size='3xl' icon='cancel' title='fermer' link='/signin' />
             </div>
-            <form onSubmit={formik.handleSubmit} className='flex flex-col  w-respLarge' >
+            <form
+                onSubmit={formik.handleSubmit}
+                className='flex flex-col  w-respLarge' >
                 <main className='flex flex-col py-6 gap-4 '>
                     <Card className='FixCardNoImage flex py-8 w-respLarge'>
-                        <CardHeader className="FixCardHeaderNoImage flex-col !my-0 p-4 " floated={false}>
-                            <Typography variant="h5" color="blue-gray" >
+                        <CardHeader
+                            className="FixCardHeaderNoImage flex-col !my-0 p-4 "
+                            floated={false}>
+                            <Typography
+                                variant="h5" >
                                 Mot de pass oublié
                             </Typography>
-                            <Typography >{notif}</Typography>
+                            <Typography >
+                                {notif}
+                            </Typography>
                         </CardHeader>
                         <CardBody className='FixCardBody gap-8 my-4 '>
-                            <Input label={formik?.errors.email ? formik?.errors.email : "Email"} name="email" variant="static" error={formik?.errors.email ? true : false} onChange={formik.handleChange} onInput={() => setHidden(false)} className='w-full' />
+                            <Input
+                                label={formik?.errors.email ? formik?.errors.email : "Email"}
+                                name="email"
+                                variant="static" error={formik?.errors.email ? true : false}
+                                onChange={formik.handleChange}
+                                onInput={() => setHidden(false)} />
                         </CardBody>
                         <CardFooter className='FixCardFooter'>
-                            <Button type="submit" className={`lgBtn w-max ${hidden && ' invisible'}`}>
-                                Envoyer
+                            <Button
+                                type="submit"
+                                color="cyan"
+                                className={`lgBtn m-auto  ${hidden && ' invisible'}`}>
+                                Recevoir le lien
                             </Button>
                         </CardFooter>
                     </Card>

@@ -1,11 +1,13 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react"
-import { Service, serviceCategories, ServiceType, ServiceView } from "../../../../../domain/entities/Service";
+import { Service, ServiceType } from "../../../../../domain/entities/Service";
 import { Icon } from "../../../common/SmallComps";
 import { Profile } from "../../../../../domain/entities/Profile";
 import DI from "../../../../../di/ioc";
 import { getLabel, isLate } from "../../../../views/viewsEntities/utilsService";
+import { serviceCategories } from "../../../../constants";
+import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 
 
 export default function ServiceIssueCard(props: { service: ServiceView }) {

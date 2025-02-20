@@ -3,10 +3,11 @@ import { useState, useEffect } from "react";
 import { Pool } from "../../../../../domain/entities/Pool";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { Vote } from "../../../../../domain/entities/Vote";
-import { DateChip, ProfileDiv, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
+import { ProfileDiv, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
 import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { dayMS } from "../../../../views/viewsEntities/utilsService";
+import { DateChip } from "../../../common/ChipDate";
 
 
 export default function PoolDetailCard(props: { element: Pool, mines?: boolean, change: (e: any) => void }) {
@@ -43,28 +44,55 @@ export default function PoolDetailCard(props: { element: Pool, mines?: boolean, 
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
                     <div className={`ChipDivNoImage`}>
-
-                        <Chip value={'Cagnotte'} size='sm' className="CyanChip">
+                        <Chip
+                            value={'Cagnotte'}
+                            size='sm'
+                            className="CyanChip">
                         </Chip>
 
-                        <DateChip start={createdAt} ended={ended} end={end} prefix="finis dans" />
+                        <DateChip
+                            start={createdAt}
+                            ended={ended}
+                            end={end}
+                            prefix="finis dans" />
                     </div>
                 </CardHeader>
-                <CardBody className="FixCardBody">
-                    <Title title={title} CreatedAt={createdAt} />
+                <CardBody
+                    className="FixCardBody">
+                    <Title
+                        title={title}
+                        CreatedAt={createdAt} />
                     <div className="CardOverFlow h-full justify-between pb-4 mb-6">
-                        <Typography color="blue-gray" className="mb-2">
+                        <Typography
+                            color="blue-gray"
+                            className="mb-2">
                             {description}
                         </Typography>
-                        <ProfileDiv profile={UserBenef?.Profile || {} as Profile} size={'xl'} />
+                        <ProfileDiv
+                            profile={UserBenef?.Profile || {} as Profile}
+                            size={'xl'} />
                     </div>
-                    <ProgressSmallbar value={pourcent} label="Votes" size={'lg'} needed={needed} />
+                    <ProgressSmallbar
+                        value={pourcent}
+                        label="Votes"
+                        size={'lg'}
+                        needed={needed} />
                 </CardBody>
-                <CardFooter className="CardFooter mb-2">
-                    <ProfileDiv profile={author} />
+                <CardFooter
+                    className="CardFooter mb-2">
+                    <ProfileDiv
+                        profile={author} />
                     <div className="flex items-center gap-2 ">
-                        <Chip value={Votes?.length} variant="ghost" size='lg' className="rounded-full h-max flex items-center gap-2"
-                            icon={<Icon icon="smart_card_reader" fill={ImIn} color={ImIn && "green" || ''} size="2xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
+                        <Chip
+                            value={Votes?.length}
+                            variant="ghost"
+                            size='lg'
+                            className="rounded-full h-max flex items-center gap-2"
+                            icon={<Icon
+                                icon="smart_card_reader"
+                                fill={ImIn}
+                                color={ImIn && "green" || ''}
+                                size="2xl" title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
                         </Chip>
                     </div>
                 </CardFooter>

@@ -76,7 +76,11 @@ export default function ProfileCreatePage() {
             <div className="w-respLarge flex-col flex justify-between ">
                 <AuthHeader />
                 <div className="flex justify-between items-center pb-3">
-                    <Typography color="blue-gray" className='w-resp px-4 flex justify-center pb-2'>Bienvenue, veuillez remplir votre profil pour pouvoir utiliser Collect'if</Typography>
+                    <Typography
+                        color="blue-gray"
+                        className='w-resp px-4 flex justify-center pb-2'>
+                        Bienvenue, veuillez remplir votre profil pour pouvoir utiliser Collect'if
+                    </Typography>
                     <LogOutButton />
                 </div>
             </div>

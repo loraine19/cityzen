@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { ServiceStep, ServiceView, } from '../../../../domain/entities/Service';
+import { ServiceStep } from '../../../../domain/entities/Service';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import ServiceDetailComp from './servicesComps/ServiceDetailCard';
+import ServiceDetailComp from './serviceCards/ServiceDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
@@ -16,7 +16,6 @@ export default function ServiceDetailPage() {
     const idS = id ? parseInt(id) : 0;
     const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const { service, isLoading, error, refetch } = serviceIdViewModelFactory(idS);
-    const serviceView = new ServiceView(service);
 
     const deleteService = async (id: number) => await DI.resolve('deleteServiceUseCase').execute(id);
     const respService = async (id: number) => await DI.resolve('respServiceUseCase').execute(id);
@@ -24,13 +23,13 @@ export default function ServiceDetailPage() {
     const validRespService = async (id: number) => await DI.resolve('validRespServiceUseCase').execute(id);
     const finishService = async (id: number) => await DI.resolve('finishServiceUseCase').execute(id);
 
-    const isNew = serviceView.statusS === ServiceStep.STEP_0 ? true : false;
-    const isResp = serviceView.statusS === ServiceStep.STEP_1 ? true : false;
-    const isValidated = serviceView.statusS === ServiceStep.STEP_2 ? true : false;
-    const isFinish = serviceView.statusS === ServiceStep.STEP_3 ? true : false;
-    const inIssue = serviceView.statusS === ServiceStep.STEP_4 ? true : false;
-    const statusInt = getEnumVal(serviceView.statusS, ServiceStep)
-    const isLateValue = (isLate(serviceView.createdAt, 15) && statusInt < 1)
+    const isNew = service.statusS === ServiceStep.STEP_0 ? true : false;
+    const isResp = service.statusS === ServiceStep.STEP_1 ? true : false;
+    const isValidated = service.statusS === ServiceStep.STEP_2 ? true : false;
+    const isFinish = service.statusS === ServiceStep.STEP_3 ? true : false;
+    const inIssue = service.statusS === ServiceStep.STEP_4 ? true : false;
+    const statusInt = getEnumVal(service.statusS, ServiceStep)
+    const isLateValue = (isLate(service.createdAt, 15) && statusInt < 1)
 
     const { typeS, categoryS, mine, IResp } = service
     const generateActions = (): Action[] => {
@@ -41,9 +40,9 @@ export default function ServiceDetailPage() {
                 actions = [
                     {
                         icon: isNew ? 'Répondre au service' : isFinish ? 'ce service est terminé' : 'Service en cours',
-                        title: isNew ? 'Nous envoyerons un message à ' + serviceView.User?.email + ' pour le premier contact' : '',
+                        title: isNew ? 'Nous envoyerons un message à ' + service.User?.email + ' pour le premier contact' : '',
                         body: service?.title,
-                        function: isNew ? async () => { await respService(serviceView.id); await refetch() } : () => { },
+                        function: isNew ? async () => { await respService(service.id); await refetch() } : () => { },
                     },
                 ];
                 break;
@@ -63,15 +62,15 @@ export default function ServiceDetailPage() {
                     ...myAction,
                     {
                         icon: 'Valider ',
-                        title: `Accepter la reponse de ${serviceView.UserResp?.Profile.firstName}`,
-                        body: `${service?.title} <br> Nous envoyerons un message à ${serviceView.UserResp?.email} - ${serviceView.UserResp?.Profile.phone} , ${service?.points} points seront débités de votre compte, et crédités à ${serviceView.UserResp?.Profile.firstName} après validation de la fin du service`,
-                        function: async () => { await validRespService(serviceView.id); await refetch() },
+                        title: `Accepter la reponse de ${service.UserResp?.Profile.firstName}`,
+                        body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone} , ${service?.points} points seront débités de votre compte, et crédités à ${service.UserResp?.Profile.firstName} après validation de la fin du service`,
+                        function: async () => { await validRespService(service.id); await refetch() },
                     },
                     {
                         icon: 'Refuser ',
-                        title: `Refuser la reponse de ${serviceView.UserResp?.Profile.firstName}`,
-                        body: `${service?.title} <br> Nous envoyerons un message à ${serviceView.UserResp?.email} - ${serviceView.UserResp?.Profile.phone}`,
-                        function: async () => { await cancelRespService(serviceView.id); await refetch() },
+                        title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
+                        body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
+                        function: async () => { await cancelRespService(service.id); await refetch() },
                     },
                 ];
                 break;
@@ -80,14 +79,14 @@ export default function ServiceDetailPage() {
                     {
                         icon: 'Besoin d\'aide ?',
                         title: 'Ouvrir une demande de conciliation',
-                        body: `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(serviceView.UserResp)}`,
-                        function: () => navigate(`/conciliation/create/${serviceView.id}`),
+                        body: `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.UserResp)}`,
+                        function: () => navigate(`/conciliation/create/${service.id}`),
                     },
                     {
                         icon: 'terminer',
                         title: 'Terminer le service',
-                        body: `${service?.title}<br> et crediter ${serviceView.UserResp?.Profile.firstName} <br> de ${service?.points} points, Nous enverrons un message à ${serviceView.UserResp?.email} `,
-                        function: async () => { await finishService(serviceView.id) }
+                        body: `${service?.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${service?.points} points, Nous enverrons un message à ${service.UserResp?.email} `,
+                        function: async () => { await finishService(service.id) }
                     },
                 ];
                 break;
@@ -96,10 +95,10 @@ export default function ServiceDetailPage() {
                     {
                         icon: isResp ? 'Annuler votre réponse' : isValidated ? "Besoin d'aide ?" : '',
                         title: isResp ? 'Annuler votre réponse' : isValidated ? "Ouvrir une demande de conciliation?" : '',
-                        body: isResp ? service?.title : isValidated ? `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(serviceView.User)}` : '',
+                        body: isResp ? service?.title : isValidated ? `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` : '',
                         function: async () => {
-                            if (isResp) { await cancelRespService(serviceView.id); await refetch() };
-                            if (isValidated) navigate(`/conciliation/create/${serviceView.id}`);
+                            if (isResp) { await cancelRespService(service.id); await refetch() };
+                            if (isValidated) navigate(`/conciliation/create/${service.id}`);
                         },
                     },
                 ];
@@ -110,7 +109,7 @@ export default function ServiceDetailPage() {
                         icon: 'Voir le litige',
                         title: 'Voir le litige',
                         body: 'Voir le litige',
-                        function: () => navigate(`/conciliation/${serviceView.id}`),
+                        function: () => navigate(`/conciliation/${service.id}`),
                     },
                 ];
                 break;
@@ -140,7 +139,7 @@ export default function ServiceDetailPage() {
                         <Skeleton />
                         :
                         <ServiceDetailComp
-                            service={serviceView}
+                            service={service}
                             mines={mine}
                         />}
                 </div>

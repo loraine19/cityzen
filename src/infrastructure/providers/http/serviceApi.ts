@@ -1,4 +1,5 @@
-import { Service, ServiceDTO, ServicePage, ServiceUpdate } from "../../../domain/entities/Service";
+import { Service, ServicePage, ServiceUpdate } from "../../../domain/entities/Service";
+import { ServiceDTO } from "../../DTOs/ServiceDTO";
 import { ApiService } from "./apiService";
 
 export class ServiceApi {
@@ -35,11 +36,10 @@ export class ServiceApi {
         })
     }
 
-
     async deleteService(id: number): Promise<void> {
         return this.api.delete(`${this.dataType}/${id}`)
     }
-    ;
+
     async updateServiceStep(id: number, update?: ServiceUpdate): Promise<Service> {
         const updateR = update ? `?update=${update}` : '';
         return this.api.put(`${this.dataType}/${id}${updateR}`)

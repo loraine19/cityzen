@@ -7,7 +7,7 @@ export function AuthHeader() {
                 <div className="flex items-center justify-center gap-4 p-4 mr-8">
                     <img
                         className="h-16 w-16 object-cover object-center"
-                        src="/logo.svg"
+                        src="../../../image/logo.svg"
                         alt="logo" />
                     <Typography
                         variant="h1"

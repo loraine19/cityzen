@@ -5,11 +5,11 @@ import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
-import { DateChip } from "../../../common/SmallComps";
 import { ImageBtn } from "../../../common/ImageBtn";
 import { dayMS, formatDateForDB, getDefaultImage, getLabel } from "../../../../views/viewsEntities/utilsService";
 import { eventCategories } from "../../../../constants";
 import { AddressDTO } from "../../../../../infrastructure/DTOs/AddressDTO";
+import { DateChip } from "../../../common/ChipDate";
 
 export function EventForm(props: { formik: any, Address: AddressDTO, setAddress: any }) {
     const { formik, Address, setAddress } = props;
@@ -24,8 +24,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
     //// ADDRESS GPS FUNCTION
     useEffect(() => {
         setAddress(Address)
-        Address && (formik.values.Address = Address);
-        console.log('Address', Address)
+        Address && (formik.values.Address = Address)
     }, [Address]);
 
     const { image, title, category, description, start, end, participantsMin, Participants } = formik.values;
@@ -65,7 +64,10 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                     <Card className=" w-respLarge FixCard !relative !z-10">
                         <CardHeader className="FixCardHeader lg:max-h-[20vh]">
                             <div className={`${start ? 'ChipDiv !justify-end' : 'hidden'}`}>
-                                <DateChip start={start} end={start} prefix={start ? 'Début' : ''} />
+                                <DateChip
+                                    start={start}
+                                    end={start}
+                                    prefix={start ? 'Début' : ''} />
                             </div>
                             <ImageBtn
                                 className="!absolute z-40 !h-max bottom-0 !left-3 mb-1"

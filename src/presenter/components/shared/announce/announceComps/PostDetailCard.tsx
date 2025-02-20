@@ -1,5 +1,5 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
-import { DateChip, Icon, ProfileDiv, Title } from "../../../common/SmallComps";
+import { Icon, ProfileDiv, Title } from "../../../common/SmallComps";
 import { useState, } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
@@ -7,6 +7,7 @@ import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { getLabel, postCategories, toggleLike } from "../../../../views/viewsEntities/utilsService";
+import { DateChip } from "../../../common/ChipDate";
 
 export default function AnnounceDetailComp(props: { post: Post, mines?: boolean, change: (e: any) => void }) {
     const [post, setPost] = useState<Post>(props.post)

@@ -50,7 +50,6 @@ export default function DashboardPage() {
 
             />
             <div className="Body gray">
-
                 <div className="relative flex-col w-full flex items-center  justify-center ">
                     <div className="absolute flex justify-between lg:justify-end w-full max-w-[1000px] !m-auto  p-2">
                         <LogOutButton />
@@ -66,7 +65,7 @@ export default function DashboardPage() {
                             <Card className="lg:h-full p-0 flex-1 flex ">
                                 <CardHeader className="flex flex-col items-center !p-0 justify-centerp-0 bg-transparent shadow-none">
                                     <Avatar
-                                        src={user?.Profile?.image as string || './person.svg'}
+                                        src={user?.Profile?.image as string || '/image/person.svg'}
                                         alt={user?.Profile?.firstName}
                                         variant="circular"
                                         className="!shadow-sm !shadow-gray-400 w-16 h-16 lg:w-20 lg:h-20 BgUser"
@@ -118,7 +117,13 @@ export default function DashboardPage() {
                             <Card className=" orange100">
                                 <CardBody className="h-full flex flex-col py-3 px-4">
                                     <div className="flex gap-2 items-center">
-                                        <Icon fill icon="circle_notifications" link="/notification" size="4xl" color="orange" title="voir mes notifications" />
+                                        <Icon
+                                            fill
+                                            icon="circle_notifications"
+                                            link="/notification"
+                                            size="4xl"
+                                            color="orange"
+                                            title="voir mes notifications" />
                                         <div>
                                             <Typography color="blue-gray">
                                                 {notifList && userNotif > 0 ? `${userNotif} notifications` : 'pas de notifications'}
@@ -127,12 +132,17 @@ export default function DashboardPage() {
                                     </div>
                                     <div className="flex flex-col w-full max-h-8 overflow-y-auto ">
                                         {notifList && (notifList.map((notif: NotifView, index: number) => notif.read === false &&
-                                            <div className="w-full font-light text-sm flex px-1 justify-between" key={index}>
+                                            <div className="w-full font-light text-sm flex px-1 justify-between"
+                                                key={index}>
                                                 <p>
                                                     <span className="text-orange-800 capitalize font-normal">{notif?.elementType}</span> :
                                                     {notif?.title}
                                                 </p>
-                                                <Icon icon="arrow_circle_right" link={`/${notif?.elementType}/${notif.id}`} size="2xl" color="orange"
+                                                <Icon
+                                                    icon="arrow_circle_right"
+                                                    link={`/${notif?.elementType}/${notif.id}`}
+                                                    size="2xl"
+                                                    color="orange"
                                                     title={"voir les details de " + notif.title} />
                                             </div>))}
                                     </div>
@@ -143,16 +153,22 @@ export default function DashboardPage() {
                             <Card className="h-full flex-1 cyan">
                                 <CardBody className="h-full min-h-[20vh] lg!min-h-[100%] flex flex-col  p-4">
                                     <div className="flex items-center gap-2">
-                                        <Icon fill icon="explore_nearby" link="/service" size="4xl" color="cyan"
+                                        <Icon
+                                            fill
+                                            icon="explore_nearby"
+                                            link="/service" size="4xl"
+                                            color="cyan"
                                             title="voir mes services" />
                                         <div>
-                                            <Typography color="blue-gray">
+                                            <Typography
+                                                color="blue-gray">
                                                 Services
                                             </Typography>
                                         </div>
                                     </div>
                                     <div className="flex-1 flex">
-                                        {user?.Profile?.Address ? <AddressMapOpen address={user?.Profile?.Address} /> : <Skeleton />}</div>
+                                        {user?.Profile?.Address ? <AddressMapOpen address={user?.Profile?.Address} /> : <Skeleton />}
+                                    </div>
                                 </CardBody>
                             </Card>
                         </div>

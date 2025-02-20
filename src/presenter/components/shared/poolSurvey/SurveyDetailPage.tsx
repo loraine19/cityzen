@@ -5,7 +5,7 @@ import { SurveyService } from '../../../../domain/repositoriesBase/SurveyReposit
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import SurveyDetailCard from './poolSurveyComp/SurveyDetailCard';
+import SurveyDetailCard from './poolSurveyCards/SurveyDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { Skeleton } from '../../common/Skeleton';

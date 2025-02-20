@@ -237,7 +237,7 @@ button {
 /* COMP */
 
 .BgUser {
-    background-image: url("/person.svg");
+    background-image: url("image/person.svg");
     background-size: cover;
     background-position: center;
 }
@@ -284,4 +284,7 @@ button {
 ::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:active {
     @apply bg-white/50;
+}
+button span {
+    @apply !truncate max-w-full min-h-max;
 }

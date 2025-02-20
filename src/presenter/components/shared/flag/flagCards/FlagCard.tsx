@@ -8,7 +8,6 @@ import DI from "../../../../../di/ioc";
 
 export function FlagCard(props: { flag: FlagView, update: () => void }) {
     const { targetId, createdAt, target, targetS, element, reasonS } = props.flag
-    console.log(element)
     const { update } = props
     const navigate = useNavigate();
     const deleteFlag = (targetId: number, target: FlagTarget) => DI.resolve('deleteFlagUseCase').execute(targetId, target)
@@ -33,27 +32,40 @@ export function FlagCard(props: { flag: FlagView, update: () => void }) {
 
     return (
         <Card className="FixCardNoImage w-resp !justify-start">
-            <CardHeader className="FixCardHeaderNoImage " floated={false}>
+            <CardHeader
+                className="FixCardHeaderNoImage "
+                floated={false}>
                 <div className="ChipDivNoImage justify-between ">
                     <div className="flex  items-center gap-2 w-full">
-                        <Chip size='sm'
+                        <Chip
+                            size='sm'
                             value={targetS}
                             className="CyanChip">
                         </Chip>
-                        <Chip size='sm' value={reasonS} className={`OrangeChip truncate overflow-auto max-w-[30vw]`}>
+                        <Chip
+                            size='sm'
+                            value={reasonS}
+                            className={`OrangeChip truncate overflow-auto max-w-[30vw]`}>
                         </Chip>
                     </div>
                     <div>
-                        <ModifBtnStack actions={MyActions} /></div>
+                        <ModifBtnStack
+                            actions={MyActions} />
+                    </div>
                 </div>
             </CardHeader>
             <CardBody className="FixCardBody max-h-max !py-0">
-                <Typography color="gray" className="font-normal truncate ">
+                <Typography
+                    color="gray"
+                    className="font-normal truncate ">
                     {element?.title}
                 </Typography>
             </CardBody>
             <CardFooter className="CardFooter items-center !px-4">
-                <Chip size='sm' value={'signalé le ' + new Date(createdAt).toLocaleDateString('fr-FR')} className={`rounded-full GrayChip h-max flex items-center gap-2  `}>
+                <Chip
+                    size='sm'
+                    value={'signalé le ' + new Date(createdAt).toLocaleDateString('fr-FR')}
+                    className={`rounded-full GrayChip h-max flex items-center gap-2  `}>
                 </Chip>
                 <Icon
                     fill icon="arrow_circle_right"

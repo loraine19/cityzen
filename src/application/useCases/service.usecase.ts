@@ -1,5 +1,6 @@
-import { Service, ServiceDTO, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
+import { Service, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
 import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
+import { ServiceDTO } from "../../infrastructure/DTOs/ServiceDTO";
 
 export class GetServicesUseCase {
     private serviceRepository: ServiceRepositoryBase;

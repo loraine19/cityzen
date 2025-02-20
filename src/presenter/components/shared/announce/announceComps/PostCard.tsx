@@ -6,10 +6,11 @@ import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { PostService } from "../../../../../domain/repositoriesBase/PostRepository";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { DateChip, Title, ProfileDiv, Icon } from "../../../common/SmallComps";
+import { Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { GenereMyActions, getLabel, postCategories, toggleLike } from "../../../../views/viewsEntities/utilsService";
+import { DateChip } from "../../../common/ChipDate";
 
 
 

@@ -47,7 +47,12 @@ export default function ResetPasswordPage() {
         <div className="Body gray gap-8 items-center">
             <div className=" w-respLarge flex justify-between items-center">
                 <AuthHeader />
-                <Icon fill size='3xl' icon='cancel' title='fermer' link='/signin' />
+                <Icon
+                    fill
+                    size='3xl'
+                    icon='cancel'
+                    title='fermer'
+                    link='/' />
             </div>
             <form onSubmit={formik.handleSubmit} className='flex flex-col  w-respLarge' >
                 <main className='flex flex-col py-6 gap-4 '>

@@ -48,7 +48,7 @@ export default function AddressMapOpen(props: { address: AddressDTO | Address, m
     return (
         <Popover open={open} >
             <PopoverHandler>
-                <div className=' relative flex flex-1 min-h-[5.5rem] !h-[100%] !rounded-2xl  shadow mb-2'>
+                <div className=' relative flex flex-1 min-h-[5.5rem] !h-[100%] !rounded-2xl  shadow-md mb-2'>
                     <Icon
                         icon='expand_content'
                         fill size='2xl'
@@ -66,10 +66,10 @@ export default function AddressMapOpen(props: { address: AddressDTO | Address, m
                         <Marker
                             position={position}
                             icon={L.icon({
-                                iconUrl: '/marker.svg',
+                                iconUrl: '/image/marker.svg',
                                 iconSize: [50, 50],
-                                iconAnchor: [0, 0],
-                                popupAnchor: [0, 0],
+                                iconAnchor: [25, 50],
+                                popupAnchor: [0, -5],
                             })}
                         >
                             <Popup>
@@ -90,17 +90,20 @@ export default function AddressMapOpen(props: { address: AddressDTO | Address, m
                         onClick={() => setOpen(false)}
                         style={' !px-1'}
                         title='Fermer la carte' />
-                    <MapContainer center={position} zoom={16} scrollWheelZoom={false}
+                    <MapContainer
+                        center={position}
+                        zoom={16}
+                        scrollWheelZoom={false}
                         className='shadow-xl rounded-xl border-2 border-gray-300 flex w-full h-full' >
                         <TileLayer
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
                         />
                         <Marker position={position}
                             icon={L.icon({
-                                iconUrl: '/marker.svg',
+                                iconUrl: '/image/marker.svg',
                                 iconSize: [50, 50],
-                                iconAnchor: [0, 0],
-                                popupAnchor: [0, 0],
+                                iconAnchor: [25, 50],
+                                popupAnchor: [0, -5],
                             })}>
                             <Popup>
                                 {message || `${Address?.address} ${Address?.city}`}

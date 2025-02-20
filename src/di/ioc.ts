@@ -25,7 +25,6 @@ import { ResetPasswordService } from '../infrastructure/services/resetPasswordSe
 import { ServiceApi } from '../infrastructure/providers/http/serviceApi';
 import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/ServiceRespositoryImpl';
 import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
-import { ServiceService } from '../presenter/views/viewsEntities/serviceService';
 import { GetUserMeUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
 import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
@@ -129,7 +128,6 @@ container.register({
     serviceData: asClass(ServiceApi),
     serviceViewModel: asFunction(serviceViewModel),
     serviceIdViewModel: asFunction(serviceIdViewModel),
-    serviceService: asClass(ServiceService),
 
     ////FLAG 
     flagRepository: asClass(FlagRepositoryImpl),

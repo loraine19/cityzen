@@ -7,7 +7,7 @@ import { IssueService } from '../../../../../domain/repositoriesBase/IssueReposi
 import CTAMines from '../../../common/CTAMines';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
-import { IssueForm } from '../servicesComps/IssueCard';
+import { IssueForm } from '../serviceCards/IssueCard';
 import { Action } from '../../../../../domain/entities/frontEntities';
 import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
 import { useUserStore } from '../../../../../application/stores/user.store';
