@@ -24,15 +24,10 @@ export class Issue {
     status: IssueStep | string = IssueStep.STEP_0;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+    constructor(data?: Partial<Issue>) {
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
 }
 
-export class IssueDTO {
-    serviceId?: number;
-    userId?: number;
-    description?: string;
-    image?: string | File;
-    status?: IssueStep | string;
-    userIdModo?: number;
-    userIdModoResp?: number;
-    date?: Date | string;
-}

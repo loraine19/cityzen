@@ -11,7 +11,6 @@ export class NotifApi {
     private readonly api: ApiServiceI;
     constructor() { this.api = new ApiService(); }
     async getNotifs(): Promise<Notif[]> {
-        console.log(await this.api.get(this.dataType))
         return this.api.get(this.dataType)
     }
 }

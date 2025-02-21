@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { EventFilter } from "../../../../domain/entities/Event";
-
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -21,7 +20,6 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
-
     const eventViewModelFactory = DI.resolve('eventViewModel');
     const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(filter, category)
 
@@ -32,7 +30,6 @@ export default function EventListPage() {
     const params = { filter: Params.get("filter"), category: Params.get("category") }
 
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
-
 
     const filterTab = async (value?: EventFilter) => {
         setParams({ filter: value as string || '', category: category });
@@ -51,7 +48,8 @@ export default function EventListPage() {
     ];
 
     const change = (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
-        const selectedCategory = typeof e !== "object" ? e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), eventCategories).toLowerCase();
+        const selectedCategory = typeof e !== "object" ?
+            e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), eventCategories).toLowerCase();
         setCategory(selectedCategory);
         setParams({ filter: filter as string || '', category: selectedCategory });
         refetch();
@@ -86,14 +84,19 @@ export default function EventListPage() {
                 setIsBottom(false);
             }
         }
-    };
+    }
 
     return (
         <div className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader qty={count || 0} type={`évènements ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ""}`} />
-                {view === "view_agenda" && <TabsMenu labels={eventTabs} defaultTab={params.filter || ''} />}
+                <SubHeader
+                    qty={count || 0}
+                    type={`évènements ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ""}`} />
+                {view === "view_agenda" &&
+                    <TabsMenu
+                        labels={eventTabs}
+                        defaultTab={params.filter || ''} />}
                 <div className={`flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect
                         categoriesArray={eventCategoriesS}
@@ -113,8 +116,10 @@ export default function EventListPage() {
                     </div>}
             </header>
             {view === "view_agenda" && (
-                <main ref={divRef}
-                    onScroll={handleScroll} className="Grid">
+                <main
+                    ref={divRef}
+                    onScroll={handleScroll}
+                    className="Grid">
                     {isLoading || error ?
                         [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                             <SkeletonGrid

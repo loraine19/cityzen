@@ -1,6 +1,6 @@
 //src/infrastructure/api/userApi.tsx
 import { User } from "../../../domain/entities/User";
-import { UserDTO } from "../../DTOs/User";
+import { UserDTO } from "../../DTOs/UserDTO";
 import { ApiServiceI, ApiService } from "./apiService";
 
 
@@ -20,7 +20,6 @@ export class UserApi {
 
 
     async getUserMe(): Promise<User> {
-        console.log('usermeAP0I')
         return this.api.get(`${this.dataType}/me`);
     }
 

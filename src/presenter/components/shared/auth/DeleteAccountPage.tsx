@@ -6,7 +6,7 @@ import { Typography, Button, Card, CardBody, Input } from '@material-tailwind/re
 import { useSearchParams } from 'react-router-dom';
 import DI from '../../../../di/ioc';
 import { DeleteDTO } from '../../../../infrastructure/DTOs/AuthDTO';
-import { UserDTO } from '../../../../infrastructure/DTOs/User';
+import { UserDTO } from '../../../../infrastructure/DTOs/UserDTO';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { Icon } from '../../common/SmallComps';
 

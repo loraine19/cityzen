@@ -1,4 +1,4 @@
-import { EventView } from "./EventDTO";
+import { EventView } from "../../presenter/views/viewsEntities/eventViewEntities";
 
 
 //// for front only 

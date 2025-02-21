@@ -64,11 +64,4 @@ export class DeleteEventUseCase {
     }
 }
 
-export const eventUseCases = {
-    GetEventsUseCase,
-    GetEventByIdUseCase,
-    PostEventUseCase,
-    UpdateEventUseCase,
-    DeleteEventUseCase
-}
 

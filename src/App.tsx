@@ -18,10 +18,10 @@ const ServiceListPage = lazy(() => import("./presenter/components/shared/service
 const IssueCreatePage = lazy(() => import("./presenter/components/shared/service/issue/IssueCreatePage"));
 const IssueDetailPage = lazy(() => import("./presenter/components/shared/service/issue/IssueDetailPage"));
 const IssueEditPage = lazy(() => import("./presenter/components/shared/service/issue/IssueEditPage"));
-const AnnounceCreatePage = lazy(() => import("./presenter/components/shared/announce/AnnounceCreatePage"));
-const AnnounceDetailPage = lazy(() => import("./presenter/components/shared/announce/AnnounceDetailPage"));
-const AnnounceEditPage = lazy(() => import("./presenter/components/shared/announce/AnnounceEditPage"));
-const AnnounceListPage = lazy(() => import("./presenter/components/shared/announce/AnnounceListPage"));
+const AnnounceCreatePage = lazy(() => import("./presenter/components/shared/post/AnnounceCreatePage"));
+const AnnounceDetailPage = lazy(() => import("./presenter/components/shared/post/AnnounceDetailPage"));
+const AnnounceEditPage = lazy(() => import("./presenter/components/shared/post/AnnounceEditPage"));
+const AnnounceListPage = lazy(() => import("./presenter/components/shared/post/AnnounceListPage"));
 const ForgotPasswordPage = lazy(() => import("./presenter/components/shared/auth/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("./presenter/components/shared/auth/ResetPasswordPage"));
 const DeleteAccountPage = lazy(() => import("./presenter/components/shared/auth/DeleteAccountPage"));

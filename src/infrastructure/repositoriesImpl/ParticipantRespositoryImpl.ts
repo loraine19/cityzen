@@ -1,5 +1,6 @@
 import { ParticipantRepositoryBase } from "../../domain/repositoriesBase/ParticipantRepositoryBase";
-import { Participant, ParticipantDTO } from "../../domain/entities/Participant";
+import { Participant } from "../../domain/entities/Participant";
+import { ParticipantDTO } from "../DTOs/ParticipantDTO";
 
 interface IData extends ParticipantRepositoryBase {
     api: any;

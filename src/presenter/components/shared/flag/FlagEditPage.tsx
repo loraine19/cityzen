@@ -50,15 +50,29 @@ export default function FlagEditPage() {
                 title={`Confirmer la suppression`}
                 element={`<br> Vous confirmez la suppression du signalement </br>
                 sur  l'${targetKey} pour le motif ${flag?.reasonS}`} />
-            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2 pb-3">
+
+            <form
+                onSubmit={formik.handleSubmit}
+                className="flex flex-col h-full gap-2 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={`Signaler `} place={'un ' + targetKey} closeBtn />
+                    <SubHeader
+                        type={`Signaler `}
+                        place={'un ' + FlagTarget[targetKey as string as keyof typeof FlagTarget]}
+                        closeBtn />
 
                     <div className='w-respLarge h-full flex flex-col gap-2'>
                         <div className='flex justify-between items-center px-2'>
-                            <Switch label={flag.reason ? "signalé" : "non signalé"} className='px-2' color='cyan' name="active" onChange={formik.handleChange} checked={flag.reason ? true : false} /></div>
-                        <Select className={` rounded-full shadow bg-white border-none capitalize`}
+                            <Switch
+                                label={flag.reason ? "signalé" : "non signalé"}
+                                className='px-2'
+                                color='cyan'
+                                name="active"
+                                onChange={formik.handleChange}
+                                checked={flag.reason ? true : false} />
+                        </div>
+                        <Select
+                            className={` rounded-full shadow bg-white border-none capitalize`}
                             label={formik.errors.reason ? formik.errors.reason as string : "Raison du signalement"}
                             name="reason"
                             labelProps={{ className: `${formik.errors.reason && "error"} before:border-none after:border-none ` }}
@@ -68,7 +82,9 @@ export default function FlagEditPage() {
                         >
                             {flagReasons.map((reason: any, index: number) => {
                                 return (
-                                    <Option className={reason.value === '' ? "hidden" : "rounded-full my-1 capitalize"} value={reason.value} key={index} >
+                                    <Option
+                                        className={reason.value === '' ? "hidden" : "rounded-full my-1 capitalize"} value={reason.value}
+                                        key={index} >
                                         {reason.label}
                                     </Option>)
                             })}
@@ -78,12 +94,17 @@ export default function FlagEditPage() {
 
                 <main className='flex pb-2'>
                     {isLoading ?
-                        <Skeleton className='w-respLarge m-auto !h-full !rounded-3xl' /> :
-                        <FlagDetailComp flag={flag} />}
+                        <Skeleton
+                            className='w-respLarge m-auto !h-full !rounded-3xl' /> :
+                        <FlagDetailComp
+                            flag={flag} />}
                 </main>
 
                 <footer className="w-respLarge">
-                    <Button type="submit" size="lg" className="w-full rounded-full" >
+                    <Button
+                        type="submit"
+                        size="lg"
+                        className="w-full rounded-full" >
                         retirer mon signalement
                     </Button>
                 </footer>

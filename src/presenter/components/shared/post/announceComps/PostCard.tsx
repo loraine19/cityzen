@@ -1,31 +1,23 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
-import { useState } from "react";
-import { Flag } from "../../../../../domain/entities/Flag";
-import { Like } from "../../../../../domain/entities/Like";
-import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
-import { PostService } from "../../../../../domain/repositoriesBase/PostRepository";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { Title, ProfileDiv, Icon } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
-import { useUserStore } from "../../../../../application/stores/user.store";
-import { GenereMyActions, getLabel, postCategories, toggleLike } from "../../../../views/viewsEntities/utilsService";
+import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
+import DI from "../../../../../di/ioc";
+import { PostView } from "../../../../views/viewsEntities/postViewEntities";
+import { useState } from "react";
 
+type PostCardProps = { post: PostView, mines?: boolean, change: (e: any) => void, update?: () => void }
 
-
-export default function AnnouncesComp(props: { post: Post, mines?: boolean, change: (e: any) => void, update?: () => void }) {
-    const { user } = useUserStore()
-    const userId: number = user.id
-    const { mines, change, update } = props
-    const [post, setPost] = useState<Post>(props.post)
-    const { id, title, description, image, category, createdAt, Likes, User } = post
-    const flagged: boolean = post.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
+export default function PostCard({ post: initialPost, mines, change, update }: PostCardProps) {
+    const [post, setPost] = useState<PostView>(initialPost);
+    const { id, title, description, image, categoryS, createdAt, Likes, User, flagged, ILike, toogleLike } = post
     const haveImage: boolean = post.image ? true : false
     const Author: Profile = User.Profile
-    const ILike: boolean = post.Likes.find((like: Like) => like.userId === userId) ? true : false
-    const label: string = getLabel(category, postCategories)
-    const { deletePost } = new PostService()
+
+    const deletePost = async (id: number) => await DI.resolve('deletePostUseCase').execute(id)
     const myActions: Action[] = GenereMyActions(post, "annonce", deletePost)
 
     return (
@@ -35,10 +27,15 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <button onClick={(e: any) => change(e)}>
-                            <Chip size="sm" value={`${label}`} className={'CyanChip'}>
+                            <Chip
+                                size="sm"
+                                value={`${categoryS}`}
+                                className={'CyanChip'}>
                             </Chip>
                         </button>
-                        <DateChip start={createdAt} prefix="publié le " />
+                        <DateChip
+                            start={createdAt}
+                            prefix="publié le " />
                     </div>
                     {image &&
                         <img
@@ -48,10 +45,16 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                         />}
                 </CardHeader>
                 <CardBody className={` FixCardBody`}>
-                    <Title title={title} flagged={flagged} id={id} type="annonce" />
+                    <Title
+                        title={title}
+                        flagged={flagged}
+                        id={id}
+                        type="annonce" />
                     <div className="flex flex-col h-full">
                         <div className="CardOverFlow">
-                            <Typography color="blue-gray" className="mb-2">
+                            <Typography
+                                color="blue-gray"
+                                className="mb-2">
                                 {description}
                             </Typography>
                         </div>
@@ -59,10 +62,15 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                 </CardBody>
                 <CardFooter className="CardFooter">
                     {!mines ?
-                        <ProfileDiv profile={Author} /> :
-                        <ModifBtnStack actions={myActions} update={update} />}
+                        <ProfileDiv
+                            profile={Author} /> :
+                        <ModifBtnStack
+                            actions={myActions}
+                            update={update} />}
                     <div className="flex items-center gap-2">
-                        <button onClick={() => { toggleLike(post.id, userId, setPost); update && update() }} className={mines ? `hidden md:flex` : `flex`}>
+                        <button
+                            onClick={async () => { setPost(await toogleLike()) }}
+                            className={mines ? `hidden md:flex` : `flex`}>
                             <Chip
                                 size="md" value={`${Likes?.length}`}
                                 variant="ghost"
@@ -72,8 +80,10 @@ export default function AnnouncesComp(props: { post: Post, mines?: boolean, chan
                                     size="lg"
                                     fill={ILike}
                                     color={ILike ? "cyan" : "gray"}
+                                    title={ILike ? "je n'aime plus" : "j'aime"}
                                     style=" !pl-2" />}>
-                            </Chip></button>
+                            </Chip>
+                        </button>
                         <Icon
                             icon="arrow_circle_right"
                             link={`/annonce/${id}`}

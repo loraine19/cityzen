@@ -1,6 +1,7 @@
 import { Address } from "../../domain/entities/Address";
 import { EventCategory } from "../../domain/entities/Event";
-import { Participant } from "./Participant";
+import { Participant } from "../../domain/entities/Participant";
+import { EventView } from "../../presenter/views/viewsEntities/eventViewEntities";
 
 
 export class EventDTO {
@@ -29,27 +30,7 @@ export class EventDTO {
 
 export class EventUpdateDTO implements Partial<EventDTO> { }
 
-export interface EventView extends Event {
-    actif?: boolean;
-    days: Date[] | string[];
-    Igo: boolean;
-    label: string;
-    pourcent: number;
-    flagged: boolean;
-    mine: boolean;
-    isValidate: boolean;
-    agendaLink: string;
-    eventDateInfo: string;
-    toogleParticipate: () => Promise<EventView>;
-
-}
 
 export type EventPage = { events: Event[], count: number };
 
 export type EventViewPage = { events: EventView[], count: number };
-
-export enum EventFilter {
-    MINE = 'MINE',
-    IGO = 'IGO',
-    VALIDATED = 'VALIDATE'
-}

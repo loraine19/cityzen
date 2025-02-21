@@ -1,6 +1,7 @@
 import { EventCategory } from "../domain/entities/Event";
 import { FlagReason } from "../domain/entities/Flag";
 import { Label } from "../domain/entities/frontEntities";
+import { PostCategory } from "../domain/entities/Post";
 import { ServiceCategory, SkillLevel, HardLevel } from "../domain/entities/Service";
 
 export const getEnumLabel = (enumArray: any, all?: boolean): Label[] => {
@@ -22,3 +23,4 @@ export const serviceCategoriesS: Label[] = getEnumLabel(ServiceCategory, true);
 export const serviceCategories: Label[] = getEnumLabel(ServiceCategory);
 export const skillLevels: Label[] = getEnumLabel(SkillLevel);
 export const hardLevels: Label[] = getEnumLabel(HardLevel);
+export const postCategories: Label[] = getEnumLabel(PostCategory);

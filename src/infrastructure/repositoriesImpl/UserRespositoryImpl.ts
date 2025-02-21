@@ -1,7 +1,7 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { User } from "../../domain/entities/User";
 import { UserRepositoryBase } from "../../domain/repositoriesBase/UserRepositoryBase";
-import { UserDTO } from "../DTOs/User";
+import { UserDTO } from "../DTOs/UserDTO";
 import { ApiServiceI } from "../providers/http/apiService";
 
 export interface IUserData extends UserRepositoryBase {

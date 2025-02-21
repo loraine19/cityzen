@@ -41,6 +41,15 @@ import { FlagApi } from '../infrastructure/providers/http/flagApi';
 import { GetFlagsUseCase, GetFlagByIdUseCase, PostFlagUseCase, DeleteFlagUseCase } from '../application/useCases/flag.usecase';
 import { FlagRepositoryImpl } from '../infrastructure/repositoriesImpl/FlagRespositoryImpl';
 import { flagByIdViewModel, flagsViewModel } from '../presenter/views/flagViewModel';
+import { IssueRepositoryImpl } from '../infrastructure/repositoriesImpl/IssueRepositoryImpl';
+import { IssueApi } from '../infrastructure/providers/http/IssueApi';
+import { PostRepositoryImpl } from '../infrastructure/repositoriesImpl/PostRespositoryImpl';
+import { PostApi } from '../infrastructure/providers/http/postApi';
+import { DeletePostUseCase, GetPostByIdUseCase, GetPostsUseCase, PostPostUseCase, UpdatePostUseCase } from '../application/useCases/post.useCase';
+import { postIdViewModel, postViewModel } from '../presenter/views/postViewModel';
+import { LikeRepositoryImpl } from '../infrastructure/repositoriesImpl/LikeRespositoryImpl';
+import { ToogleLikeUseCase } from '../application/useCases/like.useCase';
+import { LikeApi } from '../infrastructure/providers/http/likeApi';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -138,6 +147,27 @@ container.register({
     deleteFlagUseCase: asClass(DeleteFlagUseCase),
     flagsViewModel: asFunction(flagsViewModel),
     flagByIdViewModel: asFunction(flagByIdViewModel),
+
+    ////ISSUE
+    issueRepository: asClass(IssueRepositoryImpl),
+    issueData: asClass(IssueApi),
+
+    ////POST
+    postRepository: asClass(PostRepositoryImpl),
+    postData: asClass(PostApi),
+    getPostsUseCase: asClass(GetPostsUseCase),
+    getPostByIdUseCase: asClass(GetPostByIdUseCase),
+    postPostUseCase: asClass(PostPostUseCase),
+    updatePostUseCase: asClass(UpdatePostUseCase),
+    deletePostUseCase: asClass(DeletePostUseCase),
+    postViewModel: asFunction(postViewModel),
+    postIdViewModel: asFunction(postIdViewModel),
+
+    ////LIKE
+    toogleLikeUseCase: asClass(ToogleLikeUseCase),
+    likeRepository: asClass(LikeRepositoryImpl),
+    likeData: asClass(LikeApi),
+
 });
 
 // Log all registered components

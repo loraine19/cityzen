@@ -10,14 +10,18 @@ export enum Share {
 }
 
 export enum PostCategory {
-    CATEGORY_1,
-    CATEGORY_2,
-    CATEGORY_3,
-    CATEGORY_4,
-    CATEGORY_5
+    CATEGORY_1 = "perdu-trouvé",
+    CATEGORY_2 = "animaux",
+    CATEGORY_3 = "à vendre",
+    CATEGORY_4 = "je donne",
+    CATEGORY_5 = "autre"
 }
 export const postCategory = Object.values(PostCategory).filter(category => typeof category === 'string');
 
+export enum PostFilter {
+    MINE = 'MINE',
+    ILIKE = 'ILIKE',
+}
 export class Post {
     id: number = 0;
     content: string = '';
@@ -33,15 +37,12 @@ export class Post {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     Likes: Like[] = [];
-    Flags?: Flag[] = [];
+    Flags: Flag[] = [];
+    constructor(data?: Partial<Post>) {
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
 }
 
-export class PostDTO implements Partial<Post> {
-    userId?: number;
-    image?: string;
-    title?: string;
-    description?: string;
-    category?: PostCategory;
-    share?: Share;
-}
-export class PostUpdateDTO implements Partial<PostDTO> { }
+export type PostPage = { events: Post[], count: number };

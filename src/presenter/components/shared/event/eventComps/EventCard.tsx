@@ -9,7 +9,6 @@ import { useNotificationStore } from "../../../../../application/stores/notifica
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 
-
 type EventCardProps = { event: EventView, refetch?: () => void, change: (e: any) => void, mines?: boolean }
 
 export function EventCard({ event: initialEvent, change, mines, refetch }: EventCardProps) {
@@ -18,7 +17,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
     const { id, title, description, category, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink, eventDateInfo } = event;
     const disabledDelete = new Date(start).getTime() < Date.now();
     const disabledEdit = new Date(start).getTime() < Date.now();
-    const deleteEvent = async (id: number) => await DI.resolve('eventUseCase').deleteEvent(id);
+    const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id)
     const actions = GenereMyActions(event, "evenement", deleteEvent);
     const haveImage = Boolean(image);
 
@@ -98,7 +97,6 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                     <button
                         onClick={async () => {
                             const event = toogleParticipate && await toogleParticipate();
-
                             setEvent(event);
                             updateNotif()
                         }}>
@@ -106,7 +104,12 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             value={participantsMin}
                             variant="ghost"
                             className="rounded-full h-max flex items-center px-4 gap-2"
-                            icon={<Icon icon="person" fill={event?.Igo} color={event?.Igo ? "cyan" : "gray"} style="-mt-2 pl-2" title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
+                            icon={<Icon
+                                icon="person"
+                                fill={event?.Igo}
+                                color={event?.Igo ? "cyan" : "gray"}
+                                style="-mt-2 pl-2"
+                                title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>
                     <Icon

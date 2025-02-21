@@ -6,7 +6,6 @@ import { Service, ServiceType } from '../../../../../domain/entities/Service';
 import { Issue } from '../../../../../domain/entities/Issue';
 import { User } from '../../../../../domain/entities/User';
 import { ModalValues } from '../../../../../domain/entities/frontEntities';
-import { IssueService } from '../../../../../domain/repositoriesBase/IssueRepository';
 import { ConfirmModal } from '../../../common/ConfirmModal';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
@@ -15,6 +14,7 @@ import { UserApi } from '../../../../../infrastructure/providers/http/userApi'
 import { useUserStore } from '../../../../../application/stores/user.store';
 import { Skeleton } from '../../../common/Skeleton';
 import { ServiceApi } from '../../../../../infrastructure/providers/http/serviceApi';
+import { IssueApi } from '../../../../../infrastructure/providers/http/IssueApi';
 
 export default function IssueEditPage() {
     const { id } = useParams();
@@ -41,7 +41,7 @@ export default function IssueEditPage() {
     const [ModalValues, setModalValues] = useState<ModalValues>(redirectModal)
     const { getUsersModos } = new UserApi()
     const { getServiceById } = new ServiceApi()
-    const { getIssueById, postIssue } = new IssueService()
+    const { getIssueById, postIssue } = new IssueApi()
 
     const fetch = async () => {
         const idS = id ? parseInt(id) : 0;

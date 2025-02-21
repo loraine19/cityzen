@@ -1,4 +1,5 @@
-import { Participant, ParticipantDTO } from "../entities/Participant";
+import { ParticipantDTO } from "../../infrastructure/DTOs/ParticipantDTO";
+import { Participant } from "../entities/Participant";
 
 
 export interface ParticipantRepositoryBase {

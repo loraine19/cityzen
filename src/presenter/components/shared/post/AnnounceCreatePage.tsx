@@ -1,39 +1,18 @@
 import { useFormik } from 'formik';
 import { object, string, array } from 'yup';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Post } from '../../../../domain/entities/Post';
-import { PostService } from '../../../../domain/repositoriesBase/PostRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { AnnounceForm } from './announceComps/AnnounceForm';
+import { PostApi } from '../../../../infrastructure/providers/http/postApi';
 
 
-export default function AnnounceEditPage() {
-    const { id } = useParams()
-    const [newPost, setNewPost] = useState<Post>({} as Post);
+export default function AnnounceCreatePage() {
+    const [newPost,] = useState<Post>({} as Post);
     const navigate = useNavigate();
     const [value, setValue] = useState("");
-    const { getPostById, patchPost } = new PostService()
-
-    const fetch = async () => {
-        const idS = id ? parseInt(id) : 0;
-        const fetched = await getPostById(idS);
-        setNewPost(fetched);
-        formik.values.category = fetched.category;
-        formik.values.title = fetched.title;
-        formik.values.description = fetched.description;
-        formik.values.share = fetched.share.toString().split('_');
-        formik.values.image = fetched.image;
-        formik.values.category = fetched.category;
-        formik.values.createdAt = fetched.createdAt;
-        setValue(fetched.category.toString().toLowerCase())
-        //navigate(`/evenement/${id}`
-    };
-
-    useEffect(() => {
-        fetch()
-    }, []);
-
+    const { postPost } = new PostApi()
 
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -41,8 +20,6 @@ export default function AnnounceEditPage() {
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
         share: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
     })
-
-
 
     const [open, setOpen] = useState(false);
     const formik = useFormik({
@@ -56,10 +33,13 @@ export default function AnnounceEditPage() {
     });
 
     const updateFunction = async () => {
-        formik.values.share = formik.values.share.sort((a: string, b: string) => a.localeCompare(b)).toString().toUpperCase().replace(',', '_')
+        Array.isArray(formik.values.share) && formik.values.share.sort((a: string, b: string) => a.localeCompare(b))
+        formik.values.share = formik.values.share.toString().toUpperCase().replace(',', '_')
+        console.log('gppp', formik.values.share)
         const { ...rest } = formik.values;
         const updateData = { ...rest }
-        return await patchPost(newPost.id, updateData)
+        console.log('gppp', updateData)
+        return await postPost(updateData)
     }
 
 
@@ -71,10 +51,7 @@ export default function AnnounceEditPage() {
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => {
                     const ok = await updateFunction()
-                    if (ok) {
-                        navigate(`/annonce`);
-                        setOpen(false)
-                    }
+                    if (ok) { navigate(`/annonce`); setOpen(false) }
                 }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />

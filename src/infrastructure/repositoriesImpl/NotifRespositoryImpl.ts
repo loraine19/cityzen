@@ -1,11 +1,12 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { Notif } from "../../domain/entities/Notif";
 import { NotifRepositoryBase } from "../../domain/repositoriesBase/NotifRepositoryBase";
+import { ApiServiceI } from "../providers/http/apiService";
 
-export interface IData {
-    api: any;
-    dataType: any;
-    getNotifs(): Promise<Notif[]>;
+
+interface IData extends NotifRepositoryBase {
+    api: ApiServiceI;
+    dataType: string;
 }
 
 export class NotifRepositoryImpl implements NotifRepositoryBase {

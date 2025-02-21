@@ -3,15 +3,14 @@ import { Icon, ProfileDiv, Title } from "../../../common/SmallComps";
 import { useState, } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
-import { Post } from "../../../../../domain/entities/Post";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
-import { getLabel, postCategories, toggleLike } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
+import { PostView } from "../../../../views/viewsEntities/postViewEntities";
 
-export default function AnnounceDetailComp(props: { post: Post, mines?: boolean, change: (e: any) => void }) {
-    const [post, setPost] = useState<Post>(props.post)
-    const { id, title, description, image, category, createdAt, Likes } = post
+export default function PostDetailCard(props: { post: PostView, mines?: boolean, change: (e: any) => void }) {
+    const [post, setPost] = useState<PostView>(props.post)
+    const { id, title, description, image, categoryS, createdAt, Likes, toogleLike } = post
     const { user } = useUserStore()
     const userId: number = user.id
     const haveImage: boolean = post?.image ? true : false
@@ -28,7 +27,7 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <Chip
                             size='sm'
-                            value={getLabel(category, postCategories)}
+                            value={categoryS}
                             className={'CyanChip'}>
                         </Chip>
                         <DateChip
@@ -57,7 +56,8 @@ export default function AnnounceDetailComp(props: { post: Post, mines?: boolean,
                 <CardFooter className="CardFooter mb-2">
                     <ProfileDiv profile={Author} />
                     <div className="flex items-center gap-2 ">
-                        <button onClick={() => toggleLike(post.id, userId, setPost)}>
+                        <button
+                            onClick={async () => setPost(await toogleLike())}>
                             <Chip
                                 value={`${Likes?.length}`}
                                 variant="ghost"

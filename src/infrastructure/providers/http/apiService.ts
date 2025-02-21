@@ -77,11 +77,13 @@ export class ApiService implements ApiServiceI {
     };
 
     private handleRequest = (config: any) => {
+        console.log('base url:', baseURL);
         // remove this beacuse it's not used since I use httpOnly cookie
         return config;
     };
 
     private handleResponseError = async (error: any) => {
+
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {

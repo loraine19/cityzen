@@ -9,7 +9,7 @@ export const LoadMoreButton = (props: { handleScroll: () => void, hasNextPage: b
                 fill
                 icon="keyboard_double_arrow_down"
                 size="4xl" title="voir plus"
-                style={(isBottom && hasNextPage) ? "mb-10" : "hidden"}
+                style={(isBottom && hasNextPage) ? "mb-12" : "hidden"}
                 onClick={handleScroll} />
         </div>
     )

@@ -1,6 +1,7 @@
-import { Participant, ParticipantDTO } from "../../domain/entities/Participant";
+import { Participant } from "../../domain/entities/Participant";
 import { ParticipantRepositoryBase } from "../../domain/repositoriesBase/ParticipantRepositoryBase";
 import { Event } from "../../domain/entities/Event";
+import { ParticipantDTO } from "../../infrastructure/DTOs/ParticipantDTO";
 
 export class GetParticipantsUseCase {
     private participantRepository: ParticipantRepositoryBase;

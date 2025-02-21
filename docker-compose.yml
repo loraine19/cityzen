@@ -13,9 +13,8 @@ services:
     networks :
       - front
     env_file:
-      - .env.local
+      - .env
 
-  
 
 networks:
   front:

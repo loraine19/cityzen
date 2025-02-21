@@ -1,13 +1,14 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
-import { Flag } from "../../../../../domain/entities/Flag";
 import { Icon, ProfileDiv } from "../../../common/SmallComps";
+import { FlagView } from "../../../../views/viewsEntities/flagViewEntities";
+import { FlagTarget } from "../../../../../domain/entities/Flag";
 
-export default function FlagDetailComp(props: { flag: Flag, element?: any, label?: string }) {
+export default function FlagDetailComp(props: { flag: FlagView, element?: any, label?: string }) {
     const { flag } = props
+
     const { createdAt, element, target, title } = flag
     const now = Date.now();
     const id = flag.targetId
-    console.log("FlagDetailComp", flag)
 
     return (
         <>
@@ -16,7 +17,8 @@ export default function FlagDetailComp(props: { flag: Flag, element?: any, label
                     floated={false}>
                     <div className="ChipDivNoImage">
                         <Chip
-                            value={target || props.label}
+                            value={FlagTarget[flag.target as unknown as keyof typeof FlagTarget] ||
+                                FlagTarget[props.label as unknown as keyof typeof FlagTarget]}
                             className="CyanChip">
                         </Chip>
                         <Chip

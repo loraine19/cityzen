@@ -8,14 +8,12 @@ import { Profile } from "../../../domain/entities/Profile";
 import { Service } from "../../../domain/entities/Service";
 import { Survey, surveyCategory } from "../../../domain/entities/Survey";
 import { User } from "../../../domain/entities/User";
-import { LikeService } from "../../../domain/repositoriesBase/LikeRepository";
-import { PostService } from "../../../domain/repositoriesBase/PostRepository";
+import { LikeApi } from "../../../infrastructure/providers/http/likeApi";
+import { PostApi } from "../../../infrastructure/providers/http/postApi";
 import { EventView } from "./eventViewEntities";
 
 
 export const dayMS = 24 * 60 * 60 * 1000
-
-
 
 export const getFlagsInElement = (array: any[], arrayOfJoin: any[]): any => {
     return array.map((element: any) => {
@@ -76,19 +74,15 @@ export const takeElement = (id: number, array: Service[], setArray: any, userPro
 
 //// NEW FUNCTIONS
 export const toggleLike = async (postId: number, userId: number, setPost: any) => {
-    const { getPostById } = new PostService();
-    const { postLike, deleteLike } = new LikeService();
+    const { getPostById } = new PostApi();
+    const { postLike, deleteLike } = new LikeApi();
     const response = await getPostById(postId);
     const isLiked = response.Likes.find((like: any) => like.userId === userId) ? true : false;
     isLiked ? await deleteLike(postId) : await postLike({ userId: userId, postId: postId });
     setPost(await getPostById(postId));
 }
 
-
-
 export const formatDateForDB = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0]);
-
-
 
 //
 export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {

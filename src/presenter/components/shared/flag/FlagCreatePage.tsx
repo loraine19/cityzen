@@ -5,7 +5,6 @@ import { object, string } from 'yup';
 import { Option, Button, Select, Switch } from '@material-tailwind/react';
 import { Flag, FlagTarget } from '../../../../domain/entities/Flag';
 import { Label } from '../../../../domain/entities/frontEntities';
-import { PostService } from '../../../../domain/repositoriesBase/PostRepository';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -25,7 +24,7 @@ export default function FlagCreatePage() {
     const postFlag = async (data: any) => DI.resolve('postFlagUseCase').execute(data);
     const getEventById = (id: number) => DI.resolve('getEventByIdUseCase').execute(id);
     const getServiceById = (id: number) => DI.resolve('getServiceByIdUseCase').execute(id);
-    const { getPostById } = new PostService();
+    const getPostById = (id: number) => DI.resolve('getPostByIdUseCase').execute(id);
 
     const fetch = async () => {
         setLoading(true);
@@ -44,7 +43,6 @@ export default function FlagCreatePage() {
             // target === "survey" && setElement(await getSurveyById(idS))
         }
         flag.element = fetchedElement;
-        console.log(flag, 47, fetchedElement)
         formik.setValues({ ...fetchedElement, element: fetchedElement, target: targetKey, targetId: idS });
         setLoading(false);
     };
@@ -80,10 +78,15 @@ export default function FlagCreatePage() {
                 element={` Vous confirmez le signalement </br>
                     sur  <br>${target} ${flag?.element?.title} <br> pour le motif <b>${getLabel(flag.reason, flagReasons)}</b>`} />
 
-            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2 pb-3">
+            <form
+                onSubmit={formik.handleSubmit}
+                className="flex flex-col h-full gap-2 pb-3">
                 <header className="px-4">
                     <NavBarTop />
-                    <SubHeader type={`Signaler `} place={'un ' + target} closeBtn />
+                    <SubHeader
+                        type={`Signaler `}
+                        place={'un ' + target}
+                        closeBtn />
                     <div className='w-respLarge h-full flex flex-col gap-2'>
                         <div className='flex justify-between items-center px-2'>
                             <Switch
@@ -91,7 +94,8 @@ export default function FlagCreatePage() {
                                 className='px-2' color='cyan' name="active"
                                 checked={flag.reason ? true : false} />
                         </div>
-                        <Select className={` rounded-full shadow bg-white border-none capitalize`}
+                        <Select
+                            className={` rounded-full shadow bg-white border-none capitalize`}
                             label={formik.errors.reason ? formik.errors.reason as string : "Raison du signalement"}
                             name="reason"
                             labelProps={{ className: `${formik.errors.reason && "error"} before:border-none after:border-none ` }}
@@ -102,7 +106,8 @@ export default function FlagCreatePage() {
                                 return (
                                     <Option
                                         className={"rounded-full my-1 capitalize"}
-                                        value={reason.value} key={index} >
+                                        value={reason.value}
+                                        key={index} >
                                         {reason.label}
                                     </Option>)
                             })}
@@ -112,12 +117,18 @@ export default function FlagCreatePage() {
 
                 <main className='flex pb-2'>
                     {loading ?
-                        <Skeleton className='w-respLarge m-auto !h-full !rounded-3xl' /> :
-                        <FlagDetailComp flag={new FlagView(flag)} label={targetKey} />}
+                        <Skeleton
+                            className='w-respLarge m-auto !h-full !rounded-3xl' /> :
+                        <FlagDetailComp
+                            flag={new FlagView(flag)}
+                            label={targetKey} />}
                 </main>
 
                 <footer className="w-respLarge">
-                    <Button type="submit" size="lg" className="w-full rounded-full lgBtn"
+                    <Button
+                        type="submit"
+                        size="lg"
+                        className="w-full rounded-full lgBtn"
                         disabled={false}>
                         {`Enregistrer`}
                     </Button>
