@@ -5,16 +5,14 @@ export function DateChip(props: { start: Date | string, end?: Date | string, end
     const { start, end, prefix, ended } = props
     const now = new Date();
     const endDate: string = end && new Date(end).toLocaleDateString('fr-FR') || ''
-    const endDays: number = Math.ceil(((new Date(start).getTime()) - (now.getTime())) / dayMS)
+    const endDays: number = Math.ceil(((new Date(end ? end : start).getTime()) - (now.getTime())) / dayMS)
     const dateClass = (() => {
         switch (true) {
-            case endDays <= 4 && endDays > 0:
-                return "RedChip";
-            case endDays > 4 && endDays <= 15:
-                return "OrangeChip";
-            case endDays > 15:
+            case endDays >= 14:
                 return "GreenChip";
-            case endDays < 0 && end && !ended:
+            case endDays >= 4 && endDays <= 7:
+                return "OrangeChip";
+            case endDays <= 4 && endDays >= 0:
                 return "RedChip";
             default:
                 return "GrayChip";

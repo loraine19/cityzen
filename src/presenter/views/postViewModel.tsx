@@ -54,7 +54,6 @@ export const postIdViewModel = () => {
     })
 
     const post = userLoading ? {} : data ? new PostView(data, userId) : {} as Post;
-    console.log(post, data)
     return { post, isLoading, error, refetch }
   }
 }

@@ -2,15 +2,15 @@ import { Flag } from "../../../domain/entities/Flag";
 import { Action, Label, defaultEventImage } from "../../../domain/entities/frontEntities";
 import { Issue } from "../../../domain/entities/Issue";
 import { notifCategory } from "../../../domain/entities/Notif";
-import { Pool } from "../../../domain/entities/Pool";
+import { Pool, Survey, surveyCategory } from "../../../domain/entities/PoolSurvey";
 import { Post, postCategory } from "../../../domain/entities/Post";
 import { Profile } from "../../../domain/entities/Profile";
 import { Service } from "../../../domain/entities/Service";
-import { Survey, surveyCategory } from "../../../domain/entities/Survey";
 import { User } from "../../../domain/entities/User";
 import { LikeApi } from "../../../infrastructure/providers/http/likeApi";
 import { PostApi } from "../../../infrastructure/providers/http/postApi";
 import { EventView } from "./eventViewEntities";
+import { PoolSurveyView } from "./poolSurveyViewEntity";
 
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -85,7 +85,7 @@ export const toggleLike = async (postId: number, userId: number, setPost: any) =
 export const formatDateForDB = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0]);
 
 //
-export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
+export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
     'title' in element ? title = element.title ?? 'litige' : 'litige';

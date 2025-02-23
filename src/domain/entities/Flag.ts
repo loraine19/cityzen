@@ -1,7 +1,7 @@
 import { Event } from "./Event";
+import { Survey } from "./PoolSurvey";
 import { Post } from "./Post";
 import { Service } from "./Service";
-import { Survey } from "./Survey";
 import { User } from "./User";
 
 export enum FlagReason {

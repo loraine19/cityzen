@@ -15,7 +15,6 @@ export default function ServiceComp(props:
     { service: ServiceView, mines?: boolean, change: (e: any) => void, update?: () => void }) {
     const { user } = useUserStore()
     const { mines, change, update, service } = props
-    console.log(service)
     const { id, title, description, image, createdAt, User, flagged, mine, IResp, points, typeS, categoryS, statusS } = service
     const haveImage = service.image ? true : false
     const navigate = useNavigate();
@@ -25,11 +24,8 @@ export default function ServiceComp(props:
     const inIssue = service.statusS === ServiceStep.STEP_4 ? true : false;
     const statusSInt = getEnumVal(service.statusS, ServiceStep)
     const isLateValue = isLate(createdAt, 15) && statusSInt < 3
-
     const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
     const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
-
-
 
     const myActions = GenereMyActions(service, "service", deleteService, undefined, isLateValue)
     const takenCTA: Action[] = [
@@ -60,7 +56,10 @@ export default function ServiceComp(props:
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
                             <button
-                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => { const cat = e.currentTarget.innerText.toLowerCase(); change(cat) }}>
+                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                    const cat = e.currentTarget.innerText.toLowerCase();
+                                    change(cat)
+                                }}>
                                 <Chip
                                     size="sm"
                                     value={`${categoryS}`}
@@ -68,7 +67,10 @@ export default function ServiceComp(props:
                                 </Chip>
                             </button>
                             <button
-                                onClick={(e: any) => { const cat = e.target.innerText.toLowerCase(); change(cat) }}>
+                                onClick={(e: any) => {
+                                    const cat = e.target.innerText.toLowerCase();
+                                    change(cat)
+                                }}>
                                 <Chip
                                     size="sm"
                                     value={typeS}
@@ -83,7 +85,7 @@ export default function ServiceComp(props:
                         </div>
                         <DateChip
                             start={createdAt}
-                            prefix="publié le " />
+                            prefix="le" />
                     </div>
                     {image &&
                         <img

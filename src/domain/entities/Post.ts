@@ -6,7 +6,7 @@ import { User } from "./User";
 export enum Share {
     EMAIL,
     PHONE,
-    BOTH
+    EMAIL_PHONE
 }
 
 export enum PostCategory {
@@ -24,7 +24,6 @@ export enum PostFilter {
 }
 export class Post {
     id: number = 0;
-    content: string = '';
     User: User = {} as User;
     userId: number = 0;
     group: Group = {} as Group;

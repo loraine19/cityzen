@@ -1,4 +1,4 @@
-import { Pool } from "./Pool";
+import { Pool } from "./PoolSurvey";
 import { User } from "./User";
 
 export enum VoteTarget {
@@ -7,9 +7,9 @@ export enum VoteTarget {
 }
 
 export enum VoteOpinion {
-    OK,
-    NO,
-    WO
+    OK = 'OK',
+    NO = 'NO',
+    WO = 'WO'
 }
 
 export class Vote {

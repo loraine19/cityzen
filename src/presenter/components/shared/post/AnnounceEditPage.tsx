@@ -1,67 +1,56 @@
 import { useFormik } from 'formik';
 import { object, string, array } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { Post } from '../../../../domain/entities/Post';
+import { useState, useEffect } from 'react';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { AnnounceForm } from './announceComps/AnnounceForm';
-import { PostApi } from '../../../../infrastructure/providers/http/postApi';
-
+import { PostFormCard } from './announceComps/PostFormCard';
+import DI from '../../../../di/ioc';
+import { Skeleton } from '../../common/Skeleton';
+import { PostDTO } from '../../../../infrastructure/DTOs/PostDTO';
+import { useUserStore } from '../../../../application/stores/user.store';
+import { Share } from '../../../../domain/entities/Post';
+import { PostView } from '../../../views/viewsEntities/postViewEntities';
 
 export default function AnnounceEditPage() {
     const { id } = useParams()
-    const [newPost, setNewPost] = useState<Post>({} as Post);
     const navigate = useNavigate();
-    const [value, setValue] = useState("");
-    const { getPostById, updatePost } = new PostApi()
-
-    const fetch = async () => {
-        const idS = id ? parseInt(id) : 0;
-        const fetched = await getPostById(idS);
-        setNewPost(fetched);
-        formik.values.category = fetched.category;
-        formik.values.title = fetched.title;
-        formik.values.description = fetched.description;
-        formik.values.share = fetched.share.toString().split('_');
-        formik.values.image = fetched.image;
-        formik.values.category = fetched.category;
-        formik.values.createdAt = fetched.createdAt;
-        setValue(fetched.category.toString().toLowerCase())
-        //navigate(`/evenement/${id}`
-    };
-
-    useEffect(() => {
-        fetch()
-    }, []);
-
+    const updatePost = (id: number, data: PostDTO) => DI.resolve('updatePostUseCase').execute(id, data);
+    const idS = id ? parseInt(id) : 0;
+    const postIdViewModelFactory = DI.resolve('postIdViewModel');
+    const { post, error, isLoading } = postIdViewModelFactory(idS);
+    const [initialValues, setInitialValues] = useState<PostView>({} as PostView);
+    const user = useUserStore((state) => state.user);
+    const [open, setOpen] = useState(false);
 
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
-        share: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
+        shareA: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
     })
 
 
+    useEffect(() => {
+        !isLoading && post && post.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier cette annonce")
+        setInitialValues(post)
+    }, [isLoading]);
 
-    const [open, setOpen] = useState(false);
     const formik = useFormik({
-        initialValues: newPost as any,
+        enableReinitialize: true,
+        initialValues: initialValues as PostView,
         validationSchema: formSchema,
         onSubmit: values => {
             formik.values = values
             setOpen(true)
-            value && console.log("avoid compile error ", value)
         }
-    });
+    })
 
     const updateFunction = async () => {
-        formik.values.share = formik.values.share.sort((a: string, b: string) => a.localeCompare(b)).toString().toUpperCase().replace(',', '_')
-        const { ...rest } = formik.values;
-        const updateData = { ...rest }
-        return await updatePost(newPost.id, updateData)
+        const shareArray = formik.values.shareA as string[];
+        const share = shareArray.sort().join('_').toUpperCase() as unknown as Share;
+        const updateData = new PostDTO({ ...formik.values as PostDTO, share });
+        return await updatePost(post.id, updateData);
     }
-
 
     return (
         <div className="Body orange">
@@ -77,8 +66,12 @@ export default function AnnounceEditPage() {
                     }
                 }}
                 title={"Confimrer la modification"}
-                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-            <AnnounceForm formik={formik} setValue={setValue} />
+                element={(JSON.stringify(new PostDTO(formik.values as PostDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+
+            {isLoading || error ?
+                <Skeleton /> :
+                <PostFormCard
+                    formik={formik} />}
         </div >
     )
 }

@@ -13,7 +13,6 @@ export class PostApi {
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const categoryR = category ? `&category=${category}` : '';
-        console.log(await this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`))
         return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`);
     }
 

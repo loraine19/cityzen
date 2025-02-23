@@ -13,6 +13,7 @@ export class EventApi {
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const categoryR = category ? `&category=${category}` : '';
+        console.log(this.api, this.dataType);
         return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`);
     }
 

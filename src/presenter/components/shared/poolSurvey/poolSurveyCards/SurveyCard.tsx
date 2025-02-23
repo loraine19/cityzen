@@ -1,60 +1,35 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
-import { useState, useEffect } from "react";
-import { Flag } from "../../../../../domain/entities/Flag";
-import { Survey } from "../../../../../domain/entities/Survey";
-import { Vote } from "../../../../../domain/entities/Vote";
 import { SurveyService } from "../../../../../domain/repositoriesBase/SurveyRepository"
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
-import { UserApi } from "../../../../../infrastructure/providers/http/userApi";
-import { useUserStore } from "../../../../../application/stores/user.store";
-import { GenereMyActions, getLabel, surveyCategories } from "../../../../views/viewsEntities/utilsService";
+import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { dayMS } from "../../../../../domain/entities/frontEntities";
 import { DateChip } from "../../../common/ChipDate";
+import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
 
 
-type SurveyCardProps = { survey: Survey, change: () => void, mines?: boolean, update?: () => void }
+type SurveyCardProps = { survey: PoolSurveyView, change: () => void, mines?: boolean, update?: () => void }
 
-export function SurveyCard(props: SurveyCardProps) {
-    const { user } = useUserStore()
-    const userId: number = user.id
-    const [survey] = useState<Survey>(props.survey)
-    const { id, title, description, createdAt, image } = survey
-    const Votes: Vote[] = survey.Votes || []
-    const { change, mines, update } = props
-    const ImIn: boolean = Votes?.find((vote: Vote) => vote?.User?.id === userId) ? true : false
+export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
     const now = new Date(Date.now())
-    const [usersLength, setUsersLength] = useState<number>(0)
-    const OkVotes: Vote[] = Votes?.filter((vote: Vote) => vote.opinion as unknown as string === 'OK')
-    const pourcent: number = Math.floor((OkVotes?.length) / usersLength * 100)
-    const endDays: number = Math.floor((new Date(createdAt).getTime() + 15 * dayMS - (now.getTime())) / dayMS)
-    const end = new Date(new Date(createdAt).getTime() + 15 * dayMS)
-    const disabledEditCTA: boolean = pourcent >= 100 ? true : false
-    const ended: boolean = pourcent < 100 && endDays <= 0 ? true : false
-    const category: string = getLabel(survey.category, surveyCategories)
+    const endDays: number = Math.floor((new Date(survey?.createdAt).getTime() + 15 * dayMS - (now.getTime())) / dayMS)
+    const end = new Date(new Date(survey?.createdAt).getTime() + 15 * dayMS)
+    const disabledEditCTA: boolean = survey?.pourcent >= 100 ? true : false
+    const ended: boolean = survey?.pourcent >= 100 || endDays <= 0 ? true : false
     const { deleteSurvey } = new SurveyService()
-    const { getUserCount } = new UserApi()
     const actions = GenereMyActions(survey, "survey", deleteSurvey)
-    const haveImage = survey.image ? true : false
-    const flagged: boolean = survey.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
-    const [needed, setNeeded] = useState<number>(usersLength - (survey.Votes?.length || 0))
+    const haveImage = survey?.image ? true : false
 
-    useEffect(() => {
-        const onload = async () => {
-            const users = await getUserCount()
-            setUsersLength(users / 2)
-            setNeeded(users / 2 - (survey.Votes?.length || 0))
-        }
-        onload()
-    }, [survey])
 
     return (
         <Card className={haveImage ? "FixCard " : "FixCardNoImage  "}>
-            <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeader NoImage"}
+            <CardHeader
+                className={haveImage ? "FixCardHeader" : "FixCardHeader NoImage"}
                 floated={haveImage}>
                 <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                     <div className="flex items-center gap-2">
-                        <button onClick={() => { change() }}>
+                        <button
+                            onClick={() => { change() }}>
                             <Chip
                                 value='Sondage'
                                 size="sm"
@@ -62,33 +37,35 @@ export function SurveyCard(props: SurveyCardProps) {
                             </Chip>
                         </button>
                         <Chip
-                            value={category}
+                            value={survey?.categoryS}
                             size="sm"
-                            className="CyanChip"></Chip>
+                            className="CyanChip">
+                        </Chip>
                     </div>
                     <DateChip
-                        start={createdAt}
-                        ended={ended} end={end}
+                        start={survey?.createdAt}
+                        ended={ended}
+                        end={end}
                         prefix="finis dans" />
                 </div>
-                {image &&
+                {survey?.image &&
                     <img
-                        src={image as any}
-                        alt={title}
+                        src={survey?.image as any}
+                        alt={survey?.title}
                         className="h-full w-full object-cover"
                     />}
             </CardHeader>
             <CardBody className={` FixCardBody`}>
                 <Title
-                    title={title}
-                    flagged={flagged}
-                    id={id}
+                    title={survey?.title}
+                    flagged={survey?.flagged}
+                    id={survey?.id}
                     type="sondage" />
 
                 <Typography
                     color="blue-gray"
                     className=" overflow-auto mb-2 pb-2">
-                    {description}
+                    {survey?.description}
                 </Typography>
 
 
@@ -97,9 +74,9 @@ export function SurveyCard(props: SurveyCardProps) {
                 className="CardFooter items-center gap-6">
                 {!mines ?
                     <ProgressSmallbar
-                        value={pourcent}
+                        value={survey?.pourcent}
                         label="Votes"
-                        needed={needed}
+                        needed={survey?.needed}
                         size="md" />
                     :
                     <ModifBtnStack
@@ -108,24 +85,24 @@ export function SurveyCard(props: SurveyCardProps) {
                         update={update} />}
                 <div className="flex items-center justify-between gap-2">
                     <Chip
-                        value={Votes?.length}
+                        value={survey?.Votes?.length}
                         variant="ghost"
                         className="min-w-max rounded-full px-4"
                         icon={<Icon
                             icon="smart_card_reader"
-                            fill={ImIn} color={ImIn && "green" || ''}
+                            fill={survey?.IVoted} color={survey?.IVoted && "green" || ''}
                             size="xl"
-                            title={`  ${Votes?.length} personnes ${ImIn ? `dont vous ` : ''} ont voté`}
-                            style="-mt-1.5 pl-2.5" />}>
+                            title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
+                            style=" pl-2.5" />}>
                     </Chip>
                     <Icon
                         icon="arrow_circle_right"
-                        title={`voir les details de ${title}`}
-                        link={`/sondage/${id}`}
+                        title={`voir les details de ${survey?.title}`}
+                        link={`/sondage/${survey?.id}`}
                         fill
                         size="4xl" />
                 </div>
             </CardFooter >
-        </Card>
+        </Card >
     );
 }

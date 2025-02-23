@@ -1,10 +1,11 @@
 import { ParticipantRepositoryBase } from "../../domain/repositoriesBase/ParticipantRepositoryBase";
 import { Participant } from "../../domain/entities/Participant";
 import { ParticipantDTO } from "../DTOs/ParticipantDTO";
+import { ApiServiceI } from "../providers/http/apiService";
 
 interface IData extends ParticipantRepositoryBase {
-    api: any;
-    dataType: any;
+    api: ApiServiceI;
+    dataType: string;
 }
 
 export class ParticipantRepositoryImpl implements ParticipantRepositoryBase {

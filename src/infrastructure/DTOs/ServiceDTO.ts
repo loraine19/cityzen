@@ -10,4 +10,13 @@ export class ServiceDTO implements Partial<Service> {
     skill?: SkillLevel;
     hard?: HardLevel;
     status?: ServiceStep;
+    constructor(init?: Partial<ServiceDTO>) {
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof ServiceDTO];
+                }
+            });
+        }
+    }
 }

@@ -9,6 +9,7 @@ import { Skeleton } from '../../common/Skeleton';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { EventDTO, EventUpdateDTO } from '../../../../infrastructure/DTOs/EventDTO';
+import { EventView } from '../../../views/viewsEntities/eventViewEntities';
 
 export default function EventDetailPage() {
     const { id } = useParams()
@@ -16,13 +17,13 @@ export default function EventDetailPage() {
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, isLoading } = eventIdViewModelFactory(idS);
     const user = useUserStore((state) => state.user);
-    const [eventDto, setEventDto] = useState<EventDTO>(new EventDTO(event));
-    const [Address, setAddress] = useState<AddressDTO>(eventDto.Address || {} as AddressDTO)
+    const [initialValues, setInitialValues] = useState<EventView>({} as EventView)
+    const [Address, setAddress] = useState<AddressDTO>(initialValues.Address || {} as AddressDTO)
     const updateEvent = async (id: number, data: EventUpdateDTO, address: AddressDTO) => await DI.resolve('updateEventUseCase').execute(id, data, address)
 
     useEffect(() => {
-        setEventDto(new EventDTO(event));
         event && event.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
+        setInitialValues(event)
     }, [isLoading]);
 
 
@@ -44,7 +45,7 @@ export default function EventDetailPage() {
 
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: eventDto,
+        initialValues: initialValues as EventView,
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values
@@ -76,7 +77,8 @@ export default function EventDetailPage() {
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => await updateFunction()}
                 title={"Confimrer la modification"}
-                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+                element={(JSON.stringify(new EventDTO(formik.values), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+
             {isLoading || formik.values === null ?
                 <Skeleton /> :
                 <EventForm

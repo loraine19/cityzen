@@ -11,7 +11,12 @@ export default function SubHeader(props: { type: string, qty?: (number | string)
                 <span className="font-medium ">{qty} {type} </span>{place ? place : " dans votre quartier"}
             </h2>
 
-            <Icon icon="cancel" size="4xl" fill style={`${closeBtn ? 'flex' : 'hidden'} thin`} link={goBack} title={"retour  " + goBack?.replace("/", "")} />
+            <Icon
+                icon="cancel"
+                size="4xl"
+                fill
+                style={`${closeBtn ? 'flex' : 'hidden'} thin`}
+                link={goBack} title={"retour  " + goBack?.replace("/", "")} />
         </div>
     )
 }

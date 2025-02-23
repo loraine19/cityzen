@@ -27,6 +27,7 @@ export default function SignInPage() {
     });
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: new AccessDTO(),
         validationSchema: formSchema,
         onSubmit: async (values) => {
@@ -42,7 +43,7 @@ export default function SignInPage() {
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/profile/create") }, 1000);
         } else {
-            setNotif(authVerify?.error || 'Erreur de connexion');
+            setNotif(authVerify?.error || authVerify?.message || 'Erreur de connexion');
             formik.resetForm();
         }
 
@@ -51,15 +52,15 @@ export default function SignInPage() {
     const fetchUser = useUserStore((state) => state.fetchUser);
     const handleSignIn = async (email: string, password: string) => {
         const accessData = { email, password }
-        const auth = await signIn(accessData);
+        const auth = await signIn(accessData)
         if (auth?.refreshToken) {
             saveToken(auth.refreshToken);
             fetchUser()
             setNotif('Vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/") }, 1000);
         } else {
-            setNotif(auth?.error || 'Erreur de connexion');
-            setTimeout(() => { formik.resetForm(); }, 1000);
+            setNotif(auth?.error || auth?.message || 'Erreur de connexion');
+            formik.resetForm()
         }
     }
 

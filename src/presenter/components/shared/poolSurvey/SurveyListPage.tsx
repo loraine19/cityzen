@@ -1,11 +1,8 @@
 //import from REACT & REACT ROUTER DOM
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { dayMS, TabLabel } from "../../../../domain/entities/frontEntities";
-import { Pool } from "../../../../domain/entities/Pool";
-import { Survey } from "../../../../domain/entities/Survey";
-import { PoolService, PoolSurveyService } from "../../../../domain/repositoriesBase/PoolRepository";
-import { SurveyService } from "../../../../domain/repositoriesBase/SurveyRepository";
+import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { PoolSurveyFilter, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -14,136 +11,182 @@ import TabsMenu from "../../common/TabsMenu";
 import { PoolCard } from "./poolSurveyCards/PoolCard";
 import { SurveyCard } from "./poolSurveyCards/SurveyCard";
 import { SkeletonGrid } from "../../common/Skeleton";
+import { LoadMoreButton } from "../../common/LoadMoreBtn";
+import { getLabel } from "../../../views/viewsEntities/utilsService";
+import DI from "../../../../di/ioc";
+import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
 
 
 export default function SurveyListPage() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const params = { tab: searchParams.get("search"), category: searchParams.get("category") };
-    const [poolsSurveys, setPoolsSurveys] = useState<(Pool | Survey)[]>([]);
-    const [myPoolsSurveys, setMyPoolsSurveys] = useState<(Pool | Survey)[]>([]);
-    const [pools, setPools] = useState<Pool[]>([]);
-    const [surveys, setSurveys] = useState<Survey[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [list, setList] = useState<(Pool | Survey)[]>([]);
-    const [tabSelected, setTabSelected] = useState<string>("")
-    const [mines, setMines] = useState<boolean>(false);
-    const [tabledList, setTabledList] = useState<(Pool | Survey)[]>([]);
-    const [notif, setNotif] = useState<string>("")
-    const fifteenDaysAgo = new Date().getTime() - 15 * dayMS;
-    const { getPools } = new PoolService();
-    const { getPoolsSurveys, getPoolsSurveysMines, } = new PoolSurveyService()
-    const { getSurveys } = new SurveyService();
+    const [notif, setNotif] = useState<string>('');
+    const [tabSelected] = useState<string>('');
+    const [mine, setMine] = useState<boolean>(false)
+    const [step, setStep] = useState<string>('');
+    const [filter, setFilter] = useState<string>('');
+    const poolSurveyViewModelFactory = DI.resolve('poolSurveyViewModel');
+    const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = poolSurveyViewModelFactory(filter, step);
+    const [Params, setParams] = useSearchParams();
+    const params = { filter: Params.get("filter"), step: Params.get("step") }
 
-    const UpdateList = async () => {
-        const poolsSurveys = await getPoolsSurveys();
-        const pools = await getPools();
-        const surveys = await getSurveys()
-        const myPoolsSurveys = await getPoolsSurveysMines()
-        setPoolsSurveys(poolsSurveys)
-        setMyPoolsSurveys(myPoolsSurveys)
-        setPools(pools)
-        setSurveys(surveys)
-        switch (tabSelected) {
-            case "mines": setList(myPoolsSurveys); break;
-            case "pools": setList(pools); break;
-            case "surveys": setList(surveys); break;
-            default: setList(poolsSurveys); break;
+    useEffect(() => {
+        setStep(params.step || '');
+        setFilter(params.filter || '')
+    }, []);
+
+    const boxArray = ["nouveau", "en attente", "terminé"];
+    const filterName = (): string => {
+        switch (filter) {
+            case PoolSurveyFilter.MINE: return 'les miens';
+            case PoolSurveyFilter.POOL: return 'cagnottes';
+            case PoolSurveyFilter.SURVEY: return 'sondages';
+            default: return '';
         }
-        setTabledList(list)
-        poolsSurveys.length > 0 && setLoading(false);
-        setNotif('')
+    }
+    const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
+
+    const CheckboxesFilter = () => {
+        let steps = [];
+        boxSelected.includes(boxArray[0]) && steps.push(PoolSurveyStep.NEW);
+        boxSelected.includes(boxArray[1]) && steps.push(PoolSurveyStep.PENDING);
+        boxSelected.includes(boxArray[2]) && steps.push(PoolSurveyStep.FINISHED);
+        if (boxSelected.length === 0) {
+            setStep('');
+        }
+        else {
+            setStep(steps.join(','));
+        }
     }
 
     useEffect(() => {
-        const Tab: HTMLElement | null = document.querySelector(`li[data-value="${params.tab}"]`)
-        const fetch = async () => await UpdateList()
-        fetch().then(() => Tab && Tab.click())
-    }, []);
+        CheckboxesFilter()
+    }, [boxSelected]);
 
-    const filterTab = async (newArray: (Pool | Survey)[], value: string) => {
-        if (value !== tabSelected) { setBoxSelected(boxArray); await UpdateList(); }
-        setList(newArray)
-        setTabledList(newArray)
-        setTabSelected(value)
-        value === "mines" ? setMines(true) : setMines(false);
-        setSearchParams({ search: value });
+
+    const filterTab = async (value?: PoolSurveyFilter) => {
+        setParams({ filter: value as string || '', step: step });
+        if (value !== filter) { setStep('') }
+        setFilter(value || '');
+        setMine(false)
+        switch (value) {
+            case PoolSurveyFilter.MINE:
+                { setMine(true), setStep(''), setBoxSelected(boxArray) };
+                break;
+            case PoolSurveyFilter.POOL:
+                { setMine(false), setStep(''), setBoxSelected(boxArray) };
+                break;
+            case PoolSurveyFilter.SURVEY:
+                { setMine(false), setStep(''), setBoxSelected(boxArray) };
+                break;
+            default:
+                { setMine(false), setStep(''), setBoxSelected(boxArray) };
+                break;
+        }
+        setParams({ filter: value as string || '', step: step })
     };
 
     const tabs: TabLabel[] = [
-        { label: "tous", value: "", result: () => filterTab([...poolsSurveys], "") },
-        { label: "cagnottes", value: "pools", result: () => filterTab([...pools], "pools") },
-        { label: "sondages", value: "surveys", result: () => filterTab([...surveys], "surveys") },
-        { label: "les miens", value: "mines", result: () => filterTab([...myPoolsSurveys], "mines") },
-    ];
+        { label: "tous", value: '', result: () => filterTab() },
+        { label: "cagnotte", value: PoolSurveyFilter.POOL, result: () => filterTab(PoolSurveyFilter.POOL) },
+        { label: "sondage", value: PoolSurveyFilter.SURVEY, result: () => filterTab(PoolSurveyFilter.SURVEY) },
+        { label: "les miens", value: PoolSurveyFilter.MINE, result: () => filterTab(PoolSurveyFilter.MINE) },
+    ]
 
-    const boxArray = ["nouveau", "en cours", "terminé"];
-    const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
 
-    const filterCheck = (boxSelected: string[]) => {
-        const filters = [
-            boxSelected.includes(boxArray[0]) ? [...tabledList.filter(element => { return new Date(element.createdAt).getTime() > fifteenDaysAgo })] : [],
-            boxSelected.includes(boxArray[1]) ? [...tabledList.filter(element => { return element.Votes && element?.Votes?.length > 0 })] : [],
-            boxSelected.includes(boxArray[2]) ? [...tabledList.filter(element => { return new Date(element.createdAt).getTime() < fifteenDaysAgo; })] : [],
-        ]
-        return [...new Set(filters.flat())];
-    }
-
-    useEffect(() => setList(filterCheck(boxSelected)), [boxSelected])
 
     useEffect(() => {
-        if (list.length === 0 && !loading) {
-            if (tabSelected === "pools") { setNotif(`Aucune cagnotte n'a été trouvée`) }
-            else if (tabSelected === "surveys") { setNotif(`Aucun sondage n'a été trouvé`) }
-            else { setNotif(`Aucun sondage ou cagnotte n'a été trouvé`) }
+        !isLoading && setNotif(count > 0 ? '' : `Aucun  ${tabSelected} ${step !== '' && step ? ' ' : ''} n'a été trouvé`);
+    }, [isLoading]);
+
+    useEffect(() => {
+        const notifUpdate =
+            (count === 0 && !isLoading) &&
+            `Aucun ${filter !== '' ? getLabel(filter, tabs).toLowerCase() : ''} ${step !== '' ? filterName() : ''} n'a été trouvé`
+            || error && "Erreur lors du chargement des sondages, veuillez réessayer plus tard"
+            || '';
+        setNotif(notifUpdate);
+    }, [isLoading, error, filter, step]);
+
+    const divRef = useRef(null);
+    const [isBottom, setIsBottom] = useState(false);
+    const handleScroll = () => {
+        if (divRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+            if (scrollTop + clientHeight + 2 >= scrollHeight) {
+                setIsBottom(true);
+                if (hasNextPage) {
+                    fetchNextPage();
+                }
+            } else {
+                setIsBottom(false);
+            }
         }
-        else { setNotif('') }
-    }, [list, tabledList])
+    };
+
 
     return (
 
         <div className="Body orange">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader qty={list.length > 0 ? list.length : 'aucun'} type={tabSelected === "pools" && "cagnottes" || tabSelected === "surveys" && "sondages" || 'sondages ou cagnottes'} />
-                <TabsMenu labels={tabs} />
+                <SubHeader
+                    qty={count > 0 ? count : 'aucun'}
+                    type={tabSelected === "pools" && "cagnottes" ||
+                        tabSelected === "surveys" && "sondages" || 'sondages ou cagnottes'} />
+                <TabsMenu
+                    labels={tabs} />
                 <CheckCard
                     categoriesArray={boxArray}
                     boxSelected={boxSelected}
                     setBoxSelected={setBoxSelected}
                     color={"orange-500"} />
-                <div className={(!loading && notif ? "w-full flex justify-center p-8" : "hidden")}>{notif}</div>
+                <div className={(!isLoading && notif ? "w-full flex justify-center p-8" : "hidden")}>
+                    {notif}
+                </div>
             </header>
 
-            <main className="Grid">
-                {loading ?
+            <main ref={divRef}
+                onScroll={() => handleScroll()}
+                className="Grid">
+                {isLoading || !poolsSurveys ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <SkeletonGrid
                             key={index}
                             count={4} />
                     )) :
-                    list.map((element: any, index: number) =>
-
-                        element.category ?
+                    poolsSurveys.map((element: PoolSurveyView, index: number) =>
+                        element.typeS === "SURVEY" ?
                             <div className="SubGrid" key={index}>
                                 <SurveyCard
                                     survey={element}
                                     key={index}
-                                    change={() => { const Tab: HTMLElement | null = document.querySelector(`li[data-value="surveys"]`); Tab && Tab.click(); }}
-                                    mines={mines}
-                                    update={UpdateList} />
+                                    change={() => {
+                                        const Tab: HTMLElement | null = document.querySelector(`li[data-value="surveys"]`);
+                                        Tab && Tab.click();
+                                    }}
+                                    mines={mine}
+                                    update={refetch} />
                             </div> :
                             <div className="SubGrid " key={index}>
                                 <PoolCard
                                     pool={element}
                                     key={index}
-                                    change={() => { const Tab: HTMLElement | null = document.querySelector(`li[data-value="pools"]`); Tab && Tab.click(); }}
-                                    mines={mines}
-                                    update={UpdateList} /></div>
+                                    change={() => {
+                                        const Tab: HTMLElement | null = document.querySelector(`li[data-value="pools"]`);
+                                        Tab && Tab.click();
+                                    }}
+                                    mines={mine}
+                                    update={refetch} />
+                            </div>
                     )}
-
+                <LoadMoreButton
+                    isBottom={isBottom}
+                    hasNextPage={hasNextPage}
+                    handleScroll={() => handleScroll()} />
             </main>
 
-            <NavBarBottom addBtn={true} color={'orange'} />
+            <NavBarBottom
+                addBtn={true}
+                color={'orange'} />
         </div>
     );
 }

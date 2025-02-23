@@ -79,9 +79,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                 alt={title || 'image'}
                                 width={100}
                                 height={100}
-                                className={image || imgBlob ? "h-full w-full object-cover" : "hidden"}
-                            />
-
+                                className={image || imgBlob ? "h-full w-full object-cover" : "hidden"} />
                         </CardHeader>
                         <CardBody className='FixCardBody'>
                             <div className='CardOverFlow gap-3'>

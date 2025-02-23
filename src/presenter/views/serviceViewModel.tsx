@@ -54,4 +54,3 @@ export const serviceIdViewModel = () => {
     return { service, isLoading, error, refetch }
   }
 }
-

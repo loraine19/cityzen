@@ -129,7 +129,7 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
             <Popover placement="bottom-start">
                 <PopoverHandler>
                     <Avatar
-                        src={image as string || "./person.png"}
+                        src={image as string || "../image/person.png"}
                         size={size as any}
                         alt="avatar"
                         withBorder={true}
@@ -138,8 +138,9 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
                 <PopoverContent className="w-72">
                     <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
                         <Avatar
-                            src={image as string}
-                            size="sm" alt="avatar"
+                            src={image as string || "../image/person.png"}
+                            size="sm"
+                            alt="avatar"
                             withBorder={true} />
                         <div className="flex flex-col">
                             <Typography

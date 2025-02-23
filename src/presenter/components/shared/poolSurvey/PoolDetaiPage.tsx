@@ -1,59 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Action } from '../../../../domain/entities/frontEntities';
-import { Pool } from '../../../../domain/entities/Pool';
 import { PoolService } from '../../../../domain/repositoriesBase/PoolRepository';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import PoolDetailCard from './poolSurveyCards/PoolDetailCard';
-import { useUserStore } from '../../../../application/stores/user.store';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
+import DI from '../../../../di/ioc';
+import { Skeleton } from '../../common/Skeleton';
 
 export default function PoolDetailPage() {
     const { id } = useParams();
-    const { user } = useUserStore()
-    const userId: number = user.id
-    const [element, setElement] = useState<Pool>({} as Pool);
-    const [isMine, setIsMine] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
+    const idS = id ? parseInt(id) : 0
+    const poolIdViewModelFactory = DI.resolve('poolIdViewModel');
+    const { pool, isLoading } = poolIdViewModelFactory(idS);
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => setOpen(!open);
-    const { getPoolById, deletePool } = new PoolService();
-    const myActions = GenereMyActions(element, "cagnotte", deletePool, handleOpen)
-
-
-    const fetch = async () => {
-        const idS = id ? parseInt(id) : 0;
-        const result = await getPoolById(idS);
-        setElement(result);
-        setIsMine(result.userId === userId);
-        setLoading(false);
-    };
-
-    useEffect(() => {
-        fetch();
-    }, []);
+    const { deletePool } = new PoolService();
+    const myActions = pool && GenereMyActions(pool, "cagnotte", deletePool, handleOpen)
 
     //// ACTIONS
     const Actions: Action[] = [
         {
             icon: 'Sans avis',
             title: "Confirmer votre vote neutre ",
-            body: `Pour la cagnotte ${element.title} `,
-            function: () => { window.open(`tel:${element.User?.Profile.phone}`); handleOpen(); },
+            body: `Pour la cagnotte ${pool?.title} `,
+            function: () => { window.open(`tel:${pool?.User?.Profile.phone}`); handleOpen(); },
         },
         {
             icon: 'Voter contre',
             title: 'Confirmer votre vote contre',
-            body: `Pour la cagnotte ${element.title} `,
-            function: () => { window.open(`mailto:${element.User?.email}?subject=${element.title}`); handleOpen(); },
+            body: `Pour la cagnotte ${pool?.title} `,
+            function: () => { window.open(`mailto:${pool?.User?.email}?subject=${pool?.title}`); handleOpen(); },
         },
         {
             icon: 'Voter Pour',
             title: 'Confirmer votre vote pour',
-            body: `Pour la cagnotte ${element.title} `,
-            function: () => { window.open(`mailto:${element.User?.email}?subject=${element.title}`); handleOpen(); },
+            body: `Pour la cagnotte ${pool?.title} `,
+            function: () => { window.open(`mailto:${pool?.User?.email}?subject=${pool?.title}`); handleOpen(); },
         },
     ]
 
@@ -61,17 +46,19 @@ export default function PoolDetailPage() {
         <div className="Body orange">
             <header className="px-4">
                 <NavBarTop />
-                <SubHeader type={`Cagnotte `} link={`/sondage`} closeBtn />
+                <SubHeader
+                    type={`Cagnotte `}
+                    link={`/sondage`} closeBtn />
             </header>
             <main>
-                {loading ?
-                    <div>Loading...</div> :
+                {isLoading || !pool ?
+                    <Skeleton /> :
                     <div className="flex pt-6 pb-1 h-full">
-                        <PoolDetailCard element={element} mines={isMine} change={() => { }} />
+                        <PoolDetailCard pool={pool} />
                     </div>}
             </main>
 
-            {isMine ?
+            {pool?.mine ?
                 <CTAMines actions={myActions} /> :
                 <CTAMines actions={Actions} />}
         </div>

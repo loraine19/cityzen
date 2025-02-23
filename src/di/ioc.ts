@@ -25,7 +25,7 @@ import { ResetPasswordService } from '../infrastructure/services/resetPasswordSe
 import { ServiceApi } from '../infrastructure/providers/http/serviceApi';
 import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/ServiceRespositoryImpl';
 import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
-import { GetUserMeUseCase } from '../application/useCases/user.usecase';
+import { GetUserCountUseCase, GetUserMeUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
 import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
@@ -50,6 +50,10 @@ import { postIdViewModel, postViewModel } from '../presenter/views/postViewModel
 import { LikeRepositoryImpl } from '../infrastructure/repositoriesImpl/LikeRespositoryImpl';
 import { ToogleLikeUseCase } from '../application/useCases/like.useCase';
 import { LikeApi } from '../infrastructure/providers/http/likeApi';
+import { PoolSurveyRepositoryImpl } from '../infrastructure/repositoriesImpl/PoolSurveyRespositoryImpl';
+import { PoolSurveyApi } from '../infrastructure/providers/http/poolSurveyApi';
+import { GetPoolByIdUseCase, GetPoolsSurveysUseCase, GetSurveyByIdUseCase, PostPoolUseCase } from '../application/useCases/poolSurvey.useCase';
+import { poolIdViewModel, poolSurveyViewModel, surveyIdViewModel } from '../presenter/views/poolSurveyViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -87,6 +91,7 @@ container.register({
 
     ////USER
     getUserMeUseCase: asClass(GetUserMeUseCase),
+    getUserCountUseCase: asClass(GetUserCountUseCase),
     userRepository: asClass(UserRepositoryImpl),
     userService: asClass(UserService),
     userData: asClass(UserApi),
@@ -167,6 +172,18 @@ container.register({
     toogleLikeUseCase: asClass(ToogleLikeUseCase),
     likeRepository: asClass(LikeRepositoryImpl),
     likeData: asClass(LikeApi),
+
+    ////POOLSURVEY
+    poolSurveyRepository: asClass(PoolSurveyRepositoryImpl),
+    poolSurveyData: asClass(PoolSurveyApi),
+    getPoolsSurveysUseCase: asClass(GetPoolsSurveysUseCase),
+    getPoolByIdUseCase: asClass(GetPoolByIdUseCase),
+    getSurveyByIdUseCase: asClass(GetSurveyByIdUseCase),
+    postPoolUseCase: asClass(PostPoolUseCase),
+    poolSurveyViewModel: asFunction(poolSurveyViewModel),
+    poolIdViewModel: asFunction(poolIdViewModel),
+    surveyIdViewModel: asFunction(surveyIdViewModel),
+
 
 });
 

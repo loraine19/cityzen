@@ -1,6 +1,5 @@
 import { ApiService } from "../../infrastructure/providers/http/apiService";
-import { Pool, PoolDTO } from "../entities/Pool";
-import { Survey } from "../entities/Survey";
+import { Pool, PoolDTO, Survey } from "../entities/PoolSurvey";
 
 const api: ApiService = new ApiService()
 const dataTypeComb = "pools-surveys";

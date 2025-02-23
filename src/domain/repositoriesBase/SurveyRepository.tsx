@@ -1,5 +1,5 @@
 import { ApiService } from "../../infrastructure/providers/http/apiService";
-import { Survey, SurveyDTO } from "../entities/Survey";
+import { Survey, SurveyDTO } from "../entities/PoolSurvey";
 
 const api: ApiService = new ApiService();
 const dataType = "surveys";
