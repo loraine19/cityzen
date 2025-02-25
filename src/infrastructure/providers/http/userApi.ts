@@ -14,6 +14,10 @@ export class UserApi {
         return this.api.get(`${this.dataType}/modos`);
     }
 
+    async getUsers(): Promise<User[]> {
+        return this.api.get(`${this.dataType}`);
+    }
+
     async getUserCount(): Promise<number> {
         return this.api.get(`${this.dataType}/count`);
     }

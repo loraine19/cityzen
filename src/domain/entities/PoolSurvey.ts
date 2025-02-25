@@ -50,7 +50,6 @@ export enum SurveyCategory {
     CATEGORY_4 = 'je c pas 4',
     CATEGORY_5 = 'autre',
 }
-export const surveyCategory = Object.values(SurveyCategory).filter(category => typeof category === 'string');
 
 
 export class SurveyDTO {

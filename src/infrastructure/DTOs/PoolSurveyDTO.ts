@@ -8,7 +8,13 @@ export class SurveyDTO {
     title?: string;
     category?: SurveyCategory;
     constructor(init?: Partial<SurveyDTO>) {
-        Object.assign(this, init);
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof SurveyDTO];
+                }
+            });
+        }
     }
 }
 
@@ -17,9 +23,16 @@ export class PoolDTO {
     name?: string;
     title?: string;
     userId?: number;
-    userIdBenef?: number;
+    userIdBenef: number;
 
-    constructor(init?: Partial<PoolDTO>) {
-        Object.assign(this, init);
+    constructor(init: Partial<PoolDTO>) {
+        this.userIdBenef = parseInt(init.userIdBenef?.toString() || '0');
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof PoolDTO];
+                }
+            });
+        }
     }
 }

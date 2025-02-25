@@ -84,7 +84,8 @@ export default function DashboardPage() {
                                         <Icon
                                             link="/myprofile"
                                             icon="person_edit"
-                                            color="cyan" fill bg
+                                            color="cyan"
+                                            fill bg
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
@@ -125,8 +126,10 @@ export default function DashboardPage() {
                                             color="orange"
                                             title="voir mes notifications" />
                                         <div>
-                                            <Typography color="blue-gray">
-                                                {notifList && userNotif > 0 ? `${userNotif} notifications` : 'pas de notifications'}
+                                            <Typography
+                                                color="blue-gray">
+                                                {notifList && userNotif > 0 ?
+                                                    `${userNotif} notifications` : 'pas de notifications'}
                                             </Typography>
                                         </div>
                                     </div>
@@ -135,7 +138,10 @@ export default function DashboardPage() {
                                             <div className="w-full font-light text-sm flex px-1 justify-between"
                                                 key={index}>
                                                 <p>
-                                                    <span className="text-orange-800 capitalize font-normal">{notif?.elementType}</span> :
+                                                    <span
+                                                        className="text-orange-800 capitalize font-normal">
+                                                        {notif?.elementType}
+                                                    </span> :
                                                     {notif?.title}
                                                 </p>
                                                 <Icon
@@ -173,7 +179,7 @@ export default function DashboardPage() {
                             </Card>
                         </div>
                         <div className={eventClasse}>
-                            <Card className="h-full flex-1  gray100">
+                            <Card className="h-full flex-1  gray100 ">
                                 <CardBody className="h-full flex flex-col p-4 ">
                                     <CalendarComp logo={true} />
                                 </CardBody>

@@ -33,12 +33,13 @@ const EventListPage = lazy(() => import("./presenter/components/shared/event/Eve
 const FlagCreatePage = lazy(() => import("./presenter/components/shared/flag/FlagCreatePage"));
 const FlagEditPage = lazy(() => import("./presenter/components/shared/flag/FlagEditPage"));
 const FlagPage = lazy(() => import("./presenter/components/shared/flag/FlagPage"));
-const SurveyCreatePage = lazy(() => import("./presenter/components/shared/poolSurvey/SurveyCreatePage"));
-const SurveyDetailPage = lazy(() => import("./presenter/components/shared/poolSurvey/SurveyDetailPage"));
-const SurveyListPage = lazy(() => import("./presenter/components/shared/poolSurvey/SurveyListPage"));
+const VoteCreatePage = lazy(() => import("./presenter/components/shared/vote/VoteCreatePage"));
+const SurveyDetailPage = lazy(() => import("./presenter/components/shared/vote/SurveyDetailPage"));
+const VoteListPage = lazy(() => import("./presenter/components/shared/vote/VoteListPage"));
+const VoteEditPage = lazy(() => import("./presenter/components/shared/vote/VoteEditPage"));
 const MyInfosPage = lazy(() => import("./presenter/components/shared/myInfos/MyInfosPage"));
 const NotificationPage = lazy(() => import("./presenter/components/shared/myInfos/NotificationPage"));
-const PoolDetailPage = lazy(() => import("./presenter/components/shared/poolSurvey/PoolDetaiPage"));
+const PoolDetailPage = lazy(() => import("./presenter/components/shared/vote/PoolDetaiPage"));
 
 
 function App() {
@@ -90,12 +91,11 @@ function App() {
                                 <Route path="/flag/edit/:target/:id" element={<FlagEditPage />} />
                                 <Route path="/flag" element={<FlagPage />} />
 
-                                <Route path="/sondage" element={<SurveyListPage />} />
-                                <Route path="/sondage/:id" element={<SurveyDetailPage />} />
-                                <Route path="/sondage/edit/:id" element={<SurveyCreatePage />} />
-                                <Route path="/sondage/create" element={<SurveyCreatePage />} />
+                                <Route path="/vote" element={<VoteListPage />} />
+                                <Route path="/vote/:target/edit/:id" element={<VoteEditPage />} />
+                                <Route path="/vote/create" element={<VoteCreatePage />} />
                                 <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
-                                <Route path="/cagnotte/edit/:id" element={<SurveyCreatePage />} />
+                                <Route path="/sondage/:id" element={<SurveyDetailPage />} />
 
                                 <Route path="/annonce" element={<AnnounceListPage />} />
                                 <Route path="/annonce/:id" element={<AnnounceDetailPage />} />

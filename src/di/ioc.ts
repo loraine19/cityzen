@@ -25,7 +25,7 @@ import { ResetPasswordService } from '../infrastructure/services/resetPasswordSe
 import { ServiceApi } from '../infrastructure/providers/http/serviceApi';
 import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/ServiceRespositoryImpl';
 import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
-import { GetUserCountUseCase, GetUserMeUseCase } from '../application/useCases/user.usecase';
+import { GetUserCountUseCase, GetUserMeUseCase, GetUsersModosUseCase, GetUsersUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
 import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
@@ -53,7 +53,7 @@ import { LikeApi } from '../infrastructure/providers/http/likeApi';
 import { PoolSurveyRepositoryImpl } from '../infrastructure/repositoriesImpl/PoolSurveyRespositoryImpl';
 import { PoolSurveyApi } from '../infrastructure/providers/http/poolSurveyApi';
 import { DeletePoolUseCase, DeleteSurveyUseCase, GetPoolByIdUseCase, GetPoolsSurveysUseCase, GetSurveyByIdUseCase, PostPoolUseCase, UpdatePoolUseCase, UpdateSurveyUseCase } from '../application/useCases/poolSurvey.useCase';
-import { poolIdViewModel, poolSurveyViewModel, surveyIdViewModel } from '../presenter/views/poolSurveyViewModel';
+import { poolIdViewModel, surveyIdViewModel, voteViewModel } from '../presenter/views/voteViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -92,6 +92,8 @@ container.register({
     ////USER
     getUserMeUseCase: asClass(GetUserMeUseCase),
     getUserCountUseCase: asClass(GetUserCountUseCase),
+    getUsersUseCase: asClass(GetUsersUseCase),
+    getUsersModosUseCase: asClass(GetUsersModosUseCase),
     userRepository: asClass(UserRepositoryImpl),
     userService: asClass(UserService),
     userData: asClass(UserApi),
@@ -173,7 +175,7 @@ container.register({
     likeRepository: asClass(LikeRepositoryImpl),
     likeData: asClass(LikeApi),
 
-    ////POOLSURVEY
+    ////VOTE
     poolSurveyRepository: asClass(PoolSurveyRepositoryImpl),
     poolSurveyData: asClass(PoolSurveyApi),
     getPoolsSurveysUseCase: asClass(GetPoolsSurveysUseCase),
@@ -184,7 +186,7 @@ container.register({
     deletePoolUseCase: asClass(DeletePoolUseCase),
     updateSurveyUseCase: asClass(UpdateSurveyUseCase),
     deleteSurveyUseCase: asClass(DeleteSurveyUseCase),
-    poolSurveyViewModel: asFunction(poolSurveyViewModel),
+    voteViewModel: asFunction(voteViewModel),
     poolIdViewModel: asFunction(poolIdViewModel),
     surveyIdViewModel: asFunction(surveyIdViewModel),
 

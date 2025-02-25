@@ -30,3 +30,28 @@ export class GetUserCountUseCase {
 
 }
 
+
+export class GetUsersUseCase {
+    private userRepository: UserRepositoryBase;
+
+    constructor({ userRepository }: { userRepository: UserRepositoryBase }) {
+        this.userRepository = userRepository;
+    }
+
+    public async execute(): Promise<User[]> {
+        return this.userRepository.getUsers()
+    }
+}
+
+export class GetUsersModosUseCase {
+    private userRepository: UserRepositoryBase;
+
+    constructor({ userRepository }: { userRepository: UserRepositoryBase }) {
+        this.userRepository = userRepository;
+    }
+
+    public async execute(): Promise<User[]> {
+        return this.userRepository.getUsersModos()
+    }
+}
+

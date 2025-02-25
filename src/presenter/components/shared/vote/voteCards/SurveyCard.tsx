@@ -18,7 +18,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
     const disabledEditCTA: boolean = survey?.pourcent >= 100 ? true : false
     const ended: boolean = survey?.pourcent >= 100 || endDays <= 0 ? true : false
     const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
-    const actions = GenereMyActions(survey, "survey", deleteSurvey)
+    const actions = GenereMyActions(survey, "vote/sondage", deleteSurvey)
     const haveImage = survey?.image ? true : false
 
 

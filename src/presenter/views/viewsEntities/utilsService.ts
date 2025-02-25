@@ -2,7 +2,7 @@ import { Flag } from "../../../domain/entities/Flag";
 import { Action, Label, defaultEventImage } from "../../../domain/entities/frontEntities";
 import { Issue } from "../../../domain/entities/Issue";
 import { notifCategory } from "../../../domain/entities/Notif";
-import { Pool, Survey, surveyCategory } from "../../../domain/entities/PoolSurvey";
+import { Pool, Survey } from "../../../domain/entities/PoolSurvey";
 import { Post, postCategory } from "../../../domain/entities/Post";
 import { Profile } from "../../../domain/entities/Profile";
 import { Service } from "../../../domain/entities/Service";
@@ -142,8 +142,6 @@ export const flagTargets = generateLabels(labelsFlagTarget, labelsFlagTarget);
 const reasonsFlag = ["illicite", "haineux", "dangereux", "irrespecteux", "atteinte à la vie privé"]
 export const flagReasons = generateLabels(reasonsFlag, reasonsFlag);
 
-const labelsSurvey = ['sécurité', 'environnement', 'régles', 'suggestion', 'autre'];
-export const surveyCategories = generateLabels(surveyCategory, labelsSurvey);
 
 const labelsNotif = ['annonce', 'evenement', 'service', 'litige', 'sondage', 'cagnotte', 'flag']
 export const notifCategories = generateLabels(notifCategory, labelsNotif);

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import SurveyDetailCard from './poolSurveyCards/SurveyDetailCard';
+import SurveyDetailCard from './voteCards/SurveyDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import { Skeleton } from '../../common/Skeleton';
 import { GenereMyActions, } from '../../../views/viewsEntities/utilsService';
@@ -18,7 +18,7 @@ export default function SurveyDetailPage() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
     const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
-    const myActions: Action[] = GenereMyActions(survey, "sondage", deleteSurvey, handleOpen)
+    const myActions: Action[] = GenereMyActions(survey, "vote/sondage", deleteSurvey, handleOpen)
 
 
     const Actions: Action[] = [
@@ -48,6 +48,7 @@ export default function SurveyDetailPage() {
                 <NavBarTop />
                 <SubHeader
                     type={`sondage ${survey?.categoryS}`}
+                    link='vote'
                     closeBtn />
             </header>
             <main>

@@ -2,29 +2,30 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
-import { PoolSurveyFilter, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
-import { PoolCard } from "./poolSurveyCards/PoolCard";
-import { SurveyCard } from "./poolSurveyCards/SurveyCard";
+import { PoolCard } from "./voteCards/PoolCard";
+import { SurveyCard } from "./voteCards/SurveyCard";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { getLabel } from "../../../views/viewsEntities/utilsService";
 import DI from "../../../../di/ioc";
+
+import { PoolSurveyFilter, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
 
 
-export default function SurveyListPage() {
+export default function VoteListPage() {
     const [notif, setNotif] = useState<string>('');
     const [tabSelected] = useState<string>('');
     const [mine, setMine] = useState<boolean>(false)
     const [step, setStep] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
-    const poolSurveyViewModelFactory = DI.resolve('poolSurveyViewModel');
-    const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = poolSurveyViewModelFactory(filter, step);
+    const voteViewModelFactory = DI.resolve('voteViewModel');
+    const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = voteViewModelFactory(filter, step);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), step: Params.get("step") }
 

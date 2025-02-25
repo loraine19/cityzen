@@ -2,8 +2,8 @@ import { Pool } from "./PoolSurvey";
 import { User } from "./User";
 
 export enum VoteTarget {
-    SURVEY,
-    POOL
+    SURVEY = 'sondage',
+    POOL = 'cagnotte'
 }
 
 export enum VoteOpinion {

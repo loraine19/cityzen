@@ -3,7 +3,7 @@ import DI from '../../di/ioc'
 import { Pool, Survey } from '../../domain/entities/PoolSurvey';
 import { PoolSurveyView } from './viewsEntities/poolSurveyViewEntity';
 
-export const poolSurveyViewModel = () => {
+export const voteViewModel = () => {
   return (filter: string, step: string) => {
 
     const { data: user, isLoading: userLoading } = useQuery({

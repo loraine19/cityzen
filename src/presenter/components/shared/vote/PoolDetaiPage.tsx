@@ -4,7 +4,7 @@ import { Action } from '../../../../domain/entities/frontEntities';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import PoolDetailCard from './poolSurveyCards/PoolDetailCard';
+import PoolDetailCard from './voteCards/PoolDetailCard';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
@@ -17,7 +17,7 @@ export default function PoolDetailPage() {
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => setOpen(!open);
     const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
-    const myActions = pool && GenereMyActions(pool, "cagnotte", deletePool, handleOpen)
+    const myActions = pool && GenereMyActions(pool, "vote/cagnotte", deletePool, handleOpen)
 
     //// ACTIONS
     const Actions: Action[] = [
@@ -47,7 +47,8 @@ export default function PoolDetailPage() {
                 <NavBarTop />
                 <SubHeader
                     type={`Cagnotte `}
-                    link={`/sondage`} closeBtn />
+                    link={`vote`}
+                    closeBtn />
             </header>
             <main>
                 {isLoading || !pool ?

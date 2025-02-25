@@ -17,38 +17,43 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
     const handleNavigate = () => navigate(`/${type}/create`);
 
     const navItems = [
-        { to: "/", icon: "home", label: "Home", color: "blue-gray" },
-        { to: "/service", icon: "partner_exchange", label: "Service", color: "cyan" },
-        { to: "/evenement", icon: "event", label: "Évenement", color: "cyan" },
-        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "orange" },
-        { to: "/sondage", icon: "ballot", label: "Sondage", color: "orange" },
+        { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-600`" },
+        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-cyan-600" },
+        { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-600" },
+        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-600" },
+        { to: "/vote", icon: "ballot", label: "Vote", color: "!border-orange-600" },
     ];
 
     return (
         <footer className="pt-0.5 pb-2 px-2 z-30">
-            <Navbar className="flex rounded-full shadow-lg h-16 items-center justify-between p-0 !bg-white">
-                <div className="w-full self-center pl-4 pr-1 h-full -mb-1">
+            <Navbar className="flex rounded-full shadow-lg h-16 items-center justify-between p-0 !bg-white ">
+                <div className="w-full self-center px-4  h-full -mb-1">
                     <ul className="flex flex-row justify-around gap-4 pl-2 h-full">
                         {navItems.map(({ to, icon, label, color }) => (
+
                             <Typography
                                 key={to}
                                 as="li"
                                 variant="small"
                                 color="blue-gray"
-                                className="flex flex-1 justify-center items-center font-medium"
+                                className={`flex flex-1 justify-center items-center font-medium `}
                             >
                                 <NavLink
                                     to={to}
-                                    className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full  ${isActive ? `border-b-4 border-${color}-600` : ''}`}>
-                                    <span className="icon notranslate UCyan">{icon}</span>
-                                    <span className="text-[0.6rem] -mt-1 font-light lg:block lg:text-sm">{label}</span>
+                                    className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full ${color} ${isActive ? `border-b-4 ` : ''}`}>
+                                    <span className="icon notranslate">
+                                        {icon}
+                                    </span>
+                                    <span className="text-[0.6rem] -mt-1 font-light lg:block lg:text-sm">
+                                        {label}
+                                    </span>
                                 </NavLink>
                             </Typography>
                         ))}
                     </ul>
                 </div>
                 {addBtn && (
-                    <div className="flex p-2">
+                    <div className="flex p-2 -ml-2">
                         <SpeedDial offset={10}>
                             <SpeedDialHandler>
                                 <Button

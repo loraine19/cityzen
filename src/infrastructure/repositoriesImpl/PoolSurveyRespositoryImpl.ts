@@ -1,6 +1,7 @@
 import { ApiServiceI } from "../providers/http/apiService";
 import { PoolSurveyRepositoryBase } from "../../domain/repositoriesBase/PoolSurveyRepositoryBase";
 import { Pool, PoolSurveyPage, Survey } from "../../domain/entities/PoolSurvey";
+import { PoolDTO, SurveyDTO } from "../DTOs/PoolSurveyDTO";
 
 interface IData extends PoolSurveyRepositoryBase {
     api: ApiServiceI;
@@ -31,11 +32,11 @@ export class PoolSurveyRepositoryImpl implements PoolSurveyRepositoryBase {
         return this.poolSurveyData.postSurvey(data);
     }
 
-    public async updatePool(id: number, data: Pool): Promise<Pool> {
+    public async updatePool(id: number, data: PoolDTO): Promise<Pool> {
         return this.poolSurveyData.updatePool(id, data);
     }
 
-    public async updateSurvey(id: number, data: Survey): Promise<Survey> {
+    public async updateSurvey(id: number, data: SurveyDTO): Promise<Survey> {
         return this.poolSurveyData.updateSurvey(id, data);
     }
 

@@ -27,10 +27,8 @@ export function PoolCard({
     const ended: boolean = pool.pourcent < 100 && endDays <= 0 ? true : false
     const end: Date = new Date(new Date(pool.createdAt).getTime() + 15 * dayMS)
     const disabledEditCTA: boolean = pool.pourcent >= 100 ? true : false
-
     const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
-
-    const actions: Action[] = GenereMyActions(pool, "pool", deletePool)
+    const actions: Action[] = GenereMyActions(pool, "vote/cagnotte", deletePool)
 
 
     return (

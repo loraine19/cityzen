@@ -19,7 +19,7 @@ export default function NavBarTop() {
                             className="BgUser !shadow cursor-pointer "
                             variant="circular"
                             alt={firstName || 'user'}
-                            src={image ? image as string : '../image/person.svg'}
+                            src={image ? image as string : '../../../image/person.svg'}
                         />
                     </MenuHandler>
                     <MenuList className="!rounded-xl !shadow-xl ">
