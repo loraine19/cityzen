@@ -9,7 +9,11 @@ import { useNotificationStore } from "../../../../../application/stores/notifica
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 
-type EventCardProps = { event: EventView, refetch?: () => void, change: (e: any) => void, mines?: boolean }
+type EventCardProps = {
+    event: EventView, refetch?: () => void,
+    change: (e: any) => void,
+    mines?: boolean
+}
 
 export function EventCard({ event: initialEvent, change, mines, refetch }: EventCardProps) {
     const [event, setEvent] = useState<EventView>(initialEvent);
@@ -23,10 +27,14 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
 
     return (
         <Card className="FixCard w-respLarge">
-            <CardHeader className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"} floated={haveImage}>
-                <div className={`${haveImage ? "ChipDiv flex-col justify-between !h-full " : "ChipDivNoImage"}`}>
+            <CardHeader
+                className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
+                floated={haveImage}>
+                <div
+                    className={`${haveImage ? "ChipDiv flex-col justify-between !h-full " : "ChipDivNoImage"}`}>
                     <div className="flex w-full justify-between items-center gap-2">
-                        <button onClick={change}>
+                        <button
+                            onClick={change}>
                             <Chip
                                 size='sm'
                                 value={label}
@@ -47,7 +55,10 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                                 label={pourcent > 100 ? "Validé" : " "} />
                         ) : (
                             <div className="flex flex-1 bg-white/70 rounded-full h-max items-center justify-center">
-                                <Typography className="mb-0 text-xs font-medium">pas encore de participants</Typography>
+                                <Typography
+                                    className="mb-0 text-xs font-medium">
+                                    pas encore de participants
+                                </Typography>
                             </div>
                         )}
                     </div>
@@ -104,19 +115,21 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             value={participantsMin}
                             variant="ghost"
                             className="rounded-full h-max flex items-center px-4 gap-2"
-                            icon={<Icon
-                                icon="person"
-                                fill={event?.Igo}
-                                color={event?.Igo ? "cyan" : "gray"}
-                                style="-mt-2 pl-2"
-                                title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
+                            icon={
+                                <Icon
+                                    icon="person"
+                                    fill={event?.Igo}
+                                    color={event?.Igo ? "cyan" : "gray"}
+                                    style="-mt-2 pl-2"
+                                    title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>
                     <Icon
                         icon="arrow_circle_right"
                         link={`/evenement/${id}`}
                         title={`voir les details de ${title}`}
-                        size="4xl px-1" fill />
+                        size="4xl px-1"
+                        fill />
                 </div>
             </CardFooter>
         </Card>

@@ -155,7 +155,7 @@ export default function SurveyListPage() {
                     )) :
                     poolsSurveys.map((element: PoolSurveyView, index: number) =>
                         element.typeS === "SURVEY" ?
-                            <div className="SubGrid" key={index}>
+                            <div className="SubGrid" key={'div' + index}>
                                 <SurveyCard
                                     survey={element}
                                     key={index}
@@ -166,7 +166,7 @@ export default function SurveyListPage() {
                                     mines={mine}
                                     update={refetch} />
                             </div> :
-                            <div className="SubGrid " key={index}>
+                            <div className="SubGrid " key={'div' + index}>
                                 <PoolCard
                                     pool={element}
                                     key={index}

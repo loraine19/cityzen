@@ -1,8 +1,9 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, } from "@material-tailwind/react";
-import { ProgressSmallbar, ProfileDiv, Icon, Title } from "../../../common/SmallComps";
+import { ProfileDiv, Icon, Title } from "../../../common/SmallComps";
 import { DateChip } from "../../../common/ChipDate";
 import { dayMS } from "../../../../../domain/entities/frontEntities";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
+import { ProgressBar } from "../../../common/ProgressBar";
 
 type Props = { survey: PoolSurveyView }
 
@@ -13,7 +14,7 @@ export default function SurveyDetailCard({ survey }: Props) {
     const ended: boolean = end < now || survey?.pourcent >= 100 ? true : false
 
     return (
-        <>
+        <div className="pt-6 pb-1 h-full flex">
             <Card className="FixCard w-respLarge" >
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
@@ -34,7 +35,7 @@ export default function SurveyDetailCard({ survey }: Props) {
                     </div>
                     {survey?.image &&
                         <img
-                            src={survey?.image as any}
+                            src={survey?.image as string}
                             alt={survey?.title}
                             className="h-full w-full object-cover" />}
                 </CardHeader>
@@ -52,9 +53,9 @@ export default function SurveyDetailCard({ survey }: Props) {
                             {survey?.description}
                         </Typography>
                     </div>
-                    <ProgressSmallbar
+                    <ProgressBar
                         value={survey?.pourcent}
-                        label="Votes pour"
+                        label="votes pour"
                         size={'lg'}
                         needed={survey?.needed} />
                 </CardBody>
@@ -69,12 +70,13 @@ export default function SurveyDetailCard({ survey }: Props) {
                             icon={<Icon
                                 icon="smart_card_reader"
                                 fill={survey?.IVoted} color={survey?.IVoted && "green" || ''}
-                                size="2xl" title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
+                                size="2xl"
+                                title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
                         </Chip>
                     </div>
                 </CardFooter>
             </Card>
-        </>
+        </div>
     )
 }
 

@@ -1,11 +1,12 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
-import { SurveyService } from "../../../../../domain/repositoriesBase/SurveyRepository"
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
+import { Icon, Title } from "../../../common/SmallComps";
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { dayMS } from "../../../../../domain/entities/frontEntities";
 import { DateChip } from "../../../common/ChipDate";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
+import { ProgressBar } from "../../../common/ProgressBar";
+import DI from "../../../../../di/ioc";
 
 
 type SurveyCardProps = { survey: PoolSurveyView, change: () => void, mines?: boolean, update?: () => void }
@@ -16,7 +17,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
     const end = new Date(new Date(survey?.createdAt).getTime() + 15 * dayMS)
     const disabledEditCTA: boolean = survey?.pourcent >= 100 ? true : false
     const ended: boolean = survey?.pourcent >= 100 || endDays <= 0 ? true : false
-    const { deleteSurvey } = new SurveyService()
+    const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
     const actions = GenereMyActions(survey, "survey", deleteSurvey)
     const haveImage = survey?.image ? true : false
 
@@ -55,7 +56,8 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                         className="h-full w-full object-cover"
                     />}
             </CardHeader>
-            <CardBody className={` FixCardBody`}>
+            <CardBody
+                className={` FixCardBody`}>
                 <Title
                     title={survey?.title}
                     flagged={survey?.flagged}
@@ -73,11 +75,10 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
             <CardFooter
                 className="CardFooter items-center gap-6">
                 {!mines ?
-                    <ProgressSmallbar
+                    <ProgressBar
                         value={survey?.pourcent}
                         label="Votes"
-                        needed={survey?.needed}
-                        size="md" />
+                        needed={survey?.needed} />
                     :
                     <ModifBtnStack
                         disabled2={disabledEditCTA}

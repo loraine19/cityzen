@@ -85,7 +85,6 @@ export const surveyIdViewModel = () => {
       queryFn: async () => await getSurveyById.execute(id),
     })
     const survey = userLoading || userCountLoading ? {} : data ? new PoolSurveyView(data, user, userCount) : {} as PoolSurveyView;
-    console.log(getSurveyById, survey, data, isLoading)
     return { survey, isLoading, error, refetch }
   }
 }

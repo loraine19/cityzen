@@ -1,9 +1,10 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, } from "@material-tailwind/react";
 import { Profile } from "../../../../../domain/entities/Profile";
-import { ProfileDiv, ProgressSmallbar, Icon, Title } from "../../../common/SmallComps";
+import { ProfileDiv, Icon, Title } from "../../../common/SmallComps";
 import { dayMS } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
+import { ProgressBar } from "../../../common/ProgressBar";
 
 type PoolDetailCardProps = { pool: PoolSurveyView }
 
@@ -13,7 +14,7 @@ export default function PoolDetailCard({ pool }: PoolDetailCardProps) {
     const ended: boolean = end < now || pool?.pourcent >= 100 ? true : false
 
     return (
-        <>
+        <div className="pt-6 pb-1 h-full flex">
             <Card className="FixCardNoImage w-respLarge" >
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
@@ -44,9 +45,9 @@ export default function PoolDetailCard({ pool }: PoolDetailCardProps) {
                         </Typography>
                         <ProfileDiv
                             profile={pool?.UserBenef?.Profile || {} as Profile}
-                            size={'xl'} />
+                            size={'lg'} />
                     </div>
-                    <ProgressSmallbar
+                    <ProgressBar
                         value={pool?.pourcent}
                         label="votes pour "
                         size={'lg'}
@@ -60,19 +61,19 @@ export default function PoolDetailCard({ pool }: PoolDetailCardProps) {
                         <Chip
                             value={pool.Votes?.length}
                             variant="ghost"
-                            size='lg'
-                            className="rounded-full h-max flex items-center gap-2"
-                            icon={<Icon
-                                icon="smart_card_reader"
-                                fill={pool?.IVoted}
-                                color={pool?.IVoted && "green" || ''}
-                                size="2xl"
-                                title={`  ${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
+                            className="rounded-full h-max flex items-center pr-3 pl-5"
+                            icon={
+                                <Icon
+                                    icon="smart_card_reader"
+                                    fill={pool?.IVoted}
+                                    color={pool?.IVoted && "green" || ''}
+                                    size="2xl"
+                                    title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-2  ml-2" />}>
                         </Chip>
                     </div>
                 </CardFooter>
             </Card>
-        </>
+        </div>
     )
 }
 

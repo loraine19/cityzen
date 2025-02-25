@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Action } from '../../../../domain/entities/frontEntities';
-import { PoolService } from '../../../../domain/repositoriesBase/PoolRepository';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -17,7 +16,7 @@ export default function PoolDetailPage() {
     const { pool, isLoading } = poolIdViewModelFactory(idS);
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => setOpen(!open);
-    const { deletePool } = new PoolService();
+    const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
     const myActions = pool && GenereMyActions(pool, "cagnotte", deletePool, handleOpen)
 
     //// ACTIONS
@@ -53,9 +52,8 @@ export default function PoolDetailPage() {
             <main>
                 {isLoading || !pool ?
                     <Skeleton /> :
-                    <div className="flex pt-6 pb-1 h-full">
-                        <PoolDetailCard pool={pool} />
-                    </div>}
+                    <PoolDetailCard pool={pool} />
+                }
             </main>
 
             {pool?.mine ?

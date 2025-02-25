@@ -1,12 +1,13 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
 import { Icon, Title } from '../../../common/SmallComps'
 import { Profile } from "../../../../../domain/entities/Profile";
-import { PoolService } from "../../../../../domain/repositoriesBase/PoolRepository";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { ProfileDiv, ProgressSmallbar } from "../../../common/SmallComps";
+import { ProfileDiv } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { dayMS, GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
+import { ProgressBar } from "../../../common/ProgressBar";
+import DI from "../../../../../di/ioc";
 
 type PoolCardProps = {
     pool: any,
@@ -26,7 +27,8 @@ export function PoolCard({
     const ended: boolean = pool.pourcent < 100 && endDays <= 0 ? true : false
     const end: Date = new Date(new Date(pool.createdAt).getTime() + 15 * dayMS)
     const disabledEditCTA: boolean = pool.pourcent >= 100 ? true : false
-    const { deletePool } = new PoolService()
+
+    const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
 
     const actions: Action[] = GenereMyActions(pool, "pool", deletePool)
 
@@ -66,9 +68,9 @@ export function PoolCard({
             <CardFooter
                 className="CardFooter items-center gap-6">
                 {!mines ?
-                    <ProgressSmallbar
+                    <ProgressBar
                         value={pool.pourcent}
-                        label="Votes pour"
+                        label="votes pour"
                         needed={pool.needed}
                         size="md" />
                     :

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { SurveyService } from '../../../../domain/repositoriesBase/SurveyRepository';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -18,7 +17,7 @@ export default function SurveyDetailPage() {
     const { survey, isLoading, } = surveyIdViewModelFactory(idS);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
-    const { deleteSurvey } = new SurveyService();
+    const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
     const myActions: Action[] = GenereMyActions(survey, "sondage", deleteSurvey, handleOpen)
 
 
@@ -53,11 +52,12 @@ export default function SurveyDetailPage() {
             </header>
             <main>
                 {isLoading ?
-                    <Skeleton className='!rounded-2xl flex pt-6 pb-1 h-full' /> :
-                    <div className="flex pt-6 pb-1 h-full">
-                        <SurveyDetailCard
-                            survey={survey} />
-                    </div>}
+                    <Skeleton
+                        className='!rounded-2xl flex pt-6 pb-1 h-full' /> :
+
+                    <SurveyDetailCard
+                        survey={survey} />
+                }
             </main>
             <footer>
                 {survey?.mine ?

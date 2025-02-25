@@ -1,4 +1,4 @@
-import { PoolDTO } from "../../infrastructure/DTOs/Pool";
+import { PoolDTO } from "../../infrastructure/DTOs/PoolSurveyDTO";
 import { Pool, PoolSurveyPage, Survey } from "../entities/PoolSurvey";
 
 
@@ -10,5 +10,12 @@ export abstract class PoolSurveyRepositoryBase {
     abstract getSurveyById(id: number): Promise<Survey>
 
     abstract postPool(data: PoolDTO): Promise<Pool>;
+    abstract postSurvey(data: PoolDTO): Promise<Survey>;
+
+    abstract updatePool(id: number, data: PoolDTO): Promise<Pool>;
+    abstract updateSurvey(id: number, data: PoolDTO): Promise<Survey>;
+
+    abstract deletePool(id: number): Promise<Pool>;
+    abstract deleteSurvey(id: number): Promise<Survey>;
 
 }

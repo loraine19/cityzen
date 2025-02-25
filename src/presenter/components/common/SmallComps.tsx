@@ -3,7 +3,6 @@ import { Link, } from "react-router-dom";
 import { Profile } from "../../../domain/entities/Profile";
 import { useState } from "react";
 import parse from "html-react-parser";
-import { Skeleton } from "./Skeleton";
 
 
 
@@ -84,73 +83,39 @@ export function ProgressLargebar(props: { value: number, float?: boolean, label?
 }
 
 
-export function ProgressSmallbar(props: { value: number, label?: string, size?: string, needed: number }) {
-    const { value, label, needed } = props
-    const size = props.size ? props.size : "md"
-    const textSize = size === "lg" && 'h5' || size === "md" && 'small' || 'normal';
-    const label2 = ` ${value > 0 ? value + '%' : ''}`
-    const label3 = needed > 0 && value > 0 ? ` il manques ${needed} ${label}` : ''
 
-    return (
-        < div className={`h-max w-full flex -m-1 flex-col px-2 pb-3 gap-2 ${size === "lg" && "mb-2"}`}>
-            <div className=" flex  w-full items-center justify-between gap-2">
-                <Typography
-                    color={value < 1 ? "red" : "blue-gray"}
-                    variant={textSize as any} >
-                    {value > 0 ? `Validé à ` : `Pas encore de ${label}`}
-                </Typography>
-                <Typography
-                    color='blue-gray'
-                    variant={textSize as any}>
-                    {label2}
-                </Typography>
-                <Typography
-                    color="blue-gray"
-                    variant={textSize as any}
-                    className={`flex-1 text-right ${label3 === '' && 'hidden'}`}>
-                    {label3}
-                </Typography>
-            </div>
-            <Progress
-                value={value}
-                color={value > 100 ? "green" : "gray"}
-                size={size as any} />
-        </div>)
-}
 
 
 export function ProfileDiv(props: { profile: Profile, size?: string }) {
-    if (!props.profile) return <Skeleton />
     const { profile } = props
-    const { image, firstName, lastName, skills } = profile;
+
     const size = !props.size ? "sm" : props.size
     return (
         <div className="flex items-center px-0 gap-2">
             <Popover placement="bottom-start">
                 <PopoverHandler>
                     <Avatar
-                        src={image as string || "../image/person.png"}
+                        src={profile?.image as string || "../../image/person.svg"}
                         size={size as any}
                         alt="avatar"
-                        withBorder={true}
-                        className="BgUser" />
+                        className="BgUser shadow" />
                 </PopoverHandler>
                 <PopoverContent className="w-72">
                     <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
                         <Avatar
-                            src={image as string || "../image/person.png"}
+                            src={profile?.image as string || "../../image/person.svg"}
                             size="sm"
                             alt="avatar"
-                            withBorder={true} />
+                            className="BgUser border-blue-gray-500" />
                         <div className="flex flex-col">
                             <Typography
                                 variant="h6"
-                                color="blue-gray">{firstName} {lastName}
+                                color="blue-gray">{profile?.firstName} {profile?.lastName}
                             </Typography>
                             <Typography
                                 variant="small"
                                 className="font-normal text-blue-gray-500">
-                                {skills}
+                                {profile?.skills}
                             </Typography>
                         </div>
                     </div>
@@ -163,7 +128,7 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
                                     size="2xl"
                                     color="blue-gray" />
                             </ListItemPrefix>
-                            {profile.Address?.city}, {profile.Address?.zipcode}
+                            {profile?.Address?.city}, {profile?.Address?.zipcode}
                         </ListItem>
                     </List>
                 </PopoverContent>
@@ -173,12 +138,12 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
                     variant={size === "xl" ? "h5" : "h6"}
                     color="blue-gray"
                     className="border-b border-blue-gray-200 pr-4">
-                    {firstName} {lastName}
+                    {profile?.firstName} {profile?.lastName}
                 </Typography>
                 <Typography
                     variant={size === "xl" ? "h6" : "small"}
                     className="font-normal text-blue-gray-500">
-                    ◦ {skills}
+                    ◦ {profile?.skills}
                 </Typography>
             </div>
         </div>

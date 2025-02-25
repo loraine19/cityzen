@@ -52,7 +52,7 @@ import { ToogleLikeUseCase } from '../application/useCases/like.useCase';
 import { LikeApi } from '../infrastructure/providers/http/likeApi';
 import { PoolSurveyRepositoryImpl } from '../infrastructure/repositoriesImpl/PoolSurveyRespositoryImpl';
 import { PoolSurveyApi } from '../infrastructure/providers/http/poolSurveyApi';
-import { GetPoolByIdUseCase, GetPoolsSurveysUseCase, GetSurveyByIdUseCase, PostPoolUseCase } from '../application/useCases/poolSurvey.useCase';
+import { DeletePoolUseCase, DeleteSurveyUseCase, GetPoolByIdUseCase, GetPoolsSurveysUseCase, GetSurveyByIdUseCase, PostPoolUseCase, UpdatePoolUseCase, UpdateSurveyUseCase } from '../application/useCases/poolSurvey.useCase';
 import { poolIdViewModel, poolSurveyViewModel, surveyIdViewModel } from '../presenter/views/poolSurveyViewModel';
 
 
@@ -180,6 +180,10 @@ container.register({
     getPoolByIdUseCase: asClass(GetPoolByIdUseCase),
     getSurveyByIdUseCase: asClass(GetSurveyByIdUseCase),
     postPoolUseCase: asClass(PostPoolUseCase),
+    updatePoolUseCase: asClass(UpdatePoolUseCase),
+    deletePoolUseCase: asClass(DeletePoolUseCase),
+    updateSurveyUseCase: asClass(UpdateSurveyUseCase),
+    deleteSurveyUseCase: asClass(DeleteSurveyUseCase),
     poolSurveyViewModel: asFunction(poolSurveyViewModel),
     poolIdViewModel: asFunction(poolIdViewModel),
     surveyIdViewModel: asFunction(surveyIdViewModel),
