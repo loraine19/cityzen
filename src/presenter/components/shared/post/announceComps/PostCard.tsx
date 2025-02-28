@@ -54,7 +54,7 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                         <div className="CardOverFlow">
                             <Typography
                                 color="blue-gray"
-                                className="mb-2">
+                                className="!-mt-3">
                                 {description}
                             </Typography>
                         </div>
@@ -88,7 +88,7 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                             icon="arrow_circle_right"
                             link={`/annonce/${id}`}
                             title={`voir les details de l'annonce  ${title}`}
-                            size="4xl px-1"
+                            size="4xl"
                             fill />
                     </div>
                 </CardFooter>

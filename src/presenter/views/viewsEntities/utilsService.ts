@@ -88,8 +88,12 @@ export const formatDateForDB = (date: any) => (new Date(date).toISOString().slic
 export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
+
     'title' in element ? title = element.title ?? 'litige' : 'litige';
-    'id' in element ? id = element.id : element.targetId;
+    'serviceId' in element && (id = element.serviceId);
+    'targetId' in element && (id = element.targetId);
+    'id' in element && (id = element.id);
+
     const actions = [
         {
             icon: handleOpen ? 'Supprimer' : 'close',
@@ -115,8 +119,6 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
 }
 
 //// GENERE LABELS 
-
-
 export const getEnumLabel = (enumArray: any, all?: boolean): Label[] => {
     const allLabel = { label: 'tous', value: '' }
     const array = [...Object.keys(enumArray).map(key => ({
@@ -165,11 +167,12 @@ export const getDefaultImage = (category: string) => {
 
 export const generateContact = (user: User): string => {
     return `
-        <br> <span className="font-medium">${user?.Profile.firstName} </span>
+        <br><span className="font-medium">${user?.Profile.firstName} </span>
         <br> par mail :<br>
-        <a href="mailto:${user?.email}" className="text-orange-500 font-medium underline">${user?.email}</a>
+        <a href="mailto:${user?.email}"className="text-orange-500 font-medium underline">${user?.email}</a>
         <br> ou télèphone :
-        <br> <a href="tel:${user?.Profile.phone}" className="text-orange-500 font-medium underline">${user?.Profile.phone}</a>`;
+        <br><a href="tel:${user?.Profile.phone}" className="text-orange-500 font-medium underline">${user?.Profile.phone}
+        </a>`;
 }
 
 

@@ -4,43 +4,51 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
-import { ServiceDTO } from '../../../../infrastructure/DTOs/ServiceDTO';
 import { VoteForm } from './voteCards/VoteForm';
 import { PoolDTO, SurveyDTO } from '../../../../infrastructure/DTOs/PoolSurveyDTO';
 import { PoolSurveyView } from '../../../views/viewsEntities/poolSurveyViewEntity';
+import { VoteTarget } from '../../../../domain/entities/Vote';
 
 export default function VoteCreatePage() {
     const [initialValues] = useState<PoolSurveyView>({} as PoolSurveyView);
     const postSurvey = async (data: SurveyDTO) => await DI.resolve('postSurveyUseCase').execute(data)
     const postPool = async (data: PoolDTO) => await DI.resolve('postPoolUseCase').execute(data)
-
+    const [type, setType] = useState<VoteTarget>(VoteTarget.SURVEY)
 
     const navigate = useNavigate();
-    const formSchema = object({
+    const formSchemaSurvey = object({
+        typeS: string().required("Type est obligatoire"),
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
     })
 
+    const formSchemaPool = object({
+        typeS: string().required("Type est obligatoire"),
+        userIdBenef: string().required("Le beneficiaire est obligatoire"),
+        title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
+        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+    })
 
 
     const [open, setOpen] = useState(false);
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: initialValues as PoolSurveyView,
-        validationSchema: formSchema,
+        validationSchema: type === VoteTarget.SURVEY ? formSchemaSurvey : formSchemaPool,
         onSubmit: values => {
+            console.log(values)
             formik.values = values
             setOpen(true)
         }
     })
 
     const updateFunction = async () => {
-        if (formik.values.typeS === "sondage") {
+        if (type === VoteTarget.SURVEY) {
             const updateData = new SurveyDTO(formik.values as SurveyDTO)
             return await postSurvey(updateData)
         }
-        else if (formik.values.typeS === "cagnotte") {
+        else if (type === VoteTarget.POOL) {
             const updateData = new PoolDTO(formik.values as PoolDTO)
             return await postPool(updateData)
         }
@@ -56,16 +64,18 @@ export default function VoteCreatePage() {
                 handleConfirm={async () => {
                     const ok = await updateFunction();
                     if (ok) {
-                        navigate(`/sondage/${ok.id}`);
+                        navigate(`/${type === VoteTarget.SURVEY ? 'sondage' : 'cagnotte'}/${ok.id}`);
                         setOpen(false)
                     }
                 }}
-                title={"Confimrer la modification"}
-                element={(JSON.stringify(new ServiceDTO(formik.values as ServiceDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+                title={`Confimrer la création ${type === VoteTarget.SURVEY ? 'du sondage' : 'de la cagnotte'}`}
+                element={Object.entries(type === VoteTarget.SURVEY ? new SurveyDTO(formik.values as SurveyDTO) : new PoolDTO(formik.values as PoolDTO)).map(([key, value]) => (value && `<b>${key} </b>: ${typeof value === 'object' ? value.name : value}<br>`)).join('')} />
 
 
             <VoteForm
                 formik={formik}
+                type={type}
+                setType={(type: VoteTarget) => setType(type)}
             />
         </div >
     )

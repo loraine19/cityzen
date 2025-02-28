@@ -1,49 +1,45 @@
-import { Issue } from "../../../domain/entities/Issue";
+import { Issue, IssuePage, IssueStep } from "../../../domain/entities/Issue";
 import { IssueDTO } from "../../DTOs/IssueDTO";
-import { ApiServiceI, ApiService } from "./apiService";
-
+import { ApiService } from "./apiService";
 
 export class IssueApi {
-    private readonly dataType: string = 'issue';
+    ;
+    private readonly dataType: string = 'issues';
+    private readonly api: ApiService;
 
-    private readonly api: ApiServiceI;
     constructor() { this.api = new ApiService(); }
 
-    async getIssues(): Promise<Issue[]> {
-        return this.api.get(this.dataType)
+    async getIssues(page?: number, step?: string,): Promise<IssuePage> {
+        const pageR = page ? `?page=${page}` : '';
+        const stepR = step ? `&step=${step}` : '';
+        return this.api.get(`${this.dataType}${pageR}${stepR}`)
     }
 
-    async getIssueById(id: number): Promise<Issue> {
-        return this.api.get(`${this.dataType}/${id}`)
+    async getIssueById(serviceId: number): Promise<Issue> {
+        return this.api.get(`${this.dataType}/${serviceId}`)
     }
 
-    async getIssuesMines(): Promise<Issue[]> {
-        return this.api.get(`${this.dataType}/mines`)
-    }
-
-    async getIssuesByResp(id: number): Promise<Issue[]> {
-        return this.api.get(`${this.dataType}/resp/${id}`)
-    }
-
-    async deleteIssue(id: number): Promise<Issue> {
-        return this.api.delete(`${this.dataType}/${id}`)
-    }
-
-    async putIssueFinish(id: number): Promise<Issue> {
-        return this.api.put(`${this.dataType}/finish/${id}`)
-    }
-
-    async patchIssue(id: number, element: IssueDTO): Promise<Issue> {
-        const formData = this.api.createFormData(element);
-        return this.api.patch(`${this.dataType}/${id}`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        })
-    }
-
-    async postIssue(element: IssueDTO): Promise<Issue> {
-        const formData = this.api.createFormData(element);
+    async postIssue(data: IssueDTO): Promise<Issue> {
+        const formData = this.api.createFormData(data);
         return this.api.post(this.dataType, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
     }
+
+    async updateIssue(serviceId: number, data: IssueDTO): Promise<Event> {
+        const formData = this.api.createFormData(data);
+        return this.api.patch(`${this.dataType}/${serviceId}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+    }
+
+    async deleteIssue(id: number): Promise<void> {
+        return this.api.delete(`${this.dataType}/${id}`)
+    }
+
+    async updateIssueStep(id: number, update?: IssueStep): Promise<Issue> {
+        const updateR = update ? `?update=${update}` : '';
+        return this.api.put(`${this.dataType}/${id}${updateR}`)
+    }
+
 }

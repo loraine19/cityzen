@@ -92,7 +92,8 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             icon='calendar_add_on'
                             onClick={() => window.open(agendaLink)}
                             title={`ajouter a mon agenda  : ${title}`}
-                            bg size='2xl'
+                            bg
+                            size='2xl'
                             style='border-2 border-white !px-0 h-9 !w-9 flex-0  -mr-5 hover:z-10'
                             color={Igo ? "cyan" : "gray"} />
                         <AvatarStack avatarDatas={event.Participants} />
@@ -117,10 +118,11 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             className="rounded-full h-max flex items-center px-4 gap-2"
                             icon={
                                 <Icon
+
                                     icon="person"
                                     fill={event?.Igo}
                                     color={event?.Igo ? "cyan" : "gray"}
-                                    style="-mt-2 pl-2"
+                                    style=" pl-2"
                                     title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>
@@ -128,7 +130,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         icon="arrow_circle_right"
                         link={`/evenement/${id}`}
                         title={`voir les details de ${title}`}
-                        size="4xl px-1"
+                        size="4xl"
                         fill />
                 </div>
             </CardFooter>

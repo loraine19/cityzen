@@ -1,4 +1,3 @@
-//import from REACT & REACT ROUTER DOM
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
@@ -13,9 +12,9 @@ import { SkeletonGrid } from "../../common/Skeleton";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { getLabel } from "../../../views/viewsEntities/utilsService";
 import DI from "../../../../di/ioc";
-
 import { PoolSurveyFilter, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
+import { VoteTarget } from "../../../../domain/entities/Vote";
 
 
 export default function VoteListPage() {
@@ -28,6 +27,7 @@ export default function VoteListPage() {
     const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = voteViewModelFactory(filter, step);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), step: Params.get("step") }
+
 
     useEffect(() => {
         setStep(params.step || '');
@@ -124,70 +124,76 @@ export default function VoteListPage() {
     };
 
 
+
+
+
     return (
+        <>
 
-        <div className="Body orange">
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader
-                    qty={count > 0 ? count : 'aucun'}
-                    type={tabSelected === "pools" && "cagnottes" ||
-                        tabSelected === "surveys" && "sondages" || 'sondages ou cagnottes'} />
-                <TabsMenu
-                    labels={tabs} />
-                <CheckCard
-                    categoriesArray={boxArray}
-                    boxSelected={boxSelected}
-                    setBoxSelected={setBoxSelected}
-                    color={"orange-500"} />
-                <div className={(!isLoading && notif ? "w-full flex justify-center p-8" : "hidden")}>
-                    {notif}
-                </div>
-            </header>
+            <div className="Body orange">
+                <header className="px-4">
+                    <NavBarTop />
+                    <SubHeader
+                        qty={count > 0 ? count : 'aucun'}
+                        type={tabSelected === "pools" && "cagnottes" ||
+                            tabSelected === "surveys" && "sondages" || 'sondages ou cagnottes'} />
+                    <TabsMenu
+                        labels={tabs} />
+                    <CheckCard
+                        categoriesArray={boxArray}
+                        boxSelected={boxSelected}
+                        setBoxSelected={setBoxSelected}
+                        color={"orange-500"} />
+                    <div className={(!isLoading && notif ? "w-full flex justify-center p-8" : "hidden")}>
+                        {notif}
+                    </div>
+                </header>
 
-            <main ref={divRef}
-                onScroll={() => handleScroll()}
-                className="Grid">
-                {isLoading || !poolsSurveys ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
-                    )) :
-                    poolsSurveys.map((element: PoolSurveyView, index: number) =>
-                        element.typeS === "SURVEY" ?
-                            <div className="SubGrid" key={'div' + index}>
-                                <SurveyCard
-                                    survey={element}
-                                    key={index}
-                                    change={() => {
-                                        const Tab: HTMLElement | null = document.querySelector(`li[data-value="surveys"]`);
-                                        Tab && Tab.click();
-                                    }}
-                                    mines={mine}
-                                    update={refetch} />
-                            </div> :
-                            <div className="SubGrid " key={'div' + index}>
-                                <PoolCard
-                                    pool={element}
-                                    key={index}
-                                    change={() => {
-                                        const Tab: HTMLElement | null = document.querySelector(`li[data-value="pools"]`);
-                                        Tab && Tab.click();
-                                    }}
-                                    mines={mine}
-                                    update={refetch} />
-                            </div>
-                    )}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={() => handleScroll()} />
-            </main>
+                <main ref={divRef}
+                    onScroll={() => handleScroll()}
+                    className="Grid">
+                    {isLoading || !poolsSurveys ?
+                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
+                                key={index}
+                                count={4} />
+                        )) :
+                        poolsSurveys.map((element: PoolSurveyView, index: number) =>
+                            element.typeS === VoteTarget.SURVEY ?
+                                <div className="SubGrid" key={'div' + index}>
+                                    <SurveyCard
+                                        survey={element}
+                                        key={index}
+                                        change={() => {
+                                            const Tab: HTMLElement | null = document.querySelector(`li[data-value="surveys"]`);
+                                            Tab && Tab.click();
+                                        }}
+                                        mines={mine}
+                                        update={refetch} />
+                                </div> :
+                                <div className="SubGrid " key={'div' + index}>
+                                    <PoolCard
+                                        pool={element}
+                                        key={index}
+                                        change={() => {
+                                            const Tab: HTMLElement | null = document.querySelector(`li[data-value="pools"]`);
+                                            Tab && Tab.click();
+                                        }}
+                                        mines={mine}
+                                        update={refetch}
+                                    />
+                                </div>
+                        )}
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={() => handleScroll()} />
+                </main>
 
-            <NavBarBottom
-                addBtn={true}
-                color={'orange'} />
-        </div>
+                <NavBarBottom
+                    addBtn={true}
+                    color={'orange'} />
+            </div>
+        </>
     );
 }

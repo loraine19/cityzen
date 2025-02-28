@@ -9,7 +9,6 @@ export enum IssueStep {
 export const issueStep = Object.values(IssueStep).filter(step => typeof step === 'string');
 
 export class Issue {
-    id: number = 0;
     serviceId: number = 0;
     Service: Service = new Service();
     userId: number = 0;
@@ -29,5 +28,20 @@ export class Issue {
             Object.assign(this, data);
         }
     }
+}
+
+export type IssuePage = {
+    issues: Issue[],
+    count: number
+}
+
+export enum IssueUpdate {
+    POST_MODO = 'POST_MODO',
+    VALID_MODO = 'VALID_MODO',
+    CANCEL_MODO = 'CANCEL_MODO',
+    POST_MODO_RESP = 'POST_MODO_RESP',
+    VALID_MODORESP = 'VALID_MODO_RESP',
+    CANCEL_MODORESP = 'CANCEL_MODO_RESP',
+    FINISH = 'FINISH',
 }
 

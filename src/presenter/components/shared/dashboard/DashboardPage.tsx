@@ -162,7 +162,8 @@ export default function DashboardPage() {
                                         <Icon
                                             fill
                                             icon="explore_nearby"
-                                            link="/service" size="4xl"
+                                            link="/service"
+                                            size="4xl"
                                             color="cyan"
                                             title="voir mes services" />
                                         <div>

@@ -52,8 +52,13 @@ import { ToogleLikeUseCase } from '../application/useCases/like.useCase';
 import { LikeApi } from '../infrastructure/providers/http/likeApi';
 import { PoolSurveyRepositoryImpl } from '../infrastructure/repositoriesImpl/PoolSurveyRespositoryImpl';
 import { PoolSurveyApi } from '../infrastructure/providers/http/poolSurveyApi';
-import { DeletePoolUseCase, DeleteSurveyUseCase, GetPoolByIdUseCase, GetPoolsSurveysUseCase, GetSurveyByIdUseCase, PostPoolUseCase, UpdatePoolUseCase, UpdateSurveyUseCase } from '../application/useCases/poolSurvey.useCase';
+import { DeletePoolUseCase, DeleteSurveyUseCase, GetPoolByIdUseCase, GetPoolsSurveysUseCase, GetSurveyByIdUseCase, PostPoolUseCase, PostSurveyUseCase, UpdatePoolUseCase, UpdateSurveyUseCase } from '../application/useCases/poolSurvey.useCase';
 import { poolIdViewModel, surveyIdViewModel, voteViewModel } from '../presenter/views/voteViewModel';
+import { PostVoteUseCase, UpdateVoteUseCase } from '../application/useCases/vote.useCase';
+import { VoteRepositoryImpl } from '../infrastructure/repositoriesImpl/VoteRespositoryImpl';
+import { VoteApi } from '../infrastructure/providers/http/voteApi';
+import { GetIssuesUseCase, GetIssueByIdUseCase, PostIssueUseCase, UpdateIssueUseCase, DeleteIssueUseCase } from '../application/useCases/issue.useCase';
+import { issueViewModel, IssueIdViewModel } from '../presenter/views/issueViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -71,7 +76,6 @@ container.register({
     deleteAccountUseCase: asClass(DeleteAccountUseCase),
     deleteAccountConfirmUseCase: asClass(DeleteAccountConfirmUseCase),
     logOutUseCase: asClass(LogOutUseCase),
-
     authRepository: asClass(AuthRepositoryImpl),
     authData: asClass(AuthApi),
     authService: asClass(AuthService),
@@ -158,6 +162,13 @@ container.register({
     ////ISSUE
     issueRepository: asClass(IssueRepositoryImpl),
     issueData: asClass(IssueApi),
+    getIssuesUseCase: asClass(GetIssuesUseCase),
+    getIssueByIdUseCase: asClass(GetIssueByIdUseCase),
+    postIssueUseCase: asClass(PostIssueUseCase),
+    updateIssueUseCase: asClass(UpdateIssueUseCase),
+    issueViewModel: asFunction(issueViewModel),
+    issueIdViewModel: asFunction(IssueIdViewModel),
+    deleteIssueUseCase: asClass(DeleteIssueUseCase),
 
     ////POST
     postRepository: asClass(PostRepositoryImpl),
@@ -184,11 +195,16 @@ container.register({
     postPoolUseCase: asClass(PostPoolUseCase),
     updatePoolUseCase: asClass(UpdatePoolUseCase),
     deletePoolUseCase: asClass(DeletePoolUseCase),
+    postSurveyUseCase: asClass(PostSurveyUseCase),
     updateSurveyUseCase: asClass(UpdateSurveyUseCase),
     deleteSurveyUseCase: asClass(DeleteSurveyUseCase),
     voteViewModel: asFunction(voteViewModel),
     poolIdViewModel: asFunction(poolIdViewModel),
     surveyIdViewModel: asFunction(surveyIdViewModel),
+    voteRepository: asClass(VoteRepositoryImpl),
+    voteData: asClass(VoteApi),
+    postVoteUseCase: asClass(PostVoteUseCase),
+    updateVoteUseCase: asClass(UpdateVoteUseCase),
 
 
 });

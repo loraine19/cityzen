@@ -5,13 +5,21 @@ import { dayMS } from "../../../../../domain/entities/frontEntities";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
 import { ProgressBar } from "../../../common/ProgressBar";
 
-type Props = { survey: PoolSurveyView }
+type Props = { survey: PoolSurveyView, setOpen: (open: boolean) => void }
 
-export default function SurveyDetailCard({ survey }: Props) {
+export default function SurveyDetailCard({ survey, setOpen }: Props) {
     const haveImage: boolean = survey.image ? true : false
     const now = new Date(Date.now())
     const end = new Date(new Date(survey.createdAt).getTime() + 15 * dayMS)
     const ended: boolean = end < now || survey?.pourcent >= 100 ? true : false
+    const color = (): string => {
+        switch (survey?.myOpinion) {
+            case 'OK': return 'green';
+            case 'NO': return 'red';
+            case 'WO': return 'orange';
+            default: return 'blue-gray';
+        }
+    }
 
     return (
         <div className="pt-6 pb-1 h-full flex">
@@ -68,10 +76,12 @@ export default function SurveyDetailCard({ survey }: Props) {
                             variant="ghost" size='lg'
                             className="rounded-full h-max flex items-center gap-2"
                             icon={<Icon
+                                onClick={() => { setOpen(true) }}
                                 icon="smart_card_reader"
-                                fill={survey?.IVoted} color={survey?.IVoted && "green" || ''}
+                                fill={survey?.IVoted}
+                                color={color()}
                                 size="2xl"
-                                title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-1.5  ml-1" />}>
+                                title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-1.5  " />}>
                         </Chip>
                     </div>
                 </CardFooter>

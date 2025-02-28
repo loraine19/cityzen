@@ -40,6 +40,7 @@ const VoteEditPage = lazy(() => import("./presenter/components/shared/vote/VoteE
 const MyInfosPage = lazy(() => import("./presenter/components/shared/myInfos/MyInfosPage"));
 const NotificationPage = lazy(() => import("./presenter/components/shared/myInfos/NotificationPage"));
 const PoolDetailPage = lazy(() => import("./presenter/components/shared/vote/PoolDetaiPage"));
+const ConciliationListPage = lazy(() => import("./presenter/components/shared/service/issue/ConciationListPage"));
 
 
 function App() {
@@ -76,8 +77,8 @@ function App() {
                                 <Route path="/service/edit/:id" element={<ServiceEditPage />} />
 
                                 <Route path="/litige/:id" element={<IssueDetailPage />} />
-                                <Route path="/litige/edit/:id" element={<IssueEditPage />} />
-                                <Route path="/conciliation" element={<ServiceListPage />} />
+                                <Route path="/conciliation/edit/:id" element={<IssueEditPage />} />
+                                <Route path="/conciliation" element={<ConciliationListPage />} />
 
                                 <Route path="/conciliation/:id" element={<IssueDetailPage />} />
                                 <Route path="/conciliation/create/:id" element={<IssueCreatePage />} />

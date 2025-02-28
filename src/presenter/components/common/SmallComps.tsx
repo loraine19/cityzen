@@ -30,11 +30,14 @@ export function Icon(props: {
 }) {
     const { title, icon, disabled, onClick } = props
     let size = props.size ? props.size : "2xl"
-    size === 'sm' && (size = '[0.8rem]')
-    size === 'md' && (size = '[1rem]')
-    size === 'lg' && (size = '[1.2rem]')
-    size === 'xl' && (size = '[1.2rem]')
-    size === '5xl' && (size = '[2.8rem]')
+    size === 'sm' && (size = '!text-[0.8rem]')
+    size === 'md' && (size = '!text-[1rem]')
+    size === 'lg' && (size = '!text-[1.2rem]')
+    size === 'xl' && (size = '!text-[1.2rem]')
+    size === '2xl' && (size = '!text-[1.4rem]')
+    size === '3xl' && (size = '!text-[1.6rem]')
+    size === '4xl' && (size = '!text-[2.2rem]')
+    size === '5xl' && (size = '!text-[2.8rem]')
     const pad = props.bg ? 'px-[0.26em] pb-[0.03em]' : 'px-1'
     const fill = props.fill ? "fillThin" : ""
     const color = props.color ? props.color : 'gray'
@@ -42,21 +45,32 @@ export function Icon(props: {
     const bg = (props.bg && props.color) && `bg-${color}-500 bg-opacity-30 ` || props.bg && "!bg-gray-300" || ''
     const style = props.style || ""
     const link = props.link || ""
-    const classIcon = `icon notranslate pt-0.5  flex items-center justify-center !text-${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
+    const classIcon = `icon notranslate pt-0.5  flex items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
     const classActive = `hover:backdrop-brightness-[85%] hover:!bg-opacity-30 hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out `
     if (onClick) {
-        return <button type="button" onClick={onClick} title={!disabled ? title : title + ' est desactivée'} className={`${classIcon} ${!disabled && classActive} `} disabled={disabled}>
+        return <button
+            type="button"
+            onClick={onClick}
+            title={!disabled ? title : title + ' est desactivée'}
+            className={`${classIcon} ${!disabled && classActive} `}
+            disabled={disabled}>
             {icon}
         </button>
     }
     if (link) {
-        return <Link to={link} title={title} rel="noopener noreferrer"
+        return <Link
+            to={link}
+            title={title}
+            rel="noopener noreferrer"
             className={`${classIcon} ${classActive}  `}>
             {icon}
         </Link>
     }
     else {
-        return <span title={title} className={`${classIcon} `}> {icon}</span>;
+        return <span
+            title={title}
+            className={`${classIcon} `}>
+            {icon}</span>;
     }
 }
 
@@ -95,7 +109,7 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
             <Popover placement="bottom-start">
                 <PopoverHandler>
                     <Avatar
-                        src={profile?.image as string || "../../image/person.svg"}
+                        src={profile?.image as string || "../image/person.svg"}
                         size={size as any}
                         alt="avatar"
                         className="BgUser shadow" />
@@ -103,7 +117,7 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
                 <PopoverContent className="w-72">
                     <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
                         <Avatar
-                            src={profile?.image as string || "../../image/person.svg"}
+                            src={profile?.image as string || "../image/person.svg"}
                             size="sm"
                             alt="avatar"
                             className="BgUser border-blue-gray-500" />

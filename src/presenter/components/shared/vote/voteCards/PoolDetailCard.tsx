@@ -6,12 +6,21 @@ import { DateChip } from "../../../common/ChipDate";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
 import { ProgressBar } from "../../../common/ProgressBar";
 
-type PoolDetailCardProps = { pool: PoolSurveyView }
+type PoolDetailCardProps = { pool: PoolSurveyView, setOpen: (open: boolean) => void }
 
-export default function PoolDetailCard({ pool }: PoolDetailCardProps) {
+export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
     const now = new Date(Date.now())
     const end = new Date(new Date(pool?.createdAt).getTime() + 15 * dayMS)
     const ended: boolean = end < now || pool?.pourcent >= 100 ? true : false
+
+    const color = (): string => {
+        switch (pool?.myOpinion) {
+            case 'OK': return 'green';
+            case 'NO': return 'red';
+            case 'WO': return 'orange';
+            default: return 'blue-gray';
+        }
+    }
 
     return (
         <div className="pt-6 pb-1 h-full flex">
@@ -61,14 +70,15 @@ export default function PoolDetailCard({ pool }: PoolDetailCardProps) {
                         <Chip
                             value={pool.Votes?.length}
                             variant="ghost"
-                            className="rounded-full h-max flex items-center pr-3 pl-5"
+                            className="rounded-full h-max flex items-center px-4 gap-2"
                             icon={
                                 <Icon
+                                    onClick={() => { setOpen(true) }}
                                     icon="smart_card_reader"
                                     fill={pool?.IVoted}
-                                    color={pool?.IVoted && "green" || ''}
+                                    color={color()}
                                     size="2xl"
-                                    title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-2  ml-2" />}>
+                                    title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`} style="pr-2" />}>
                         </Chip>
                     </div>
                 </CardFooter>

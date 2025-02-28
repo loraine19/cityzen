@@ -70,16 +70,16 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                 className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
                                 icon={<Icon
                                     icon="design_services"
-                                    style="pl-2.5 !-mt-[0.4rem]"
+                                    style="pl-2.5 "
                                     title="Compétence" />}>
                             </Chip>
                             <Chip
                                 value={HardLevel[hard as unknown as keyof typeof HardLevel]}
-                                className=" GrayChip px-5 rounded-full h-full flex items-center justify-center gap-5"
+                                className=" GrayChip px-5 rounded-full h-full flex items-center justify-center gap-4"
                                 icon={<Icon
                                     icon="signal_cellular_alt"
                                     fill
-                                    style="pl-2.5 !-mt-[0.4rem]"
+                                    style="pl-2.5 "
                                     title="Difficulté" />}>
                             </Chip>
                         </div>

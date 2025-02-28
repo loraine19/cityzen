@@ -20,7 +20,7 @@ export class GroupUserDTO {
 }
 
 export enum Role {
-    MEMBER,
-    GUEST,
-    MODO
+    MEMBER = 'MEMBER',
+    GUEST = 'GUEST',
+    MODO = 'MODO',
 }

@@ -8,59 +8,62 @@ import PoolDetailCard from './voteCards/PoolDetailCard';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
+import { VoteCard } from './voteCards/VoteCard';
+import { Button } from '@material-tailwind/react';
 
 export default function PoolDetailPage() {
     const { id } = useParams();
     const idS = id ? parseInt(id) : 0
     const poolIdViewModelFactory = DI.resolve('poolIdViewModel');
-    const { pool, isLoading } = poolIdViewModelFactory(idS);
-    const [open, setOpen] = useState<boolean>(false);
+    const { pool, isLoading, refetch } = poolIdViewModelFactory(idS);
     const handleOpen = () => setOpen(!open);
     const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
-    const myActions = pool && GenereMyActions(pool, "vote/cagnotte", deletePool, handleOpen)
+    const myActions: Action[] = pool && GenereMyActions(pool, "vote/cagnotte", deletePool, handleOpen)
 
     //// ACTIONS
-    const Actions: Action[] = [
-        {
-            icon: 'Sans avis',
-            title: "Confirmer votre vote neutre ",
-            body: `Pour la cagnotte ${pool?.title} `,
-            function: () => { window.open(`tel:${pool?.User?.Profile.phone}`); handleOpen(); },
-        },
-        {
-            icon: 'Voter contre',
-            title: 'Confirmer votre vote contre',
-            body: `Pour la cagnotte ${pool?.title} `,
-            function: () => { window.open(`mailto:${pool?.User?.email}?subject=${pool?.title}`); handleOpen(); },
-        },
-        {
-            icon: 'Voter Pour',
-            title: 'Confirmer votre vote pour',
-            body: `Pour la cagnotte ${pool?.title} `,
-            function: () => { window.open(`mailto:${pool?.User?.email}?subject=${pool?.title}`); handleOpen(); },
-        },
-    ]
 
-    return (
+    const [open, setOpen] = useState(false);
+    const [openVote, setOpenVote] = useState(false);
+
+    return (<>
+        {openVote &&
+            <VoteCard
+                open={openVote}
+                setOpen={setOpenVote}
+                vote={pool}
+                refetch={refetch}
+            />}
         <div className="Body orange">
+
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader
                     type={`Cagnotte `}
-                    link={`vote`}
+                    link={`/vote`}
                     closeBtn />
             </header>
             <main>
                 {isLoading || !pool ?
                     <Skeleton /> :
-                    <PoolDetailCard pool={pool} />
+                    <PoolDetailCard
+                        pool={pool}
+                        setOpen={setOpenVote} />
                 }
             </main>
 
             {pool?.mine ?
                 <CTAMines actions={myActions} /> :
-                <CTAMines actions={Actions} />}
+                <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 h-max overflow-y-auto `}>
+                    <Button
+                        className='lgBtn w-respLarge'
+                        onClick={() => setOpenVote(true)}
+                    >
+                        {pool.IVoted ? 'Modifier mon vote' : 'Voter'}
+                    </Button>
+                </footer>
+            }
         </div>
+    </>
     );
 }
 

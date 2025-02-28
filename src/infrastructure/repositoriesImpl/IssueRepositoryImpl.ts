@@ -1,5 +1,5 @@
-import { Issue } from "../../domain/entities/Issue";
-import { IssueRepositoryBase } from "../../domain/repositoriesBase/IssueRepository";
+import { Issue, IssuePage, IssueUpdate } from "../../domain/entities/Issue";
+import { IssueRepositoryBase } from "../../domain/repositoriesBase/IssueRepositoryBase";
 import { IssueDTO } from "../DTOs/IssueDTO";
 import { ApiServiceI } from "../providers/http/apiService";
 
@@ -15,7 +15,7 @@ export class IssueRepositoryImpl implements IssueRepositoryBase {
     private issueData: IData;
     constructor({ issueData }: { issueData: IData }) { this.issueData = issueData }
 
-    public async getIssues(): Promise<Issue[]> {
+    public async getIssues(): Promise<IssuePage> {
         return this.issueData.getIssues();
     }
 
@@ -23,16 +23,16 @@ export class IssueRepositoryImpl implements IssueRepositoryBase {
         return this.issueData.getIssueById(id)
     }
 
-    async deleteIssue(id: number): Promise<Issue> {
+    async deleteIssue(id: number): Promise<void> {
         return this.issueData.deleteIssue(id)
     }
 
-    async putIssueFinish(id: number): Promise<Issue> {
-        return this.issueData.putIssueFinish(id)
+    async updateIssue(id: number, data: IssueDTO): Promise<Issue> {
+        return this.issueData.updateIssue(id, data)
     }
 
-    async patchIssue(id: number, data: IssueDTO): Promise<Issue> {
-        return this.issueData.patchIssue(id, data)
+    async updateIssueStep(id: number, step: IssueUpdate): Promise<Issue> {
+        return this.issueData.updateIssueStep(id, step)
     }
 
     async postIssue(data: IssueDTO): Promise<Issue> {

@@ -1,7 +1,6 @@
 import { SurveyCategory } from "../../domain/entities/PoolSurvey";
 
 export class SurveyDTO {
-    name?: string;
     description?: string;
     userId?: number;
     image?: string;

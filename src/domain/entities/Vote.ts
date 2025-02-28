@@ -26,11 +26,4 @@ export class Vote {
     User?: User = new User();
 }
 
-export class VoteDTO {
-    id?: number;
-    poolId?: number;
-    userId?: number;
-    targetId?: number;
-    target?: VoteTarget;
-    opinion?: VoteOpinion;
-}
+

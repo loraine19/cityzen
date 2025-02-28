@@ -76,6 +76,11 @@ main {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)]  pt-2;
     grid-auto-rows: 46vh;
 }
+.Grid2 {
+    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
+    grid-auto-rows: 58vh;
+}
+/* */
 
 .GridSmall {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-1 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)]  pt-2;
@@ -120,7 +125,7 @@ main {
 }
 
 .FixCardBody {
-    @apply relative flex flex-1 overflow-auto flex-col py-3 px-5;
+    @apply relative flex flex-1 overflow-auto flex-col py-3 px-5 -mt-2;
 }
 
 .CardOverFlow {
@@ -191,24 +196,24 @@ nav li .icon {
 
 /* CHIP LIGHT COLOR */
 .OrangeChip {
-    @apply bg-orange-100 text-orange-800  px-3 rounded-2xl shadow;
+    @apply bg-orange-100 text-orange-800  px-3 pb-1 rounded-2xl shadow;
 }
 
 .GreenChip {
-    @apply bg-green-100 text-green-800 px-3 rounded-2xl shadow;
+    @apply bg-green-100 text-green-800 px-3 !pb-1 rounded-2xl shadow;
 }
 
 .RedChip {
-    @apply bg-red-200 text-red-900  px-3 rounded-2xl shadow;
+    @apply bg-red-200 text-red-900  px-3 pb-1 rounded-2xl shadow;
 }
 
 .CyanChip {
-    @apply bg-cyan-200 text-cyan-900  px-3 rounded-2xl shadow;
+    @apply bg-cyan-200 text-cyan-900  px-3 !pb-1 rounded-2xl shadow;
 }
 
 .GrayChip,
 .lgBtn:disabled {
-    @apply bg-gray-300 text-gray-600 min-w-max;
+    @apply bg-gray-300 text-gray-600 min-w-max rounded-2xl;
 }
 
 /* CHIP OUTLINED */

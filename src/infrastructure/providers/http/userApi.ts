@@ -11,6 +11,7 @@ export class UserApi {
 
 
     async getUsersModos(): Promise<User[]> {
+        console.log('api', await this.api.get(`${this.dataType}/modos`))
         return this.api.get(`${this.dataType}/modos`);
     }
 

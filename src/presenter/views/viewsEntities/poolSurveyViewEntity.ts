@@ -1,7 +1,7 @@
 //src/infrastructure/services/serviceService.ts
 import { User } from "../../../domain/entities/User";
 import { Pool, Survey, SurveyCategory } from "../../../domain/entities/PoolSurvey";
-import { Vote, VoteOpinion } from "../../../domain/entities/Vote";
+import { Vote, VoteOpinion, VoteTarget } from "../../../domain/entities/Vote";
 import { Flag } from "../../../domain/entities/Flag";
 
 
@@ -10,7 +10,8 @@ export class PoolSurveyView {
     flagged: boolean = false;
     mine: boolean = false;
     IVoted: boolean = false;
-    typeS: string = '';
+    myOpinion?: VoteOpinion | null = null;
+    typeS: VoteTarget = VoteTarget.POOL;
     pourcent: number = 0;
     needed: number = 0;
     title: string = '';
@@ -32,18 +33,19 @@ export class PoolSurveyView {
         if ('userIdBenef' in base) {
             Object.assign(this, base);
             this.flagged = false;
-            this.typeS = 'POOL';
+            this.typeS = VoteTarget.POOL;
         }
         if ('category' in base) {
             Object.assign(this, base);
             this.flagged = base.Flags.some(flag => flag.userId === user.id);
-            this.typeS = 'SURVEY';
+            this.typeS = VoteTarget.SURVEY;
             this.categoryS = SurveyCategory[base.category as string as keyof typeof SurveyCategory];
         }
         this.mine = base.userId === user.id;
         this.pourcent = Math.round(base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length / (userCount / 2) * 100);
         this.needed = Math.round(userCount / 2) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length;
         this.IVoted = base.Votes.some(vote => vote.userId === user.id);
+        this.myOpinion = base.Votes.find(vote => vote.userId === user.id)?.opinion || null;
 
     }
 

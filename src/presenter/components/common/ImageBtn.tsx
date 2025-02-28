@@ -2,19 +2,20 @@ import { Button } from "@material-tailwind/react";
 import { useState } from "react";
 import { Icon } from "./SmallComps";
 
-export const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
-    let file = event.target.files[0];
-    formik.values.image = file as File;
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-        setImgBlob(reader.result as string)
-    }
-}
 
 export const ImageBtn = (props: { formik: any, setImgBlob: any, imgDef?: string, className?: string }) => {
     const { formik, imgDef, setImgBlob, className } = props;
-    const [imgBlob] = useState<string | any>(formik.values.image);
+    const [imgBlob] = useState<string | any>(formik?.values?.image || imgDef || '');
+
+    const getImageBlob = (event: any, setImgBlob: any, formik: any) => {
+        let file = event.target.files[0];
+        formik.values.image = file as File;
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            setImgBlob(reader.result as string)
+        }
+    }
 
     return (
         <div className={`absolute -mb-1 pb-2 pl-1 z-30 ${className}`}>
@@ -24,7 +25,7 @@ export const ImageBtn = (props: { formik: any, setImgBlob: any, imgDef?: string,
                     <Icon
                         icon={(imgBlob && formik.values.image) ? "edit" : "add_a_photo"}
                         color="white"
-                        size="2xl !px-1"
+                        size="2xl"
                         style="rounded-full shadow"
                     />
                     <div className="flex flex-col w-full items-center justify-center">
@@ -39,8 +40,11 @@ export const ImageBtn = (props: { formik: any, setImgBlob: any, imgDef?: string,
                 size="lg"
                 color="red"
                 title={"supprimer l'image"}
-                onClick={() => { formik.values.image = ''; setImgBlob(imgDef || '') }}
-                style={formik.values.image && formik.values.image !== imgDef ? `absolute -left-2 !px-1 !py-0  bottom-0 z-30 ` : `hidden`}
+                onClick={() => {
+                    formik.values.image = '';
+                    setImgBlob(imgDef || '')
+                }}
+                style={formik?.values?.image && formik.values?.image !== imgDef ? `absolute -left-2 !px-1 !py-0  bottom-0 z-30 ` : `hidden`}
             />
         </div>
     );

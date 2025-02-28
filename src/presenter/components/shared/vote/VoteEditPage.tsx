@@ -22,6 +22,7 @@ export default function VoteEditPage() {
     const [initialValues, setInitialValues] = useState<PoolSurveyView>({} as PoolSurveyView);
     const updateSurvey = async (id: number, data: SurveyDTO) => await DI.resolve('updateSurveyUseCase').execute(id, data)
     const updatePool = async (id: number, data: PoolDTO) => await DI.resolve('updatePoolUseCase').execute(id, data)
+    const [type, setType] = useState<VoteTarget>(target as VoteTarget)
 
 
     const navigate = useNavigate();
@@ -82,7 +83,9 @@ export default function VoteEditPage() {
                 }}
                 title={"Confimrer la modification"}
                 element={
-                    target === "sondage" ? JSON.stringify(new SurveyDTO(formik.values as SurveyDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ").replace(/}/g, "") : (JSON.stringify(new PoolDTO(formik.values as PoolDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+                    target === "sondage" ?
+                        JSON.stringify(new SurveyDTO(formik.values as SurveyDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ").replace(/}/g, "") :
+                        (JSON.stringify(new PoolDTO(formik.values as PoolDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
 
             {isLoading || error || isLoadingPool || errorPool ?
                 <Skeleton
@@ -90,7 +93,8 @@ export default function VoteEditPage() {
                     key={'S'} /> :
                 <VoteForm
                     formik={formik}
-                    type={target as VoteTarget} />}
+                    type={type as VoteTarget}
+                    setType={setType} />}
         </div >
     )
 }

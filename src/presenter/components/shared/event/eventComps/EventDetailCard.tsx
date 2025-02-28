@@ -83,12 +83,12 @@ export function EventDetailCard(props: EventCardProps) {
                             <Chip
                                 value={participantsMin}
                                 variant="ghost"
-                                className="rounded-full h-max flex items-center pr-3 pl-6"
+                                className="rounded-full h-max flex items-center px-4 "
                                 icon={<Icon icon="person"
                                     size="2xl"
                                     fill={Igo}
                                     color={Igo ? "cyan" : "gray"}
-                                    style=" pl-4 -mt-2 hover:text-cyan-800 "
+                                    style="pl-2 hover:text-cyan-800 "
                                     title={Igo ? "Je n'y vais plus" : "j'y vais"} />}>
 
                             </Chip>

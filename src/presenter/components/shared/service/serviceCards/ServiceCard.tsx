@@ -135,14 +135,16 @@ export default function ServiceComp(props:
                                 icon="toll"
                                 title={`Ce service ${service.typeS === ServiceType.GET ? 'vous fais gagner' : 'coute'} ${points.join(' à ')}pts`}
                                 fill={user.Profile.points > points[0]}
-                                color={service.typeS === ServiceType.GET ? "green" : "orange"} size="2xl" style="!py-0 -mt-1.5 pl-2" />}>
+                                color={service.typeS === ServiceType.GET ? "green" : "orange"}
+                                size="2xl"
+                                style="!pt-0.5 pl-2" />}>
                         </Chip>
 
                         <Icon
                             icon="arrow_circle_right"
                             link={`/service/${id}`}
                             title={`voir les details de service  ${title}`}
-                            size="4xl px-1"
+                            size="4xl"
                             fill />
                     </div>
                 </CardFooter>
