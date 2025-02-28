@@ -143,7 +143,6 @@ export default function ConciationListPage() {
                         <div className="SubGrid" key={index}>
                             <IssueCard
                                 issue={issue}
-
                                 change={search}
                                 mines={mine}
                                 update={refetch} />
