@@ -78,24 +78,6 @@ export class ApiService implements ApiServiceI {
 
     private handleRequest = (config: any) => {
         // implemente here cookies filter 
-        const allowedCookieName = import.meta.env.VITE_ACCESS_COOKIE_NAME;
-        let cookieHeader = '';
-
-        // Récupérer les cookies et filtrer
-        const cookies = document.cookie.split(';').map((c) => c.trim());
-        console.log('cookies:', cookies);
-        for (const cookie of cookies) {
-            const [name, value] = cookie.split('=');
-            if (name === allowedCookieName) {
-                cookieHeader = `${name}=${value}`;
-                break; // On a trouvé le cookie, on arrête la boucle
-            }
-        }
-
-        // Ajouter l'en-tête Cookie à la requête
-        config.headers.Cookie = 'cookieHeader';
-        config.headers["Content-Type"] = "application/json"; // Si ce n'est pas déjà fait
-        console.log('config:', config);
         return config;
 
     };

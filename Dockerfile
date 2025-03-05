@@ -1,4 +1,4 @@
-FROM node:20-alpine as build
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:1.21.0-alpine
+FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

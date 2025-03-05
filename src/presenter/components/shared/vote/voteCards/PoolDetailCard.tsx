@@ -69,20 +69,22 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                     <ProfileDiv
                         profile={pool.User?.Profile || {} as Profile} />
                     <div className="flex items-center gap-2 ">
-                        <Chip
-                            value={pool.Votes?.length}
-                            variant="ghost"
-                            className="rounded-full h-max flex items-center px-4 gap-2"
-                            icon={
-                                <Icon
-                                    onClick={() => { setOpen(true) }}
-                                    icon="smart_card_reader"
-                                    fill={pool?.IVoted}
-                                    color={color()}
-                                    size="2xl"
-                                    title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                    style="pr-2" />}>
-                        </Chip>
+                        <button onClick={() => { setOpen(true) }}>
+                            <Chip
+                                value={pool.Votes?.length}
+                                variant="ghost"
+                                size='lg'
+                                className="rounded-full pl-5 "
+                                icon={
+                                    <Icon
+                                        icon="smart_card_reader"
+                                        fill={pool?.IVoted}
+                                        color={color()}
+                                        size="md"
+                                        title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
+                                        style="scale-125 mt-0.5 " />}>
+                            </Chip>
+                        </button>
                     </div>
                 </CardFooter>
             </Card>

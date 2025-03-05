@@ -73,19 +73,21 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                     <ProfileDiv
                         profile={survey?.User?.Profile} />
                     <div className="flex items-center gap-2 ">
-                        <Chip
-                            value={survey?.Votes?.length}
-                            variant="ghost" size='lg'
-                            className="rounded-full h-max flex items-center gap-2"
-                            icon={<Icon
-                                onClick={() => { setOpen(true) }}
-                                icon="smart_card_reader"
-                                fill={survey?.IVoted}
-                                color={color()}
-                                size="2xl"
-                                title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
-                                style="mt-0.5 " />}>
-                        </Chip>
+                        <button onClick={() => setOpen(true)}>
+                            <Chip
+                                value={survey?.Votes?.length}
+                                variant="ghost"
+                                size='lg'
+                                className="rounded-full  pl-5"
+                                icon={<Icon
+                                    icon="smart_card_reader"
+                                    fill={survey?.IVoted}
+                                    color={color()}
+                                    size="md"
+                                    title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
+                                    style="scale-125 mt-0.5" />}>
+                            </Chip>
+                        </button>
                     </div>
                 </CardFooter>
             </Card>
