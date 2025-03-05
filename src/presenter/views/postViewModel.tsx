@@ -47,6 +47,7 @@ export const postIdViewModel = () => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
+      staleTime: 600000,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
     const userId = user?.id
@@ -54,6 +55,7 @@ export const postIdViewModel = () => {
     const getPostById = DI.resolve('getPostByIdUseCase')
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['PostById', id],
+      staleTime: 600000,
       queryFn: async () => await getPostById.execute(id),
     })
 

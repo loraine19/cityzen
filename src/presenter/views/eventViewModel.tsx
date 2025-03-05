@@ -19,6 +19,7 @@ export const eventViewModel = () => {
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['events', filter, category],
+        staleTime: 600000,
         queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam, filter, category) || { events: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.events?.length ? pages.length + 1 : undefined
@@ -58,6 +59,7 @@ export const eventIdViewModel = () => {
 
     const { data: eventByIdData, isLoading, error, refetch } = useQuery({
       queryKey: ['eventById', id],
+      staleTime: 600000,
       queryFn: async () => await getEventById.execute(id),
     })
 

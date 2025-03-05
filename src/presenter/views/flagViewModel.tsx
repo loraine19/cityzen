@@ -9,12 +9,12 @@ export const flagsViewModel = () => {
   const { data, isLoading, error, refetch }
     = useQuery({
       queryKey: ['flags'],
+      staleTime: 600000,
       queryFn: async () => await getFlags.execute() || [],
     })
 
   const flags = isLoading ? [] : data?.map((flag: Flag) => new FlagView(flag))
 
-  console.log(data, flags)
   return {
     flags,
     refetch,
@@ -30,6 +30,7 @@ export const flagByIdViewModel = () => {
     const { data, isLoading, error, refetch }
       = useQuery({
         queryKey: ['flagById', id, target],
+        staleTime: 600000,
         queryFn: async () => await getFlagById.execute(id, target) || [],
       })
 

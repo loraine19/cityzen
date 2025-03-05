@@ -18,6 +18,7 @@ export const serviceViewModel = () => {
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['services', mine, type, step, category],
+        staleTime: 600000,
         queryFn: async ({ pageParam = 1 }) => await getServices.execute(pageParam, mine, type, step, category) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
@@ -43,6 +44,8 @@ export const serviceIdViewModel = () => {
   return (id: number) => {
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
+      refetchOnWindowFocus: false,
+      staleTime: 600000,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
 
@@ -50,6 +53,7 @@ export const serviceIdViewModel = () => {
 
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['serviceById', id],
+      staleTime: 600000,
       queryFn: async () => await getServiceById.execute(id),
     })
     const service = userLoading ? {} : data ? new ServiceView(data, user) : {} as ServiceView;

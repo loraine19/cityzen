@@ -63,6 +63,7 @@ export const poolIdViewModel = () => {
     const getPoolById = DI.resolve('getPoolByIdUseCase')
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['poolById', id],
+      staleTime: 600000,
       queryFn: async () => await getPoolById.execute(id),
     })
     const pool = userLoading || userCountLoading ? {} : data ? new PoolSurveyView(data, user, userCount) : {} as PoolSurveyView;
@@ -88,6 +89,7 @@ export const surveyIdViewModel = () => {
     const getSurveyById = DI.resolve('getSurveyByIdUseCase')
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['surveyById', id],
+      staleTime: 600000,
       queryFn: async () => await getSurveyById.execute(id),
     })
     const survey = userLoading || userCountLoading ? {} : data ? new PoolSurveyView(data, user, userCount) : {} as PoolSurveyView;

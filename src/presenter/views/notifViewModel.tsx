@@ -18,6 +18,7 @@ export const notifViewModel = () => {
     const { data, isLoading, error, refetch }
       = useQuery({
         queryKey: ['notifs'],
+        staleTime: 600000,
         queryFn: async () => await getNotifs.execute() || [],
       })
 

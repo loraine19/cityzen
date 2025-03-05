@@ -19,6 +19,7 @@ export const issueViewModel = () => {
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['issues', step],
+        staleTime: 600000,
         queryFn: async ({ pageParam = 1 }) => await getIssues.execute(pageParam, step) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.issues?.length ? pages.length + 1 : undefined
@@ -54,6 +55,7 @@ export const IssueIdViewModel = () => {
 
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['IssueById', id],
+      staleTime: 600000,
       queryFn: async () => await getIssueById.execute(id),
     })
     const issue = userLoading ? {} : data ? new IssueView(data, userId) : {} as IssueView;
