@@ -5,7 +5,7 @@ import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button, Card, CardBody, Input, CardHeader, CardFooter } from '@material-tailwind/react';;
 import { User } from '../../../../domain/entities/User';
 import DI from '../../../../di/ioc';
-import { Icon } from '../../common/SmallComps';
+import { Icon } from '../../common/IconComp';
 
 export default function ForgotPasswordPage() {
     const resetPassword = async (email: string) => await DI.resolve('resetPasswordUseCase').execute(email)

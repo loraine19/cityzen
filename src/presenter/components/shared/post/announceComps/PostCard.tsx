@@ -1,13 +1,15 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { Profile } from "../../../../../domain/entities/Profile";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { Title, ProfileDiv, Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
 import DI from "../../../../../di/ioc";
 import { PostView } from "../../../../views/viewsEntities/postViewEntities";
 import { useState } from "react";
+import { Title } from "../../../common/CardTitle";
+import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type PostCardProps = { post: PostView, mines?: boolean, change: (e: any) => void, update?: () => void }
 
@@ -74,14 +76,15 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                             <Chip
                                 size="md" value={`${Likes?.length}`}
                                 variant="ghost"
-                                className="pl-4  rounded-full h-full flex items-center"
+                                className="  rounded-full h-full flex items-center"
                                 icon={<Icon
                                     icon="thumb_up"
-                                    size="lg"
+                                    style='scale-125'
+                                    size="md"
                                     fill={ILike}
                                     color={ILike ? "cyan" : "gray"}
                                     title={ILike ? "je n'aime plus" : "j'aime"}
-                                    style=" !pl-2" />}>
+                                />}>
                             </Chip>
                         </button>
                         <Icon

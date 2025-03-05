@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverHandler, Typography } from '@material-tailwind/react';
 import { EventCard } from '../shared/event/eventComps/EventCard';
-import { Icon } from './SmallComps';
+import { Icon } from './IconComp';
 import DI from '../../../di/ioc'
 import { dayMS } from '../../../domain/entities/frontEntities';
 import { getLabel } from '../../views/viewsEntities/utilsService';
@@ -34,7 +34,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
     useEffect(() => { hasNextPage && fetchNextPage() }, [startDate, numberOfwweks, loadingEvents])
 
     return (
-        <div className='flex flex-col flex-1 '>
+        <div className='flex flex-col flex-1 pt-3 '>
             <div className="flex  justify-between  gap-1 items-center p-0">
                 {logo && <div className='flex items-center'>
                     <Icon fill bg
@@ -52,14 +52,14 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                     <div className='flex  items-center'>
                         <Icon
                             icon='arrow_back_ios'
-                            size='lg'
+                            size='md'
                             onClick={removeWeek} />
                         <button onClick={resetWeek}>
                             {(new Date().toLocaleDateString('fr-FR', { weekday: 'short', month: 'numeric', day: 'numeric' }))}
                         </button>
                         <Icon
                             icon='arrow_forward_ios'
-                            size='lg'
+                            size='md'
                             onClick={addWeek} />
                     </div>
                     <div className='flex items-center px-4'>
@@ -67,14 +67,14 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             jours
                             <Icon
                                 icon='do_not_disturb_on'
-                                size='lg'
+                                size='md'
                                 onClick={removeCol} />
                             <button onClick={resetCol}>
                                 {col}
                             </button>
                             <Icon
                                 icon='add_circle'
-                                size='lg'
+                                size='md'
                                 onClick={addCol} />
                         </div>
                         {!logo &&
@@ -82,13 +82,13 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                 semaine
                                 <Icon
                                     icon='remove_circle'
-                                    size='lg'
+                                    size='md'
                                     onClick={() => setNumberOfwweks(numberOfwweks > 1 ? numberOfwweks - 1 : 1)} />
                                 <button
                                     onClick={() => setNumberOfwweks(2)}>{numberOfwweks}</button>
                                 <Icon
                                     icon='add_circle'
-                                    size='lg'
+                                    size='md'
                                     onClick={() => setNumberOfwweks(numberOfwweks < 4 ? numberOfwweks + 1 : 4)} />
                             </div>}
                     </div>

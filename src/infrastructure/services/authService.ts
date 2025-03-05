@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { cryptedStorage, cryptedStorageI } from "./storageService";
+import { cryptedCookie, cryptedCookieI } from "./cookiService";
 
 interface AuthServiceI {
     // logOut(): void;
@@ -8,10 +8,10 @@ interface AuthServiceI {
     saveToken(refreshtoken: string): void;
 }
 export class AuthService implements AuthServiceI {
-    private storage: cryptedStorageI;
+    private storage: cryptedCookieI;
 
     constructor() {
-        this.storage = new cryptedStorage();
+        this.storage = new cryptedCookie();
     }
 
     // logOutSe = () => {
@@ -25,7 +25,9 @@ export class AuthService implements AuthServiceI {
         return new Date(decoded.exp * 1000);
     }
 
-    getRefreshToken = (): string => this.storage.getItem('refresh')
+    getRefreshToken = (): string => {
+        return this.storage.getItem('refresh')
+    }
 
     saveToken = (refreshToken: string) => {
         this.storage.setItem('refresh', refreshToken);

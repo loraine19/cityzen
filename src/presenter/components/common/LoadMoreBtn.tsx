@@ -1,4 +1,4 @@
-import { Icon } from "./SmallComps"
+import { Icon } from "./IconComp"
 
 export const LoadMoreButton = (props: { handleScroll: () => void, hasNextPage: boolean, isBottom: boolean }) => {
     const { handleScroll, hasNextPage, isBottom } = props
@@ -12,5 +12,6 @@ export const LoadMoreButton = (props: { handleScroll: () => void, hasNextPage: b
                 style={(isBottom && hasNextPage) ? "mb-12" : "hidden"}
                 onClick={handleScroll} />
         </div>
+
     )
 }

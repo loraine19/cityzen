@@ -1,7 +1,7 @@
 import { Button, Navbar, SpeedDial, SpeedDialAction, SpeedDialContent, SpeedDialHandler, Typography } from "@material-tailwind/react";
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Icon } from "./SmallComps";
+import { Icon } from "./IconComp";
 
 interface NavBarBottomProps {
     handleClick?: () => void;
@@ -17,7 +17,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
     const handleNavigate = () => navigate(`/${type}/create`);
 
     const navItems = [
-        { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-600`" },
+        { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-600" },
         { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-cyan-600" },
         { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-600" },
         { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-600" },
@@ -41,10 +41,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                 <NavLink
                                     to={to}
                                     className={({ isActive }) => `flex w-[90%] justify-center flex-col items-center gap-0 lg:flex-row lg:gap-2 h-full ${color} ${isActive ? `border-b-4 ` : ''}`}>
-                                    <span className="icon notranslate">
-                                        {icon}
-                                    </span>
-                                    <span className="text-[0.6rem] -mt-1 font-light lg:block lg:text-sm">
+                                    <Icon
+                                        style={`pb-0.5`}
+                                        size='3xl'
+                                        icon={icon}
+                                        color='red' />
+                                    <span className="text-[0.6rem] lg:-mt-1 font-light lg:block lg:text-sm">
                                         {label}
                                     </span>
                                 </NavLink>
@@ -64,7 +66,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                     <Icon
                                         icon="add"
                                         color="white"
-                                        style={!closeDial ? 'transition-transform group-hover:rotate-45' : ''} />
+                                        size="sm"
+                                        style={`${!closeDial ? 'transition-transform group-hover:rotate-45' : ''} !scale-[3] pb-0.5`} />
                                 </Button>
                             </SpeedDialHandler>
                             <SpeedDialContent className={`${closeDial && "hidden"}`}>
@@ -72,7 +75,9 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                     className="h-14 gap-4 w-14 shadow-lg"
                                     title={`Ajouter un ${type}`}
                                     onClick={handleNavigate}>
-                                    <span className={`icon notranslate text-${color}-500`}>edit</span>
+                                    <Icon
+                                        icon='edit'
+                                        color={color} />
                                     <div className="py-2 px-4 mr-90 font-thin rounded-full text-gray-900 absolute top-2/4 -left-3/4 -translate-y-2/4 -translate-x-3/4 bg-white text-xs shadow-xl lowercase">
                                         {`Ajouter un ${type}`}
                                     </div>

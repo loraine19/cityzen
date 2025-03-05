@@ -2,13 +2,17 @@ import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@mater
 import { useNavigate } from "react-router-dom";
 import { ServiceStep, ServiceType, ServiceUpdate } from "../../../../../domain/entities/Service";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { Title, ProfileDiv, Icon } from "../../../common/SmallComps";
+import {
+    Icon
+} from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import DI from "../../../../../di/ioc";
 import { GenereMyActions, getEnumVal, isLate } from "../../../../views/viewsEntities/utilsService";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
+import { ProfileDiv } from "../../../common/ProfilDiv";
+import { Title } from "../../../common/CardTitle";
 
 
 export default function ServiceComp(props:
@@ -129,15 +133,15 @@ export default function ServiceComp(props:
                         <Chip
                             size="md"
                             value={`${points.join(' à ')}   pts`}
-                            className={`!px-4 GrayChip  lowercase !font-medium  rounded-full ${mines && 'hidden md:flex'}`}
+                            className={` GrayChip  lowercase !font-medium  rounded-full ${mines && 'hidden md:flex'}`}
                             icon=
                             {<Icon
                                 icon="toll"
                                 title={`Ce service ${service.typeS === ServiceType.GET ? 'vous fais gagner' : 'coute'} ${points.join(' à ')}pts`}
                                 fill={user.Profile.points > points[0]}
                                 color={service.typeS === ServiceType.GET ? "green" : "orange"}
-                                size="2xl"
-                                style="!pt-0.5 pl-2" />}>
+                                size="md"
+                                style="scale-150" />}>
                         </Chip>
 
                         <Icon

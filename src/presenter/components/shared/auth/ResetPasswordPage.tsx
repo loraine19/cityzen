@@ -5,7 +5,7 @@ import { AuthHeader } from './auth.Comps/AuthHeader';
 import { Typography, Button, Card, CardBody, Input, CardFooter, CardHeader } from '@material-tailwind/react';
 import { useSearchParams } from 'react-router-dom';
 import { User } from '../../../../domain/entities/User';
-import { Icon } from '../../../components/common/SmallComps';
+import { Icon } from '../../common/IconComp';
 import DI from '../../../../di/ioc';
 import { ResetDTO } from '../../../../infrastructure/DTOs/AuthDTO';
 

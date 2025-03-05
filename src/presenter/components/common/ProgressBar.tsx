@@ -35,3 +35,24 @@ export function ProgressBar(props: { value: number, label?: string, size?: Progr
                 size={size} />
         </div>)
 }
+
+export function ProgressLargebar(props: { value: number, float?: boolean, label?: string }) {
+    const { value, float, label } = props
+    const style = float ? "h-max w-full !rounded-full  backdrop-blur flex items-center gap-2 shadow p-2" :
+        "!rounded-full bg-cyan-200 backdrop-blur flex items-center gap-2 shadow p-2"
+
+    return (
+        <div className={style}>
+            {value > 0 ? <Progress
+                value={value}
+                color={value >= 100 ? "green" : "gray"}
+                size="md"
+                label={value >= 100 ? " Validé" : ' '} /> :
+                <div className="flex flex-1 bg-white/70 rounded-full h-max items-center justify-center">
+                    <Typography
+                        className="mb-0 text-xs font-medium">
+                        pas encore de {label}
+                    </Typography>
+                </div>}
+        </div>)
+}

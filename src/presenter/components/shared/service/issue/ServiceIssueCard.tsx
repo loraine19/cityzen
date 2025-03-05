@@ -1,6 +1,6 @@
 import { Card, CardHeader, Typography, CardBody, Chip, Avatar } from "@material-tailwind/react";
 import { Service, ServiceType } from "../../../../../domain/entities/Service";
-import { Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import { useUserStore } from "../../../../../application/stores/user.store";
 
@@ -11,50 +11,50 @@ export default function ServiceIssueCard(props: { service: Service }) {
 
 
     return (
-        <Card className={`CardFix !h-full  !flex !gap-0 bg-blue-gray-50  !py-0`}>
+        <Card className={`CardFix !h-full  shadow-none !flex !gap-0 bg-blue-gray-50  !py-0`}>
             <CardHeader
-                className="fixCardHeaderNoImage !mt-1 mx-2 mb-0  !py-1 shadow-none bg-transparent"
+                className="fixCardHeaderNoImage  mx-2 mt-1 py-1 shadow-none bg-transparent"
                 floated={false}>
                 <div className="flex justify-between items-center ">
                     <div className="flex items-center gap-2 ">
                         <Chip
                             size='sm'
                             value={categoryS}
-                            className="CyanChip " >
+                            className="CyanChip lowercase" >
                         </Chip>
                         <Chip
                             size='sm'
                             value={typeS}
-                            className={`${type === ServiceType.GET ? "OrangeChip" : "GreenChip"}`}>
+                            className={`${type === ServiceType.GET ? "OrangeChip lowercase" : "GreenChip lowercase"}`}>
                         </Chip>
                     </div>
-                    <div className="flex items-center ">
+                    <div className="flex items-center gap-2">
                         <Chip
                             size='sm'
                             value={(new Date(createdAt)).toLocaleDateString('fr-FR')}
                             className="GrayChip lowercase">
                         </Chip>
-                        <Icon
-                            icon="expand_circle_right"
-                            color="gray"
-                            link={`/service/${id}`}
-                            title={`voir les details de service  ${title}`}
-                            size="3xl"
-                            style="!px-1 !py-0"
 
-                            fill />
                     </div>
                 </div>
             </CardHeader>
-            <CardBody className={` FixCardBody  !flex-1 -mt-3 `}>
+            <CardBody className={` FixCardBody  !flex-1 !py-1.5 `}>
                 <div className="flex h-full ">
-                    <div className="flex flex-col flex-1 gap-2 overflow-y-auto">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="truncate max-w-[40vw] lg:max-w-[20vw] pr-2 font-medium">
-                            {title}
-                        </Typography>
+                    <div className="flex flex-col flex-1 gap-1.5 overflow-y-auto">
+                        <div className="flex items-center justify-between pr-2">
+                            <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="truncate max-w-[40vw] lg:max-w-[20vw] pr-2 font-medium">
+                                {title}
+                            </Typography>
+                            <Icon
+                                icon="more_up"
+                                link={`/service/${id}`}
+                                title={`voir les details de service  ${title}`}
+                                size="xl"
+                                fill />
+                        </div>
                         <div className="flex gap-2 ">
                             <Avatar
                                 src={User.Profile?.image as string || '../../image/person.svg'}
@@ -75,11 +75,11 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         <Typography
                             color="blue-gray"
                             variant="small"
-                            className="flex-1 pr-2 lg:max-h-[1.3rem] overflow-auto">
+                            className="flex-1 pr-2 lg:max-h-[1.3rem] overflow-auto truncate">
                             {description}
                         </Typography>
                     </div>
-                    <div className="flex flex-1 flex-col pt-1 items-end border-l-[1px] border-gray-400 overflow-y-auto gap-2">
+                    <div className="flex flex-1 flex-col pt-1 items-end border-l-[1px] border-gray-400 overflow-y-auto gap-0.5">
                         <Typography
                             variant="small"
                             color="blue-gray"

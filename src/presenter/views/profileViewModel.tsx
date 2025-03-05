@@ -8,6 +8,8 @@ export const profileMeViewModel = () => {
         const getProfileMe = DI.resolve('getProfileMeUseCase')
         const { data, error: errorProfileMe, isLoading: loadingProfileMe } = useQuery({
             queryKey: ['profileMe'],
+            refetchOnWindowFocus: false,
+            staleTime: 600000, // 10 minutes,
             queryFn: async () => await getProfileMe.execute()
         })
 

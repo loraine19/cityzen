@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom"
-import { Icon } from "./SmallComps"
+import { Icon } from "./IconComp"
 
 type SubHeaderProps = { type: string, qty?: (number | string), place?: any, closeBtn?: boolean, link?: string }
 export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeaderProps) {

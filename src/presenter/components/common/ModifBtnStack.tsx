@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import { Action } from "../../../domain/entities/frontEntities";
-import { Icon } from "./SmallComps";
+import { Icon } from "./IconComp";
 
 type ModifBtnStackProps = {
     actions: Action[];

@@ -6,11 +6,11 @@ import {
   mergeProps,
   render,
   setupStyleSheet
-} from "./chunk-TIYQVLHI.js";
+} from "./chunk-YKTWUAAM.js";
 import {
   onlineManager,
   useQueryClient
-} from "./chunk-33NZN6UC.js";
+} from "./chunk-NRRNZCTZ.js";
 import {
   require_jsx_runtime
 } from "./chunk-YWYMGJCA.js";
@@ -97,7 +97,7 @@ var TanstackQueryDevtools = (_a = class {
       if (__privateGet(this, _Component)) {
         Devtools = __privateGet(this, _Component);
       } else {
-        Devtools = lazy(() => import("./E3YREIG7-QMQUTWMT.js"));
+        Devtools = lazy(() => import("./E3YREIG7-G36LSUQG.js"));
         __privateSet(this, _Component, Devtools);
       }
       setupStyleSheet(__privateGet(this, _styleNonce), __privateGet(this, _shadowDOMTarget));
@@ -220,7 +220,7 @@ var TanstackQueryDevtoolsPanel = (_a2 = class {
       if (__privateGet(this, _Component2)) {
         Devtools = __privateGet(this, _Component2);
       } else {
-        Devtools = lazy(() => import("./LFXA4CB4-HKTP6INL.js"));
+        Devtools = lazy(() => import("./LFXA4CB4-AHQENYDG.js"));
         __privateSet(this, _Component2, Devtools);
       }
       setupStyleSheet(__privateGet(this, _styleNonce2), __privateGet(this, _shadowDOMTarget2));
@@ -325,7 +325,7 @@ function ReactQueryDevtools(props) {
       devtools.unmount();
     };
   }, [devtools]);
-  return (0, import_jsx_runtime.jsx)("div", { className: "tsqd-parent-container", ref });
+  return (0, import_jsx_runtime.jsx)("div", { dir: "ltr", className: "tsqd-parent-container", ref });
 }
 
 // node_modules/@tanstack/react-query-devtools/build/modern/ReactQueryDevtoolsPanel.js

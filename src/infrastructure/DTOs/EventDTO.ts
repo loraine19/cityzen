@@ -1,11 +1,10 @@
-import { Address } from "../../domain/entities/Address";
 import { EventCategory } from "../../domain/entities/Event";
 import { Participant } from "../../domain/entities/Participant";
 import { EventView } from "../../presenter/views/viewsEntities/eventViewEntities";
-
+import { AddressDTO } from "./AddressDTO";
 
 export class EventDTO {
-    Address: Address = new Address();
+    Address: AddressDTO = {} as AddressDTO;
     addressId?: number = 0;
     category: EventCategory | string = EventCategory.CATEGORY_1;
     description: string = '';

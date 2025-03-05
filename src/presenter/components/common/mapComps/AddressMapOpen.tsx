@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Popover, PopoverHandler, PopoverContent, Chip } from '@material-tailwind/react';
-import { Icon } from '../SmallComps';
+import { Icon } from '../IconComp';
 import { Address } from '../../../../domain/entities/Address';
 import { Link } from 'react-router-dom';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';

@@ -1,7 +1,7 @@
 import { Card, CardBody, Typography, Input, CardFooter, Checkbox, Button, CardHeader } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 import PopUp from '../../../common/PopUp';
-import { Icon } from '../../../common/SmallComps';
+import { Icon } from '../../../common/IconComp';
 import { FormikProps } from 'formik';
 
 type AuthFormProps = {
@@ -64,9 +64,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                         <Input
                             size='md'
                             icon={
-                                <Icon onClick={() => toggleInputStyle(passWordInput, setPassWordInput)}
+                                <Icon
+                                    onClick={() => toggleInputStyle(passWordInput, setPassWordInput)}
+                                    size='2xl'
                                     icon={passWordInput.icon}
-                                    style='!-mt-4 -ml-4' />
+                                    style='!-mt-2 -ml-4' />
                             }
                             error={!!formik?.errors.password}
                             label={typeof formik?.errors.password === 'string' ? formik?.errors.password : "Mot de passe"}
@@ -81,7 +83,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 icon={
                                     <Icon onClick={() => toggleInputStyle(passWordInput2, setPassWordInput2)}
                                         icon={passWordInput2.icon}
-                                        style='!-mt-4 !-ml-4' />
+                                        size='2xl'
+                                        style='!-mt-2 -ml-4' />
 
                                 }
                                 error={!!formik.errors.passwordConfirm}

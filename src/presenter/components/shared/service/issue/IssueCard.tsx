@@ -8,10 +8,12 @@ import { GenereMyActions, isLate } from "../../../../views/viewsEntities/utilsSe
 import { IssueView } from "../../../../views/viewsEntities/issueViewEntity";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import ServiceIssueCard from "./ServiceIssueCard";
+import { Icon } from "../../../common/IconComp";
+import { PathElement } from "../../../../constants";
 
 type IssueCardProps = { issue: IssueView, mines?: boolean, change: (e: any) => void, update?: () => void }
 export default function IssueCard({ mines, change, update, issue }: IssueCardProps) {
-    const { description, image, createdAt, mine } = issue
+    const { description, image, createdAt, mine, serviceId } = issue
     const Service = new ServiceView(issue?.Service, issue?.Service?.type === ServiceType.GET ? issue?.Service.User : issue?.Service?.UserResp)
     const haveImage = image ? true : false
     const isLateValue = isLate(createdAt, 15)
@@ -40,7 +42,7 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
         <>
             <Card className={haveImage ? "FixCard" : "FixCardNoImage"}>
                 <CardHeader
-                    className={haveImage ? "h-full !max-h-[16vh] !mb-0" : "FixCardHeaderNoImage"}
+                    className={haveImage ? "h-full !max-h-[15vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
@@ -51,11 +53,12 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
                                 }}>
                                 <Chip
                                     size="sm"
-                                    value={`pouet`}
+                                    value={`etape `}
                                     className="CyanChip">
                                 </Chip>
                             </button>
                         </div>
+
                         <DateChip
                             start={createdAt}
                             prefix="le" />
@@ -69,8 +72,18 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
                     }
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1 max-h-max -mt-2.5 mb-0`}>
-                    <Typography variant="h6">Probleme : </Typography>
-                    <div className="flex flex-col h-full !max-h-[3.5rem] overflow-auto">
+                    <div className="relative flex items-center justify-between">
+                        <Typography variant="h6">Probleme : </Typography>
+                        <Icon
+
+                            icon="arrow_circle_right"
+                            link={`/${PathElement.ISSUE}/${serviceId}`}
+                            title={`voir les details de concialtion  ${Service.title}`}
+                            size="4xl"
+                            style="absolute top-1 right-0"
+                            fill />
+                    </div>
+                    <div className="flex flex-col h-full !max-h-[3rem] overflow-auto">
                         <Typography
                             color="blue-gray">
                             {description}
@@ -78,7 +91,7 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
                     </div>
                 </CardBody>
 
-                <CardFooter className="CardFooter flex-col flex-1  pb-2 ">
+                <CardFooter className="CardFooter flex-col flex-1 !-mt-1.5 pb-2 ">
                     <ServiceIssueCard service={Service} />
                     <div
                         className="flex items-center justify-between"> {mine && mines &&

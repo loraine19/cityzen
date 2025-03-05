@@ -7,7 +7,6 @@ import { PostFormCard } from './announceComps/PostFormCard';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { PostDTO } from '../../../../infrastructure/DTOs/PostDTO';
-import { useUserStore } from '../../../../application/stores/user.store';
 import { Share } from '../../../../domain/entities/Post';
 import { PostView } from '../../../views/viewsEntities/postViewEntities';
 
@@ -19,7 +18,6 @@ export default function AnnounceEditPage() {
     const postIdViewModelFactory = DI.resolve('postIdViewModel');
     const { post, error, isLoading } = postIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<PostView>({} as PostView);
-    const user = useUserStore((state) => state.user);
     const [open, setOpen] = useState(false);
 
     const formSchema = object({
@@ -31,7 +29,7 @@ export default function AnnounceEditPage() {
 
 
     useEffect(() => {
-        !isLoading && post && post.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier cette annonce")
+        !isLoading && post && !post.mine && navigate("/msg?msg=Vous n'avez pas le droit de modifier cette annonce")
         setInitialValues(post)
     }, [isLoading]);
 

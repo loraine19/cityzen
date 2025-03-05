@@ -6,8 +6,8 @@ import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
 import { ImageBtn } from "../../../common/ImageBtn";
-import { dayMS, formatDateForDB, getDefaultImage, getLabel } from "../../../../views/viewsEntities/utilsService";
-import { eventCategories } from "../../../../constants";
+import { dayMS, formatDateForDB, getLabel } from "../../../../views/viewsEntities/utilsService";
+import { eventCategories, EventImage } from "../../../../constants";
 import { AddressDTO } from "../../../../../infrastructure/DTOs/AddressDTO";
 import { DateChip } from "../../../common/ChipDate";
 
@@ -16,10 +16,9 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100) || 0;
     const today = new Date(new Date().getTime() + (1 * dayMS)).toISOString().slice(0, 16).replace('Z', '');
 
-    ///// BLOB FUNCTION 
-    const imgCategory = getDefaultImage(formik.values.category || '');
-    const [img] = useState<string>(formik.values.image ? formik.values.image : imgCategory);
-    const [imgBlob, setImgBlob] = useState<string | undefined>(img);
+    ///// BLOB FUNCTION ;
+    const imgCategory = EventImage[formik.values.category as keyof typeof EventImage] || EventImage.default
+    const [imgBlob, setImgBlob] = useState<string>(formik.values.image ? formik.values.image : imgCategory);
 
     //// ADDRESS GPS FUNCTION
     useEffect(() => {
@@ -47,11 +46,12 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                             value={category || ''}
                             onChange={(val: any) => {
                                 formik.values.category = val;
-                                !formik.values.image && setImgBlob(getDefaultImage(val || ''));
+                                !formik.values.image && setImgBlob(EventImage[val as keyof typeof EventImage || EventImage.default]);
                             }}>
                             {eventCategories.map((category: Label, index: number) => {
                                 return (
-                                    <Option className={`rounded-full my-1 capitalize`}
+                                    <Option
+                                        className={`rounded-full my-1 capitalize`}
                                         value={category.value}
                                         key={index} >
                                         {category.label}
@@ -91,8 +91,14 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                     defaultValue={title} />
                                 <div className='flex flex-col lg:flex-row gap-5 h-full'>
                                     <div className='flex flex-col flex-1 pb-2'>
-                                        <Textarea rows={1} resize={true} variant="standard"
-                                            label={formik.errors.description ? formik.errors.description as string : "Description"} error={formik.errors.description ? true : false} name="description" onChange={formik.handleChange} className=" focus:outline-none min-h-full  "
+                                        <Textarea
+                                            rows={1}
+                                            resize={true}
+                                            variant="standard"
+                                            label={formik.errors.description ? formik.errors.description as string : "Description"}
+                                            error={formik.errors.description ? true : false}
+                                            name="description" onChange={formik.handleChange}
+                                            className=" focus:outline-none min-h-full  "
                                             defaultValue={description}
                                             containerProps={{ className: "grid h-full" }}
                                             labelProps={{ className: "before:content-none after:content-none" }} />
@@ -112,7 +118,8 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                 </div>
                                 <div className='flex gap-[2vw] pt-4'>
                                     <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
-                                        <Input type="datetime-local"
+                                        <Input
+                                            type="datetime-local"
                                             label={formik.errors.start ? formik.errors.start as string : "date de debut"}
                                             error={formik.errors.start ? true : false}
                                             name="start" variant="standard"
@@ -121,7 +128,8 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                             defaultValue={`${start && formatDateForDB(start)}`} />
                                     </div>
                                     <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
-                                        <Input type="datetime-local"
+                                        <Input
+                                            type="datetime-local"
                                             min={today}
                                             defaultValue={end && formatDateForDB(end)}
                                             label={formik.errors.end ? formik.errors.end as string : "date de fin"}
@@ -132,7 +140,8 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                 </div>
                                 <div className='flex w-full gap-[10%]  pt-1'>
                                     <div className='flex flex-col w-full max-w-[30rem]'>
-                                        <Input type='number'
+                                        <Input
+                                            type='number'
                                             label={formik.errors.participantsMin ? formik.errors.participantsMin as string : "participants minimum"}
                                             name="participantsMin"
                                             error={formik.errors.participantsMin ? true : false}
@@ -142,17 +151,22 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                     </div>
                                     <div className={"flex items-center  gap-1 flex-col justify-center w-full"}>
                                         <div className="mb-2 flex  w-full items-center justify-between gap-4">
-                                            <Typography color="blue-gray" variant="small">
+                                            <Typography
+                                                color="blue-gray"
+                                                variant="small">
                                                 {pourcentParticipants > 0 && `Particpants inscrits` ||
                                                     pourcentParticipants >= 100 && `validé` || `aucun inscrit`}
                                             </Typography>
-                                            <Typography color="blue-gray" variant="small"
+                                            <Typography
+                                                color="blue-gray"
+                                                variant="small"
                                                 className={pourcentParticipants <= 0 || pourcentParticipants >= 100 ? 'hidden' : ''}>
                                                 {Participants?.length}  /  {participantsMin}
                                             </Typography>
                                         </div>
                                         <Progress
-                                            value={pourcentParticipants} size="md"
+                                            value={pourcentParticipants}
+                                            size="md"
                                             color={pourcentParticipants === 100 ? "green" : "cyan"} />
                                     </div>
                                 </div>
@@ -162,7 +176,8 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                 </main>
                 <footer className="w-respLarge">
                     <Button
-                        type="submit" size="lg"
+                        type="submit"
+                        size="lg"
                         className="lgBtn w-full rounded-full" >
                         enregistrer
                     </Button>

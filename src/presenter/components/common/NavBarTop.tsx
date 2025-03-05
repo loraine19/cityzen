@@ -1,6 +1,6 @@
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { Icon } from "./SmallComps";
+import { Icon } from "./IconComp";
 import { NotifBadge } from "./NotifBadge";
 import { useUserStore } from "../../../application/stores/user.store";
 
@@ -19,7 +19,7 @@ export default function NavBarTop() {
                             className="BgUser !shadow cursor-pointer "
                             variant="circular"
                             alt={firstName || 'user'}
-                            src={image ? image as string : '../../../image/person.svg'}
+                            src={image ? image as string : '/image/person.svg'}
                         />
                     </MenuHandler>
                     <MenuList className="!rounded-xl !shadow-xl ">

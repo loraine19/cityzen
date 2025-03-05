@@ -1,10 +1,12 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, } from "@material-tailwind/react";
 import { Profile } from "../../../../../domain/entities/Profile";
-import { ProfileDiv, Icon, Title } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { dayMS } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
 import { ProgressBar } from "../../../common/ProgressBar";
+import { Title } from "../../../common/CardTitle";
+import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type PoolDetailCardProps = { pool: PoolSurveyView, setOpen: (open: boolean) => void }
 
@@ -23,7 +25,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
     }
 
     return (
-        <div className="pt-6 pb-1 h-full flex">
+        <div className="pt-8 pb-1 h-full flex">
             <Card className="FixCardNoImage w-respLarge" >
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
@@ -78,7 +80,8 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                     fill={pool?.IVoted}
                                     color={color()}
                                     size="2xl"
-                                    title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`} style="pr-2" />}>
+                                    title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
+                                    style="pr-2" />}>
                         </Chip>
                     </div>
                 </CardFooter>

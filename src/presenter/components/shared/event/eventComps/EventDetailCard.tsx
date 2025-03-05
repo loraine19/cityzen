@@ -1,15 +1,17 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, } from "@material-tailwind/react";
 import { AvatarStack } from "./AvatarStack";
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
-import { ProgressLargebar, ProfileDiv, Title, Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import { Link } from "react-router-dom";
 import { Skeleton } from "../../../common/Skeleton";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
+import { Title } from "../../../common/CardTitle";
+import { ProgressLargebar } from "../../../common/ProgressBar";
+import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type EventCardProps = { EventLoad: EventView, refetch?: () => void, change?: (e: any) => void }
-export function EventDetailCard(props: EventCardProps) {
-    const { EventLoad, refetch } = props
+export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
     const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, } = EventLoad;
     const author = User?.Profile
 

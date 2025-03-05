@@ -1,5 +1,5 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
-import { Icon, ProfileDiv, Title } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { useState, } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
@@ -7,6 +7,8 @@ import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { DateChip } from "../../../common/ChipDate";
 import { PostView } from "../../../../views/viewsEntities/postViewEntities";
+import { Title } from "../../../common/CardTitle";
+import { ProfileDiv } from "../../../common/ProfilDiv";
 
 export default function PostDetailCard(props: { post: PostView, mines?: boolean, change: (e: any) => void }) {
     const [post, setPost] = useState<PostView>(props.post)

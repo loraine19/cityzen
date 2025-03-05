@@ -8,7 +8,7 @@ import TabsMenu from "../../common/TabsMenu";
 import CalendarComp from "../../common/CalendarComp";
 import { EventCard } from "./eventComps/EventCard";
 import DI from "../../../../di/ioc";
-import { Icon } from "../../common/SmallComps";
+import { Icon } from "../../common/IconComp";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
@@ -106,7 +106,8 @@ export default function EventListPage() {
                     <Icon
                         onClick={switchClick}
                         icon={view === "view_agenda" ? "calendar_month" : "list"}
-                        size="4xl"
+                        size="3xl"
+                        style="mt-1"
                         color="gray"
                         title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
                 </div>

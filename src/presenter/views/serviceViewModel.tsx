@@ -8,6 +8,8 @@ export const serviceViewModel = () => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
+      refetchOnWindowFocus: false,
+      staleTime: 600000, // 10 minutes,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
 

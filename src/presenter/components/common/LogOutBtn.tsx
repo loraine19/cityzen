@@ -1,4 +1,4 @@
-import { Icon } from "./SmallComps";
+import { Icon } from "./IconComp";
 import DI from "../../../di/ioc";
 
 export const LogOutButton = () => {

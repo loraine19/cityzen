@@ -1,8 +1,7 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
-import { Icon, Title } from '../../../common/SmallComps'
+import { Icon } from '../../../common/IconComp'
 import { Profile } from "../../../../../domain/entities/Profile";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { ProfileDiv } from "../../../common/SmallComps";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { dayMS, GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
@@ -10,6 +9,8 @@ import { ProgressBar } from "../../../common/ProgressBar";
 import DI from "../../../../../di/ioc";
 import { VoteCard } from "./VoteCard";
 import { useState } from "react";
+import { ProfileDiv } from "../../../common/ProfilDiv";
+import { Title } from "../../../common/CardTitle";
 
 type PoolCardProps = {
     pool: any,
@@ -96,20 +97,22 @@ export function PoolCard({
                             actions={actions}
                             update={update} />}
                     <div className="flex items-center justify-between gap-2">
-                        <Chip
-                            value={pool.Votes?.length}
-                            variant="ghost"
-                            className="rounded-full h-max flex items-center gap-3 px-4"
-                            icon={
-                                <Icon
-                                    onClick={() => setOpen(true)}
-                                    icon="smart_card_reader"
-                                    fill={pool?.IVoted}
-                                    color={color()}
-                                    size="xl"
-                                    title={`  ${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                    style=" pl-0.5" />}>
-                        </Chip>
+                        <button onClick={() => setOpen(true)}>
+                            <Chip
+                                value={pool.Votes?.length}
+                                variant="ghost"
+                                className="GrayChip px-3.5"
+                                icon={
+                                    <Icon
+
+                                        icon="smart_card_reader"
+                                        fill={pool?.IVoted}
+                                        color={color()}
+                                        size="md"
+                                        title={`  ${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
+                                        style="scale-150" />}>
+                            </Chip>
+                        </button>
                         <Icon
                             icon="arrow_circle_right"
                             title={`voir les details de ${pool.title}`}

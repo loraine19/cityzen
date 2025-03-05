@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import DI from '../../di/ioc';
 import { User } from '../../domain/entities/User';
 import { Profile } from '../../domain/entities/Profile';
-import { cryptedStorage } from '../../infrastructure/services/storageService';
+import { cryptedCookie } from '../../infrastructure/services/cookiService';
 
 
 
@@ -37,7 +37,7 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
     },
         {
             name: 'user',
-            storage: createJSONStorage(() => new cryptedStorage()),
+            storage: createJSONStorage(() => new cryptedCookie()),
         }
     )
 );

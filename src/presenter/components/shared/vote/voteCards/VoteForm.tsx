@@ -9,7 +9,7 @@ import { surveyCategories } from "../../../../constants";
 import { VoteTarget } from "../../../../../domain/entities/Vote";
 import DI from "../../../../../di/ioc";
 import { User } from "../../../../../domain/entities/User";
-import { ProfileDiv } from "../../../common/SmallComps";
+import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type PoolSurveyFormProps = {
     formik: any;

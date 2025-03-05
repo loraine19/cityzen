@@ -2,12 +2,13 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } fr
 import { AvatarStack } from "./AvatarStack";
 import { useState } from "react";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { Title, Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import DI from "../../../../../di/ioc";
 import { useNotificationStore } from "../../../../../application/stores/notification.store";
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
+import { Title } from "../../../common/CardTitle";
 
 type EventCardProps = {
     event: EventView, refetch?: () => void,
@@ -115,14 +116,14 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         <Chip
                             value={participantsMin}
                             variant="ghost"
-                            className="rounded-full h-max flex items-center px-4 gap-2"
+                            className="rounded-full h-max flex items-center  "
                             icon={
                                 <Icon
-
+                                    style='scale-150'
+                                    size="md"
                                     icon="person"
                                     fill={event?.Igo}
                                     color={event?.Igo ? "cyan" : "gray"}
-                                    style=" pl-2"
                                     title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>

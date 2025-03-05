@@ -5,15 +5,14 @@ import { useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
-import { Address } from '../../../../domain/entities/Address';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
-import { EventUpdateDTO, EventDTO } from '../../../../infrastructure/DTOs/EventDTO';
+import { EventDTO } from '../../../../infrastructure/DTOs/EventDTO';
 
 
 export default function EventCreatePage() {
     const navigate = useNavigate();
     const [Address, setAddress] = useState<AddressDTO>({} as AddressDTO)
-    const postEvent = async (data: EventUpdateDTO, Address: Address) => await DI.resolve('postEventUseCase').execute(data, Address)
+    const postEvent = async (data: EventDTO) => await DI.resolve('postEventUseCase').execute(data)
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -40,18 +39,16 @@ export default function EventCreatePage() {
     const postFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
-        const { Address, Participants, ...rest } = formik.values;
-        const updateData = { ...rest }
-        const post = await postEvent(updateData, Address);
+        const dataDTO = new EventDTO(formik.values)
+        const post = await postEvent(dataDTO);
         if (post) {
             navigate("/evenement/" + post.id);
             location.reload()
         }
     }
 
-
-
     const [open, setOpen] = useState(false);
+
     return (
         <div className="Body cyan">
             <ConfirmModal

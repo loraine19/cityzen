@@ -27,14 +27,6 @@ export class ModalValues {
     element: any = '';
 }
 
-export const defaultEventImage = [
-    { type: "", image: "https://images.squarespace-cdn.com/content/v1/53dd6676e4b0fedfbc26ea91/b5511a07-a9b9-4c65-aa14-474e3698b8f8/6254751079_46a4340650_h.jpg" },
-    { type: "CATEGORY_1", image: "https://miro.medium.com/v2/resize:fit:828/format:webp/1*wWopwRHXQsuwUXAxwdShWw.png" },
-    { type: "CATEGORY_2", image: "https://blog.nextdoor.com/wp-content/uploads/2020/01/nextdoorevent3-22-2018-287-1.jpg" },
-    { type: "CATEGORY_3", image: "https://worldculturefest.org/wp-content/uploads/2023/06/Home_Carousel-3.jpg" },
-    { type: "CATEGORY_4", image: "https://museum.toulouse-metropole.fr/wp-content/uploads/sites/6/2023/09/blob.png" },
-    { type: "CATEGORY_5", image: "https://blog.collinsdictionary.com/wp-content/uploads/sites/39/2023/03/autre-blog.jpg" }
-]
 
 
 export const dayMS = 24 * 60 * 60 * 1000;

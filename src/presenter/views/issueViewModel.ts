@@ -8,6 +8,8 @@ export const issueViewModel = () => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
+      refetchOnWindowFocus: false,
+      staleTime: 600000, // 10 minutes,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
 
@@ -42,6 +44,8 @@ export const IssueIdViewModel = () => {
   return (id: number) => {
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
+      refetchOnWindowFocus: false,
+      staleTime: 600000, // 10 minutes,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
     const userId = user?.id || 0

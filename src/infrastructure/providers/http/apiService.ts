@@ -62,7 +62,7 @@ export class ApiService implements ApiServiceI {
 
     constructor() {
         this.authService = new AuthService();
-        this.api = axios.create({ baseURL });
+        this.api = axios.create({ baseURL, withCredentials: true });
         this.api.interceptors.request.use(this.handleRequest);
         this.api.interceptors.response.use(
             response => response,
@@ -77,21 +77,34 @@ export class ApiService implements ApiServiceI {
     };
 
     private handleRequest = (config: any) => {
-        console.log('base url:', baseURL);
-        // remove this beacuse it's not used since I use httpOnly cookie
+        // implemente here cookies filter 
+        const allowedCookieName = import.meta.env.VITE_ACCESS_COOKIE_NAME;
+        let cookieHeader = '';
+
+        // Récupérer les cookies et filtrer
+        const cookies = document.cookie.split(';').map((c) => c.trim());
+        console.log('cookies:', cookies);
+        for (const cookie of cookies) {
+            const [name, value] = cookie.split('=');
+            if (name === allowedCookieName) {
+                cookieHeader = `${name}=${value}`;
+                break; // On a trouvé le cookie, on arrête la boucle
+            }
+        }
+
+        // Ajouter l'en-tête Cookie à la requête
+        config.headers.Cookie = 'cookieHeader';
+        config.headers["Content-Type"] = "application/json"; // Si ce n'est pas déjà fait
+        console.log('config:', config);
         return config;
+
     };
 
     private handleResponseError = async (error: any) => {
-
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
             this.logWithTime('not api error');
-            // if (!originalRequest._retry) {
-            //     originalRequest._retry = true;
-            //     if (!window.location.pathname.includes('/sign') && !window.location.pathname.includes('/reset')) {
-            //         setTimeout(() => window.location.replace('/signin?msg=merci de vous connecter dans quelques instants'), 50000);
             return Promise.reject(new ApiError(error.code, error.message));
         }
         const { status, data } = error.response;
@@ -136,6 +149,7 @@ export class ApiService implements ApiServiceI {
         const refreshToken = this.authService.getRefreshToken();
         if (window.location.pathname.includes('/sign')) return false;
         if (!refreshToken && !window.location.pathname.includes('/sign')) {
+            console.error('no refresh token');
             window.location.replace('/signin?msg=merci de vous connecter');
         }
         try {

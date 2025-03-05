@@ -12,7 +12,7 @@ import {
 var React2 = __toESM(require_react());
 var ReactDOM = __toESM(require_react_dom());
 
-// node_modules/react-router-dom/node_modules/react-router/dist/index.js
+// node_modules/react-router/dist/index.js
 var React = __toESM(require_react());
 
 // node_modules/@remix-run/router/dist/router.js
@@ -1093,6 +1093,7 @@ function createRouter(init) {
   let getScrollPosition = null;
   let initialScrollRestored = init.hydrationData != null;
   let initialMatches = matchRoutes(dataRoutes, init.history.location, basename);
+  let initialMatchesIsFOW = false;
   let initialErrors = null;
   if (initialMatches == null && !patchRoutesOnNavigationImpl) {
     let error = getInternalRouterError(404, {
@@ -1120,6 +1121,7 @@ function createRouter(init) {
     if (future.v7_partialHydration) {
       let fogOfWar = checkFogOfWar(null, dataRoutes, init.history.location.pathname);
       if (fogOfWar.active && fogOfWar.matches) {
+        initialMatchesIsFOW = true;
         initialMatches = fogOfWar.matches;
       }
     }
@@ -1466,8 +1468,19 @@ function createRouter(init) {
     pendingViewTransitionEnabled = (opts && opts.enableViewTransition) === true;
     let routesToUse = inFlightDataRoutes || dataRoutes;
     let loadingNavigation = opts && opts.overrideNavigation;
-    let matches = matchRoutes(routesToUse, location, basename);
+    let matches = opts != null && opts.initialHydration && state.matches && state.matches.length > 0 && !initialMatchesIsFOW ? (
+      // `matchRoutes()` has already been called if we're in here via `router.initialize()`
+      state.matches
+    ) : matchRoutes(routesToUse, location, basename);
     let flushSync = (opts && opts.flushSync) === true;
+    if (matches && state.initialized && !isRevalidationRequired && isHashChangeOnly(state.location, location) && !(opts && opts.submission && isMutationMethod(opts.submission.formMethod))) {
+      completeNavigation(location, {
+        matches
+      }, {
+        flushSync
+      });
+      return;
+    }
     let fogOfWar = checkFogOfWar(matches, routesToUse, location.pathname);
     if (fogOfWar.active && fogOfWar.matches) {
       matches = fogOfWar.matches;
@@ -1484,14 +1497,6 @@ function createRouter(init) {
         errors: {
           [route.id]: error
         }
-      }, {
-        flushSync
-      });
-      return;
-    }
-    if (state.initialized && !isRevalidationRequired && isHashChangeOnly(state.location, location) && !(opts && opts.submission && isMutationMethod(opts.submission.formMethod))) {
-      completeNavigation(location, {
-        matches
       }, {
         flushSync
       });
@@ -1893,7 +1898,7 @@ function createRouter(init) {
     let abortController = new AbortController();
     let fetchRequest = createClientSideRequest(init.history, path, abortController.signal, submission);
     if (isFogOfWar) {
-      let discoverResult = await discoverRoutes(requestMatches, path, fetchRequest.signal);
+      let discoverResult = await discoverRoutes(requestMatches, new URL(fetchRequest.url).pathname, fetchRequest.signal, key);
       if (discoverResult.type === "aborted") {
         return;
       } else if (discoverResult.type === "error") {
@@ -2040,7 +2045,7 @@ function createRouter(init) {
     let abortController = new AbortController();
     let fetchRequest = createClientSideRequest(init.history, path, abortController.signal);
     if (isFogOfWar) {
-      let discoverResult = await discoverRoutes(matches, path, fetchRequest.signal);
+      let discoverResult = await discoverRoutes(matches, new URL(fetchRequest.url).pathname, fetchRequest.signal, key);
       if (discoverResult.type === "aborted") {
         return;
       } else if (discoverResult.type === "error") {
@@ -2474,7 +2479,7 @@ function createRouter(init) {
       matches: null
     };
   }
-  async function discoverRoutes(matches, pathname, signal) {
+  async function discoverRoutes(matches, pathname, signal, fetcherKey) {
     if (!patchRoutesOnNavigationImpl) {
       return {
         type: "success",
@@ -2488,8 +2493,10 @@ function createRouter(init) {
       let localManifest = manifest;
       try {
         await patchRoutesOnNavigationImpl({
+          signal,
           path: pathname,
           matches: partialMatches,
+          fetcherKey,
           patch: (routeId, children) => {
             if (signal.aborted) return;
             patchRoutesImpl(routeId, children, routesToUse, localManifest, mapRouteProperties2);
@@ -3125,16 +3132,22 @@ async function convertDataStrategyResultToDataResult(dataStrategyResult) {
   }
   if (type === ResultType.error) {
     if (isDataWithResponseInit(result)) {
-      var _result$init2;
+      var _result$init3, _result$init4;
       if (result.data instanceof Error) {
-        var _result$init;
+        var _result$init, _result$init2;
         return {
           type: ResultType.error,
           error: result.data,
-          statusCode: (_result$init = result.init) == null ? void 0 : _result$init.status
+          statusCode: (_result$init = result.init) == null ? void 0 : _result$init.status,
+          headers: (_result$init2 = result.init) != null && _result$init2.headers ? new Headers(result.init.headers) : void 0
         };
       }
-      result = new ErrorResponseImpl(((_result$init2 = result.init) == null ? void 0 : _result$init2.status) || 500, void 0, result.data);
+      return {
+        type: ResultType.error,
+        error: new ErrorResponseImpl(((_result$init3 = result.init) == null ? void 0 : _result$init3.status) || 500, void 0, result.data),
+        statusCode: isRouteErrorResponse(result) ? result.status : void 0,
+        headers: (_result$init4 = result.init) != null && _result$init4.headers ? new Headers(result.init.headers) : void 0
+      };
     }
     return {
       type: ResultType.error,
@@ -3143,21 +3156,21 @@ async function convertDataStrategyResultToDataResult(dataStrategyResult) {
     };
   }
   if (isDeferredData(result)) {
-    var _result$init3, _result$init4;
+    var _result$init5, _result$init6;
     return {
       type: ResultType.deferred,
       deferredData: result,
-      statusCode: (_result$init3 = result.init) == null ? void 0 : _result$init3.status,
-      headers: ((_result$init4 = result.init) == null ? void 0 : _result$init4.headers) && new Headers(result.init.headers)
+      statusCode: (_result$init5 = result.init) == null ? void 0 : _result$init5.status,
+      headers: ((_result$init6 = result.init) == null ? void 0 : _result$init6.headers) && new Headers(result.init.headers)
     };
   }
   if (isDataWithResponseInit(result)) {
-    var _result$init5, _result$init6;
+    var _result$init7, _result$init8;
     return {
       type: ResultType.data,
       data: result.data,
-      statusCode: (_result$init5 = result.init) == null ? void 0 : _result$init5.status,
-      headers: (_result$init6 = result.init) != null && _result$init6.headers ? new Headers(result.init.headers) : void 0
+      statusCode: (_result$init7 = result.init) == null ? void 0 : _result$init7.status,
+      headers: (_result$init8 = result.init) != null && _result$init8.headers ? new Headers(result.init.headers) : void 0
     };
   }
   return {
@@ -3723,7 +3736,7 @@ function persistAppliedTransitions(_window, transitions) {
   }
 }
 
-// node_modules/react-router-dom/node_modules/react-router/dist/index.js
+// node_modules/react-router/dist/index.js
 function _extends2() {
   _extends2 = Object.assign ? Object.assign.bind() : function(target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -3930,7 +3943,8 @@ function useRoutesImpl(routes, locationArg, dataRouterState, future) {
     "useRoutes() may be used only in the context of a <Router> component."
   ) : invariant(false) : void 0;
   let {
-    navigator
+    navigator,
+    static: isStatic
   } = React.useContext(NavigationContext);
   let {
     matches: parentMatches
@@ -3963,7 +3977,7 @@ function useRoutesImpl(routes, locationArg, dataRouterState, future) {
     let segments = pathname.replace(/^\//, "").split("/");
     remainingPathname = "/" + segments.slice(parentSegments.length).join("/");
   }
-  let matches = matchRoutes(routes, {
+  let matches = !isStatic && dataRouterState && dataRouterState.matches && dataRouterState.matches.length > 0 ? dataRouterState.matches : matchRoutes(routes, {
     pathname: remainingPathname
   });
   if (true) {
@@ -5985,7 +5999,7 @@ export {
 
 @remix-run/router/dist/router.js:
   (**
-   * @remix-run/router v1.21.1
+   * @remix-run/router v1.23.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -5997,7 +6011,7 @@ export {
 
 react-router/dist/index.js:
   (**
-   * React Router v6.28.2
+   * React Router v6.30.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -6009,7 +6023,7 @@ react-router/dist/index.js:
 
 react-router-dom/dist/index.js:
   (**
-   * React Router DOM v6.28.2
+   * React Router DOM v6.30.0
    *
    * Copyright (c) Remix Software Inc.
    *

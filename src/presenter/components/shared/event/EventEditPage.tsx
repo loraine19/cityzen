@@ -6,23 +6,22 @@ import { EventForm } from './eventComps/EventForm';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
-import { useUserStore } from '../../../../application/stores/user.store';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { EventDTO, EventUpdateDTO } from '../../../../infrastructure/DTOs/EventDTO';
 import { EventView } from '../../../views/viewsEntities/eventViewEntities';
+import { generateDivObject } from '../../../views/viewsEntities/utilsService';
 
 export default function EventDetailPage() {
     const { id } = useParams()
     const idS = id ? parseInt(id) : 0;
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, isLoading } = eventIdViewModelFactory(idS);
-    const user = useUserStore((state) => state.user);
     const [initialValues, setInitialValues] = useState<EventView>({} as EventView)
     const [Address, setAddress] = useState<AddressDTO>(initialValues.Address || {} as AddressDTO)
     const updateEvent = async (id: number, data: EventUpdateDTO, address: AddressDTO) => await DI.resolve('updateEventUseCase').execute(id, data, address)
 
     useEffect(() => {
-        event && event.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
+        event && !event.mine && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
         setInitialValues(event)
     }, [isLoading]);
 
@@ -77,7 +76,7 @@ export default function EventDetailPage() {
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => await updateFunction()}
                 title={"Confimrer la modification"}
-                element={(JSON.stringify(new EventDTO(formik.values), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
+                element={generateDivObject(new EventDTO(formik.values))} />
 
             {isLoading || formik.values === null ?
                 <Skeleton /> :

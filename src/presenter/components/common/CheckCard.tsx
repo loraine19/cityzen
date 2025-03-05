@@ -1,6 +1,6 @@
 import { Checkbox, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { Icon } from "./SmallComps";
+import { Icon } from "./IconComp";
 
 type checkCardProps = {
     categoriesArray: string[];

@@ -12,7 +12,7 @@ import { User } from '../../../../domain/entities/User';
 import { Skeleton } from '../../common/Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { LogOutButton } from '../../common/LogOutBtn';
-import { Icon } from '../../common/SmallComps';
+import { Icon } from '../../common/IconComp';
 
 
 export default function MyInfosPage() {

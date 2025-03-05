@@ -97,7 +97,7 @@ export default function ConciationListPage() {
 
     return (
         <div className="Body gray">
-            <header className="px-4 !gap-0">
+            <header className="px-4 !gap-0 !pb-0">
                 <NavBarTop />
                 <SubHeader
                     closeBtn

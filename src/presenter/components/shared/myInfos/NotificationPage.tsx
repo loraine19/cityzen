@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { NotifView } from "../../../../domain/entities/Notif";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
@@ -9,6 +8,7 @@ import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { notifCategories } from "../../../views/viewsEntities/utilsService";
+import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
 
 export default function NotificationPage() {
     const { notifList, updateNotif, removeNotif } = useNotificationStore()
@@ -18,7 +18,6 @@ export default function NotificationPage() {
     const [categorySelected, setCategorySelected] = useState<string>(notifCategories[0].value);
     const [notifFind, setNotifFind] = useState<string>('');
     const [loading] = useState<boolean>(false);
-
 
 
     useEffect(() => { console.log(notifList); setList(notifList) }, [notifList])

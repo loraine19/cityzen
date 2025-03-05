@@ -1,10 +1,10 @@
 // src/application/stores/notificationStore.ts
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { NotifView } from '../../domain/entities/Notif';
 import { cryptedStorage } from '../../infrastructure/services/storageService';
 import DI from '../../di/ioc';
 import { useUserStore } from './user.store';
+import { NotifView } from '../../presenter/views/viewsEntities/notifViewEntity';
 
 interface NotificationStore {
   notifList: NotifView[];

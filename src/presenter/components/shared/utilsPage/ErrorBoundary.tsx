@@ -3,6 +3,7 @@ import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
 import { Button, Typography } from '@material-tailwind/react';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { LogOutButton } from '../../common/LogOutBtn';
+import { PathElement } from '../../../constants';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -38,14 +39,17 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     render() {
         if (this.state.hasError) {
             const path = window.location.pathname
-            let bodyColor = 'defaultColor';
-            if (path.includes('service') || path.includes('evenemen')) {
-                bodyColor = 'cyan';
+            let bodyColor: string;
+            switch (true) {
+                case path.includes(PathElement.SERVICE) || path.includes(PathElement.EVENT):
+                    bodyColor = 'cyan';
+                    break;
+                case path.includes(PathElement.POST) || path.includes(PathElement.SURVEY) || path.includes(PathElement.POOL) || path.includes(PathElement.ISSUE) || path.includes(PathElement.VOTE):
+                    bodyColor = 'orange';
+                    break;
+                default:
+                    bodyColor = 'gray';
             }
-            else if (path.includes('annonce') || path.includes('sondage') || path.includes('cagnotte') || path.includes('litige')) {
-                bodyColor = 'orange'
-            }
-            else bodyColor = 'gray'
 
             let open = true
 

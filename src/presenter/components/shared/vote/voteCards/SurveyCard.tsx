@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import { Icon, Title } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { dayMS } from "../../../../../domain/entities/frontEntities";
 import { DateChip } from "../../../common/ChipDate";
@@ -9,6 +9,7 @@ import { ProgressBar } from "../../../common/ProgressBar";
 import DI from "../../../../../di/ioc";
 import { useState } from "react";
 import { VoteCard } from "./VoteCard";
+import { Title } from "../../../common/CardTitle";
 
 
 type SurveyCardProps = {
@@ -108,19 +109,22 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                             actions={actions}
                             update={update} />}
                     <div className="flex items-center justify-between gap-2">
-                        <Chip
-                            value={survey?.Votes?.length}
-                            variant="ghost"
-                            className="min-w-max rounded-full px-4"
-                            icon={<Icon
-                                onClick={() => setOpen(true)}
-                                icon="smart_card_reader"
-                                fill={survey?.IVoted}
-                                color={color()}
-                                size="xl"
-                                title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
-                                style=" pl-1 hover:!bg-none" />}>
-                        </Chip>
+                        <button
+                            onClick={() => { setOpen(true) }}>
+                            <Chip
+                                value={survey?.Votes?.length}
+                                variant="ghost"
+                                size='md'
+                                className="GrayChip px-3"
+                                icon={<Icon
+                                    icon="smart_card_reader"
+                                    fill={survey?.IVoted}
+                                    color={color()}
+                                    size="md"
+                                    title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
+                                    style="scale-150" />}>
+                            </Chip>
+                        </button>
                         <Icon
                             icon="arrow_circle_right"
                             title={`voir les details de ${survey?.title}`}

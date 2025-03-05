@@ -1,4 +1,3 @@
-//src/di/ioc.ts
 import { asClass, asFunction, createContainer, BuildResolverOptions } from 'awilix';
 import { UserRepositoryImpl } from '../infrastructure/repositoriesImpl/UserRespositoryImpl';
 import { UserApi } from '../infrastructure/providers/http/userApi';
@@ -6,7 +5,6 @@ import { NotifRepositoryImpl } from '../infrastructure/repositoriesImpl/NotifRes
 import { NotifApi } from '../infrastructure/providers/http/notifApi';
 import { EventRepositoryImpl } from '../infrastructure/repositoriesImpl/EventRespositoryImpl';
 import { EventApi } from '../infrastructure/providers/http/eventApi';
-import { UserService } from '../infrastructure/services/userService';
 import { ParticipantRepositoryImpl } from '../infrastructure/repositoriesImpl/ParticipantRespositoryImpl';
 import { ParticipantApi } from '../infrastructure/providers/http/participantApi';
 import { AuthApi } from '../infrastructure/providers/http/authApi';
@@ -16,7 +14,6 @@ import { ResetPasswordRepositoryImpl } from '../infrastructure/repositoriesImpl/
 import { ProfileRepositoryImpl } from '../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
 import { profileMeViewModel } from '../presenter/views/profileViewModel';
 import { ProfileApi } from '../infrastructure/providers/http/profileApi';
-import { ProfileService } from '../infrastructure/services/profileService';
 import { AddressRepositoryImpl } from '../infrastructure/repositoriesImpl/AddressRespositoryImpl';
 import { AddressApi } from '../infrastructure/providers/http/addressApi';
 import { eventIdViewModel, eventsWeekViewModel, eventViewModel } from '../presenter/views/eventViewModel';
@@ -31,7 +28,6 @@ import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignI
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
 import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
-import { NotifService } from '../presenter/views/viewsEntities/notifService';
 import { GetNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
 import { PostProfileUseCase, UpdateProfileUseCase } from '../application/useCases/profile.useCase';
@@ -99,7 +95,6 @@ container.register({
     getUsersUseCase: asClass(GetUsersUseCase),
     getUsersModosUseCase: asClass(GetUsersModosUseCase),
     userRepository: asClass(UserRepositoryImpl),
-    userService: asClass(UserService),
     userData: asClass(UserApi),
 
     ////PROFILE
@@ -107,13 +102,11 @@ container.register({
     updateProfileUseCase: asClass(UpdateProfileUseCase),
     profileRepository: asClass(ProfileRepositoryImpl),
     profileMeViewModel: asFunction(profileMeViewModel),
-    profileService: asClass(ProfileService),
     profileData: asClass(ProfileApi),
 
     ////NOTIFS
     notifViewModel: asFunction(notifViewModel),
     getNotifUseCase: asClass(GetNotifUseCase),
-    notifService: asClass(NotifService),
     notifRepository: asClass(NotifRepositoryImpl),
     notifData: asClass(NotifApi),
 

@@ -15,6 +15,7 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { postCategories } from "../../../constants";
 import PostCard from "./announceComps/PostCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { Icon } from "../../common/IconComp";
 
 export default function AnnounceListPage() {
     const [filter, setFilter] = useState<string>('');
@@ -105,18 +106,23 @@ export default function AnnounceListPage() {
                     type={`annonces ${category !== '' ? getLabel(category, postCategories).toLowerCase() : ""}`} />
                 <TabsMenu
                     labels={postTabs} />
-                <div className="flex items-center justify-center gap-4 lg:px-8">
+                <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
                     <CategoriesSelect
                         categoriesArray={postCategories}
                         change={change}
                         categorySelected={category.toString()} />
-                    <button onClick={switchClick}>
-                        <span className="material-symbols-outlined text-gray-700 !text-4xl flex items-center">
-                            {view === "list" ? "list" : "dashboard"}
-                        </span>
-                    </button>
+
+                    <Icon
+                        icon={view === "list" ? "list" : "dashboard"}
+                        onClick={switchClick}
+                        size="3xl"
+                        style="mt-1"
+                    />
                 </div>
-                {notif && <div className="w-full flex justify-center p-8">{notif}</div>}
+                {notif &&
+                    <div className="w-full flex justify-center p-8">
+                        {notif}
+                    </div>}
             </header>
             <main
                 ref={divRef}

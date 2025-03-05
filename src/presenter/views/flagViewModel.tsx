@@ -34,7 +34,6 @@ export const flagByIdViewModel = () => {
       })
 
     const flag = isLoading ? {} : new FlagView(data)
-    console.log(flag, data)
     return {
       flag,
       refetch,

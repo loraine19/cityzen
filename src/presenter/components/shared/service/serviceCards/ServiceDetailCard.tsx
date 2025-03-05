@@ -1,10 +1,12 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { HardLevel, SkillLevel, ServiceStep } from "../../../../../domain/entities/Service";
-import { Title, ProfileDiv, Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
+import { Title } from "../../../common/CardTitle";
+import { ProfileDiv } from "../../../common/ProfilDiv";
 
 export default function ServiceDetailComp(props: { service: ServiceView, mines?: boolean }) {
     const { service } = props
@@ -67,19 +69,21 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                         <div className="flex  items-center gap-2 mb-1">
                             <Chip
                                 value={SkillLevel[skill as unknown as keyof typeof SkillLevel]}
-                                className=" GrayChip  px-5 rounded-full h-full flex items-center justify-center"
+                                className=" GrayChip  px-4 rounded-full h-full flex items-center justify-center"
                                 icon={<Icon
+                                    size="md"
                                     icon="design_services"
-                                    style="pl-2.5 "
+                                    style="scale-150 "
                                     title="Compétence" />}>
                             </Chip>
                             <Chip
                                 value={HardLevel[hard as unknown as keyof typeof HardLevel]}
-                                className=" GrayChip px-5 rounded-full h-full flex items-center justify-center gap-4"
+                                className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-4"
                                 icon={<Icon
+                                    size="md"
                                     icon="signal_cellular_alt"
                                     fill
-                                    style="pl-2.5 "
+                                    style="scale-150"
                                     title="Difficulté" />}>
                             </Chip>
                         </div>
@@ -109,31 +113,25 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                 {description}
                             </Typography>
                             {UserResp &&
-                                <div className="flex flex-col items-end gap-3">
-                                    <div className="flex flex-col items-end ">
-                                        <Typography
-                                            variant="small"
-                                            className="font-normal !p-0">
-                                            {UserResp.Profile?.firstName} {UserResp.Profile?.lastName}
-                                        </Typography>
-                                        <Typography
-                                            variant="small"
-                                            color="gray" >
-                                            {UserResp.Profile?.skills} ◦
-                                        </Typography>
-                                        <Avatar
-                                            src={UserResp.Profile?.image as string || './person.png'}
-                                            size="sm"
-                                            alt="avatar"
-                                            withBorder={true}
-                                            color="blue-gray" />
-                                    </div>
-                                    <Chip
-                                        size={"sm"}
-                                        value={statusS}
-                                        className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} rounded-full h-max flex items-center gap-2 font-medium shadow`}>
-                                    </Chip>
-                                </div>}
+                                <div className="flex flex-col items-end ">
+                                    <Typography
+                                        variant="small"
+                                        className="font-normal !p-0">
+                                        {UserResp.Profile?.firstName} {UserResp.Profile?.lastName}
+                                    </Typography>
+                                    <Typography
+                                        variant="small"
+                                        color="gray" >
+                                        {UserResp.Profile?.skills} ◦
+                                    </Typography>
+                                    <Avatar
+                                        src={UserResp.Profile?.image as string || './person.png'}
+                                        size="sm"
+                                        alt="avatar"
+                                        withBorder={true}
+                                        color="blue-gray" />
+                                </div>
+                            }
                         </div>
                     </div>
                 </CardBody>

@@ -1,5 +1,5 @@
 import { Card, CardBody, CardFooter, Typography, Chip, CardHeader } from "@material-tailwind/react";
-import { Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { useNavigate } from "react-router-dom";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { FlagView } from "../../../../views/viewsEntities/flagViewEntities";

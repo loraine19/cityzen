@@ -6,7 +6,7 @@ import SubHeader from "../../../common/SubHeader";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { ImageBtn } from "../../../common/ImageBtn";
-import { Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import { hardLevels, serviceCategoriesS, skillLevels } from "../../../../constants";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";

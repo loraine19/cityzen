@@ -1,10 +1,15 @@
-export interface Notif {
-    title: string;
-    id: number;
-    element: ElementNotif;
-    updatedAt: Date;
-    read: boolean;
-    userId: number;
+export class Notif {
+    title: string = '';
+    id: number = 0;
+    element: ElementNotif = {} as ElementNotif;
+    updatedAt: Date = new Date();
+    read: boolean = false;
+    userId: number = 0;
+    constructor(data?: Partial<Notif>) {
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
 }
 
 
@@ -18,9 +23,5 @@ export enum ElementNotif {
     FLAG,
 }
 
-export interface NotifView extends Notif {
-    elementType: string;
-    relation: string;
-    update: string;
-}
+
 export const notifCategory = Object.values(ElementNotif).filter(category => typeof category === 'string');

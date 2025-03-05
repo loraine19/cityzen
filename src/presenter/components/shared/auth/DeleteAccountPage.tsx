@@ -8,7 +8,7 @@ import DI from '../../../../di/ioc';
 import { DeleteDTO } from '../../../../infrastructure/DTOs/AuthDTO';
 import { UserDTO } from '../../../../infrastructure/DTOs/UserDTO';
 import { useUserStore } from '../../../../application/stores/user.store';
-import { Icon } from '../../common/SmallComps';
+import { Icon } from '../../common/IconComp';
 
 
 export default function DeleteAccountPage() {

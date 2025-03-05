@@ -9,6 +9,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "icon";
+    src: url("/fonts/material-symbols-outlined.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -78,7 +85,7 @@ main {
 }
 .Grid2 {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
-    grid-auto-rows: 58vh;
+    grid-auto-rows: 51vh;
 }
 /* */
 
@@ -144,16 +151,20 @@ main {
 .icon {
     font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
     font-variation-settings: "wght" 300 !important;
-    font-size: 48px;
-    font-family: "Material Symbols Outlined", Arial, sans-serif;
+    font-family: "icon", sans-serif;
+    line-height: 1;
+}
+
+@layer base {
+    svg {
+        font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
+        font-variation-settings: "wght" 300 !important;
+        @apply fill-current;
+    }
 }
 
 .icon .thin {
     font-variation-settings: "wght" 100 !important;
-}
-
-.icon::before {
-    content: "\200B"; /* Zero-width space to break translation */
 }
 
 nav .icon {
@@ -213,7 +224,7 @@ nav li .icon {
 
 .GrayChip,
 .lgBtn:disabled {
-    @apply bg-gray-300 text-gray-600 min-w-max rounded-2xl;
+    @apply bg-gray-300 text-gray-600 min-w-max rounded-full;
 }
 
 /* CHIP OUTLINED */

@@ -9,6 +9,8 @@ export const postViewModel = () => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
+      refetchOnWindowFocus: false,
+      staleTime: 600000, // 10 minutes,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
 
@@ -16,6 +18,8 @@ export const postViewModel = () => {
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['Posts', filter, category],
+        refetchOnWindowFocus: false,
+        staleTime: 600000, // 10 minutes,
         queryFn: async ({ pageParam = 1 }) => await getPosts.execute(pageParam, filter, category) || { Posts: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.posts?.length ? pages.length + 1 : undefined

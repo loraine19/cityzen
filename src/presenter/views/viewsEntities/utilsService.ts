@@ -1,5 +1,5 @@
 import { Flag } from "../../../domain/entities/Flag";
-import { Action, Label, defaultEventImage } from "../../../domain/entities/frontEntities";
+import { Action, Label } from "../../../domain/entities/frontEntities";
 import { Issue } from "../../../domain/entities/Issue";
 import { notifCategory } from "../../../domain/entities/Notif";
 import { Pool, Survey } from "../../../domain/entities/PoolSurvey";
@@ -158,11 +158,7 @@ export const getValue = (label: string, array: Label[]): string => {
 }
 export const getEnumVal = (element: any, enumArray: any) => Object.values(enumArray).indexOf(element);
 
-export const getDefaultImage = (category: string) => {
-    const catToFind = category.toLowerCase();
-    const foundCategory = defaultEventImage.find(category => category.type.toLowerCase() === catToFind);
-    return foundCategory ? foundCategory.image : defaultEventImage[0].image;
-}
+
 
 
 export const generateContact = (user: User): string => {
@@ -173,6 +169,10 @@ export const generateContact = (user: User): string => {
         <br> ou télèphone :
         <br><a href="tel:${user?.Profile.phone}" className="text-orange-500 font-medium underline">${user?.Profile.phone}
         </a>`;
+}
+
+export const generateDivObject = (element: any) => {
+    return Object.entries(element).map(([key, value]) => (value && `<b>${key} </b>: ${typeof value === 'object' ? Object.entries(value).map(([key, subvalue]) => `${key} : ${subvalue}`).join('') : value}<br>`)).join('')
 }
 
 

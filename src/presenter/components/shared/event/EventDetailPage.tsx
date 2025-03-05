@@ -13,13 +13,13 @@ import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 export default function EventDetailPage() {
     const { id } = useParams();
     const idS = id ? parseInt(id) : 0;
-
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, isLoading, refetch } = eventIdViewModelFactory(idS);
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id);
     const disabledDelete = new Date(event?.start).getTime() < Date.now();
     const disabledEdit = new Date(event?.start).getTime() < Date.now();
     const myActions = event && GenereMyActions(event, "evenement", deleteEvent, () => { });
+
 
     const buttons: Action[] = [
         {

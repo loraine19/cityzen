@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
           }
         }
       }
-    };
+    }
   }
   return {
     plugins: [react()],

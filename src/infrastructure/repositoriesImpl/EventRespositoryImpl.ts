@@ -22,8 +22,8 @@ export class EventRepositoryImpl implements EventRepositoryBase {
         return this.eventData.getEventById(id);
     }
 
-    public async postEvent(data: EventDTO, address?: AddressDTO): Promise<Event> {
-        return this.eventData.postEvent(data, address);
+    public async postEvent(data: EventDTO): Promise<Event> {
+        return this.eventData.postEvent(data);
     }
 
     public async updateEvent(id: number, data: EventDTO, address?: AddressDTO): Promise<Event> {

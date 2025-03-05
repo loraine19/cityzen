@@ -1,9 +1,8 @@
 //src/presenter/components/shared/dashboard/DashboardPage.tsx
 import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
-import { NotifView } from "../../../../domain/entities/Notif";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
-import { Icon } from "../../common/SmallComps";
+import { Icon } from "../../common/IconComp";
 import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import CalendarComp from "../../common/CalendarComp";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
@@ -14,6 +13,7 @@ import { useUserStore } from "../../../../application/stores/user.store";
 import { ConfirmModal } from "../../common/ConfirmModal";
 import { useSearchParams } from "react-router-dom";
 import { LogOutButton } from "../../common/LogOutBtn";
+import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
 
 export default function DashboardPage() {
     const user = useUserStore((state) => state.user);

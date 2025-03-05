@@ -33,13 +33,13 @@ export default function IssueDetailPage() {
 
 
     const MyActions: Action[] = [{
-        icon: statusValue < 1 ? 'En attente' : 'Conciliation en cours',
-        title: 'Valider la conciliation',
-        body: 'service.title as string,',
-        function: () => { }
+        icon: statusValue < 2 ? 'Modifier ' : 'Conciliation en cours',
+        title: 'Modifier la conciliation',
+        body: 'Aller à la page de modification de la conciliation',
+        function: () => { navigate('/conciliation/edit/' + issue.serviceId) }
     },
     {
-        icon: statusValue < 2 ? 'Supprimer la conciliation' : '',
+        icon: statusValue < 2 ? 'Supprimer ' : '',
         title: 'Supprimer la conciliation',
         body: 'service.title as string',
         function: async () => { const ok = await deleteIssue(issue.serviceId); ok && navigate('/service?search=myservices') }
@@ -73,12 +73,10 @@ export default function IssueDetailPage() {
             }
             {issue?.mine &&
                 <CTAMines
-                    actions={MyActions}
-                    disabled1={statusValue < 1} />}
+                    actions={MyActions} />}
             {issue.ImIn &&
                 <CTAMines
-                    actions={RespActions}
-                    disabled1={statusValue > 1} />
+                    actions={RespActions} />
             }
         </div >
     )

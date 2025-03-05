@@ -6,7 +6,7 @@ import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { Label } from "../../../../../domain/entities/frontEntities";
 import { ImageBtn } from "../../../common/ImageBtn";
-import { Icon } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
 
 
@@ -145,14 +145,18 @@ export const ProfileForm = (props: {
                                 )
                             })}
                         </Select>
-                        <Input label="Ajouter une compétences" name="skills" value={newSkill} variant="standard"
+                        <Input
+                            label="Ajouter une compétences"
+                            name="skills" value={newSkill}
+                            variant="standard"
                             onChange={(e: any) => { e.preventDefault(); setNewSkill(e.target.value) }}
                             onSubmit={addSkill}
-                            icon={<button
-                                type='button'
+                            icon={<Icon
+                                icon='add'
                                 onClick={addSkill}
-                                className={`material-symbols-rounded !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'}`}>add
-                            </button>} />
+                                style={`py-1 !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'
+                                    }`
+                                } />} />
 
                         <List className='flex  p-0'>
                             <Typography className='text-xs'>Liste des compétences</Typography>

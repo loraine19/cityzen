@@ -52,7 +52,9 @@ function App() {
 
     return (
         <>
-            <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');</style>
+            <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+            </style>
 
             <BrowserRouter>
                 <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>

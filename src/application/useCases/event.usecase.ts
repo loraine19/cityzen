@@ -35,8 +35,8 @@ export class PostEventUseCase {
         this.eventRepository = eventRepository;
     }
 
-    public async execute(data: EventDTO, address: AddressDTO): Promise<Event> {
-        return this.eventRepository.postEvent(data, address);
+    public async execute(data: EventDTO): Promise<Event> {
+        return this.eventRepository.postEvent(data);
     }
 }
 

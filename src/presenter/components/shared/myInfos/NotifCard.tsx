@@ -1,8 +1,8 @@
 import { Card, CardBody, CardFooter, Typography, Chip, CardHeader } from "@material-tailwind/react";
-import { Icon } from "../../common/SmallComps";
-import { NotifView } from "../../../../domain/entities/Notif";
+import { Icon } from "../../common/IconComp";
 import { useUserStore } from "../../../../application/stores/user.store";
 import { Profile } from "../../../../domain/entities/Profile";
+import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
 
 
 type notifCardProps = { notif: any, handleClick: (notif: NotifView) => void }
@@ -10,9 +10,7 @@ type notifCardProps = { notif: any, handleClick: (notif: NotifView) => void }
 export function NotifCard(props: notifCardProps) {
     const { user } = useUserStore()
     const userProfile: Profile = user.Profile
-
     const { handleClick, notif } = props
-    console.log(notif)
     const { update, userId, read, elementType, relation } = notif
 
     return (

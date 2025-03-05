@@ -56,9 +56,9 @@ export default function SurveyDetailPage() {
                 {survey?.mine ?
                     <CTAMines actions={myActions} />
                     :
-                    <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 h-max overflow-y-auto `}>
+                    <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around py-2 min-h-max overflow-y-auto `}>
                         <Button
-                            className='lgBtn w-respLarge'
+                            className='lgBtn w-respLarge min-h-max'
                             onClick={() => setOpenVote(true)}
                         >
                             {survey.IVoted ? 'Modifier mon vote' : 'Voter'}

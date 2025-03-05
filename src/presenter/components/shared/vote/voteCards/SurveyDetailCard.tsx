@@ -1,9 +1,11 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, } from "@material-tailwind/react";
-import { ProfileDiv, Icon, Title } from "../../../common/SmallComps";
+import { Icon } from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import { dayMS } from "../../../../../domain/entities/frontEntities";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
 import { ProgressBar } from "../../../common/ProgressBar";
+import { Title } from "../../../common/CardTitle";
+import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type Props = { survey: PoolSurveyView, setOpen: (open: boolean) => void }
 
@@ -22,7 +24,7 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
     }
 
     return (
-        <div className="pt-6 pb-1 h-full flex">
+        <div className="pt-8 pb-1 h-full flex">
             <Card className="FixCard w-respLarge" >
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
@@ -81,7 +83,8 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                                 fill={survey?.IVoted}
                                 color={color()}
                                 size="2xl"
-                                title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`} style="-mt-1.5  " />}>
+                                title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
+                                style="mt-0.5 " />}>
                         </Chip>
                     </div>
                 </CardFooter>

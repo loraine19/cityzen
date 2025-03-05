@@ -2,6 +2,7 @@ import { Event, EventCategory } from "../../../domain/entities/Event";
 import { Flag } from "../../../domain/entities/Flag";
 import { dayMS } from "../../../domain/entities/frontEntities";
 import DI from "../../../di/ioc";
+import { EventImage } from "../../constants";
 
 export class EventView extends Event {
     actif?: boolean;
@@ -15,9 +16,12 @@ export class EventView extends Event {
     agendaLink: string;
     eventDateInfo: string;
     toogleParticipate: () => Promise<EventView>;
+    image: string = '';
 
     constructor(event: Event, userId: number) {
         super(event);
+        this.image = (typeof event.image === 'string' && event.image) ? event.image : this.getDefaultImage(event.category as EventCategory);
+        console.log(this.image)
         this.days = this.getDays(event);
         this.Igo = event.Participants.some((p) => p.userId === userId) ? true : false;
         this.mine = event?.userId === userId;
@@ -62,4 +66,22 @@ export class EventView extends Event {
         }
         return days;
     }
+
+    public getDefaultImage(category: EventCategory): string {
+        switch (category) {
+            case EventCategory.CATEGORY_1:
+                return EventImage.CATEGORY_1;
+            case EventCategory.CATEGORY_2:
+                return EventImage.CATEGORY_2;
+            case EventCategory.CATEGORY_3:
+                return EventImage.CATEGORY_3;
+            case EventCategory.CATEGORY_4:
+                return EventImage.CATEGORY_4;
+            case EventCategory.CATEGORY_5:
+                return EventImage.CATEGORY_5;
+            default:
+                return EventImage.default;
+        }
+    }
+
 }

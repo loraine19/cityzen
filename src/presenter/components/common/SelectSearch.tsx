@@ -1,6 +1,6 @@
 import { Button, Input, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 import { Label } from "../../../domain/entities/frontEntities";
-import { Icon } from "./SmallComps";
+import { Icon } from "./IconComp";
 
 type selectSearchProps = {
     searchCat: Label;
@@ -21,7 +21,9 @@ export default function SelectSearch(props: selectSearchProps) {
                         size="sm"
                         className="flex items-center  bg-none rounded-full py-1 !px-4"
                     >
-                        <Icon icon="arrow_drop_down" />
+                        <Icon
+                            icon="arrow_drop_down"
+                            size='2xl' />
                     </Button>
                 </MenuHandler>
                 <MenuList className="flex flex-col">
