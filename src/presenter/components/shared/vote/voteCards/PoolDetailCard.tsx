@@ -74,7 +74,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                 value={pool.Votes?.length}
                                 variant="ghost"
                                 size='lg'
-                                className="rounded-full pl-5 "
+                                className="rounded-full px-4"
                                 icon={
                                     <Icon
                                         icon="smart_card_reader"
@@ -82,7 +82,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                         color={color()}
                                         size="md"
                                         title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                        style="scale-125 mt-0.5 " />}>
+                                        style="scale-125" />}>
                             </Chip>
                         </button>
                     </div>

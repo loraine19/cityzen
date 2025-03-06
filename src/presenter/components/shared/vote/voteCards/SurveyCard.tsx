@@ -115,14 +115,14 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                                 value={survey?.Votes?.length}
                                 variant="ghost"
                                 size='md'
-                                className="GrayChip px-3"
+                                className="GrayChip px-3.5"
                                 icon={<Icon
                                     icon="smart_card_reader"
                                     fill={survey?.IVoted}
                                     color={color()}
                                     size="md"
                                     title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
-                                    style="scale-150" />}>
+                                    style="scale-150 -mt-0.5" />}>
                             </Chip>
                         </button>
                         <Icon

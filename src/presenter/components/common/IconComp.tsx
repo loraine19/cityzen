@@ -1,5 +1,6 @@
-import { Link, } from "react-router-dom";
-import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent } from '@project-lary/react-material-symbols';
+import { Link } from "react-router-dom";
+import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent, EditFilled, Edit } from '@project-lary/react-material-symbols-300-rounded';
+
 
 const iconMap = {
     add: { filled: AddFilled, default: Add },
@@ -21,6 +22,7 @@ const iconMap = {
     design_services: { filled: DesignServicesFilled, default: DesignServices },
     diversity_3: { filled: Diversity3Filled, default: Diversity3 },
     do_not_disturb_on: { filled: DoNotDisturbOnFilled, default: DoNotDisturbOn },
+    edit: { filled: EditFilled, default: Edit },
     event: { filled: EventFilled, default: Event },
     exit_to_app: { filled: ExitToAppFilled, default: ExitToApp },
     expand_content: { filled: ExpandContentFilled, default: ExpandContent },
@@ -49,8 +51,6 @@ function searchIcon(icon: string, fill?: boolean): JSX.Element {
     return fill ? <IconComponent.filled /> : <IconComponent.default />;
 }
 
-
-
 type IconProps = {
     icon: string,
     style?: string,
@@ -64,7 +64,7 @@ type IconProps = {
     disabled?: boolean
 }
 
-export function Icon({ title, disabled, onClick, icon, size = "2xl", ...props }: IconProps) {
+export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size = "2xl", style, link, fill, ...props }) => {
 
     const sizeMap: { [key: string]: string } = {
         'sm': '!text-[0.8rem]',
@@ -78,16 +78,12 @@ export function Icon({ title, disabled, onClick, icon, size = "2xl", ...props }:
     };
 
     size = sizeMap[size] || sizeMap['2xl'];
-    const pad = props.bg ? 'px-[0.30em] pt-[0.26em] pb-[0.26em]' : 'px-1'
-    const fill = props.fill ? "fillThin" : ""
-    const color = props.color ? props.color : 'gray'
-    const textColor = props.color ? `text-${color}-700` : "text-gray-900"
-    const bg = (props.bg && props.color) && `bg-${color}-500 bg-opacity-30 ` || props.bg && "!bg-gray-300" || ''
-    const style = props.style || ""
-    const link = props.link || ""
-    const classIcon = `icon notranslate pt-0.5  flex items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
-    const classActive = `hover:!saturate-[2] hover:!bg-opacity-30 hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out `
-
+    const pad = props.bg ? 'px-[0.30em] pt-[0.26em] pb-[0.26rem]' : 'px-1 py-1'
+    const color = props.color ?? 'gray'
+    const textColor = props.color ? `text-${color}-700 hover:!saturate-[2] hover:!bg-${color}-700` : "text-gray-800 hover:!bg-gray-300"
+    const bg = props.bg ? (props.color ? `bg-${color}-500 bg-opacity-30` : "!bg-gray-300 ") : ''
+    const classIcon = `flex items-center justify-center  notranslate  flex items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
+    const classActive = ` hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out `
 
     if (onClick) {
         return (
@@ -97,7 +93,7 @@ export function Icon({ title, disabled, onClick, icon, size = "2xl", ...props }:
                 title={!disabled ? title : title + ' est desactivée'}
                 className={`${classIcon} ${!disabled && classActive} `}
                 disabled={disabled}>
-                {searchIcon(icon, props.fill)}
+                {searchIcon(icon, fill)}
             </button>)
     }
     if (link) {
@@ -106,28 +102,14 @@ export function Icon({ title, disabled, onClick, icon, size = "2xl", ...props }:
             title={title}
             rel="noopener noreferrer"
             className={`${classIcon} ${classActive}  `}>
-            {searchIcon(icon, props.fill)}
+            {searchIcon(icon, fill)}
         </Link>
     }
     else {
         return <span
             title={title}
             className={`${classIcon} `}>
-            {searchIcon(icon, props.fill)}
+            {searchIcon(icon, fill)}
         </span>;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

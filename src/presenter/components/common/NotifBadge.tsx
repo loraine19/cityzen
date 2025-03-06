@@ -2,12 +2,13 @@ import { Menu, MenuHandler, Chip, MenuList, Typography, MenuItem } from "@materi
 import { Icon } from "./IconComp"
 import { useNotificationStore } from "../../../application/stores/notification.store";
 import { NotifView } from "../../views/viewsEntities/notifViewEntity";
+import { useNavigate } from "react-router";
 
 export function NotifBadge() {
     const notifList = useNotificationStore((state) => state.notifList);
     const qty: number = notifList && notifList.filter((notif: NotifView) => notif?.read === false).length
     const unReadNotif: boolean = qty > 0
-    const color = unReadNotif ? 'orange' : 'gray'
+    const navigate = useNavigate()
 
     return (
         <div className="relative w-max ">
@@ -66,13 +67,14 @@ export function NotifBadge() {
                 </Menu>
             </div>
             <Icon
+                onClick={() => { navigate('/notification') }}
                 icon="notifications"
-                link='/notification'
-                color={color || 'orange'}
+                disabled={!unReadNotif}
+                color={unReadNotif ? 'orange' : ''}
                 fill bg
                 size="3xl"
-                title="voir mes notifications"
-                style="!p-2.5 !text-3xl !w-11 !h-11" />
+                title={unReadNotif ? "voir mes notifications" : "Aucune notifications : button"}
+                style=" rounded-full !p-2.5 !text-3xl !w-11 !h-11" />
         </div>
     )
 }

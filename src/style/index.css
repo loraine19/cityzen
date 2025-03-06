@@ -152,16 +152,13 @@ main {
     font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
     font-variation-settings: "wght" 300 !important;
     font-family: "icon", sans-serif;
-    line-height: 1;
 }
 
-@layer base {
+/* @layer base {
     svg {
-        font-variation-settings: "FILL" 0, "GRAD" 0, "opsz" 96;
-        font-variation-settings: "wght" 300 !important;
-        @apply fill-current;
+
     }
-}
+} */
 
 .icon .thin {
     font-variation-settings: "wght" 100 !important;

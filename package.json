@@ -14,6 +14,7 @@
   "dependencies": {
     "@material-tailwind/react": "^2.1.10",
     "@project-lary/react-material-symbols": "^0.21.0",
+    "@project-lary/react-material-symbols-300-rounded": "^0.21.0",
     "@react-google-maps/api": "^2.20.5",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tanstack/react-query": "^5.64.1",

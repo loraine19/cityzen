@@ -110,7 +110,7 @@ export function PoolCard({
                                         color={color()}
                                         size="md"
                                         title={`  ${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                        style="scale-150" />}>
+                                        style="scale-150 -mt-0.5" />}>
                             </Chip>
                         </button>
                         <Icon

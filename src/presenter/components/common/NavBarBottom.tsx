@@ -45,7 +45,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                         style={`pb-0.5`}
                                         size='3xl'
                                         icon={icon}
-                                        color='red' />
+                                        color='blue-gray' />
                                     <span className="text-[0.6rem] lg:-mt-1 font-light lg:block lg:text-sm">
                                         {label}
                                     </span>
@@ -67,7 +67,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                         icon="add"
                                         color="white"
                                         size="sm"
-                                        style={`${!closeDial ? 'transition-transform group-hover:rotate-45' : ''} !scale-[3] pb-0.5`} />
+                                        style={`${!closeDial ? 'transition-transform group-hover:rotate-45' : ''} !scale-[3.5]`} />
                                 </Button>
                             </SpeedDialHandler>
                             <SpeedDialContent className={`${closeDial && "hidden"}`}>
@@ -76,6 +76,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                     title={`Ajouter un ${type}`}
                                     onClick={handleNavigate}>
                                     <Icon
+                                        size='3xl'
                                         icon='edit'
                                         color={color} />
                                     <div className="py-2 px-4 mr-90 font-thin rounded-full text-gray-900 absolute top-2/4 -left-3/4 -translate-y-2/4 -translate-x-3/4 bg-white text-xs shadow-xl lowercase">
