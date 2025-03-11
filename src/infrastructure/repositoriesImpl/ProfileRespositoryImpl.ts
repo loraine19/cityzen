@@ -1,4 +1,5 @@
 //src/infrastructure/repositoriesImpl/ProfileRepositoryImpl.tsx
+import { GroupUser } from "../../domain/entities/GroupUser";
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
 import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
 import { ApiServiceI } from "../providers/http/apiService";
@@ -22,6 +23,10 @@ export class ProfileRepositoryImpl implements ProfileRepositoryBase {
 
     async updateProfile(data: ProfileDTO): Promise<Profile> {
         return this.profileData.updateProfile(data);
+    }
+
+    async updateRole(modo: boolean, groupId: number): Promise<GroupUser> {
+        return this.profileData.updateRole(modo, groupId);
     }
 }
 

@@ -29,7 +29,7 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
         return {
             user: {} as User,
             profile: {} as Profile,
-            setUser: (user: User) => set({ user: user }),
+            setUser: (user: User) => set({ user: new User(user) }),
             setUserProfile: (profile: Profile) => set((state) => ({ user: { ...state.user, Profile: profile } })),
             removeUser: () => set(() => ({ user: {} as User })),
             fetchUser,

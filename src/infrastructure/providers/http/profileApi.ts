@@ -1,4 +1,4 @@
-//src/infrastructure/api/profileApi.tsx
+import { GroupUser } from "../../../domain/entities/GroupUser";
 import { Profile, ProfileDTO } from "../../../domain/entities/Profile";
 import { ApiService, ApiServiceI } from "./apiService";
 
@@ -38,5 +38,11 @@ export class ProfileApi {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
     }
+
+    async updateRole(modo: boolean, groupId: number): Promise<GroupUser> {
+        const data = { modo }
+        return this.api.put(`group-users/${groupId}`, data)
+    }
+
 }
 

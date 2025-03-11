@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export enum TokenType {
     REFRESH,
     RESET,
@@ -21,6 +23,7 @@ export class Token {
 
 export class Auth {
     refreshToken: string = '';
+    user?: User = {} as User;
     constructor() {
         this.refreshToken = '';
     }

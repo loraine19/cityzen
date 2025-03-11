@@ -38,7 +38,8 @@ export class IssueApi {
     }
 
     async updateIssueResp(id: number, update?: IssueStep): Promise<Issue> {
-        const updateR = update ? `?update=${update}` : '';
+        const updateR = update ? `?step=${update}` : '';
+        console.log(updateR)
         return this.api.put(`${this.dataType}/${id}${updateR}`)
     }
 

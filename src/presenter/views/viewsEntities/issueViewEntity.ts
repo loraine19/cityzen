@@ -18,6 +18,6 @@ export class IssueView extends Issue {
         this.ImModo = this.userIdModo === userId
         this.ImModoResp = this.userIdModoResp === userId
         this.UserOn = issue.userId === issue.Service.userId ? issue.Service.UserResp : issue.Service.User
-        this.onMe = this.UserOn.id === userId
+        this.onMe = this.UserOn.Profile.userId === userId
     }
 }

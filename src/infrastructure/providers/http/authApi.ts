@@ -10,7 +10,9 @@ export class AuthApi {
     constructor() { this.api = new ApiService(); }
 
     async signIn(credentials: AccessDTO): Promise<Auth> {
-        return this.api.post(`${this.dataType}/signin`, credentials)
+        const ttest = this.api.post(`${this.dataType}/signin`, credentials)
+        console.log(ttest)
+        return ttest
     }
 
     async signInVerify(data: VerifyDTO): Promise<Auth> {

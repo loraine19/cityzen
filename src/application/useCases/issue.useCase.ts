@@ -1,4 +1,4 @@
-import { Issue, IssuePage, IssueUpdate } from "../../domain/entities/Issue";
+import { Issue, IssuePage, IssueStep } from "../../domain/entities/Issue";
 import { IssueRepositoryBase } from "../../domain/repositoriesBase/IssueRepositoryBase";
 import { IssueDTO } from "../../infrastructure/DTOs/IssueDTO";
 
@@ -48,15 +48,16 @@ export class UpdateIssueUseCase {
     }
 }
 
-export class RepIssueUseCase {
+export class RespIssueUseCase {
     private issueRepository: IssueRepositoryBase;
 
     constructor({ issueRepository }: { issueRepository: IssueRepositoryBase }) {
         this.issueRepository = issueRepository;
     }
 
-    public async execute(id: number, update: IssueUpdate): Promise<Issue> {
-        return await this.issueRepository.updateIssueResp(id, update);
+    public async execute(id: number, step: IssueStep): Promise<Issue> {
+        console.log(step, 'use')
+        return await this.issueRepository.updateIssueResp(id, step);
     }
 }
 

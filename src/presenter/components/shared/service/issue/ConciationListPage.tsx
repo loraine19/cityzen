@@ -12,7 +12,6 @@ import { LoadMoreButton } from "../../../common/LoadMoreBtn";
 import { serviceCategories } from "../../../../constants";
 import IssueCard from "./IssueCard";
 import { IssueView } from "../../../../views/viewsEntities/issueViewEntity";
-import { Radio } from "@material-tailwind/react";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { Role } from "../../../../../domain/entities/GroupUser";
 import { IssueFilter } from '../../../../../domain/entities/Issue';
@@ -28,7 +27,7 @@ export default function ConciationListPage() {
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     const user = useUserStore().user
-    const [ImModo, setImModo] = useState<boolean>(user.GroupUser[0].role === Role.MODO)
+    const ImModo = (user.GroupUser[0].role === Role.MODO)
 
     useEffect(() => { setFilter(params.filter || '') }, []);
 
@@ -94,25 +93,9 @@ export default function ConciationListPage() {
                 <SubHeader
                     closeBtn
                     qty={count}
+                    link="/"
                     type={`${count > 0 ? 'conciliations' : 'aucune conciliation'} ${filterName()}`} />
-                <div className="flex gap-10">
-                    <Radio
-                        disabled={count > 100}
-                        name="modo"
-                        label="Je ne suis conciliateur"
-                        value={Role.MODO}
-                        checked={ImModo}
-                        onChange={() => { setImModo(true) }}
-                    />
-                    <Radio
-                        disabled={count > 100}
-                        name="modo"
-                        label="Je ne suis pas conciliateur"
-                        value={Role.MEMBER}
-                        checked={!ImModo}
-                        onChange={() => { setImModo(false) }}
-                    />
-                </div>
+
                 <TabsMenu labels={serviceTabs} />
                 {notif &&
                     <div className="w-full flex justify-center p-8">

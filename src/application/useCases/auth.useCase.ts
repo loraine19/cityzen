@@ -2,7 +2,7 @@ import { Auth } from "../../domain/entities/Auth";
 import { MessageBack } from "../../domain/entities/frontEntities";
 import { AuthRepositoryBase } from "../../domain/repositoriesBase/AuthRepositoryBase";
 import { AccessDTO, VerifyDTO, DeleteDTO } from "../../infrastructure/DTOs/AuthDTO";
-import { cryptedStorageI, cryptedStorage } from "../../infrastructure/services/storageService";
+import { cryptedCookie, cryptedCookieI } from "../../infrastructure/services/cookiService";
 
 
 export class SignInUseCase {
@@ -47,11 +47,11 @@ export class SignUpUseCase {
 
 export class LogOutUseCase {
     private authRepository: AuthRepositoryBase;
-    private storage: cryptedStorageI
+    private storage: cryptedCookieI
 
     constructor({ authRepository }: { authRepository: AuthRepositoryBase }) {
         this.authRepository = authRepository;
-        this.storage = new cryptedStorage();
+        this.storage = new cryptedCookie();
     }
 
     public async execute(): Promise<MessageBack> {

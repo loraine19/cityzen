@@ -30,7 +30,7 @@ import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
 import { GetNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
-import { PostProfileUseCase, UpdateProfileUseCase } from '../application/useCases/profile.useCase';
+import { PostProfileUseCase, UpdateProfileUseCase, UpdateRoleUseCase } from '../application/useCases/profile.useCase';
 import { notifViewModel } from '../presenter/views/notifViewModel';
 import { cryptedStorage } from '../infrastructure/services/storageService';
 import { FlagApi } from '../infrastructure/providers/http/flagApi';
@@ -55,6 +55,7 @@ import { VoteRepositoryImpl } from '../infrastructure/repositoriesImpl/VoteRespo
 import { VoteApi } from '../infrastructure/providers/http/voteApi';
 import { GetIssuesUseCase, GetIssueByIdUseCase, PostIssueUseCase, UpdateIssueUseCase, DeleteIssueUseCase, FinishIssueUseCase } from '../application/useCases/issue.useCase';
 import { issueViewModel, IssueIdViewModel } from '../presenter/views/issueViewModel';
+import { RespIssueUseCase } from '../application/useCases/issue.useCase';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -103,6 +104,7 @@ container.register({
     profileRepository: asClass(ProfileRepositoryImpl),
     profileMeViewModel: asFunction(profileMeViewModel),
     profileData: asClass(ProfileApi),
+    updateRoleUseCase: asClass(UpdateRoleUseCase),
 
     ////NOTIFS
     notifViewModel: asFunction(notifViewModel),
@@ -161,7 +163,7 @@ container.register({
     updateIssueUseCase: asClass(UpdateIssueUseCase),
     issueViewModel: asFunction(issueViewModel),
     issueIdViewModel: asFunction(IssueIdViewModel),
-    respIssueUseCase: asClass(RespServiceUseCase),
+    respIssueUseCase: asClass(RespIssueUseCase),
     finishIssueUseCase: asClass(FinishIssueUseCase),
     deleteIssueUseCase: asClass(DeleteIssueUseCase),
 

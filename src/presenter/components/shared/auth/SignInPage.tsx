@@ -34,12 +34,14 @@ export default function SignInPage() {
             token ? await handleSignInVerify(values.email, values.password, token) : await handleSignIn(values.email, values.password)
         },
     });
+    const setUser = useUserStore((state) => state.setUser);
 
     const handleSignInVerify = async (email: string, password: string, token: string) => {
         const verifyData = { email, password, verifyToken: token }
         const authVerify = await signInVerify(verifyData);
-        if (authVerify?.refreshToken) {
+        if (authVerify?.refreshToken && authVerify?.user) {
             saveToken(authVerify.refreshToken);
+            setUser(authVerify.user);
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/profile/create") }, 1000);
         } else {
@@ -49,13 +51,12 @@ export default function SignInPage() {
 
     };
 
-    const fetchUser = useUserStore((state) => state.fetchUser);
     const handleSignIn = async (email: string, password: string) => {
         const accessData = { email, password }
         const auth = await signIn(accessData)
-        if (auth?.refreshToken) {
+        if (auth?.refreshToken && auth?.user) {
             saveToken(auth.refreshToken);
-            fetchUser()
+            setUser(auth.user);
             setNotif('Vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/") }, 1000);
         } else {

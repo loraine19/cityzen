@@ -21,7 +21,6 @@ export class EventView extends Event {
     constructor(event: Event, userId: number) {
         super(event);
         this.image = (typeof event.image === 'string' && event.image) ? event.image : this.getDefaultImage(event.category as EventCategory);
-        console.log(this.image)
         this.days = this.getDays(event);
         this.Igo = event.Participants.some((p) => p.userId === userId) ? true : false;
         this.mine = event?.userId === userId;

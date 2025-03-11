@@ -1,4 +1,4 @@
-import { Issue, IssuePage, IssueUpdate } from "../../domain/entities/Issue";
+import { Issue, IssuePage, IssueStep } from "../../domain/entities/Issue";
 import { IssueRepositoryBase } from "../../domain/repositoriesBase/IssueRepositoryBase";
 import { IssueDTO } from "../DTOs/IssueDTO";
 import { ApiServiceI } from "../providers/http/apiService";
@@ -29,7 +29,7 @@ export class IssueRepositoryImpl implements IssueRepositoryBase {
         return this.issueData.updateIssue(id, data)
     }
 
-    async updateIssueResp(id: number, step: IssueUpdate): Promise<Issue> {
+    async updateIssueResp(id: number, step: IssueStep): Promise<Issue> {
         return this.issueData.updateIssueResp(id, step)
     }
 

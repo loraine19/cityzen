@@ -1,4 +1,4 @@
-import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
+import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix, Switch } from "@material-tailwind/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
@@ -9,14 +9,16 @@ import { ImageBtn } from "../../../common/ImageBtn";
 import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
 
-
-export const ProfileForm = (props: {
+type ProfileFormProps = {
     formik: any,
     setAssistance?: any,
     setAddress?: any,
     setMailSub?: any,
-}) => {
-    const { formik, setAssistance, setMailSub, setAddress, } = props;
+    ImModo?: boolean,
+    setImModo?: any
+}
+
+export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress, ImModo = false, setImModo }) => {
     const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image || './person.svg');
     const { user } = useUserStore()
     const [newSkill, setNewSkill] = useState<string | undefined>()
@@ -145,6 +147,24 @@ export const ProfileForm = (props: {
                                 )
                             })}
                         </Select>
+                        <div className="flex flex-col  gap-1">
+                            <label
+                                htmlFor="modo"
+                                className="text-xs text-blue-gray-500">
+                                {ImModo ? "Je suis conciliateur" : "Je ne suis pas conciliateur"}
+                            </label>
+                            <Switch
+                                onChange={() => { setImModo(!ImModo) }}
+                                color="cyan"
+                                checked={ImModo}
+                                id="modo"
+                                ripple={false}
+                                className="h-full w-full "
+                                containerProps={{ className: "w-10 h-5" }}
+                                circleProps={{ className: "before:hidden left-0.5 border-none bg-gray-200" }}
+                            />
+
+                        </div>
                         <Input
                             label="Ajouter une compétences"
                             name="skills" value={newSkill}

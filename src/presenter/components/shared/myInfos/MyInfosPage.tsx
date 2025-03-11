@@ -13,16 +13,18 @@ import { Skeleton } from '../../common/Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { Icon } from '../../common/IconComp';
+import { Role } from '../../../../domain/entities/GroupUser';
 
 
 export default function MyInfosPage() {
-    const { setUserProfile } = useUserStore()
+    const { setUserProfile, setUser } = useUserStore()
     const navigate = useNavigate();
     const user: User = useUserStore((state) => state.user);
     const [assistance, setAssistance] = useState<string | undefined>(user.Profile?.assistance)
     const [mailSub, setMailSub] = useState<string | undefined>(user.Profile?.mailSub)
     const [address, setAddress] = useState<AddressDTO>(user.Profile?.Address)
     const [open, setOpen] = useState(false);
+    const [imModo, setImModo] = useState<boolean>(user.GroupUser[0].role === Role.MODO)
     const updateProfile = async (data: ProfileDTO, Address: AddressDTO) => await DI.resolve('updateProfileUseCase').execute(data, Address)
 
     const formSchema = object({
@@ -44,11 +46,19 @@ export default function MyInfosPage() {
             setOpen(true)
         }
     })
+    const goupId = import.meta.env.VITE_GOUPID_FAKER || 1
 
     const update = async () => {
         const { ...rest } = formik.values;
         const updateData = { assistance, ...rest }
         const updated = await updateProfile(updateData, address)
+        if ((user.GroupUser[0].role === Role.MODO) !== imModo) {
+
+            const groupUser = await DI.resolve('updateRoleUseCase').execute(imModo, goupId)
+            if (groupUser) {
+                setUser({ ...user, GroupUser: [groupUser] })
+            }
+        }
         if (updated) {
             setUserProfile(updated)
             navigate("/");
@@ -66,6 +76,7 @@ export default function MyInfosPage() {
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => { await update() }}
                 title={"Confimrer la modification"}
+                confirmString='Enregistrer'
                 element={
                     `<p className="font-bold text-lg">Voulez vous vraiment modifier vos informations personnelles ?</p>`
                 } />
@@ -90,6 +101,8 @@ export default function MyInfosPage() {
                     setAssistance={setAssistance}
                     setAddress={setAddress}
                     setMailSub={setMailSub}
+                    ImModo={imModo}
+                    setImModo={setImModo}
                 />}
         </div >
     )

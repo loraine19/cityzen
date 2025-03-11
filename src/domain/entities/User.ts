@@ -9,7 +9,6 @@ export enum UserStatus {
 export class User {
     id: number = 0;
     email: string = '';
-    password: string = '';
     Profile: Profile = {} as Profile;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();

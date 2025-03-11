@@ -11,6 +11,7 @@ import DI from '../../../../../di/ioc';
 import { generateContact } from '../../../../views/viewsEntities/utilsService';
 import { useState } from 'react';
 import { Input, Typography } from '@material-tailwind/react';
+import { IssueStep } from '../../../../../domain/entities/Issue';
 
 export default function IssueDetailPage() {
     const { id } = useParams()
@@ -23,7 +24,7 @@ export default function IssueDetailPage() {
     const { issue, isLoading } = issueIdViewModelFactory(idS);
 
     const deleteIssue = async (id: number) => await DI.resolve('deleteIssueUseCase').execute(id);
-    const respIssue = async (id: number) => await DI.resolve('respIssueUseCase').execute(id);
+    const respIssue = async (id: number, step: IssueStep) => await DI.resolve('respIssueUseCase').execute(id, step);
     // const cancelRespService = async (id: number) => await DI.resolve('cancelRespServiceUseCase').execute(id);
     // const validRespService = async (id: number) => await DI.resolve('validRespServiceUseCase').execute(id);
     const finishIssue = async (id: number, pourcent: number) => await DI.resolve('finishIssueUseCase').execute(id, pourcent);
@@ -53,6 +54,7 @@ export default function IssueDetailPage() {
     const [pourcent, setPourcent] = useState({ IModo: 100, other: 0 })
     const userImodo = issue.ImModo ? issue?.Service?.User : issue?.Service?.UserResp
     const otherModo = issue.ImModo ? issue?.Service?.UserResp : issue?.Service?.User
+    console.log(user)
 
     const pourcentInput =
         <div className="flex flex-col gap-4 p-4">
@@ -83,13 +85,16 @@ export default function IssueDetailPage() {
 
     const ModoActions = [
         {
-            icon: issue.stepValue > 0 ? `Accepter la conciliation ${issue.ImModo ? issue.Service.User.Profile.firstName : issue.Service.UserResp.Profile.firstName}` : issue.statusS,
+            icon: issue.stepValue === 2 && issue.stepValue === 3 ? `Accepter la conciliation ${issue.ImModo ? issue.Service.User.Profile.firstName : issue.Service.UserResp.Profile.firstName}` : '',
             title: 'Vous avez été choisi comme modérateur ',
             body: `Vous pouvez contacter l'utilisateur qui vous à choisi : ${generateContact(issue.ImModo ? issue.User : issue.UserOn)}`,
-            function: async () => { await respIssue(issue.serviceId) }
+            function: async () => {
+                const update = issue.ImModo ? IssueStep.STEP_1 : IssueStep.STEP_2
+                await respIssue(issue.serviceId, update)
+            }
         },
         {
-            icon: issue.stepValue === 2 || issue.stepValue === 3 ? 'Cloturer le litige' : '',
+            icon: issue.ImModo && issue.stepValue === 2 || issue.ImModoResp && issue.stepValue === 3 ? 'Cloturer le litige' : issue.statusS,
             title: `Attribution de la moitié des points la conciliation`,
             body: pourcentInput,
             function: async () => {
@@ -102,7 +107,6 @@ export default function IssueDetailPage() {
 
     return (
         <>
-            {issue.stepValue}
             <div className="Body gray">
                 <header className="px-4">
                     <NavBarTop />
@@ -133,7 +137,7 @@ export default function IssueDetailPage() {
                     <>
                         <CTAMines
                             key={'ImModo'}
-                            disabled1={issue?.stepValue > 3}
+                            disabled2={issue?.stepValue >= 4}
                             actions={ModoActions} />
                     </>
                 }
