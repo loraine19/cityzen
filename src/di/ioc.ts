@@ -53,7 +53,7 @@ import { poolIdViewModel, surveyIdViewModel, voteViewModel } from '../presenter/
 import { PostVoteUseCase, UpdateVoteUseCase } from '../application/useCases/vote.useCase';
 import { VoteRepositoryImpl } from '../infrastructure/repositoriesImpl/VoteRespositoryImpl';
 import { VoteApi } from '../infrastructure/providers/http/voteApi';
-import { GetIssuesUseCase, GetIssueByIdUseCase, PostIssueUseCase, UpdateIssueUseCase, DeleteIssueUseCase } from '../application/useCases/issue.useCase';
+import { GetIssuesUseCase, GetIssueByIdUseCase, PostIssueUseCase, UpdateIssueUseCase, DeleteIssueUseCase, FinishIssueUseCase } from '../application/useCases/issue.useCase';
 import { issueViewModel, IssueIdViewModel } from '../presenter/views/issueViewModel';
 
 
@@ -161,6 +161,8 @@ container.register({
     updateIssueUseCase: asClass(UpdateIssueUseCase),
     issueViewModel: asFunction(issueViewModel),
     issueIdViewModel: asFunction(IssueIdViewModel),
+    respIssueUseCase: asClass(RespServiceUseCase),
+    finishIssueUseCase: asClass(FinishIssueUseCase),
     deleteIssueUseCase: asClass(DeleteIssueUseCase),
 
     ////POST
@@ -207,7 +209,5 @@ console.log('Registered components:', container.registrations);
 
 // TEST RESOLVE 
 //console.log('addressUserCase:', container.resolve('addressUseCase').getAddresses());
-
-
 
 export default container;

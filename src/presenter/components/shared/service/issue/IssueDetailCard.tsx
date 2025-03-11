@@ -3,25 +3,18 @@ import ServiceIssueCard from "./ServiceIssueCard"
 import { useEffect, useState } from "react"
 import { Service } from "../../../../../domain/entities/Service"
 import { User } from "../../../../../domain/entities/User"
-import { useUserStore } from "../../../../../application/stores/user.store"
-import { Profile } from "../../../../../domain/entities/Profile"
 import { ImageBtn } from "../../../common/ImageBtn"
 import { IssueView } from "../../../../views/viewsEntities/issueViewEntity"
 import DI from "../../../../../di/ioc"
-
+import { IssueStep } from "../../../../../domain/entities/Issue"
 
 type IssueFormProps = { issue: IssueView, service?: Service, formik?: any }
-export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
+export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service }) => {
     const Service = service ? service : issue.Service
-    const { user } = useUserStore()
-    const userProfile: Profile = user.Profile
-    const myService = useState<boolean>(userProfile?.userId === Service?.userId)
-    const IResp = useState<boolean>(userProfile.userId === Service.userIdResp)
     const [imgBlob, setImgBlob] = useState<string>(formik?.values.image ? formik?.values.image : issue.image)
     const start = new Date(Service.createdAt).toLocaleDateString('fr-FR')
-    const modoId = formik?.values.userIdModo ? formik?.values.userIdModo : issue.UserModo?.id
-    const modoRespId = formik?.values.userIdModoResp ? formik?.values.userIdModoResp : issue.UserModoResp?.id
-
+    const modoId = formik?.values.userIdModo ? formik?.values.userIdModo : issue.userIdModo || 0
+    const modoIdResp = formik?.values.userIdModoResp ? formik?.values.userIdModoResp : issue.userIdModoResp || 0
     const [modos, setModos] = useState<User[]>([])
 
     useEffect(() => {
@@ -32,9 +25,11 @@ export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
         if (issue && formik && (!issue.UserModo || !issue.UserModoResp)) fetchModos()
         if (issue && !formik || (formik && issue.UserModo && issue.UserModoResp)) {
 
-            setModos([issue.UserModo, issue.UserModoResp])
+            setModos([])
         }
     }, [issue]);
+
+
 
     return (
         <>
@@ -42,7 +37,7 @@ export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
                 <Card
                     className=" w-respLarge FixCard z-50  ">
                     <CardHeader
-                        className={"FixCardHeaderNoImage px-4 min-h-max py-3 justify-between items-center  shadow-none flex"}
+                        className={"FixCardHeaderNoImage px-4 min-h-max py-3 justify-between items-center shadow-none flex"}
                         floated={false}>
                         <Typography
                             className="truncate"
@@ -50,30 +45,38 @@ export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
                             color="blue-gray" >
                             {`${issue?.User?.Profile?.firstName ? issue?.User?.Profile?.firstName : 'Vous'} ${issue?.UserModo ? "à demander de l'aide" : "demandez de l'aide"}`}
                         </Typography>
-                        {issue?.date ?
+                        <div className="flex gap-2 items-center">
                             <Chip
-                                value={'date du probléme : ' + (new Date(formik?.values?.createdAt ? formik?.values.createdAt : issue.createdAt)).toLocaleDateString('fr-FR')}
-                                className={`lowercase GrayChip shadow font-medium `}>
-                            </Chip> :
-                            <div className='flex flex-col flex-1 !max-w-max overflow-auto pt-1'>
-                                <Input
-                                    type="datetime-local"
-                                    min={start}
-                                    className="flex justify-end px-4 pb-4 RedChip"
-                                    label={formik?.errors.date as string || "date du probléme"}
-                                    labelProps={{ className: `${formik?.errors.date && 'error'}  "mr-3 pr-4 pt-0 flex justify-end !text-gray-800 h-max peer-focus:after:content-none` }}
-                                    name="date"
-                                    variant="standard"
-                                    onChange={formik?.handleChange}
-                                    value={formik?.values?.date ? formik?.values.date : start}
-                                    error={Boolean(formik?.errors?.date)}
-                                    containerProps={{ className: "!max-h-max h-8 !min-w-max opacity-80" }}
-                                />
-
-                            </div>}
+                                className={`${issue?.statusS === IssueStep.STEP_3 && 'GreenChip' || issue?.statusS === IssueStep.STEP_4 && 'GrayChip' || 'OrangeChip'} lowercase`}
+                                value={issue?.statusS ?? 'nouveau'}>
+                            </Chip>
+                            {issue?.date ?
+                                <Chip
+                                    size='sm'
+                                    value={'' + (new Date(formik?.values?.createdAt ? formik?.values.createdAt : issue.createdAt)).toLocaleDateString('fr-FR')}
+                                    className={`!flex lowercase GrayChip shadow font-medium before:content-['']`}>
+                                </Chip>
+                                :
+                                <div className='flex flex-col flex-1 !max-w-max overflow-auto pt-1'>
+                                    <Input
+                                        type="datetime-local"
+                                        min={start}
+                                        className="flex justify-end px-4 pb-4 RedChip"
+                                        label={formik?.errors.date as string || "date du probléme"}
+                                        labelProps={{ className: `${formik?.errors.date && 'error'}  "mr-3 pr-4 pt-0 flex justify-end !text-gray-800 h-max peer-focus:after:content-none` }}
+                                        name="date"
+                                        variant="standard"
+                                        onChange={formik?.handleChange}
+                                        value={formik?.values?.date ? formik?.values.date : start}
+                                        error={Boolean(formik?.errors?.date)}
+                                        containerProps={{ className: "!max-h-max h-8 !min-w-max opacity-80" }}
+                                    />
+                                </div>}
+                        </div>
                     </CardHeader>
-                    <CardBody className='lg:flex-1 flex-1 flex  flex-row w-full py-0 !px-4 gap-4  lg:items-center'>
-                        <div className={` flex flex-1 h-full overflow-auto ${formik ? 'pt-2' : 'py-1'}`}>
+                    <CardBody
+                        className={`${formik ? 'pt-3' : 'py-0'}  flex flex-1 w-full gap-4 lg:items-center lg:max-h-[25vh] max-h-[30vh]`}>
+                        <div className={`flex flex-1 h-full`}>
                             <Textarea
                                 variant={formik ? "static" : "outlined"}
                                 error={Boolean(formik?.errors?.description)}
@@ -82,10 +85,10 @@ export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
                                 onChange={formik?.handleChange}
                                 value={formik?.value?.description ? formik?.value.description : issue.description}
                                 disabled={formik ? false : true}
-                                className="!rounded-2xl flex flex-1"
+                                className="!rounded-2xl flex flex-1   "
                             />
                         </div>
-                        <div className={imgBlob ? 'relative  flex-1 flex ' : `relative`}>
+                        <div className={imgBlob ? 'relative flex-1   flex' : `relative`}>
                             <div className={imgBlob ? ' flex w-full' : `hidden`}>
                                 <Popover>
                                     <PopoverHandler>
@@ -93,7 +96,7 @@ export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
                                             src={imgBlob}
                                             alt='image'
                                             title='cliquez pour agrandir'
-                                            className="lg:max-h-[24vh]  h-full w-full  shadow rounded-2xl object-cover"
+                                            className="lg:max-h-[25vh] max-h-[30vh] w-full  shadow rounded-2xl object-cover"
                                         />
                                     </PopoverHandler>
                                     <PopoverContent
@@ -116,26 +119,33 @@ export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
                             </div>
                         </div>
                     </CardBody>
-                    <CardFooter className="CardFooter w-full flex-1 flex flex-col  gap-3 !pt-2 !pb-4">
+                    <CardFooter className="CardFooter !overflow-auto  w-full flex-1 flex flex-col  gap-3 !pt-2 !pb-4">
                         <div className='flex gap-3 md:!flex-row flex-col max-w-[100%] min-h-max '>
                             <Select
+                                key='userIdModo'
                                 className="rounded-full flex  !shadow !py-1 bg-white border-none capitalize overflow-auto"
-                                label={`${issue?.UserModo ? "" : `Choisir un modérateur de ${Service.User.Profile.firstName}`}`}
+                                label={`Choisir un modérateur de ${Service.User.Profile.firstName}`}
                                 name={"userIdModo"}
                                 labelProps={{ className: `before:border-none after:border-none ` }}
                                 menuProps={{ className: 'overflow-auto max-h-44' }}
-                                disabled={(myService[0] && formik && !issue.userIdModo) ? false : false}
-                                value={modoId.toString() || '0'}
-                                onChange={(e: string | undefined) => { formik.values.userIdModo = e }}
+                                disabled={modoId !== 0}
+                                value={modoId.toString()}
+                                onChange={(e: string | undefined) => { formik.values.userIdModo = parseInt(e || '1') }}
                                 containerProps={{ className: "h-[2rem] !py-0 !flex justify-center" }}
                             >
-                                {modos.map((modo: User) =>
+                                {modoId === 0 ? modos.map((modo: User) =>
                                     <Option
                                         key={modo.id}
-                                        className={`rounded-full my-1 capitalize ${modo?.id.toString() === issue?.UserModo?.id.toString() && 'bg-red-100'}`}
-                                        value={modo?.id.toString()} >
-                                        {modo?.Profile?.firstName} {modo?.id.toString() === issue?.UserModo?.id.toString() && `modérateur de ${Service.User.Profile.firstName}`}
-                                    </Option>)}
+                                        className={`rounded-full my-1 capitalize ${modo?.id === issue?.UserModo?.id && 'bg-red-100'}`}
+                                        value={modo.id && modo?.id.toString() || '0'} >
+                                        {modo?.Profile?.firstName} {modo.id && modo?.id.toString() === issue?.UserModo?.id.toString() && `modérateur de ${Service.User.Profile.firstName}`}
+                                    </Option>) :
+                                    <Option
+                                        key={issue?.UserModo?.id}
+                                        className={`rounded-full my-1 capitalize`}
+                                        value={issue?.userIdModo?.toString()} >
+                                        {issue.UserModo?.Profile?.firstName}   &nbsp;<span className=" text-blue-gray-400 text-[0.7rem] italic">{`modérateur de ${Service.User.Profile.firstName}`}</span>
+                                    </Option>}
                             </Select>
                             <Select
                                 className="rounded-full shadow !py-1 !flex !justify-center bg-white border-none capitalize "
@@ -143,18 +153,28 @@ export const IssueForm = ({ issue, formik, service }: IssueFormProps) => {
                                 name={"userIdModoResp"}
                                 labelProps={{ className: `before:border-none after:border-none ` }}
                                 menuProps={{ className: 'overflow-auto max-h-44' }}
-                                disabled={IResp[0] && formik ? false : false}
-                                value={formik?.values?.userIdModoResp || issue?.UserModoResp?.id.toString() || '0'}
+                                disabled={modoIdResp !== 0}
+                                value={modoIdResp.toString()}
                                 onChange={(e: string | undefined) => { formik.values.userIdModoResp = e }}
                                 containerProps={{ className: "h-[2rem] !py-0 !flex justify-center" }}
                             >
-                                {modos.map((modo: User) =>
+                                {modoIdResp !== 0 ?
                                     <Option
-                                        key={modo.id}
-                                        className={"rounded-full my-1 capitalize"}
-                                        value={modoRespId.toString() || '0'} >
-                                        {modo?.Profile?.firstName} {modo?.id.toString() === issue?.UserModoResp?.id.toString() && `modérateur de ${Service.UserResp.Profile.firstName}`}
-                                    </Option>)}
+                                        key={'modoResp'}
+                                        className={`rounded-full my-1 capitalize`}
+                                        value={issue?.userIdModoResp.toString()
+                                        }>
+                                        {issue.UserModoResp?.Profile?.firstName}   &nbsp;<span className=" text-blue-gray-400 text-[0.7rem] italic">{`modérateur de ${Service.UserResp.Profile.firstName}`}</span>
+                                    </Option> :
+                                    modos.map((modo: User) =>
+                                        <Option
+                                            key={modo.id}
+                                            className={"rounded-full my-1 capitalize"}
+                                            value={modoIdResp.toString() || '0'} >
+                                            {modo?.Profile?.firstName} {modo.id && modo?.id.toString() === issue?.UserModoResp?.id.toString() && `modérateur de ${Service.UserResp.Profile.firstName}`}
+                                        </Option>)
+
+                                }
                             </Select>
                         </div>
                         <div className=" h-full">

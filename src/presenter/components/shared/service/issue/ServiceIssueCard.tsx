@@ -11,7 +11,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
 
 
     return (
-        <Card className={`CardFix !h-full  shadow-none !flex !gap-0 bg-blue-gray-50  !py-0`}>
+        <Card className={`CardFix !h-full shadow-none !flex !gap-0 bg-blue-gray-50  !py-0`}>
             <CardHeader
                 className="fixCardHeaderNoImage  mx-2 mt-1 py-1 shadow-none bg-transparent"
                 floated={false}>

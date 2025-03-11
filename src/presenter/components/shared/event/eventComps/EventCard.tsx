@@ -119,7 +119,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             className="rounded-full h-max flex items-center  "
                             icon={
                                 <Icon
-                                    style='scale-150'
+                                    style='scale-[1.5] -mt-0.5'
                                     size="md"
                                     icon="person"
                                     fill={event?.Igo}

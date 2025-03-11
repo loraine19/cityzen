@@ -1,9 +1,9 @@
 import { Component, ReactNode, ErrorInfo } from 'react';
 import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
 import { Button, Typography } from '@material-tailwind/react';
-import { ConfirmModal } from '../../common/ConfirmModal';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { PathElement } from '../../../constants';
+import { ConfirmModal } from '../../common/ConfirmModal';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -59,7 +59,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                         open={true}
                         handleOpen={() => open = !open}
                         handleConfirm={() => { window.location.reload(); open = !open }}
-                        handleCancel={() => window.location.href = '/'} title={'Désolé, Une erreur s\'est produite'} element={'Cliquer confirm pour reessayer, ou cliquer sur annuler pour revenir à l\'acceuil'} />
+                        handleCancel={() => window.location.href = '/'} title={'Désolé, Une erreur s\'est produite'} element={'Cliquer confirm pour reessayer, ou cliquer sur annuler pour revenir à l\'acceuil'}
+                        confirmString='Essayer à nouveau'
+                        cancelString="revenir à l'acceuil"
+                    />
 
                     <div className={"Body " + bodyColor}>
                         <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">

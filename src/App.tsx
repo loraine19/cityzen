@@ -25,7 +25,6 @@ const AnnounceListPage = lazy(() => import("./presenter/components/shared/post/A
 const ForgotPasswordPage = lazy(() => import("./presenter/components/shared/auth/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("./presenter/components/shared/auth/ResetPasswordPage"));
 const DeleteAccountPage = lazy(() => import("./presenter/components/shared/auth/DeleteAccountPage"));
-
 const EventCreatePage = lazy(() => import("./presenter/components/shared/event/EventCreatePage"));
 const EventDetailPage = lazy(() => import("./presenter/components/shared/event/EventDetailPage"));
 const EventEditPage = lazy(() => import("./presenter/components/shared/event/EventEditPage"));
@@ -52,10 +51,9 @@ function App() {
 
     return (
         <>
-            <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
-
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
             </style>
-
             <BrowserRouter>
                 <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
                     <Suspense fallback={<LoadingPage />}>

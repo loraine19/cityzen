@@ -27,7 +27,6 @@ export class AuthRepositoryImpl implements AuthRepositoryBase {
     }
 
     public async logOut(): Promise<MessageBack> {
-        console.log('repoImpl')
         return this.authData.logOut();
     }
 

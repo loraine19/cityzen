@@ -1,12 +1,6 @@
 import { Service } from "./Service";
 import { User } from "./User";
 
-export enum IssueStep {
-    STEP_0,
-    STEP_1,
-    STEP_2
-}
-export const issueStep = Object.values(IssueStep).filter(step => typeof step === 'string');
 
 export class Issue {
     serviceId: number = 0;
@@ -36,12 +30,24 @@ export type IssuePage = {
 }
 
 export enum IssueUpdate {
-    POST_MODO = 'POST_MODO',
+    POST_MODO2 = 'POST_MODO2',
     VALID_MODO = 'VALID_MODO',
-    CANCEL_MODO = 'CANCEL_MODO',
-    POST_MODO_RESP = 'POST_MODO_RESP',
-    VALID_MODORESP = 'VALID_MODO_RESP',
-    CANCEL_MODORESP = 'CANCEL_MODO_RESP',
+    VALID_MODO2 = 'VALID_MODO2',
     FINISH = 'FINISH',
+    FINISH2 = 'FINISH2',
 }
 
+export enum IssueStep {
+    STEP_0 = 'attente choix du 2eme conciliateur',
+    STEP_1 = 'attente validation conciliateurs',
+    STEP_2 = 'attente validation conciliateur resp',
+    STEP_3 = 'attente decision conciliateur',
+    STEP_4 = 'attente decision conciliateur resp',
+    STEP_5 = 'terminé',
+}
+
+export enum IssueFilter {
+    WAITING = 'WAITING',
+    PENDING = 'PENDING',
+    FINISH = 'FINISH',
+}

@@ -79,7 +79,7 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                                 className="  rounded-full h-full flex items-center"
                                 icon={<Icon
                                     icon="thumb_up"
-                                    style='scale-125 '
+                                    style='scale-125 -mt-0.5'
                                     size="md"
                                     fill={ILike}
                                     color={ILike ? "cyan" : "gray"}

@@ -9,10 +9,10 @@ export class IssueApi {
 
     constructor() { this.api = new ApiService(); }
 
-    async getIssues(page?: number, step?: string,): Promise<IssuePage> {
+    async getIssues(page?: number, filter?: string): Promise<IssuePage> {
         const pageR = page ? `?page=${page}` : '';
-        const stepR = step ? `&step=${step}` : '';
-        return this.api.get(`${this.dataType}${pageR}${stepR}`)
+        const filterR = filter ? `&filter=${filter}` : '';
+        return this.api.get(`${this.dataType}${pageR}${filterR}`)
     }
 
     async getIssueById(serviceId: number): Promise<Issue> {
@@ -37,9 +37,14 @@ export class IssueApi {
         return this.api.delete(`${this.dataType}/${id}`)
     }
 
-    async updateIssueStep(id: number, update?: IssueStep): Promise<Issue> {
+    async updateIssueResp(id: number, update?: IssueStep): Promise<Issue> {
         const updateR = update ? `?update=${update}` : '';
         return this.api.put(`${this.dataType}/${id}${updateR}`)
+    }
+
+    async updateIssueFinish(id: number, pourcent: number): Promise<Issue> {
+        const data: { pourcent: number } = { pourcent }
+        return this.api.put(`${this.dataType}/${id}`, data)
     }
 
 }

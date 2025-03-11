@@ -4,11 +4,10 @@ import { Issue } from '../../domain/entities/Issue';
 import { IssueView } from './viewsEntities/issueViewEntity';
 
 export const issueViewModel = () => {
-  return (step: string) => {
+  return (filter?: string) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
-      refetchOnWindowFocus: false,
       staleTime: 600000, // 10 minutes,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
@@ -18,17 +17,18 @@ export const issueViewModel = () => {
 
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
-        queryKey: ['issues', step],
-        staleTime: 600000,
-        queryFn: async ({ pageParam = 1 }) => await getIssues.execute(pageParam, step) || [],
+        queryKey: ['issues', filter],
+        //  staleTime: 600000,
+        queryFn: async ({ pageParam = 1 }) => await getIssues.execute(pageParam, filter) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.issues?.length ? pages.length + 1 : undefined
       });
-    const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
 
+    const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const flat = data?.pages.flat().map(page => page.issues).flat()
     const issues = userLoading || isLoading ? [] : flat?.map((issue: Issue) => new IssueView(issue, userId))
 
+    console.log('viewModel', issues, data, flat, count, isLoading, error, filter)
     return {
       count,
       issues,
@@ -37,7 +37,7 @@ export const issueViewModel = () => {
       hasNextPage,
       isLoading,
       error
-    };
+    }
   }
 }
 
@@ -46,11 +46,10 @@ export const IssueIdViewModel = () => {
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
       refetchOnWindowFocus: false,
-      staleTime: 600000, // 10 minutes,
+      staleTime: 600000,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
     const userId = user?.id || 0
-
     const getIssueById = DI.resolve('getIssueByIdUseCase')
 
     const { data, isLoading, error, refetch } = useQuery({

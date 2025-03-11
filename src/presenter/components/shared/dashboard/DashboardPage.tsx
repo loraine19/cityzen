@@ -165,6 +165,7 @@ export default function DashboardPage() {
                                             link="/service"
                                             size="4xl"
                                             color="cyan"
+                                            style="hover:!bg-cyan-100"
                                             title="voir mes services" />
                                         <div>
                                             <Typography

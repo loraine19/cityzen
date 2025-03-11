@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent, EditFilled, Edit } from '@project-lary/react-material-symbols-300-rounded';
+import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent, EditFilled, Edit, GroupsFilled, Groups, PersonCancelFilled, PersonCancel } from '@project-lary/react-material-symbols-300-rounded';
 
 
 const iconMap = {
@@ -28,6 +28,7 @@ const iconMap = {
     expand_content: { filled: ExpandContentFilled, default: ExpandContent },
     explore_nearby: { filled: ExploreNearbyFilled, default: ExploreNearby },
     flag_2: { filled: Flag2Filled, default: Flag2 },
+    groups: { filled: GroupsFilled, default: Groups },
     home: { filled: HomeFilled, default: Home },
     keyboard_double_arrow_down: { filled: KeyboardDoubleArrowDownFilled, default: KeyboardDoubleArrowDown },
     list: { filled: ListFilled, default: List },
@@ -35,6 +36,7 @@ const iconMap = {
     notifications: { filled: NotificationsFilled, default: Notifications },
     partner_exchange: { filled: PartnerExchangeFilled, default: PartnerExchange },
     person: { filled: PersonFilled, default: Person },
+    person_cancel: { filled: PersonCancelFilled, default: PersonCancel },
     person_edit: { filled: PersonEditFilled, default: PersonEdit },
     search: { filled: SearchFilled, default: Search },
     signal_cellular_alt: { filled: SignalCellularAltFilled, default: SignalCellularAlt },
@@ -80,10 +82,10 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     size = sizeMap[size] || sizeMap['2xl'];
     const pad = props.bg ? 'px-[0.30em] pt-[0.26em] pb-[0.26rem]' : 'px-1 py-1'
     const color = props.color ?? 'gray'
-    const textColor = props.color ? `text-${color}-700 hover:!saturate-[2] hover:!bg-${color}-700` : "text-gray-800 hover:!bg-gray-300"
+    const textColor = props.color ? `text-${color}-700 hover:!saturate-[1.5] hover:!bg-${color}-500 hover:!bg-opacity-30` : "text-gray-800 hover:!bg-gray-200"
     const bg = props.bg ? (props.color ? `bg-${color}-500 bg-opacity-30` : "!bg-gray-300 ") : ''
-    const classIcon = `flex items-center justify-center  notranslate  flex items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
-    const classActive = ` hover:!shadow hover:${pad} rounded-full transition-all duration-200 ease-in-out `
+    const classIcon = `!rounded-full flex items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
+    const classActive = ` hover:scale-[1.2] hover:!shadow hover:${pad}  transition-all duration-200 ease-in-out `
 
     if (onClick) {
         return (

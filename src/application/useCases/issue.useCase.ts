@@ -7,8 +7,8 @@ export class GetIssuesUseCase {
     constructor({ issueRepository }: { issueRepository: IssueRepositoryBase }) {
         this.issueRepository = issueRepository;
     }
-    public async execute(page?: number, step?: string,): Promise<IssuePage> {
-        return await this.issueRepository.getIssues(page, step);
+    public async execute(page?: number, filter?: string,): Promise<IssuePage> {
+        return await this.issueRepository.getIssues(page, filter);
     }
 }
 
@@ -48,7 +48,7 @@ export class UpdateIssueUseCase {
     }
 }
 
-export class UpdateIssueStepUseCase {
+export class RepIssueUseCase {
     private issueRepository: IssueRepositoryBase;
 
     constructor({ issueRepository }: { issueRepository: IssueRepositoryBase }) {
@@ -56,10 +56,9 @@ export class UpdateIssueStepUseCase {
     }
 
     public async execute(id: number, update: IssueUpdate): Promise<Issue> {
-        return await this.issueRepository.updateIssueStep(id, update);
+        return await this.issueRepository.updateIssueResp(id, update);
     }
 }
-
 
 export class FinishIssueUseCase {
     private issueRepository: IssueRepositoryBase;
@@ -67,8 +66,8 @@ export class FinishIssueUseCase {
     constructor({ issueRepository }: { issueRepository: IssueRepositoryBase }) {
         this.issueRepository = issueRepository;
     }
-    public async execute(id: number): Promise<Issue> {
-        return await this.issueRepository.updateIssueStep(id, IssueUpdate.FINISH);
+    public async execute(id: number, pourcent: number): Promise<Issue> {
+        return await this.issueRepository.updateIssueFinish(id, pourcent);
     }
 }
 
@@ -82,5 +81,6 @@ export class DeleteIssueUseCase {
     public async execute(id: number): Promise<void> {
         return await this.issueRepository.deleteIssue(id);
     }
+
 }
 

@@ -9,8 +9,10 @@ type ConfirmModalProps = {
     title: string;
     element: string | JSX.Element;
     disableConfirm?: boolean;
+    confirmString?: string;
+    cancelString?: string;
 }
-export function ConfirmModal({ open, handleOpen, handleConfirm, handleCancel, disableConfirm, title, element }: ConfirmModalProps) {
+export const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, handleOpen, handleConfirm, handleCancel, disableConfirm, title, element, confirmString = 'Confirmer', cancelString = 'Fermer' }) => {
     return (
         <>
             <Button className="hidden">
@@ -34,16 +36,15 @@ export function ConfirmModal({ open, handleOpen, handleConfirm, handleCancel, di
                         className={`mr-1 rounded-full ${disableConfirm && 'invisible'}`}
                     >
                         <span>
-                            Annuler
+                            {cancelString}
                         </span>
                     </Button>
                     <Button
                         color="green"
                         className="rounded-full"
                         onClick={() => { handleConfirm() }}>
-                        <span>
-                            Confirmer
-                        </span>
+
+                        {confirmString}
                     </Button>
                 </DialogFooter>
             </Dialog></>

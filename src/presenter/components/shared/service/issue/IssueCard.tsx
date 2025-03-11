@@ -10,17 +10,19 @@ import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import ServiceIssueCard from "./ServiceIssueCard";
 import { Icon } from "../../../common/IconComp";
 import { PathElement } from "../../../../constants";
+import React from 'react';
+import { IssueStep } from '../../../../../domain/entities/Issue';
 
 type IssueCardProps = { issue: IssueView, mines?: boolean, change: (e: any) => void, update?: () => void }
-export default function IssueCard({ mines, change, update, issue }: IssueCardProps) {
-    const { description, image, createdAt, mine, serviceId } = issue
+const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) => {
+    const { description, image, createdAt, mine, serviceId, statusS } = issue
     const Service = new ServiceView(issue?.Service, issue?.Service?.type === ServiceType.GET ? issue?.Service.User : issue?.Service?.UserResp)
     const haveImage = image ? true : false
     const isLateValue = isLate(createdAt, 15)
     const deleteIssue = async (id: number) => await DI.resolve('deleteIssueUseCase').execute(id);
     // const updateIssue = async (id: number, data: IssueDTO) => await DI.resolve('updateServiceStepUseCase').execute(id, data)
 
-    const myActions = GenereMyActions(issue, "concialtion", deleteIssue, undefined, isLateValue)
+    const myActions = GenereMyActions(issue, "concialtion", deleteIssue)
     const takenCTA: Action[] = [
 
         {
@@ -40,7 +42,7 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
 
     return (
         <>
-            <Card className={haveImage ? "FixCard" : "FixCardNoImage"}>
+            <Card className={haveImage ? "FixCard  " : "FixCardNoImage"}>
                 <CardHeader
                     className={haveImage ? "h-full !max-h-[15vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
@@ -53,8 +55,9 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
                                 }}>
                                 <Chip
                                     size="sm"
-                                    value={`etape `}
-                                    className="CyanChip">
+                                    value={statusS}
+                                    className={`${statusS === IssueStep.STEP_3 && 'GreenChip' || statusS === IssueStep.STEP_4 && 'GrayChip' || 'OrangeChip'} truncate lowercase`}
+                                >
                                 </Chip>
                             </button>
                         </div>
@@ -91,7 +94,7 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
                     </div>
                 </CardBody>
 
-                <CardFooter className="CardFooter flex-col flex-1 !-mt-1.5 pb-2 ">
+                <CardFooter className="CardFooter   flex-col flex-1 !-mt-1.5 pb-2 ">
                     <ServiceIssueCard service={Service} />
                     <div
                         className="flex items-center justify-between"> {mine && mines &&
@@ -111,3 +114,5 @@ export default function IssueCard({ mines, change, update, issue }: IssueCardPro
         </>
     )
 }
+
+export default IssueCard;

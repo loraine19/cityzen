@@ -3,8 +3,6 @@ import { IssueRepositoryBase } from "../../domain/repositoriesBase/IssueReposito
 import { IssueDTO } from "../DTOs/IssueDTO";
 import { ApiServiceI } from "../providers/http/apiService";
 
-
-
 interface IData extends IssueRepositoryBase {
     api: ApiServiceI;
     dataType: string;
@@ -15,8 +13,8 @@ export class IssueRepositoryImpl implements IssueRepositoryBase {
     private issueData: IData;
     constructor({ issueData }: { issueData: IData }) { this.issueData = issueData }
 
-    public async getIssues(): Promise<IssuePage> {
-        return this.issueData.getIssues();
+    public async getIssues(page: number, filter?: string): Promise<IssuePage> {
+        return this.issueData.getIssues(page, filter);
     }
 
     async getIssueById(id: number): Promise<Issue> {
@@ -31,8 +29,12 @@ export class IssueRepositoryImpl implements IssueRepositoryBase {
         return this.issueData.updateIssue(id, data)
     }
 
-    async updateIssueStep(id: number, step: IssueUpdate): Promise<Issue> {
-        return this.issueData.updateIssueStep(id, step)
+    async updateIssueResp(id: number, step: IssueUpdate): Promise<Issue> {
+        return this.issueData.updateIssueResp(id, step)
+    }
+
+    async updateIssueFinish(id: number, pourcent: number): Promise<Issue> {
+        return this.issueData.updateIssueFinish(id, pourcent)
     }
 
     async postIssue(data: IssueDTO): Promise<Issue> {
