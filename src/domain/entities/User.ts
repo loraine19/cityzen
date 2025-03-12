@@ -15,6 +15,7 @@ export class User {
     lastConnection: Date = new Date();
     status: UserStatus = UserStatus.INACTIVE;
     GroupUser: [GroupUser] = [{} as GroupUser];
+    password: string = '';
 
     constructor(init?: User) {
         if (init) {

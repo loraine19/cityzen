@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Issue } from '../../../../../domain/entities/Issue';
@@ -15,6 +15,7 @@ import { Button } from '@material-tailwind/react';
 import { IssueView } from '../../../../views/viewsEntities/issueViewEntity';
 import DI from '../../../../../di/ioc';
 import { IssueDTO } from '../../../../../infrastructure/DTOs/IssueDTO';
+import { User } from '../../../../../domain/entities/User';
 
 
 
@@ -25,13 +26,22 @@ export default function IssueEditPage() {
     const userId = user.id
     const [issue, setIssue] = useState<Issue>({} as Issue);
     const [open, setOpen] = useState(false);
-
     const idS = id ? parseInt(id) : 0;
     const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const { service, isLoading } = serviceIdViewModelFactory(idS);
-
     const postIssue = async (data: IssueDTO) => await DI.resolve('postIssueUseCase').execute(data)
+    const getModos = async () => await DI.resolve('getUsersModosUseCase').execute()
+    const [modos, setModos] = useState<User[]>([])
 
+    useEffect(() => {
+        if (modos.length === 0) {
+            const fetchModos = async () => {
+                const modos = await getModos()
+                setModos([...modos])
+                console.log('modos', modos)
+            }; fetchModos()
+        }
+    }, [issue]);
 
     const redirectModal: ModalValues = {
         confirm: async () => { navigate(`/conciliation/${id}`); setOpen(false) },
@@ -103,6 +113,7 @@ export default function IssueEditPage() {
             {isLoading ?
                 <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
                 <IssueForm
+                    modos={modos}
                     issue={issue as IssueView}
                     service={service}
                     formik={formik} />}

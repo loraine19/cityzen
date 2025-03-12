@@ -7,7 +7,7 @@ export class IssueView extends Issue {
     mine: boolean = false;
     onMe: boolean = false;
     ImModo: boolean = false;
-    ImModoResp: boolean = false;
+    ImModoOn: boolean = false;
     statusS: string = IssueStep[this.status as keyof typeof IssueStep]
     stepValue: number = parseInt(this.status.toString().replace('STEP_', ''))
     UserOn: User = {} as User
@@ -16,7 +16,7 @@ export class IssueView extends Issue {
         super(issue);
         this.mine = issue?.userId === userId
         this.ImModo = this.userIdModo === userId
-        this.ImModoResp = this.userIdModoResp === userId
+        this.ImModoOn = this.userIdModoOn === userId
         this.UserOn = issue.userId === issue.Service.userId ? issue.Service.UserResp : issue.Service.User
         this.onMe = this.UserOn.Profile.userId === userId
     }

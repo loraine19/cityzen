@@ -9,52 +9,85 @@ import { useUserStore } from '../../../../../application/stores/user.store';
 import { Skeleton } from '../../../common/Skeleton';
 import DI from '../../../../../di/ioc';
 import { generateContact } from '../../../../views/viewsEntities/utilsService';
-import { useState } from 'react';
-import { Input, Typography } from '@material-tailwind/react';
+import { useEffect, useState } from 'react';
+import { Input, Select, Typography, Option } from '@material-tailwind/react';
 import { IssueStep } from '../../../../../domain/entities/Issue';
+import { User } from '../../../../../domain/entities/User';
+import { ProfileDiv } from '../../../common/ProfilDiv';
 
 export default function IssueDetailPage() {
     const { id } = useParams()
     const { user } = useUserStore()
     const userId = user.id
     const navigate = useNavigate();
-
     const idS = id ? parseInt(id) : 0;
     const issueIdViewModelFactory = DI.resolve('issueIdViewModel');
-    const { issue, isLoading } = issueIdViewModelFactory(idS);
-
+    const { issue, isLoading, error } = issueIdViewModelFactory(idS);
     const deleteIssue = async (id: number) => await DI.resolve('deleteIssueUseCase').execute(id);
     const respIssue = async (id: number, step: IssueStep) => await DI.resolve('respIssueUseCase').execute(id, step);
-    // const cancelRespService = async (id: number) => await DI.resolve('cancelRespServiceUseCase').execute(id);
-    // const validRespService = async (id: number) => await DI.resolve('validRespServiceUseCase').execute(id);
     const finishIssue = async (id: number, pourcent: number) => await DI.resolve('finishIssueUseCase').execute(id, pourcent);
+    const getModos = async () => await DI.resolve('getUsersModosUseCase').execute()
+    const [modos, setModos] = useState<User[]>([])
+    const [modoOnId, setModoOnId] = useState<number>(0)
+
+    console.log('issue', issue)
+    useEffect(() => {
+        if (modos.length === 0) {
+            const fetchModos = async () => {
+                const modos = await getModos()
+                setModos([...modos])
+            }; fetchModos()
+        }
+    }, [issue]);
 
 
     const MyActions: Action[] = [{
-        icon: issue.stepValue < 2 ? 'Modifier ' : issue.statusS,
+        icon: issue.stepValue < 2 ? 'Modifier ' : '',
         title: 'Modifier la conciliation',
         body: 'Aller à la page de modification de la conciliation',
         function: () => { navigate('/conciliation/edit/' + issue.serviceId) }
     },
     {
-        icon: issue.stepValue <= 3 ? 'Supprimer ' : issue.statuS,
+        icon: issue.stepValue <= 3 ? 'Supprimer ' : issue.statusS,
         title: 'Supprimer la conciliation',
         body: 'service.title as string',
         function: async () => { const ok = await deleteIssue(issue.serviceId); ok && navigate('/service?search=myservices') }
     }]
 
+    const ChoiceModoSelect: JSX.Element = issue &&
+        <div className=' pb-20 z-50 overflow-hidden pt-2'>
+            <Select
+                labelProps={{ className: 'z-50  pl-8' }}
+                label={modoOnId === 0 ? '' : 'Modérateur choisi'}
+                variant='static'
+                className={`!relative top-0 z-50  !rounded-full !border-none !flex !justify-start !items-start !flex-col gap-4 ${modoOnId === 0 ? 'bg-red-100' : '!bg-blue-gray-50'} `}>
+                {modos.map((modo: User) =>
+                    <Option
+                        onClick={() => setModoOnId(modo.id)}
+                        key={modo.id}
+                        className={` rounded-full   `}
+                        value={modo.id && modo?.id?.toString() || '0'} >
+                        <div className='px-4 mb-1'>
+                            <ProfileDiv
+                                size="xs"
+                                profile={modo.Profile} />
+                        </div>
+                    </Option >)
+                }
+            </Select >
+        </div >
+
     const RespActions = [
         {
-            icon: issue.stepValue <= 2 ? 'Accepter la conciliation' : issue.statusS,
+            icon: issue.status === IssueStep.STEP_1 ? 'Choisir mon modérateur' : issue.statusS,
             title: 'Choisir mon modérateur',
-            body: '--',
+            body: ChoiceModoSelect,
             function: () => { navigate('/conciliation/edit/' + issue.serviceId) }
         }]
 
     const [pourcent, setPourcent] = useState({ IModo: 100, other: 0 })
     const userImodo = issue.ImModo ? issue?.Service?.User : issue?.Service?.UserResp
     const otherModo = issue.ImModo ? issue?.Service?.UserResp : issue?.Service?.User
-    console.log(user)
 
     const pourcentInput =
         <div className="flex flex-col gap-4 p-4">
@@ -85,7 +118,7 @@ export default function IssueDetailPage() {
 
     const ModoActions = [
         {
-            icon: issue.stepValue === 2 && issue.stepValue === 3 ? `Accepter la conciliation ${issue.ImModo ? issue.Service.User.Profile.firstName : issue.Service.UserResp.Profile.firstName}` : '',
+            icon: issue.ImModo && issue.status === IssueStep.STEP_1 || issue.ImModoOn && issue.status === IssueStep.STEP_2 ? `Accepter la conciliation ${issue.ImModo ? issue.Service.User.Profile.firstName : issue.Service.UserResp.Profile.firstName}` : '',
             title: 'Vous avez été choisi comme modérateur ',
             body: `Vous pouvez contacter l'utilisateur qui vous à choisi : ${generateContact(issue.ImModo ? issue.User : issue.UserOn)}`,
             function: async () => {
@@ -94,7 +127,7 @@ export default function IssueDetailPage() {
             }
         },
         {
-            icon: issue.ImModo && issue.stepValue === 2 || issue.ImModoResp && issue.stepValue === 3 ? 'Cloturer le litige' : issue.statusS,
+            icon: (issue.ImModo && issue.statusS === IssueStep.STEP_3) || (issue.ImModoOn && issue.statusS === IssueStep.STEP_4) ? 'Cloturer le litige' : issue.statusS,
             title: `Attribution de la moitié des points la conciliation`,
             body: pourcentInput,
             function: async () => {
@@ -115,9 +148,10 @@ export default function IssueDetailPage() {
                         place={` sur une ${ServiceType[issue?.Service?.type as unknown as keyof typeof ServiceType]} de service  ${userId === issue?.Service?.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`}
                         closeBtn />
                 </header>
-                {isLoading || !issue ?
+                {isLoading || !issue || error ?
                     <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
                     <IssueForm
+                        modos={modos}
                         issue={issue} />
                 }
                 {issue?.mine &&
@@ -132,14 +166,12 @@ export default function IssueDetailPage() {
                         disabled1={issue?.stepValue >= 2}
                         disabled2={issue?.stepValue >= 3}
                         actions={RespActions} />}
-
-                {issue.ImModo || issue.ImModoResp &&
-                    <>
-                        <CTAMines
-                            key={'ImModo'}
-                            disabled2={issue?.stepValue >= 4}
-                            actions={ModoActions} />
-                    </>
+                {(issue?.ImModo || issue?.ImModoOn) &&
+                    <CTAMines
+                        key={'ImModo'}
+                        disabled1={(issue?.ImModo && issue?.statusS !== IssueStep.STEP_0) || (issue?.ImModoOn && issue?.statusS !== IssueStep.STEP_1)}
+                        disabled2={(issue?.ImModo && issue?.statusS !== IssueStep.STEP_3) || (issue?.ImModoOn && issue?.statusS !== IssueStep.STEP_4)}
+                        actions={ModoActions} />
                 }
             </div >
         </>

@@ -44,7 +44,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 case path.includes(PathElement.SERVICE) || path.includes(PathElement.EVENT):
                     bodyColor = 'cyan';
                     break;
-                case path.includes(PathElement.POST) || path.includes(PathElement.SURVEY) || path.includes(PathElement.POOL) || path.includes(PathElement.ISSUE) || path.includes(PathElement.VOTE):
+                case path.includes(PathElement.POST) || path.includes(PathElement.SURVEY) || path.includes(PathElement.POOL) || path.includes(PathElement.VOTE):
                     bodyColor = 'orange';
                     break;
                 default:

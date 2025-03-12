@@ -9,8 +9,8 @@ export class Issue {
     User: User = new User();
     userIdModo: number = 0;
     UserModo: User = new User();
-    userIdModoResp: number = 0;
-    UserModoResp: User = new User();
+    userIdModoOn: number = 0;
+    UserModoOn: User = new User();
     description: string = '';
     image: string | File = '';
     date: Date | string = new Date();
@@ -39,10 +39,10 @@ export enum IssueUpdate {
 
 export enum IssueStep {
     STEP_0 = 'attente choix du 2eme conciliateur',
-    STEP_1 = 'attente validation conciliateurs',
-    STEP_2 = 'attente validation conciliateur resp',
+    STEP_1 = 'attente validation conciliateur',
+    STEP_2 = 'attente validation 2em conciliateur',
     STEP_3 = 'attente decision conciliateur',
-    STEP_4 = 'attente decision conciliateur resp',
+    STEP_4 = 'attente decision 2em conciliateur',
     STEP_5 = 'terminé',
 }
 

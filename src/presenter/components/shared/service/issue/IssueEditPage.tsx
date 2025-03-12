@@ -27,6 +27,7 @@ export default function IssueEditPage() {
     const { issue, isLoading, error } = issueIdViewModelFactory(idS);
     const updateIssue = async (id: number, data: IssueDTO) => await DI.resolve('updateIssueUseCase').execute(id, data)
 
+
     const redirectModal: ModalValues = {
         confirm: async () => { navigate(`/conciliation/${id}`); setOpen(false) },
         title: "Confirmer la redirection",
@@ -96,6 +97,7 @@ export default function IssueEditPage() {
             {isLoading || error ?
                 <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
                 <IssueForm
+                    modos={[]}
                     issue={issue}
                     formik={formik} />}
             <Button

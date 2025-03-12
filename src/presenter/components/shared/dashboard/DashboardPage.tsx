@@ -14,6 +14,7 @@ import { ConfirmModal } from "../../common/ConfirmModal";
 import { useSearchParams } from "react-router-dom";
 import { LogOutButton } from "../../common/LogOutBtn";
 import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
+import { Role } from "../../../../domain/entities/GroupUser";
 
 export default function DashboardPage() {
     const user = useUserStore((state) => state.user);
@@ -89,9 +90,11 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
-                                            link="/conciliation"
+                                            style={user?.GroupUser[0].role === Role.MODO ? '' : 'cursor-not-allowed'}
+                                            link={user?.GroupUser[0].role === Role.MODO ? '/conciliation' : ''}
                                             icon="diversity_3"
-                                            color="orange" fill bg
+                                            color={user?.GroupUser[0].role === Role.MODO ? 'orange' : 'blue-gray'}
+                                            fill bg
                                             size="lg"
                                             title="ouvrir la page conciliation" />
                                         <Icon

@@ -2,10 +2,11 @@ import { Popover, PopoverHandler, Avatar, PopoverContent, Typography, List, List
 import { Icon } from "./IconComp"
 import { Profile } from "../../../domain/entities/Profile"
 
-export function ProfileDiv(props: { profile: Profile, size?: string }) {
-    const { profile } = props
+type ProfileDivProps = { profile: Profile, size?: string }
+export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) => {
+    const textSize = size === "xl" && "h5" || size === "sm" && "h6" || "small"
+    const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
 
-    const size = !props.size ? "sm" : props.size
     return (
         <div className="flex items-center px-0 gap-2">
             <Popover placement="bottom-start">
@@ -51,14 +52,13 @@ export function ProfileDiv(props: { profile: Profile, size?: string }) {
             </Popover>
             <div className="flex flex-col">
                 <Typography
-                    variant={size === "xl" ? "h5" : "h6"}
+                    variant={textSize}
                     color="blue-gray"
                     className="border-b border-blue-gray-200 pr-4">
                     {profile?.firstName} {profile?.lastName}
                 </Typography>
                 <Typography
-                    variant={size === "xl" ? "h6" : "small"}
-                    className="font-normal text-blue-gray-500">
+                    className={`font-normal text-blue-gray-500 ${texteSize2}`}>
                     ◦ {profile?.skills}
                 </Typography>
             </div>
