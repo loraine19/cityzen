@@ -28,7 +28,7 @@ export const issueViewModel = () => {
     const flat = data?.pages.flat().map(page => page.issues).flat()
     const issues = userLoading || isLoading ? [] : flat?.map((issue: Issue) => new IssueView(issue, userId))
 
-    console.log('viewModel', issues, data, flat, count, isLoading, error, filter)
+
     return {
       count,
       issues,

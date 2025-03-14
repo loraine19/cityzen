@@ -3,13 +3,11 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { cryptedStorage } from '../../infrastructure/services/storageService';
 import DI from '../../di/ioc';
-import { useUserStore } from './user.store';
 import { NotifView } from '../../presenter/views/viewsEntities/notifViewEntity';
 
 interface NotificationStore {
   notifList: NotifView[];
   updateNotif: () => void;
-  addNotif: (newNotif: NotifView) => void;
   removeNotif: (notifId: number) => void;
   fetchNotif: () => Promise<void>;
 }
@@ -20,9 +18,7 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
   persist((set) => {
     const getNewNotif = async () => {
       const notifs = await DI.resolve('getNotifUseCase').execute() as NotifView[];
-      const userId = useUserStore.getState().user.id;
-      const notif = DI.resolve('notifService').getInfosInNotifs(notifs, userId);
-      return notif
+      return notifs
     }
     const fetchNotif = async () => {
       if (!window.location.pathname.includes('/sign')) {
@@ -31,7 +27,6 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
         storage.setItem('notifications', notif);
       }
     }
-
     return {
       notifList: [],
       addNotif: (newNotif: NotifView) => {
@@ -48,8 +43,7 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
                 new Date(newNotif.updatedAt).getTime() > new Date(notif.updatedAt).getTime()
             );
             return find ? find : notif;
-          });
-          console.log('updatedList', updatedList);
+          })
           return { notifList: updatedList };
         });
       },

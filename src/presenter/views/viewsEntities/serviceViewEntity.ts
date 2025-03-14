@@ -20,9 +20,9 @@ export class ServiceView extends Service {
         super(service);
         this.IResp = service?.userIdResp ? service.userIdResp === user.id : false;
         this.flagged = service?.Flags ? service?.Flags?.some((flag: Flag) => flag.userId === user.id) : false;
-        this.mine = service?.userId === user.id;
+        this.mine = service?.userId === user?.id;
         this.isLate = this.isLateCalc(service?.createdAt, 15);
-        this.points = this.GetPoints(service, user.Profile);
+        this.points = this.GetPoints(service, user?.Profile);
         this.categoryS = ServiceCategory[service?.category as string as keyof typeof ServiceCategory]
         this.typeS = ServiceType[service?.type as string as keyof typeof ServiceType]
         this.statusS = ServiceStep[service?.status as string as keyof typeof ServiceStep]

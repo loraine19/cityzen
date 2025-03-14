@@ -56,11 +56,12 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                 <Link
                                     to={agendaLink as string}
                                     target="_blank" rel="noopener noreferrer"
-                                    className={`${Igo ? 'GreenChip' : 'GrayChip'} w-max rounded-full mb-1 py-0.5 px-2 text-xs font-medium flex items-center gap-1`}
+                                    className={`${Igo ? 'GreenChip' : 'GrayChip'} w-max !rounded-full mb-1 pt-1  text-xs font-medium flex items-center gap-1`}
                                     title="ajouter a mon agenda">
-                                    <span className="material-symbols-outlined !text-[1.2rem] !m-0 !pt-0.5">
-                                        calendar_add_on
-                                    </span>
+                                    <Icon
+                                        color={Igo ? "green" : "gray"}
+                                        icon="calendar_add_on"
+                                        size="2xl" />
                                     ajouter a mon agenda
                                 </Link>
                                 <Typography >
@@ -86,12 +87,14 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                 value={participantsMin}
                                 variant="ghost"
                                 className="rounded-full h-max flex items-center px-4 "
-                                icon={<Icon icon="person"
-                                    size="2xl"
-                                    fill={Igo}
-                                    color={Igo ? "cyan" : "gray"}
-                                    style="pl-2 hover:text-cyan-800 "
-                                    title={Igo ? "Je n'y vais plus" : "j'y vais"} />}>
+                                icon={
+                                    <Icon
+                                        icon="person"
+                                        size="sm"
+                                        fill={Igo}
+                                        color={Igo ? "cyan" : "gray"}
+                                        style=" hover:text-cyan-800 scale-[1.6] "
+                                        title={Igo ? "Je n'y vais plus" : "j'y vais"} />}>
 
                             </Chip>
                         </button>

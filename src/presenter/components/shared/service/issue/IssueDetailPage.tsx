@@ -118,7 +118,7 @@ export default function IssueDetailPage() {
 
     const ModoActions = [
         {
-            icon: issue.ImModo && issue.status === IssueStep.STEP_1 || issue.ImModoOn && issue.status === IssueStep.STEP_2 ? `Accepter la conciliation ${issue.ImModo ? issue.Service.User.Profile.firstName : issue.Service.UserResp.Profile.firstName}` : '',
+            icon: (issue.ImModo && issue.statusS === IssueStep.STEP_1) || (issue.ImModoOn && issue.statusS === IssueStep.STEP_2) ? `Accepter la conciliation pour ${issue.ImModo ? issue.Service.User.Profile.firstName : issue.Service.UserResp.Profile.firstName}` : '',
             title: 'Vous avez été choisi comme modérateur ',
             body: `Vous pouvez contacter l'utilisateur qui vous à choisi : ${generateContact(issue.ImModo ? issue.User : issue.UserOn)}`,
             function: async () => {
@@ -127,14 +127,10 @@ export default function IssueDetailPage() {
             }
         },
         {
-            icon: (issue.ImModo && issue.statusS === IssueStep.STEP_3) || (issue.ImModoOn && issue.statusS === IssueStep.STEP_4) ? 'Cloturer le litige' : issue.statusS,
+            icon: issue.stepValue > 2 && (((issue.ImModo && issue.statusS === IssueStep.STEP_3) || (issue.ImModoOn && issue.statusS === IssueStep.STEP_4)) ? 'Cloturer le litige' : issue.statusS),
             title: `Attribution de la moitié des points la conciliation`,
             body: pourcentInput,
-            function: async () => {
-                const ok = await finishIssue(issue.serviceId, pourcent.IModo);
-                ok && console.log(ok);
-
-            }
+            function: async () => await finishIssue(issue.serviceId, pourcent.IModo)
         }]
 
 
@@ -169,7 +165,7 @@ export default function IssueDetailPage() {
                 {(issue?.ImModo || issue?.ImModoOn) &&
                     <CTAMines
                         key={'ImModo'}
-                        disabled1={(issue?.ImModo && issue?.statusS !== IssueStep.STEP_0) || (issue?.ImModoOn && issue?.statusS !== IssueStep.STEP_1)}
+                        disabled1={(issue?.ImModo && issue?.statusS !== IssueStep.STEP_1) || (issue?.ImModoOn && issue?.statusS !== IssueStep.STEP_2)}
                         disabled2={(issue?.ImModo && issue?.statusS !== IssueStep.STEP_3) || (issue?.ImModoOn && issue?.statusS !== IssueStep.STEP_4)}
                         actions={ModoActions} />
                 }

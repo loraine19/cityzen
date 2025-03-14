@@ -5,30 +5,31 @@ import NavBarBottom from "../../common/NavBarBottom";
 import { Icon } from "../../common/IconComp";
 import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import CalendarComp from "../../common/CalendarComp";
-import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { useEffect, useState } from "react";
 import { NotifBadge } from "../../common/NotifBadge";
 import { Skeleton } from "../../common/Skeleton";
 import { useUserStore } from "../../../../application/stores/user.store";
 import { ConfirmModal } from "../../common/ConfirmModal";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { LogOutButton } from "../../common/LogOutBtn";
 import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
 import { Role } from "../../../../domain/entities/GroupUser";
+import DI from "../../../../di/ioc";
 
 export default function DashboardPage() {
     const user = useUserStore((state) => state.user);
     const fetchUser = useUserStore((state) => state.fetchUser);
-    const notifList = useNotificationStore((state: any) => state.notifList);
-    const updateNotif = useNotificationStore((state: any) => state.updateNotif);
-    const userNotif = useNotificationStore((state: any) => state.notifList?.filter((notif: NotifView) => !notif.read).length);
     useEffect(() => {
         const fetch = async () => {
             if (!user || !user.Profile) { await fetchUser() }
-            await updateNotif()
         }
         fetch()
     }, [])
+
+    const navigate = useNavigate();
+    const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
+    const notifViewModelFactory = DI.resolve('notifViewModel');
+    const { notifs, isLoading, refetch, count } = notifViewModelFactory();
 
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
@@ -131,28 +132,34 @@ export default function DashboardPage() {
                                         <div>
                                             <Typography
                                                 color="blue-gray">
-                                                {notifList && userNotif > 0 ?
-                                                    `${userNotif} notifications` : 'pas de notifications'}
+                                                {count > 0 ?
+                                                    `${count} notifications` : 'pas de notifications'}
                                             </Typography>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col w-full max-h-8 overflow-y-auto ">
-                                        {notifList && (notifList.map((notif: NotifView, index: number) => notif.read === false &&
+                                    <div className="flex flex-col w-full max-h-8 overflow-y-auto gap-0.5">
+                                        {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
                                             <div className="w-full font-light text-sm flex px-1 justify-between"
                                                 key={index}>
                                                 <p>
                                                     <span
                                                         className="text-orange-800 capitalize font-normal">
-                                                        {notif?.elementType}
+                                                        {notif?.typeS}
                                                     </span> :
-                                                    {notif?.title}
+                                                    <span className="text-ellipsis">
+                                                        {notif?.description}
+                                                    </span>
                                                 </p>
                                                 <Icon
                                                     icon="arrow_circle_right"
-                                                    link={`/${notif?.elementType}/${notif.id}`}
+                                                    onClick={async () => {
+                                                        await readNotif(notif.id);
+                                                        refetch();
+                                                        navigate(notif.link)
+                                                    }}
                                                     size="2xl"
                                                     color="orange"
-                                                    title={"voir les details de " + notif.title} />
+                                                    title={"voir les details de " + notif?.title} />
                                             </div>))}
                                     </div>
                                 </CardBody>

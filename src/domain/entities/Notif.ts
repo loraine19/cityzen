@@ -1,10 +1,16 @@
+import { Address } from "./Address";
+
 export class Notif {
     title: string = '';
+    description: string = '';
     id: number = 0;
-    element: ElementNotif = {} as ElementNotif;
     updatedAt: Date = new Date();
     read: boolean = false;
-    userId: number = 0;
+    link?: string = '';
+    Address?: Address = {} as Address;
+    data: any = {};
+    type: ElementNotif = ElementNotif.POST;
+    level?: any = '';
     constructor(data?: Partial<Notif>) {
         if (data) {
             Object.assign(this, data);
@@ -14,13 +20,16 @@ export class Notif {
 
 
 export enum ElementNotif {
-    POST,
-    EVENT,
-    SERVICE,
-    ISSUE,
-    SURVEY,
-    POOL,
-    FLAG,
+    POST = 'POST',
+    EVENT = 'EVENT',
+    SERVICE = 'SERVICE',
+    ISSUE = 'ISSUE',
+    SURVEY = 'SURVEY',
+    POOL = 'POOL',
+    FLAG = 'FLAG',
+    LIKE = 'LIKE',
+    PARTICIPANT = 'PARTICIPANT',
+    VOTE = 'VOTE'
 }
 
 

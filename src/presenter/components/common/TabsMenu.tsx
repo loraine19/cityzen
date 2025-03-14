@@ -19,7 +19,7 @@ export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: strin
                     <Tab key={index}
                         value={value}
                         activeClassName="text-white"
-                        className="text-sm whitespace-nowrap bg-white rounded-full shadow"
+                        className="text-sm whitespace-nowrap bg-white rounded-full shadow !px-3"
                         onClick={() => { result() }}>
                         {label}
                     </Tab>

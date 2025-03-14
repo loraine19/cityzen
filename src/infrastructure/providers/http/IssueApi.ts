@@ -3,9 +3,9 @@ import { IssueDTO } from "../../DTOs/IssueDTO";
 import { ApiService } from "./apiService";
 
 export class IssueApi {
-    ;
+
     private readonly dataType: string = 'issues';
-    private readonly api: ApiService;
+    private readonly api: ApiService
 
     constructor() { this.api = new ApiService(); }
 

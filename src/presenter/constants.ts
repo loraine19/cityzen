@@ -30,11 +30,13 @@ export enum PathElement {
     SERVICE = 'service',
     POST = 'annonce',
     SURVEY = 'sondage',
-    POOL = 'pool',
+    POOL = 'cagnotte',
     FLAG = 'signalement',
     ISSUE = 'conciliation',
     NOTIF = 'notification',
     VOTE = 'vote',
+    PARTICIPANT = 'participant',
+    LIKE = 'like'
 }
 
 export enum EventImage {

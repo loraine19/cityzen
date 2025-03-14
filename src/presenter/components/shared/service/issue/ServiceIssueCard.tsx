@@ -88,18 +88,18 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         </Typography>
                         <div className="flex flex-row-reverse gap-2 ">
                             <Avatar
-                                src={UserResp.Profile?.image as string || '../../image/person.svg'}
+                                src={UserResp?.Profile?.image as string || '../../image/person.svg'}
                                 size="sm"
                                 alt="avatar" />
                             <div className="flex flex-col items-end">
                                 <Typography
                                     className="max-h-4"
                                     variant="small">
-                                    {UserResp.Profile?.firstName}
+                                    {UserResp?.Profile?.firstName}
                                 </Typography>
                                 <Typography
                                     variant="small">
-                                    {UserResp.Profile?.lastName}
+                                    {UserResp?.Profile?.lastName}
                                 </Typography>
                             </div>
                         </div>

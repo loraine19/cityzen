@@ -142,7 +142,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                             </Select>
                             <Select
                                 className="rounded-full shadow !py-1 !flex !justify-center bg-white border-none capitalize "
-                                label={`Modérateur de ${Service.UserResp.Profile.firstName}`}
+                                label={`Modérateur de ${Service.UserResp?.Profile?.firstName}`}
                                 name={"userIdModoOn"}
                                 labelProps={{ className: `before:border-none after:border-none ` }}
                                 menuProps={{ className: 'overflow-auto max-h-44' }}
