@@ -87,7 +87,8 @@ export class ApiService implements ApiServiceI {
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
             this.logWithTime('not api error');
-            return Promise.reject(new ApiError(error.code, error.message));
+            return Promise.reject(new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard'));
+            // return { data: { error: new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard') } };
         }
         const { status, data } = error.response;
         console.error('complete error:', error.response);
@@ -104,20 +105,20 @@ export class ApiService implements ApiServiceI {
                         this.logWithTime('token refreshed SUCCESS 401');
                         return this.api(originalRequest);
                     } else {
-                        newError = new UnauthorizedError('Erreur lors du rafraîchissement du token');
+                        newError = new UnauthorizedError(data.message || 'Erreur lors du rafraîchissement du token');
                     }
                 } else {
                     newError = new UnauthorizedError();
                 }
                 break;
             case 403:
-                newError = new ForbiddenError();
+                newError = new ForbiddenError(data.message);
                 break;
             case 404:
-                newError = new NotFoundError();
+                newError = new NotFoundError(data.message);
                 break;
             case 409:
-                newError = new ConflictError();
+                newError = new ConflictError(data.message);
                 break;
             case 500:
                 newError = new ServerError();

@@ -15,7 +15,8 @@ type ProfileFormProps = {
     setAddress?: any,
     setMailSub?: any,
     ImModo?: boolean,
-    setImModo?: any
+    setImModo?: any,
+
 }
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress, ImModo = false, setImModo }) => {

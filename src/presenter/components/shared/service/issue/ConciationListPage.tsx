@@ -33,16 +33,13 @@ export default function ConciationListPage() {
 
     const filterName = (): string => filter === IssueFilter.FINISH && 'resolus' || filter === IssueFilter.PENDING && 'demande' || filter === IssueFilter.WAITING && 'en cours' || ''
 
-
-
     const filterTab = async (value?: IssueFilter) => {
         setParams({ filter: value as string || '', category: category });
         if (value !== filter) { setCategory('') }
         setFilter(value || '');
         setStep(value || '')
         setParams({ filter: value as string || '', category: category })
-
-    };
+    }
 
     const serviceTabs: TabLabel[] = [
         { label: "tous", value: '', result: () => filterTab() },
@@ -57,9 +54,7 @@ export default function ConciationListPage() {
             setCategory(value);
             setParams({ search: tabSelected, category: value });
         }
-    };
-
-
+    }
 
     useEffect(() => {
         const notifUpdate =
@@ -84,7 +79,7 @@ export default function ConciationListPage() {
                 setIsBottom(false);
             }
         }
-    };
+    }
 
     return (
         <div className="Body gray">

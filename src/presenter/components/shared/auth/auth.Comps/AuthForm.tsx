@@ -14,6 +14,7 @@ type AuthFormProps = {
     confirm: boolean;
     formik: FormikProps<any>;
     hidden?: boolean;
+    inError?: boolean;
 };
 
 export const AuthForm: React.FC<AuthFormProps> = ({
@@ -25,7 +26,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     submitText,
     confirm,
     formik,
-    hidden
+    hidden = false,
+    inError = false
 }: AuthFormProps) => {
     const passwordType = { value: 'password', icon: 'visibility' }
     const textType = { value: 'text', icon: 'visibility_off' }
@@ -40,14 +42,18 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     return (
         <div className='flex justify-center items-center h-full w-resp pt-6'>
             <Card className=" flex FixCardNoImage !gap-0 ">
-                <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-2">
-                    <CardHeader className="FixCardHeaderNoImage flex-col !h-max px-4 !pt-4" floated={false}>
+                <form
+                    onSubmit={formik.handleSubmit}
+                    className="flex flex-col h-full gap-2">
+                    <CardHeader className="FixCardHeaderNoImage flex-col !h-max px-4 !pt-4"
+                        floated={false}>
                         <Typography
                             variant="h5">
                             {lead}
                         </Typography>
                         <Typography
-                            className='text-sm'>
+                            data-cy="notif-text"
+                            className={`text-sm ${inError ? "error" : ""}`}>
                             {notif}
                         </Typography>
                     </CardHeader>
@@ -60,6 +66,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             name="email"
                             variant="standard"
                             onChange={formik.handleChange}
+                            data-cy="email-input"
                         />
                         <Input
                             size='md'
@@ -76,6 +83,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             variant="standard"
                             onChange={formik.handleChange}
                             type={passWordInput.value}
+                            data-cy="password-input"
                         />
                         <div className={!confirm ? "hidden" : ""}>
                             <Input
@@ -93,7 +101,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 name="passwordConfirm"
                                 type={passWordInput2.value}
                                 variant="standard"
-                                onChange={formik.handleChange} />
+                                onChange={formik.handleChange}
+                                data-cy="password-confirm-input"
+                            />
                         </div>
                     </CardBody>
 
@@ -103,6 +113,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                         </Typography>
                         <div className=" flex  justify-center items-center  ">
                             <Checkbox
+                                data-cy="terms-checkbox"
                                 type="checkbox"
                                 name="checkbox"
                                 className={formik.errors.checkbox ? "error bg-red-300/50" : ""}
@@ -116,6 +127,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             </div>
                         </div>
                         <Button
+                            data-cy="submit-button"
                             type="submit"
                             color="cyan"
                             size="md"

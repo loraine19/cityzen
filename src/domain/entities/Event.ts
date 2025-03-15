@@ -31,9 +31,13 @@ export class Event {
     title: string = '';
     updatedAt: Date = new Date();
     userId: number = 0;
-    constructor(data?: Partial<Event>) {
-        if (data) {
-            Object.assign(this, data);
+    constructor(init?: Partial<Event>) {
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof Event];
+                }
+            });
         }
     }
 }

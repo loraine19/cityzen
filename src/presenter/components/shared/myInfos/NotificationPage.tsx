@@ -78,7 +78,7 @@ export default function NotificationPage() {
     useEffect(() => {
         count > 0 ?
             setNotifFind('') :
-            setNotifFind(`Aucun Notification ${PathElement[filter as keyof typeof PathElement]} na été trouvé`);
+            setNotifFind(`Aucun Notification ${PathElement[filter as keyof typeof PathElement] ?? ""} na été trouvé`);
     }, [notifs, count, isLoading, filter])
 
 
@@ -103,7 +103,7 @@ export default function NotificationPage() {
                 <div className="flex ">
                     <SubHeader
                         qty={count}
-                        type={"Notifications " + `${PathElement[filter as keyof typeof PathElement]} `}
+                        type={"Notifications " + `${PathElement[filter as keyof typeof PathElement] ?? ""} `}
                         closeBtn
                         link={'/'} />
                 </div>
