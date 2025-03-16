@@ -13,8 +13,8 @@ export class NotifRepositoryImpl implements NotifRepositoryBase {
     private notifData: IData;
     constructor({ notifData }: { notifData: IData }) { this.notifData = notifData }
 
-    public async getNotifs(page?: number, filter?: string): Promise<Notif[]> {
-        return this.notifData.getNotifs(page, filter);
+    public async getNotifs(page?: number, filter?: string, map?: boolean): Promise<Notif[]> {
+        return this.notifData.getNotifs(page, filter, map);
     }
 
     public async readNotif(id: number): Promise<Notif> {

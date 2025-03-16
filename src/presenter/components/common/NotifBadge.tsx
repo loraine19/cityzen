@@ -3,17 +3,47 @@ import { Icon } from "./IconComp"
 import { NotifView } from "../../views/viewsEntities/notifViewEntity";
 import { useNavigate } from "react-router";
 import DI from "../../../di/ioc";
+import { LoadMoreButton } from "./LoadMoreBtn";
+import { useEffect, useRef, useState } from "react";
 
 export function NotifBadge() {
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
-    const { notifs, isLoading, refetch, count } = notifViewModelFactory();
+    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const unReadNotif: boolean = count > 0
     const navigate = useNavigate()
 
+
+    const divRef = useRef<HTMLDivElement>(null);
+    const [isBottom, setIsBottom] = useState(true);
+    const handleScroll = () => {
+        setIsMenuOpen(true);
+        if (isMenuOpen && divRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+            if (scrollTop + clientHeight + 2 >= scrollHeight) {
+                setIsBottom(true);
+                if (hasNextPage) fetchNextPage();
+            } else {
+                setIsBottom(false);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (isMenuOpen) {
+            console.log("divRef.current dans useEffect:", divRef.current);
+            if (!divRef.current) {
+                console.log("divRef.current n'est pas encore disponible.");
+            }
+        }
+    }, [isMenuOpen])
+
     return (
         <div className="relative w-max ">
-            <div>
+            <div id='notifList'
+                ref={divRef}
+            >
                 <Menu placement="bottom-end" >
                     <MenuHandler title="Notifications">
                         <Chip
@@ -22,8 +52,12 @@ export function NotifBadge() {
                             value={count}>
                         </Chip>
                     </MenuHandler>
-                    <MenuList className="flex flex-col  max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3  rounded-2xl backdrop-blur-2xl">
-                        <div className="overflow-auto flex flex-col gap-1">
+                    <MenuList className="flex flex-col  max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3  rounded-2xl backdrop-blur-2xl ">
+                        <div
+                            onScroll={handleScroll}
+                            className="relative overflow-auto flex flex-col gap-1"
+
+                        >
                             {count === 0 || isLoading ? (
                                 <div className="flex items-center justify-center p-4">
                                     <Typography
@@ -54,22 +88,27 @@ export function NotifBadge() {
                                                 className="max-w-[calc(100%-2rem)] truncate">
                                                 {notif.description}
                                             </Typography>
-                                            <Icon
+                                            {notif.link && <Icon
                                                 icon="chevron_right"
                                                 fill
                                                 onClick={async () => {
                                                     await readNotif(notif.id);
                                                     refetch();
-                                                    navigate(notif.link)
+                                                    notif.link && navigate(notif.link)
                                                 }}
                                                 size="3xl"
                                                 style="bg-white"
-                                            />
+                                            />}
                                         </div>
                                     </MenuItem>)
                                 )}
                         </div>
-
+                        <LoadMoreButton
+                            style="-mb-8"
+                            size="3xl"
+                            isBottom={isBottom}
+                            hasNextPage={hasNextPage}
+                            handleScroll={() => handleScroll()} />
                     </MenuList>
                 </Menu>
             </div>

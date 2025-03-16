@@ -10,8 +10,8 @@ export class GetNotifUseCase {
     constructor({ notifRepository }: { notifRepository: NotifRepositoryBase }) {
         this.notifRepository = notifRepository;
     }
-    public async execute(page?: number, filter?: string): Promise<any> {
-        return this.notifRepository.getNotifs(page, filter);
+    public async execute(page?: number, filter?: string, map?: boolean): Promise<any> {
+        return this.notifRepository.getNotifs(page, filter, map);
     }
 
 }

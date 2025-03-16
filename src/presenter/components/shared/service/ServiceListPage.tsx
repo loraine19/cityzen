@@ -118,6 +118,8 @@ export default function ServicesPage() {
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
+        console.log(divRef)
+        console.log(divRef.current)
         if (divRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
@@ -153,7 +155,8 @@ export default function ServicesPage() {
                 }
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
-            <main ref={divRef}
+            <main
+                ref={divRef}
                 onScroll={() => handleScroll()}
                 className="Grid">
                 {isLoading || error ?

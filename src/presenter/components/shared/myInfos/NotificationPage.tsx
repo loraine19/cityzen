@@ -60,6 +60,10 @@ export default function NotificationPage() {
     {
         label: "vote",
         value: ElementNotif.VOTE, result: () => filterTab(ElementNotif.VOTE)
+    },
+    {
+        label: "signalement",
+        value: ElementNotif.FLAG, result: () => filterTab(ElementNotif.FLAG)
     }]
 
     const filterTab = async (value?: ElementNotif) => {

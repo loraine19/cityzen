@@ -2,11 +2,12 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Popover, PopoverHandler, PopoverContent, Chip } from '@material-tailwind/react';
+import { Popover, PopoverHandler, PopoverContent, Chip, Typography } from '@material-tailwind/react';
 import { Icon } from '../IconComp';
 import { Address } from '../../../../domain/entities/Address';
 import { Link } from 'react-router-dom';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
+import { NotifView } from '../../../views/viewsEntities/notifViewEntity';
 
 function FlyToMarker({ position }: { position: [number, number] }) {
     const map = useMap();
@@ -22,17 +23,68 @@ function FlyToMarker({ position }: { position: [number, number] }) {
     return null;
 }
 
-export default function AddressMapOpen(props: { address: AddressDTO | Address, message?: string }) {
-    const { message } = props;
-    const Address = props.address;
-    const [position, setPosition] = useState<[number, number]>([Address?.lat, Address?.lng]);
+const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
+    return (
+        notifsMap.map((notif: NotifView) => notif?.Address && notif?.Address.lat && notif?.Address?.lng &&
+            <Marker
+                key={notif.id}
+                position={[notif?.Address.lat, notif?.Address.lng]}
+                icon={L.icon({
+                    iconUrl: '/image/marker_orange.svg',
+                    iconSize: [40, 40],
+                    iconAnchor: [25, 50],
+                    popupAnchor: [0, -5],
+                })}
+            >
+                <Popup className=' flex !p-0'>
+                    <div className='flex flex-1 justify-between items-center max-h-8 w-full'>
+                        <Typography
+                            variant='h6'
+                            color='gray'
+                            className=''>
+                            {notif.title}
+                        </Typography>
+                        <Chip
+                            size='sm'
+                            value={notif.typeS}
+                            className='CyanChip text-ellipsis rounded-full max-w-max ' />
+                    </div>
+                    <div className='flex max-h-16 justify-between items-center w-full'>
+                        <Typography
+                            variant="small"
+                            color='gray'
+                            className='font-normal truncate !p-0 !my-0'>
+                            {notif.description}
+                        </Typography>
+                        <Icon
+                            style='!text-gray-900 max-h-max'
+                            icon='arrow_circle_right'
+                            link={`/${notif.link}`}
+                            title={`voir les details de ${notif.title}`}
+                            size='3xl'
+                            fill />
+                    </div>
+                </Popup>
+            </Marker>)
+    )
+}
+
+
+
+
+type AddressMapOpenProps = { address: AddressDTO | Address, message?: string, notifs?: NotifView[] }
+
+export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message, notifs }) => {
+    const [position, setPosition] = useState<[number, number]>([address?.lat, address?.lng]);
+
+
 
     useEffect(() => {
-        setPosition([Address.lat, Address.lng]);
-    }, [Address]);
+        setPosition([address.lat, address.lng]);
+    }, [address]);
     const [open, setOpen] = useState(false);
 
-    const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${Address.lat},${Address.lng}`;
+    const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${address.lat},${address.lng}`;
 
     const IntenaryChip = () => (<Link
         style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}
@@ -63,6 +115,7 @@ export default function AddressMapOpen(props: { address: AddressDTO | Address, m
                         <TileLayer
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
                         />
+
                         <Marker
                             position={position}
                             icon={L.icon({
@@ -73,9 +126,11 @@ export default function AddressMapOpen(props: { address: AddressDTO | Address, m
                             })}
                         >
                             <Popup>
-                                {message || `${Address?.address} ${Address?.city}`}
+                                {message || `${address?.address} ${address?.city}`}
                             </Popup>
                         </Marker>
+                        {notifs &&
+                            <MarkerList notifsMap={notifs} />}
                         {!message &&
                             <FlyToMarker position={position} />}
                         <IntenaryChip />
@@ -106,12 +161,13 @@ export default function AddressMapOpen(props: { address: AddressDTO | Address, m
                                 popupAnchor: [0, -5],
                             })}>
                             <Popup>
-                                {message || `${Address?.address} ${Address?.city}`}
+                                {message || `${address?.address} ${address?.city}`}
                                 <br />
                                 <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">y aller</a>
                             </Popup>
                         </Marker>
                         {!message && <FlyToMarker position={position} />}
+                        {notifs && <MarkerList notifsMap={notifs} />}
                         <IntenaryChip />
                     </MapContainer>
                 </div>
@@ -119,3 +175,4 @@ export default function AddressMapOpen(props: { address: AddressDTO | Address, m
         </Popover >
     );
 }
+export default AddressMapOpen;

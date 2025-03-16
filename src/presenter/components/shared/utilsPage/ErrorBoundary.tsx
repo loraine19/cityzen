@@ -59,8 +59,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                         open={true}
                         handleOpen={() => open = !open}
                         handleConfirm={() => { window.location.reload(); open = !open }}
-                        handleCancel={() => window.location.href = '/'} title={'Désolé, Une erreur s\'est produite'} element={'Cliquer confirm pour reessayer, ou cliquer sur annuler pour revenir à l\'acceuil'}
-                        confirmString='Essayer à nouveau'
+                        handleCancel={() => window.location.href = '/'}
+                        title={'Désolé, Une erreur s\'est produite'}
+                        element={<>
+                            Cliquer confirm pour reessayer, ou cliquer sur annuler pour revenir à l'acceuil
+                            <br />
+                            Si l'erreur persiste, vous pouvez vous déconnecter. <LogOutButton /></>}
+                        confirmString={'Essayer à nouveau'}
                         cancelString="revenir à l'acceuil"
                     />
 
@@ -74,8 +79,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                             <Typography variant="lead" color="blue-gray" className="flex items-center justify-center mt-2">
                                 {`Désolé, une erreur s'est produite... `}
                             </Typography>
-                            <Button size='lg' onClick={() => window.location.href = '/'} className="LnBtn rounded-full">retour à l' acceuil</Button>
-                            <Typography variant="lead" color="blue-gray" className="flex items-center justify-center mt-2">
+                            <Button
+                                size='lg'
+                                onClick={() => window.location.href = '/'}
+                                className="LnBtn rounded-full">retour à l' acceuil
+                            </Button>
+                            <Typography
+                                variant="lead"
+                                color="blue-gray"
+                                className="flex items-center justify-center mt-2">
                                 {`ou déconnectez-vous`}
                             </Typography>
                             <LogOutButton />

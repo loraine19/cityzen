@@ -31,7 +31,7 @@ import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, Delete
 import { GetNotifUseCase, ReadNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
 import { PostProfileUseCase, UpdateProfileUseCase, UpdateRoleUseCase } from '../application/useCases/profile.useCase';
-import { notifViewModel } from '../presenter/views/notifViewModel';
+import { notifMapViewModel, notifViewModel } from '../presenter/views/notifViewModel';
 import { cryptedStorage } from '../infrastructure/services/storageService';
 import { FlagApi } from '../infrastructure/providers/http/flagApi';
 import { GetFlagsUseCase, GetFlagByIdUseCase, PostFlagUseCase, DeleteFlagUseCase } from '../application/useCases/flag.usecase';
@@ -108,6 +108,7 @@ container.register({
 
     ////NOTIFS
     notifViewModel: asFunction(notifViewModel),
+    notifMapViewModel: asFunction(notifMapViewModel),
     getNotifUseCase: asClass(GetNotifUseCase),
     readNotifUseCase: asClass(ReadNotifUseCase),
     notifRepository: asClass(NotifRepositoryImpl),

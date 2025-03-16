@@ -130,7 +130,7 @@ export class ApiService implements ApiServiceI {
 
     private refreshAccess = async (): Promise<boolean> => {
         const refreshToken = this.authService.getRefreshToken();
-        if (window.location.pathname.includes('/sign')) return false;
+        if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
         if (!refreshToken && !window.location.pathname.includes('/sign')) {
             console.error('no refresh token');
             window.location.replace('/signin?msg=merci de vous connecter');

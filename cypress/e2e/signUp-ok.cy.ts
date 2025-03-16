@@ -1,5 +1,5 @@
 describe('SignUp process with mail activation', () => {
-  const baseUrl = 'http://localhost:5173';
+  const baseUrl = Cypress.config('baseUrl');
   const signUp = `${baseUrl}/signup`;
   const email = 'collectif_tester@imagindev.com';
   const password = 'passwordtest';
@@ -8,7 +8,9 @@ describe('SignUp process with mail activation', () => {
   const authBackUrl = `http://localhost:3000/api/auth`;
   let activationLink = '';
 
+
   it('Delete test user before test', () => {
+    cy.log('baseUrl: ' + baseUrl);
     cy.request('DELETE', `${authBackUrl}/tester`).then((response) => {
       expect([200, 404]).to.include(response.status)
     })
@@ -16,13 +18,12 @@ describe('SignUp process with mail activation', () => {
 
   it('Attempts to sign up with new credentials', () => {
     cy.visit(signUp)
-
-    // Fill in the sign-up form with incorrect credentials
     cy.get('[data-cy="email-input"]').type(email);
     cy.get('[data-cy="password-input"]').type(password);
     cy.get('[data-cy="password-confirm-input"]').type(password);
     cy.get('[data-cy="terms-checkbox"]').check();
-    cy.get('[data-cy="submit-button"]').click()
+    cy.get('[data-cy="submit-button"]').click();
+    cy.wait(8000);
     cy.get('[data-cy="notif-text"]').contains('lien envoyé par email').should('be.visible');
   })
 
@@ -41,26 +42,20 @@ describe('SignUp process with mail activation', () => {
       })
     });
     cy.get('a.logout').click();
-
+    cy.wait(8000);
   })
 
-
   it('Visits the activation link, completes the sign-up process', () => {
-    cy.origin('http://localhost:5173', { args: { activationLink } }, ({ activationLink }) => {
+    cy.origin(baseUrl, { args: { activationLink } }, ({ activationLink }) => {
       cy.visit(activationLink);
     });
-
-    cy.origin('http://localhost:5173', { args: { email, password } }, ({ email, password }) => {
+    cy.origin(baseUrl, { args: { email, password } }, ({ email, password }) => {
       cy.url().should('include', '/signin');
       cy.contains('vous pouvez maintenant vous connecter').should('be.visible');
-
       cy.get('input[name="email"]').type(email);
       cy.get('input[name="password"]').type(password);
-
-      // Submit the form
       cy.get('button[type="submit"]').click()
-
-      // Verify that the sign-in completed
+      cy.wait(8000);
       cy.url().should('include', '/profile/create')
     });
   })

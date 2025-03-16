@@ -47,12 +47,12 @@ export function NotifCard(props: notifCardProps) {
                     className="font-normal truncate">
                     {update}
                 </Typography>
-                <Icon
+                {notif.link && <Icon
                     icon="arrow_circle_right"
-                    link={`/${notif.link}`}
+                    link={`${notif.link}`}
                     title={`voir les details de ${notif.title}`}
                     size="4xl"
-                    fill />
+                    fill />}
             </CardFooter>
         </Card>
 

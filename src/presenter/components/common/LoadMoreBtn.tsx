@@ -1,15 +1,16 @@
 import { Icon } from "./IconComp"
 
-export const LoadMoreButton = (props: { handleScroll: () => void, hasNextPage: boolean, isBottom: boolean }) => {
-    const { handleScroll, hasNextPage, isBottom } = props
+type LoadMoreButtonProps = { handleScroll: () => void, hasNextPage: boolean, isBottom: boolean, color?: string, size?: string, style?: string }
+export const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ handleScroll, hasNextPage, isBottom, color = "cyan", size = "4xl", style = 'mb-12' }) => {
     return (
-        <div className="absolute bottom-8 left-0 !w-full flex items-center justify-center ">
+        <div className={`absolute !w-full flex items-center justify-center bottom-8 left-0 `}>
             <Icon
-                color='cyan'
+                color={color}
                 fill
                 icon="keyboard_double_arrow_down"
-                size="4xl" title="voir plus"
-                style={(isBottom && hasNextPage) ? "mb-12" : "hidden"}
+                size={size}
+                title="voir plus"
+                style={(isBottom && hasNextPage) ? style : "hidden"}
                 onClick={handleScroll} />
         </div>
 

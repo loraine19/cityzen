@@ -10,10 +10,12 @@ export class NotifApi {
     private readonly api: ApiServiceI;
     constructor() { this.api = new ApiService() }
 
-    async getNotifs(page?: number, filter?: string): Promise<Notif[]> {
-        const pageR = page ? `?page=${page}` : '';
-        const filterR = filter ? `&filter=${filter}` : '';
-        return this.api.get(`${this.dataType}${pageR}${filterR}`)
+    async getNotifs(page?: number, filter?: string, map?: boolean): Promise<Notif[]> {
+        const pageR = page ? `?page=${page}` : `?page=${0}`;
+        const filterR = filter ? `&filter=${filter}` : ``;
+        const mapR = map ? `&map=${map}` : '';
+        console.log('useCase', page, filter, map, `${this.dataType}${pageR}${filterR}${mapR}`)
+        return this.api.get(`${this.dataType}${pageR}${filterR}${mapR}`)
     }
 
     async readNotif(id: number): Promise<Notif> {

@@ -1,12 +1,4 @@
 {
-    "compilerOptions": {
-        "composite": true,
-        "noEmit": false,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "target": "es2020"
-    },
-    "include": ["./src/**/*", "./cypress/**/*"],
     "files": [],
     "references": [
         { "path": "./tsconfig.app.json" },

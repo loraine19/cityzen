@@ -1,11 +1,10 @@
-//src/presenter/components/shared/dashboard/DashboardPage.tsx
 import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
 import { Icon } from "../../common/IconComp";
 import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import CalendarComp from "../../common/CalendarComp";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NotifBadge } from "../../common/NotifBadge";
 import { Skeleton } from "../../common/Skeleton";
 import { useUserStore } from "../../../../application/stores/user.store";
@@ -15,6 +14,7 @@ import { LogOutButton } from "../../common/LogOutBtn";
 import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
 import { Role } from "../../../../domain/entities/GroupUser";
 import DI from "../../../../di/ioc";
+import { LoadMoreButton } from "../../common/LoadMoreBtn";
 
 export default function DashboardPage() {
     const user = useUserStore((state) => state.user);
@@ -29,7 +29,12 @@ export default function DashboardPage() {
     const navigate = useNavigate();
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
-    const { notifs, isLoading, refetch, count } = notifViewModelFactory();
+    const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
+
+
+    const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
+    const { notifsMap, isLoadingMap } = notifMapViewModelFactory();
+
 
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
@@ -38,6 +43,22 @@ export default function DashboardPage() {
     const [searchParams] = useSearchParams();
     const msg = searchParams.get("msg");
     const [open, setOpen] = useState<boolean>(msg ? true : false);
+
+    const divRef = useRef(null);
+    const [isBottom, setIsBottom] = useState(false);
+    const handleScroll = () => {
+        if (divRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+            if (scrollTop + clientHeight + 2 >= scrollHeight) {
+                setIsBottom(true);
+                if (hasNextPage) {
+                    fetchNextPage();
+                }
+            } else {
+                setIsBottom(false);
+            }
+        }
+    };
 
     return (
         <>
@@ -110,7 +131,9 @@ export default function DashboardPage() {
                                         color="blue-gray"
                                         className="font-extrabold"
                                     >
-                                        {!user ? <Skeleton className="rounded-full" /> : user?.Profile?.points}
+                                        {!user ?
+                                            <Skeleton className="rounded-full" /> :
+                                            user?.Profile?.points}
                                         <span className={`${!user && 'hidden'} text-xs font-light `}>
                                             {' pts'}
                                         </span>
@@ -118,9 +141,9 @@ export default function DashboardPage() {
                                 </CardBody>
                             </Card>
                         </div>
-                        <div className={`hidden lg:${notifClasse} h-full lg:grid`}>
-                            <Card className=" orange100">
-                                <CardBody className="h-full flex flex-col py-3 px-4">
+                        <div className={`hidden lg:${notifClasse}  h-full lg:grid`}>
+                            <Card className=" orange100 ">
+                                <CardBody className="h-full flex flex-col  pt-2 pb-0 px-4">
                                     <div className="flex gap-2 items-center">
                                         <Icon
                                             fill
@@ -137,37 +160,53 @@ export default function DashboardPage() {
                                             </Typography>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col w-full max-h-8 overflow-y-auto gap-0.5">
+                                    <div className="relative flex flex-col -mt-0.5 max-h-10 overflow-y-auto"
+                                        onScroll={() => handleScroll()}
+                                        ref={divRef}>
                                         {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
-                                            <div className="w-full font-light text-sm flex px-1 justify-between"
-                                                key={index}>
-                                                <p>
+                                            <div key={index}
+                                                className=" font-light text-sm flex items-center pl-2 justify-between hover:cursor-pointer hover:bg-orange-100 rounded-full py-0.5"
+                                                onClick={async () => {
+                                                    await readNotif(notif.id);
+                                                    refetch();
+                                                    notif.link && navigate(notif.link)
+                                                }}>
+                                                <p className="truncate max-w-[30vw]">
                                                     <span
                                                         className="text-orange-800 capitalize font-normal">
-                                                        {notif?.typeS}
-                                                    </span> :
-                                                    <span className="text-ellipsis">
+                                                        {notif?.typeS} :&nbsp;
+                                                    </span>
+                                                    <span className="">
                                                         {notif?.description}
                                                     </span>
                                                 </p>
-                                                <Icon
-                                                    icon="arrow_circle_right"
+
+                                                {notif.link && <Icon
+                                                    icon={notif.link ? "arrow_circle_right" : "cancel"}
                                                     onClick={async () => {
                                                         await readNotif(notif.id);
                                                         refetch();
-                                                        navigate(notif.link)
+                                                        notif.link && navigate(notif.link)
                                                     }}
                                                     size="2xl"
                                                     color="orange"
-                                                    title={"voir les details de " + notif?.title} />
+                                                    title={"voir les details de " + notif?.title} />}
                                             </div>))}
+
                                     </div>
+                                    <LoadMoreButton
+                                        style="-mb-8"
+                                        color="orange"
+                                        size="2xl"
+                                        isBottom={isBottom}
+                                        hasNextPage={hasNextPage}
+                                        handleScroll={() => handleScroll()} />
                                 </CardBody>
                             </Card>
                         </div>
                         <div className={mapClasse}>
                             <Card className="h-full flex-1 cyan">
-                                <CardBody className="h-full min-h-[20vh] lg!min-h-[100%] flex flex-col  p-4">
+                                <CardBody className="h-full min-h-[20vh] lg!min-h-[100%] flex flex-col !pt-2 p-4">
                                     <div className="flex items-center gap-2">
                                         <Icon
                                             fill
@@ -180,19 +219,23 @@ export default function DashboardPage() {
                                         <div>
                                             <Typography
                                                 color="blue-gray">
-                                                Services
+                                                {isLoadingMap ? 'Chargement...' : ` ${notifsMap.length} nouveautés à proximité`}
                                             </Typography>
                                         </div>
                                     </div>
                                     <div className="flex-1 flex">
-                                        {user?.Profile?.Address ? <AddressMapOpen address={user?.Profile?.Address} /> : <Skeleton />}
+                                        {user?.Profile?.Address && notifsMap.length > 0 ?
+                                            <AddressMapOpen
+                                                address={user?.Profile?.Address}
+                                                notifs={notifsMap} /> :
+                                            <Skeleton />}
                                     </div>
                                 </CardBody>
                             </Card>
                         </div>
                         <div className={eventClasse}>
                             <Card className="h-full flex-1  gray100 ">
-                                <CardBody className="h-full flex flex-col p-4 ">
+                                <CardBody className="h-full flex flex-col !pt-1 p-4 ">
                                     <CalendarComp logo={true} />
                                 </CardBody>
                             </Card>

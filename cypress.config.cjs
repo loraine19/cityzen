@@ -1,16 +1,17 @@
-import { defineConfig } from "cypress";
+const { defineConfig } = require("cypress");
 
-export default defineConfig({
+module.exports = defineConfig({
   projectId: 'wf3obe',
   e2e: {
     defaultCommandTimeout: 10000,
     pageLoadTimeout: 120000,
+    baseUrl: 'http://localhost:5173',
     setupNodeEvents(on, config) {
       // implement node event listeners here
+      return config;
     },
-    baseUrl: 'http://localhost:5173',
     video: true,
-    videosFolder: 'cypress/videos',
+    videosFolder: 'cypress/videos'
 
   },
 });
