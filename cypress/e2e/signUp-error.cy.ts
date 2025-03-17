@@ -1,15 +1,13 @@
-
-/// <reference types="cypress" />
-
 describe('SignUp process with mail activation', () => {
-  const baseUrl = Cypress.config('baseUrl') as string;
+  const baseUrl: string = Cypress.config('baseUrl') as string;
   const signUp = `${baseUrl}/signup`;
-  const email = 'testeur_cityzen@imagindev.com';
+  const email = 'cityzen_tester@imagindev.com';
   const password = 'passwordtest';
   const mailUrl = 'http://localhost:8085'
-  const waitedMailSubject = "Activation de votre compte City'Zen";
+  const waitedMailSubject = 'Activation de votre compte City\'Zen';
   const authBackUrl = `http://localhost:3000/api/auth`;
-  let activationLink = '';
+  let activationLink: string = ''
+
 
   it('Delete test user before test', () => {
     cy.request('DELETE', `${authBackUrl}/tester`).then((response) => {
@@ -39,7 +37,7 @@ describe('SignUp process with mail activation', () => {
     cy.get('iframe[name="messagecontframe"]').then(($iframe) => {
       const $body = $iframe.contents().find('body');
       cy.wrap($body).find('a#v1activation-link', { timeout: 8000 }).should('be.visible').then(($link) => {
-        activationLink = $link.attr('href') as string;
+        activationLink = $link.attr('href') || '';
       })
     });
     cy.get('a.logout').click();
@@ -49,7 +47,7 @@ describe('SignUp process with mail activation', () => {
   it('Visits the activation link, completes the sign-up process', () => {
     cy.origin(baseUrl, { args: { activationLink } }, ({ activationLink }) => {
       cy.visit(activationLink);
-    })
+    });
     cy.origin(baseUrl, { args: { email, password } }, ({ email, password }) => {
       cy.url().should('include', '/signin');
       cy.contains('vous pouvez maintenant vous connecter').should('be.visible');

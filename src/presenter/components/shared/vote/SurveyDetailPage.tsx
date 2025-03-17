@@ -23,7 +23,6 @@ export default function SurveyDetailPage() {
     const myActions: Action[] = GenereMyActions(survey, "vote/sondage", deleteSurvey, handleOpen)
     const [openVote, setOpenVote] = useState(false);
 
-
     return (
         <>
             {
@@ -54,7 +53,7 @@ export default function SurveyDetailPage() {
                 </main>
 
                 {survey?.mine ?
-                    <CTAMines actions={myActions} />
+                    <footer> <CTAMines actions={myActions} /></footer>
                     :
                     <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around py-2 min-h-max overflow-y-auto `}>
                         <Button

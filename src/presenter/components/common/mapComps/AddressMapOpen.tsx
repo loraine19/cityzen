@@ -8,6 +8,7 @@ import { Address } from '../../../../domain/entities/Address';
 import { Link } from 'react-router-dom';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { NotifView } from '../../../views/viewsEntities/notifViewEntity';
+import { ElementNotif } from '../../../../domain/entities/Notif';
 
 function FlyToMarker({ position }: { position: [number, number] }) {
     const map = useMap();
@@ -29,42 +30,83 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
             <Marker
                 key={notif.id}
                 position={[notif?.Address.lat, notif?.Address.lng]}
-                icon={L.icon({
+                icon={notif.type === ElementNotif.SERVICE ? L.icon({
+                    iconUrl: '/image/marker_green.svg',
+                    iconSize: [40, 40],
+                    iconAnchor: [25, 50],
+                    popupAnchor: [-5, -15],
+                    pane: 'markerPane',
+                }) : L.icon({
                     iconUrl: '/image/marker_orange.svg',
                     iconSize: [40, 40],
                     iconAnchor: [25, 50],
-                    popupAnchor: [0, -5],
+                    popupAnchor: [-5, -15],
+                    pane: 'markerPane',
                 })}
             >
-                <Popup className=' flex !p-0'>
-                    <div className='flex flex-1 justify-between items-center max-h-8 w-full'>
-                        <Typography
-                            variant='h6'
-                            color='gray'
-                            className=''>
-                            {notif.title}
-                        </Typography>
-                        <Chip
-                            size='sm'
-                            value={notif.typeS}
-                            className='CyanChip text-ellipsis rounded-full max-w-max ' />
-                    </div>
-                    <div className='flex max-h-16 justify-between items-center w-full'>
-                        <Typography
-                            variant="small"
-                            color='gray'
-                            className='font-normal truncate !p-0 !my-0'>
-                            {notif.description}
-                        </Typography>
-                        <Icon
-                            style='!text-gray-900 max-h-max'
-                            icon='arrow_circle_right'
-                            link={`/${notif.link}`}
-                            title={`voir les details de ${notif.title}`}
-                            size='3xl'
-                            fill />
+                <Popup>
+                    <div>
+                        <div className='flex flex-1 justify-between items-center  w-full'>
+                            <Typography
+                                variant='h6'
+                                color='gray'
+                                className=''>
+                                {notif.title}
+                            </Typography>
+                            <Chip
+                                size='sm'
+                                value={notif.typeS}
+                                className='CyanChip text-ellipsis rounded-full max-w-max ' />
+                        </div>
+                        <div className='flex max-h-16 justify-between items-center w-full'>
+                            <Typography
+                                variant="small"
+                                color='gray'
+                                className='font-normal truncate !p-0 !my-0'>
+                                {notif.description}
+                            </Typography>
+                            <Icon
+                                style='!text-gray-900 max-h-max'
+                                icon='arrow_circle_right'
+                                link={notif.link}
+                                title={`voir les details de ${notif.title}`}
+                                size='3xl'
+                                fill />
+                        </div>
+
                     </div>
                 </Popup>
+                <div className='!absolute !-mt-0 border-orange-100 border-2 rounded-lg shadow-md'>
+                    <div className='bg-white p-2 -mt-3 z-50 relative top-0 left-0 right-0 rounded-t-lg'>
+                        <div className='flex flex-1 justify-between items-center  w-full'>
+                            <Typography
+                                variant='h6'
+                                color='gray'
+                                className=''>
+                                {notif.title}
+                            </Typography>
+                            <Chip
+                                size='sm'
+                                value={notif.typeS}
+                                className='CyanChip text-ellipsis rounded-full max-w-max ' />
+                        </div>
+                        <div className='flex max-h-16 justify-between items-center w-full'>
+                            <Typography
+                                variant="small"
+                                color='gray'
+                                className='font-normal truncate !p-0 !my-0'>
+                                {notif.description}
+                            </Typography>
+                            <Icon
+                                style='!text-gray-900 max-h-max'
+                                icon='arrow_circle_right'
+                                link={`/${notif.link}`}
+                                title={`voir les details de ${notif.title}`}
+                                size='3xl'
+                                fill />
+                        </div>
+                    </div>
+                </div>
             </Marker>)
     )
 }
@@ -116,6 +158,9 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                             url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
                         />
 
+
+                        {notifs &&
+                            <MarkerList notifsMap={notifs} />}
                         <Marker
                             position={position}
                             icon={L.icon({
@@ -129,8 +174,6 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                                 {message || `${address?.address} ${address?.city}`}
                             </Popup>
                         </Marker>
-                        {notifs &&
-                            <MarkerList notifsMap={notifs} />}
                         {!message &&
                             <FlyToMarker position={position} />}
                         <IntenaryChip />

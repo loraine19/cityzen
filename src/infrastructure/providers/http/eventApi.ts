@@ -22,7 +22,6 @@ export class EventApi {
 
     async postEvent(event: EventDTO): Promise<Event> {
         const formData = this.api.createFormData(event);
-        console.log(33, event, formData);
         return this.api.post(this.dataType, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });

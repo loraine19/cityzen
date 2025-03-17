@@ -2,7 +2,7 @@ services:
   # front
   front:
     container_name: front
-    image: lorainep/collectif:latest
+    image: lorainep/cityzen:latest
     restart: unless-stopped
     ports:
       - '4443:443'
