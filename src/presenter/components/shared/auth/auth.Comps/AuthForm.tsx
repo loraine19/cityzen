@@ -44,7 +44,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
             <Card className=" flex FixCardNoImage !gap-0 ">
                 <form
                     onSubmit={formik.handleSubmit}
-                    className="flex flex-col h-full gap-2">
+                    className="flex flex-col h-full gap-2 ">
                     <CardHeader className="FixCardHeaderNoImage flex-col !h-max px-4 !pt-4"
                         floated={false}>
                         <Typography
@@ -58,7 +58,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                         </Typography>
                     </CardHeader>
 
-                    <CardBody className='FixCardBody gap-3'>
+                    <CardBody className='FixCardBody gap-3 min-h-24'>
                         <Input
                             size='md'
                             error={!!formik?.errors.email}

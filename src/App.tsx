@@ -40,6 +40,7 @@ const MyInfosPage = lazy(() => import("./presenter/components/shared/myInfos/MyI
 const NotificationPage = lazy(() => import("./presenter/components/shared/myInfos/NotificationPage"));
 const PoolDetailPage = lazy(() => import("./presenter/components/shared/vote/PoolDetaiPage"));
 const ConciliationListPage = lazy(() => import("./presenter/components/shared/service/issue/ConciationListPage"));
+const ChatPage = lazy(() => import("./presenter/components/shared/dashboard/ChatPage"));
 
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
 
                             <Route path="/" element={<PrivateRoute />}>
                                 <Route path="/" element={<DashboardPage />} />
+                                <Route path="/chat" element={<ChatPage />} />
                                 <Route path="/msg" element={<DashboardPage />} />
                                 <Route path="/myprofile" element={<MyInfosPage />} />
                                 <Route path="/notification" element={<NotificationPage />} />

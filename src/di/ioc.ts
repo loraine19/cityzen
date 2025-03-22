@@ -56,6 +56,10 @@ import { VoteApi } from '../infrastructure/providers/http/voteApi';
 import { GetIssuesUseCase, GetIssueByIdUseCase, PostIssueUseCase, UpdateIssueUseCase, DeleteIssueUseCase, FinishIssueUseCase } from '../application/useCases/issue.useCase';
 import { issueViewModel, IssueIdViewModel } from '../presenter/views/issueViewModel';
 import { RespIssueUseCase } from '../application/useCases/issue.useCase';
+import { DeleteMessageUseCase, GetConversationUseCase, GetMessagesUseCase, ReadConversationUseCase, ReadMessageUseCase, SendMessageUseCase, UpdateMessageUseCase } from '../application/useCases/message.usecase';
+import { MessageRepositoryImpl } from '../infrastructure/repositoriesImpl/MessageRespositoryImpl';
+import { MessageApi } from '../infrastructure/providers/http/messageApi';
+import { conversationsViewModel, conversationViewModel } from '../presenter/views/messageViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -113,6 +117,19 @@ container.register({
     readNotifUseCase: asClass(ReadNotifUseCase),
     notifRepository: asClass(NotifRepositoryImpl),
     notifData: asClass(NotifApi),
+
+    ////MESSAGES
+    getMessagesUseCase: asClass(GetMessagesUseCase),
+    getConversationUseCase: asClass(GetConversationUseCase),
+    readMessageUseCase: asClass(ReadMessageUseCase),
+    sendMessageUseCase: asClass(SendMessageUseCase),
+    deleteMessageUseCase: asClass(DeleteMessageUseCase),
+    udateMessageUseCase: asClass(UpdateMessageUseCase),
+    messageRepository: asClass(MessageRepositoryImpl),
+    messageData: asClass(MessageApi),
+    conversationViewModel: asFunction(conversationViewModel),
+    conversationsViewModel: asFunction(conversationsViewModel),
+    readConversationUseCase: asClass(ReadConversationUseCase),
 
     ////EVENTS
     getEventsUseCase: asClass(GetEventsUseCase),

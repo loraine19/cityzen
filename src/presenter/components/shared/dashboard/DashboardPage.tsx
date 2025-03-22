@@ -30,8 +30,6 @@ export default function DashboardPage() {
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
-
-
     const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
     const { notifsMap, isLoadingMap } = notifMapViewModelFactory();
 
@@ -112,10 +110,17 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
+                                            link="/chat"
+                                            icon="forum"
+                                            color="orange"
+                                            fill bg
+                                            size="lg"
+                                            title="ouvrir la page chat" />
+                                        <Icon
                                             style={user?.GroupUser[0].role === Role.MODO ? '' : 'cursor-not-allowed'}
                                             link={user?.GroupUser[0].role === Role.MODO ? '/conciliation' : ''}
                                             icon="diversity_3"
-                                            color={user?.GroupUser[0].role === Role.MODO ? 'orange' : 'blue-gray'}
+                                            color={user?.GroupUser[0].role === Role.MODO ? 'red' : 'blue-gray'}
                                             fill bg
                                             size="lg"
                                             title="ouvrir la page conciliation" />
@@ -219,13 +224,16 @@ export default function DashboardPage() {
                                         <div>
                                             <Typography
                                                 color="blue-gray">
-                                                {isLoadingMap ? 'Chargement...' : ` ${notifsMap.length} nouveautés à proximité`}
+                                                {isLoadingMap ?
+                                                    'Chargement...' :
+                                                    ` ${notifsMap.length} nouveautés à proximité`}
                                             </Typography>
                                         </div>
                                     </div>
                                     <div className="flex-1 flex">
                                         {user?.Profile?.Address && notifsMap.length > 0 ?
                                             <AddressMapOpen
+                                                message=" 📍 Vous êtes ici "
                                                 address={user?.Profile?.Address}
                                                 notifs={notifsMap} /> :
                                             <Skeleton />}

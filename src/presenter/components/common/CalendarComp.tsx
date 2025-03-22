@@ -117,7 +117,9 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                 ) :
                     (<div className=' absolute flex flex-col flex-1 h-full p-2 gap-2  w-full rounded-2xl bg-white shadow '>
                         {weeks && weeks.map((week: any, key: number) => (
-                            <div key={key} className={` grid rounded-lg  h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
+                            <div
+                                key={key}
+                                className={` grid rounded-lg  h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
                             ${col === 1 && 'grid-cols-1'} 
                             ${col === 2 && 'grid-cols-2'}
                             ${col === 3 && 'grid-cols-3'}
@@ -126,11 +128,12 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             ${col === 6 && 'grid-cols-6'}
                             ${col === 7 && 'grid-cols-7'}`}>
                                 {week.map((day: any, index: number) =>
-                                    <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full    `} key={index}>
-                                        <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50  '>
+                                    <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full    `}
+                                        key={index}>
+                                        <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50  border-b-[1px] border-gray-300 '>
                                             {day.date.toLocaleDateString('fr-FR', { weekday: 'narrow', month: 'numeric', day: 'numeric' })}
                                         </p>
-                                        <div className='flex flex-col h-full w-full items-center gap-3' key={index}>
+                                        <div className='flex flex-col h-full w-full items-center gap-0.5' key={index}>
                                             {day.events.sort((a: any, b: any) => a.id - b.id).map((event: any, indexEvent: number) => {
                                                 const eventDays = event.days.map((d: any) => new Date(d).toDateString());
                                                 const currentDay = new Date(new Date(day.date).getTime()).toDateString();
@@ -143,7 +146,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                                                 onClick={() => { setOpen(true); setPopId(event.id + day.date) }}>
                                                                 <PopoverHandler>
                                                                     <div className=
-                                                                        {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  p-[0.4rem]  text-white h-7 truncate flex items-center justify-center font-normal z-50
+                                                                        {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-5 truncate flex items-center justify-center font-normal z-50
                                                         ${(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) && 'rounded-l-2xl !justify-start !z-50 pl-4 !font-medium'}
                                                         ${(eventDays[eventDays.length - 1] === currentDay || new Date(day.date).getDay() === 0) && 'rounded-r-2xl '}
                                                     `}>

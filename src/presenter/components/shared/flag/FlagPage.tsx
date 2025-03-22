@@ -5,13 +5,30 @@ import { FlagCard } from "./flagCards/FlagCard";
 import { SkeletonGrid } from "../../common/Skeleton";
 import DI from "../../../../di/ioc";
 import { FlagView } from "../../../views/viewsEntities/flagViewEntities";
+import { LoadMoreButton } from "../../common/LoadMoreBtn";
+import { useRef, useState } from "react";
 
 
 
 export default function FlagPage() {
 
-    const { flags, isLoading, error, refetch } = DI.resolve('flagsViewModel')
-    console.log(flags)
+    const { flags, isLoading, error, refetch, hasNextPage, fetchNextPage } = DI.resolve('flagsViewModel')
+
+    const divRef = useRef(null);
+    const [isBottom, setIsBottom] = useState(false);
+    const handleScroll = () => {
+        if (divRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+            if (scrollTop + clientHeight + 2 >= scrollHeight) {
+                setIsBottom(true);
+                if (hasNextPage) {
+                    fetchNextPage();
+                }
+            } else {
+                setIsBottom(false);
+            }
+        }
+    }
 
     /////FILTER FUNCTIONS
     return (
@@ -31,8 +48,16 @@ export default function FlagPage() {
                 ))
                     :
                     flags.map((element: FlagView, index: number) =>
-                        <div className="SubGrid " key={'div' + index}>    <FlagCard key={index} flag={element} update={refetch} />
+                        <div className="SubGrid " key={'div' + index}>
+                            <FlagCard
+                                key={index}
+                                flag={element}
+                                update={refetch} />
                         </div>)}
+                <LoadMoreButton
+                    isBottom={isBottom}
+                    hasNextPage={hasNextPage}
+                    handleScroll={handleScroll} />
             </main>
             <NavBarBottom />
 

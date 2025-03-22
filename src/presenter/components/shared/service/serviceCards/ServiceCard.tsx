@@ -15,10 +15,9 @@ import { ProfileDiv } from "../../../common/ProfilDiv";
 import { Title } from "../../../common/CardTitle";
 
 
-export default function ServiceComp(props:
-    { service: ServiceView, mines?: boolean, change: (e: any) => void, update?: () => void }) {
+type ServiceProps = { service: ServiceView, mines?: boolean, change: (e: React.MouseEvent<HTMLButtonElement>) => void, update?: () => void }
+const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update }) => {
     const { user } = useUserStore()
-    const { mines, change, update, service } = props
     const { id, title, description, image, createdAt, User, flagged, mine, IResp, points, typeS, categoryS, statusS } = service
     const haveImage = service.image ? true : false
     const navigate = useNavigate();
@@ -31,10 +30,18 @@ export default function ServiceComp(props:
     const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
     const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
 
-    const myActions = GenereMyActions(service, "service", deleteService, undefined, isLateValue)
+    const myActions = [
+        ...GenereMyActions(service, "service", deleteService, undefined, isLateValue),
+        {
+            icon: "sync_problem",
+            title: `litige sur  `,
+            body: `litige a `,
+            function: () => navigate({ pathname: `/litige/create/${id}` }),
+        }
+    ];
     const takenCTA: Action[] = [
         {
-            icon: "sync_problem", title: `litige sur  ${title}`,
+            icon: "sync_problem", title: `litige sur ${title}`,
             body: `litige a ${title}`,
             function: () => navigate({ pathname: `/litige/create/${id}` }),
         },
@@ -106,6 +113,8 @@ export default function ServiceComp(props:
                         type='service' />
                     <div className="flex flex-col h-full overflow-auto">
                         <Typography
+
+                            className="leading-1"
                             color="blue-gray">
                             {description}
                         </Typography>
@@ -122,8 +131,8 @@ export default function ServiceComp(props:
                     {IResp && mines &&
                         <ModifBtnStack
                             actions={takenCTA}
-                            disabled1={statusSInt > 1}
-                            disabled2={statusSInt > 1} />}
+                            disabled1={service.statusS !== ServiceStep.STEP_2}
+                            disabled2={service.statusS !== ServiceStep.STEP_1} />}
                     {!mines &&
                         <ProfileDiv
                             profile={User.Profile} />
@@ -156,3 +165,4 @@ export default function ServiceComp(props:
         </>
     )
 }
+export default ServiceCard

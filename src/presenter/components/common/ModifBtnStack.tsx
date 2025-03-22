@@ -34,7 +34,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
 
             <Icon
                 icon={buttons[0].icon as string}
-                color={'red'}
+                color={disabled1 ? 'gray' : 'red'}
                 onClick={() => { setOpen(true), setIndex(0) }}
                 bg size="2xl"
                 style={"shadow rounded-full"}
@@ -43,7 +43,8 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
 
             <Icon
                 icon={buttons[1].icon as string}
-                color={'orange'} onClick={() => { setOpen(true), setIndex(1) }}
+                color={disabled2 ? 'gray' : 'orange'}
+                onClick={() => { setOpen(true), setIndex(1) }}
                 bg size="2xl"
                 style={"shadow rounded-full "}
                 disabled={disabled2}

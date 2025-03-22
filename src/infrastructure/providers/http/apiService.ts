@@ -128,7 +128,7 @@ export class ApiService implements ApiServiceI {
         return Promise.reject(newError);
     };
 
-    private refreshAccess = async (): Promise<boolean> => {
+    refreshAccess = async (): Promise<boolean> => {
         const refreshToken = this.authService.getRefreshToken();
         if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
         if (!refreshToken && !window.location.pathname.includes('/sign')) {

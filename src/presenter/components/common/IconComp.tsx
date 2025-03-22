@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent, EditFilled, Edit, GroupsFilled, Groups, PersonCancelFilled, PersonCancel, AddAPhoto, AddAPhotoFilled, VisibilityOffFilled, VisibilityOff, DistanceFilled, Distance, PersonPinCircleFilled, PersonPinCircle } from '@project-lary/react-material-symbols-300-rounded';
+import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent, EditFilled, Edit, GroupsFilled, Groups, PersonCancelFilled, PersonCancel, AddAPhoto, AddAPhotoFilled, VisibilityOffFilled, VisibilityOff, DistanceFilled, Distance, PersonPinCircleFilled, PersonPinCircle, SyncProblemFilled, SyncProblem, KeyboardDoubleArrowUp, KeyboardDoubleArrowUpFilled, SendFilled, Send, ForumFilled, Forum, NearMeFilled, NearMe } from '@project-lary/react-material-symbols-300-rounded';
 
 
 const iconMap = {
@@ -30,11 +30,14 @@ const iconMap = {
     expand_content: { filled: ExpandContentFilled, default: ExpandContent },
     explore_nearby: { filled: ExploreNearbyFilled, default: ExploreNearby },
     flag_2: { filled: Flag2Filled, default: Flag2 },
+    forum: { filled: ForumFilled, default: Forum },
     groups: { filled: GroupsFilled, default: Groups },
     home: { filled: HomeFilled, default: Home },
     keyboard_double_arrow_down: { filled: KeyboardDoubleArrowDownFilled, default: KeyboardDoubleArrowDown },
+    keyboard_double_arrow_up: { filled: KeyboardDoubleArrowUpFilled, default: KeyboardDoubleArrowUp },
     list: { filled: ListFilled, default: List },
     more_up: { filled: MoreUpFilled, default: MoreUp },
+    near_me: { filled: NearMeFilled, default: NearMe },
     notifications: { filled: NotificationsFilled, default: Notifications },
     partner_exchange: { filled: PartnerExchangeFilled, default: PartnerExchange },
     person: { filled: PersonFilled, default: Person },
@@ -44,6 +47,8 @@ const iconMap = {
     search: { filled: SearchFilled, default: Search },
     signal_cellular_alt: { filled: SignalCellularAltFilled, default: SignalCellularAlt },
     smart_card_reader: { filled: SmartCardReaderFilled, default: SmartCardReader },
+    sync_problem: { filled: SyncProblemFilled, default: SyncProblem },
+    send: { filled: SendFilled, default: Send },
     thumb_up: { filled: ThumbUpFilled, default: ThumbUp },
     toll: { filled: TollFilled, default: Toll },
     two_pager: { filled: TwoPagerFilled, default: TwoPager },

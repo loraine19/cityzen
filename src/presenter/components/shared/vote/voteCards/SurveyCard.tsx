@@ -90,7 +90,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
 
                     <Typography
                         color="blue-gray"
-                        className=" overflow-auto mb-2 pb-2">
+                        className="leading-[1.3rem] overflow-auto mb-2">
                         {survey?.description}
                     </Typography>
 

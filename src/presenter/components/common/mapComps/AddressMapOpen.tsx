@@ -30,19 +30,21 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
             <Marker
                 key={notif.id}
                 position={[notif?.Address.lat, notif?.Address.lng]}
-                icon={notif.type === ElementNotif.SERVICE ? L.icon({
-                    iconUrl: '/image/marker_green.svg',
-                    iconSize: [40, 40],
-                    iconAnchor: [25, 50],
-                    popupAnchor: [-5, -15],
-                    pane: 'markerPane',
-                }) : L.icon({
-                    iconUrl: '/image/marker_orange.svg',
-                    iconSize: [40, 40],
-                    iconAnchor: [25, 50],
-                    popupAnchor: [-5, -15],
-                    pane: 'markerPane',
-                })}
+                icon={notif.type === ElementNotif.SERVICE ?
+                    L.icon({
+                        iconUrl: '/image/marker_green.svg',
+                        iconSize: [40, 40],
+                        iconAnchor: [25, 50],
+                        popupAnchor: [-5, -15],
+                        pane: 'markerPane',
+                    }) :
+                    L.icon({
+                        iconUrl: '/image/marker_orange.svg',
+                        iconSize: [40, 40],
+                        iconAnchor: [25, 70],
+                        popupAnchor: [-5, -15],
+                        pane: 'markerPane',
+                    })}
             >
                 <Popup>
                     <div>
@@ -128,16 +130,23 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
 
     const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${address.lat},${address.lng}`;
 
-    const IntenaryChip = () => (<Link
-        style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}
-        to={googleMapsLink}
-        target="_blank"
-        rel="noopener noreferrer">
-        <Chip
-            value='itineraire'
-            className='CyanChip rounded-full shadow'
-            size='sm' />
-    </Link>)
+    const IntenaryChip = () => (
+        <Link
+            style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}
+            to={googleMapsLink}
+            target="_blank"
+            rel="noopener noreferrer">
+            <Chip
+                icon={<Icon
+                    size='sm'
+                    color='cyan'
+                    icon='near_me'
+                    fill
+                    style='scale-[2]' />}
+                value='itineraire'
+                className='CyanChip rounded-full shadow !w-max lowercase'
+                size='sm' />
+        </Link>)
 
     return (
         <Popover open={open} >

@@ -1,4 +1,4 @@
-// cryptedStorage.ts
+// src/infrastructure/services/cookiService.ts
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
 

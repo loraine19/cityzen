@@ -46,20 +46,17 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                             className="h-full w-full object-cover"
                         />}
                 </CardHeader>
-                <CardBody className={` FixCardBody`}>
+                <CardBody className={` FixCardBody !flex-1`}>
                     <Title
                         title={title}
-                        flagged={flagged}
-                        id={id}
-                        type="annonce" />
-                    <div className="flex flex-col h-full">
-                        <div className="CardOverFlow">
-                            <Typography
-                                color="blue-gray"
-                                className="!-mt-3">
-                                {description}
-                            </Typography>
-                        </div>
+                        flagged={flagged} id={id}
+                        type='service' />
+                    <div className="flex flex-col h-full overflow-auto">
+                        <Typography
+                            className="leading-1"
+                            color="blue-gray">
+                            {description}
+                        </Typography>
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">

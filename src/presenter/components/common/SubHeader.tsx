@@ -7,7 +7,7 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
     const goBack = link ? link : '/' + (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
 
     return (
-        <div className="flex w-full  justify-between items-end pb-0">
+        <div className="flex w-full  justify-between items-end pb-2">
             <h2 className="text-3xl font-thin px-4 flex-1 text-blue-gray-900">
                 <span className="font-medium ">
                     {qty} {type}
@@ -16,9 +16,9 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
             </h2>
             <Icon
                 icon="cancel"
-                size="4xl"
+                size="3xl"
                 fill
-                style={`${closeBtn ? 'flex !py-0' : 'hidden'} thin`}
+                style={`${closeBtn ? 'flex !p-0 !mb-2' : 'hidden'} thin`}
                 link={goBack}
                 title={"retour " + goBack?.replace("/", "")} />
         </div>
