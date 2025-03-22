@@ -69,7 +69,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                             <button
                                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                     const cat = e.currentTarget.innerText.toLowerCase();
-                                    change(cat)
+                                    change(cat as any)
                                 }}>
                                 <Chip
                                     size="sm"

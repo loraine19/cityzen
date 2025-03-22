@@ -3,16 +3,16 @@ import { ApiService } from './apiService';
 import { Message } from '../../../domain/entities/Message';
 
 export type SocketServiceI = {
-    connect: (nameSpace?: string) => void;
+    connect: (nameSpace: string) => void;
     disconnect: () => void;
-    sendMessage: (userIdRec: number, message: string) => Promise<boolean>;
+    sendMessage: (messageData: any, nameSpace: string) => Promise<boolean>;
     onConnect: (callback: () => void) => void;
     onConnectError: (callback: (error: Error) => void) => void;
-    onNewMessage: (callback: (message: any) => void) => void; // Changed return type to void
+    onNewMessage: (callback: (message: any) => void) => void;
     onError: (callback: (error: Error) => void) => void;
 }
 
-class SocketService {
+export class SocketService implements SocketServiceI {
     private socket: Socket | null = null;
     private connectionPromise: Promise<void> | null = null;
     private connectCallbacks: (() => void)[] = [];
@@ -23,7 +23,7 @@ class SocketService {
 
     constructor() { this.api = new ApiService(); }
 
-    connect = (nameSpace?: string): void => {
+    connect = (nameSpace: string): void => {
         if (!this.connectionPromise) {
             this.connectionPromise = this.initializeConnection(nameSpace);
         }
@@ -31,7 +31,8 @@ class SocketService {
 
     private initializeConnection = async (nameSpace?: string): Promise<void> => {
         const serverUrl = import.meta.env.PROD ? import.meta.env.VITE_WS_URL : import.meta.env.VITE_WS_URL_DEV;
-        this.socket = io(serverUrl, {
+        const url = nameSpace ? `${serverUrl}/${nameSpace}` : serverUrl;
+        this.socket = io(url, {
             withCredentials: true,
             autoConnect: true,
             reconnectionAttempts: 5,
@@ -51,13 +52,14 @@ class SocketService {
             this.connectErrorCallbacks.forEach((cb) => cb(error));
         });
 
-        this.socket.on('newMessage', (message: any) => { // Changed type of message to any
+        this.socket.on('newMessage', (message: any) => {
             console.log('[SocketService] New message received:', message);
             this.newMessageCallbacks.forEach(cb => cb(message));
         });
 
-        this.socket.on('error', async (error: any) => { // Changed type of error to any
+        this.socket.on('error', async (error: any) => {
             console.error('[SocketService] WebSocket error:', error);
+            setTimeout(() => { }, 1000);
             if (error === 'Unauthorized') {
                 try {
                     await this.api.refreshAccess();
@@ -83,17 +85,17 @@ class SocketService {
         });
     };
 
-    sendMessage = async (userIdRec: number, message: string): Promise<boolean> => {
+    sendMessage = async (messageData: any, nameSpace: string): Promise<boolean> => {
         try {
             await this.connectionPromise;
             if (this.socket && this.socket.connected) {
-                this.socket.emit('sendMessage', { userIdRec, message });
+                this.socket.emit(`${nameSpace}-message`, messageData);
             } else {
                 console.warn('[SocketService] SocketService.sendMessage() called, but not connected. Reconnecting...');
-                this.connect();
-                return this.sendMessage(userIdRec, message);
+                this.connect(nameSpace);
+                return this.sendMessage(messageData, nameSpace);
             }
-            console.log('[SocketService] Message sent:', message);
+            console.log('[SocketService] Message sent:', messageData);
             return true;
         } catch (error) {
             console.error("[SocketService] Error sending message:", error);
@@ -118,24 +120,26 @@ class SocketService {
         this.connectCallbacks.push(callback);
     };
 
-    onConnectError = (callback: (error: any) => void): void => { // Changed type of error to any
+    onConnectError = (callback: (error: any) => void): void => {
         console.log('[SocketService] onConnectError() registered callback');
         this.connectErrorCallbacks.push(callback);
     };
+
     onNewMessage = (callback: (message: any) => void): void => {
         console.log('[SocketService] onNewMessage() registered callback');
         this.newMessageCallbacks.push(callback);
-
         //Important: Register the listener here
         if (this.socket) {
             this.socket.on('newMessage', callback);
         }
     };
 
-    onError = (callback: (error: any) => void): void => {  // Changed type of error to any
+    onError = (callback: (error: any) => void): void => {
         console.log('[SocketService] onError() registered callback');
         this.errorCallbacks.push(callback);
     };
 }
 
 export default SocketService;
+
+

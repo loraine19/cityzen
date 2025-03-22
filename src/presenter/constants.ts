@@ -36,7 +36,8 @@ export enum PathElement {
     NOTIF = 'notification',
     VOTE = 'vote',
     PARTICIPANT = 'evenement',
-    LIKE = 'annonce'
+    LIKE = 'annonce',
+    MESSAGE = 'message',
 }
 
 export enum EventImage {

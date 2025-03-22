@@ -74,8 +74,8 @@ export default function DashboardPage() {
                 <div className="relative flex-col w-full flex items-center  justify-center ">
                     <div className="absolute flex justify-between lg:justify-end w-full max-w-[1000px] !m-auto  p-2">
                         <LogOutButton />
-                        <div className="lg:hidden">
-                            <NotifBadge />
+                        <div className="absolute z-50 w-full flex justify-end right-4 -top-2">
+                            <NotifBadge onBoard />
                         </div>
                     </div>
                     <AuthHeader />

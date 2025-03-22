@@ -116,7 +116,7 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
 
 
 
-type AddressMapOpenProps = { address: AddressDTO | Address, message?: string, notifs?: NotifView[] }
+type AddressMapOpenProps = { address: AddressDTO | Address, message?: string | Element, notifs?: NotifView[] }
 
 export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message, notifs }) => {
     const [position, setPosition] = useState<[number, number]>([address?.lat, address?.lng]);
@@ -180,7 +180,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                             })}
                         >
                             <Popup>
-                                {message || `${address?.address} ${address?.city}`}
+                                {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
                             </Popup>
                         </Marker>
                         {!message &&
@@ -213,7 +213,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                                 popupAnchor: [0, -5],
                             })}>
                             <Popup>
-                                {message || `${address?.address} ${address?.city}`}
+                                {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
                                 <br />
                                 <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">y aller</a>
                             </Popup>

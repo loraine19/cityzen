@@ -60,6 +60,7 @@ import { DeleteMessageUseCase, GetConversationUseCase, GetMessagesUseCase, ReadC
 import { MessageRepositoryImpl } from '../infrastructure/repositoriesImpl/MessageRespositoryImpl';
 import { MessageApi } from '../infrastructure/providers/http/messageApi';
 import { conversationsViewModel, conversationViewModel } from '../presenter/views/messageViewModel';
+import SocketService from '../infrastructure/providers/http/socketService';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -221,6 +222,11 @@ container.register({
     voteData: asClass(VoteApi),
     postVoteUseCase: asClass(PostVoteUseCase),
     updateVoteUseCase: asClass(UpdateVoteUseCase),
+
+
+
+    ////SOCKETS 
+    socketService: asClass(SocketService),
 
 
 });

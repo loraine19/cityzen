@@ -118,8 +118,6 @@ export default function ServicesPage() {
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
-        console.log(divRef)
-        console.log(divRef.current)
         if (divRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
@@ -172,7 +170,7 @@ export default function ServicesPage() {
                                 <ServiceComp
                                     key={service.id}
                                     service={service}
-                                    change={search}
+                                    change={search as any}
                                     mines={mine}
                                     update={refetch} />
                             </div>)) :
@@ -181,7 +179,7 @@ export default function ServicesPage() {
                                 <ServiceComp
                                     key={service.id}
                                     service={service}
-                                    change={search}
+                                    change={search as any}
                                     mines={mine}
                                     update={refetch} />
                             </div>

@@ -25,12 +25,23 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                     </PopoverHandler>
                     <PopoverContent className="w-72">
                         <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
+
+                            <Icon
+                                color='orange'
+                                fill
+                                style="absolute !p-[0.3rem] !bg-orange-100 top-2 left-11  z-50  "
+                                size='lg'
+                                link={`/chat?with=${profile?.userId}`}
+                                bg
+                                title="Envoyer un message"
+                                icon="sms"
+                            />
                             <Avatar
                                 src={profile?.image as string || "/image/person.svg"}
                                 size="sm"
                                 alt="avatar"
                                 className="BgUser border-blue-gray-500" />
-                            <div className="flex flex-col">
+                            <div className="flex flex-col pl-2">
                                 <Typography
                                     variant="h6"
                                     color="blue-gray">{profile?.firstName} {profile?.lastName}
@@ -56,7 +67,13 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
 
                                 {profile?.addressShared && profile?.Address &&
                                     <div className={`absolute  -top-2 -right-2 ${profile?.addressShared ? 'flex' : 'hidden'}`}>
-                                        <AddressMapOpen address={profile?.Address} />
+                                        <AddressMapOpen
+                                            message={<DistanceCalculator
+                                                lat1={profile?.Address?.lat}
+                                                lon1={profile?.Address?.lng}
+                                                lat2={user.Profile?.Address?.lat}
+                                                lon2={user.Profile?.Address?.lng} /> as any}
+                                            address={profile?.Address} />
                                     </div>}
                             </div>
                             <DistanceCalculator

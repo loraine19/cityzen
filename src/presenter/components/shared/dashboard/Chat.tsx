@@ -18,9 +18,10 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
 
     const [imTyping, setImTyping] = useState(false);
     const readConversationUseCase = async (id: number) => DI.resolve('readConversationUseCase').execute(id);
-    const [notif] = useState<string>(isLoading ? 'Chargement...' : `Conversation avec ${userRec?.Profile.firstName}`);
+    const [notif, setNotif] = useState<string>('Chargement...');
 
     useEffect(() => {
+        setNotif(userRec?.Profile?.firstName ? `Conversation avec ${userRec?.Profile?.firstName}` : 'Chargement...');
         if (userRec?.id && !messages[0]?.read) {
             const read = async () => await readConversationUseCase(userRec.id);
             read();
@@ -46,7 +47,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
     }
 
     return (
-        <div className='pb-1 pt-6 flex h-full flex-1 pr-2'>
+        <div className=' pt-6 flex h-full flex-1 '>
             <Card className='FixCardNoImage flex bg-blue-gray-50  border-white border-8'>
                 <CardHeader className='FixCardHeaderNoImage min-h-max !bg-transparent px-3 pt-2'
                     floated={false}>

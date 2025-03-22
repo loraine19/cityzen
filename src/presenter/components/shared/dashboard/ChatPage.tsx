@@ -16,19 +16,20 @@ import { Message } from '../../../../domain/entities/Message';
 export default function ChatPage() {
     const [Params, setParams] = useSearchParams();
     const params = { with: Params.get("with") }
-    const [userRecId, setUserRecId] = useState(parseInt(params.with || '0'));
-    const [open, setOpen] = useState(false);
+    const [userIdRec, setUserIdRec] = useState(parseInt(params.with || '0'));
+    const [open, setOpen] = useState(params.with ? true : false);
     const [userRec, setUserRec] = useState<User>({} as User);
     const { conversations, countConv, isLoadingConv, refetchConv } = DI.resolve('conversationsViewModel')()
-    const socketService = new SocketService();
+    const socketService: SocketService = DI.resolve('socketService')
     const [notif, setNotif] = useState<string>('... en attente de connexion');
     const [connected, setConnected] = useState<boolean>(false);
     const conversationViewModelFactory = DI.resolve('conversationViewModel')
-    const { messages, isLoading, refetch, fetchNextPage, hasNextPage } = conversationViewModelFactory(userRecId)
+    const { messages, isLoading, refetch, fetchNextPage, hasNextPage } = conversationViewModelFactory(userIdRec)
+    const nameSpace = 'chat';
 
 
     const connexion = () => {
-        socketService.connect();
+        socketService.connect(nameSpace);
         socketService.onConnect(() => {
             setNotif(``);
             setConnected(true);
@@ -36,13 +37,21 @@ export default function ChatPage() {
             //  return () => socketService.disconnect();
         });
     }
-    useEffect(() => { connexion() }, [])
+    useEffect(() => {
+        connexion();
+        const messageData = { message: 'connexion' };
+        const up = async () => await socketService.sendMessage(messageData, nameSpace);
+        up();
+    }, [])
+
+
 
 
     const [message, setMessage] = useState('');
     const handleSendMessage = async () => {
         if (message.trim() !== '') {
-            const ret = await socketService.sendMessage(userRec.id, message);
+            const messageData = { userIdRec, message };
+            const ret = await socketService.sendMessage(messageData, nameSpace);
             if (ret) {
                 setMessage('');
                 refetch();
@@ -84,36 +93,36 @@ export default function ChatPage() {
                         onClick={() => connexion()} />}
             </header>
 
-            <main className='flex pb-2 pt-6'>
+            <main className='flex pb-4 pt-6'>
                 {isLoadingConv ?
                     <Skeleton
                         className='w-respLarge m-auto !h-full !rounded-3xl' /> :
-                    <Card className='FixCardNoImage !px-0 flex py-8 w-respLarge'>
-                        <CardBody className='FixCardBody !px-0 !py-4 !flex overflow-hidden'>
+                    <Card className='FixCardNoImage !pb-0 !px-0 flex w-respLarge'>
+                        <CardBody className='FixCardBody !p-0 !pt-2 !flex overflow-hidden'>
                             <div className='flex h-full  '>
-                                <div className='flex-1  overflow-y-auto overflow-x-hidden'>
+                                <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
                                     <List
                                         className=' flex-1 '>
                                         {conversations &&
                                             conversations.map((message: MessageView) =>
                                                 <>
                                                     <ListItem
-                                                        className={`px-2 py-1 ${(userRecId === message?.userIdRec || userRecId === message?.userId) ? '!bg-gray-200 border-white border-4 shadow-md hover:pointer-events-none' : ''}`}
+                                                        className={`p-1 ${(userIdRec === message?.userIdRec || userIdRec === message?.userId) ? '!bg-gray-200 border-white border-4 shadow-md hover:pointer-events-none' : ''}`}
                                                         onClick={() => {
                                                             setOpen(true)
                                                             const userRec = message?.IWrite ? message?.UserRec : message?.User
                                                             setUserRec(userRec)
-                                                            setUserRecId(userRec.id)
+                                                            setUserIdRec(userRec.id)
                                                             setParams({ with: userRec.id.toString() })
                                                         }}
                                                         key={message.id}
                                                     >
                                                         <ListItemPrefix className='flex min-w-max'>
-                                                            <Avatar
-                                                                className={`bg-user border-[3px]
-                                                                    ${(userRecId === message?.userIdRec || userRecId === message?.userId) && '!border-cyan-300' ||
-                                                                    (message.read || message.IWrite) && 'border-white' || '!border-orange-500'}`}
 
+                                                            <Avatar
+                                                                className={`bg-user border-[3px] p-0.5
+                                                                    ${(userIdRec === message?.userIdRec || userIdRec === message?.userId) && '!border-cyan-300' ||
+                                                                    (message.read || message.IWrite) && 'border-white' || '!border-orange-500'}`}
                                                                 variant="circular"
                                                                 alt="avatar"
                                                                 size='md'
@@ -126,7 +135,7 @@ export default function ChatPage() {
                                                             <Typography
                                                                 variant="small"
                                                                 color="blue-gray"
-                                                                className="font-normal !line-clamp-2">
+                                                                className="font-normal !line-clamp-1">
                                                                 {message.IWrite &&
                                                                     <span className='text-blue-gray-500'>
                                                                         {message.read && '🗸'}
@@ -136,12 +145,12 @@ export default function ChatPage() {
                                                             </Typography>
                                                         </div>
                                                     </ListItem>
-                                                    <hr className='h-[1px] mx-4 bg-blue-gray-100'></hr></>
+                                                    <hr className='h-[0px] mx-4 bg-blue-gray-100'></hr></>
                                             )}
                                     </List>
                                 </div>
                                 {open &&
-                                    <div className='relative !w-[calc(100%-5rem)]'>
+                                    <div className='relative !w-[calc(100%-4.5rem)]'>
                                         <Chat
                                             isLoading={isLoading}
                                             fetchNextPage={fetchNextPage}
@@ -153,13 +162,12 @@ export default function ChatPage() {
                                             userRec={userRec}
                                         />
                                         <Icon
-
                                             style='absolute top-2 right-4'
                                             color='red'
                                             icon='cancel'
                                             title='fermer'
                                             onClick={() => {
-                                                setUserRecId(0)
+                                                setUserIdRec(0)
                                                 setUserRec({} as User)
                                                 setOpen(false)
                                             }}

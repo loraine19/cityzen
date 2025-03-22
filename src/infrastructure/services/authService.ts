@@ -14,10 +14,10 @@ export class AuthService implements AuthServiceI {
         this.storage = new cryptedCookie();
     }
 
-    // logOutSe = () => {
-    //     this.storage.removeItem('refresh');
-    //     window.location.replace('/signin');
-    // }
+    logOut = () => {
+        this.storage.removeItem('refresh');
+        window.location.replace('/signin');
+    }
 
     getTokenExpirationDate = (token: string): Date | null => {
         const decoded: any = jwtDecode(token);
