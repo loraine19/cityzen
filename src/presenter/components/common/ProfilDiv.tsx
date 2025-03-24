@@ -4,6 +4,7 @@ import { Profile } from "../../../domain/entities/Profile"
 import { DistanceCalculator } from "./CalculatorDistance"
 import { useUserStore } from "../../../application/stores/user.store"
 import AddressMapOpen from "./mapComps/AddressMapOpen"
+import { OnlineDot } from "./onlineDot"
 
 type ProfileDivProps = { profile: Profile, size?: string }
 export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) => {
@@ -11,36 +12,41 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
     const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
     const user = useUserStore(state => state.user)
 
-
     return (
         <>
-            <div className="flex items-center px-0 gap-2">
+            <div className="realtive z-50 flex items-center px-0 gap-2">
                 <Popover placement="bottom-start">
                     <PopoverHandler>
-                        <Avatar
-                            src={profile?.image as string || "/image/person.svg"}
-                            size={size as any}
-                            alt="avatar"
-                            className="BgUser shadow" />
-                    </PopoverHandler>
-                    <PopoverContent className="w-72">
-                        <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
-
-                            <Icon
-                                color='orange'
-                                fill
-                                style="absolute !p-[0.3rem] !bg-orange-100 top-2 left-11  z-50  "
-                                size='lg'
-                                link={`/chat?with=${profile?.userId}`}
-                                bg
-                                title="Envoyer un message"
-                                icon="sms"
-                            />
+                        <div className="relative">
                             <Avatar
                                 src={profile?.image as string || "/image/person.svg"}
-                                size="sm"
+                                size={size as any}
                                 alt="avatar"
-                                className="BgUser border-blue-gray-500" />
+                                className="BgUser shadow" />
+                            <OnlineDot id={profile?.userId} />
+
+                        </div>
+                    </PopoverHandler>
+                    <PopoverContent className=" w-72 z-50">
+                        <div className=" flex  gap-6 ">
+                            <div className="mb-2 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
+                                <Icon
+                                    color='orange'
+                                    fill
+                                    style="absolute !p-[0.3rem] !bg-orange-100 top-2 left-11  z-50  "
+                                    size='lg'
+                                    link={`/chat?with=${profile?.userId}`}
+                                    bg
+                                    title="Envoyer un message"
+                                    icon="sms"
+                                />
+                                <Avatar
+                                    src={profile?.image as string || "/image/person.svg"}
+                                    size="sm"
+                                    alt="avatar"
+                                    className="BgUser border-blue-gray-500" />
+
+                            </div>
                             <div className="flex flex-col pl-2">
                                 <Typography
                                     variant="h6"
@@ -49,7 +55,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                 <Typography
                                     variant="small"
                                     className="font-normal text-blue-gray-500">
-                                    {profile?.skills}
+                                    ◦ {profile?.skills}
                                 </Typography>
                             </div>
                         </div>
@@ -66,7 +72,8 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                     color={profile.addressShared ? "cyan" : "gray"} />
 
                                 {profile?.addressShared && profile?.Address &&
-                                    <div className={`absolute  -top-2 -right-2 ${profile?.addressShared ? 'flex' : 'hidden'}`}>
+                                    <div className={`absolute -top-4 -right-4 
+                                    ${profile?.addressShared ? 'flex opacity-55' : 'hidden'}`}>
                                         <AddressMapOpen
                                             message={<DistanceCalculator
                                                 lat1={profile?.Address?.lat}
@@ -85,7 +92,6 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                             {profile?.Address?.city}, {profile?.Address?.zipcode}
 
                         </div>
-
                     </PopoverContent>
                 </Popover>
                 <div className="flex flex-col">

@@ -72,9 +72,8 @@ export default function MyInfosPage() {
         <div className="Body gray flex">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => { await update() }}
+                handleConfirm={async () => { await update(); setOpen(false) }}
                 title={"Confimrer la modification"}
                 confirmString='Enregistrer'
                 element={

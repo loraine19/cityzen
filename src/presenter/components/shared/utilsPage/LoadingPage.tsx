@@ -1,38 +1,35 @@
 import NavBarBottom from '../../common/NavBarBottom';
 import NavBarTop from '../../common/NavBarTop';
-import { SkeletonGrid } from '../../common/Skeleton';
+import { Skeleton, } from '../../common/Skeleton';
 import SubHeader from '../../common/SubHeader';
 
 export const LoadingPage = () => {
 
-
     const path = window.location.pathname
     let bodyColor = 'defaultColor';
-    if (path.includes('service') || path.includes('evenemen')) {
-        bodyColor = 'cyan';
+    switch (path.split('/')[1]) {
+        case 'evenement': case 'groupe': case 'profil': bodyColor = 'cyan'; break;
+        case 'annonce': case 'sondage': case 'cagnotte': case 'litige': bodyColor = 'orange'; break;
+        default: bodyColor = 'gray'; break;
     }
-    else if (path.includes('annonce') || path.includes('sondage') || path.includes('cagnotte') || path.includes('litige')) {
-        bodyColor = 'orange'
-    }
-    else bodyColor = 'gray'
-
 
     return (
         <>
-
-
             <div className={"Body " + bodyColor}>
                 <header className="px-4">
                     <NavBarTop />
                     <SubHeader type={"Chargement"} />
 
                 </header>
-                <main className="flex items-center justify-evenly h-full py-10">
+                <main className="flex gap-3 items-center justify-evenly h-full  ">
 
                     {[...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
+                        <div
+                            className='flex lg:flex-row flex-col  h-full gap-3 w-full items-center justify-center flex-1'>
+                            <Skeleton
+                                key={index} /> <Skeleton
+                                key={index} />
+                        </div>
                     ))}
                 </main>
                 <NavBarBottom addBtn={true} />

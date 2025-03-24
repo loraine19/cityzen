@@ -16,7 +16,8 @@ export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: strin
                 className="w-full !gap-2 !px-0 my-2 bg-transparent "
                 indicatorProps={{ className: "bg-gray-900 rounded-full" }}>
                 {labels.map(({ label, value, result }, index: number) => (
-                    <Tab key={index}
+                    <Tab
+                        key={index}
                         value={value}
                         activeClassName="text-white"
                         className="text-sm whitespace-nowrap bg-white rounded-full shadow !px-3"

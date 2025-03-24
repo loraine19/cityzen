@@ -41,7 +41,6 @@ export default function FlagEditPage() {
         <div className="Body gray">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => {
                     await deleteFlag()

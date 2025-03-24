@@ -6,7 +6,7 @@ export type SocketServiceI = {
     connect: (nameSpace: string) => void;
     disconnect: () => void;
     sendMessage: (messageData: any, nameSpace: string) => Promise<boolean>;
-    onConnect: (callback: () => void) => void;
+    onConnect: (callback: () => void, nameSpace: string) => void;
     onConnectError: (callback: (error: Error) => void) => void;
     onNewMessage: (callback: (message: any) => void) => void;
     onError: (callback: (error: Error) => void) => void;
@@ -35,8 +35,10 @@ export class SocketService implements SocketServiceI {
         this.socket = io(url, {
             withCredentials: true,
             autoConnect: true,
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000,
+            // reconnectionAttempts: Infinity, // Retry indefinitely
+            reconnectionDelay: 1000, // Delay between reconnection attempts
+            // reconnectionDelayMax: 5000, // Maximum delay between reconnections
+            // timeout: 20000, // Timeout for connection attempts
         });
 
         console.log('[SocketService] Socket instance created:', this.socket);
@@ -52,21 +54,22 @@ export class SocketService implements SocketServiceI {
             this.connectErrorCallbacks.forEach((cb) => cb(error));
         });
 
-        this.socket.on('newMessage', (message: any) => {
-            console.log('[SocketService] New message received:', message);
+        this.socket.on(`${nameSpace}-message`, (message: any) => {
+            console.log(`[SocketService] New message received ${nameSpace}`, message);
             this.newMessageCallbacks.forEach(cb => cb(message));
         });
 
         this.socket.on('error', async (error: any) => {
             console.error('[SocketService] WebSocket error:', error);
-            setTimeout(() => { }, 1000);
-            if (error === 'Unauthorized') {
+            if (error.message === 'Unauthorized') {
                 try {
-                    await this.api.refreshAccess();
-                    console.log('[SocketService] Reconnecting WebSocket after token refresh...');
-                    this.socket!.connect();
+                    const token = await this.api.refreshAccess();
+
+                    console.log(token ? '[SocketService] Token refreshed' : '[SocketService] Token not refreshed');
+                    token && this.socket?.connect();
                 } catch (refreshError) {
-                    console.error("[SocketService] Failed to refresh token", refreshError)
+                    console.error("[SocketService] Failed to refresh token", refreshError);
+                    this.disconnect();
                 }
             }
             this.errorCallbacks.forEach((cb) => cb(error));
@@ -90,6 +93,8 @@ export class SocketService implements SocketServiceI {
             await this.connectionPromise;
             if (this.socket && this.socket.connected) {
                 this.socket.emit(`${nameSpace}-message`, messageData);
+
+
             } else {
                 console.warn('[SocketService] SocketService.sendMessage() called, but not connected. Reconnecting...');
                 this.connect(nameSpace);
@@ -112,11 +117,11 @@ export class SocketService implements SocketServiceI {
         }
     };
 
-    onConnect = (callback: () => void): void => {
-        console.log('[SocketService] onConnect() registered callback');
-        if (this.socket && this.socket.connected) {
-            callback();
-        }
+    onConnect = (callback: () => void, nameSpace: string): void => {
+        console.log('[SocketService] onConnect() registered callback' + nameSpace);
+        // if (this.socket && this.socket.connected) {
+        //     callback();
+        // }
         this.connectCallbacks.push(callback);
     };
 
@@ -128,10 +133,6 @@ export class SocketService implements SocketServiceI {
     onNewMessage = (callback: (message: any) => void): void => {
         console.log('[SocketService] onNewMessage() registered callback');
         this.newMessageCallbacks.push(callback);
-        //Important: Register the listener here
-        if (this.socket) {
-            this.socket.on('newMessage', callback);
-        }
     };
 
     onError = (callback: (error: any) => void): void => {

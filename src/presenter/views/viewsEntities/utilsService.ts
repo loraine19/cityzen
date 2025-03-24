@@ -168,7 +168,8 @@ export const generateContact = (user: User): string => {
         <a href="mailto:${user?.email}"className="text-orange-500 font-medium underline">${user?.email}</a>
         <br> ou télèphone :
         <br><a href="tel:${user?.Profile.phone}" className="text-orange-500 font-medium underline">${user?.Profile.phone}
-        </a>`;
+        </a>
+        <br>`;
 }
 
 export const generateDivObject = (element: any) => {

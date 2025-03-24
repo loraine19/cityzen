@@ -3,7 +3,7 @@ import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
 import { Button, Typography } from '@material-tailwind/react';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { PathElement } from '../../../constants';
-import { ConfirmModal } from '../../common/ConfirmModal';
+import { AlertModal } from '../../common/AlertModal';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -35,7 +35,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             this.setState({ hasError: true })
         }
     }
-
     render() {
         if (this.state.hasError) {
             const path = window.location.pathname
@@ -51,23 +50,24 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     bodyColor = 'gray';
             }
 
-            let open = true
+
+
 
             return (
                 <>
-                    <ConfirmModal
+                    <AlertModal globalError={true} />
+                    {/* <ConfirmModal
                         open={true}
-                        handleOpen={() => open = !open}
                         handleConfirm={() => { window.location.reload(); open = !open }}
                         handleCancel={() => window.location.href = '/'}
                         title={'Désolé, Une erreur s\'est produite'}
                         element={<>
                             Cliquer confirm pour reessayer, ou cliquer sur annuler pour revenir à l'acceuil
                             <br />
-                            Si l'erreur persiste, vous pouvez vous déconnecter. <LogOutButton /></>}
+                            Si l'erreur persiste, vous pouvez vous déconnecter.
+                            <LogOutButton /></>}
                         confirmString={'Essayer à nouveau'}
-                        cancelString="revenir à l'acceuil"
-                    />
+                    /> */}
 
                     <div className={"Body " + bodyColor}>
                         <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">

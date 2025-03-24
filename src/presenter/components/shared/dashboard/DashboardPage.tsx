@@ -26,14 +26,14 @@ export default function DashboardPage() {
         fetch()
     }, [])
 
+
+
     const navigate = useNavigate();
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
     const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
     const { notifsMap, isLoadingMap } = notifMapViewModelFactory();
-
-
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
     const notifClasse = " row-span-2 grid min-h-[7.8rem]  lg:pt-6";
@@ -63,7 +63,6 @@ export default function DashboardPage() {
             <ConfirmModal
                 open={open}
                 disableConfirm
-                handleOpen={() => { }}
                 handleConfirm={() => { setOpen(false); window.location.href = '/' }}
                 handleCancel={() => { }}
                 title="Notification"
@@ -78,9 +77,10 @@ export default function DashboardPage() {
                             <NotifBadge onBoard />
                         </div>
                     </div>
-                    <AuthHeader />
+                    {user && <AuthHeader />}
                 </div>
                 <main className="relative flex -top-6 -mb-5 h-[calc(100%-3.5rem)]">
+
                     <div className={" flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                         <div className={`${userClasse}`}>
                             <Card className="lg:h-full p-0 flex-1 flex ">
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                                                     refetch();
                                                     notif.link && navigate(notif.link)
                                                 }}>
-                                                <p className="truncate max-w-[30vw]">
+                                                <p className="line-clamp-1">
                                                     <span
                                                         className="text-orange-800 capitalize font-normal">
                                                         {notif?.typeS} :&nbsp;
@@ -231,7 +231,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div className="flex-1 flex">
-                                        {user?.Profile?.Address && notifsMap.length > 0 ?
+                                        {user?.Profile?.Address && notifsMap ?
                                             <AddressMapOpen
                                                 message=" 📍 Vous êtes ici "
                                                 address={user?.Profile?.Address}

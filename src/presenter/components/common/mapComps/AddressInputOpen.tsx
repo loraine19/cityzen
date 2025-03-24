@@ -76,7 +76,7 @@ export const AddressInputOpen = (props: {
     };
 
     return (
-        <div className='relative z-50 '>
+        <div className='relative z-40 '>
             <Input
                 error={error ? true : false}
                 label={error ? Object.values(error).join(', ') : "Adresse"}

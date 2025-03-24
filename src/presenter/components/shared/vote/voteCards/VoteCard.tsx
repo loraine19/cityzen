@@ -42,7 +42,6 @@ export const VoteCard = ({ vote, refetch, open, setOpen }: { vote: PoolSurveyVie
     return (
         <ConfirmModal
             open={open}
-            handleOpen={() => { }}
             handleConfirm={async () => {
                 const ok = vote.IVoted ? await updateVote(voteDTO) : await postVote(voteDTO)
                 if (ok) {

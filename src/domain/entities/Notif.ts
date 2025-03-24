@@ -29,7 +29,8 @@ export enum ElementNotif {
     FLAG = 'FLAG',
     LIKE = 'LIKE',
     PARTICIPANT = 'PARTICIPANT',
-    VOTE = 'VOTE'
+    VOTE = 'VOTE',
+    MESSAGE = 'MESSAGE'
 }
 
 

@@ -26,13 +26,19 @@ export default function EventDetailPage() {
             icon: event?.Igo ? 'Annuler votre participation' : '',
             title: `annuler votre participation a ${event?.title}`,
             body: `annuler votre participation a ${event?.title}`,
-            function: async () => event?.toogleParticipate && refetch()
+            function: async () => {
+                await event?.toogleParticipate();
+                refetch()
+            }
         },
         {
             icon: event?.Igo ? '' : `Participer a ${event?.title}`,
             title: `Participer a ${event?.title}`,
             body: `Participer a ${event?.title}`,
-            function: async () => event?.toogleParticipate && refetch()
+            function: async () => {
+                await event?.toogleParticipate();
+                refetch()
+            }
         },
 
     ];

@@ -56,9 +56,10 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                 <Link
                                     to={agendaLink as string}
                                     target="_blank" rel="noopener noreferrer"
-                                    className={`${Igo ? 'GreenChip' : 'GrayChip'} w-max !rounded-full mb-1 pt-1  text-xs font-medium flex items-center gap-1`}
+                                    className={`${Igo ? 'GreenChip' : 'GrayChip px-4 pb-0.5'} w-max !rounded-full mb-1 pt-1  text-xs font-medium flex items-center gap-1`}
                                     title="ajouter a mon agenda">
                                     <Icon
+                                        style="-ml-1"
                                         color={Igo ? "green" : "gray"}
                                         icon="calendar_add_on"
                                         size="2xl" />

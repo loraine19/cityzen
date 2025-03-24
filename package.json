@@ -26,6 +26,7 @@
     "axios": "^1.7.9",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
+    "emoji-picker-react": "^4.12.2",
     "formik": "^2.4.6",
     "html-react-parser": "^5.1.18",
     "i": "^0.3.7",

@@ -3,13 +3,14 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useEffect, useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
-import { EventDTO, EventUpdateDTO } from '../../../../infrastructure/DTOs/EventDTO';
+import { EventUpdateDTO } from '../../../../infrastructure/DTOs/EventDTO';
 import { EventView } from '../../../views/viewsEntities/eventViewEntities';
-import { generateDivObject } from '../../../views/viewsEntities/utilsService';
+import { EventCard } from './eventComps/EventCard';
+import { Typography } from '@material-tailwind/react';
+import { useAlertStore } from '../../../../application/stores/alert.store';
 
 export default function EventDetailPage() {
     const { id } = useParams()
@@ -20,14 +21,17 @@ export default function EventDetailPage() {
     const [Address, setAddress] = useState<AddressDTO>(initialValues.Address || {} as AddressDTO)
     const updateEvent = async (id: number, data: EventUpdateDTO, address: AddressDTO) => await DI.resolve('updateEventUseCase').execute(id, data, address)
 
+    const { setAlertValues, setOpen } = useAlertStore()
+
+
     useEffect(() => {
-        event && !event.mine && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
+        console.log(event);
+        (event && !event.mine && !isLoading) && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
         setInitialValues(event)
     }, [isLoading]);
 
 
     const navigate = useNavigate()
-    const [open, setOpen] = useState(false)
 
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
@@ -44,11 +48,26 @@ export default function EventDetailPage() {
 
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: initialValues as EventView,
+        initialValues: initialValues as any,
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values
             setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await updateFunction(),
+                confirmString: "Enregistrer les modifications",
+                title: "Confimrer la modification",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
+                        <Typography variant='h6'> Évenement au : {formik.values?.Address?.address} le {new Date(formik.values?.start).toLocaleDateString('fr-FR')}</Typography>
+                        <EventCard
+                            event={new EventView({ ...formik.values, image: formik.values.blob }, 0)}
+                            refetch={() => { }}
+                            change={() => { }}
+                        />
+                    </div>
+                )
+            })
         }
     })
 
@@ -68,15 +87,9 @@ export default function EventDetailPage() {
     }
 
 
+
     return (
         <div className="Body cyan">
-            <ConfirmModal
-                open={open}
-                handleOpen={() => setOpen(false)}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => await updateFunction()}
-                title={"Confimrer la modification"}
-                element={generateDivObject(new EventDTO(formik.values))} />
 
             {isLoading || formik.values === null ?
                 <Skeleton /> :

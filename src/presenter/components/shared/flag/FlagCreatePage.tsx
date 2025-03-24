@@ -67,7 +67,6 @@ export default function FlagCreatePage() {
         <div className="Body gray">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false); }}
                 handleConfirm={async () => {
                     const PostData = { ...formik.values };

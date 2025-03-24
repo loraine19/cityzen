@@ -5,7 +5,9 @@ import { useNavigate } from "react-router";
 import DI from "../../../di/ioc";
 import { LoadMoreButton } from "./LoadMoreBtn";
 import { useEffect, useRef, useState } from "react";
-import { Notif } from "../../../domain/entities/Notif";
+import { ElementNotif, Notif } from "../../../domain/entities/Notif";
+import { connectedUsersStore } from "../../../application/stores/connectedUsers.store";
+import { useNotificationStore } from "../../../application/stores/notification.store";
 
 export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const notifViewModelFactory = DI.resolve('notifViewModel');
@@ -16,36 +18,45 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const navigate = useNavigate()
     const nameSpace = 'notifs';
     const [notif, setNotif] = useState<string | null>(null);
-
     const [connected, setConnected] = useState(false);
     const socketService = DI.resolve('socketService');
-    console.log('notifBadge', connected)
+    const { setConnectedUsers } = connectedUsersStore();
+    const { setUnReadMsgNotif } = useNotificationStore();
 
     const connexion = () => {
         socketService.connect(nameSpace);
         socketService.onConnect(() => { setConnected(true) });
     }
-    useEffect(() => {
-        connexion();
-        const messageData = { message: 'connexion' };
-        const up = async () => await socketService.sendMessage(messageData, nameSpace);
-        up();
 
+    const up = async () => await socketService.sendMessage({ message: 'connexion au notif' }, nameSpace);
+    useEffect(() => {
+        console.warn('mounted NOTIF')
+        if (!connected) {
+            connexion();
+            up();
+        }
+        socketService.onConnectError((error: Error) => {
+            console.error("Connection Error:", error);
+        })
+
+        socketService.onNewMessage(async (newMessage: Notif | { users: number[] }) => {
+            if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
+                const notifMessage = newMessage as Notif;
+                setNotif(notifMessage.description);
+                refetch()
+                setTimeout(() => { setNotif('') }, 1000);
+            } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
+                setConnectedUsers(newMessage.users);
+            }
+        });
+
+        setUnReadMsgNotif(notifs.filter((notif: NotifView) => (notif.read === false && notif.type === ElementNotif.MESSAGE)).length)
+        return () => {
+            console.warn('unmounted NOTIF')
+            socketService.disconnect(nameSpace);
+        }
     }, [])
 
-    socketService.onConnectError((error: Error) => {
-        setConnected(false);
-        console.log("Connection Error:", error);
-    });
-
-    socketService.onNewMessage(async (newMessage: Notif) => {
-        setNotif(newMessage.description);
-
-        setTimeout(() => { setNotif(null) }, 1000);
-
-
-        refetch()
-    });
 
 
 
@@ -68,31 +79,26 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
 
     return (
         <>
-            <div className={`absolute w-[90%] top-8 flex justify-center m-auto flex-1 transition-transform duration-[1500ms] ease-in-out  ${notif ? 'translate-y-0' : '-translate-y-full'}`}>
-                {notif &&
-                    <Card className="mt-4 px-4 py-2 rounded-full shadow-lg">
-                        {notif}
-                    </Card>}
+            <div className={`absolute w-full h-20 left-0 top-0 flex justify-center m-auto flex-1 `}>
+                <Card className={`${notif ? 'relative' : ''} mt-4 h-max px-4 py-2 w-respLarge rounded-full shadow-lg transition-all duration-1000 ease-in-out transform ${notif ? 'scale-100 opacity-100 top-4' : 'scale-20 opacity-0 top-0'} `}>
+                    {notif}
+                </Card>
             </div>
             <div className={`relative w-max ${onBoard ? 'lg:hidden' : ''}`}>
-
                 <div id='notifList'
                     ref={divRef}
                 >
                     <Menu placement="bottom-end" >
                         <MenuHandler title="Notifications">
                             <Chip
-                                className={`${unReadNotif ? "absolute flex font-medium  items-center justify-center w-7 h-7 text-sm pt-1.5  rounded-full bottom-0 right-8 shadow z-30" : "hidden"}`}
+                                className={`${unReadNotif ? "absolute flex font-medium items-center justify-center w-6 h-6 text-[0.8rem] pt-1 pb-0.5 border-2 border-cyan-500 rounded-full bottom-0 right-8 shadow z-50" : "hidden"}`}
                                 color="cyan"
-                                value={count}>
+                                value={count >= 99 ? '99+' : (count ? count.toString() : '0')}>
                             </Chip>
                         </MenuHandler>
                         <MenuList className="flex flex-col  max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3  rounded-2xl backdrop-blur-2xl ">
-                            <div
-                                onScroll={handleScroll}
-                                className="relative overflow-auto flex flex-col gap-1"
-
-                            >
+                            <div onScroll={handleScroll}
+                                className="relative overflow-auto !border-none hover:!border-none flex flex-col gap-1">
                                 {count === 0 || isLoading ? (
                                     <div className="flex items-center justify-center p-4">
                                         <Typography

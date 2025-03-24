@@ -3,16 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { Icon } from "./IconComp";
 import { NotifBadge } from "./NotifBadge";
 import { useUserStore } from "../../../application/stores/user.store";
+import { OnlineDot } from "./onlineDot";
+import { useNotificationStore } from "../../../application/stores/notification.store";
 
 export default function NavBarTop() {
     const user = useUserStore((state) => state.user);
+    const unReadMsgNotif = useNotificationStore((state) => state.unReadMsgNotif);
     const { firstName, image } = user && user.Profile || {} as any;
     const navigate = useNavigate();
 
     const menuItems = [
-
         { icon: "home", text: "Accueil", onClick: () => navigate('/') },
-        { icon: "forum", text: "Messagerie", onClick: () => navigate('/chat') },
+        { icon: "forum", text: `Messagerie (${unReadMsgNotif ?? ''})`, onClick: () => navigate('/chat') },
         { icon: "person_edit", text: "Modifier mon profil", onClick: () => navigate('/myprofile') },
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null },
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t " }
@@ -22,13 +24,18 @@ export default function NavBarTop() {
         <div className="flex justify-between w-full items-center py-3">
             <div className="flex items-center w-full gap-2">
                 <Menu placement="bottom-start">
-                    <MenuHandler className="flex items-center gap-2 BgUser !rounded-full !shadow cursor-pointer">
-                        <Avatar
-                            className="BgUser !shadow cursor-pointer"
-                            variant="circular"
-                            alt={firstName || 'user'}
-                            src={image ? image as string : '/image/person.svg'}
-                        />
+                    <MenuHandler className="relative z-40 flex items-center gap-2 BgUser !rounded-full !shadow cursor-pointer">
+                        <div className="relative">
+                            <Avatar
+                                className="BgUser !shadow cursor-pointer"
+                                variant="circular"
+                                alt={firstName || 'user'}
+                                src={image ? image as string : '/image/person.svg'}
+                            />
+                            <OnlineDot
+                                className="!bottom-0 !-right-0.5"
+                                id={user?.id} />
+                        </div>
                     </MenuHandler>
                     <MenuList className="!rounded-xl !shadow-xl">
                         {menuItems.map((item, index) => (
@@ -50,6 +57,6 @@ export default function NavBarTop() {
                 </div>
             </div>
             <NotifBadge />
-        </div>
+        </div >
     );
 }

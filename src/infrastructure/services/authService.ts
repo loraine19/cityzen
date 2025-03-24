@@ -14,10 +14,6 @@ export class AuthService implements AuthServiceI {
         this.storage = new cryptedCookie();
     }
 
-    logOut = () => {
-        this.storage.removeItem('refresh');
-        window.location.replace('/signin');
-    }
 
     getTokenExpirationDate = (token: string): Date | null => {
         const decoded: any = jwtDecode(token);
@@ -31,5 +27,9 @@ export class AuthService implements AuthServiceI {
 
     saveToken = (refreshToken: string) => {
         this.storage.setItem('refresh', refreshToken);
+    }
+
+    clearCookies = () => {
+        this.storage.clear();
     }
 }

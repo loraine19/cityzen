@@ -54,7 +54,6 @@ export default function AnnounceEditPage() {
         <div className="Body orange">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => {
                     const ok = await updateFunction()
@@ -62,6 +61,7 @@ export default function AnnounceEditPage() {
                         navigate(`/annonce`);
                         setOpen(false)
                     }
+
                 }}
                 title={"Confimrer la modification"}
                 element={(JSON.stringify(new PostDTO(formik.values as PostDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />

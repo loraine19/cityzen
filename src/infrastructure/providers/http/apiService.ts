@@ -125,35 +125,32 @@ export class ApiService implements ApiServiceI {
                 break;
         }
         console.error('newError:', newError);
-        return Promise.reject(newError);
+        // return Promise.reject(newError);
+        return { error: newError };
     };
 
     refreshAccess = async (): Promise<boolean> => {
         const refreshToken = this.authService.getRefreshToken();
+
         if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
         if (!refreshToken && !window.location.pathname.includes('/sign')) {
             console.error('no refresh token');
             window.location.replace('/signin?msg=Merci de vous connecter');
         }
         try {
-            try {
-                const response = await axios.post(`${baseURL}/auth/refresh`, {},
-                    { withCredentials: true, headers: { Authorization: `Bearer ${refreshToken}` } });
-                const { refreshToken: newRefreshToken } = response.data;
-                this.authService.saveToken(newRefreshToken);
-                return true;
-            } catch (error: any) {
-                console.error('First attempt to refresh token failed:', error);
-                const response = await axios.post(`${baseURL}/auth/refresh`, {},
-                    { withCredentials: true, headers: { Authorization: `Bearer ${refreshToken}` } });
-                const { refreshToken: newRefreshToken } = response.data;
-                this.authService.saveToken(newRefreshToken);
-                return true;
-            }
+            console.log('try to refresh token' + refreshToken);
+            const response = await axios.post(`${baseURL}/auth/refresh`, {},
+                { withCredentials: true, headers: { Authorization: `Bearer ${refreshToken}` } });
+            const { refreshToken: newRefreshToken } = response.data;
+            this.authService.saveToken(newRefreshToken);
+            return true;
+
         } catch (error) {
-            console.error('error refresh:', error);
-            if (!window.location.pathname.includes('/sign')) setTimeout(() => this.authService.logOut(), 8000)
-            this.authService.logOut();
+            if (!window.location.pathname.includes('/sign')) {
+                this.authService.clearCookies();
+                setTimeout(() => { window.location.replace('/signin?msg=Merci de vous re-identifier') }, 2000)
+
+            }
             return false;
         }
     };

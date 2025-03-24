@@ -16,6 +16,20 @@ export class GetUserMeUseCase {
 
 }
 
+export class GetUserByIdUseCase {
+    private userRepository: UserRepositoryBase;
+
+    constructor({ userRepository }: { userRepository: UserRepositoryBase }) {
+        this.userRepository = userRepository;
+    }
+
+    public async execute(id: number): Promise<User> {
+        return this.userRepository.getUserById(id);
+    }
+
+
+}
+
 export class GetUserCountUseCase {
     private userRepository: UserRepositoryBase;
 

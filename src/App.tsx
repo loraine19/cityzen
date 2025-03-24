@@ -9,6 +9,7 @@ import ProfileCreatePage from "./presenter/components/shared/auth/ProfileCreateP
 import SignUpPage from "./presenter/components/shared/auth/SignUpPage";
 import DashboardPage from "./presenter/components/shared/dashboard/DashboardPage";
 import { LoadingPage } from "./presenter/components/shared/utilsPage/LoadingPage";
+import { AlertModal } from "./presenter/components/common/AlertModal";
 
 // Lazy load components
 const ServiceCreatePage = lazy(() => import("./presenter/components/shared/service/ServiceCreatePage"));
@@ -106,11 +107,14 @@ function App() {
                                 <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
 
                                 <Route path="/*" element={<NotFindPage />} />
+
                             </Route>
                         </Routes>
                     </Suspense>
                 </ErrorBoundary>
                 <ReactQueryDevtools />
+
+                <AlertModal />
             </BrowserRouter>
         </>
     );

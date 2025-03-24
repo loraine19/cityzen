@@ -19,7 +19,6 @@ export default function CTAMines(props: CTAMinesProps) {
         <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 h-max overflow-y-auto `}>
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={() => {
                     buttons[index]?.function && buttons[index].function();

@@ -22,7 +22,7 @@ import { ResetPasswordService } from '../infrastructure/services/resetPasswordSe
 import { ServiceApi } from '../infrastructure/providers/http/serviceApi';
 import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/ServiceRespositoryImpl';
 import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
-import { GetUserCountUseCase, GetUserMeUseCase, GetUsersModosUseCase, GetUsersUseCase } from '../application/useCases/user.usecase';
+import { GetUserByIdUseCase, GetUserCountUseCase, GetUserMeUseCase, GetUsersModosUseCase, GetUsersUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
 import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
@@ -97,6 +97,7 @@ container.register({
 
     ////USER
     getUserMeUseCase: asClass(GetUserMeUseCase),
+    getUserByIdUseCase: asClass(GetUserByIdUseCase),
     getUserCountUseCase: asClass(GetUserCountUseCase),
     getUsersUseCase: asClass(GetUsersUseCase),
     getUsersModosUseCase: asClass(GetUsersModosUseCase),

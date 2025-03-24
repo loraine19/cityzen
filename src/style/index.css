@@ -116,7 +116,7 @@ main {
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !min-h-[20vh];
+    @apply flex flex-1 !min-h-[20vh] !max-h-[25vh];
 }
 
 .FixCardHeaderNoImage {
@@ -144,7 +144,7 @@ main {
 }
 
 .CardImage {
-    @apply h-full  w-full object-cover bg-transparent;
+    @apply object-cover bg-transparent w-full max-h-full;
 }
 
 /* ICON */
@@ -154,12 +154,12 @@ main {
     font-family: "icon", sans-serif;
 }
 
-/* @layer base {
-    svg {
-
-    }
-} */
-
+.BgUser {
+    background-image: url("public/image/person.svg");
+    background-size: cover;
+    background-position: center;
+    background-color: #a5f3fc;
+}
 .icon .thin {
     font-variation-settings: "wght" 100 !important;
 }

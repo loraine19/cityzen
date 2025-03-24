@@ -3,9 +3,10 @@ import { cryptedCookie } from '../../../../infrastructure/services/cookiService'
 
 export const PrivateRoute = () => {
     const cookies = new cryptedCookie()
-    const accessToken = cookies.getItem(import.meta.env.VITE_ACCESS_COOKIE_NAME);
     const refreshToken = cookies.getItem('refresh');
-    return accessToken || refreshToken ? <Outlet /> : <Navigate to="/signin?msg=Vous devez vous connecter pour accéder au service" />;
+    return refreshToken ?
+        <Outlet /> :
+        <Navigate to="/signin?msg=Vous devez vous connecter pour accéder au service" />;
 };
 
 

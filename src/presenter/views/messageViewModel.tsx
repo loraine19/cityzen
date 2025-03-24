@@ -20,6 +20,7 @@ export const conversationViewModel = () => {
         queryKey: ['conversation', id],
         staleTime: 6000,
         refetchOnMount: true,
+        refetchOnWindowFocus: true,
         queryFn: async ({ pageParam = 1 }) => await getConversation.execute(id, pageParam) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.messages?.length ? pages.length + 1 : undefined
@@ -48,8 +49,6 @@ export const conversationsViewModel = () => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
-      refetchOnWindowFocus: true,
-      staleTime: 6000, // 10 minutes,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
 
@@ -59,7 +58,9 @@ export const conversationsViewModel = () => {
         queryKey: ['conversations'],
         queryFn: async ({ pageParam = 1 }) => await getMessages.execute(pageParam) || [],
         initialPageParam: 1,
-        getNextPageParam: (lastPage, pages) => lastPage?.conversations?.length ? pages.length + 1 : undefined
+        getNextPageParam: (lastPage, pages) => lastPage?.conversations?.length ? pages.length + 1 : undefined,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
       })
 
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
@@ -67,7 +68,7 @@ export const conversationsViewModel = () => {
     const conversations = isLoading || userLoading ? [] : flat?.map((message: Message) => new MessageView(message, user?.id || 0))
 
 
-
+    console.log('conversations', conversations)
     return {
       countConv: count,
       conversations,

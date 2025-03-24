@@ -44,7 +44,6 @@ export default function AnnounceCreatePage() {
         <div className="Body orange">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => {
                     const ok = await updateFunction()

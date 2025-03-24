@@ -19,7 +19,7 @@ type EventCardProps = {
 export function EventCard({ event: initialEvent, change, mines, refetch }: EventCardProps) {
     const [event, setEvent] = useState<EventView>(initialEvent);
     const { updateNotif } = useNotificationStore();
-    const { id, title, description, category, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink, eventDateInfo } = event;
+    const { id, title, description, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink, eventDateInfo } = event;
     const disabledDelete = new Date(start).getTime() < Date.now();
     const disabledEdit = new Date(start).getTime() < Date.now();
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id)
@@ -64,15 +64,12 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         )}
                     </div>
                 </div>
-                {image ? (
+                {image && (
                     <img
-                        src={image as string || './load.gif'}
+                        src={image as string || '../../public/image/def.jpeg'}
+                        onError={(e) => { e.currentTarget.src = '../../public/image/def.jpeg'; }}
                         alt={title}
-                        className="CardImage" />
-                ) : (
-                    <Typography variant="h6" color="white" className="mb-2">
-                        {title} - {category}
-                    </Typography>
+                        className="CardImage flex " />
                 )}
             </CardHeader>
             <CardBody className="FixCardBody">

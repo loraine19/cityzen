@@ -40,7 +40,6 @@ export default function ServiceCreatePage() {
         <div className="Body cyan">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => {
                     const ok = await postFunction();

@@ -10,6 +10,8 @@ interface NotificationStore {
   updateNotif: () => void;
   removeNotif: (notifId: number) => void;
   fetchNotif: () => Promise<void>;
+  unReadMsgNotif: number;
+  setUnReadMsgNotif: (value: number) => void;
 }
 
 const storage = new cryptedStorage();
@@ -28,6 +30,8 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
       }
     }
     return {
+      unReadMsgNotif: 0,
+      setUnReadMsgNotif: (value: number) => set({ unReadMsgNotif: value }),
       notifList: [],
       addNotif: (newNotif: NotifView) => {
         set((state) => ({ notifList: [...state.notifList, newNotif] }));

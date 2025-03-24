@@ -33,6 +33,8 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
     useEffect(() => { if (window.innerWidth < 900) { setNumberOfwweks(1); } else { setNumberOfwweks(2) } }, [])
     useEffect(() => { hasNextPage && fetchNextPage() }, [startDate, numberOfwweks, loadingEvents])
 
+    const colClass = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6', 'grid-cols-7']
+
     return (
         <div className='flex flex-col flex-1 pt-3 '>
             <div className="flex  justify-between  gap-1 items-center p-0">
@@ -120,17 +122,11 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             <div
                                 key={key}
                                 className={` grid rounded-lg  h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
-                            ${col === 1 && 'grid-cols-1'} 
-                            ${col === 2 && 'grid-cols-2'}
-                            ${col === 3 && 'grid-cols-3'}
-                            ${col === 4 && 'grid-cols-4'} 
-                            ${col === 5 && 'grid-cols-5'}
-                            ${col === 6 && 'grid-cols-6'}
-                            ${col === 7 && 'grid-cols-7'}`}>
+                                ${colClass[col - 1]}`}>
                                 {week.map((day: any, index: number) =>
                                     <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full    `}
                                         key={index}>
-                                        <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50  border-b-[1px] border-gray-300 '>
+                                        <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50 '>
                                             {day.date.toLocaleDateString('fr-FR', { weekday: 'narrow', month: 'numeric', day: 'numeric' })}
                                         </p>
                                         <div className='flex flex-col h-full w-full items-center gap-0.5' key={index}>
@@ -155,9 +151,14 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                                                 </PopoverHandler>
                                                             </button>
                                                             <PopoverContent
-                                                                className='bg-transparent shadow-none z-50 border-none p-0 FixedCenter flex-col'>
-                                                                <Icon fill icon="cancel" size="3xl"
-                                                                    onClick={() => setOpen(false)} style='mb-6' />
+                                                                className='bg-transparent shadow-none z-40 border-none p-0 FixedCenter flex-col'>
+                                                                <Icon
+                                                                    fill
+                                                                    title='Fermer'
+                                                                    icon="cancel"
+                                                                    size="3xl"
+                                                                    onClick={() => setOpen(false)}
+                                                                    style='absolute top-8 right-16 mb-6' />
                                                                 <EventCard event={event} change={() => { }} />
                                                             </PopoverContent>
                                                         </Popover>

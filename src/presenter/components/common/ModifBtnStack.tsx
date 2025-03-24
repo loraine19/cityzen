@@ -21,7 +21,6 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
 
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={() => {
                     buttons[index].function && buttons[index].function();

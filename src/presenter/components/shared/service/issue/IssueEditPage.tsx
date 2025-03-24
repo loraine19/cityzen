@@ -81,7 +81,6 @@ export default function IssueEditPage() {
         <form onSubmit={formik.handleSubmit} className=" Body gray gap-3 pb-2">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={ModalValues.confirm}
                 title={ModalValues.title}

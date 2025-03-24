@@ -53,7 +53,6 @@ export default function EventCreatePage() {
         <div className="Body cyan">
             <ConfirmModal
                 open={open}
-                handleOpen={() => setOpen(false)}
                 handleCancel={() => { setOpen(false) }}
                 handleConfirm={async () => { await postFunction() }}
                 title={"Confimrer la modification"}

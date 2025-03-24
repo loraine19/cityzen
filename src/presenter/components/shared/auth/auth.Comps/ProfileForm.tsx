@@ -20,7 +20,7 @@ type ProfileFormProps = {
 }
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress, ImModo = false, setImModo }) => {
-    const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image || './person.svg');
+    const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image);
     const { user } = useUserStore()
     const [newSkill, setNewSkill] = useState<string | undefined>()
     const [skillList, setSkillList] = useState<string[]>(formik.values?.skills?.split(',') || [])
@@ -48,12 +48,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                         <ImageBtn
                             setImgBlob={setImgBlob}
                             formik={formik}
-                            imgDef="../../../image/person.svg"
+                            imgDef="image/person.svg"
                             className="-ml-20 " />
                         <Avatar
-                            src={imgBlob as string || formik.values.image as string || '../../../image/person.svg'}
+                            src={imgBlob as string || '../public/image/person.svg'}
                             alt={formik.values.image || imgBlob ? formik.values.firstName : ''}
-                            className={"shadow-md BgUser !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
+                            className={"shadow-md !BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
                             <Typography
                                 className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">
@@ -155,7 +155,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                                 {ImModo ? "Je suis conciliateur" : "Je ne suis pas conciliateur"}
                             </label>
                             <Switch
-                                onChange={() => { setImModo(!ImModo) }}
+                                onChange={() => setImModo(!ImModo)}
                                 color="cyan"
                                 checked={ImModo}
                                 id="modo"

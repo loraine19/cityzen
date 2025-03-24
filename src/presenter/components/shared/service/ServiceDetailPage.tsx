@@ -8,6 +8,8 @@ import { Action } from '../../../../domain/entities/frontEntities';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { generateContact, GenereMyActions, getEnumVal, isLate } from '../../../views/viewsEntities/utilsService';
+import { ContactDiv } from '../../common/ContactDiv';
+import { User } from '../../../../domain/entities/User';
 
 export default function ServiceDetailPage() {
     const { id } = useParams();
@@ -79,7 +81,11 @@ export default function ServiceDetailPage() {
                     {
                         icon: 'Besoin d\'aide ?',
                         title: 'Ouvrir une demande de conciliation',
-                        body: `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.UserResp)}`,
+                        body: <div>
+                            Avant d'ouvrir une demande d'aide pouvez contacter
+                            <ContactDiv
+                                user={service.UserResp as User} />
+                        </div>,
                         function: () => navigate(`/conciliation/create/${service.id}`),
                     },
                     {
