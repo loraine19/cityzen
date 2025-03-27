@@ -20,11 +20,11 @@ type ChatProps = {
 const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, message, setMessage, messages, fetchNextPage, hasNextPage, isLoading, newConv, setNewConv }) => {
 
     const [imTyping, setImTyping] = useState(false);
-    console.log(imTyping)
     const readConversationUseCase = async (id: number) => DI.resolve('readConversationUseCase').execute(id);
     const [notif, setNotif] = useState<string>('Chargement...');
 
     useEffect(() => {
+        console.log('imTyping', imTyping)
         setNotif(userRec?.Profile?.firstName ? `Conversation avec ${userRec?.Profile?.firstName}` : 'Chargement...');
         if (!newConv && userRec?.id && !messages[0]?.read && !isLoading) {
             const read = async () => await readConversationUseCase(userRec.id);
@@ -38,17 +38,11 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
         if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-
+            const { scrollTop, scrollHeight, clientHeight } = divRef.current
             if ((scrollHeight + scrollTop) <= clientHeight + 4) {
-                //      alert('bottom');
                 setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
+                if (hasNextPage) fetchNextPage()
+            } else setIsBottom(false)
         }
     }
 
@@ -57,7 +51,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
     return (
         <div className=' pt-6 flex h-full flex-1 '>
             <Card className='FixCardNoImage flex bg-blue-gray-50  border-white border-8'>
-                <CardHeader className='FixCardHeaderNoImage min-h-max !bg-transparent px-3 pt-2'
+                <CardHeader className='FixCardHeaderNoImage min-h-max  !bg-transparent px-3 pt-2'
                     floated={false}>
                     {newConv ?
                         <ProfileDiv profile={userRec.Profile} /> :
@@ -69,7 +63,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                 <CardBody
                     ref={divRef}
                     onScroll={() => handleScroll()}
-                    className='overflow-auto  flex flex-col-reverse pt-4'>
+                    className='overflow-auto flex-1 flex flex-col-reverse pt-4'>
                     <List className='gap-3  justify-end items-end flex flex-col-reverse' >
                         {!isLoading && messages && messages.map((msg: MessageView, index: number) => (
                             <ListItem
@@ -105,11 +99,8 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                             size='3xl'
                             icon='mood'
                         />
-
-
                         <div className='absolute flex overflow-auto items-end w-full  pr-3 -ml-3 z-50 mb-14 bottom-0 '>
                             <EmojiPicker
-
                                 className='bg-cyan-600 !overflow-auto max-h-[85%] z-40 p-1 mr-2 flex flex-1'
                                 previewConfig={{ showPreview: false }}
                                 searchPlaceHolder='Rechercher un emoji'

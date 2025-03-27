@@ -21,5 +21,9 @@ export class NotifRepositoryImpl implements NotifRepositoryBase {
         return this.notifData.readNotif(id);
     }
 
+    public async readAllNotif(): Promise<Notif[]> {
+        return this.notifData.readAllNotif();
+    }
+
 
 }

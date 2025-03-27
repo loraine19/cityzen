@@ -3,8 +3,8 @@ import { Typography } from "@material-tailwind/react";
 export function AuthHeader() {
     return (
         <>
-            <header className=" flex flex-col items-center justify-center pt-2">
-                <div className="flex items-center justify-center gap-4 p-4 mr-8">
+            <header className=" flex flex-col items-center justify-center pb-2">
+                <div className="flex items-center justify-center gap-4 p-4 mr-16">
                     <img
                         className="h-16 w-16 object-cover object-center"
                         src="../../../image/logo.svg"
@@ -12,7 +12,7 @@ export function AuthHeader() {
                     <Typography
                         variant="h1"
                         color="blue-gray"
-                        className="font-comfortaa font-bold">City'Zen
+                        className="font-comfortaa  text-[2.8rem] font-bold">City'Zen
                     </Typography>
                 </div>
             </header>

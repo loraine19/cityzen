@@ -28,7 +28,7 @@ import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignI
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
 import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
-import { GetNotifUseCase, ReadNotifUseCase } from '../application/useCases/notif.usecase';
+import { GetNotifUseCase, ReadAllNotifUseCase, ReadNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
 import { PostProfileUseCase, UpdateProfileUseCase, UpdateRoleUseCase } from '../application/useCases/profile.useCase';
 import { notifMapViewModel, notifViewModel } from '../presenter/views/notifViewModel';
@@ -61,6 +61,9 @@ import { MessageRepositoryImpl } from '../infrastructure/repositoriesImpl/Messag
 import { MessageApi } from '../infrastructure/providers/http/messageApi';
 import { conversationsViewModel, conversationViewModel } from '../presenter/views/messageViewModel';
 import SocketService from '../infrastructure/providers/http/socketService';
+import { AlertStoreRepositoryImpl } from '../infrastructure/repositoriesImpl/AlertStoreRespositoryImpl';
+import { AlertStoreFunctions } from '../infrastructure/adaptaters/alertStoreFunctions';
+import { ErrorService } from '../infrastructure/services/errorService';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -117,6 +120,7 @@ container.register({
     notifMapViewModel: asFunction(notifMapViewModel),
     getNotifUseCase: asClass(GetNotifUseCase),
     readNotifUseCase: asClass(ReadNotifUseCase),
+    readAllNotifUseCase: asClass(ReadAllNotifUseCase),
     notifRepository: asClass(NotifRepositoryImpl),
     notifData: asClass(NotifApi),
 
@@ -229,6 +233,10 @@ container.register({
     ////SOCKETS 
     socketService: asClass(SocketService),
 
+    ///STORE 
+    errorService: asClass(ErrorService),
+    alertStoreRepository: asClass(AlertStoreRepositoryImpl),
+    alertStoreFunctions: asClass(AlertStoreFunctions),
 
 });
 

@@ -2,7 +2,6 @@ import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwi
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import NavBarBottom from "../../common/NavBarBottom";
 import { Icon } from "../../common/IconComp";
-import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import CalendarComp from "../../common/CalendarComp";
 import { useEffect, useRef, useState } from "react";
 import { NotifBadge } from "../../common/NotifBadge";
@@ -15,21 +14,24 @@ import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
 import { Role } from "../../../../domain/entities/GroupUser";
 import DI from "../../../../di/ioc";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
+import { ElementNotif } from "../../../../domain/entities/Notif";
+import { useNotificationStore } from "../../../../application/stores/notification.store";
 
 export default function DashboardPage() {
-    const user = useUserStore((state) => state.user);
-    const fetchUser = useUserStore((state) => state.fetchUser);
-    useEffect(() => {
-        const fetch = async () => {
-            if (!user || !user.Profile) { await fetchUser() }
-        }
-        fetch()
-    }, [])
+    const { user, fetchUser } = useUserStore((state) => state);
+    const { unReadMsgNotif, unReadNotMessages, fetchNotif } = useNotificationStore((state) => state);
 
+    useEffect(() => {
+        async () => {
+            if (!user || !user.Profile) await fetchUser()
+            await fetchNotif()
+        }
+    }, [])
 
 
     const navigate = useNavigate();
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
+
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
     const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
@@ -49,12 +51,8 @@ export default function DashboardPage() {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
+                if (hasNextPage) fetchNextPage()
+            } else setIsBottom(false)
         }
     };
 
@@ -67,17 +65,22 @@ export default function DashboardPage() {
                 handleCancel={() => { }}
                 title="Notification"
                 element={msg || ''}
-
             />
             <div className="Body gray">
-                <div className="relative flex-col w-full flex items-center  justify-center ">
-                    <div className="absolute flex justify-between lg:justify-end w-full max-w-[1000px] !m-auto  p-2">
-                        <LogOutButton />
-                        <div className="absolute z-50 w-full flex justify-end right-4 -top-2">
-                            <NotifBadge onBoard />
-                        </div>
+                <div className="relative pt-2 pb-5 lg:px-8 pr-4 w-respXl w-full flex lg:justify-center items-center  ">
+                    <div className="flex  w-full justify-center flex-1 items-center  lg:gap-4 gap-2   mr-6">
+                        <img
+                            className="h-14 w-14 lg:h-16 lg:w-16 object-cover object-center"
+                            src="../../../image/logo.svg"
+                            alt="logo" />
+                        <Typography
+                            color="blue-gray"
+                            className="font-comfortaa text-[2.5rem] lg:text-[2.8rem] font-bold">City'Zen
+                        </Typography>
                     </div>
-                    {user && <AuthHeader />}
+                    <div className=" z-50 absolute right-4 top-0 w-full h-full items-start flex justify-between">
+                        <NotifBadge onBoard />
+                    </div>
                 </div>
                 <main className="relative flex -top-6 -mb-5 h-[calc(100%-3.5rem)]">
 
@@ -110,13 +113,6 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
-                                            link="/chat"
-                                            icon="forum"
-                                            color="orange"
-                                            fill bg
-                                            size="lg"
-                                            title="ouvrir la page chat" />
-                                        <Icon
                                             style={user?.GroupUser[0].role === Role.MODO ? '' : 'cursor-not-allowed'}
                                             link={user?.GroupUser[0].role === Role.MODO ? '/conciliation' : ''}
                                             icon="diversity_3"
@@ -130,6 +126,7 @@ export default function DashboardPage() {
                                             color='green' fill bg
                                             size="lg"
                                             title="ouvrir la page réglement" />
+                                        <LogOutButton />
                                     </div>
                                     <Typography
                                         variant="h2"
@@ -148,29 +145,41 @@ export default function DashboardPage() {
                         </div>
                         <div className={`hidden lg:${notifClasse}  h-full lg:grid`}>
                             <Card className=" orange100 ">
-                                <CardBody className="h-full flex flex-col  pt-2 pb-0 px-4">
-                                    <div className="flex gap-2 items-center">
-                                        <Icon
-                                            fill
-                                            icon="circle_notifications"
-                                            link="/notification"
-                                            size="4xl"
-                                            color="orange"
-                                            title="voir mes notifications" />
-                                        <div>
-                                            <Typography
-                                                color="blue-gray">
-                                                {count > 0 ?
-                                                    `${count} notifications` : 'pas de notifications'}
-                                            </Typography>
+                                <CardBody className="h-full flex flex-col  pt-2.5 pb-0 px-4">
+                                    <div className="flex gap-2 py-1.5 items-center">
+                                        <div className="relative">
+                                            <Icon
+                                                fill bg
+                                                icon="notifications"
+                                                link="/notification"
+                                                size="xl"
+                                                color="orange"
+                                                title="voir mes notifications" />
+                                            <span className={unReadNotMessages < 1 ? "hidden" : " absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-red-500"} />
                                         </div>
+                                        <div className="relative">
+                                            < Icon
+                                                fill bg
+                                                icon="forum"
+                                                link="/chat"
+                                                size="xl"
+                                                color="cyan"
+                                                title="voir mes notifications" />
+                                            <span className={unReadMsgNotif < 1 ? "hidden" : " absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-red-500"} />
+                                        </div>
+
+                                        <Typography>  {count > 0 ?
+                                            <>{count} notifications </> :
+                                            'pas de notifications'}</Typography>
+
+
                                     </div>
                                     <div className="relative flex flex-col -mt-0.5 max-h-10 overflow-y-auto"
                                         onScroll={() => handleScroll()}
                                         ref={divRef}>
                                         {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
                                             <div key={index}
-                                                className=" font-light text-sm flex items-center pl-2 justify-between hover:cursor-pointer hover:bg-orange-100 rounded-full py-0.5"
+                                                className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex mr-8 items-center pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5`}
                                                 onClick={async () => {
                                                     await readNotif(notif.id);
                                                     refetch();
@@ -178,7 +187,7 @@ export default function DashboardPage() {
                                                 }}>
                                                 <p className="line-clamp-1">
                                                     <span
-                                                        className="text-orange-800 capitalize font-normal">
+                                                        className={`mr-1 capitalize font-normal ${notif.typeS === 'message' ? 'text-cyan-800' : 'text-orange-800'}`}>
                                                         {notif?.typeS} :&nbsp;
                                                     </span>
                                                     <span className="">
@@ -186,18 +195,17 @@ export default function DashboardPage() {
                                                     </span>
                                                 </p>
 
-                                                {notif.link && <Icon
-                                                    icon={notif.link ? "arrow_circle_right" : "cancel"}
+                                                {<Icon
+                                                    icon={"cancel"}
                                                     onClick={async () => {
                                                         await readNotif(notif.id);
                                                         refetch();
                                                         notif.link && navigate(notif.link)
                                                     }}
-                                                    size="2xl"
-                                                    color="orange"
-                                                    title={"voir les details de " + notif?.title} />}
+                                                    style={'absolute z-40 right-0'}
+                                                    size="lg"
+                                                    title={"fermer " + notif?.title} />}
                                             </div>))}
-
                                     </div>
                                     <LoadMoreButton
                                         style="-mb-8"
@@ -215,11 +223,12 @@ export default function DashboardPage() {
                                     <div className="flex items-center gap-2">
                                         <Icon
                                             fill
-                                            icon="explore_nearby"
+                                            bg
+                                            icon="location_on"
                                             link="/service"
-                                            size="4xl"
+                                            size="xl"
                                             color="cyan"
-                                            style="hover:!bg-cyan-100"
+                                            style="hover:!bg-cyan-100 mb-2"
                                             title="voir mes services" />
                                         <div>
                                             <Typography

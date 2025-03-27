@@ -21,5 +21,9 @@ export class NotifApi {
     async readNotif(id: number): Promise<Notif> {
         return this.api.put(`${this.dataType}/${id}`)
     }
+
+    async readAllNotif(): Promise<Notif> {
+        return this.api.put(`${this.dataType}/all`)
+    }
 }
 

@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { AuthService } from "../../services/authService";
+import { ErrorService } from "../../services/errorService";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
 
@@ -59,8 +60,11 @@ export type ApiServiceI = {
 export class ApiService implements ApiServiceI {
     private api: AxiosInstance;
     private authService: AuthService;
+    private errorService: ErrorService;
 
     constructor() {
+
+        this.errorService = new ErrorService();
         this.authService = new AuthService();
         this.api = axios.create({ baseURL, withCredentials: true });
         this.api.interceptors.request.use(this.handleRequest);
@@ -83,19 +87,25 @@ export class ApiService implements ApiServiceI {
     };
 
     private handleResponseError = async (error: any) => {
+
+        let newError = new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard');
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
             this.logWithTime('not api error');
-            return Promise.reject(new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard'));
+            //return Promise.reject(new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard'));
+            //   this.errorService.handleErrors(new ApiError(500, 'Erreur application non disponible , essayez plus tard'));
+            newError = new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard');
             // return { data: { error: new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard') } };
         }
-        const { status, data } = error.response;
-        console.error('complete error:', error.response);
-        let newError = new ApiError(status, data.message);
+
+        const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
+        const message = error.message || error.response?.data?.message || error.response?.message || 'Une erreur est survenue';
+        console.error('complete error:', error);
+        newError = new ApiError(status, message);
         switch (status) {
             case 400:
-                newError = new BadRequestError(data.message);
+                newError = new BadRequestError(message);
                 break;
             case 401:
                 if (!originalRequest._retry) {
@@ -105,28 +115,29 @@ export class ApiService implements ApiServiceI {
                         this.logWithTime('token refreshed SUCCESS 401');
                         return this.api(originalRequest);
                     } else {
-                        newError = new UnauthorizedError(data.message || 'Erreur lors du rafraîchissement du token');
+                        newError = new UnauthorizedError(message || 'Erreur lors du rafraîchissement du token');
                     }
                 } else {
                     newError = new UnauthorizedError();
                 }
                 break;
             case 403:
-                newError = new ForbiddenError(data.message);
+                newError = new ForbiddenError(message);
                 break;
             case 404:
-                newError = new NotFoundError(data.message);
+                newError = new NotFoundError(message);
                 break;
             case 409:
-                newError = new ConflictError(data.message);
+                newError = new ConflictError(message);
                 break;
             case 500:
                 newError = new ServerError();
                 break;
         }
-        console.error('newError:', newError);
+        this.errorService.handleErrors(newError);
+        console.error('newError:', newError, newError.message);
         // return Promise.reject(newError);
-        return { error: newError };
+        return { data: { error: newError } };
     };
 
     refreshAccess = async (): Promise<boolean> => {

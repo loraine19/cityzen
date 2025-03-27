@@ -4,6 +4,8 @@ import { Button, Typography } from '@material-tailwind/react';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { PathElement } from '../../../constants';
 import { AlertModal } from '../../common/AlertModal';
+import Cookies from 'js-cookie';
+import { Icon } from '../../common/IconComp';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -55,19 +57,45 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
             return (
                 <>
-                    <AlertModal globalError={true} />
-                    {/* <ConfirmModal
-                        open={true}
-                        handleConfirm={() => { window.location.reload(); open = !open }}
-                        handleCancel={() => window.location.href = '/'}
-                        title={'Désolé, Une erreur s\'est produite'}
-                        element={<>
-                            Cliquer confirm pour reessayer, ou cliquer sur annuler pour revenir à l'acceuil
-                            <br />
-                            Si l'erreur persiste, vous pouvez vous déconnecter.
-                            <LogOutButton /></>}
-                        confirmString={'Essayer à nouveau'}
-                    /> */}
+                    <AlertModal values={{
+
+                        handleConfirm: () => { window.location.replace('/') },
+                        title: 'Désolé, Une erreur s\'est produite',
+                        element: <div className="items-center text-center pb-8 flex flex-col gap-4">
+                            <Typography
+                                variant="h6">
+                                Veuillez réessayer de recharger la page
+                            </Typography>
+
+                            <Icon
+                                bg
+                                fill
+                                style='flex-0 !pb-2 shadow-orange shadow-md '
+                                icon="sync_problem"
+                                size="4xl"
+                                color="orange"
+                                onClick={() => window.location.reload()} />
+                            <Typography>
+                                Si le problème persiste, vous pouvez retourner à la page d'accueil<br></br>
+                                ou vous pouvez vous re-connecter
+                            </Typography>
+
+
+                        </div>,
+                        confirmString: 'Retour à l\'accueil',
+                        disableConfirm: true,
+                        button2: {
+                            text: 'Re-connexion', onClick: () => {
+                                Cookies.remove('user')
+                                Cookies.remove('refreshToken')
+                                window.location.replace('/signin')
+                            }
+                        },
+                        isOpen: true,
+                        close: () => { window.location.replace('/') }
+
+
+                    }} />
 
                     <div className={"Body " + bodyColor}>
                         <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
@@ -75,7 +103,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                             </div>
                             <AuthHeader />
                         </div>
-                        <main className="flex items-center justify-evenly h-full py-10">
+                        <main className="flex items-center gap-8 h-full py-12">
                             <Typography variant="lead" color="blue-gray" className="flex items-center justify-center mt-2">
                                 {`Désolé, une erreur s'est produite... `}
                             </Typography>

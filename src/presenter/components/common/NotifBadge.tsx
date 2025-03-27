@@ -12,16 +12,17 @@ import { useNotificationStore } from "../../../application/stores/notification.s
 export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
-    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory();
+    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory(Object.keys(ElementNotif).filter((key) => key !== 'MESSAGE').join(','));
+    const messages = notifViewModelFactory(ElementNotif.MESSAGE)
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const unReadNotif: boolean = count > 0
     const navigate = useNavigate()
     const nameSpace = 'notifs';
     const [notif, setNotif] = useState<string | null>(null);
     const [connected, setConnected] = useState(false);
     const socketService = DI.resolve('socketService');
     const { setConnectedUsers } = connectedUsersStore();
-    const { setUnReadMsgNotif } = useNotificationStore();
+    const { setUnReadMsgNotif, setUnReadNotMessages } = useNotificationStore();
+
 
     const connexion = () => {
         socketService.connect(nameSpace);
@@ -43,21 +44,27 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
             if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
                 const notifMessage = newMessage as Notif;
                 setNotif(notifMessage.description);
-                refetch()
                 setTimeout(() => { setNotif('') }, 1000);
+                if (newMessage.type === 'MESSAGE') {
+                    messages.refetch()
+                    setUnReadMsgNotif(messages?.count)
+                }
+                else {
+                    refetch()
+                    setUnReadNotMessages(count)
+                }
             } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
                 setConnectedUsers(newMessage.users);
             }
         });
 
-        setUnReadMsgNotif(notifs.filter((notif: NotifView) => (notif.read === false && notif.type === ElementNotif.MESSAGE)).length)
+        setUnReadMsgNotif(messages?.count)
+        setUnReadNotMessages(count)
         return () => {
             console.warn('unmounted NOTIF')
             socketService.disconnect(nameSpace);
         }
     }, [])
-
-
 
 
 
@@ -75,40 +82,47 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
             }
         }
     };
+    type NotifBadgeProps = { count: number, notifs: NotifView[], color: string, icon: string, link: string }
 
 
     return (
-        <>
-            <div className={`absolute w-full h-20 left-0 top-0 flex justify-center m-auto flex-1 `}>
-                <Card className={`${notif ? 'relative' : ''} mt-4 h-max px-4 py-2 w-respLarge rounded-full shadow-lg transition-all duration-1000 ease-in-out transform ${notif ? 'scale-100 opacity-100 top-4' : 'scale-20 opacity-0 top-0'} `}>
+        <div className={`${onBoard ? ' w-respXl relative pt-4' : ''} gap-3  flex justify-end flex-1 w-full  right-0`}>
+            <div className={` w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
+                <Card className={`${notif ? 'animate-bounce absolute' : ''} z-50 mt-4 h-max px-4 py-2 w-respLarge rounded-2xl shadow-lg transition-all duration-1000 ease-in-out transform
+                 ${notif ?
+                        'scale-100 opacity-100 top-4' :
+                        'scale-80 opacity-0 top-0'} `}>
                     {notif}
                 </Card>
             </div>
-            <div className={`relative w-max ${onBoard ? 'lg:hidden' : ''}`}>
+
+
+            {!isLoading && [{ count: messages.count, notifs: messages.notifs, color: 'cyan', icon: 'forum', link: '/chat' },
+            { count, notifs, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) => <div className={`relative w-max ${onBoard ? 'lg:hidden' : ''}`}>
                 <div id='notifList'
+                    key={index}
                     ref={divRef}
                 >
                     <Menu placement="bottom-end" >
                         <MenuHandler title="Notifications">
-                            <Chip
-                                className={`${unReadNotif ? "absolute flex font-medium items-center justify-center w-6 h-6 text-[0.8rem] pt-1 pb-0.5 border-2 border-cyan-500 rounded-full bottom-0 right-8 shadow z-50" : "hidden"}`}
-                                color="cyan"
-                                value={count >= 99 ? '99+' : (count ? count.toString() : '0')}>
-                            </Chip>
+                            <span className={`${list.count === 0 ? 'hidden' : ''} ${`text-white absolute flex font-medium items-center justify-center w-[1.35rem] h-[1.35rem] text-[0.75rem] pt-1 pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2 shadow z-50`}`}>
+                                {list.count >= 99 ? ' 99⁺' :
+                                    (list.count ? list.count.toString() : '0')}
+                            </span>
                         </MenuHandler>
-                        <MenuList className="flex flex-col  max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3  rounded-2xl backdrop-blur-2xl ">
+                        <MenuList className="flex flex-col max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3 rounded-2xl backdrop-blur-2xl ">
                             <div onScroll={handleScroll}
                                 className="relative overflow-auto !border-none hover:!border-none flex flex-col gap-1">
-                                {count === 0 || isLoading ? (
+                                {list.count === 0 ? (
                                     <div className="flex items-center justify-center p-4">
                                         <Typography
                                             variant="small"
                                             color="gray"
                                             className="font-normal">
-                                            Aucune nouvelle notification
+                                            Aucune nouveau message
                                         </Typography>
                                     </div>)
-                                    : (notifs.map((notif: NotifView, index: number) => notif.read === false &&
+                                    : (list.notifs.map((notif: NotifView, index: number) => notif.read === false &&
                                         <MenuItem className="flex flex-col w-full  max-w-[calc(100vw-2rem)] "
                                             key={index}>
                                             <div className="flex items-center w-full justify-between">
@@ -116,7 +130,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                     value={notif.typeS}
                                                     className="rounded-full w-max h-max text-ellipsis pt-1.5  "
                                                     size='sm'
-                                                    color="cyan">
+                                                    color={list.color as any}>
                                                 </Chip>
                                                 <Typography
                                                     className="flex items-center gap-1 text-xs font-normal text-blue-gray-500">
@@ -132,11 +146,12 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                 {notif.link && <Icon
                                                     icon="chevron_right"
                                                     fill
-                                                    onClick={async () => {
-                                                        await readNotif(notif.id);
-                                                        refetch();
-                                                        notif.link && navigate(notif.link)
-                                                    }}
+                                                    onClick={
+                                                        async () => {
+                                                            await readNotif(notif.id);
+                                                            refetch();
+                                                            notif.link && navigate(notif.link)
+                                                        }}
                                                     size="3xl"
                                                     style="bg-white"
                                                 />}
@@ -145,6 +160,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                     )}
                             </div>
                             <LoadMoreButton
+                                color={list.color}
                                 style="-mb-8"
                                 size="3xl"
                                 isBottom={isBottom}
@@ -154,14 +170,18 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                     </Menu>
                 </div>
                 <Icon
-                    onClick={() => { navigate('/notification') }}
-                    icon="notifications"
-                    disabled={!unReadNotif}
-                    color={unReadNotif ? 'orange' : ''}
+                    link={list.link}
+                    icon={list.icon}
+                    color={list.count > 0 ? list.color : 'gray'}
                     fill bg
-                    size="3xl"
-                    title={unReadNotif ? "voir mes notifications" : "Aucune notifications : button"}
-                    style=" rounded-full !p-2.5 !text-3xl !w-11 !h-11" />
-            </div></>
+                    size="2xl"
+                    title={list.count ? "voir la liste" : "aucune notification"}
+                    style=" rounded-full z-40 relative !text-3xl !w-10 !h-10" />
+            </div>)
+
+            }
+
+
+        </div>
     )
 }

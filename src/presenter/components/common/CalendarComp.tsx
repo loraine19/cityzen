@@ -37,12 +37,15 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
 
     return (
         <div className='flex flex-col flex-1 pt-3 '>
-            <div className="flex  justify-between  gap-1 items-center p-0">
-                {logo && <div className='flex items-center'>
-                    <Icon fill bg
-                        icon="calendar_view_month"
+            <div className="flex  justify-between  gap-2 items-center p-0">
+                {logo && <div className='flex items-center gap-1'>
+                    <Icon
+                        fill bg
+                        color='blue-gray'
+                        icon='today'
                         link="/evenement"
-                        size="2xl"
+                        size="xl"
+                        style='mb-1 !px-1.5'
                         title='Voir tous les événements' />
                     <div>
                         <Typography color="blue-gray" className="hidden lg:flex">
@@ -64,8 +67,8 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             size='md'
                             onClick={addWeek} />
                     </div>
-                    <div className='flex items-center px-4'>
-                        <div className={`flex gap-2 items-center `}>
+                    <div className='flex items-center px-5'>
+                        <div className={`flex gap-1 items-center font-light`}>
                             jours
                             <Icon
                                 icon='do_not_disturb_on'
@@ -137,12 +140,13 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                                     <div key={indexEvent} className=' w-full  rounded-xl  '>
                                                         <Popover
                                                             open={open && popId === event.id + day.date} >
-                                                            <button title={'Voir événement' + ' ' + event.title}
+                                                            <button
+                                                                title={'Voir événement' + ' ' + event.title}
                                                                 className=' w-full rounded-xl'
                                                                 onClick={() => { setOpen(true); setPopId(event.id + day.date) }}>
                                                                 <PopoverHandler>
                                                                     <div className=
-                                                                        {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-5 truncate flex items-center justify-center font-normal z-50
+                                                                        {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-6 truncate flex items-center justify-center font-normal z-50
                                                         ${(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) && 'rounded-l-2xl !justify-start !z-50 pl-4 !font-medium'}
                                                         ${(eventDays[eventDays.length - 1] === currentDay || new Date(day.date).getDay() === 0) && 'rounded-r-2xl '}
                                                     `}>
@@ -158,7 +162,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                                                     icon="cancel"
                                                                     size="3xl"
                                                                     onClick={() => setOpen(false)}
-                                                                    style='absolute top-8 right-16 mb-6' />
+                                                                    style='absolute top-6 right-8' />
                                                                 <EventCard event={event} change={() => { }} />
                                                             </PopoverContent>
                                                         </Popover>

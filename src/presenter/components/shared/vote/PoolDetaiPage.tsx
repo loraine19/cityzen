@@ -28,11 +28,10 @@ export default function PoolDetailPage() {
     return (<>
         {openVote &&
             <VoteCard
-                open={openVote}
-                setOpen={setOpenVote}
+                open={open}
+                close={() => setOpen(false)}
                 vote={pool}
-                refetch={refetch}
-            />}
+                refetch={refetch} />}
         <div className="Body orange">
 
             <header className="px-4">

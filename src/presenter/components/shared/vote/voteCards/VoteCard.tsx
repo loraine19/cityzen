@@ -1,14 +1,20 @@
 import { Radio } from "@material-tailwind/react";
 import { VoteOpinion, VoteTarget } from "../../../../../domain/entities/Vote";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
-import { ConfirmModal } from "../../../common/ConfirmModal";
 import { VoteDTO } from "../../../../../infrastructure/DTOs/VoteDTO";
 import DI from "../../../../../di/ioc";
 import { useState } from "react";
+import { AlertModal } from "../../../common/AlertModal";
+import { AlertValues } from "../../../../../domain/entities/Error";
 
-export const VoteCard = ({ vote, refetch, open, setOpen }: { vote: PoolSurveyView, refetch: () => void, open: boolean, setOpen: (open: boolean) => void }) => {
-    const [opinion, setOpinion] = useState<VoteOpinion>(vote.myOpinion ? vote.myOpinion : VoteOpinion.OK)
-    const voteDTO = new VoteDTO({ targetId: vote.id, target: vote.typeS === VoteTarget.POOL ? 'POOL' as VoteTarget : 'SURVEY' as VoteTarget, opinion } as VoteDTO);
+export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView, refetch: () => void, open: boolean, close: () => void }) => {
+    const [opinion, setOpinion] = useState<VoteOpinion>(vote.myOpinion ?? VoteOpinion.OK)
+    const voteDTO = new VoteDTO({
+        targetId: vote.id, target: vote.typeS === VoteTarget.POOL ?
+            'POOL' as VoteTarget :
+            'SURVEY' as VoteTarget,
+        opinion
+    } as VoteDTO);
     const postVote = async (data: VoteDTO) => await DI.resolve('postVoteUseCase').execute(data)
     const updateVote = async (data: VoteDTO) => await DI.resolve('updateVoteUseCase').execute(data)
 
@@ -39,21 +45,27 @@ export const VoteCard = ({ vote, refetch, open, setOpen }: { vote: PoolSurveyVie
                 onChange={() => setOpinion(VoteOpinion.OK)}
             />
         </div>
-    return (
-        <ConfirmModal
-            open={open}
-            handleConfirm={async () => {
-                const ok = vote.IVoted ? await updateVote(voteDTO) : await postVote(voteDTO)
-                if (ok) {
-                    refetch();
-                    setOpen(false)
-                }
-            }}
-            handleCancel={() => {
-                setOpen(false)
-            }}
-            title={`${vote.IVoted ? 'Modifier mon vote ' : 'Voter'} pour ${vote.title} `}
-            element={body}
 
-        />)
+    const alertValues: AlertValues = {
+        handleConfirm: async () => {
+            const ok = vote.IVoted ? await updateVote(voteDTO) : await postVote(voteDTO)
+            if (ok) {
+                refetch();
+                close();
+                console.log(ok)
+            }
+        },
+        title: `${vote.IVoted ? 'Modifier mon vote ' : 'Voter'} pour ${vote.title} `,
+        confirmString: vote.IVoted ? 'Modifier' : 'Confirmer',
+        element: body,
+        disableConfirm: false,
+        isOpen: open,
+        close: close
+    }
+    return (
+        <div className="bg-cyan-100">
+            <AlertModal values={alertValues} />
+        </div>
+
+    )
 }

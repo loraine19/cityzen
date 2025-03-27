@@ -21,13 +21,13 @@ export default function NavBarTop() {
     ];
 
     return (
-        <div className="flex justify-between w-full items-center py-3">
-            <div className="flex items-center w-full gap-2">
+        <div className="relative flex justify-between w-full items-center py-3 ">
+            <div className="flex items-center  gap-2">
                 <Menu placement="bottom-start">
-                    <MenuHandler className="relative z-40 flex items-center gap-2 BgUser !rounded-full !shadow cursor-pointer">
-                        <div className="relative">
+                    <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
+                        <div className="flex items-center relative">
                             <Avatar
-                                className="BgUser !shadow cursor-pointer"
+                                className="!flex BgUser !shadow cursor-pointer !h-12 !w-19"
                                 variant="circular"
                                 alt={firstName || 'user'}
                                 src={image ? image as string : '/image/person.svg'}

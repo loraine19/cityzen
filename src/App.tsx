@@ -9,6 +9,7 @@ import ProfileCreatePage from "./presenter/components/shared/auth/ProfileCreateP
 import SignUpPage from "./presenter/components/shared/auth/SignUpPage";
 import DashboardPage from "./presenter/components/shared/dashboard/DashboardPage";
 import { LoadingPage } from "./presenter/components/shared/utilsPage/LoadingPage";
+import { errorValues } from "./presenter/components/shared/utilsPage/erroValues";
 import { AlertModal } from "./presenter/components/common/AlertModal";
 
 // Lazy load components
@@ -110,11 +111,11 @@ function App() {
 
                             </Route>
                         </Routes>
+
                     </Suspense>
                 </ErrorBoundary>
+                <AlertModal values={errorValues} />
                 <ReactQueryDevtools />
-
-                <AlertModal />
             </BrowserRouter>
         </>
     );

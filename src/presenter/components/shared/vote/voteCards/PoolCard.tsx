@@ -48,10 +48,9 @@ export function PoolCard({
             {open &&
                 <VoteCard
                     open={open}
-                    setOpen={setOpen}
+                    close={() => setOpen(false)}
                     vote={pool}
-                    refetch={update}
-                />}
+                    refetch={update} />}
             <Card className={`FixCardNoImage `}>
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
@@ -72,7 +71,7 @@ export function PoolCard({
                 </CardHeader>
                 <CardBody className="FixCardBody ">
                     <Title title={pool.title} />
-                    <div className="CardOverFlow h-full !p-0 flex justify-between flex-col gap-2">
+                    <div className="CardOverFlow h-full !pb-2 !pl-2 !p-0 flex justify-between flex-col gap-2">
                         <Typography
                             color="blue-gray"
                             className="max-h-full overflow-auto">

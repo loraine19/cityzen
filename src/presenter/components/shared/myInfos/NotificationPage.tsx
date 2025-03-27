@@ -12,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import { ElementNotif } from "../../../../domain/entities/Notif";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { PathElement } from "../../../constants";
+import { ReadAllButton } from "../../common/ReadAllBtn";
 
 export default function NotificationPage() {
     const [notifFind, setNotifFind] = useState<string>('');
@@ -25,6 +26,10 @@ export default function NotificationPage() {
 
     const notifTabs: TabLabel[] = [{
         label: "tous", value: "", result: () => { filterTab() }
+    },
+    {
+        label: "message",
+        value: ElementNotif.MESSAGE, result: () => filterTab(ElementNotif.MESSAGE)
     },
     {
         label: "service",
@@ -111,9 +116,11 @@ export default function NotificationPage() {
                         closeBtn
                         link={'/'} />
                 </div>
-                <div className="max-w-[100vw] overflow-auto flex px-2 !py-0">
+                <div className="relative max-w-[100vw] overflow-auto flex pl-1 !py-0 pr-10">
                     <TabsMenu
                         labels={notifTabs} />
+                    <ReadAllButton
+                        update={refetch} />
                 </div>
                 <div className={notifFind && "w-full flex justify-center p-8"}>
                     {notifFind}

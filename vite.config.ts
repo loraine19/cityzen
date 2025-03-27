@@ -7,6 +7,11 @@ export default defineConfig(({ mode }) => {
     return {
       plugins: [react(), visualizer()],
       build: {
+        minify: 'terser', // Use Terser for minification
+        terserOptions: {
+          keep_fnames: true, // Prevent function names from being mangled
+          keep_classnames: true, // Prevent class names from being mangled
+        },
         rollupOptions: {
           output: {
             entryFileNames: `[name].js`,

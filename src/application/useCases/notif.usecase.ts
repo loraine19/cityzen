@@ -1,5 +1,6 @@
 //src/application/useCases/notif/getNotifs.usecase.ts
 
+import { Notif } from "../../domain/entities/Notif";
 import { NotifRepositoryBase } from "../../domain/repositoriesBase/NotifRepositoryBase";
 
 
@@ -26,5 +27,18 @@ export class ReadNotifUseCase {
         return this.notifRepository.readNotif(id);
     }
 }
+
+export class ReadAllNotifUseCase {
+    private notifRepository: NotifRepositoryBase;
+
+    constructor({ notifRepository }: { notifRepository: NotifRepositoryBase }) {
+        this.notifRepository = notifRepository;
+
+    }
+    public async execute(): Promise<Notif[]> {
+        return this.notifRepository.readAllNotif();
+    }
+}
+
 
 

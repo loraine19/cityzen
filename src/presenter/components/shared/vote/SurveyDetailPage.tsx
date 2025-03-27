@@ -10,6 +10,7 @@ import { GenereMyActions, } from '../../../views/viewsEntities/utilsService';
 import DI from '../../../../di/ioc';
 import { VoteCard } from './voteCards/VoteCard';
 import { Button } from '@material-tailwind/react';
+import { Icon } from '../../common/IconComp';
 
 
 export default function SurveyDetailPage() {
@@ -17,22 +18,22 @@ export default function SurveyDetailPage() {
     const idS = id ? parseInt(id) : 0
     const surveyIdViewModelFactory = DI.resolve('surveyIdViewModel');
     const { survey, isLoading, refetch, error } = surveyIdViewModelFactory(idS);
-    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
     const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
     const myActions: Action[] = GenereMyActions(survey, "vote/sondage", deleteSurvey, handleOpen)
-    const [openVote, setOpenVote] = useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
         <>
             {
-                openVote &&
+
                 <VoteCard
-                    open={openVote}
-                    setOpen={setOpenVote}
+                    open={open}
+                    close={() => setOpen(false)}
                     vote={survey}
                     refetch={refetch} />
             }
+
             <div className="Body orange">
                 <header className="px-4">
                     <NavBarTop />
@@ -47,19 +48,23 @@ export default function SurveyDetailPage() {
                             className='!rounded-2xl flex pt-6 pb-1 h-full' /> :
 
                         <SurveyDetailCard
-                            setOpen={setOpenVote}
+                            setOpen={setOpen}
                             survey={survey} />
                     }
                 </main>
 
                 {survey?.mine ?
-                    <footer> <CTAMines actions={myActions} /></footer>
+
+                    <CTAMines actions={myActions} />
                     :
-                    <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around py-2 min-h-max overflow-y-auto `}>
+                    <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 h-max overflow-y-auto `}>
                         <Button
+                            size='lg'
+                            color='orange'
                             className='lgBtn w-respLarge min-h-max'
-                            onClick={() => setOpenVote(true)}
+                            onClick={() => setOpen(true)}
                         >
+                            {<Icon fill color='white' icon={survey.IVoted ? 'edit' : 'smart_card_reader'} />}
                             {survey.IVoted ? 'Modifier mon vote' : 'Voter'}
                         </Button>
                     </footer>

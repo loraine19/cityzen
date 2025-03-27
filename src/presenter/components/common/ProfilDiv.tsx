@@ -14,10 +14,10 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
 
     return (
         <>
-            <div className="realtive z-50 flex items-center px-0 gap-2">
+            <div className={`realtive z-50 flex items-center px-0 gap-2 `}>
                 <Popover placement="bottom-start">
                     <PopoverHandler>
-                        <div className="relative">
+                        <div className={`relative`}>
                             <Avatar
                                 src={profile?.image as string || "/image/person.svg"}
                                 size={size as any}
@@ -69,7 +69,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                     fill
                                     size="4xl"
                                     style={profile?.addressShared ? '!p-0' : 'hover:!event-none'}
-                                    color={profile.addressShared ? "cyan" : "gray"} />
+                                    color={profile?.addressShared ? "cyan" : "gray"} />
 
                                 {profile?.addressShared && profile?.Address &&
                                     <div className={`absolute -top-4 -right-4 

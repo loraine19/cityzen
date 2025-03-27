@@ -37,15 +37,15 @@ export class PoolSurveyView {
         }
         if ('category' in base) {
             Object.assign(this, base);
-            this.flagged = base.Flags.some(flag => flag.userId === user.id);
+            this.flagged = base?.Flags?.some(flag => flag?.userId === user?.id);
             this.typeS = VoteTarget.SURVEY;
             this.categoryS = SurveyCategory[base.category as string as keyof typeof SurveyCategory];
         }
-        this.mine = base.userId === user.id;
+        this.mine = base.userId === user?.id || false;
         this.pourcent = Math.round(base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length / (userCount / 2) * 100);
         this.needed = Math.round(userCount / 2) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length;
-        this.IVoted = base.Votes.some(vote => vote.userId === user.id);
-        this.myOpinion = base.Votes.find(vote => vote.userId === user.id)?.opinion || null;
+        this.IVoted = base?.Votes?.some(vote => vote.userId === user?.id);
+        this.myOpinion = base?.Votes?.find(vote => vote.userId === user?.id)?.opinion || null;
 
     }
 

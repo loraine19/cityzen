@@ -5,7 +5,6 @@ import ModifBtnStack from "../../../common/ModifBtnStack";
 import { Icon } from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import DI from "../../../../../di/ioc";
-import { useNotificationStore } from "../../../../../application/stores/notification.store";
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 import { Title } from "../../../common/CardTitle";
@@ -18,7 +17,6 @@ type EventCardProps = {
 
 export function EventCard({ event: initialEvent, change, mines, refetch }: EventCardProps) {
     const [event, setEvent] = useState<EventView>(initialEvent);
-    const { updateNotif } = useNotificationStore();
     const { id, title, description, participantsMin, start, end, createdAt, image, flagged, pourcent = 0, Igo, label, toogleParticipate, agendaLink, eventDateInfo } = event;
     const disabledDelete = new Date(start).getTime() < Date.now();
     const disabledEdit = new Date(start).getTime() < Date.now();
@@ -66,8 +64,8 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                 </div>
                 {image && (
                     <img
-                        src={image as string || '../../public/image/def.jpeg'}
-                        onError={(e) => { e.currentTarget.src = '../../public/image/def.jpeg'; }}
+                        src={image as string || '../../image/def.jpeg'}
+                        onError={(e) => { e.currentTarget.src = '../../image/def.jpeg'; }}
                         alt={title}
                         className="CardImage flex " />
                 )}
@@ -108,7 +106,6 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         onClick={async () => {
                             const event = toogleParticipate && await toogleParticipate();
                             setEvent(event);
-                            updateNotif()
                         }}>
                         <Chip
                             value={participantsMin}

@@ -9,6 +9,7 @@ import Chat from './Chat';
 import { User } from '../../../../domain/entities/User';
 import { Icon } from '../../common/IconComp';
 import { useSearchParams } from 'react-router-dom';
+import { useNotificationStore } from '../../../../application/stores/notification.store';
 
 
 export default function ChatPage() {
@@ -33,6 +34,7 @@ export default function ChatPage() {
         socketService.onConnect(() => { setConnected(true) });
     }
 
+    const { setUnReadMsgNotif, unReadMsgNotif } = useNotificationStore();
     const up = async () => await socketService.sendMessage({ message: 'connexion au chat' }, nameSpace);
     useEffect(() => {
         console.warn('mounted CHAT')
@@ -54,8 +56,10 @@ export default function ChatPage() {
     socketService.onNewMessage(async (newMessage: any) => {
         if (newMessage?.users) { setOnline(newMessage.users); return }
         refetchConv()
-        if (newMessage.userIdRec === userRec.id || newMessage.userId === userRec.id)
+        if (newMessage.userIdRec === userRec.id || newMessage.userId === userRec.id) {
             refetch()
+            setUnReadMsgNotif(unReadMsgNotif + 1)
+        }
     });
 
 
@@ -85,8 +89,7 @@ export default function ChatPage() {
             const ret = await socketService.sendMessage(messageData, nameSpace);
             if (ret) {
                 refetch();
-                setMessage('');
-
+                setMessage('')
             }
             else {
                 setConnected(false);
@@ -121,14 +124,12 @@ export default function ChatPage() {
 
             <main className='flex pb-4 pt-6'>
                 {isLoadingConv ?
-                    <Skeleton
-                        className=' m-auto !h-full !rounded-3xl' /> :
+                    <Skeleton className=' m-auto !h-full !rounded-3xl' /> :
                     <Card className='FixCardNoImage !pb-0 !px-0 flex '>
                         <CardBody className='FixCardBody !p-0 !pt-2 !flex overflow-hidden'>
                             <div className='flex h-full  '>
                                 <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
-                                    <List
-                                        className=' flex-1 '>
+                                    <List className=' flex-1 '>
                                         {conversations &&
                                             conversations.map((message: MessageView, index: number) =>
                                                 <div>

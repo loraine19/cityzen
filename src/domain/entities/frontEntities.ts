@@ -4,9 +4,11 @@ import { EventView } from "../../presenter/views/viewsEntities/eventViewEntities
 //// for front only 
 export class Action {
     icon?: string;
+    iconImage?: string;
     title?: string;
     body?: string | Element | JSX.Element | Element[] | JSX.Element[];
     function?: () => void;
+    color?: string;
 }
 export class Label {
     label: string = '';

@@ -29,24 +29,17 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
     const actions = GenereMyActions(survey, "vote/sondage", deleteSurvey)
     const haveImage = survey?.image ? true : false
     const [open, setOpen] = useState(false);
-    const color = (): string => {
-        switch (survey?.myOpinion) {
-            case 'OK': return 'green';
-            case 'NO': return 'red';
-            case 'WO': return 'orange';
-            default: return 'blue-gray';
-        }
-    }
+    const color = { OK: 'green', NO: 'red', WO: 'orange' }
+
 
 
     return (
         <>
             <VoteCard
                 open={open}
-                setOpen={setOpen}
+                close={() => setOpen(false)}
                 vote={survey}
-                refetch={update}
-            />
+                refetch={update} />
             <Card className={haveImage ? "FixCard " : "FixCardNoImage  "}>
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
@@ -119,7 +112,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                                 icon={<Icon
                                     icon="smart_card_reader"
                                     fill={survey?.IVoted}
-                                    color={color()}
+                                    color={survey?.IVoted ? color[survey?.myOpinion as keyof typeof color] : 'gray'}
                                     size="md"
                                     title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
                                     style="scale-150 -mt-0.5" />}>

@@ -23,16 +23,25 @@ export default function AnnounceDetailPage() {
     //// CONTACT ACTIONS
     const ContactActions: Action[] = [
         {
+            iconImage: 'call',
             icon: 'Appel',
             title: "Confirmer mon appel à " + post?.User?.Profile.firstName,
             body: `<a href="tel:${post?.User?.Profile.phone}" target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Confirmer mon appel ${post?.User?.Profile.phone}</a>`,
             function: () => { window.open(`tel:${post?.User?.Profile.phone}`); handleOpen(); },
         },
         {
+            iconImage: 'mail',
             icon: 'Email',
             title: "Envoyer un email à " + post?.User?.Profile.firstName,
             body: `<a href="mailto:${post?.User?.email}?subject=${post?.title} target="_blank" rel="noopener noreferrer" class="text-orange-500 font-medium underline">Envoyer un email à ${post?.User?.Profile.firstName}</a>`,
             function: () => { window.open(`mailto:${post?.User?.email}?subject=${post?.title}`); handleOpen(); },
+        },
+        {
+            iconImage: 'forum',
+            icon: 'Chat',
+            title: "Envoyer un message à " + post?.User?.Profile.firstName,
+            body: `<a href="/chat/${post?.User?.id}" class="text-orange-500 font-medium underline">Envoyer un message à ${post?.User?.Profile.firstName}</a>`,
+            function: () => { window.open(`/chat/${post?.User?.id}`); handleOpen(); }
         },
     ]
 

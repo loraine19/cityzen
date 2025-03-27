@@ -96,12 +96,15 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
 
     const actions = [
         {
+            iconImage: 'close',
+            color: 'bg-red-500',
             icon: handleOpen ? 'Supprimer' : 'close',
             title: "Confirmer la suppression",
             body: "Confirmer la suppression de " + title,
             function: async () => { await deleteRoute(id); handleOpen && handleOpen() && (window.location.href = (`/${type}`)) },
         },
         {
+            iconImage: 'edit',
             icon: handleOpen ? 'Modifier' : 'edit',
             title: "Confirmer la modification",
             body: "Confirmer la modification de " + title,
@@ -110,6 +113,7 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
 
     ];
     icon3 && actions.length < 3 && actions.push({
+        iconImage: 'groups',
         icon: handleOpen ? 'Relancer' : 'groups',
         title: "Relancer " + title,
         body: "Relancer " + title,

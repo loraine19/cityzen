@@ -138,9 +138,9 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
             <Icon
                 link={`${googleMapsLink}`}
                 bg
-                style='!bg-cyan-100 !pb-1'
+                style='!bg-cyan-100 hover:!bg-opacity-100 !pb-1'
                 title='Ouvrir dans Google Maps'
-                size='2xl'
+                size='xl'
                 color='cyan'
                 icon='near_me'
                 fill
@@ -157,7 +157,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 onClick={() => setFly(true)}
                 icon="my_location"
                 style='!pb-1.5 '
-                size="2xl"
+                size="xl"
                 fill />
         </div>)
 
@@ -168,7 +168,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 bg
                 icon='close'
                 fill
-                size='2xl'
+                size='xl'
                 onClick={() => setOpen(false)}
                 style={'!pb-1.5'}
                 title='Fermer la carte' />
@@ -180,7 +180,8 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
             <Icon
                 bg
                 icon='expand_content'
-                fill size='xl'
+                fill
+                size='xl'
                 onClick={() => setOpen(true)}
                 style={' !pb-1.5 '}
                 title='Ouvrir la carte' />
