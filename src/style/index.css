@@ -81,7 +81,7 @@ main {
 }
 
 .orange {
-    background-image: linear-gradient(#f9fafb, #fed7aa);
+    background-image: linear-gradient(#f9fafb, #ffedd5);
 }
 
 .orange100 {
@@ -124,7 +124,7 @@ main {
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !min-h-[20vh] !max-h-[25vh];
+    @apply flex flex-1 !min-h-[20vh] !max-h-[30vh] lg:!max-h-[22vh];
 }
 
 .FixCardHeaderNoImage {
@@ -152,7 +152,7 @@ main {
 }
 
 .CardImage {
-    @apply object-cover bg-transparent w-full max-h-full;
+    @apply object-cover bg-transparent w-full max-h-full !bg-blue-gray-400;
 }
 
 /* ICON */
@@ -212,24 +212,24 @@ nav li .icon {
 
 /* CHIP LIGHT COLOR */
 .OrangeChip {
-    @apply bg-orange-100 text-orange-800  px-3 pb-1 rounded-2xl shadow;
+    @apply bg-[#FED7AA] text-orange-800  px-3 pb-1 rounded-2xl;
 }
 
 .GreenChip {
-    @apply bg-green-100 text-green-800 px-3 !pb-1 rounded-2xl shadow;
+    @apply bg-green-100 text-green-800 px-3 !pb-1 rounded-2xl;
 }
 
 .RedChip {
-    @apply bg-red-200 text-red-900  px-3 pb-1 rounded-2xl shadow;
+    @apply bg-red-200 text-red-900  px-3 pb-1 rounded-2xl;
 }
 
 .CyanChip {
-    @apply bg-cyan-200 text-cyan-900  px-3 !pb-1 rounded-2xl shadow;
+    @apply bg-cyan-200 text-cyan-900  px-3 !pb-1 rounded-2xl;
 }
 
 .GrayChip,
 .lgBtn:disabled {
-    @apply bg-gray-300 text-gray-600 min-w-max rounded-full;
+    @apply bg-gray-300 text-gray-600 px-3 !pb-1 min-w-max rounded-full;
 }
 
 /* CHIP OUTLINED */

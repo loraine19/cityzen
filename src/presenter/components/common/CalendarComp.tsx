@@ -86,7 +86,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             <div className='flex gap-2 px-2 items-center'>
                                 semaine
                                 <Icon
-                                    icon='remove_circle'
+                                    icon='do_not_disturb_on'
                                     size='md'
                                     onClick={() => setNumberOfwweks(numberOfwweks > 1 ? numberOfwweks - 1 : 1)} />
                                 <button

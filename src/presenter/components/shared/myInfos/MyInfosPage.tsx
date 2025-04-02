@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
 import { ProfileForm } from '../auth/auth.Comps/ProfileForm';
 import { ProfileDTO, } from '../../../../domain/entities/Profile';
-import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { User } from '../../../../domain/entities/User';
@@ -14,6 +13,8 @@ import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { Icon } from '../../common/IconComp';
 import { Role } from '../../../../domain/entities/GroupUser';
+import { useAlertStore } from '../../../../application/stores/alert.store';
+import { ProfileDiv } from '../../common/ProfilDiv';
 
 
 export default function MyInfosPage() {
@@ -23,7 +24,6 @@ export default function MyInfosPage() {
     const [assistance, setAssistance] = useState<string | undefined>(user.Profile?.assistance)
     const [mailSub, setMailSub] = useState<string | undefined>(user.Profile?.mailSub)
     const [address, setAddress] = useState<AddressDTO>(user.Profile?.Address)
-    const [open, setOpen] = useState(false);
     const [imModo, setImModo] = useState<boolean>(user.GroupUser[0].role === Role.MODO)
     const updateProfile = async (data: ProfileDTO, Address: AddressDTO) => await DI.resolve('updateProfileUseCase').execute(data, Address)
 
@@ -35,6 +35,31 @@ export default function MyInfosPage() {
         mailSub: string()
     })
 
+    const { setOpen, setAlertValues } = useAlertStore(state => state)
+
+    const updateFunction = async () => {
+        const { blob, ...rest } = formik.values;
+        const updateData = new ProfileDTO({ assistance, ...rest })
+        const updated = await updateProfile(updateData, address)
+        if (updated.error) {
+            setOpen(false)
+            setAlertValues({ ...updated.error })
+        }
+        else {
+            setUserProfile(updated)
+            navigate("/");
+            setOpen(false)
+            if ((user.GroupUser[0].role === Role.MODO) !== imModo) {
+                const data = await DI.resolve('updateRoleUseCase').execute(imModo, goupId)
+                if (data.error) {
+                    setOpen(false)
+                    setAlertValues({ ...data.error })
+
+                } else setUser({ ...user, GroupUser: [data] })
+            }
+        }
+    }
+
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: user.Profile as any,
@@ -44,42 +69,28 @@ export default function MyInfosPage() {
             formik.values.assistance = assistance;
             formik.values.mailSub = mailSub;
             setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await updateFunction(),
+                confirmString: "Enregistrer les modifications",
+                title: "Confimrer la modification",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
+                        <ProfileDiv
+                            profile={{ ...formik.values, image: formik.values?.blob || formik.values?.image }}
+
+                        />
+                    </div>
+                )
+            })
         }
     })
     const goupId = import.meta.env.VITE_GOUPID_FAKER || 1
 
-    const update = async () => {
-        const { ...rest } = formik.values;
-        const updateData = { assistance, ...rest }
-        const updated = await updateProfile(updateData, address)
-        if ((user.GroupUser[0].role === Role.MODO) !== imModo) {
-
-            const groupUser = await DI.resolve('updateRoleUseCase').execute(imModo, goupId)
-            if (groupUser) {
-                setUser({ ...user, GroupUser: [groupUser] })
-            }
-        }
-        if (updated) {
-            setUserProfile(updated)
-            navigate("/");
-            setOpen(false)
-        }
-    }
 
     useEffect(() => { formik.values.Address = address }, [address])
 
     return (
         <div className="Body gray flex">
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => { await update(); setOpen(false) }}
-                title={"Confimrer la modification"}
-                confirmString='Enregistrer'
-                element={
-                    `<p className="font-bold text-lg">Voulez vous vraiment modifier vos informations personnelles ?</p>`
-                } />
-
             <div className="w-respLarge flex-col flex justify-between pt-1">
                 <div className="flex w-respLarge justify-between items-center gap-4">
                     <LogOutButton />

@@ -10,6 +10,7 @@ import { dayMS, formatDateForDB, getLabel } from "../../../../views/viewsEntitie
 import { eventCategories, EventImage } from "../../../../constants";
 import { AddressDTO } from "../../../../../infrastructure/DTOs/AddressDTO";
 import { DateChip } from "../../../common/ChipDate";
+import { Icon } from "../../../common/IconComp";
 
 export function EventForm(props: { formik: any, Address: AddressDTO, setAddress: any }) {
     const { formik, Address, setAddress } = props;
@@ -18,7 +19,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
 
     ///// BLOB FUNCTION ;
     const imgCategory = EventImage[formik.values.category as keyof typeof EventImage] || EventImage.default
-    const [imgBlob, setImgBlob] = useState<string>(formik.values.image ? formik.values.image : imgCategory);
+    const [imgBlob, setImgBlob] = useState<string>(formik.values.image ?? imgCategory);
 
     //// ADDRESS GPS FUNCTION
     useEffect(() => {
@@ -31,7 +32,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
+            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full   ">
                 <header className="px-4">
                     <NavBarTop />
                     <SubHeader
@@ -60,7 +61,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                         </Select>
                     </div>
                 </header>
-                <main className='flex flex-1 pb-1 pt-[1.5rem]'>
+                <main className='flex flex-1 pb-1 pt-[2rem]'>
                     <Card className=" w-respLarge FixCard !relative !z-10">
                         <CardHeader className="FixCardHeader lg:max-h-[20vh]">
                             <div className={`${start ? 'ChipDiv !justify-end' : 'hidden'}`}>
@@ -75,7 +76,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                 setImgBlob={setImgBlob}
                                 imgDef={imgCategory} />
                             <img
-                                src={imgBlob || './load.gif'}
+                                src={imgBlob || formik.values.blob || './load.gif'}
                                 alt={title || 'image'}
                                 width={100}
                                 height={100}
@@ -105,12 +106,12 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                     </div>
                                     <div className="flex flex-1 flex-col lg:pt-3 ">
 
-                                        {(Address.lat && Address.lng) ?
+                                        {(Address?.lat && Address?.lng) ?
                                             <AddressMapOpen address={Address} /> : ''}
 
                                         <div className='relative z-50'>
                                             <AddressInputOpen
-                                                address={Address}
+                                                address={Address || formik.values.Address}
                                                 setAddress={setAddress}
                                                 error={formik.errors.Address} />
                                         </div>
@@ -174,12 +175,19 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                         </CardBody>
                     </Card>
                 </main>
-                <footer className="w-respLarge">
+                <footer className="CTA">
                     <Button
+                        color='cyan'
                         type="submit"
                         size="lg"
                         className="lgBtn w-full rounded-full" >
-                        enregistrer
+                        <Icon
+
+                            color='white'
+                            icon={title ? 'edit' : 'add'}
+                        />
+                        {title ? 'Modifier' : 'Créer'}
+
                     </Button>
                 </footer>
             </form>

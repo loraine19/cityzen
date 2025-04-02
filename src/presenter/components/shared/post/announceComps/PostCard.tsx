@@ -37,13 +37,13 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                         </button>
                         <DateChip
                             start={createdAt}
-                            prefix="publié le " />
+                            prefix=" " />
                     </div>
                     {image &&
                         <img
                             src={image as any}
                             alt={title}
-                            className="h-full w-full object-cover"
+                            className="h-full CardImage w-full object-cover"
                         />}
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1`}>

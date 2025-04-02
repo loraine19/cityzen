@@ -28,7 +28,7 @@ export const LoadingPage = () => {
                             className='flex lg:flex-row flex-col  h-full gap-3 w-full items-center justify-center flex-1'>
                             <Skeleton
                                 key={index} /> <Skeleton
-                                key={index} />
+                                key={index + '2'} />
                         </div>
                     ))}
                 </main>

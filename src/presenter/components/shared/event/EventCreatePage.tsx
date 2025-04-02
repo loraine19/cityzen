@@ -3,10 +3,13 @@ import { useFormik } from 'formik';
 import { date, number, object, string, ref } from 'yup';
 import { useState } from 'react';
 import { EventForm } from './eventComps/EventForm';
-import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { EventDTO } from '../../../../infrastructure/DTOs/EventDTO';
+import { useAlertStore } from '../../../../application/stores/alert.store';
+import { Typography } from '@material-tailwind/react';
+import { EventView } from '../../../views/viewsEntities/eventViewEntities';
+import { EventCard } from './eventComps/EventCard';
 
 
 export default function EventCreatePage() {
@@ -27,37 +30,51 @@ export default function EventCreatePage() {
         })
     })
 
-    const formik = useFormik({
-        initialValues: new EventDTO(),
-        validationSchema: formSchema,
-        onSubmit: async values => {
-            formik.values = values
-            setOpen(true)
-        }
-    });
+    const { setAlertValues, setOpen, handleApiError } = useAlertStore(state => state)
 
     const postFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
         const dataDTO = new EventDTO(formik.values)
-        const post = await postEvent(dataDTO);
-        if (post) {
-            navigate("/evenement/" + post.id);
-            location.reload()
+        const data = await postEvent(dataDTO);
+        if (data.error) handleApiError(data?.error)
+        else {
+            setOpen(false);
+            navigate("/evenement/" + data.id);
         }
     }
 
-    const [open, setOpen] = useState(false);
+    const formik = useFormik({
+        initialValues: {} as any,
+        validationSchema: formSchema,
+        onSubmit: async values => {
+            formik.values = values
+            setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await postFunction(),
+                confirmString: "Enregistrer les modifications",
+                title: "Confimrer la modification",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
+                        <Typography variant='h6'>
+                            Évenement au : {formik.values?.Address?.address} le {new Date(formik.values?.start).toLocaleDateString('fr-FR')}
+                        </Typography>
+                        <EventCard
+                            event={new EventView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, 0)}
+                            refetch={() => { }}
+                            change={() => { }}
+                        />
+                    </div>
+                )
+            })
+        }
+    });
+
+
+
 
     return (
         <div className="Body cyan">
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => { await postFunction() }}
-                title={"Confimrer la modification"}
-                element={(JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-
             <EventForm
                 formik={formik}
                 Address={Address}

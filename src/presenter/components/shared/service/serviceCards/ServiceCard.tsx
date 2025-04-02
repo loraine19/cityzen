@@ -31,9 +31,9 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
     const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
 
     const myActions = [
-        ...GenereMyActions(service, "service", deleteService, undefined, isLateValue),
+        ...GenereMyActions(service, "service", deleteService, isLateValue),
         {
-            icon: "sync_problem",
+            iconImage: "sync_problem",
             title: `litige sur  `,
             body: `litige a `,
             function: () => navigate({ pathname: `/litige/create/${id}` }),
@@ -41,17 +41,20 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
     ];
     const takenCTA: Action[] = [
         {
-            icon: "sync_problem", title: `litige sur ${title}`,
+            iconImage: "sync_problem",
+            title: `litige sur ${title}`,
             body: `litige a ${title}`,
             function: () => navigate({ pathname: `/litige/create/${id}` }),
         },
         {
-            icon: "person_cancel", title: `annuler ma réponse à ${title}`,
+            iconImage: "person_cancel",
+            title: `annuler ma réponse à ${title}`,
             body: `annuler ma réponse à ${title}`,
             function: async () => { await updateServiceStep(id, ServiceUpdate.CANCEL_RESP); update && update() },
         },
         {
-            icon: "groups", title: `Relancer ${title}`,
+            iconImage: "groups",
+            title: `Relancer ${title}`,
             body: ` Relancer ${title}`,
             function: () => { alert(`Voulez-vous relancer ${typeS} ${id} ?`) },
         },
@@ -142,7 +145,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                         <Chip
                             size="md"
                             value={`${points.join(' à ')}   pts`}
-                            className={` GrayChip  lowercase !font-medium  rounded-full ${mines && 'hidden md:flex'}`}
+                            className={` GrayChip  lowercase !font-medium px-3.5 rounded-full ${mines && 'hidden md:flex'}`}
                             icon=
                             {<Icon
                                 icon="toll"
@@ -150,7 +153,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                                 fill={user.Profile.points > points[0]}
                                 color={service.typeS === ServiceType.GET ? "green" : "orange"}
                                 size="md"
-                                style="scale-150" />}>
+                                style="scale-[1.6] !pb-2" />}>
                         </Chip>
 
                         <Icon

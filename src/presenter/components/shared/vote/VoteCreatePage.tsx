@@ -2,18 +2,22 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { VoteForm } from './voteCards/VoteForm';
 import { PoolDTO, SurveyDTO } from '../../../../infrastructure/DTOs/PoolSurveyDTO';
 import { PoolSurveyView } from '../../../views/viewsEntities/poolSurveyViewEntity';
 import { VoteTarget } from '../../../../domain/entities/Vote';
+import { useAlertStore } from '../../../../application/stores/alert.store';
+import { SurveyCard } from './voteCards/SurveyCard';
+import { User } from '../../../../domain/entities/User';
+import { PoolCard } from './voteCards/PoolCard';
 
 export default function VoteCreatePage() {
     const [initialValues] = useState<PoolSurveyView>({} as PoolSurveyView);
     const postSurvey = async (data: SurveyDTO) => await DI.resolve('postSurveyUseCase').execute(data)
     const postPool = async (data: PoolDTO) => await DI.resolve('postPoolUseCase').execute(data)
     const [type, setType] = useState<VoteTarget>(VoteTarget.SURVEY)
+    const { setOpen, setAlertValues, handleApiError } = useAlertStore()
 
     const navigate = useNavigate();
     const formSchemaSurvey = object({
@@ -31,46 +35,55 @@ export default function VoteCreatePage() {
     })
 
 
-    const [open, setOpen] = useState(false);
-    const formik = useFormik({
-        enableReinitialize: true,
-        initialValues: initialValues as PoolSurveyView,
-        validationSchema: type === VoteTarget.SURVEY ? formSchemaSurvey : formSchemaPool,
-        onSubmit: values => {
-            console.log(values)
-            formik.values = values
-            setOpen(true)
-        }
-    })
-
-    const updateFunction = async () => {
+    const createFunction = async () => {
         if (type === VoteTarget.SURVEY) {
             const updateData = new SurveyDTO(formik.values as SurveyDTO)
-            return await postSurvey(updateData)
+            const data = await postSurvey(updateData)
+            data.error ? handleApiError(data?.error) :
+                navigate(`/sondage/${data?.id}`)
         }
         else if (type === VoteTarget.POOL) {
             const updateData = new PoolDTO(formik.values as PoolDTO)
-            return await postPool(updateData)
+            const data = await postPool(updateData)
+            data.error ? handleApiError(data?.error) :
+                navigate(`/cagnotte/${data?.id}`)
         }
     }
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: initialValues as any,
+        validationSchema: type === VoteTarget.SURVEY ? formSchemaSurvey : formSchemaPool,
+        onSubmit: values => {
+            formik.values = values
+            setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await createFunction(),
+                confirmString: "Enregistrer ",
+                title: "Confimrer la création",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl pt-12 p-5'>
+                        {type === VoteTarget.SURVEY ?
+                            <SurveyCard
+                                survey={new PoolSurveyView({ ...formik.values, Votes: [], image: formik.values?.blob || formik.values?.image }, {} as User, 0)}
+                                change={() => { }}
+                                update={() => { }}
+                            /> :
+                            <PoolCard
+                                pool={new PoolSurveyView({ ...formik.values, Votes: [] }, {} as User, 0)}
+                                change={() => { }}
+                                update={() => { }}
+                            />}
+                    </div>
+                )
+            })
+        }
+    })
+
 
 
     return (
         <div className="Body orange">
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await updateFunction();
-                    if (ok) {
-                        navigate(`/${type === VoteTarget.SURVEY ? 'sondage' : 'cagnotte'}/${ok.id}`);
-                        setOpen(false)
-                    }
-                }}
-                title={`Confimrer la création ${type === VoteTarget.SURVEY ? 'du sondage' : 'de la cagnotte'}`}
-                element={Object.entries(type === VoteTarget.SURVEY ? new SurveyDTO(formik.values as SurveyDTO) : new PoolDTO(formik.values as PoolDTO)).map(([key, value]) => (value && `<b>${key} </b>: ${typeof value === 'object' ? value.name : value}<br>`)).join('')} />
-
-
             <VoteForm
                 formik={formik}
                 type={type}

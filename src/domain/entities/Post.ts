@@ -23,6 +23,7 @@ export enum PostFilter {
     ILIKE = 'ILIKE',
 }
 export class Post {
+    error?: string;
     id: number = 0;
     User: User = {} as User;
     userId: number = 0;

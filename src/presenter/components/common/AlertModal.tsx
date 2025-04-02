@@ -7,15 +7,14 @@ import { AlertValues } from "../../../domain/entities/Error";
 
 
 
-
 export const AlertModal = ({ values }: { values: AlertValues }) => {
     const { title, element, disableConfirm, confirmString, button2, isOpen, close } = values;
 
     const { open, setOpen } = useAlertStore(state => state)
 
 
-    if (close ? isOpen : open) return (
-        <div className={`!absolute top-0 left-0 h-full px-[2rem]  w-full mx-[1rem] z-50 !flex flex-1 justify-center items-center backdrop-filter backdrop-blur-sm `} >
+    if (isOpen || open) return (
+        <div className={`!absolute top-0 left-0 h-screen px-[2rem]  w-screen  z-[1500] !flex flex-1 justify-center items-center backdrop-filter backdrop-blur-sm `} >
             <Card
                 className="relative  h-min w-resp m-auto flex ">
                 <CardHeader
@@ -24,7 +23,7 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                         variant="h5">{title}</Typography>
                     {!disableConfirm &&
                         <Icon
-                            onClick={() => { close ? close() : setOpen(false) }}
+                            onClick={() => { close && close() || setOpen(false) }}
                             icon="cancel"
                             size="3xl"
                             color="red" />}
@@ -46,7 +45,10 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                         size='lg'
                         color="cyan"
                         className="rounded-full lgBtn max-w-max"
-                        onClick={() => values.handleConfirm ? values.handleConfirm() : close ? close() : setOpen(false)
+                        onClick={() => {
+                            values.handleConfirm && values.handleConfirm();
+                            close && close() || setOpen(false)
+                        }
                         }>
                         {confirmString}
                     </Button>}

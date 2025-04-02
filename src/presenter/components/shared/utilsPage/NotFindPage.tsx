@@ -2,12 +2,28 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@material-tailwind/react";
 import { AuthHeader } from "../auth/auth.Comps/AuthHeader";
 import NavBarBottom from "../../common/NavBarBottom";
+import { useAlertStore } from "../../../../application/stores/alert.store";
+import { useEffect } from "react";
 
 
 
 export default function NotFindPage() {
     const navigate = useNavigate();
-    const url: string = (new URLSearchParams(useLocation().pathname.split("/").join(""))).toString().replace("=", '')
+    const url: string = (new URLSearchParams(useLocation().pathname.split("/").join("-"))).toString().replace("=", '').replace('-', ' ')
+    const { setAlertValues, setOpen } = useAlertStore()
+
+
+    useEffect(() => {
+        setAlertValues({
+            title: 'Désolé, cette page n\'existe pas',
+            element: `Veuillez vérifier l\'élement ${url} ou retourner à la page d\'accueil.`,
+            confirmString: 'Retour à l\'accueil',
+            disableConfirm: true,
+            handleConfirm: () => { navigate('/'); setOpen(false) },
+        });
+        setOpen(true)
+    }, [url])
+
 
     return (
         <div className="Body gray">

@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+import { useAlertStore } from "../../../application/stores/alert.store";
 import { Flag } from "../../../domain/entities/Flag";
 import { Action, Label } from "../../../domain/entities/frontEntities";
 import { Issue } from "../../../domain/entities/Issue";
@@ -85,9 +87,11 @@ export const toggleLike = async (postId: number, userId: number, setPost: any) =
 export const formatDateForDB = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0]);
 
 //
-export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, handleOpen?: () => void, icon3?: boolean): Action[] => {
+export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
+    const { setOpen, open, handleApiError } = useAlertStore(state => state)
+    const navigate = useNavigate()
 
     'title' in element ? title = element.title ?? 'litige' : 'litige';
     'serviceId' in element && (id = element.serviceId);
@@ -97,24 +101,33 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
     const actions = [
         {
             iconImage: 'close',
-            color: 'bg-red-500',
-            icon: handleOpen ? 'Supprimer' : 'close',
+            color: 'red',
+            icon: 'Supprimer',
             title: "Confirmer la suppression",
-            body: "Confirmer la suppression de " + title,
-            function: async () => { await deleteRoute(id); handleOpen && handleOpen() && (window.location.href = (`/${type}`)) },
+            body: "Confirmer la suppression de " + title + " ?",
+            function: async () => {
+                const data = await deleteRoute(id);
+                if (data.error) handleApiError(data?.error)
+                setOpen(!open);
+                (navigate(`/${type}`))
+            },
         },
         {
+
             iconImage: 'edit',
-            icon: handleOpen ? 'Modifier' : 'edit',
+            icon: 'Modifier',
             title: "Confirmer la modification",
-            body: "Confirmer la modification de " + title,
-            function: () => { window.location.href = (`/${type}/edit/${id}`); handleOpen && handleOpen(); },
+            body: "Vous serez rediriger vers la page de modification de " + title,
+            function: () => {
+                navigate(`/${type}/edit/${id}`);
+                setOpen(false);
+            },
         },
 
     ];
     icon3 && actions.length < 3 && actions.push({
         iconImage: 'groups',
-        icon: handleOpen ? 'Relancer' : 'groups',
+        icon: 'Relancer',
         title: "Relancer " + title,
         body: "Relancer " + title,
         function: () => { console.log(`Voulez-vous relancer ${title}?`) }

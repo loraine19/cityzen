@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { NotifBadge } from "../../common/NotifBadge";
 import { Skeleton } from "../../common/Skeleton";
 import { useUserStore } from "../../../../application/stores/user.store";
-import { ConfirmModal } from "../../common/ConfirmModal";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { LogOutButton } from "../../common/LogOutBtn";
 import { NotifView } from "../../../views/viewsEntities/notifViewEntity";
@@ -16,14 +15,18 @@ import DI from "../../../../di/ioc";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { ElementNotif } from "../../../../domain/entities/Notif";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
+import { useAlertStore } from "../../../../application/stores/alert.store";
 
 export default function DashboardPage() {
     const { user, fetchUser } = useUserStore((state) => state);
     const { unReadMsgNotif, unReadNotMessages, fetchNotif } = useNotificationStore((state) => state);
+    const [modo, setModo] = useState(false);
 
     useEffect(() => {
+        if (user.GroupUser && user?.GroupUser[0]?.role === Role.MODO) setModo(true)
         async () => {
             if (!user || !user.Profile) await fetchUser()
+            if (user.GroupUser && user?.GroupUser[0]?.role === Role.MODO) setModo(true)
             await fetchNotif()
         }
     }, [])
@@ -31,7 +34,6 @@ export default function DashboardPage() {
 
     const navigate = useNavigate();
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
-
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
     const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
@@ -42,8 +44,6 @@ export default function DashboardPage() {
     const mapClasse = "flex row-span-6 lg:grid";
     const [searchParams] = useSearchParams();
     const msg = searchParams.get("msg");
-    const [open, setOpen] = useState<boolean>(msg ? true : false);
-
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
@@ -56,16 +56,21 @@ export default function DashboardPage() {
         }
     };
 
+    const { setAlertValues, setOpen } = useAlertStore(state => state)
+    useEffect(() => {
+        msg && setOpen(true)
+        setAlertValues({
+            handleConfirm: () => { setOpen(false); window.location.href = '/' },
+            title: "Notification",
+            element: msg || '',
+            disableConfirm: true,
+            confirmString: 'ok',
+        });
+    }, [msg]);
+
+
     return (
         <>
-            <ConfirmModal
-                open={open}
-                disableConfirm
-                handleConfirm={() => { setOpen(false); window.location.href = '/' }}
-                handleCancel={() => { }}
-                title="Notification"
-                element={msg || ''}
-            />
             <div className="Body gray">
                 <div className="relative pt-2 pb-5 lg:px-8 pr-4 w-respXl w-full flex lg:justify-center items-center  ">
                     <div className="flex  w-full justify-center flex-1 items-center  lg:gap-4 gap-2   mr-6">
@@ -113,10 +118,10 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
-                                            style={user?.GroupUser[0].role === Role.MODO ? '' : 'cursor-not-allowed'}
-                                            link={user?.GroupUser[0].role === Role.MODO ? '/conciliation' : ''}
+                                            style={modo ? '' : 'cursor-not-allowed'}
+                                            link={modo ? '/conciliation' : ''}
                                             icon="diversity_3"
-                                            color={user?.GroupUser[0].role === Role.MODO ? 'red' : 'blue-gray'}
+                                            color={modo ? 'red' : 'blue-gray'}
                                             fill bg
                                             size="lg"
                                             title="ouvrir la page conciliation" />
@@ -167,12 +172,9 @@ export default function DashboardPage() {
                                                 title="voir mes notifications" />
                                             <span className={unReadMsgNotif < 1 ? "hidden" : " absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-red-500"} />
                                         </div>
-
                                         <Typography>  {count > 0 ?
                                             <>{count} notifications </> :
                                             'pas de notifications'}</Typography>
-
-
                                     </div>
                                     <div className="relative flex flex-col -mt-0.5 max-h-10 overflow-y-auto"
                                         onScroll={() => handleScroll()}

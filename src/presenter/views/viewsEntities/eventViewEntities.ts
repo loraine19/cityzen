@@ -20,23 +20,22 @@ export class EventView extends Event {
 
     constructor(event: Event, userId: number) {
         super(event);
-        this.image = (typeof event?.image === 'string' && event?.image) ? event.image : this.getDefaultImage(event.category as EventCategory);
+        this.image = (typeof event?.image === 'string' && event?.image) ? event.image : this.getDefaultImage(event?.category as EventCategory);
         this.days = this.getDays(event);
-        this.Igo = event.Participants.some((p) => p.userId === userId) ? true : false;
+        this.Igo = event?.Participants?.some((p) => p.userId === userId) ? true : false;
         this.mine = event?.userId === userId;
-        this.label = EventCategory[event.category as unknown as keyof typeof EventCategory];
-        this.pourcent = Math.floor((event.Participants?.length || 0) / event.participantsMin * 100);
-        this.flagged = event.Flags ? event?.Flags?.some((flag: Flag) => flag.userId === userId) : false;
+        this.label = EventCategory[event?.category as unknown as keyof typeof EventCategory];
+        this.pourcent = Math.floor((event?.Participants?.length || 0) / event?.participantsMin * 100);
+        this.flagged = event?.Flags ? event?.Flags?.some((flag: Flag) => flag.userId === userId) : false;
         this.agendaLink = this.generateCalendarLink(event);
         this.eventDateInfo = this.eventdateInfo(event);
-        this.isValidate = event.Participants.length >= event.participantsMin;
+        this.isValidate = event?.Participants?.length >= event.participantsMin;
         this.toogleParticipate = async () => {
             await DI.resolve('toogleParticipantUseCase').execute(event, event.id, userId);
             const updatedEvent = await DI.resolve('getEventByIdUseCase').execute(event.id);
             return new EventView(updatedEvent, userId)
         }
     }
-
 
     private eventdateInfo = (event: Event) => {
         return (
@@ -57,8 +56,8 @@ export class EventView extends Event {
     }
 
     private getDays(event: Event): Date[] {
-        const start = new Date(event.start).getTime();
-        const end = new Date(event.end).getTime();
+        const start = new Date(event?.start).getTime();
+        const end = new Date(event?.end).getTime();
         const days: Date[] = [];
         for (let time = start; time <= end; time += dayMS) {
             days.push(new Date(time));

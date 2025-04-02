@@ -8,7 +8,6 @@ interface OnlineDotProps {
 export const OnlineDot = ({ id, className = "-bottom-1 -left-1" }: OnlineDotProps) => {
     const connectedUsers = connectedUsersStore((state) => state.connectedUsers);
     const isOnline: boolean = connectedUsers.find((userId) => userId === id) ? true : false;
-    console.log('isOnline', isOnline, connectedUsers, id)
 
     return (
         <span title={isOnline ? "En ligne" : "Hors ligne"}

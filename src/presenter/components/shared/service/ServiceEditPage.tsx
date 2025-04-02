@@ -2,23 +2,25 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ConfirmModal } from '../../common/ConfirmModal';
 import { ServiceForm } from './serviceCards/ServiceForm';
 import DI from '../../../../di/ioc';
 import { ServiceDTO } from '../../../../infrastructure/DTOs/ServiceDTO';
 import { Skeleton } from '../../common/Skeleton';
 import { ServiceView } from '../../../views/viewsEntities/serviceViewEntity';
 import { useUserStore } from '../../../../application/stores/user.store';
+import { useAlertStore } from '../../../../application/stores/alert.store';
+import ServiceCard from './serviceCards/ServiceCard';
+import { User } from '../../../../domain/entities/User';
 
 export default function ServiceEditPage() {
     const { id } = useParams()
     const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const idS = id ? parseInt(id) : 0;
     const user = useUserStore((state) => state.user);
-    const { service, isLoading, error } = serviceIdViewModelFactory(idS);
+    const { service, isLoading, error, refetch } = serviceIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<ServiceView>({} as ServiceView);
     const updateService = async (id: number, data: ServiceDTO) => await DI.resolve('updateServiceUseCase').execute(id, data)
-
+    const { handleApiError, setAlertValues, setOpen } = useAlertStore(state => state)
     const navigate = useNavigate();
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -27,42 +29,45 @@ export default function ServiceEditPage() {
     })
 
     useEffect(() => {
-        !isLoading && service && service.userId !== user.id && navigate("/msg?msg=Vous n'avez pas le droit de modifier ce service")
+        if (!isLoading && service && service.userId !== user.id) handleApiError({ message: "Vous n'avez pas le droit de modifier ce service" }, () => navigate('/service'))
         setInitialValues(service)
     }, [isLoading]);
 
-    const [open, setOpen] = useState(false);
+
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: initialValues as ServiceView,
+        initialValues: initialValues as any,
         validationSchema: formSchema,
         onSubmit: values => {
             formik.values = values
             setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await updateFunction(),
+                confirmString: "Enregistrer ",
+                title: "Confimrer la modification",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl pt-12 p-5'>
+                        <ServiceCard
+                            service={new ServiceView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, {} as User)}
+                            change={() => { }}
+                            update={() => { }}
+                        />
+                    </div>
+                )
+            })
         }
     })
 
     const updateFunction = async () => {
         const updateData = new ServiceDTO(formik.values as ServiceDTO)
-        return await updateService(service.id, updateData)
+        const data = await updateService(service.id, updateData)
+        if (data.error) handleApiError(data?.error)
+        else { refetch(); setOpen(false); navigate(`/service/${data?.id}`) }
     }
 
 
     return (
         <div className="Body cyan">
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await updateFunction();
-                    if (ok) {
-                        navigate(`/service/${ok.id}`);
-                        setOpen(false)
-                    }
-                }}
-                title={"Confimrer la modification"}
-                element={(JSON.stringify(new ServiceDTO(formik.values as ServiceDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
-
             {isLoading || error ?
                 <Skeleton className={'w-24'} key={'S'} /> :
                 <ServiceForm formik={formik} />}

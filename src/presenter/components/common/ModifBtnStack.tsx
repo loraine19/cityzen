@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { ConfirmModal } from "./ConfirmModal";
+import { useEffect, useState } from "react";
 import { Action } from "../../../domain/entities/frontEntities";
 import { Icon } from "./IconComp";
+import { useAlertStore } from "../../../application/stores/alert.store";
 
 type ModifBtnStackProps = {
     actions: Action[];
@@ -13,26 +13,30 @@ type ModifBtnStackProps = {
 
 export default function ModifBtnStack({ actions, disabled1, disabled2, update, icon3 }: ModifBtnStackProps) {
     const [buttons] = useState<Action[]>(actions);
-    const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0)
+
+    const { setAlertValues, setOpen } = useAlertStore(state => state)
+
+    useEffect(() => {
+        setAlertValues({
+            handleConfirm: () => {
+                buttons[index]?.function && buttons[index].function();
+                update && update()
+                setOpen(false)
+            },
+            title: buttons[index]?.title as string,
+            element: buttons[index]?.body as string,
+            disableConfirm: false,
+            confirmString: 'Confirmer',
+        });
+    }, [index]);
+
 
     return (
         <div className="flex gap-3 items-center w-full">
 
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={() => {
-                    buttons[index].function && buttons[index].function();
-                    setOpen(false)
-                    update && update()
-                }}
-                title={buttons[index].title as string}
-                element={buttons[index].body as any} />
-
-
             <Icon
-                icon={buttons[0].icon as string}
+                icon={buttons[0].iconImage as string}
                 color={disabled1 ? 'gray' : 'red'}
                 onClick={() => { setOpen(true), setIndex(0) }}
                 bg size="2xl"
@@ -41,7 +45,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
                 title={buttons[0].title as string} />
 
             <Icon
-                icon={buttons[1].icon as string}
+                icon={buttons[1].iconImage as string}
                 color={disabled2 ? 'gray' : 'orange'}
                 onClick={() => { setOpen(true), setIndex(1) }}
                 bg size="2xl"
@@ -52,7 +56,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
 
             {icon3 &&
                 <Icon
-                    icon={buttons[2].icon as string}
+                    icon={buttons[2].iconImage as string}
                     color={'cyan'}
                     onClick={() => { setOpen(true), setIndex(2) }}
                     bg size="2xl"

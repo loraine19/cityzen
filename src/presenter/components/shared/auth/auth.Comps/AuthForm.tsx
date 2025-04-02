@@ -126,14 +126,26 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                     content={popOverContent} />
                             </div>
                         </div>
-                        <Button
-                            data-cy="submit-button"
-                            type="submit"
-                            color="cyan"
-                            size="md"
-                            className=" w-[90%] m-auto rounded-full">
-                            {submitText}
-                        </Button>
+
+                        <div className='flex flex-col gap-4 pb-2'>
+                            <Button
+                                data-cy="submit-button"
+                                type="submit"
+                                color="cyan"
+                                size="md"
+                                className=" w-[90%] m-auto rounded-full">
+                                {submitText}
+                            </Button>
+                            <Button
+                                size="md"
+                                variant="outlined"
+                                color="gray"
+                                className="max-h-10 items-center gap-4 justify-center rounded-full w-[90%] m-auto hidden"
+                            >
+                                <img src="https://docs.material-tailwind.com/icons/google.svg"
+                                    alt="metamask" className="h-5 w-5" />
+                                Continuer avec Google
+                            </Button></div>
                     </CardFooter>
                 </form>
             </Card>

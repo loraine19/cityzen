@@ -13,5 +13,14 @@ export class AlertStoreRepositoryImpl implements AlertStoreRepositoryBase {
         return this.alertStoreFunctions.setAlertValues(alertValues);
     }
 
+    public setOpen(open: boolean): void {
+        alert('repoImpl' + open);
+        return this.alertStoreFunctions.setOpen(open);
+    }
+
+    public initialize(): void {
+        this.alertStoreFunctions.initialize();
+    }
+
 
 }
