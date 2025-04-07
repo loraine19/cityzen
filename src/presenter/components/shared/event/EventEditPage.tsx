@@ -6,7 +6,7 @@ import { EventForm } from './eventComps/EventForm';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
-import { EventUpdateDTO } from '../../../../infrastructure/DTOs/EventDTO';
+import { EventDTO, EventUpdateDTO } from '../../../../infrastructure/DTOs/EventDTO';
 import { EventView } from '../../../views/viewsEntities/eventViewEntities';
 import { EventCard } from './eventComps/EventCard';
 import { Typography } from '@material-tailwind/react';
@@ -25,9 +25,8 @@ export default function EventDetailPage() {
 
 
     useEffect(() => {
-        console.log(event);
-        (event && !event.mine && !isLoading) && navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
-        setInitialValues(event)
+        if (event && !event?.mine && !isLoading) navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
+        setInitialValues(event as EventView)
     }, [isLoading]);
 
 
@@ -52,6 +51,7 @@ export default function EventDetailPage() {
         validationSchema: formSchema,
         onSubmit: async values => {
             formik.values = values
+            formik.values.Address = Address as AddressDTO
             setOpen(true)
             setAlertValues({
                 handleConfirm: async () => await updateFunction(),
@@ -61,7 +61,7 @@ export default function EventDetailPage() {
                     <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
                         <Typography variant='h6'> Évenement au : {formik.values?.Address?.address} le {new Date(formik.values?.start).toLocaleDateString('fr-FR')}</Typography>
                         <EventCard
-                            event={new EventView({ ...formik.values, image: formik.values.blob }, 0)}
+                            event={new EventView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, 0)}
                             refetch={() => { }}
                             change={() => { }}
                         />
@@ -77,7 +77,7 @@ export default function EventDetailPage() {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
         const { ...rest } = formik.values;
-        const updateData = { ...rest }
+        const updateData = new EventDTO({ ...rest })
         const updated = await updateEvent(event.id, updateData, Address)
         if (updated) {
             navigate("/evenement/" + updated.id);
@@ -95,7 +95,7 @@ export default function EventDetailPage() {
                 <Skeleton /> :
                 <EventForm
                     formik={formik}
-                    Address={Address}
+                    Address={formik.values.Address}
                     setAddress={setAddress} />}
         </div >
     )

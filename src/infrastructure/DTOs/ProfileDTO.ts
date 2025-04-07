@@ -1,9 +1,11 @@
-import { Profile, AssistanceLevel, MailSubscriptions } from "../../domain/entities/Profile";
+import { AssistanceLevel, MailSubscriptions } from "../../domain/entities/Profile";
+import { AddressDTO } from "./AddressDTO";
 
 
 
 
-export class ProfileDTO implements Partial<Profile> {
+export class ProfileDTO {
+    Address?: AddressDTO = {} as AddressDTO;
     userIdSp: number = 0;
     addressId: number = 0;
     profile?: ProfileDTO;
@@ -16,9 +18,13 @@ export class ProfileDTO implements Partial<Profile> {
     points?: number;
     skills?: string = '';
     mailSub?: MailSubscriptions | string = MailSubscriptions.SUB_1
-    constructor(data?: Partial<ProfileDTO>) {
-        if (data) {
-            Object.assign(this, data);
+    constructor(init?: Partial<ProfileDTO>) {
+        if (init) {
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof ProfileDTO];
+                }
+            });
         }
     }
 

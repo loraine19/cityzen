@@ -36,7 +36,8 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
     const colClass = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6', 'grid-cols-7']
 
     return (
-        <div className='flex flex-col flex-1 pt-3 '>
+        <div className='flex flex-col flex-1 pt-3 '
+            data-cy="calendar">
             <div className="flex  justify-between  gap-2 items-center p-0">
                 {logo && <div className='flex items-center gap-1'>
                     <Icon
@@ -86,7 +87,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             <div className='flex gap-2 px-2 items-center'>
                                 semaine
                                 <Icon
-                                    icon='remove_circle'
+                                    icon='do_not_disturb_on'
                                     size='md'
                                     onClick={() => setNumberOfwweks(numberOfwweks > 1 ? numberOfwweks - 1 : 1)} />
                                 <button
@@ -141,11 +142,13 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                                         <Popover
                                                             open={open && popId === event.id + day.date} >
                                                             <button
+                                                                data-cy='event-handler'
                                                                 title={'Voir événement' + ' ' + event.title}
                                                                 className=' w-full rounded-xl'
                                                                 onClick={() => { setOpen(true); setPopId(event.id + day.date) }}>
                                                                 <PopoverHandler>
-                                                                    <div className=
+                                                                    <div
+                                                                        className=
                                                                         {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-6 truncate flex items-center justify-center font-normal z-50
                                                         ${(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) && 'rounded-l-2xl !justify-start !z-50 pl-4 !font-medium'}
                                                         ${(eventDays[eventDays.length - 1] === currentDay || new Date(day.date).getDay() === 0) && 'rounded-r-2xl '}

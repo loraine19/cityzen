@@ -19,11 +19,13 @@ export class GetPostByIdUseCase {
     private postRepository: PostRepositoryBase;
 
     constructor({ postRepository }: { postRepository: PostRepositoryBase }) {
-        this.postRepository = postRepository;
+        this.postRepository = postRepository
     }
 
     public async execute(id: number): Promise<Post> {
-        return this.postRepository.getPostById(id);
+
+        const data = await this.postRepository.getPostById(id)
+        return data;
     }
 }
 

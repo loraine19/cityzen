@@ -11,6 +11,7 @@ import DashboardPage from "./presenter/components/shared/dashboard/DashboardPage
 import { LoadingPage } from "./presenter/components/shared/utilsPage/LoadingPage";
 import { errorValues } from "./presenter/components/shared/utilsPage/erroValues";
 import { AlertModal } from "./presenter/components/common/AlertModal";
+import { useAlertStore } from "./application/stores/alert.store";
 
 // Lazy load components
 const ServiceCreatePage = lazy(() => import("./presenter/components/shared/service/ServiceCreatePage"));
@@ -51,6 +52,7 @@ function App() {
         setTimeout(() => { console.log(retryCount, 'retryCountApp') }, 5000);
         setRetryCount(retryCount + 1);
     }
+    const { alertValues } = useAlertStore(state => state)
 
     return (
         <>
@@ -114,7 +116,7 @@ function App() {
 
                     </Suspense>
                 </ErrorBoundary>
-                <AlertModal values={errorValues} />
+                <AlertModal values={alertValues ?? errorValues} />
                 <ReactQueryDevtools />
             </BrowserRouter>
         </>

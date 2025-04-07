@@ -6,7 +6,7 @@ describe('SignUp process with mail activation', () => {
   const signUp = `${baseUrl}/signup`;
   const email = 'testeur_cityzen@imagindev.com';
   const password = 'passwordtest';
-  const mailUrl = 'http://localhost:8085'
+  const mailUrl = 'http://localhost:1085'
   const waitedMailSubject = "Activation de votre compte City'Zen";
   const authBackUrl = `http://localhost:3000/api/auth`;
   let activationLink = '';
@@ -20,22 +20,29 @@ describe('SignUp process with mail activation', () => {
   it('Attempts to sign up with new credentials', () => {
     cy.visit(signUp)
     cy.get('[data-cy="email-input"]').type(email);
+    cy.wait(1000);
     cy.get('[data-cy="password-input"]').type(password);
+    cy.wait(1000);
     cy.get('[data-cy="password-confirm-input"]').type(password);
+    cy.wait(1000);
     cy.get('[data-cy="terms-checkbox"]').check();
+    cy.wait(1000);
     cy.get('[data-cy="submit-button"]').click();
-    cy.wait(8000);
+    cy.wait(2500);
     cy.get('[data-cy="notif-text"]').contains('lien envoyé par email').should('be.visible');
   })
 
   it('Check the email and get the activation link', () => {
     cy.visit(mailUrl);
     cy.get('input[name="_user"]').type(email);
+    cy.wait(1000);
     cy.get('input[name="_pass"]').type(password);
+    cy.wait(1000);
     cy.get('button[type="submit"]').click();
+    cy.wait(1000);
     cy.url().should('include', '_task=mail&_mbox=INBOX');
     cy.contains(waitedMailSubject).click();
-    cy.wait(8000);
+    cy.wait(2000);
     cy.get('iframe[name="messagecontframe"]').then(($iframe) => {
       const $body = $iframe.contents().find('body');
       cy.wrap($body).find('a#v1activation-link', { timeout: 8000 }).should('be.visible').then(($link) => {
@@ -43,7 +50,7 @@ describe('SignUp process with mail activation', () => {
       })
     });
     cy.get('a.logout').click();
-    cy.wait(8000);
+    cy.wait(2000);
   })
 
   it('Visits the activation link, completes the sign-up process', () => {
@@ -53,8 +60,11 @@ describe('SignUp process with mail activation', () => {
     cy.origin(baseUrl, { args: { email, password } }, ({ email, password }) => {
       cy.url().should('include', '/signin');
       cy.contains('vous pouvez maintenant vous connecter').should('be.visible');
+      cy.wait(1000);
       cy.get('input[name="email"]').type(email);
+      cy.wait(1000);
       cy.get('input[name="password"]').type(password);
+      cy.wait(1000);
       cy.get('button[type="submit"]').click()
       cy.wait(8000);
       cy.url().should('include', '/profile/create')

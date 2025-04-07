@@ -1,5 +1,4 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { Event } from '../../domain/entities/Event';
 import DI from '../../di/ioc';
 import { dayMS, shortDateString } from './viewsEntities/utilsService';
 import { EventView } from '../views/viewsEntities/eventViewEntities';
@@ -53,18 +52,19 @@ export const eventIdViewModel = () => {
 
     })
     const userId = user?.id
-
     const getEventById = DI.resolve('getEventByIdUseCase')
 
-
-    const { data: eventByIdData, isLoading, error, refetch } = useQuery({
+    let { data, isLoading, error, refetch } = useQuery({
       queryKey: ['eventById', id],
       staleTime: 600000,
+      refetchOnWindowFocus: false,
       queryFn: async () => await getEventById.execute(id),
     })
 
-    const event = userLoading ? {} : eventByIdData ? new EventView(eventByIdData, userId) : {} as Event;
 
+    data?.error ? error = data.error : error = null
+    console.log("eventIdViewModel", data, error)
+    const event = (!userLoading && !isLoading && !error) ? new EventView(data, userId) : {} as EventView
     return { event, isLoading, error, refetch }
   }
 }

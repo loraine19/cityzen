@@ -10,6 +10,7 @@ import { VoteTarget } from "../../../../../domain/entities/Vote";
 import DI from "../../../../../di/ioc";
 import { User } from "../../../../../domain/entities/User";
 import { ProfileDiv } from "../../../common/ProfilDiv";
+import { Icon } from "../../../common/IconComp";
 
 type PoolSurveyFormProps = {
     formik: any;
@@ -23,7 +24,6 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
     const [imgBlob, setImgBlob] = useState<string | undefined>(formik.values.image);
     const getUsers = async () => await DI.resolve('getUsersUseCase').execute();
     const [users, setUsers] = useState<User[]>([])
-    const [benef, setBenef] = useState<User>({} as User)
 
     useEffect(() => {
         const fetchUsers = async () => setUsers(await getUsers())
@@ -34,7 +34,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
+            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full">
                 <header className="px-4">
                     <NavBarTop />
                     <SubHeader
@@ -44,7 +44,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                         closeBtn
                     />
                     <div className="w-respLarge">
-                        <div className="flex gap-10">
+                        <div className="flex pb-0.5 gap-10">
                             <Radio
                                 disabled={formik.values.pourcent > 1}
                                 name="typeS"
@@ -80,14 +80,13 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 onChange={(val: string | undefined) => {
                                     formik.setFieldValue('category', val)
                                     formik.setFieldValue('userIdBenef', '')
-                                    setBenef({} as User)
+                                    formik.setFieldValue('UserBenef', {} as User)
                                 }} >
                                 {surveyCategories.map((category: Label, index: number) => {
                                     return (
                                         <Option
                                             value={category.value}
-                                            key={index}
-                                        >
+                                            key={index}>
                                             {category.label}
                                         </Option>
                                     )
@@ -95,20 +94,21 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                             </Select> :
                             <Select
                                 className="rounded-full shadow bg-white border-none capitalize"
-                                label={formik.errors.userIdBenef ? formik.errors.userIdBenef as string : "Choisir le bénéficiaire"}
+                                label={formik.errors.userIdBenef as string ? `Changer le beneficiare` : "Choisir le bénéficiaire"}
                                 name={"userIdBenef"}
-                                labelProps={{ className: `${formik.errors.userIdBenef && "error"} before:border-none after:border-none ` }}
-                                value={formik.values?.UseIdBenef?.toString()}
+                                labelProps={{ className: `${formik.errors?.userIdBenef && "error"} before:border-none after:border-none ` }}
+                                defaultValue={formik.values?.UserBenef?.id?.toString()}
                                 onChange={(val: string | undefined) => {
                                     const find = users.find((user: Partial<User>) => user.id === parseInt(val || ''))
-                                    setBenef(find || {} as User)
+
+                                    formik.setFieldValue('UserBenef', find as User)
                                     formik.setFieldValue('userIdBenef', val)
                                     formik.setFieldValue('category', '')
                                 }} >
                                 {users.map((user: Partial<User>, index: number) => {
                                     return (
                                         <Option
-                                            className={"rounded-full my-1 capitalize"}
+                                            className={`${user.id?.toString() === formik.values?.UserBenef?.id.toString() && "bg-orange-100 shadow-md"} rounded-full my-1 capitalize`}
                                             value={user.id?.toString()}
                                             key={index}
                                         >
@@ -120,7 +120,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                         }
                     </div>
                 </header>
-                <main className={`flex flex-1 pb-1 ' ${haveImage && "pt-[1.5rem]"}`}>
+                <main className={`flex flex-1 pb-1 pt-2  ${haveImage && "pt-[2rem]"}`}>
                     <Card className="w-respLarge FixCard">
                         <CardHeader
                             className={haveImage ?
@@ -136,7 +136,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
 
                             <ImageBtn
                                 className={type === VoteTarget.SURVEY ?
-                                    "!absolute z-40 !h-max !left-3 " : "hidden"}
+                                    "!absolute z-40 !h-max top-3 !left-3 " : "hidden"}
                                 formik={formik}
                                 setImgBlob={setImgBlob} />
                             {haveImage && <img
@@ -147,15 +147,13 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 className={"h-full w-full object-cover"}
                             />
                             }
-                            {formik.values?.typeS === VoteTarget.POOL &&
+                            {formik.values?.UserBenef?.Profile && formik.values?.typeS === VoteTarget.POOL &&
                                 <ProfileDiv
-                                    profile={benef.Profile} />
+                                    profile={formik.values?.UserBenef?.Profile} />
                             }
-
                         </CardHeader>
-
                         <CardBody className='FixCardBody '>
-                            <div className='CardOverFlow h-full justify-between gap-4'>
+                            <div className='CardOverFlow h-full justify-between mt-2 gap-4'>
                                 <Input
                                     error={formik.errors.title}
                                     label={formik.errors.title ?
@@ -192,13 +190,20 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                         </CardBody>
                     </Card>
                 </main>
-                <footer className="w-respLarge">
+                <footer className="CTA">
                     <Button
+                        color="orange"
+                        size='lg'
                         type="submit"
                         disabled={formik.values.pourcent > 1}
-                        className="lgBtn">
+                        className="lgBtn ">
+                        <Icon
+                            color="white"
+                            icon="add"
+
+                        />
                         {formik.values.pourcent > 1 ?
-                            'Non modifiable votes en cours  ' + formik.values.pourcent + '%' : `enregistrer`}
+                            'Non modifiable votes en cours  ' + formik.values.pourcent + '%' : `Enregistrer`}
                     </Button>
                 </footer>
             </form>

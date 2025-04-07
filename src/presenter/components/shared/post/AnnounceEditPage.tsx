@@ -2,13 +2,14 @@ import { useFormik } from 'formik';
 import { object, string, array } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { ConfirmModal } from '../../common/ConfirmModal';
 import { PostFormCard } from './announceComps/PostFormCard';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { PostDTO } from '../../../../infrastructure/DTOs/PostDTO';
 import { Share } from '../../../../domain/entities/Post';
 import { PostView } from '../../../views/viewsEntities/postViewEntities';
+import { useAlertStore } from '../../../../application/stores/alert.store';
+import PostCard from './announceComps/PostCard';
 
 export default function AnnounceEditPage() {
     const { id } = useParams()
@@ -16,9 +17,9 @@ export default function AnnounceEditPage() {
     const updatePost = (id: number, data: PostDTO) => DI.resolve('updatePostUseCase').execute(id, data);
     const idS = id ? parseInt(id) : 0;
     const postIdViewModelFactory = DI.resolve('postIdViewModel');
-    const { post, error, isLoading } = postIdViewModelFactory(idS);
+    const { post, error, isLoading, refetch } = postIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<PostView>({} as PostView);
-    const [open, setOpen] = useState(false);
+    const { setOpen, setAlertValues, handleApiError } = useAlertStore()
 
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -27,44 +28,56 @@ export default function AnnounceEditPage() {
         shareA: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
     })
 
-
     useEffect(() => {
-        !isLoading && post && !post.mine && navigate("/msg?msg=Vous n'avez pas le droit de modifier cette annonce")
-        setInitialValues(post)
+        if (!isLoading && post && !post?.isMine) handleApiError({ message: "Vous n'avez pas le droit de modifier cette annonce" }, () => navigate('/annonce'))
+        post && setInitialValues(post)
     }, [isLoading]);
 
-    const formik = useFormik({
-        enableReinitialize: true,
-        initialValues: initialValues as PostView,
-        validationSchema: formSchema,
-        onSubmit: values => {
-            formik.values = values
-            setOpen(true)
-        }
-    })
 
     const updateFunction = async () => {
         const shareArray = formik.values.shareA as string[];
         const share = shareArray.sort().join('_').toUpperCase() as unknown as Share;
         const updateData = new PostDTO({ ...formik.values as PostDTO, share });
-        return await updatePost(post.id, updateData);
+        const data = await updatePost(post.id, updateData);
+        if (data.error) handleApiError(data?.error)
+        else {
+            setOpen(false);
+            refetch();
+            navigate(`/annonce/${data?.id}`)
+        }
     }
+
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: initialValues as any,
+        validationSchema: formSchema,
+        onSubmit: values => {
+            formik.values = values
+            formik.values = values
+            setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await updateFunction(),
+                confirmString: "Enregistrer ",
+                title: "Confimrer la modification",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl pt-12 p-5'>
+
+                        <PostCard
+                            post={new PostView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, 0)}
+                            change={() => { }}
+                            update={() => { }}
+                        />
+                    </div>
+                )
+            })
+        }
+    })
+
+
 
     return (
         <div className="Body orange">
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await updateFunction()
-                    if (ok) {
-                        navigate(`/annonce`);
-                        setOpen(false)
-                    }
-
-                }}
-                title={"Confimrer la modification"}
-                element={(JSON.stringify(new PostDTO(formik.values as PostDTO), null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
 
             {isLoading || error ?
                 <Skeleton /> :

@@ -86,7 +86,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                     <div className="flex w-full items-center gap-2">
                         <Icon
                             icon='calendar_add_on'
-                            onClick={() => window.open(agendaLink)}
+                            link={agendaLink}
                             title={`ajouter a mon agenda  : ${title}`}
                             bg
                             size='2xl'

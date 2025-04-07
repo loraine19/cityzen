@@ -1,7 +1,7 @@
-/// <reference types="cypress" />
+
 
 describe('SignUp process with mail activation', () => {
-  const baseUrl: string = Cypress.config('baseUrl') as string;
+  const baseUrl = Cypress.config('baseUrl') as unknown as string;
   const signUp = `${baseUrl}/signup`;
   const email = 'cityzen_tester@imagindev.com';
   const password = 'passwordtest';

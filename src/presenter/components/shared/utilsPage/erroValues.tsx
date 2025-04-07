@@ -36,10 +36,9 @@ export const errorValues: AlertValues = {
     button2: {
         text: 'Déconnexion', onClick: () => {
             Cookies.remove('user')
-            Cookies.remove('refreshToken')
             window.location.replace('/signin')
         }
     },
-    isOpen: false,
+    isOpen: true,
 
 }

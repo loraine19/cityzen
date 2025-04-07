@@ -35,11 +35,11 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
 
     return (
         <>
-            <VoteCard
+            {open && <VoteCard
                 open={open}
                 close={() => setOpen(false)}
                 vote={survey}
-                refetch={update} />
+                refetch={update} />}
             <Card className={haveImage ? "FixCard " : "FixCardNoImage  "}>
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}

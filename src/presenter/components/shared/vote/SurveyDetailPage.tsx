@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import CTAMines from '../../common/CTAMines';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -11,6 +11,7 @@ import DI from '../../../../di/ioc';
 import { VoteCard } from './voteCards/VoteCard';
 import { Button } from '@material-tailwind/react';
 import { Icon } from '../../common/IconComp';
+import { useAlertStore } from '../../../../application/stores/alert.store';
 
 
 export default function SurveyDetailPage() {
@@ -18,18 +19,23 @@ export default function SurveyDetailPage() {
     const idS = id ? parseInt(id) : 0
     const surveyIdViewModelFactory = DI.resolve('surveyIdViewModel');
     const { survey, isLoading, refetch, error } = surveyIdViewModelFactory(idS);
-    const handleOpen = () => setOpen(!open);
+
     const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
-    const myActions: Action[] = GenereMyActions(survey, "vote/sondage", deleteSurvey, handleOpen)
-    const [open, setOpen] = useState(false);
+    const myActions: Action[] = GenereMyActions(survey, "vote/sondage", deleteSurvey)
+    const [openVote, setOpenVote] = useState(false);
+
+    const { handleApiError } = useAlertStore()
+
+    const navigate = useNavigate();
+    useEffect(() => { if (error) handleApiError(error, () => navigate('/vote/sondage')) }, [isLoading]);
 
     return (
         <>
             {
 
                 <VoteCard
-                    open={open}
-                    close={() => setOpen(false)}
+                    open={openVote}
+                    close={() => setOpenVote(false)}
                     vote={survey}
                     refetch={refetch} />
             }
@@ -48,7 +54,7 @@ export default function SurveyDetailPage() {
                             className='!rounded-2xl flex pt-6 pb-1 h-full' /> :
 
                         <SurveyDetailCard
-                            setOpen={setOpen}
+                            setOpen={setOpenVote}
                             survey={survey} />
                     }
                 </main>
@@ -57,12 +63,12 @@ export default function SurveyDetailPage() {
 
                     <CTAMines actions={myActions} />
                     :
-                    <footer className={`flex gap-2 gap-x-4 w-respLarge justify-around pt-2 pb-4 h-max overflow-y-auto `}>
+                    <footer className={`CTA `}>
                         <Button
                             size='lg'
                             color='orange'
                             className='lgBtn w-respLarge min-h-max'
-                            onClick={() => setOpen(true)}
+                            onClick={() => setOpenVote(true)}
                         >
                             {<Icon fill color='white' icon={survey.IVoted ? 'edit' : 'smart_card_reader'} />}
                             {survey.IVoted ? 'Modifier mon vote' : 'Voter'}

@@ -17,7 +17,7 @@ function FlyToMarker({ position, setFly }: { position: [number, number], setFly?
             map.flyTo(position, 16, {
                 animate: true,
                 duration: 1,
-            });
+            })
         }
     }, [position, map]);
     if (setFly) setFly(false);
@@ -25,11 +25,9 @@ function FlyToMarker({ position, setFly }: { position: [number, number], setFly?
 }
 
 
-
-
 const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
     return (
-        notifsMap.map((notif: NotifView) => notif?.Address && notif?.Address.lat && notif?.Address?.lng &&
+        notifsMap.map((notif: NotifView, index: number) => notif?.Address && notif?.Address.lat && notif?.Address?.lng &&
             <Marker
                 key={notif.id}
                 position={[notif?.Address.lat, notif?.Address.lng]}
@@ -37,18 +35,21 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                     L.icon({
                         iconUrl: '/image/marker_green.svg',
                         iconSize: [50, 50],
-                        iconAnchor: [25, 50],
-                        popupAnchor: [-5, -15],
+                        iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
+                        popupAnchor: [0, -20],
+                        shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 30 : 25, 50],
+                        shadowUrl: '/image/marker_shadow.png',
                         pane: 'markerPane',
                     }) :
                     L.icon({
                         iconUrl: '/image/marker_orange.svg',
                         iconSize: [50, 50],
-                        iconAnchor: [25, 50],
-                        popupAnchor: [-5, -15],
+                        iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 30 : 25, 50],
+                        popupAnchor: [0, -20],
+                        shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 30 : 25, 50],
+                        shadowUrl: '/image/marker_shadow.png',
                         pane: 'markerPane',
-                    })}
-            >
+                    })} >
                 <Popup>
                     <div>
                         <div className='flex flex-1 justify-between items-center  w-full'>
@@ -78,63 +79,25 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                                 size='3xl'
                                 fill />
                         </div>
-
                     </div>
                 </Popup>
-                <div className='!absolute !-mt-0 border-orange-100 border-2 rounded-lg shadow-md'>
-                    <div className='bg-white p-2 -mt-3 z-50 relative top-0 left-0 right-0 rounded-t-lg'>
-                        <div className='flex flex-1 justify-between items-center  w-full'>
-                            <Typography
-                                variant='h6'
-                                color='gray'
-                                className=''>
-                                {notif.title}
-                            </Typography>
-                            <Chip
-                                size='sm'
-                                value={notif.typeS}
-                                className='CyanChip text-ellipsis rounded-full max-w-max ' />
-                        </div>
-                        <div className='flex max-h-16 justify-between items-center w-full'>
-                            <Typography
-                                variant="small"
-                                color='gray'
-                                className='font-normal truncate !p-0 !my-0'>
-                                {notif.description}
-                            </Typography>
-                            <Icon
-                                style='!text-gray-900 max-h-max'
-                                icon='arrow_circle_right'
-                                link={`/${notif.link}`}
-                                title={`voir les details de ${notif.title}`}
-                                size='3xl'
-                                fill />
-                        </div>
-                    </div>
-                </div>
-            </Marker>)
+            </Marker>
+        )
     )
 }
-
-
 
 
 type AddressMapOpenProps = { address: AddressDTO | Address, message?: string | Element, notifs?: NotifView[] }
 
 export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message, notifs }) => {
+
     const [position, setPosition] = useState<[number, number]>([address?.lat, address?.lng]);
-
-    useEffect(() => {
-        setPosition([address.lat, address.lng]);
-    }, [address]);
+    useEffect(() => { setPosition([address.lat, address.lng]) }, [address]);
     const [open, setOpen] = useState(false);
-
     const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${address.lat},${address.lng}`;
 
     const IntenaryChip = () => (
-        <div
-            style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}
-        >
+        <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}>
             <Icon
                 link={`${googleMapsLink}`}
                 bg
@@ -143,14 +106,11 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 size='xl'
                 color='cyan'
                 icon='near_me'
-                fill
-
-            />
+                fill />
         </div>)
 
     const FlyButton = () => (
-        <div
-            style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 1000 }}>
+        <div style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 1000 }}>
             <Icon
                 bg
                 title='Zoomer sur la position'
@@ -162,8 +122,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
         </div>)
 
     const CloseButton = () => (
-        <div
-            style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 900 }}>
+        <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 900 }}>
             <Icon
                 bg
                 icon='close'
@@ -175,8 +134,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
         </div>)
 
     const ExpandButton = () => (
-        <div
-            style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 900 }}>
+        <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 600 }}>
             <Icon
                 bg
                 icon='expand_content'
@@ -186,11 +144,6 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 style={' !pb-1.5 '}
                 title='Ouvrir la carte' />
         </div>)
-
-
-
-
-
 
     const [fly, setFly] = useState(false);
     return (
@@ -203,29 +156,26 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                         zoom={16}
                         scrollWheelZoom={false}
                         className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
-                        <TileLayer
-                            url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
-                        />
-                        {notifs && <MarkerList notifsMap={notifs} />}
+                        <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
                         <Marker
                             position={position}
                             icon={L.icon({
                                 iconUrl: '/image/marker.svg',
                                 iconSize: [60, 60],
                                 iconAnchor: [30, 60],
-                                popupAnchor: [0, -5],
-                            })}
-                        >
+                                popupAnchor: [0, -30],
+                                shadowAnchor: [30, 60],
+                                shadowUrl: '/image/marker_shadow.png'
+                            })}>
                             <Popup>
                                 {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
                             </Popup>
                         </Marker>
+                        {notifs && <MarkerList notifsMap={notifs} />}
                         {!message && <FlyToMarker position={position} />}
-
                         {fly && <FlyToMarker position={position} setFly={setFly} />}
                         <IntenaryChip />
                         <FlyButton />
-
                     </MapContainer>
                 </div>
             </PopoverHandler >
@@ -236,11 +186,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                         zoom={16}
                         scrollWheelZoom={false}
                         className='shadow-xl rounded-xl border-2 border-gray-300 flex w-full h-full' >
-                        <TileLayer
-                            url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
-                        />
-                        {notifs && <MarkerList notifsMap={notifs} />}
-
+                        <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
                         <Marker
                             position={position}
                             icon={L.icon({
@@ -248,13 +194,21 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                                 iconSize: [60, 60],
                                 iconAnchor: [30, 60],
                                 popupAnchor: [0, -5],
+                                shadowAnchor: [30, 60],
+                                shadowUrl: '/image/marker_shadow.png'
                             })}>
                             <Popup>
-                                {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
+                                {typeof message === 'string' ?
+                                    message :
+                                    <>{message}</>
+                                    || `${address?.address} ${address?.city}`}
                                 <br />
-                                <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">y aller</a>
+                                <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">
+                                    y aller
+                                </a>
                             </Popup>
                         </Marker>
+                        {notifs && <MarkerList notifsMap={notifs} />}
                         {!message && <FlyToMarker position={position} />}
                         {fly && <FlyToMarker position={position} setFly={setFly} />}
                         <IntenaryChip />

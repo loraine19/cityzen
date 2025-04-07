@@ -13,13 +13,16 @@ export class ErrorService {
 
     handleErrors(error: any) {
 
-
+        alert('errorService');
         const errorValues: AlertValues = new AlertValues({
             title: 'Une erreur est survenue',
             element: typeof error.message === 'string' ? error.message : 'Veuillez réessayer plus tard',
+            isOpen: true,
         });
-        console.error('error', error, errorValues);
+        alert('error 22' + errorValues.element);
+        this.alertStoreRepository.initialize();
         this.alertStoreRepository.setAlertValues(errorValues);
+        this.alertStoreRepository.setOpen(true);
     }
 
 }

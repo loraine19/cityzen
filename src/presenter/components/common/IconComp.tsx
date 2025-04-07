@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent, EditFilled, Edit, GroupsFilled, Groups, PersonCancelFilled, PersonCancel, AddAPhoto, AddAPhotoFilled, VisibilityOffFilled, VisibilityOff, DistanceFilled, Distance, PersonPinCircleFilled, PersonPinCircle, SyncProblemFilled, SyncProblem, KeyboardDoubleArrowUp, KeyboardDoubleArrowUpFilled, SendFilled, Send, ForumFilled, Forum, NearMeFilled, NearMe, Sms, SmsFilled, MoodFilled, Mood, MyLocationFilled, MyLocation, CallFilled, Call, Mail, MailFilled, TodayFilled, Today, LocationOn, LocationOnFilled, ClearAllFilled, ClearAll } from '@project-lary/react-material-symbols-300-rounded';
+import { Home, KeyboardDoubleArrowDown, PartnerExchange, Search, Event, Dashboard, Ballot, Add, Person, CalendarAddOn, Flag2, ExitToApp, ExploreNearby, Visibility, ArrowCircleRight, Notifications, ArrowCircleRightFilled, ThumbUp, ThumbUpFilled, HomeFilled, PersonFilled, CircleNotifications, CircleNotificationsFilled, PersonEdit, PersonEditFilled, Diversity3, Diversity3Filled, TwoPager, TwoPagerFilled, AddCircleFilled, AddCircle, DoNotDisturbOnFilled, DoNotDisturbOn, ArrowForwardIos, ArrowBackIos, CalendarViewMonth, CalendarViewMonthFilled, SearchFilled, ArrowForwardIosFilled, ArrowBackIosFilled, NotificationsFilled, VisibilityFilled, ExploreNearbyFilled, ExitToAppFilled, Flag2Filled, CalendarAddOnFilled, AddFilled, BallotFilled, DashboardFilled, EventFilled, PartnerExchangeFilled, KeyboardDoubleArrowDownFilled, TollFilled, Toll, ArrowDropDownFilled, ArrowDropDown, CalendarMonth, CalendarMonthFilled, ListFilled, List, CancelFilled, Cancel, CheckCircleFilled, CheckCircle, SmartCardReaderFilled, SmartCardReader, SignalCellularAltFilled, SignalCellularAlt, DesignServicesFilled, DesignServices, CloseFilled, Close, ChevronRight, ChevronRightFilled, MoreUp, MoreUpFilled, ExpandContentFilled, ExpandContent, EditFilled, Edit, GroupsFilled, Groups, PersonCancelFilled, PersonCancel, AddAPhoto, AddAPhotoFilled, VisibilityOffFilled, VisibilityOff, DistanceFilled, Distance, PersonPinCircleFilled, PersonPinCircle, SyncProblemFilled, SyncProblem, KeyboardDoubleArrowUp, KeyboardDoubleArrowUpFilled, SendFilled, Send, ForumFilled, Forum, NearMeFilled, NearMe, Sms, SmsFilled, MoodFilled, Mood, MyLocationFilled, MyLocation, CallFilled, Call, Mail, MailFilled, TodayFilled, Today, LocationOn, LocationOnFilled, ClearAllFilled, ClearAll, CheckFilled, Check, Block, BlockFilled } from '@project-lary/react-material-symbols-300-rounded';
 
 
 export const iconMap = {
@@ -11,11 +11,13 @@ export const iconMap = {
     arrow_drop_down: { filled: ArrowDropDownFilled, default: ArrowDropDown },
     arrow_forward_ios: { filled: ArrowForwardIosFilled, default: ArrowForwardIos },
     ballot: { filled: BallotFilled, default: Ballot },
+    block: { filled: BlockFilled, default: Block },
     calendar_add_on: { filled: CalendarAddOnFilled, default: CalendarAddOn },
     calendar_month: { filled: CalendarMonthFilled, default: CalendarMonth },
     calendar_view_month: { filled: CalendarViewMonthFilled, default: CalendarViewMonth },
     call: { filled: CallFilled, default: Call },
     cancel: { filled: CancelFilled, default: Cancel },
+    check: { filled: CheckFilled, default: Check },
     check_circle: { filled: CheckCircleFilled, default: CheckCircle },
     chevron_right: { filled: ChevronRightFilled, default: ChevronRight },
     circle_notifications: { filled: CircleNotificationsFilled, default: CircleNotifications },
@@ -107,6 +109,7 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     if (onClick) {
         return (
             <button
+                data-cy={icon}
                 type="button"
                 onClick={onClick}
                 title={!disabled ? title : title + ' est desactivée'}
@@ -117,6 +120,8 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     }
     if (link) {
         return <Link
+
+            data-cy={icon}
             to={link}
             title={title}
             target={link.startsWith('http') ? "_blank" : ""}
@@ -127,6 +132,7 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     }
     else {
         return <span
+            data-cy={icon}
             title={title}
             className={`${classIcon} `}>
             {searchIcon(icon, fill)}

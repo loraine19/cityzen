@@ -36,7 +36,7 @@ export class SocketService implements SocketServiceI {
             withCredentials: true,
             autoConnect: true,
             // reconnectionAttempts: Infinity, // Retry indefinitely
-            reconnectionDelay: 1000, // Delay between reconnection attempts
+            reconnectionDelay: 2000, // Delay between reconnection attempts
             // reconnectionDelayMax: 5000, // Maximum delay between reconnections
             // timeout: 20000, // Timeout for connection attempts
         });
@@ -55,7 +55,7 @@ export class SocketService implements SocketServiceI {
         });
 
         this.socket.on(`${nameSpace}-message`, (message: any) => {
-            console.log(`[SocketService] New message received ${nameSpace}`, message);
+            // console.log(`[SocketService] New message received ${nameSpace}`, message);
             this.newMessageCallbacks.forEach(cb => cb(message));
         });
 

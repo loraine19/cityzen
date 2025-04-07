@@ -1,5 +1,4 @@
 ## .dockerignore
-# Ignore node_modules directory to prevent copying unnecessary dependencies
 node_modules
 
 # Ignore local editor settings
@@ -20,3 +19,4 @@ build
 .prettier*
 .editorconfig
 .DS_Store
+cypress

@@ -12,7 +12,6 @@ import { AccessDTO, VerifyDTO } from '../../../../infrastructure/DTOs/AuthDTO';
 import { Error } from '../../../../domain/entities/Error';
 
 export default function SignInPage() {
-    const { saveToken } = DI.resolve('authService');
     const [searchParams] = useSearchParams();
     const email = searchParams.get("email");
     const token = searchParams.get("token");
@@ -44,8 +43,8 @@ export default function SignInPage() {
 
         const verifyData = { email, password, verifyToken: token }
         const authVerify = await signInVerify(verifyData);
-        if (authVerify?.refreshToken && authVerify?.user) {
-            saveToken(authVerify.refreshToken);
+        if (authVerify?.user) {
+            // saveToken(authVerify.refreshToken);
             setUser(authVerify.user);
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/profile/create") }, 1000);
@@ -60,8 +59,8 @@ export default function SignInPage() {
         const accessData = { email, password }
         try {
             const auth = await signIn(accessData)
-            if (auth?.refreshToken && auth?.user) {
-                saveToken(auth.refreshToken);
+            if (auth?.user) {
+                //  saveToken(auth.refreshToken);
                 setUser(auth.user);
                 setNotif('Vous êtes connecté, redirection ...');
                 setTimeout(() => { window.location.replace("/") }, 1000);

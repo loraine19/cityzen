@@ -31,7 +31,7 @@ export function ProgressBar(props: { value: number, label?: string, size?: Progr
             </div>
             <Progress
                 value={value}
-                color={value > 100 ? "green" : "gray"}
+                color={value >= 100 ? "green" : "gray"}
                 size={size} />
         </div>)
 }

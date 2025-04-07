@@ -23,7 +23,6 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const { setConnectedUsers } = connectedUsersStore();
     const { setUnReadMsgNotif, setUnReadNotMessages } = useNotificationStore();
 
-
     const connexion = () => {
         socketService.connect(nameSpace);
         socketService.onConnect(() => { setConnected(true) });
@@ -56,7 +55,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
             } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
                 setConnectedUsers(newMessage.users);
             }
-        });
+        })
 
         setUnReadMsgNotif(messages?.count)
         setUnReadNotMessages(count)
@@ -84,7 +83,6 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     };
     type NotifBadgeProps = { count: number, notifs: NotifView[], color: string, icon: string, link: string }
 
-
     return (
         <div className={`${onBoard ? ' w-respXl relative pt-4' : ''} gap-3  flex justify-end flex-1 w-full  right-0`}>
             <div className={` w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
@@ -95,89 +93,89 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                     {notif}
                 </Card>
             </div>
-
-
             {!isLoading && [{ count: messages.count, notifs: messages.notifs, color: 'cyan', icon: 'forum', link: '/chat' },
-            { count, notifs, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) => <div className={`relative w-max ${onBoard ? 'lg:hidden' : ''}`}>
-                <div id='notifList'
+            { count, notifs, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) =>
+                <div
                     key={index}
-                    ref={divRef}
-                >
-                    <Menu placement="bottom-end" >
-                        <MenuHandler title="Notifications">
-                            <span className={`${list.count === 0 ? 'hidden' : ''} ${`text-white absolute flex font-medium items-center justify-center w-[1.35rem] h-[1.35rem] text-[0.75rem] pt-1 pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2 shadow z-50`}`}>
-                                {list.count >= 99 ? ' 99⁺' :
-                                    (list.count ? list.count.toString() : '0')}
-                            </span>
-                        </MenuHandler>
-                        <MenuList className="flex flex-col max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3 rounded-2xl backdrop-blur-2xl ">
-                            <div onScroll={handleScroll}
-                                className="relative overflow-auto !border-none hover:!border-none flex flex-col gap-1">
-                                {list.count === 0 ? (
-                                    <div className="flex items-center justify-center p-4">
-                                        <Typography
-                                            variant="small"
-                                            color="gray"
-                                            className="font-normal">
-                                            Aucune nouveau message
-                                        </Typography>
-                                    </div>)
-                                    : (list.notifs.map((notif: NotifView, index: number) => notif.read === false &&
-                                        <MenuItem className="flex flex-col w-full  max-w-[calc(100vw-2rem)] "
-                                            key={index}>
-                                            <div className="flex items-center w-full justify-between">
-                                                <Chip
-                                                    value={notif.typeS}
-                                                    className="rounded-full w-max h-max text-ellipsis pt-1.5  "
-                                                    size='sm'
-                                                    color={list.color as any}>
-                                                </Chip>
-                                                <Typography
-                                                    className="flex items-center gap-1 text-xs font-normal text-blue-gray-500">
-                                                    {notif.update}
-                                                </Typography></div>
-                                            <div className="flex items-center justify-between gap-1">
-                                                <Typography
-                                                    variant="small"
-                                                    color="gray"
-                                                    className="max-w-[calc(100%-2rem)] truncate">
-                                                    {notif.description}
-                                                </Typography>
-                                                {notif.link && <Icon
-                                                    icon="chevron_right"
-                                                    fill
-                                                    onClick={
-                                                        async () => {
-                                                            await readNotif(notif.id);
-                                                            refetch();
-                                                            notif.link && navigate(notif.link)
-                                                        }}
-                                                    size="3xl"
-                                                    style="bg-white"
-                                                />}
-                                            </div>
-                                        </MenuItem>)
-                                    )}
-                            </div>
-                            <LoadMoreButton
-                                color={list.color}
-                                style="-mb-8"
-                                size="3xl"
-                                isBottom={isBottom}
-                                hasNextPage={hasNextPage}
-                                handleScroll={() => handleScroll()} />
-                        </MenuList>
-                    </Menu>
-                </div>
-                <Icon
-                    link={list.link}
-                    icon={list.icon}
-                    color={list.count > 0 ? list.color : 'gray'}
-                    fill bg
-                    size="2xl"
-                    title={list.count ? "voir la liste" : "aucune notification"}
-                    style=" rounded-full z-40 relative !text-3xl !w-10 !h-10" />
-            </div>)
+                    className={`relative w-max ${onBoard ? 'lg:hidden' : ''}`}>
+                    <div id='notifList'
+                        key={index + '1'}
+                        ref={divRef}>
+                        <Menu placement="bottom-end" >
+                            <MenuHandler title="Notifications">
+                                <span className={`${list.count === 0 ? 'hidden' : ''} ${`text-white absolute flex font-medium items-center justify-center w-[1.35rem] h-[1.35rem] text-[0.75rem] pt-1 pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2 shadow z-50`}`}>
+                                    {list.count >= 99 ? ' 99⁺' :
+                                        (list.count ? list.count.toString() : '0')}
+                                </span>
+                            </MenuHandler>
+                            <MenuList className="flex flex-col max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3 rounded-2xl backdrop-blur-2xl ">
+                                <div onScroll={handleScroll}
+                                    className="relative overflow-auto !border-none hover:!border-none flex flex-col gap-1">
+                                    {list.count === 0 ? (
+                                        <div className="flex items-center justify-center p-4">
+                                            <Typography
+                                                variant="small"
+                                                color="gray"
+                                                className="font-normal">
+                                                Aucune nouveau message
+                                            </Typography>
+                                        </div>)
+                                        : (list.notifs.map((notif: NotifView, index2: number) => notif.read === false &&
+                                            <MenuItem className="flex flex-col w-full  max-w-[calc(100vw-2rem)] "
+                                                key={index2 + list.color}>
+                                                <div className="flex items-center w-full justify-between">
+                                                    <Chip
+                                                        value={notif.typeS}
+                                                        className="rounded-full w-max h-max text-ellipsis pt-1.5  "
+                                                        size='sm'
+                                                        color={list.color as any}>
+                                                    </Chip>
+                                                    <Typography
+                                                        className="flex items-center gap-1 text-xs font-normal text-blue-gray-500">
+                                                        {notif.update}
+                                                    </Typography></div>
+                                                <div className="flex items-center justify-between gap-1">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="gray"
+                                                        className="max-w-[calc(100%-2rem)] truncate">
+                                                        {notif.description}
+                                                    </Typography>
+                                                    {notif.link && <Icon
+                                                        icon="chevron_right"
+                                                        fill
+                                                        onClick={
+                                                            async () => {
+                                                                await readNotif(notif.id);
+                                                                refetch();
+                                                                notif.link && navigate(notif.link)
+                                                            }}
+                                                        size="3xl"
+                                                        style="bg-white"
+                                                    />}
+                                                </div>
+                                            </MenuItem>)
+                                        )}
+                                </div>
+                                <LoadMoreButton
+                                    color={list.color}
+                                    style="-mb-8"
+                                    size="3xl"
+                                    isBottom={isBottom}
+                                    hasNextPage={hasNextPage}
+                                    handleScroll={() => handleScroll()} />
+                            </MenuList>
+                        </Menu>
+                    </div>
+                    <Icon
+                        link={list.link}
+                        icon={list.icon}
+                        color={list.count > 0 ? list.color : 'gray'}
+                        fill bg
+                        size="2xl"
+                        title={list.count ? "voir la liste" : "aucune notification"}
+                        style=" rounded-full z-40 relative !text-3xl !w-10 !h-10" />
+                </div>)
 
             }
 

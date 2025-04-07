@@ -12,7 +12,7 @@ export function DateChip(props: { start: Date | string, end?: Date | string, end
                 return "GreenChip";
             case endDays >= 4 && endDays <= 7:
                 return "OrangeChip";
-            case endDays <= 4 && endDays >= 0:
+            case endDays <= 4 && endDays >= 1:
                 return "RedChip";
             default:
                 return "GrayChip";

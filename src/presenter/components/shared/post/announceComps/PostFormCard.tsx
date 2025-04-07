@@ -1,5 +1,5 @@
 import { Select, Card, CardHeader, Button, Typography, CardBody, Input, Textarea, Checkbox, Option } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Label } from "../../../../../domain/entities/frontEntities";
 import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
@@ -7,6 +7,7 @@ import { ImageBtn } from "../../../common/ImageBtn";
 import { DateChip } from "../../../common/ChipDate";
 import { postCategories } from "../../../../constants";
 import { PostCategory } from "../../../../../domain/entities/Post";
+import { Icon } from "../../../common/IconComp";
 
 
 interface PostFormCardProps {
@@ -15,19 +16,15 @@ interface PostFormCardProps {
 
 export function PostFormCard({ formik }: PostFormCardProps) {
 
-    const [imgBlob, setImgBlob] = useState<string | undefined>(formik.values.image);
+    const [imgBlob, setImgBlob] = useState<string>(formik.values.image || '');
     const checkShare = (word: string) => formik.values?.shareA?.toString().toLowerCase().includes(word);
     const start = formik.values.createdAt ? new Date(formik.values.createdAt) : new Date();
-
-    useEffect(() => {
-        console.log(formik.values, imgBlob);
-    }, [formik.values, imgBlob]);
 
 
     return (
         <form
             onSubmit={formik.handleSubmit}
-            className="flex flex-col h-full gap-3 pb-3">
+            className="flex flex-col h-full">
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader
@@ -56,12 +53,13 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                     </Select>
                 </div>
             </header>
-            <main className={`flex flex-1 pb-1 ' ${formik.values.image && "pt-[1.5rem]"}`}>
+            <main className={`flex flex-1 pb-1 pt-4 ' ${(imgBlob || formik.values.image) && "pt-[2.2rem]"}`}>
                 <Card className="w-respLarge FixCard">
                     <CardHeader
-                        className={formik.values.image ?
-                            "FixCardHeader" : "FixCardHeaderNoImage !pt-16 !-mb-8 "}
-                        floated={formik.values.image ?
+                        className={(imgBlob || formik.values.image) ?
+                            "FixCardHeader" :
+                            "FixCardHeaderNoImage !pt-16 !-mb-4 "}
+                        floated={imgBlob || formik.values.image ?
                             true : false}
                     >
                         <div className={`${start ? 'ChipDiv !justify-end' : 'invisible'}`}>
@@ -74,14 +72,13 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                             formik={formik}
                             setImgBlob={setImgBlob} />
                         <img
-                            src={imgBlob || formik.values.image || '../../../../public/image/load.gif'}
+                            src={(imgBlob || formik.values.image) || ""}
                             alt={formik.values.title || 'image'}
                             width={100}
                             height={100}
-                            className={formik.values.image || imgBlob ?
+                            className={(imgBlob || formik.values.image) ?
                                 "h-full w-full object-cover" : "hidden"}
                         />
-
                     </CardHeader>
                     <CardBody className="FixCardBody">
                         <div className="CardOverFlow h-full justify-between gap-4">
@@ -139,10 +136,15 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                     </CardBody>
                 </Card>
             </main>
-            <footer className="w-respLarge">
+            <footer className="CTA">
                 <Button
+                    color="orange"
+                    size='lg'
                     type="submit"
-                    className="w-full rounded-full">
+                    className="lgBtn">
+                    <Icon
+                        icon="add"
+                        color="white" />
                     enregistrer
                 </Button>
             </footer>

@@ -30,5 +30,8 @@ export class Auth {
 }
 
 
-
+export enum CookieName {
+    REFRESH = 'refresh',
+    USER = 'user',
+}
 

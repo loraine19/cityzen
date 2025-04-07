@@ -32,7 +32,7 @@ export function ServiceForm(props: { formik: any }) {
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full gap-3 pb-3">
+            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full ">
                 <header className="px-4">
                     <NavBarTop />
                     <SubHeader
@@ -85,7 +85,7 @@ export function ServiceForm(props: { formik: any }) {
                         </Select>
                     </div>
                 </header>
-                <main className={`flex flex-1 pb-1 ' ${haveImage && "pt-[1.5rem]"}`}>
+                <main className={`flex flex-1 pb-1 ' ${haveImage && "pt-[2rem]"}`}>
                     <Card className="w-respLarge FixCard">
                         <CardHeader
                             className={formik.values.image ?
@@ -208,13 +208,14 @@ export function ServiceForm(props: { formik: any }) {
                                         </div>
                                         <Chip
                                             value={`${points} points`}
-                                            className="flex-1 GrayChip lowercase !font-medium rounded-full h-full flex items-center justify-center gap-2"
+                                            className="flex-1 GrayChip lowercase !font-medium rounded-full h-full flex items-center justify-center gap-2 max-w-max px-5"
                                             icon={
                                                 <Icon
                                                     color={formik.values.type === "do" ?
                                                         "green" : "orange"}
-                                                    icon="fiber_manual_record"
-                                                    size="xl"
+                                                    icon="toll"
+                                                    size="md"
+                                                    style="scale-[2] ml-0.5"
                                                     fill={userProfile.points > parseInt(points[0])}
                                                 />}
                                         />
@@ -224,13 +225,19 @@ export function ServiceForm(props: { formik: any }) {
                         </CardBody>
                     </Card>
                 </main>
-                <footer className="w-respLarge">
+                <footer className="CTA">
                     <Button
+                        size='lg'
                         type="submit"
                         disabled={formik.values.statusValue > 0}
                         className="lgBtn">
+                        <Icon
+                            style={formik.values.statusValue <= 0 ? 'hidden' : ''}
+                            icon="block"
+                        />
                         {formik.values.statusValue > 0 ? 'Non modifiable : ' + formik.values.statusS : `enregistrer`}
                     </Button>
+
                 </footer>
             </form>
         </>

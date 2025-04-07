@@ -6,6 +6,7 @@ interface alertStore {
     setOpen: (open: boolean) => void;
     alertValues: AlertValues;
     setAlertValues: (alertValues: Partial<AlertValues>) => void;
+    handleApiError: (error: any, returnFunction?: () => void) => void;
 }
 
 
@@ -17,5 +18,20 @@ export const useAlertStore = create<alertStore>((set) => {
         setAlertValues: (newAlertValues: Partial<AlertValues>) => set((state) => ({
             alertValues: { ...state.alertValues, ...newAlertValues }
         })),
+        handleApiError: (error: any, returnFunction?: () => void) => {
+            set({
+                open: true,
+                alertValues: new AlertValues({
+                    title: 'Cette action n\'a pas pu être effectuée',
+                    element: error?.message as string | undefined,
+                    disableConfirm: true,
+                    confirmString: 'Ok',
+                    handleConfirm: () => {
+                        set({ open: false })
+                        returnFunction && returnFunction()
+                    }
+                })
+            })
+        }
     };
 });

@@ -1,7 +1,6 @@
 // AlertStoreFunctions.ts
 
 import { useAlertStore } from "../../application/stores/alert.store";
-import { AlertValues } from "../../domain/entities/Error";
 
 export class AlertStoreFunctions {
     private functions: any | null = null; // Autoriser null
@@ -10,9 +9,16 @@ export class AlertStoreFunctions {
         this.functions = useAlertStore(); // Initialiser dans une méthode
     }
 
-    setAlertValues(alertValues: AlertValues): void {
+    setAlertValues(alertValues: any): void {
         if (this.functions) {
-            this.functions.setAlertValues(alertValues);
+            this.functions.handleApiError(alertValues);
+        }
+    }
+
+    setOpen(open: boolean): void {
+        if (this.functions) {
+
+            this.functions.setOpen(open);
         }
     }
 }

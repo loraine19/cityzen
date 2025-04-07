@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 import { AuthService } from "../../services/authService";
-import { ErrorService } from "../../services/errorService";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
 
@@ -30,7 +29,7 @@ class ForbiddenError extends ApiError {
 }
 
 class NotFoundError extends ApiError {
-    constructor(message = "Ressource non trouvée") {
+    constructor(message = "La ressource demandée n'existe pas ou plus") {
         super(404, message);
     }
 }
@@ -60,11 +59,8 @@ export type ApiServiceI = {
 export class ApiService implements ApiServiceI {
     private api: AxiosInstance;
     private authService: AuthService;
-    private errorService: ErrorService;
 
     constructor() {
-
-        this.errorService = new ErrorService();
         this.authService = new AuthService();
         this.api = axios.create({ baseURL, withCredentials: true });
         this.api.interceptors.request.use(this.handleRequest);
@@ -87,20 +83,15 @@ export class ApiService implements ApiServiceI {
     };
 
     private handleResponseError = async (error: any) => {
-
         let newError = new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard');
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
             this.logWithTime('not api error');
-            //return Promise.reject(new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard'));
-            //   this.errorService.handleErrors(new ApiError(500, 'Erreur application non disponible , essayez plus tard'));
-            newError = new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard');
-            // return { data: { error: new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard') } };
+            return Promise.reject(newError);
         }
-
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
-        const message = error.message || error.response?.data?.message || error.response?.message || 'Une erreur est survenue';
+        const message = error.response?.data?.message || error.response?.message || '';
         console.error('complete error:', error);
         newError = new ApiError(status, message);
         switch (status) {
@@ -125,7 +116,7 @@ export class ApiService implements ApiServiceI {
                 newError = new ForbiddenError(message);
                 break;
             case 404:
-                newError = new NotFoundError(message);
+                newError = new NotFoundError();
                 break;
             case 409:
                 newError = new ConflictError(message);
@@ -134,36 +125,21 @@ export class ApiService implements ApiServiceI {
                 newError = new ServerError();
                 break;
         }
-        this.errorService.handleErrors(newError);
+        //  this.errorService.handleErrors(newError);
         console.error('newError:', newError, newError.message);
-        // return Promise.reject(newError);
+        //  return Promise.reject(newError);
         return { data: { error: newError } };
     };
 
     refreshAccess = async (): Promise<boolean> => {
-        const refreshToken = this.authService.getRefreshToken();
-
+        const errorRedirect = (message?: string) => {
+            this.authService.clearCookies();
+            setTimeout(() => { window.location.replace(`/signin?msg=${message ?? 'Merci de vous re-identifier'}`) }, 2000)
+        }
         if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
-        if (!refreshToken && !window.location.pathname.includes('/sign')) {
-            console.error('no refresh token');
-            window.location.replace('/signin?msg=Merci de vous connecter');
-        }
-        try {
-            console.log('try to refresh token' + refreshToken);
-            const response = await axios.post(`${baseURL}/auth/refresh`, {},
-                { withCredentials: true, headers: { Authorization: `Bearer ${refreshToken}` } });
-            const { refreshToken: newRefreshToken } = response.data;
-            this.authService.saveToken(newRefreshToken);
-            return true;
-
-        } catch (error) {
-            if (!window.location.pathname.includes('/sign')) {
-                this.authService.clearCookies();
-                setTimeout(() => { window.location.replace('/signin?msg=Merci de vous re-identifier') }, 2000)
-
-            }
-            return false;
-        }
+        const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
+        if (!data || data.error) errorRedirect('vous n\'êtes pas connecté');
+        return true
     };
 
     public async get(url: string): Promise<any> {

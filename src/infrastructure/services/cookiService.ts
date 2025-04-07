@@ -36,6 +36,8 @@ export class cryptedCookie implements cryptedCookieI {
         };
     }
 
+
+
     private encrypt(data: string): string {
         return CryptoJS.AES.encrypt(data, secretKey).toString();
     }
@@ -49,7 +51,9 @@ export class cryptedCookie implements cryptedCookieI {
         const data = Cookies.get(name);
         if (data) {
             try {
-                return JSON.parse(this.decrypt(data));
+                const decryptedData = this.decrypt(data);
+                if (typeof decryptedData === 'string') return decryptedData;
+                return JSON.parse(decryptedData) || decryptedData;
             } catch (error) {
                 console.error("Error decrypting or parsing cookie:", error);
                 return null;
@@ -59,8 +63,10 @@ export class cryptedCookie implements cryptedCookieI {
     }
 
     setItem(name: string, value: any, options: CryptedCookieOptions = {}): void {
+        if (typeof value === 'object') value = JSON.stringify(value)
         const mergedOptions = { ...this.options, ...options };
-        const data = this.encrypt(JSON.stringify(value));
+        const data = this.encrypt(value);
+        Cookies.remove(name); // Remove the cookie first
         Cookies.set(name, data, {
             expires: mergedOptions.expires, // Use combined options
             path: mergedOptions.path,
@@ -81,8 +87,8 @@ export class cryptedCookie implements cryptedCookieI {
     }
 
     clear(): void {
-        const cookies = document.cookie.split(";");
 
+        const cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i];
             const eqPos = cookie.indexOf("=");
