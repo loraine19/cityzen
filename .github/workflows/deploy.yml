@@ -1,0 +1,50 @@
+name: Build and Deploy Front-End App
+
+on:
+    push:
+        branches: [main] # Ou votre branche principale
+
+jobs:
+    build_and_deploy_front:
+        runs-on: ubuntu-latest
+
+        steps:
+            # 1. Récupérer le code
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            # 2. Configurer Docker Buildx
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            # 3. Se connecter à Docker Hub
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            # 4. Construire et pousser l'image Docker Front-End
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v5
+              with:
+                  context: . # Ou le sous-dossier du front-end si monorepo
+                  dockerfile: Dockerfile # Assurez-vous que c'est le nom du Dockerfile du front-end
+                  push: true
+                  tags: |
+                      lorainep/cityzen:latest # Nom de l'image front-end
+                      lorainep/cityzen:${{ github.sha }}
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+                  build-args:
+                      | # Passer les variables VITE_* via les secrets GitHub
+                      VITE_FETCH_URL=${{ secrets.VITE_FETCH_URL }}
+                      VITE_APP_URL=${{ secrets.VITE_APP_URL }}
+                      VITE_STORE_KEY=${{ secrets.VITE_STORE_KEY }}
+                      VITE_DOMAIN=${{ secrets.VITE_DOMAIN }}
+                      VITE_WS_URL=${{ secrets.VITE_WS_URL }}
+                      VITE_GROUPID_FAKER=${{ secrets.VITE_GROUPID_FAKER }}
+
+            # 5. Déclencher le webhook Portainer pour le Front-End
+            - name: Trigger Portainer Deploy Webhook (Front-End)
+              run: curl -s -X POST ${{ secrets.PORTAINER_FRONT_WEBHOOK_URL }} # Ou PORTAINER_WEBHOOK_URL si même stack
