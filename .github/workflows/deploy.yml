@@ -32,7 +32,7 @@ jobs:
                   dockerfile: Dockerfile # Assurez-vous que c'est le nom du Dockerfile du front-end
                   push: true
                   tags: |
-                      lorainep/cityzen:latest # Nom de l'image front-end
+                      lorainep/cityzen:latest
                       lorainep/cityzen:${{ github.sha }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
@@ -47,4 +47,4 @@ jobs:
 
             # 5. Déclencher le webhook Portainer pour le Front-End
             - name: Trigger Portainer Deploy Webhook (Front-End)
-              run: curl -s -X POST ${{ secrets.PORTAINER_FRONT_WEBHOOK_URL }} # Ou PORTAINER_WEBHOOK_URL si même stack
+              run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_URL }}
