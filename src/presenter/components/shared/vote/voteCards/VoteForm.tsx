@@ -140,7 +140,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 formik={formik}
                                 setImgBlob={setImgBlob} />
                             {haveImage && <img
-                                src={imgBlob || formik.values.image || '../../../../public/image/load.gif'}
+                                src={imgBlob || formik.values.image || './image/load.gif'}
                                 alt={formik.values.title || 'image'}
                                 width={100}
                                 height={100}

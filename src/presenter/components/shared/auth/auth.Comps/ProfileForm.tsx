@@ -51,7 +51,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             imgDef="image/person.svg"
                             className="-ml-20 " />
                         <Avatar
-                            src={imgBlob as string || '../public/image/person.svg'}
+                            src={imgBlob as string || './image/person.svg'}
                             alt={formik.values.image || imgBlob ? formik.values.firstName : ''}
                             className={"shadow-md !BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
