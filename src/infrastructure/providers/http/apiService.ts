@@ -30,9 +30,10 @@ class ForbiddenError extends ApiError {
 
 class NotFoundError extends ApiError {
     constructor(message = "La ressource demandée n'existe pas ou plus") {
-        super(404, message);
+        constructor(message = "La ressource demandée n'existe pas ou plus") {
+            super(404, message);
+        }
     }
-}
 
 class ConflictError extends ApiError {
     constructor(message = "Conflit de ressources") {
@@ -89,8 +90,10 @@ export class ApiService implements ApiServiceI {
         if (!error.response) {
             this.logWithTime('not api error');
             return Promise.reject(newError);
+            return Promise.reject(newError);
         }
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
+        const message = error.response?.data?.message || error.response?.message || '';
         const message = error.response?.data?.message || error.response?.message || '';
         console.error('complete error:', error);
         newError = new ApiError(status, message);
@@ -117,6 +120,7 @@ export class ApiService implements ApiServiceI {
                 break;
             case 404:
                 newError = new NotFoundError();
+                newError = new NotFoundError();
                 break;
             case 409:
                 newError = new ConflictError(message);
@@ -126,7 +130,9 @@ export class ApiService implements ApiServiceI {
                 break;
         }
         //  this.errorService.handleErrors(newError);
+        //  this.errorService.handleErrors(newError);
         console.error('newError:', newError, newError.message);
+        //  return Promise.reject(newError);
         //  return Promise.reject(newError);
         return { data: { error: newError } };
     };
