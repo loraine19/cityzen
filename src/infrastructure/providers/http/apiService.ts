@@ -30,10 +30,9 @@ class ForbiddenError extends ApiError {
 
 class NotFoundError extends ApiError {
     constructor(message = "La ressource demandée n'existe pas ou plus") {
-        constructor(message = "La ressource demandée n'existe pas ou plus") {
-            super(404, message);
-        }
+        super(404, message);
     }
+}
 
 class ConflictError extends ApiError {
     constructor(message = "Conflit de ressources") {
@@ -94,7 +93,7 @@ export class ApiService implements ApiServiceI {
         }
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
         const message = error.response?.data?.message || error.response?.message || '';
-        const message = error.response?.data?.message || error.response?.message || '';
+
         console.error('complete error:', error);
         newError = new ApiError(status, message);
         switch (status) {
@@ -129,10 +128,7 @@ export class ApiService implements ApiServiceI {
                 newError = new ServerError();
                 break;
         }
-        //  this.errorService.handleErrors(newError);
-        //  this.errorService.handleErrors(newError);
         console.error('newError:', newError, newError.message);
-        //  return Promise.reject(newError);
         //  return Promise.reject(newError);
         return { data: { error: newError } };
     };

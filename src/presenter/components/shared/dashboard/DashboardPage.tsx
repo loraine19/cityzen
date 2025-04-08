@@ -16,12 +16,10 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { ElementNotif } from "../../../../domain/entities/Notif";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { useAlertStore } from "../../../../application/stores/alert.store";
-import { useAlertStore } from "../../../../application/stores/alert.store";
 
 export default function DashboardPage() {
     const { user, fetchUser } = useUserStore((state) => state);
     const { unReadMsgNotif, unReadNotMessages, fetchNotif } = useNotificationStore((state) => state);
-    const [modo, setModo] = useState(false);
     const [modo, setModo] = useState(false);
 
     useEffect(() => {
@@ -72,18 +70,6 @@ export default function DashboardPage() {
         });
     }, [msg]);
 
-
-    const { setAlertValues, setOpen } = useAlertStore(state => state)
-    useEffect(() => {
-        msg && setOpen(true)
-        setAlertValues({
-            handleConfirm: () => { setOpen(false); window.location.href = '/' },
-            title: "Notification",
-            element: msg || '',
-            disableConfirm: true,
-            confirmString: 'ok',
-        });
-    }, [msg]);
 
 
     return (
@@ -136,12 +122,10 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
-                                            style={modo ? '' : 'cursor-not-allowed'}
-                                            link={modo ? '/conciliation' : ''}
+
                                             style={modo ? '' : 'cursor-not-allowed'}
                                             link={modo ? '/conciliation' : ''}
                                             icon="diversity_3"
-                                            color={modo ? 'red' : 'blue-gray'}
                                             color={modo ? 'red' : 'blue-gray'}
                                             fill bg
                                             size="lg"
