@@ -9,6 +9,7 @@ node_modules
 
 # Ignore .env file
 .env.local
+.env
 
 # Ignore build folder
 dist
