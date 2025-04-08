@@ -28,8 +28,7 @@ jobs:
             - name: Build and push Docker image
               uses: docker/build-push-action@v5
               with:
-                  context: . # Ou le sous-dossier du front-end si monorepo
-                  dockerfile: Dockerfile # Assurez-vous que c'est le nom du Dockerfile du front-end
+                  context: .
                   push: true
                   tags: |
                       lorainep/cityzen:latest
