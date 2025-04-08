@@ -5,6 +5,7 @@ import ModifBtnStack from "../../../common/ModifBtnStack";
 import { FlagView } from "../../../../views/viewsEntities/flagViewEntities";
 import { FlagTarget } from "../../../../../domain/entities/Flag";
 import DI from "../../../../../di/ioc";
+import { Action } from "../../../../../domain/entities/frontEntities";
 
 export function FlagCard(props: { flag: FlagView, update: () => void }) {
     const { targetId, createdAt, target, targetS, element, reasonS } = props.flag
@@ -12,9 +13,9 @@ export function FlagCard(props: { flag: FlagView, update: () => void }) {
     const navigate = useNavigate();
     const deleteFlag = (targetId: number, target: FlagTarget) => DI.resolve('deleteFlagUseCase').execute(targetId, target)
 
-    const MyActions = [
+    const MyActions: Action[] = [
         {
-            icon: 'close',
+            iconImage: 'close',
             title: "Confirmer la suppression",
             body: `Confirmer la suppression du signalement ${element?.title}, pour le motif ${reasonS}`,
             function: async () => {
@@ -23,7 +24,7 @@ export function FlagCard(props: { flag: FlagView, update: () => void }) {
             },
         },
         {
-            icon: 'edit',
+            iconImage: 'edit',
             title: "Confirmer la modification",
             body: `Confirmer la modification du signalement ${element?.title}, pour le motif ${reasonS}`,
             function: () => { navigate(`/flag/edit/${targetS}/${targetId}`) },
@@ -71,7 +72,7 @@ export function FlagCard(props: { flag: FlagView, update: () => void }) {
                     fill icon="arrow_circle_right"
                     link={`/${targetS}/${targetId}`}
                     title={`voir les details de ${element?.title}`}
-                    size="4xl px-1" />
+                    size="4xl" />
             </CardFooter>
         </Card>
 

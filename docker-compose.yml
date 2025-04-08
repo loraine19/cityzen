@@ -3,12 +3,13 @@ services:
     container_name: front
     image: lorainep/cityzen:latest
     restart: unless-stopped
-    # volumes:
-    #   - ./project_data:/data
+
     networks :
       - front
+
+    # si build local 
     # env_file:
-    #   - .env
+    # - .env
 
 
 networks:

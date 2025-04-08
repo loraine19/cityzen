@@ -2,29 +2,25 @@ name: Build and Deploy Front-End App
 
 on:
     push:
-        branches: [main] # Ou votre branche principale
+        branches: [main]
 
 jobs:
     build_and_deploy_front:
         runs-on: ubuntu-latest
 
         steps:
-            # 1. Récupérer le code
             - name: Checkout code
               uses: actions/checkout@v4
 
-            # 2. Configurer Docker Buildx
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
 
-            # 3. Se connecter à Docker Hub
             - name: Login to Docker Hub
               uses: docker/login-action@v3
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            # 4. Construire et pousser l'image Docker Front-End
             - name: Build and push Docker image
               uses: docker/build-push-action@v5
               with:
@@ -44,6 +40,5 @@ jobs:
                       VITE_WS_URL=${{ secrets.VITE_WS_URL }}
                       VITE_GROUPID_FAKER=${{ secrets.VITE_GROUPID_FAKER }}
 
-            # 5. Déclencher le webhook Portainer pour le Front-End
             - name: Trigger Portainer Deploy Webhook (Front-End)
               run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_URL }}
