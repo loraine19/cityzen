@@ -26,14 +26,15 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
           <div className="relative flex justify-between h-max w-full">
             <Typography
               variant="small"
-              className="text-blue-gray-600 font-normal line-clamp-1">
-              {userGroups.length > 1 ? 'Vos groupes et rôles' : 'votre groupe et rôle'} :
-              <span > {userGroups.length > 1 ?
-                userGroups.map((groupUser) => groupUser?.Group?.name).join(', ') :
-                'enregistrer votre adresse dans votre profile pour pouvoir rejoindre des groupes'}
+              className={`${userGroups.length > 0 ? "text-blue-gray-600 font-normal" : 'text-red-500'}`}>
+              <span className="line-clamp-1" >{userGroups.length > 0
+                ? (userGroups.length > 1 ?
+                  `Vos groupes et rôles` : `votre groupe et rôle`) +
+                ` : ${userGroups.map((group: GroupUser) => group.Group.name).join(', ')} ` :
+                'Vous devez choisir un groupe'}
               </span>
             </Typography>
-            <div className="h-5 w-5 mr-2">
+            <div className="h-5 w-5 mr-1">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="grey">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd">
                 </path>
@@ -44,7 +45,9 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
         <MenuList className="w-respLarge border-[1px] bg-transparent !-ml-6 shadow-none border-none ">
           <div className="bg-white divide-y-[1px] p-4 shadow-lg rounded-xl border-[1px] border-blue-gray-50">
             {groups.length > 0 ? groups.map((group: Group) =>
-              <ListItem className="p-0">
+              <ListItem
+                key={group.id}
+                className="p-0">
                 <label
                   htmlFor={group.id.toString()}
                   className="flex w-full cursor-pointer items-center px-3 py-2"
@@ -52,16 +55,17 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
                   <ListItemPrefix className="mr-3">
                     <Checkbox
                       color="cyan"
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onChange={() => {
                         if (userGroups.find((groupUser: GroupUser) => groupUser.groupId === group.id)) {
                           setUserGroups(userGroups.filter((groupUser: GroupUser) => groupUser.groupId !== group.id));
                         } else {
-                          setUserGroups([...userGroups,
-                          new GroupUser({ groupId: group.id, Group: group, role: Role.MEMBER })]);
+                          const newGroupUser = new GroupUser({ groupId: group.id, Group: group, role: Role.MEMBER });
+                          userGroups.push(newGroupUser);
+                          setUserGroups([...userGroups]);
                         }
                         console.log(userGroups);
                       }}
+                      onClick={(e) => e.stopPropagation()}
                       id={group.id.toString()}
                       checked={userGroups.find((groupU: GroupUser) => groupU.groupId === group.id) ? true : false}
                       ripple={false}
