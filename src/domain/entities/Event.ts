@@ -31,6 +31,7 @@ export class Event {
     title: string = '';
     updatedAt: Date = new Date();
     userId: number = 0;
+    status: EventStatus = EventStatus.PENDING;
     constructor(init?: Partial<Event>) {
         if (init) {
             Object.keys(init).forEach(key => {
@@ -50,4 +51,10 @@ export enum EventFilter {
     MINE = 'MINE',
     IGO = 'IGO',
     VALIDATED = 'VALIDATE'
+}
+
+export enum EventStatus {
+    PENDING = 'PENDING',
+    VALIDATED = 'VALIDATED',
+    REJECTED = 'REJECTED'
 }

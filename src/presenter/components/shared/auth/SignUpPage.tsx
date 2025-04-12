@@ -59,6 +59,7 @@ export default function SignUpPage() {
                     popOverClass="font-light underline underline-offset-8 text-start "
                     submitText="S'enregistrer"
                     confirm
+                    checkbox
                     formik={formik}
                     hidden={hidden}
                 />

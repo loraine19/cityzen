@@ -23,12 +23,10 @@ export default function DashboardPage() {
     const [modo, setModo] = useState(false);
 
     useEffect(() => {
-        if (user.GroupUser && user?.GroupUser[0]?.role === Role.MODO) setModo(true)
-        if (user.GroupUser && user?.GroupUser[0]?.role === Role.MODO) setModo(true)
+        if (user.GroupUser && user?.GroupUser.map((g) => g.role === Role.MODO)) setModo(true)
         async () => {
             if (!user || !user.Profile) await fetchUser()
-            if (user.GroupUser && user?.GroupUser[0]?.role === Role.MODO) setModo(true)
-            if (user.GroupUser && user?.GroupUser[0]?.role === Role.MODO) setModo(true)
+            if (user.GroupUser && user?.GroupUser.map((g) => g.role === Role.MODO)) setModo(true)
             await fetchNotif()
         }
     }, [])
@@ -122,7 +120,6 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
-
                                             style={modo ? '' : 'cursor-not-allowed'}
                                             link={modo ? '/conciliation' : ''}
                                             icon="diversity_3"
@@ -131,7 +128,7 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page conciliation" />
                                         <Icon
-                                            link="/"
+                                            link="/reglement"
                                             icon="two_pager"
                                             color='green' fill bg
                                             size="lg"

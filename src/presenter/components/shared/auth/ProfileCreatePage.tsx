@@ -16,6 +16,8 @@ import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { Address } from '../../../../domain/entities/Address';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { ProfileDiv } from '../../common/ProfilDiv';
+import { GroupUser } from '../../../../domain/entities/GroupUser';
+import { GroupUserDTO } from '../../../../infrastructure/DTOs/GroupUserDTO';
 
 export default function ProfileCreatePage() {
     const { setUserProfile, setUser } = useUserStore()
@@ -25,7 +27,6 @@ export default function ProfileCreatePage() {
     const [address, setAddress] = useState<AddressDTO>(new AddressDTO())
     const [mailSub, setMailSub] = useState<string>(MailSubscriptions.SUB_1 as string)
     const [open, setOpen] = useState(false);
-    const [imModo, setImModo] = useState<boolean>(false)
     const postProfile = async (data: ProfileDTO) => await DI.resolve('postProfileUseCase').execute(data, address)
 
     useEffect(() => {
@@ -53,28 +54,26 @@ export default function ProfileCreatePage() {
             setOpen(true)
         }
     })
-
-    const goupId = import.meta.env.VITE_GOUPID_FAKER || 1
+    const [userGroups, setUserGroups] = useState<GroupUser[]>(user.GroupUser)
     const post = async () => {
         const { ...rest } = formik.values;
         const updateData = { ...rest }
         let updated: any = await postProfile(updateData)
-        console.log(62, updated)
-
-
-
-        if (imModo) {
-            const groupUser = await DI.resolve('updateRoleUseCase').execute(imModo, goupId)
-            if (groupUser) {
-                setUser({ ...user, GroupUser: [groupUser] })
-            }
-        }
         if (updated) {
             setUserProfile(updated as Profile)
             navigate("/");
             setOpen(false)
+            if (userGroups) {
+                const dto = userGroups.map((group: GroupUser) => { new GroupUserDTO(group) })
+                const groupUserUpdated = await DI.resolve('updateAllRoleUseCase').execute(dto);
+                if (groupUserUpdated) {
+                    setUser({ ...user, GroupUser: [groupUserUpdated] })
+                }
+            }
         }
+
     }
+
 
     useEffect(() => { formik.values.Address = address as Address }, [address])
     return (
@@ -101,8 +100,8 @@ export default function ProfileCreatePage() {
             {!user || user.Profile ?
                 <Skeleton /> :
                 <ProfileForm
-                    ImModo={imModo}
-                    setImModo={setImModo}
+                    setUserGroups={setUserGroups}
+                    userGroups={userGroups}
                     formik={formik}
                     setAssistance={setAssistance}
                     setAddress={setAddress}

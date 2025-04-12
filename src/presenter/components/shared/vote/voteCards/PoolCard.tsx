@@ -103,7 +103,6 @@ export function PoolCard({
                                 className="GrayChip px-3.5"
                                 icon={
                                     <Icon
-
                                         icon="smart_card_reader"
                                         fill={pool?.IVoted}
                                         color={color()}

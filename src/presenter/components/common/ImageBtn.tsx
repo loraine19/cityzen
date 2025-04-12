@@ -27,7 +27,7 @@ export const ImageBtn = (props: { formik: any; setImgBlob: any; imgDef?: string;
             <Button className="!shadow-md w-10 h-10 rounded-full px-0" ripple={false}>
                 <label htmlFor="image" className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
                     <Icon
-                        icon={formik.values.image !== "" ? "edit" : "add_a_photo"}
+                        icon={formik?.values?.image !== "" ? "edit" : "add_a_photo"}
                         color="white"
                         size="2xl"
                         style="rounded-full shadow"
@@ -70,7 +70,7 @@ export const ImageBtn = (props: { formik: any; setImgBlob: any; imgDef?: string;
                     formik.values.blob = "";
                     setImgBlob(imgDef || "");
                 }}
-                style={(formik.values.image === "" || formik.values.image === imgDef) ?
+                style={(formik?.values?.image === "" || formik?.values?.image === imgDef) ?
                     "hidden" :
                     "absolute -left-2 !px-1 !py-0 bottom-0 z-30 !shadow-none"}
             />

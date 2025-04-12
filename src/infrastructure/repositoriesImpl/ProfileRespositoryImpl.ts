@@ -2,6 +2,7 @@
 import { GroupUser } from "../../domain/entities/GroupUser";
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
 import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
+import { GroupUserDTO } from "../DTOs/GroupUserDTO";
 import { ApiServiceI } from "../providers/http/apiService";
 
 interface IData extends ProfileRepositoryBase {
@@ -23,6 +24,10 @@ export class ProfileRepositoryImpl implements ProfileRepositoryBase {
 
     async updateProfile(data: ProfileDTO): Promise<Profile> {
         return this.profileData.updateProfile(data);
+    }
+
+    async updateAllRole(data: GroupUserDTO[]): Promise<GroupUser> {
+        return this.profileData.updateAllRole(data);
     }
 
     async updateRole(modo: boolean, groupId: number): Promise<GroupUser> {

@@ -1,7 +1,6 @@
 
-
 describe('SignUp process with mail activation', () => {
-  const baseUrl = Cypress.config('baseUrl') as unknown as string;
+  const baseUrl = 'http://localhost:5173';
   const signUp = `${baseUrl}/signup`;
   const email = 'cityzen_tester@imagindev.com';
   const password = 'passwordtest';

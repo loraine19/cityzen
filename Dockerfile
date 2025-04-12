@@ -1,4 +1,4 @@
-FROM node:20-alpine AS build
+FROM node:slim AS build
 
 # Passer les variables VITE_* via les secrets GitHub
 ARG VITE_FETCH_URL
@@ -6,7 +6,6 @@ ARG VITE_APP_URL
 ARG VITE_STORE_KEY
 ARG VITE_DOMAIN
 ARG VITE_WS_URL
-ARG VITE_GROUPID_FAKER
 
 WORKDIR /app
 
@@ -18,7 +17,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:slim
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

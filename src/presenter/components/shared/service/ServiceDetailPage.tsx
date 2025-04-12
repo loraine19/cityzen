@@ -153,7 +153,9 @@ export default function ServiceDetailPage() {
 
 
     return (
-        <div className="Body cyan">
+        <div
+            data-cy="body-details-service"
+            className="Body cyan">
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader type={`${typeS} de service ${categoryS}`} closeBtn />

@@ -7,7 +7,7 @@ import Cookies from "js-cookie"
 export const errorValues: AlertValues = {
 
     handleConfirm: () => { window.location.replace('/') },
-    title: 'Désolé, Une erreur s\'est produite',
+    title: 'Vous êtes inactif ou Une erreur s\'est produite',
     element: <div className="items-center text-center pb-8 flex flex-col gap-4">
         <Typography
             variant="h6"
@@ -25,7 +25,7 @@ export const errorValues: AlertValues = {
             onClick={() => window.location.reload()} />
         <Typography
             color="blue-gray">
-            Si le problème persiste, vous pouvez retourner à la page d'accueil<br></br>
+            Si la page de charge pas, vous pouvez retourner à la page d'accueil<br></br>
             ou vous pouvez vous re-connecter
         </Typography>
 

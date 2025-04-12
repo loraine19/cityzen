@@ -15,6 +15,7 @@ import { ServiceType } from "../../../../../domain/entities/Service";
 export function ServiceForm(props: { formik: any }) {
     const { formik } = props;
     const { user } = useUserStore();
+    // DEBUT LOGIQUE CALCUL POUR CHAMPS POINTS ds form
     const [points, setPoints] = useState<string>(formik.values.points?.join(' à ') || '0 à 1');
 
     useEffect(() => {
@@ -22,7 +23,7 @@ export function ServiceForm(props: { formik: any }) {
         formik.setValues(updatedValues);
         setPoints(updatedValues.points?.join(' à ') || '0 à 1');
     }, [formik.values.hard, formik.values.skill, formik.values.type]);
-
+    // FIN LOGIQUE
 
     const userProfile: Profile = user.Profile;
     const start = formik.values.createdAt || new Date()
@@ -85,7 +86,7 @@ export function ServiceForm(props: { formik: any }) {
                         </Select>
                     </div>
                 </header>
-                <main className={`flex flex-1 pb-1 ' ${haveImage && "pt-[2rem]"}`}>
+                <main className={`flex flex-1 pb-1 pt-2 ' ${haveImage && "pt-[2rem]"}`}>
                     <Card className="w-respLarge FixCard">
                         <CardHeader
                             className={formik.values.image ?
@@ -104,7 +105,7 @@ export function ServiceForm(props: { formik: any }) {
                                 formik={formik}
                                 setImgBlob={setImgBlob} />
                             <img
-                                src={imgBlob || formik.values.image || '../../../../public/image/load.gif'}
+                                src={imgBlob || formik.values.image || './image/load.gif'}
                                 alt={formik.values.title || 'image'}
                                 width={100}
                                 height={100}
@@ -227,13 +228,14 @@ export function ServiceForm(props: { formik: any }) {
                 </main>
                 <footer className="CTA">
                     <Button
+                        color='cyan'
                         size='lg'
                         type="submit"
                         disabled={formik.values.statusValue > 0}
                         className="lgBtn">
                         <Icon
-                            style={formik.values.statusValue <= 0 ? 'hidden' : ''}
-                            icon="block"
+                            color="white"
+                            icon={formik.values.statusValue <= 0 ? 'save' : 'block'}
                         />
                         {formik.values.statusValue > 0 ? 'Non modifiable : ' + formik.values.statusS : `enregistrer`}
                     </Button>

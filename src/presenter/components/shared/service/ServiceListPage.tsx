@@ -88,6 +88,7 @@ export default function ServicesPage() {
         setCustomFilter(false);
         const value = searchLabel.value;
         const label = searchLabel.label;
+        console.log(searchLabel);
         if (value) {
             setCategory(value);
             setParams({ search: tabSelected, category: value });
@@ -95,15 +96,19 @@ export default function ServicesPage() {
         else if (label !== 'tous') {
             setCustomFilter(true);
             setCustomList(services && services.filter((service: ServiceView) =>
-                service.category.toString() === value ||
+                service.category.toString() === (value) ||
+                service.categoryS.includes(label) ||
+                service.typeS.includes(label) ||
                 service.title.toLowerCase().includes(label.toLowerCase()) ||
-                service.description.toLowerCase().includes(label.toLowerCase())
+                service.description.toLowerCase().includes(label.toLowerCase()) ||
+                service.User.Profile.firstName.toLowerCase().includes(label.toLowerCase())
             ))
         }
     };
 
     useEffect(() => {
         !isLoading && setNotif(count > 0 ? '' : `Aucun service ${tabSelected} ${category !== '' && category ? ' ' + searchCat.label.toLowerCase() : ''} n'a été trouvé`);
+        !error && setNotif('erreur de chargement des services');
     }, [services]);
 
     useEffect(() => {

@@ -30,7 +30,7 @@ import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
 import { GetNotifUseCase, ReadAllNotifUseCase, ReadNotifUseCase } from '../application/useCases/notif.usecase';
 import { ToogleParticipantUseCase } from '../application/useCases/participants.useCase';
-import { PostProfileUseCase, UpdateProfileUseCase, UpdateRoleUseCase } from '../application/useCases/profile.useCase';
+import { PostProfileUseCase, UpdateAllRoleUseCase, UpdateProfileUseCase, UpdateRoleUseCase } from '../application/useCases/profile.useCase';
 import { notifMapViewModel, notifViewModel } from '../presenter/views/notifViewModel';
 import { cryptedStorage } from '../infrastructure/services/storageService';
 import { FlagApi } from '../infrastructure/providers/http/flagApi';
@@ -64,6 +64,9 @@ import SocketService from '../infrastructure/providers/http/socketService';
 import { AlertStoreRepositoryImpl } from '../infrastructure/repositoriesImpl/AlertStoreRespositoryImpl';
 import { AlertStoreFunctions } from '../infrastructure/adaptaters/alertStoreFunctions';
 import { ErrorService } from '../infrastructure/services/errorService';
+import { GroupRepositoryImpl } from '../infrastructure/repositoriesImpl/GroupRespositoryImpl';
+import { GroupApi } from '../infrastructure/providers/http/groupApi';
+import { GetNearestGroupsUseCase } from '../application/useCases/group.usecase';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -114,6 +117,7 @@ container.register({
     profileMeViewModel: asFunction(profileMeViewModel),
     profileData: asClass(ProfileApi),
     updateRoleUseCase: asClass(UpdateRoleUseCase),
+    updateAllRoleUseCase: asClass(UpdateAllRoleUseCase),
 
     ////NOTIFS
     notifViewModel: asFunction(notifViewModel),
@@ -228,6 +232,10 @@ container.register({
     postVoteUseCase: asClass(PostVoteUseCase),
     updateVoteUseCase: asClass(UpdateVoteUseCase),
 
+    ////GROUPES
+    groupRepository: asClass(GroupRepositoryImpl),
+    groupData: asClass(GroupApi),
+    getNearestGroupsUseCase: asClass(GetNearestGroupsUseCase),
 
 
     ////SOCKETS 

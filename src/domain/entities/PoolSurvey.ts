@@ -1,4 +1,5 @@
 import { Flag } from "./Flag";
+import { Group } from "./Group";
 import { User } from "./User";
 import { Vote } from "./Vote";
 
@@ -14,6 +15,9 @@ export class Pool {
     User?: User = {} as User;
     UserBenef?: User = {} as User;
     Votes: Vote[] = [];
+    status: PoolSurveyStatus = PoolSurveyStatus.PENDING;
+    groupId: number = 0;
+    Group: Group = {} as Group;
     constructor(data?: Partial<Pool>) {
         if (data) {
             Object.assign(this, data);
@@ -27,6 +31,7 @@ export class PoolDTO {
     title?: string;
     userId?: number;
     userIdBenef?: number;
+    groupId?: number;
 }
 
 export enum PoolSurveyFilter {
@@ -37,8 +42,15 @@ export enum PoolSurveyFilter {
 
 export enum PoolSurveyStep {
     NEW = 'NEW',
+    REJECTED = 'REJECTED',
     PENDING = 'PENDING',
-    FINISHED = 'FINISHED',
+    VALIDATED = 'VALIDATED'
+}
+
+export enum PoolSurveyStatus {
+    REJECTED = 'REJECTED',
+    PENDING = 'PENDING',
+    VALIDATED = 'VALIDATED'
 }
 
 export type PoolSurveyPage = { poolsSurveys: (Pool | Survey)[], count: number };
@@ -59,6 +71,7 @@ export class SurveyDTO {
     image?: string;
     title?: string;
     category?: SurveyCategory;
+    groupId?: number;
 }
 
 export class Survey {
@@ -73,6 +86,9 @@ export class Survey {
     updatedAt: Date = new Date();
     Votes: Vote[] = []
     Flags: Flag[] = []
+    status: PoolSurveyStatus = PoolSurveyStatus.PENDING;
+    groupId: number = 0;
+    Group: Group = {} as Group;
     constructor(data?: Partial<Survey>) {
         if (data) {
             Object.assign(this, data);

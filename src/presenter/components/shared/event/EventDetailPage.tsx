@@ -56,7 +56,9 @@ export default function EventDetailPage() {
 
 
     return (
-        <div className="Body cyan">
+        <div
+            data-cy="event-details-page"
+            className="Body cyan ">
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader

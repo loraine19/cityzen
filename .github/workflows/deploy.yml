@@ -38,7 +38,6 @@ jobs:
                       VITE_STORE_KEY=${{ secrets.VITE_STORE_KEY }}
                       VITE_DOMAIN=${{ secrets.VITE_DOMAIN }}
                       VITE_WS_URL=${{ secrets.VITE_WS_URL }}
-                      VITE_GROUPID_FAKER=${{ secrets.VITE_GROUPID_FAKER }}
 
             - name: Trigger Portainer Deploy Webhook (Front-End)
               run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_URL }}

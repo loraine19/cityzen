@@ -19,6 +19,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                     <PopoverHandler>
                         <div className={`relative`}>
                             <Avatar
+                                data-cy={`big-avatar-${profile?.firstName}`}
                                 src={profile?.image as string || "/image/person.svg"}
                                 size={size as any}
                                 alt="avatar"
@@ -27,9 +28,9 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
 
                         </div>
                     </PopoverHandler>
-                    <PopoverContent className=" w-72 z-50">
-                        <div className=" flex  gap-6 ">
-                            <div className="mb-2 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
+                    <PopoverContent className=" w-72 z-50 ">
+                        <div className=" flex  gap-6 border-b border-blue-gray-50  pb-2 ">
+                            <div className="mb-2 gap-4 ">
                                 <Icon
                                     color='orange'
                                     fill
@@ -44,7 +45,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                     src={profile?.image as string || "/image/person.svg"}
                                     size="sm"
                                     alt="avatar"
-                                    className="BgUser border-blue-gray-500" />
+                                    className="BgUser  border-blue-gray-500" />
 
                             </div>
                             <div className="flex flex-col pl-2">
@@ -54,13 +55,21 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                 </Typography>
                                 <Typography
                                     variant="small"
-                                    className="font-normal text-blue-gray-500">
-                                    ◦ {profile?.skills}
+                                    className={profile?.skills ? "font-normal text-blue-gray-500" : 'hidden'}>
+                                    • {profile?.skills}
                                 </Typography>
+                                <div
+                                    className="font-normal flex flex-col text-blue-gray-500">
+                                    {user?.GroupUser?.map((group) =>
+                                        <div>{'◦ ' + group.Group?.name}
+                                        </div>)
+
+                                    }
+                                </div>
                             </div>
                         </div>
                         <div
-                            className={`${profile?.addressShared ? '' : 'hover:!event-none'} flex gap-4 relative rounded-2xl !py-0`}>
+                            className={`${profile?.addressShared ? '' : 'hover:!event-none'} flex gap-4 relative rounded-2xl pt-2 `}>
                             <div className="relative flex  pl-1 pr-4">
 
                                 <Icon
@@ -72,7 +81,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                     color={profile?.addressShared ? "cyan" : "gray"} />
 
                                 {profile?.addressShared && profile?.Address &&
-                                    <div className={`absolute -top-4 -right-4 
+                                    <div className={`absolute scale-[0.7] -top-5 -right-1  
                                     ${profile?.addressShared ? 'flex opacity-55' : 'hidden'}`}>
                                         <AddressMapOpen
                                             message={<DistanceCalculator

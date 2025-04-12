@@ -25,6 +25,7 @@ export default function VoteCreatePage() {
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        groupId: string().required("Groupe est obligatoire"),
     })
 
     const formSchemaPool = object({
@@ -32,6 +33,7 @@ export default function VoteCreatePage() {
         userIdBenef: string().required("Le beneficiaire est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        groupId: string().required("Groupe est obligatoire"),
     })
 
 

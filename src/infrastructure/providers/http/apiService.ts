@@ -119,7 +119,6 @@ export class ApiService implements ApiServiceI {
                 break;
             case 404:
                 newError = new NotFoundError();
-                newError = new NotFoundError();
                 break;
             case 409:
                 newError = new ConflictError(message);

@@ -60,7 +60,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     <AlertModal values={{
 
                         handleConfirm: () => { window.location.replace('/') },
-                        title: 'Désolé, Une erreur s\'est produite',
+                        title: 'Oups, Vous êtes inactif ou Une erreur s\'est produite',
                         element: <div className="items-center text-center pb-8 flex flex-col gap-4">
                             <Typography
                                 variant="h6">

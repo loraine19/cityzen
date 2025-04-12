@@ -53,7 +53,7 @@ export default function NavBarTop() {
                 </Menu>
                 <div className="flex flex-col w-full items-start">
                     <Typography variant="h5" color="blue-gray">{firstName}</Typography>
-                    <Typography color="blue-gray" className="-mt-1">Quartier</Typography>
+                    <Typography color="blue-gray" className="-mt-1">{user?.GroupUser?.map((group) => group.Group?.name).join(', ')}</Typography>
                 </div>
             </div>
             <NotifBadge />

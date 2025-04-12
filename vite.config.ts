@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => {
       build: {
         minify: 'terser', // Use Terser for minification
         terserOptions: {
-          keep_fnames: true, // Prevent function names from being mangled
-          keep_classnames: true, // Prevent class names from being mangled
+          keep_fnames: true,
+          keep_classnames: true,
         },
         rollupOptions: {
           output: {
@@ -28,8 +28,11 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 5173,
     },
-
-
+    test: {
+      globals: true, // Pour ne pas avoir à importer describe, it, expect etc.
+      environment: 'jsdom', // IMPORTANT: Pour simuler le DOM
+      setupFiles: './src/setupTests.ts', // Optionnel: Fichier de setup pour @testing-library/jest-dom
+    },
     build: {
       rollupOptions: {
         output: {
@@ -44,7 +47,7 @@ export default defineConfig(({ mode }) => {
           }
         }
       },
-      chunkSizeWarningLimit: 300 // Adjust this value as needed
+      chunkSizeWarningLimit: 500
     },
     cacheDir: '.vite-cache'
   };

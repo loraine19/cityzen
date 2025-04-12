@@ -49,17 +49,15 @@ export enum ServiceCategory {
 
 export class Service {
     id: number = 0;
-    name: string = '';
     description: string = '';
     address: Address = {} as Address;
     userId: number = 0;
     User: User = {} as User;
-    image: string | File = '';
+    image?: string | File = '';
     title: string = '';
     category: ServiceCategory = ServiceCategory.CATEGORY_1;
-    categoryS: any = '';
-    userIdResp: number = 0;
-    UserResp: User = {} as User;
+    userIdResp?: number = 0;
+    UserResp?: User = {} as User;
     type: ServiceType = ServiceType.GET;
     skill: SkillLevel = SkillLevel.LEVEL_0;
     hard: HardLevel = HardLevel.LEVEL_0;

@@ -31,6 +31,7 @@ export function CategoriesSelect(props: categoriesSelectProps) {
             {categoriesArray.map((category: any, key: number) => {
                 return (
                     <Option
+                        data-cy={typeof category === "string" ? category : category.label}
                         className="rounded-full my-1 capitalize "
                         value={typeof category === "string" ? category : category.value}
                         key={key}

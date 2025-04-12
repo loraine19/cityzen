@@ -32,6 +32,6 @@ export const DistanceCalculator: React.FC<DistanceCalculatorProps> = ({ lat1, lo
             lon2
         );
     }
-    const formattedDistance = distance < 1 ? ((distance.toFixed(3) + " m").replace("0.", "")) : (distance.toFixed(2) + " km");
+    const formattedDistance = distance < 1 ? (` à ${(distance * 1000).toFixed(0)} m`) : (`à ${distance.toFixed(2)} km`);
     return formattedDistance;
 }

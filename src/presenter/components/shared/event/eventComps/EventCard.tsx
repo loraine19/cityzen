@@ -35,6 +35,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         <button
                             onClick={change}>
                             <Chip
+                                data-cy={`chip-${label}`}
                                 size='sm'
                                 value={label}
                                 className="rounded-full h-max CyanChip shadow" />
@@ -49,9 +50,9 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         {pourcent > 0 ? (
                             <Progress
                                 value={pourcent}
-                                color={pourcent > 100 ? "green" : "gray"}
+                                color={pourcent >= 100 ? "green" : "gray"}
                                 size="md"
-                                label={pourcent > 100 ? "Validé" : " "} />
+                                label={pourcent >= 100 ? "VALIDÉ" : " "} />
                         ) : (
                             <div className="flex flex-1 bg-white/70 rounded-full h-max items-center justify-center">
                                 <Typography
@@ -103,6 +104,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                 )}
                 <div className="flex items-center gap-2">
                     <button
+                        data-cy='btn-participate'
                         onClick={async () => {
                             const event = toogleParticipate && await toogleParticipate();
                             setEvent(event);

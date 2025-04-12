@@ -1,5 +1,6 @@
 import { GroupUser } from "../../../domain/entities/GroupUser";
 import { Profile, ProfileDTO } from "../../../domain/entities/Profile";
+import { GroupUserDTO } from "../../DTOs/GroupUserDTO";
 import { ApiService, ApiServiceI } from "./apiService";
 
 
@@ -39,6 +40,9 @@ export class ProfileApi {
         });
     }
 
+    async updateAllRole(data: GroupUserDTO): Promise<GroupUser> {
+        return this.api.patch(`group-users`, data)
+    }
     async updateRole(modo: boolean, groupId: number): Promise<GroupUser> {
         const data = { modo }
         return this.api.put(`group-users/${groupId}`, data)

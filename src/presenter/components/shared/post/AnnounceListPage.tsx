@@ -116,7 +116,7 @@ export default function AnnounceListPage() {
                         icon={view === "list" ? "list" : "dashboard"}
                         onClick={switchClick}
                         size="3xl"
-                        style="mt-1"
+                        style="mt-1 hidden md:flex"
                     />
                 </div>
                 {notif &&

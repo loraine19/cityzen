@@ -5,7 +5,7 @@ import { User } from "../entities/User";
 export abstract class UserRepositoryBase {
     abstract getUserMe(): Promise<User>;
     abstract getUserById(id: number): Promise<User>;
-    abstract getUsers(): Promise<User[]>;
+    abstract getUsers(groupId: number): Promise<User[]>;
     abstract getUsersModos(): Promise<User[]>;
     abstract getUserCount(): Promise<number>;
     abstract updateUser(dataDTO: UserDTO): Promise<User>;

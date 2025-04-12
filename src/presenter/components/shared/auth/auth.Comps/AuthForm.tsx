@@ -11,7 +11,8 @@ type AuthFormProps = {
     popOverButtonText: string;
     popOverClass: string;
     submitText: string;
-    confirm: boolean;
+    confirm?: boolean;
+    checkbox?: boolean;
     formik: FormikProps<any>;
     hidden?: boolean;
     inError?: boolean;
@@ -25,6 +26,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     popOverClass,
     submitText,
     confirm,
+    checkbox,
     formik,
     hidden = false,
     inError = false
@@ -111,7 +113,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                         <Typography className='text-xs error'>
                             {typeof formik.errors.checkbox === 'string' && formik.errors.checkbox}
                         </Typography>
-                        <div className=" flex  justify-center items-center  ">
+                        <div className={`${!checkbox ? "hidden" : "flex justify-center items-center"} `}>
                             <Checkbox
                                 data-cy="terms-checkbox"
                                 type="checkbox"

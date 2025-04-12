@@ -83,7 +83,9 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                     <ProfileDiv profile={author} />
                     <div className="flex items-center gap-2">
                         <AvatarStack avatarDatas={Participants} />
-                        <button onClick={async () => { toogleParticipate && await toogleParticipate() && refetch && refetch() }}>
+                        <button
+                            data-cy='btn-participate'
+                            onClick={async () => { toogleParticipate && await toogleParticipate() && refetch && refetch() }}>
                             <Chip
                                 value={participantsMin}
                                 variant="ghost"

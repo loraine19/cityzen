@@ -8,8 +8,8 @@ export const LoadingPage = () => {
     const path = window.location.pathname
     let bodyColor = 'defaultColor';
     switch (path.split('/')[1]) {
-        case 'evenement': case 'groupe': case 'profil': bodyColor = 'cyan'; break;
-        case 'annonce': case 'sondage': case 'cagnotte': case 'litige': bodyColor = 'orange'; break;
+        case 'service': case 'evenement': case 'groupe': case 'profil': bodyColor = 'cyan'; break;
+        case 'vote': case 'annonce': case 'sondage': case 'cagnotte': case 'litige': bodyColor = 'orange'; break;
         default: bodyColor = 'gray'; break;
     }
 

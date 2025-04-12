@@ -1,6 +1,7 @@
 import { GroupUser } from "../../domain/entities/GroupUser";
 import { Profile, ProfileDTO } from "../../domain/entities/Profile";
 import { ProfileRepositoryBase } from "../../domain/repositoriesBase/ProfileRepositoryBase";
+import { GroupUserDTO } from "../../infrastructure/DTOs/GroupUserDTO";
 
 export class GetProfileMeUseCase {
     private profileRepository: ProfileRepositoryBase;
@@ -39,6 +40,18 @@ export class UpdateProfileUseCase {
     }
 }
 
+export class UpdateAllRoleUseCase {
+
+    private profileRepository: ProfileRepositoryBase;
+    constructor({ profileRepository }: { profileRepository: ProfileRepositoryBase }) {
+        this.profileRepository = profileRepository;
+    }
+
+    public async execute(data: GroupUserDTO[]): Promise<GroupUser> {
+        return this.profileRepository.updateAllRole(data);
+    }
+
+}
 export class UpdateRoleUseCase {
 
     private profileRepository: ProfileRepositoryBase;

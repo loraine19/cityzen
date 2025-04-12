@@ -12,11 +12,13 @@ import { Icon } from "../../../common/IconComp";
 import { PathElement } from "../../../../constants";
 import React from 'react';
 import { IssueStep } from '../../../../../domain/entities/Issue';
+import { User } from "../../../../../domain/entities/User";
 
 type IssueCardProps = { issue: IssueView, mines?: boolean, change: (e: any) => void, update?: () => void }
 const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) => {
     const { description, image, createdAt, mine, serviceId, statusS } = issue
-    const Service = new ServiceView(issue?.Service, issue?.Service?.type === ServiceType.GET ? issue?.Service.User : issue?.Service?.UserResp)
+    const userService: User = issue?.Service?.type === ServiceType.GET ? issue?.Service.User : issue?.Service?.UserResp || {} as User
+    const Service = new ServiceView(issue?.Service, userService)
     const haveImage = image ? true : false
     const isLateValue = isLate(createdAt, 15)
     const deleteIssue = async (id: number) => await DI.resolve('deleteIssueUseCase').execute(id);
@@ -44,7 +46,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
         <>
             <Card className={haveImage ? "FixCard  " : "FixCardNoImage"}>
                 <CardHeader
-                    className={haveImage ? "h-full !max-h-[15vh] !mb-0" : "FixCardHeaderNoImage"}
+                    className={haveImage ? "h-full !max-h-[16vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
@@ -82,11 +84,11 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                             icon="arrow_circle_right"
                             link={`/${PathElement.ISSUE}/${serviceId}`}
                             title={`voir les details de concialtion  ${Service.title}`}
-                            size="4xl"
+                            size="3xl"
                             style="absolute top-1 right-0"
                             fill />
                     </div>
-                    <div className="flex flex-col h-full !max-h-[3rem] overflow-auto">
+                    <div className="flex flex-col h-full line-clamp-1  ">
                         <Typography
                             color="blue-gray">
                             {description}

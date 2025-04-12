@@ -21,8 +21,8 @@ export class UserRepositoryImpl implements UserRepositoryBase {
         return this.userData.getUserById(id);
     }
 
-    public async getUsers(): Promise<User[]> {
-        return this.userData.getUsers();
+    public async getUsers(groupId: number): Promise<User[]> {
+        return this.userData.getUsers(groupId);
     }
 
     public async getUsersModos(): Promise<User[]> {

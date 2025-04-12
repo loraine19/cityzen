@@ -13,6 +13,7 @@ export function AvatarStack(props: AvatarStackProps) {
                 <Popover key={index} >
                     <PopoverHandler>
                         <Avatar
+                            data-cy={`avatar-${Participant.User?.Profile?.firstName}`}
                             variant="circular"
                             alt={Participant.User?.Profile?.firstName + " " + Participant.User.Profile?.lastName}
                             className="border-2 border-white hover:z-10 focus:z-10 BgUser"

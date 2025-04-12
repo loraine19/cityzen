@@ -1,5 +1,5 @@
-import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix, Switch } from "@material-tailwind/react";
-import { useState } from "react";
+import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
@@ -8,19 +8,21 @@ import { Label } from "../../../../../domain/entities/frontEntities";
 import { ImageBtn } from "../../../common/ImageBtn";
 import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
+import { CheckboxListGroup } from "../../myInfos/CheckboxListGroup";
+import { Group } from "../../../../../domain/entities/Group";
+import { GroupUser } from "../../../../../domain/entities/GroupUser";
 
 type ProfileFormProps = {
     formik: any,
     setAssistance?: any,
     setAddress?: any,
     setMailSub?: any,
-    ImModo?: boolean,
-    setImModo?: any,
-
+    setUserGroups: any,
+    userGroups: GroupUser[]
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress, ImModo = false, setImModo }) => {
-    const [imgBlob, setImgBlob] = useState<string | Blob>(formik.values.image);
+export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress, setUserGroups, userGroups }) => {
+    const [imgBlob, setImgBlob] = useState<string | Blob>(formik?.values?.image || '../../image/person.svg');
     const { user } = useUserStore()
     const [newSkill, setNewSkill] = useState<string | undefined>()
     const [skillList, setSkillList] = useState<string[]>(formik.values?.skills?.split(',') || [])
@@ -38,6 +40,17 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
         setNewSkill('');
     }
 
+    const groupsNear = async () => await DI.resolve('getNearestGroupsUseCase').execute() as Group[];
+    const [groups, setGroups] = useState<Group[]>([]);
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            const groups = await groupsNear();
+            setGroups([...groups]);
+        };
+        fetchGroups();
+    }, []);
+
     return (
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
             <main className='relative flex flew-1 pt-6 -mt-4'>
@@ -48,12 +61,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                         <ImageBtn
                             setImgBlob={setImgBlob}
                             formik={formik}
-                            imgDef="image/person.svg"
+                            imgDef="../../image/person.svg"
                             className="-ml-20 " />
                         <Avatar
-                            src={imgBlob as string || './image/person.svg'}
-                            alt={formik.values.image || imgBlob ? formik.values.firstName : ''}
-                            className={"shadow-md !BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
+                            src={imgBlob as string || '../../image/person.svg'}
+                            alt={formik.values.firstName ?? 'avatar'}
+                            className={"shadow-md BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
                             <Typography
                                 className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">
@@ -148,24 +161,11 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                                 )
                             })}
                         </Select>
-                        <div className="flex flex-col  gap-1">
-                            <label
-                                htmlFor="modo"
-                                className="text-xs text-blue-gray-500">
-                                {ImModo ? "Je suis conciliateur" : "Je ne suis pas conciliateur"}
-                            </label>
-                            <Switch
-                                onChange={() => setImModo(!ImModo)}
-                                color="cyan"
-                                checked={ImModo}
-                                id="modo"
-                                ripple={false}
-                                className="h-full w-full "
-                                containerProps={{ className: "w-10 h-5" }}
-                                circleProps={{ className: "before:hidden left-0.5 border-none bg-gray-200" }}
-                            />
+                        <CheckboxListGroup
+                            groups={groups}
+                            userGroups={userGroups}
+                            setUserGroups={setUserGroups} />
 
-                        </div>
                         <Input
                             label="Ajouter une compétences"
                             name="skills" value={newSkill}
@@ -175,9 +175,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             icon={<Icon
                                 icon='add'
                                 onClick={addSkill}
-                                style={`py-1 !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'
-                                    }`
-                                } />} />
+                                style={`py-1 !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'}`} />}
+                        />
 
                         <List className='flex  p-0'>
                             <Typography className='text-xs'>Liste des compétences</Typography>

@@ -103,7 +103,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         ref={divRef}>
                         <Menu placement="bottom-end" >
                             <MenuHandler title="Notifications">
-                                <span className={`${list.count === 0 ? 'hidden' : ''} ${`text-white absolute flex font-medium items-center justify-center w-[1.35rem] h-[1.35rem] text-[0.75rem] pt-1 pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2 shadow z-50`}`}>
+                                <span className={`${!list.count || list.count === 0 ? 'hidden' : `text-white absolute flex font-medium items-center justify-center w-[1.35rem] h-[1.35rem] text-[0.75rem] pt-1 pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2 shadow z-50`}`}>
                                     {list.count >= 99 ? ' 99⁺' :
                                         (list.count ? list.count.toString() : '0')}
                                 </span>

@@ -12,8 +12,6 @@ export class GetUserMeUseCase {
     public async execute(): Promise<User> {
         return this.userRepository.getUserMe();
     }
-
-
 }
 
 export class GetUserByIdUseCase {
@@ -26,8 +24,6 @@ export class GetUserByIdUseCase {
     public async execute(id: number): Promise<User> {
         return this.userRepository.getUserById(id);
     }
-
-
 }
 
 export class GetUserCountUseCase {
@@ -40,8 +36,6 @@ export class GetUserCountUseCase {
     public async execute(): Promise<number> {
         return this.userRepository.getUserCount();
     }
-
-
 }
 
 
@@ -52,8 +46,8 @@ export class GetUsersUseCase {
         this.userRepository = userRepository;
     }
 
-    public async execute(): Promise<User[]> {
-        return this.userRepository.getUsers()
+    public async execute(groupId: number): Promise<User[]> {
+        return this.userRepository.getUsers(groupId)
     }
 }
 

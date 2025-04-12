@@ -34,7 +34,7 @@ export default function VoteListPage() {
         setFilter(params.filter || '')
     }, []);
 
-    const boxArray = ["nouveau", "en attente", "terminé"];
+    const boxArray = ["nouveau", "en attente", "validé", "rejeté"];
     const filterName = (): string => {
         switch (filter) {
             case PoolSurveyFilter.MINE: return 'les miens';
@@ -49,7 +49,9 @@ export default function VoteListPage() {
         let steps = [];
         boxSelected.includes(boxArray[0]) && steps.push(PoolSurveyStep.NEW);
         boxSelected.includes(boxArray[1]) && steps.push(PoolSurveyStep.PENDING);
-        boxSelected.includes(boxArray[2]) && steps.push(PoolSurveyStep.FINISHED);
+        boxSelected.includes(boxArray[2]) && steps.push(PoolSurveyStep.VALIDATED);
+        boxSelected.includes(boxArray[3]) && steps.push(PoolSurveyStep.REJECTED);
+
         if (boxSelected.length === 0) {
             setStep('');
         }

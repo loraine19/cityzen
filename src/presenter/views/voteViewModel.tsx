@@ -5,7 +5,6 @@ import { PoolSurveyView } from './viewsEntities/poolSurveyViewEntity';
 
 export const voteViewModel = () => {
   return (filter: string, step: string) => {
-
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
       refetchOnWindowFocus: false,
@@ -30,7 +29,7 @@ export const voteViewModel = () => {
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
 
     const flat = data?.pages.flat().map(page => page.poolsSurveys).flat()
-    const poolsSurveys = userLoading || isLoading || userCountLoading ? [] : flat?.map((base: Pool | Survey) => new PoolSurveyView(base, user, userCount))
+    const poolsSurveys = userLoading || isLoading || userCountLoading || !flat ? [] : flat?.map((base: Pool | Survey) => new PoolSurveyView(base, user, userCount))
     console.log(flat, poolsSurveys)
 
     return {

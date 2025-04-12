@@ -44,10 +44,11 @@ describe('SignUp process with mail activation', () => {
     cy.contains(waitedMailSubject).click();
     cy.wait(2000);
     cy.get('iframe[name="messagecontframe"]').then(($iframe) => {
-      const $body = $iframe.contents().find('body');
-      cy.wrap($body).find('a#v1activation-link', { timeout: 8000 }).should('be.visible').then(($link) => {
-        activationLink = $link.attr('href') as string;
-      })
+      cy.wrap($iframe).its('0.contentDocument.body').should('not.be.empty').then(cy.wrap).within(() => {
+        cy.get('a#v1activation-link', { timeout: 8000 }).should('be.visible').then(($link) => {
+          activationLink = $link.attr('href') as string;
+        });
+      });
     });
     cy.get('a.logout').click();
     cy.wait(2000);

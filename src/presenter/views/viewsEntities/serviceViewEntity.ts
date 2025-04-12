@@ -36,14 +36,15 @@ export class ServiceView extends Service {
         const userP = user ? user : service.User?.Profile
         const hard = parseInt(HardLevel[service?.hard as unknown as keyof typeof HardLevel]) || parseInt(HardLevel.LEVEL_0)
         const skill = parseInt(SkillLevel[service?.skill as unknown as keyof typeof SkillLevel]) || parseInt(SkillLevel.LEVEL_0)
-        const userPoints = parseInt(AssistanceLevel[userP.assistance as keyof typeof AssistanceLevel])
+        const userPoints = parseInt(AssistanceLevel[userP.assistance as keyof typeof AssistanceLevel]) || 0
         const userRespPoints: number = userResp ? parseInt(AssistanceLevel[userResp.assistance as keyof typeof AssistanceLevel]) : 0
         const base = Number(((hard / 2 + skill / 2) + 1).toFixed(1))
         const points =
             userResp ?
                 [base + userRespPoints / 2] :
                 ServiceType[service?.type as string as keyof typeof ServiceType] === ServiceType.DO ?
-                    [base + userPoints / 2] : [base, (base + 1.5)]
+                    [base + userPoints / 2] :
+                    [base, (base + 2)]
         return points
     }
 

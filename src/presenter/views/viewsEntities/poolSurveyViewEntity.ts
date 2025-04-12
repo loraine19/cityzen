@@ -1,6 +1,6 @@
 //src/infrastructure/services/serviceService.ts
 import { User } from "../../../domain/entities/User";
-import { Pool, Survey, SurveyCategory } from "../../../domain/entities/PoolSurvey";
+import { Pool, PoolSurveyStatus, Survey, SurveyCategory } from "../../../domain/entities/PoolSurvey";
 import { Vote, VoteOpinion, VoteTarget } from "../../../domain/entities/Vote";
 import { Flag } from "../../../domain/entities/Flag";
 
@@ -43,7 +43,7 @@ export class PoolSurveyView {
         }
         this.mine = base.userId === user?.id || false;
         this.pourcent = Math.round(base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length / (userCount / 2) * 100);
-        this.needed = Math.round(userCount / 2) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length;
+        this.needed = base.status === PoolSurveyStatus.PENDING ? Math.round(userCount / 2) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length : 0;
         this.IVoted = base?.Votes?.some(vote => vote.userId === user?.id);
         this.myOpinion = base?.Votes?.find(vote => vote.userId === user?.id)?.opinion || null;
 

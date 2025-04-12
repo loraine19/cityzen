@@ -27,7 +27,7 @@ export default function ConciationListPage() {
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     const user = useUserStore().user
-    const ImModo = (user.GroupUser[0].role === Role.MODO)
+    const ImModo = (user.GroupUser.map(g => g.role).includes(Role.MODO))
 
     useEffect(() => { setFilter(params.filter || '') }, []);
 

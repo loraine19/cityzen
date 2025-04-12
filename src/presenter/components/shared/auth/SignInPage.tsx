@@ -1,7 +1,7 @@
 //src/presenter/components/shared/auth/SignInPage.tsx
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import { AuthForm } from './auth.Comps/AuthForm';
 import { AuthHeader } from './auth.Comps/AuthHeader';
@@ -9,7 +9,6 @@ import { Typography, Button } from '@material-tailwind/react';
 import DI from '../../../../di/ioc';
 import { useUserStore } from '../../../../application/stores/user.store';
 import { AccessDTO, VerifyDTO } from '../../../../infrastructure/DTOs/AuthDTO';
-import { Error } from '../../../../domain/entities/Error';
 
 export default function SignInPage() {
     const [searchParams] = useSearchParams();
@@ -21,6 +20,8 @@ export default function SignInPage() {
 
     const signIn = async (accessData: AccessDTO) => await DI.resolve('signInUseCase').execute(accessData)
     const signInVerify = async (verifyData: VerifyDTO) => await DI.resolve('signInVerifyUseCase').execute(verifyData)
+    const navigate = useNavigate();
+
 
     const formSchema = object({
         email: string().email("Email non valide").required("Email est obligatoire"),
@@ -44,7 +45,6 @@ export default function SignInPage() {
         const verifyData = { email, password, verifyToken: token }
         const authVerify = await signInVerify(verifyData);
         if (authVerify?.user) {
-            // saveToken(authVerify.refreshToken);
             setUser(authVerify.user);
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
             setTimeout(() => { window.location.replace("/profile/create") }, 1000);
@@ -52,7 +52,6 @@ export default function SignInPage() {
             setNotif(authVerify?.error || authVerify?.message || 'Erreur de connexion');
             formik.resetForm();
         }
-
     };
 
     const handleSignIn = async (email: string, password: string) => {
@@ -63,7 +62,9 @@ export default function SignInPage() {
                 //  saveToken(auth.refreshToken);
                 setUser(auth.user);
                 setNotif('Vous êtes connecté, redirection ...');
-                setTimeout(() => { window.location.replace("/") }, 1000);
+                setTimeout(() => { navigate('/') }, 1000);
+
+
             } else {
                 setInError(true);
                 setNotif('Erreur : ' + auth?.message as string || 'Erreur de connexion');
@@ -71,7 +72,7 @@ export default function SignInPage() {
             }
         }
         catch (error: unknown) {
-            const catchError = new Error(error);
+            const catchError = new Error(error as string);
             setInError(true);
             setNotif(catchError?.message as string || 'Erreur de connexion');
         }

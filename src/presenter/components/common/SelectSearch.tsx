@@ -19,9 +19,9 @@ export default function SelectSearch(props: selectSearchProps) {
                         variant="text"
                         color="blue-gray"
                         size="sm"
-                        className="flex items-center  bg-none rounded-full py-1 !px-4"
-                    >
+                        className="flex items-center bg-none rounded-full py-1 !px-4" >
                         <Icon
+                            data-cy="select"
                             icon="arrow_drop_down"
                             size='2xl' />
                     </Button>
@@ -30,11 +30,11 @@ export default function SelectSearch(props: selectSearchProps) {
                     {category.map((label: any, index: number) => {
                         return (
                             <MenuItem
+                                data-cy={label.value}
                                 key={index}
                                 value={label.value}
                                 className="flex items-center gap-2 !text-md"
-                                onClick={() => { setSearchCat(label); search(label) }}
-                            >
+                                onClick={() => { setSearchCat(label); search(label) }} >
                                 {label.label}
                             </MenuItem>
                         );
@@ -42,6 +42,8 @@ export default function SelectSearch(props: selectSearchProps) {
                 </MenuList>
             </Menu>
             <Input
+                onClick={(e) => e.stopPropagation()}
+                data-cy="input-search"
                 type="search"
                 placeholder="Rechercher"
                 className="bg-none border-none"
@@ -53,6 +55,7 @@ export default function SelectSearch(props: selectSearchProps) {
                 onKeyDown={(e) => e.key === 'Enter' && search(searchCat)}
             />
             <Button
+                data-cy="btn-search"
                 ripple={false}
                 variant="text"
                 color="blue-gray"

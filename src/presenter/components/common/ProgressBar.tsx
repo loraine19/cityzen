@@ -15,7 +15,7 @@ export function ProgressBar(props: { value: number, label?: string, size?: Progr
                 <Typography
                     color={value < 1 ? "red" : "blue-gray"}
                     variant={textSize as TypographyProps['variant']} >
-                    {value > 0 ? `Validé à ` : `Pas encore de ${label}`}
+                    {(needed <= 0 && value < 100) ? 'à été validé' : value > 0 ? `Validé à ` : `Pas encore de ${label}`}
                 </Typography>
                 <Typography
                     color='blue-gray'
@@ -30,8 +30,8 @@ export function ProgressBar(props: { value: number, label?: string, size?: Progr
                 </Typography>
             </div>
             <Progress
-                value={value}
-                color={value >= 100 ? "green" : "gray"}
+                value={needed === 0 ? 100 : value}
+                color={(value >= 100 || needed === 0) ? "green" : "gray"}
                 size={size} />
         </div>)
 }

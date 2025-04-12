@@ -10,7 +10,7 @@ export class IssueView extends Issue {
     ImModoOn: boolean = false;
     statusS: string = IssueStep[this.status as keyof typeof IssueStep]
     stepValue: number = parseInt(this.status.toString().replace('STEP_', ''))
-    UserOn: User = {} as User
+    UserOn?: User = {} as User
 
     constructor(issue: Issue, userId: number) {
         super(issue);

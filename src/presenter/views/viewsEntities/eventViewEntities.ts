@@ -1,4 +1,4 @@
-import { Event, EventCategory } from "../../../domain/entities/Event";
+import { Event, EventCategory, EventStatus } from "../../../domain/entities/Event";
 import { Flag } from "../../../domain/entities/Flag";
 import { dayMS } from "../../../domain/entities/frontEntities";
 import DI from "../../../di/ioc";
@@ -29,7 +29,7 @@ export class EventView extends Event {
         this.flagged = event?.Flags ? event?.Flags?.some((flag: Flag) => flag.userId === userId) : false;
         this.agendaLink = this.generateCalendarLink(event);
         this.eventDateInfo = this.eventdateInfo(event);
-        this.isValidate = event?.Participants?.length >= event.participantsMin;
+        this.isValidate = this.status === EventStatus.VALIDATED || event?.Participants?.length >= event.participantsMin;
         this.toogleParticipate = async () => {
             await DI.resolve('toogleParticipantUseCase').execute(event, event.id, userId);
             const updatedEvent = await DI.resolve('getEventByIdUseCase').execute(event.id);

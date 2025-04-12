@@ -11,6 +11,7 @@ import DI from "../../../../../di/ioc";
 import { User } from "../../../../../domain/entities/User";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { Icon } from "../../../common/IconComp";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 type PoolSurveyFormProps = {
     formik: any;
@@ -22,8 +23,11 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
     const end = new Date(new Date().getTime() + (1 * dayMS)).toLocaleDateString('fr-FR')
     const haveImage = (formik.values.image && formik.values.typeS === VoteTarget.SURVEY) ? true : false;
     const [imgBlob, setImgBlob] = useState<string | undefined>(formik.values.image);
-    const getUsers = async () => await DI.resolve('getUsersUseCase').execute();
+
     const [users, setUsers] = useState<User[]>([])
+    const { user } = useUserStore(state => state)
+    const [groupId] = useState<string>(formik.values.groupId || user.GroupUser[0].groupId.toString());
+    const getUsers = async () => await DI.resolve('getUsersUseCase').execute(groupId);
 
     useEffect(() => {
         const fetchUsers = async () => setUsers(await getUsers())
@@ -70,54 +74,75 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 }}
                             />
                         </div>
-                        {type === VoteTarget.SURVEY ?
-                            <Select
-                                className="rounded-full shadow bg-white border-none capitalize"
-                                label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
-                                name={"category"}
-                                labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
-                                value={formik.values.category}
-                                onChange={(val: string | undefined) => {
-                                    formik.setFieldValue('category', val)
-                                    formik.setFieldValue('userIdBenef', '')
-                                    formik.setFieldValue('UserBenef', {} as User)
-                                }} >
-                                {surveyCategories.map((category: Label, index: number) => {
-                                    return (
-                                        <Option
-                                            value={category.value}
-                                            key={index}>
-                                            {category.label}
-                                        </Option>
-                                    )
-                                })}
-                            </Select> :
-                            <Select
-                                className="rounded-full shadow bg-white border-none capitalize"
-                                label={formik.errors.userIdBenef as string ? `Changer le beneficiare` : "Choisir le bénéficiaire"}
-                                name={"userIdBenef"}
-                                labelProps={{ className: `${formik.errors?.userIdBenef && "error"} before:border-none after:border-none ` }}
-                                defaultValue={formik.values?.UserBenef?.id?.toString()}
-                                onChange={(val: string | undefined) => {
-                                    const find = users.find((user: Partial<User>) => user.id === parseInt(val || ''))
+                        <div className="flex  gap-4">
+                            {type === VoteTarget.SURVEY ?
+                                <Select
+                                    className="rounded-full shadow bg-white border-none capitalize"
+                                    label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
+                                    name={"category"}
+                                    labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
+                                    value={formik.values.category}
+                                    onChange={(val: string | undefined) => {
+                                        formik.setFieldValue('category', val)
+                                        formik.setFieldValue('userIdBenef', '')
+                                        formik.setFieldValue('UserBenef', {} as User)
+                                    }} >
+                                    {surveyCategories.map((category: Label, index: number) => {
+                                        return (
+                                            <Option
+                                                value={category.value}
+                                                key={index}>
+                                                {category.label}
+                                            </Option>
+                                        )
+                                    })}
+                                </Select> :
+                                <Select
+                                    className="rounded-full shadow bg-white border-none capitalize"
+                                    label={formik.errors.userIdBenef as string ? `Changer le beneficiare` : "Choisir le bénéficiaire"}
+                                    name={"userIdBenef"}
+                                    labelProps={{ className: `${formik.errors?.userIdBenef && "error"} before:border-none after:border-none ` }}
+                                    defaultValue={formik.values?.UserBenef?.id?.toString()}
+                                    onChange={(val: string | undefined) => {
+                                        const find = users.find((user: Partial<User>) => user.id === parseInt(val || ''))
 
-                                    formik.setFieldValue('UserBenef', find as User)
-                                    formik.setFieldValue('userIdBenef', val)
-                                    formik.setFieldValue('category', '')
+                                        formik.setFieldValue('UserBenef', find as User)
+                                        formik.setFieldValue('userIdBenef', val)
+                                        formik.setFieldValue('category', '')
+                                    }} >
+                                    {users.map((user: Partial<User>, index: number) => {
+                                        return (
+                                            <Option
+                                                className={`${user.id?.toString() === formik.values?.UserBenef?.id.toString() && "bg-orange-100 shadow-md"} rounded-full my-1 capitalize`}
+                                                value={user.id?.toString()}
+                                                key={index}
+                                            >
+                                                {user?.Profile?.firstName} {user?.Profile?.lastName}
+                                            </Option>
+                                        )
+                                    })}
+                                </Select>
+                            }
+                            <Select
+                                className="rounded-full shadow bg-white border-none capitalize"
+                                label={formik.errors.groupId ? formik.errors.groupId as string : "Choisir le groupe"}
+                                name={"groupId"}
+                                labelProps={{ className: `${formik.errors.groupId && "error"} before:border-none after:border-none ` }}
+                                defaultValue={formik.values.groupId?.toString() || user.GroupUser[0]?.Group.id.toString()}
+                                onChange={(val: string | undefined) => {
+                                    formik.setFieldValue('groupId', val)
                                 }} >
-                                {users.map((user: Partial<User>, index: number) => {
+                                {user?.GroupUser?.map((group: any, index: number) => {
                                     return (
                                         <Option
-                                            className={`${user.id?.toString() === formik.values?.UserBenef?.id.toString() && "bg-orange-100 shadow-md"} rounded-full my-1 capitalize`}
-                                            value={user.id?.toString()}
-                                            key={index}
-                                        >
-                                            {user?.Profile?.firstName} {user?.Profile?.lastName}
+                                            value={group.Group.id.toString()}
+                                            key={index}>
+                                            {group.Group.name}
                                         </Option>
                                     )
                                 })}
                             </Select>
-                        }
+                        </div>
                     </div>
                 </header>
                 <main className={`flex flex-1 pb-1 pt-2  ${haveImage && "pt-[2rem]"}`}>
