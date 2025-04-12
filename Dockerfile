@@ -1,4 +1,4 @@
-FROM node:slim AS build
+FROM node:20-alpine AS build
 
 # Passer les variables VITE_* via les secrets GitHub
 ARG VITE_FETCH_URL
@@ -17,7 +17,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:slim
+FROM nginx:node:20-alpine 
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
