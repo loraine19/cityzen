@@ -27,8 +27,8 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
             <Typography
               variant="small"
               className={`${userGroups.length > 0 ? "text-blue-gray-600 font-normal" : 'text-red-500'}`}>
-              <span className="line-clamp-1" >{userGroups.length > 0
-                ? (userGroups.length > 1 ?
+              <span className="line-clamp-1" >{userGroups && userGroups?.length > 0
+                ? (userGroups?.length > 1 ?
                   `Vos groupes et rôles` : `votre groupe et rôle`) +
                 ` : ${userGroups.map((group: GroupUser) => group.Group.name).join(', ')} ` :
                 'Vous devez choisir un groupe'}
