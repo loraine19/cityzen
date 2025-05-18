@@ -13,7 +13,7 @@ import { ProfileDiv } from "../../../common/ProfilDiv";
 type EventCardProps = { EventLoad: EventView, refetch?: () => void, change?: (e: any) => void }
 export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
     const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, } = EventLoad;
-    const author = User?.Profile
+
 
     return (
         <div className="pt-6 pb-1 h-full flex">
@@ -80,7 +80,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter flex justify-between items-center mb-2">
-                    <ProfileDiv profile={author} />
+                    <ProfileDiv profile={User} />
                     <div className="flex items-center gap-2">
                         <AvatarStack avatarDatas={Participants} />
                         <button

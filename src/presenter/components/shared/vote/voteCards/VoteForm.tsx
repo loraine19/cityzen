@@ -172,9 +172,9 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 className={"h-full w-full object-cover"}
                             />
                             }
-                            {formik.values?.UserBenef?.Profile && formik.values?.typeS === VoteTarget.POOL &&
+                            {formik.values?.UserBenef && formik.values?.typeS === VoteTarget.POOL &&
                                 <ProfileDiv
-                                    profile={formik.values?.UserBenef?.Profile} />
+                                    profile={formik.values?.UserBenef} />
                             }
                         </CardHeader>
                         <CardBody className='FixCardBody '>

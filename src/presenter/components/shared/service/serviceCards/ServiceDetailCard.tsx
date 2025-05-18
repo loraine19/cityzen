@@ -15,7 +15,6 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
     const navigate = useNavigate();
     const { id, title, description, IResp, image, createdAt, User, UserResp, mine, categoryS, statusS, hard, skill, flagged, points, typeS } = props.service
     const haveImage = service.image ? true : false
-    const userAuthor = User.Profile
     const isResp = statusS === ServiceStep.STEP_1 ? true : false;
     const isValidated = statusS === ServiceStep.STEP_2 ? true : false;
     const isFinish = statusS === ServiceStep.STEP_3 ? true : false;
@@ -43,7 +42,6 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                 <Chip
                                     size="sm" value={statusS}
                                     className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} shadow rounded-full h-max flex items-center gap-2 font-medium `}>
-
                                 </Chip>
                             </button>
                         </div>
@@ -136,8 +134,8 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">
-                    {userAuthor?.userId !== userId &&
-                        <ProfileDiv profile={userAuthor} />
+                    {User?.id !== userId &&
+                        <ProfileDiv profile={User} />
                     }
                     <div className="flex items-center gap-2">
                         <Typography

@@ -137,7 +137,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                         value={issue?.userIdModoOn?.toString() || '0'} >
                                         <ProfileDiv
                                             size="xs"
-                                            profile={issue?.UserModo?.Profile} />
+                                            profile={issue?.UserModo} />
                                     </Option>}
                             </Select>
                             <Select

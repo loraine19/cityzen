@@ -44,7 +44,7 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
         </MenuHandler>
         <MenuList className="w-respLarge border-[1px] bg-transparent !-ml-6 shadow-none border-none ">
           <div className="bg-white divide-y-[1px] p-4 shadow-lg rounded-xl border-[1px] border-blue-gray-50">
-            {groups.length > 0 ? groups.map((group: Group) =>
+            {groups.map((group: Group) =>
               <ListItem
                 key={group.id}
                 className="p-0">
@@ -111,8 +111,7 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
                       circleProps={{ className: "before:hidden left-0.5 border-none bg-gray-200" }}
                     />
                   </div>}
-              </ListItem>) :
-              <>Enregistrer votre adresse dans votre profile pour pouvoir rejoindre des groupes</>}
+              </ListItem>)}
           </div>
         </MenuList>
       </Menu>

@@ -71,7 +71,7 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                 </CardBody>
                 <CardFooter className="CardFooter mb-2">
                     <ProfileDiv
-                        profile={survey?.User?.Profile} />
+                        profile={survey?.User} />
                     <div className="flex items-center gap-2 ">
                         <button onClick={() => setOpen(true)}>
                             <Chip

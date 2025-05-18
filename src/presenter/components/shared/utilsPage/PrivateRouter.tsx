@@ -1,12 +1,12 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { cryptedCookie } from '../../../../infrastructure/services/cookiService';
+import { useUserStore } from '../../../../application/stores/user.store';
 
 export const PrivateRoute = () => {
-    const cookies = new cryptedCookie()
-    const user = cookies.getItem('user');
-    return user ?
+    const isLoggedIn = useUserStore((state) => state.isLoggedIn);
+
+    return isLoggedIn ?
         <Outlet /> :
-        <Navigate to="/signin?msg=Vous devez vous connecter pour accéder au service" />;
+        <Navigate to="/signin?msg=Vous devez vous connecter pour accéder au service ..." />;
 };
 
 

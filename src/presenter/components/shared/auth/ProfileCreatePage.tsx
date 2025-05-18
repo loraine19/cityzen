@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Typography, } from '@material-tailwind/react';
 import { AuthHeader } from './auth.Comps/AuthHeader'
 import { ProfileForm } from './auth.Comps/ProfileForm';
-import { AssistanceLevel, Profile, ProfileDTO } from '../../../../domain/entities/Profile';
+import { AssistanceLevel, ProfileDTO } from '../../../../domain/entities/Profile';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import DI from '../../../../di/ioc';
 import { useUserStore } from '../../../../application/stores/user.store';
@@ -20,7 +20,7 @@ import { GroupUser } from '../../../../domain/entities/GroupUser';
 import { GroupUserDTO } from '../../../../infrastructure/DTOs/GroupUserDTO';
 
 export default function ProfileCreatePage() {
-    const { setUserProfile, setUser } = useUserStore()
+    const { setUser } = useUserStore()
     const navigate = useNavigate()
     const user: User = useUserStore((state) => state.user);
     const [assistance, setAssistance] = useState<string>(AssistanceLevel.LEVEL_0 as string)
@@ -60,7 +60,7 @@ export default function ProfileCreatePage() {
         const updateData = { ...rest }
         let updated: any = await postProfile(updateData)
         if (updated) {
-            setUserProfile(updated as Profile)
+            setUser({ ...user, Profile: updated })
             navigate("/");
             setOpen(false)
             if (userGroups) {
@@ -71,7 +71,6 @@ export default function ProfileCreatePage() {
                 }
             }
         }
-
     }
 
 
@@ -85,7 +84,7 @@ export default function ProfileCreatePage() {
                 title={"Confirmer la création de votre profil"}
                 element={
                     <ProfileDiv
-                        size='lg' profile={{ userId: user.id, ...formik.values } as Profile} />} />
+                        size='lg' profile={{ id: user.id, ...formik.values } as Partial<User>} />} />
             <div className="w-respLarge flex-col flex justify-between ">
                 <AuthHeader />
                 <div className="flex justify-between items-center pb-3">

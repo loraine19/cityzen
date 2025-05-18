@@ -1,5 +1,4 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, } from "@material-tailwind/react";
-import { Profile } from "../../../../../domain/entities/Profile";
 import { Icon } from "../../../common/IconComp";
 import { dayMS } from "../../../../views/viewsEntities/utilsService";
 import { DateChip } from "../../../common/ChipDate";
@@ -7,6 +6,7 @@ import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEn
 import { ProgressBar } from "../../../common/ProgressBar";
 import { Title } from "../../../common/CardTitle";
 import { ProfileDiv } from "../../../common/ProfilDiv";
+import { User } from "../../../../../domain/entities/User";
 
 type PoolDetailCardProps = { pool: PoolSurveyView, setOpen: (open: boolean) => void }
 
@@ -55,7 +55,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                             {pool?.description}
                         </Typography>
                         <ProfileDiv
-                            profile={pool?.UserBenef?.Profile || {} as Profile}
+                            profile={pool?.UserBenef || {} as Partial<User>}
                             size={'lg'} />
                     </div>
                     <ProgressBar
@@ -67,7 +67,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                 <CardFooter
                     className="CardFooter mb-2">
                     <ProfileDiv
-                        profile={pool.User?.Profile || {} as Profile} />
+                        profile={pool?.User || {} as Partial<User>} />
                     <div className="flex items-center gap-2 ">
                         <button onClick={() => { setOpen(true) }}>
                             <Chip

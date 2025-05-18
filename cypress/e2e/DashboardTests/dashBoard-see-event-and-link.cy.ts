@@ -9,23 +9,24 @@ describe('Sign-in process with correct credentials, redirects to the dashboard, 
     it('Attempts to sign in with correct credentials', () => {
         cy.visit(signInUrl);
         cy.get('input[name="email"]').type(email);
-        cy.wait(1000);
+        cy.wait(500);
         cy.get('input[name="password"]').type(password);
-        cy.wait(1000);
+        cy.wait(500);
         cy.get('button[type="submit"]').click();
         cy.get('[data-cy="dashboard-body"]').should('be.visible');
-        cy.wait(2000);
+        cy.wait(3000);
         cy.get('[data-cy="event-handler"]').first().click();
-        cy.wait(2000);
+        cy.wait(3000);
         cy.get('[data-cy="person"]').click();
-        cy.wait(2000);
+        cy.wait(3000);
         cy.get('[data-cy="calendar_add_on"]', { timeout: 4000 }).should('be.visible').then(($link) => {
             agendaLink = $link.attr('href') || '';
             cy.log(agendaLink);
-            cy.wait(2000);
+            cy.wait(1000);
             expect(agendaLink).to.include(googleUrl);
+            cy.log('The link is valid');
+            cy.wait(5000);
         });
-
 
     })
 })

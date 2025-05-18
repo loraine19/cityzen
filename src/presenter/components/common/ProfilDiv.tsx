@@ -5,9 +5,12 @@ import { DistanceCalculator } from "./CalculatorDistance"
 import { useUserStore } from "../../../application/stores/user.store"
 import AddressMapOpen from "./mapComps/AddressMapOpen"
 import { OnlineDot } from "./onlineDot"
+import { User } from "../../../domain/entities/User"
 
-type ProfileDivProps = { profile: Profile, size?: string }
-export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) => {
+type ProfileDivProps = { profile: Partial<User>, size?: string }
+export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props }) => {
+    const userDiv = props.profile as Partial<User>
+    const profile = userDiv.Profile as Profile
     const textSize = size === "xl" && "h5" || size === "sm" && "h6" || "small"
     const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
     const user = useUserStore(state => state.user)
@@ -25,7 +28,6 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                 alt="avatar"
                                 className="BgUser shadow" />
                             <OnlineDot id={profile?.userId} />
-
                         </div>
                     </PopoverHandler>
                     <PopoverContent className=" w-72 z-50 ">
@@ -60,10 +62,9 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                 </Typography>
                                 <div
                                     className="font-normal flex flex-col text-blue-gray-500">
-                                    {user?.GroupUser?.map((group) =>
+                                    {userDiv?.GroupUser?.map((group) =>
                                         <div>{'◦ ' + group.Group?.name}
                                         </div>)
-
                                     }
                                 </div>
                             </div>
@@ -71,7 +72,6 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                         <div
                             className={`${profile?.addressShared ? '' : 'hover:!event-none'} flex gap-4 relative rounded-2xl pt-2 `}>
                             <div className="relative flex  pl-1 pr-4">
-
                                 <Icon
                                     disabled={profile?.addressShared ? false : true}
                                     icon="person_pin_circle"
@@ -79,7 +79,6 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                     size="4xl"
                                     style={profile?.addressShared ? '!p-0' : 'hover:!event-none'}
                                     color={profile?.addressShared ? "cyan" : "gray"} />
-
                                 {profile?.addressShared && profile?.Address &&
                                     <div className={`absolute scale-[0.7] -top-5 -right-1  
                                     ${profile?.addressShared ? 'flex opacity-55' : 'hidden'}`}>
@@ -90,7 +89,8 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                                 lat2={user.Profile?.Address?.lat}
                                                 lon2={user.Profile?.Address?.lng} /> as any}
                                             address={profile?.Address} />
-                                    </div>}
+                                    </div>
+                                }
                             </div>
                             <DistanceCalculator
                                 lat1={profile?.Address?.lat}
@@ -99,7 +99,6 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ profile, size = 'sm' }) 
                                 lon2={user.Profile?.Address?.lng} />
                             <br></br>
                             {profile?.Address?.city}, {profile?.Address?.zipcode}
-
                         </div>
                     </PopoverContent>
                 </Popover>

@@ -32,6 +32,9 @@ export default function DashboardPage() {
     }, [])
 
 
+    useEffect(() => { !user.Profile && fetchUser() }, [user.Profile])
+
+
     const navigate = useNavigate();
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
@@ -74,15 +77,15 @@ export default function DashboardPage() {
         <>
             <div className="Body gray"
                 data-cy="dashboard-body" >
-                <div className="relative pt-2 pb-5 lg:px-8 pr-4 w-respXl w-full flex lg:justify-center </div>items-center  ">
-                    <div className="flex  w-full justify-center flex-1 items-center  lg:gap-4 gap-2   mr-6">
+                <div className="relative pt-2 pb-5 lg:px-8  w-respXl w-full flex lg:justify-center </div>items-center  ">
+                    <div className="flex w-full  justify-center flex-1 items-center  lg:gap-4 gap-2   pr-10 lg:-mb-2">
                         <img
-                            className="h-14 w-14 lg:h-16 lg:w-16 object-cover object-center"
+                            className="h-14 w-14 lg:h-15 lg:w-15 object-cover object-center"
                             src="../../../image/logo.svg"
                             alt="logo" />
                         <Typography
                             color="blue-gray"
-                            className="font-comfortaa text-[2.5rem] lg:text-[2.8rem] font-bold">City'Zen
+                            className="pt-1 font-comfortaa text-[2.2rem] lg:text-[2.5rem] font-bold">City'Zen
                         </Typography>
                     </div>
                     <div className=" z-50 absolute right-4 top-0 w-full h-full items-start flex justify-between">

@@ -54,7 +54,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                 <CardHeader className='FixCardHeaderNoImage min-h-max  !bg-transparent px-3 pt-2'
                     floated={false}>
                     {newConv ?
-                        <ProfileDiv profile={userRec.Profile} /> :
+                        <ProfileDiv profile={userRec} /> :
                         <Typography
                             variant="h6">
                             {notif}

@@ -1,5 +1,4 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
-import { Profile } from "../../../../../domain/entities/Profile";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { Icon } from "../../../common/IconComp";
 import { Action } from "../../../../../domain/entities/frontEntities";
@@ -17,7 +16,6 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
     const [post, setPost] = useState<PostView>(initialPost);
     const { id, title, description, image, categoryS, createdAt, Likes, User, flagged, ILike, toogleLike } = post
     const haveImage: boolean = post.image ? true : false
-    const Author: Profile = User.Profile
 
     const deletePost = async (id: number) => await DI.resolve('deletePostUseCase').execute(id)
     const myActions: Action[] = GenereMyActions(post, "annonce", deletePost)
@@ -62,7 +60,7 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                 <CardFooter className="CardFooter">
                     {!mines ?
                         <ProfileDiv
-                            profile={Author} /> :
+                            profile={User} /> :
                         <ModifBtnStack
                             actions={myActions}
                             update={update} />}

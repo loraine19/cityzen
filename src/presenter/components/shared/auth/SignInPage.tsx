@@ -39,14 +39,15 @@ export default function SignInPage() {
         },
     });
     const setUser = useUserStore((state) => state.setUser);
+    const setIsLoggedIn = useUserStore((state) => state.setIsLoggedIn);
 
     const handleSignInVerify = async (email: string, password: string, token: string) => {
-
         const verifyData = { email, password, verifyToken: token }
         const authVerify = await signInVerify(verifyData);
         if (authVerify?.user) {
             setUser(authVerify.user);
             setNotif('Votre compte est vérifié et vous êtes connecté, redirection ...');
+            setIsLoggedIn(true)
             setTimeout(() => { window.location.replace("/profile/create") }, 1000);
         } else {
             setNotif(authVerify?.error || authVerify?.message || 'Erreur de connexion');
@@ -59,12 +60,10 @@ export default function SignInPage() {
         try {
             const auth = await signIn(accessData)
             if (auth?.user) {
-                //  saveToken(auth.refreshToken);
                 setUser(auth.user);
                 setNotif('Vous êtes connecté, redirection ...');
+                setIsLoggedIn(true)
                 setTimeout(() => { navigate('/') }, 1000);
-
-
             } else {
                 setInError(true);
                 setNotif('Erreur : ' + auth?.message as string || 'Erreur de connexion');
@@ -76,11 +75,7 @@ export default function SignInPage() {
             setInError(true);
             setNotif(catchError?.message as string || 'Erreur de connexion');
         }
-
-
     }
-
-
 
     const terms = "Vous resterez connecté pour 48h ...";
 

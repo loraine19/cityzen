@@ -70,7 +70,7 @@ export default function IssueDetailPage() {
                         <div className='px-4 mb-1'>
                             <ProfileDiv
                                 size="xs"
-                                profile={modo.Profile} />
+                                profile={modo} />
                         </div>
                     </Option >)
                 }

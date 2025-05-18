@@ -47,8 +47,8 @@ export class EventView extends Event {
     }
 
     private generateCalendarLink(event: Event): string {
-        const start = new Date(event.start).toISOString().replace(/-|:|\.\d\d\d/g, "");
-        const end = new Date(event.end).toISOString().replace(/-|:|\.\d\d\d/g, "");
+        const start = new Date(event?.start).toISOString().replace(/-|:|\.\d\d\d/g, "");
+        const end = new Date(event?.end).toISOString().replace(/-|:|\.\d\d\d/g, "");
         const title = encodeURIComponent(event.title);
         const location = encodeURIComponent(`${event.Address.address} , ${event.Address.zipcode} ${event.Address.city}` || "");
         const details = encodeURIComponent(event.description || "");

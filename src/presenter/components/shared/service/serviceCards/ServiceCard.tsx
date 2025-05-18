@@ -138,7 +138,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                             disabled2={service.statusS !== ServiceStep.STEP_1} />}
                     {!mines &&
                         <ProfileDiv
-                            profile={User.Profile} />
+                            profile={User} />
                     }
                     <div className="flex items-center gap-2">
 
@@ -155,7 +155,6 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                                 size="md"
                                 style="scale-[1.6] !pb-2" />}>
                         </Chip>
-
                         <Icon
                             icon="arrow_circle_right"
                             link={`/service/${id}`}

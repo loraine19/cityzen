@@ -25,5 +25,6 @@ describe('Sign-in process with correct credentials, redirects to the dashboard, 
         cy.get('[data-cy="arrow_circle_right"]').first().click();
         cy.get('[data-cy="body-details-service"]').should('be.visible');
 
+
     })
 })

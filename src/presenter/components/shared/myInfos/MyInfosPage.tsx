@@ -17,9 +17,8 @@ import { useAlertStore } from '../../../../application/stores/alert.store';
 import { ProfileDiv } from '../../common/ProfilDiv';
 import { GroupUserDTO } from '../../../../infrastructure/DTOs/GroupUserDTO';
 
-
 export default function MyInfosPage() {
-    const { setUserProfile, setUser } = useUserStore()
+    const { setUser } = useUserStore()
     const navigate = useNavigate();
     const user: User = useUserStore((state) => state.user);
     const [assistance, setAssistance] = useState<string | undefined>(user.Profile?.assistance)
@@ -48,18 +47,15 @@ export default function MyInfosPage() {
             setAlertValues({ ...updated.error })
         }
         else {
-            setUserProfile(updated)
             navigate("/");
             setOpen(false)
             const dto = userGroups.map((groupUser: GroupUser) => new GroupUserDTO(groupUser))
             const data = await DI.resolve('updateAllRoleUseCase').execute(dto)
-            console.log(data)
-
             if (data.error) {
                 setOpen(false)
                 setAlertValues({ ...data.error })
             }
-            else setUser({ ...user, GroupUser: data })
+            else setUser({ ...user, Profile: updated, GroupUser: data })
         }
     }
 
@@ -81,7 +77,6 @@ export default function MyInfosPage() {
                     <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
                         <ProfileDiv
                             profile={{ ...formik.values, image: formik.values?.blob || formik.values?.image }}
-
                         />
                     </div>
                 )
@@ -91,7 +86,7 @@ export default function MyInfosPage() {
 
 
 
-    useEffect(() => { formik.values.Address = address }, [address])
+    useEffect(() => { address && (formik.values.Address = address) }, [address])
 
     return (
         <div className="Body gray flex">

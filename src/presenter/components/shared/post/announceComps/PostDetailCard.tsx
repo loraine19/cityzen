@@ -3,12 +3,12 @@ import { Icon } from "../../../common/IconComp";
 import { useState, } from "react";
 import { Flag } from "../../../../../domain/entities/Flag";
 import { Like } from "../../../../../domain/entities/Like";
-import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { DateChip } from "../../../common/ChipDate";
 import { PostView } from "../../../../views/viewsEntities/postViewEntities";
 import { Title } from "../../../common/CardTitle";
 import { ProfileDiv } from "../../../common/ProfilDiv";
+import { User } from "../../../../../domain/entities/User";
 
 export default function PostDetailCard(props: { post: PostView, mines?: boolean, change: (e: any) => void }) {
     const [post, setPost] = useState<PostView>(props.post)
@@ -16,7 +16,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
     const { user } = useUserStore()
     const userId: number = user.id
     const haveImage: boolean = post?.image ? true : false
-    const Author: Profile = post?.User?.Profile
+    const Author: User = post?.User
     const flagged: boolean = post?.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false
     const ILike: boolean = post?.Likes?.find((like: Like) => like.userId === userId) ? true : false
 

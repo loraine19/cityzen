@@ -1,6 +1,5 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
 import { Icon } from '../../../common/IconComp'
-import { Profile } from "../../../../../domain/entities/Profile";
 import ModifBtnStack from "../../../common/ModifBtnStack";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { dayMS, GenereMyActions } from "../../../../views/viewsEntities/utilsService";
@@ -11,6 +10,7 @@ import { VoteCard } from "./VoteCard";
 import { useState } from "react";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { Title } from "../../../common/CardTitle";
+import { User } from "../../../../../domain/entities/User";
 
 type PoolCardProps = {
     pool: any,
@@ -78,7 +78,7 @@ export function PoolCard({
                             {pool.description}...
                         </Typography>
                         <ProfileDiv
-                            profile={pool.UserBenef?.Profile || {} as Profile}
+                            profile={pool?.UserBenef || {} as Partial<User>}
                             size={'lg'} />
                     </div>
                 </CardBody>

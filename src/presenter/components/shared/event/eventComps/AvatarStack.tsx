@@ -50,7 +50,7 @@ export function AvatarStack(props: AvatarStackProps) {
                                 <Typography
                                     variant="small"
                                     className="font-normal text-blue-gray-500  border-t border-blue-gray-50 pt-2">
-                                    {Participant.User?.Profile?.Address?.city}
+                                    {Participant.User?.GroupUser?.map((group) => group.Group.name).join(', ')}
                                 </Typography>
                             </div>
                         </div>

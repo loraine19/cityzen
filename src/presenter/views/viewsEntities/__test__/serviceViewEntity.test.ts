@@ -11,7 +11,13 @@ describe('ServiceView', () => {
 
     // Mock Utilisateur de base 
     const mockUser: User = {
-        id: 1, email: 'user@test.com', status: UserStatus.ACTIVE, password: 'pwd', createdAt: new Date(), updatedAt: new Date(), lastConnection: new Date(),
+        id: 1,
+        email: 'user@test.com',
+        status: UserStatus.ACTIVE,
+        password: 'pwd',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        lastConnection: new Date(),
         Profile: {
             userId: 1,
             firstName: 'Test',
@@ -114,8 +120,6 @@ describe('ServiceView', () => {
             };
             const baseExpected = Number(((4 / 2 + 4 / 2) + 1).toFixed(1));
             const userRespPoints = parseInt(AssistanceLevel.LEVEL_4); // = 4
-
-            // Act
             const serviceView = new ServiceView(mockService, mockUser);
             expect(serviceView.points).toEqual([baseExpected + (userRespPoints / 2)]);
         });

@@ -43,7 +43,7 @@ export default function FlagDetailComp(props: { flag: FlagView, element?: any, l
                 </CardBody>
                 <CardFooter className="CardFooter">
                     <ProfileDiv
-                        profile={element?.User?.Profile} />
+                        profile={element?.User} />
 
                     <Icon fill
                         icon="arrow_circle_right"

@@ -20,13 +20,13 @@ describe('SignUp process with mail activation', () => {
   it('Attempts to sign up with new credentials', () => {
     cy.visit(signUp)
     cy.get('[data-cy="email-input"]').type(email);
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('[data-cy="password-input"]').type(password);
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('[data-cy="password-confirm-input"]').type(password);
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('[data-cy="terms-checkbox"]').check();
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('[data-cy="submit-button"]').click();
     cy.wait(2500);
     cy.get('[data-cy="notif-text"]').contains('lien envoyé par email').should('be.visible');
@@ -51,7 +51,7 @@ describe('SignUp process with mail activation', () => {
       });
     });
     cy.get('a.logout').click();
-    cy.wait(2000);
+    cy.wait(1000);
   })
 
   it('Visits the activation link, completes the sign-up process', () => {
@@ -61,14 +61,15 @@ describe('SignUp process with mail activation', () => {
     cy.origin(baseUrl, { args: { email, password } }, ({ email, password }) => {
       cy.url().should('include', '/signin');
       cy.contains('vous pouvez maintenant vous connecter').should('be.visible');
-      cy.wait(1000);
       cy.get('input[name="email"]').type(email);
-      cy.wait(1000);
+      cy.wait(2000);
       cy.get('input[name="password"]').type(password);
-      cy.wait(1000);
+      cy.wait(2000);
       cy.get('button[type="submit"]').click()
-      cy.wait(8000);
+      cy.wait(3000);
       cy.url().should('include', '/profile/create')
+      cy.log('Successfully signed up, the user is redirected to the profile creation page');
+      cy.wait(5000);
     });
   })
 

@@ -27,7 +27,7 @@ export const eventViewModel = () => {
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const userId = user?.id || 0
     const flat = data?.pages.flat().map(page => page.events).flat()
-    const events = userLoading ? [] : flat?.map(event => new EventView(event, userId))
+    const events = (userLoading || isLoading || !data) ? [] : flat?.map(event => new EventView(event, userId))
 
     return {
       count,
@@ -99,7 +99,8 @@ export const eventsWeekViewModel = () => {
     const userId = user?.id || 0
 
     const flat = data?.pages.flat().map(page => page.events).flat()
-    if (flat && new Date(flat[flat.length - 1].start).getTime() < new Date(startDate).getTime() + numberOfWeeks * 7 * dayMS) { refetch() }
+    console.log("eventsWeekViewModel", flat)
+    if (flat && new Date(flat[flat.length - 1]?.start).getTime() < new Date(startDate).getTime() + numberOfWeeks * 7 * dayMS) { refetch() }
     const eventList = userLoading ? [] : flat?.map(event => new EventView(event, userId)) || []
 
     const weeks: { date: Date, events: EventView[], text: string }[][] = [];
