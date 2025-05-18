@@ -88,7 +88,7 @@ export default function MyInfosPage() {
 
     useEffect(() => {
         if (address) formik.values.Address = address
-        else navigate("/profile/create")
+        // else navigate("/profile/create")
     }, [address])
 
     return (
