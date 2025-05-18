@@ -6,14 +6,12 @@ import { useUserStore } from "../../../application/stores/user.store"
 import AddressMapOpen from "./mapComps/AddressMapOpen"
 import { OnlineDot } from "./onlineDot"
 import { User } from "../../../domain/entities/User"
+import { ProfileView } from "../../views/viewsEntities/profileViewEntity"
 
 type ProfileDivProps = { profile: Partial<User>, size?: string }
 export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props }) => {
-    const profile = props.profile?.Profile as Profile
+    const profile = new ProfileView(props.profile?.Profile as Profile)
     const userDiv = props.profile as User
-    console.log('userdiv', userDiv?.GroupUser?.map((group) =>
-        '◦ ' + group.Group?.name
-    ))
     const textSize = size === "xl" && "h5" || size === "sm" && "h6" || "small"
     const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
     const user = useUserStore(state => state.user)
@@ -30,7 +28,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                 size={size as any}
                                 referrerPolicy="unsafe-url"
                                 alt="avatar"
-                                className="BgUser shadow" />
+                                className="BgUser shadow " />
                             <OnlineDot id={profile?.userId} />
                         </div>
                     </PopoverHandler>
@@ -40,7 +38,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                 <Icon
                                     color='orange'
                                     fill
-                                    style="absolute !p-[0.3rem] !bg-orange-100 top-2 left-11  z-50  "
+                                    style="absolute !p-[0.3rem] !bg-orange-100 top-2 left-11  z-50"
                                     size='lg'
                                     link={`/chat?with=${profile?.userId}`}
                                     bg
@@ -48,11 +46,11 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                     icon="sms"
                                 />
                                 <Avatar
-                                    src={profile?.image as string ?? "/image/person.svg"}
+                                    src={profile?.image as string ?? '/image/person.svg'}
                                     size="sm"
                                     alt="avatar"
+                                    referrerPolicy="unsafe-url"
                                     className="BgUser  border-blue-gray-500" />
-
                             </div>
                             <div className="flex flex-col pl-2">
                                 <Typography
@@ -106,17 +104,17 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         </div>
                     </PopoverContent>
                 </Popover>
-                <div className="flex flex-col">
+                <div className="flex flex-col truncate">
                     <Typography
                         variant={textSize}
                         color="blue-gray"
-                        className="border-b border-blue-gray-200 pr-4">
+                        className="border-b border-blue-gray-200 pr-4  ">
                         {profile?.firstName} {profile?.lastName}
                     </Typography>
                     <Typography
-                        className={`font-normal text-blue-gray-500 ${texteSize2} truncate`}>
+                        className={`font-normal text-blue-gray-500 ${texteSize2} line-clamp-1 truncate max-w-full pr-2`}>
                         {userDiv?.GroupUser?.map((group) =>
-                            <span>{' ⌖ ' + group.Group?.name + ' '}
+                            <span >{' ⌖ ' + group.Group?.name + ' '}
                             </span>)
                         }
                     </Typography>

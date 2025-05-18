@@ -17,7 +17,6 @@ export class AlertStoreFunctions {
 
     setOpen(open: boolean): void {
         if (this.functions) {
-
             this.functions.setOpen(open);
         }
     }

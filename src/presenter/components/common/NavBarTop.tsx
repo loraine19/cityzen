@@ -5,11 +5,9 @@ import { NotifBadge } from "./NotifBadge";
 import { useUserStore } from "../../../application/stores/user.store";
 import { OnlineDot } from "./onlineDot";
 import { useNotificationStore } from "../../../application/stores/notification.store";
-
 export default function NavBarTop() {
     const user = useUserStore((state) => state.user);
     const unReadMsgNotif = useNotificationStore((state) => state.unReadMsgNotif);
-    const { firstName, image } = user && user.Profile || {} as any;
     const navigate = useNavigate();
 
     const menuItems = [
@@ -27,10 +25,11 @@ export default function NavBarTop() {
                     <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Avatar
+                                referrerPolicy="unsafe-url"
                                 className="!flex BgUser !shadow cursor-pointer !h-12 !w-19"
                                 variant="circular"
-                                alt={firstName || 'user'}
-                                src={image ? image as string : '/image/person.svg'}
+                                alt={user?.Profile.firstName || 'user'}
+                                src={user?.Profile.image as string ?? '/image/person.svg'}
                             />
                             <OnlineDot
                                 className="!bottom-0 !-right-0.5"
@@ -52,7 +51,7 @@ export default function NavBarTop() {
                     </MenuList>
                 </Menu>
                 <div className="flex flex-col w-full items-start">
-                    <Typography variant="h5" color="blue-gray">{firstName}</Typography>
+                    <Typography variant="h5" color="blue-gray">{user.Profile.firstName}</Typography>
                     <Typography color="blue-gray" className="-mt-1">{user?.GroupUser?.map((group) => group.Group?.name).join(', ')}</Typography>
                 </div>
             </div>

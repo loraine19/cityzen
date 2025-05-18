@@ -23,10 +23,11 @@ export const postViewModel = () => {
         getNextPageParam: (lastPage, pages) => lastPage.posts?.length ? pages.length + 1 : undefined
       })
 
-    const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
+    const count = isLoading || error ? 0 : (data?.pages[data?.pages.length - 1].count)
     const userId = user?.id || 0
-    const flat = data?.pages.flat().map(page => page.posts).flat()
-    const posts = userLoading ? [] : flat?.map(post => new PostView(post, userId))
+    const flat = error ? [] : data?.pages.flat().map(page => page.posts).flat()
+    const posts = userLoading ? [] : flat?.map(post => !post?.error && new PostView(post, userId))
+
 
     return {
       count,

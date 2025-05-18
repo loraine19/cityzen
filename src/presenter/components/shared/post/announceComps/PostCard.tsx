@@ -16,6 +16,7 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
     const [post, setPost] = useState<PostView>(initialPost);
     const { id, title, description, image, categoryS, createdAt, Likes, User, flagged, ILike, toogleLike } = post
     const haveImage: boolean = post.image ? true : false
+    console.log(post)
 
     const deletePost = async (id: number) => await DI.resolve('deletePostUseCase').execute(id)
     const myActions: Action[] = GenereMyActions(post, "annonce", deletePost)
@@ -57,14 +58,16 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                         </Typography>
                     </div>
                 </CardBody>
-                <CardFooter className="CardFooter">
+                <CardFooter className="CardFooter   ">
                     {!mines ?
-                        <ProfileDiv
-                            profile={User} /> :
+                        <div className=" w-full truncate pl-2 -ml-2 ">
+                            <ProfileDiv
+                                profile={User} />
+                        </div> :
                         <ModifBtnStack
                             actions={myActions}
                             update={update} />}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center pl-4 gap-2">
                         <button
                             onClick={async () => { setPost(await toogleLike()) }}
                             className={mines ? `hidden md:flex` : `flex`}>

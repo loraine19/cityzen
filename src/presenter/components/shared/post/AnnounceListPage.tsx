@@ -127,7 +127,7 @@ export default function AnnounceListPage() {
             <main
                 ref={divRef}
                 onScroll={handleScroll}>
-                {isLoading || error ?
+                {isLoading ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <SkeletonGrid
                             key={index}

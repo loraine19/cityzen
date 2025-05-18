@@ -46,10 +46,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
         const backendGoogleLoginUrl = `${baseURL}/auth/google`;
         window.location.href = backendGoogleLoginUrl;
+        setIsLoggedIn(true)
         setTimeout(() => {
-            setIsLoggedIn(true)
             window.location.href = baseURL;
-        }, 2000)
+        }, 1000)
     }
 
     return (

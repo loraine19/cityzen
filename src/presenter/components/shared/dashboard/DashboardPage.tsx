@@ -18,7 +18,7 @@ import { useNotificationStore } from "../../../../application/stores/notificatio
 import { useAlertStore } from "../../../../application/stores/alert.store";
 
 export default function DashboardPage() {
-    const { user, fetchUser } = useUserStore((state) => state);
+    const { user, fetchUser, setIsLoggedIn } = useUserStore((state) => state);
     const { unReadMsgNotif, unReadNotMessages, fetchNotif } = useNotificationStore((state) => state);
     const [modo, setModo] = useState(false);
 
@@ -31,8 +31,10 @@ export default function DashboardPage() {
         }
     }, [])
 
-
-    useEffect(() => { !user.Profile && fetchUser() }, [user.Profile])
+    useEffect(() => {
+        !user && setIsLoggedIn(false)
+        !user.Profile && fetchUser()
+    }, [user])
 
 
     const navigate = useNavigate();
@@ -85,10 +87,10 @@ export default function DashboardPage() {
                             alt="logo" />
                         <Typography
                             color="blue-gray"
-                            className="pt-3 font-comfortaa text-[2.2rem] lg:text-[2.5rem] font-bold">City'Do
+                            className="pt-2.5 pb-2 font-comfortaa text-[2rem] lg:text-[2.5rem] font-bold">City'Do
                         </Typography>
                     </div>
-                    <div className=" z-50 absolute right-4 top-0 w-full h-full items-start flex justify-between">
+                    <div className=" z-50 absolute right-3 top-0 w-full h-full items-start flex justify-between">
                         <NotifBadge onBoard />
                     </div>
                 </div>
