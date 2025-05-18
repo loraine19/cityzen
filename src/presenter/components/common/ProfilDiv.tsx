@@ -26,9 +26,9 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         <div className={`relative`}>
                             <Avatar
                                 data-cy={`big-avatar-${profile?.firstName}`}
-                                src={profile.image as string ?? "../image/person.svg"}
+                                src={profile?.image as string ?? "../image/person.svg"}
                                 size={size as any}
-                                referrerPolicy="no-referrer"
+                                referrerPolicy="unsafe-url"
                                 alt="avatar"
                                 className="BgUser shadow" />
                             <OnlineDot id={profile?.userId} />
@@ -48,7 +48,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                     icon="sms"
                                 />
                                 <Avatar
-                                    src={profile?.image as string || "/image/person.svg"}
+                                    src={profile?.image as string ?? "/image/person.svg"}
                                     size="sm"
                                     alt="avatar"
                                     className="BgUser  border-blue-gray-500" />

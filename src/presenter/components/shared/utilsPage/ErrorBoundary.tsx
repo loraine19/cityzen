@@ -52,19 +52,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     bodyColor = 'gray';
             }
 
-
-
-
             return (
                 <>
                     <AlertModal values={{
 
                         handleConfirm: () => { window.location.replace('/') },
-                        title: 'Oups, Vous êtes inactif ou Une erreur s\'est produite',
+                        title: 'Oups... vous êtes inactif depuis trop longtemps ou une erreur s\'est produite',
                         element: <div className="items-center text-center pb-8 flex flex-col gap-4">
                             <Typography
                                 variant="h6">
-                                Veuillez réessayer de recharger la page
+                                Vous pouvez essayer de recharger la page
                             </Typography>
 
                             <Icon
