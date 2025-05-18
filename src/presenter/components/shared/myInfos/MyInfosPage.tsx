@@ -68,15 +68,18 @@ export default function MyInfosPage() {
             formik.values = values;
             formik.values.assistance = assistance;
             formik.values.mailSub = mailSub;
+            const image = formik.values.blob ?? formik.values.image
             setOpen(true)
             setAlertValues({
+                close: () => setOpen(false),
                 handleConfirm: async () => await updateFunction(),
+                disableConfirm: false,
                 confirmString: "Enregistrer les modifications",
-                title: "Confimrer la modification",
+                title: "Confimrer la modification : ",
                 element: (
                     <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
                         <ProfileDiv
-                            profile={{ ...formik.values, image: formik.values?.blob || formik.values?.image }}
+                            profile={{ ...user, Profile: { ...formik.values, image } }}
                         />
                     </div>
                 )

@@ -78,7 +78,7 @@ export default function DashboardPage() {
             <div className="Body gray"
                 data-cy="dashboard-body" >
                 <div className="relative pt-2 pb-5 lg:px-8  w-respXl w-full flex lg:justify-center </div>items-center  ">
-                    <div className="flex w-full  justify-center flex-1 items-center  lg:gap-4 gap-2   pr-10 lg:-mb-2">
+                    <div className="flex w-full  justify-center flex-1 items-center  lg:gap-4 gap-2   pr-12 lg:-mb-2">
                         <img
                             className="h-14 w-14 lg:h-15 lg:w-15 object-cover object-center"
                             src="../../../image/logo.svg"

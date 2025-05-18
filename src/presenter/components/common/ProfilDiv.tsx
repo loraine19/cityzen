@@ -9,8 +9,11 @@ import { User } from "../../../domain/entities/User"
 
 type ProfileDivProps = { profile: Partial<User>, size?: string }
 export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props }) => {
-    const userDiv = props.profile as Partial<User>
-    const profile = userDiv.Profile as Profile
+    const profile = props.profile?.Profile as Profile
+    const userDiv = props.profile as User
+    console.log('userdiv', userDiv?.GroupUser?.map((group) =>
+        '◦ ' + group.Group?.name
+    ))
     const textSize = size === "xl" && "h5" || size === "sm" && "h6" || "small"
     const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
     const user = useUserStore(state => state.user)
@@ -23,8 +26,9 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         <div className={`relative`}>
                             <Avatar
                                 data-cy={`big-avatar-${profile?.firstName}`}
-                                src={profile?.image as string || "/image/person.svg"}
+                                src={profile.image as string ?? "../image/person.svg"}
                                 size={size as any}
+                                referrerPolicy="no-referrer"
                                 alt="avatar"
                                 className="BgUser shadow" />
                             <OnlineDot id={profile?.userId} />
@@ -63,7 +67,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                 <div
                                     className="font-normal flex flex-col text-blue-gray-500">
                                     {userDiv?.GroupUser?.map((group) =>
-                                        <div>{'◦ ' + group.Group?.name}
+                                        <div>{'⌖ ' + group.Group?.name}
                                         </div>)
                                     }
                                 </div>
@@ -110,8 +114,11 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         {profile?.firstName} {profile?.lastName}
                     </Typography>
                     <Typography
-                        className={`font-normal text-blue-gray-500 ${texteSize2}`}>
-                        ◦ {profile?.skills}
+                        className={`font-normal text-blue-gray-500 ${texteSize2} truncate`}>
+                        {userDiv?.GroupUser?.map((group) =>
+                            <span>{' ⌖ ' + group.Group?.name + ' '}
+                            </span>)
+                        }
                     </Typography>
                 </div>
             </div>

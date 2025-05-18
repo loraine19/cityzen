@@ -91,7 +91,7 @@ export default function ProfileCreatePage() {
                     <Typography
                         color="blue-gray"
                         className='w-resp px-4 flex justify-center pb-2'>
-                        Bienvenue, veuillez remplir votre profil pour pouvoir utiliser City'Zen
+                        Bienvenue, veuillez remplir votre profil pour pouvoir utiliser City'Do
                     </Typography>
                     <LogOutButton />
                 </div>

@@ -103,8 +103,8 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         ref={divRef}>
                         <Menu placement="bottom-end" >
                             <MenuHandler title="Notifications">
-                                <span className={`${!list.count || list.count === 0 ? 'hidden' : `text-white absolute flex font-medium items-center justify-center w-[1.3rem] h-[1.3rem] text-[0.70rem] pt-[0.3rem] pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2 shadow z-50`}`}>
-                                    {list.count >= 99 ? ' 99⁺' :
+                                <span className={`${!list.count || list.count === 0 ? 'hidden' : `text-white absolute flex font-medium items-center justify-center w-[1.3rem] h-[1.3rem] text-[0.70rem] !min-w-max pt-[0.3rem] pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2.5 shadow z-50`}`}>
+                                    {list.count >= 99 ? '⁺99 ' :
                                         (list.count ? list.count.toString() : '0')}
                                 </span>
                             </MenuHandler>
@@ -174,7 +174,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         fill bg
                         size="2xl"
                         title={list.count ? "voir la liste" : "aucune notification"}
-                        style=" rounded-full z-40 relative !text-3xl !w-10 !h-10" />
+                        style=" rounded-full z-40 relative  !w-10 !h-10" />
                 </div>)
 
             }
