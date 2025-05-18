@@ -37,17 +37,19 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                         iconSize: [50, 50],
                         iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         popupAnchor: [0, -20],
-                        shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 30 : 25, 50],
+                        shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
+                        shadowSize: [50, 50],
                         shadowUrl: '/image/marker_shadow.png',
                         pane: 'markerPane',
                     }) :
                     L.icon({
                         iconUrl: '/image/marker_orange.svg',
                         iconSize: [50, 50],
-                        iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 30 : 25, 50],
+                        iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         popupAnchor: [0, -20],
-                        shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 30 : 25, 50],
+                        shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         shadowUrl: '/image/marker_shadow.png',
+                        shadowSize: [50, 50],
                         pane: 'markerPane',
                     })} >
                 <Popup>
@@ -157,6 +159,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                         scrollWheelZoom={false}
                         className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
                         <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
+                        {notifs && <MarkerList notifsMap={notifs} />}
                         <Marker
                             position={position}
                             icon={L.icon({
@@ -165,13 +168,14 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                                 iconAnchor: [30, 60],
                                 popupAnchor: [0, -30],
                                 shadowAnchor: [30, 60],
+                                shadowSize: [61, 61],
                                 shadowUrl: '/image/marker_shadow.png'
                             })}>
                             <Popup>
                                 {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
                             </Popup>
                         </Marker>
-                        {notifs && <MarkerList notifsMap={notifs} />}
+
                         {!message && <FlyToMarker position={position} />}
                         {fly && <FlyToMarker position={position} setFly={setFly} />}
                         <IntenaryChip />
@@ -187,6 +191,8 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                         scrollWheelZoom={false}
                         className='shadow-xl rounded-xl border-2 border-gray-300 flex w-full h-full' >
                         <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
+
+                        {notifs && <MarkerList notifsMap={notifs} />}
                         <Marker
                             position={position}
                             icon={L.icon({
@@ -195,6 +201,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                                 iconAnchor: [30, 60],
                                 popupAnchor: [0, -5],
                                 shadowAnchor: [30, 60],
+                                shadowSize: [61, 61],
                                 shadowUrl: '/image/marker_shadow.png'
                             })}>
                             <Popup>
@@ -208,7 +215,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                                 </a>
                             </Popup>
                         </Marker>
-                        {notifs && <MarkerList notifsMap={notifs} />}
+
                         {!message && <FlyToMarker position={position} />}
                         {fly && <FlyToMarker position={position} setFly={setFly} />}
                         <IntenaryChip />

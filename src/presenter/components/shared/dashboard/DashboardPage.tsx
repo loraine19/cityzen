@@ -85,7 +85,7 @@ export default function DashboardPage() {
                             alt="logo" />
                         <Typography
                             color="blue-gray"
-                            className="pt-1 font-comfortaa text-[2.2rem] lg:text-[2.5rem] font-bold">City'Zen
+                            className="pt-3 font-comfortaa text-[2.2rem] lg:text-[2.5rem] font-bold">City'Do
                         </Typography>
                     </div>
                     <div className=" z-50 absolute right-4 top-0 w-full h-full items-start flex justify-between">
@@ -123,13 +123,13 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
-                                            style={modo ? '' : 'cursor-not-allowed'}
+                                            // style={modo ? '' : 'cursor-not-allowed'}
                                             link={modo ? '/conciliation' : ''}
                                             icon="diversity_3"
                                             color={modo ? 'red' : 'blue-gray'}
                                             fill bg
                                             size="lg"
-                                            title="ouvrir la page conciliation" />
+                                            title={modo ? "ouvrir la page conciliation" : "vous devez être concialiateur dans un groupe"} />
                                         <Icon
                                             link="/reglement"
                                             icon="two_pager"
@@ -139,9 +139,9 @@ export default function DashboardPage() {
                                         <LogOutButton />
                                     </div>
                                     <Typography
-                                        variant="h2"
+                                        variant="h3"
                                         color="blue-gray"
-                                        className="font-extrabold"
+                                        className="font-extrabold pt-1"
                                     >
                                         {!user ?
                                             <Skeleton className="rounded-full" /> :
@@ -179,7 +179,7 @@ export default function DashboardPage() {
                                         </div>
                                         <Typography>  {count > 0 ?
                                             <>{count} notifications </> :
-                                            'pas de notifications'}</Typography>
+                                            'Vous n\'avez pas de notifications'}</Typography>
                                     </div>
                                     <div className="relative flex flex-col -mt-0.5 max-h-10 overflow-y-auto"
                                         onScroll={() => handleScroll()}
@@ -251,8 +251,14 @@ export default function DashboardPage() {
                                             <AddressMapOpen
                                                 message=" 📍 Vous êtes ici "
                                                 address={user?.Profile?.Address}
-                                                notifs={notifsMap} /> :
-                                            <Skeleton />}
+                                                notifs={notifsMap} /> : <>
+
+                                                {isLoadingMap ? <Skeleton /> :
+                                                    <Card className="FixCard h-full w-full flex-1 justify-center items-center bg-gray-50">
+                                                        <Typography variant="small" className="p-8">  Veuillez renseigner votre adresse pour voir les services à proximité
+                                                        </Typography>
+                                                    </Card>
+                                                }</>}
                                     </div>
                                 </CardBody>
                             </Card>

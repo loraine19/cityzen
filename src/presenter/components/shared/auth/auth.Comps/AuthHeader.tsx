@@ -12,7 +12,7 @@ export function AuthHeader() {
                     <Typography
                         variant="h1"
                         color="blue-gray"
-                        className="font-comfortaa  text-[2.8rem] font-bold">City'Zen
+                        className="font-comfortaa  text-[2.8rem] font-bold">City'Do
                     </Typography>
                 </div>
             </header>

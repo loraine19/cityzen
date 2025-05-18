@@ -7,7 +7,7 @@ describe('SignUp process with mail activation', () => {
   const email = 'testeur_cityzen@imagindev.com';
   const password = 'passwordtest';
   const mailUrl = 'http://localhost:1085'
-  const waitedMailSubject = "Activation de votre compte City'Zen";
+  const waitedMailSubject = "Activation de votre compte City'Do";
   const authBackUrl = `http://localhost:3000/api/auth`;
   let activationLink = '';
 

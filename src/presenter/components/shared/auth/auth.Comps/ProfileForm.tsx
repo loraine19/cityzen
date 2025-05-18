@@ -45,9 +45,9 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
 
     useEffect(() => {
         const fetchGroups = async () => {
-            const groups = await groupsNear();
-            setGroups([...groups]);
-        };
+            const groups = await groupsNear()
+            setGroups([...groups])
+        }
         fetchGroups();
     }, []);
 
@@ -165,7 +165,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             groups={groups}
                             userGroups={userGroups}
                             setUserGroups={setUserGroups} />
-
                         <Input
                             label="Ajouter une compétences"
                             name="skills" value={newSkill}
@@ -177,7 +176,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                                 onClick={addSkill}
                                 style={`py-1 !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'}`} />}
                         />
-
                         <List className='flex  p-0'>
                             <Typography className='text-xs'>Liste des compétences</Typography>
                             {skillList.map((skill: string, index: number) =>

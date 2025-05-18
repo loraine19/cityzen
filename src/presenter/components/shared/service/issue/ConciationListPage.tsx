@@ -59,7 +59,7 @@ export default function ConciationListPage() {
     useEffect(() => {
         const notifUpdate =
             (count === 0 && !isLoading) &&
-            `Aucune concialation ${filter !== '' ? getLabel(filter, serviceTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, serviceCategories).toLowerCase() : ''} n'a été trouvé`
+            `Aucune conciliation ${filter !== '' ? getLabel(filter, serviceTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, serviceCategories).toLowerCase() : ''} n'a été trouvée(s)`
             || error && "Erreur lors du chargement des conciliations, veuillez réessayer plus tard"
             || !ImModo && "Vous n'êtes pas conciliateur"
         setNotif(notifUpdate);
@@ -100,7 +100,7 @@ export default function ConciationListPage() {
             <main ref={divRef}
                 onScroll={() => handleScroll()}
                 className="Grid2 ">
-                {isLoading || error || !ImModo ?
+                {isLoading ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <SkeletonGrid
                             key={index}
