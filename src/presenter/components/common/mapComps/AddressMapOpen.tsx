@@ -33,7 +33,7 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                 position={[notif?.Address.lat, notif?.Address.lng]}
                 icon={notif.type === ElementNotif.SERVICE ?
                     L.icon({
-                        iconUrl: '/image/marker_green.svg',
+                        iconUrl: '/image/marker_cyan.svg',
                         iconSize: [50, 50],
                         iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         popupAnchor: [0, -20],
@@ -43,7 +43,7 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                         pane: 'markerPane',
                     }) :
                     L.icon({
-                        iconUrl: '/image/marker_orange.svg',
+                        iconUrl: '/image/marker_cyan_dark.svg',
                         iconSize: [50, 50],
                         iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         popupAnchor: [0, -20],
@@ -163,7 +163,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                         <Marker
                             position={position}
                             icon={L.icon({
-                                iconUrl: '/image/marker.svg',
+                                iconUrl: '/image/marker_orange.svg',
                                 iconSize: [60, 60],
                                 iconAnchor: [30, 60],
                                 popupAnchor: [0, -30],
@@ -196,7 +196,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                         <Marker
                             position={position}
                             icon={L.icon({
-                                iconUrl: '/image/marker.svg',
+                                iconUrl: '/image/marker_orange.svg',
                                 iconSize: [60, 60],
                                 iconAnchor: [30, 60],
                                 popupAnchor: [0, -5],

@@ -90,12 +90,11 @@ export default function DashboardPage() {
                             className="pt-2.5 pb-2 font-comfortaa text-[2rem] lg:text-[2.5rem] font-bold">City'Do
                         </Typography>
                     </div>
-                    <div className=" z-50 absolute right-3 top-0 w-full h-full items-start flex justify-between">
+                    <div className="z-50 absolute right-3 top-0 w-full h-full items-start flex justify-between">
                         <NotifBadge onBoard />
                     </div>
                 </div>
                 <main className="relative flex -top-6 -mb-5 h-[calc(100%-3.5rem)]">
-
                     <div className={" flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                         <div className={`${userClasse}`}>
                             <Card className="lg:h-full p-0 flex-1 flex ">
@@ -125,10 +124,9 @@ export default function DashboardPage() {
                                             size="lg"
                                             title="ouvrir la page profil" />
                                         <Icon
-                                            // style={modo ? '' : 'cursor-not-allowed'}
                                             link={modo ? '/conciliation' : ''}
                                             icon="diversity_3"
-                                            color={modo ? 'red' : 'blue-gray'}
+                                            color={modo ? 'orange' : 'blue-gray'}
                                             fill bg
                                             size="lg"
                                             title={modo ? "ouvrir la page conciliation" : "vous devez être concialiateur dans un groupe"} />
@@ -176,12 +174,13 @@ export default function DashboardPage() {
                                                 link="/chat"
                                                 size="xl"
                                                 color="cyan"
-                                                title="voir mes notifications" />
+                                                title="voir mes messages" />
                                             <span className={unReadMsgNotif < 1 ? "hidden" : " absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-red-500"} />
                                         </div>
                                         <Typography>  {count > 0 ?
                                             <>{count} notifications </> :
-                                            'Vous n\'avez pas de notifications'}</Typography>
+                                            'Vous n\'avez pas de notifications'}
+                                        </Typography>
                                     </div>
                                     <div className="relative flex flex-col -mt-0.5 max-h-10 overflow-y-auto"
                                         onScroll={() => handleScroll()}
@@ -203,7 +202,6 @@ export default function DashboardPage() {
                                                         {notif?.description}
                                                     </span>
                                                 </p>
-
                                                 {<Icon
                                                     icon={"cancel"}
                                                     onClick={async () => {
