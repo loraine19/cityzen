@@ -45,14 +45,17 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
                 onChange={() => setOpinion(VoteOpinion.OK)}
             />
         </div>
+    const [voteNotification, setVoteNotification] = useState<string | undefined>(undefined)
 
     const alertValues: AlertValues = {
         handleConfirm: async () => {
             const ok = vote.IVoted ? await updateVote(voteDTO) : await postVote(voteDTO)
-            if (ok) {
+            if (ok.error) {
+                setVoteNotification(ok.error.message)
+            }
+            else {
                 refetch();
                 close();
-                console.log(ok)
             }
         },
         title: `${vote.IVoted ? 'Modifier mon vote ' : 'Voter'} pour ${vote.title} `,
@@ -60,12 +63,12 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
         element: body,
         disableConfirm: false,
         isOpen: open,
-        close: close
+        close: close,
+        notif: voteNotification,
     }
     return (
         <div className="bg-cyan-100">
             <AlertModal values={alertValues} />
         </div>
-
     )
 }

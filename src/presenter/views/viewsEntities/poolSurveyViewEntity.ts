@@ -27,6 +27,7 @@ export class PoolSurveyView {
     category?: SurveyCategory = SurveyCategory.CATEGORY_1;
     categoryS?: string = SurveyCategory[SurveyCategory.CATEGORY_1 as string as keyof typeof SurveyCategory];
     Flags?: Flag[] = [];
+    status?: PoolSurveyStatus = PoolSurveyStatus.PENDING;
 
     constructor
         (base: Pool | Survey, user: User, userCount: number) {

@@ -8,7 +8,7 @@ import { AlertValues } from "../../../domain/entities/Error";
 
 
 export const AlertModal = ({ values }: { values: AlertValues }) => {
-    const { title, element, disableConfirm, confirmString, button2, isOpen, close } = values;
+    const { title, element, disableConfirm, confirmString, button2, isOpen, close, notif } = values;
 
     const { open, setOpen } = useAlertStore(state => state)
 
@@ -20,7 +20,8 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                 <CardHeader
                     className="FixCardHeaderNoImage flex items-center justify-between p-4 text-center text-xl">
                     <Typography
-                        variant="h5">{title}</Typography>
+                        variant="h5">{title}
+                    </Typography>
                     {!disableConfirm &&
                         <Icon
                             onClick={() => { close && close() || setOpen(false) }}
@@ -30,7 +31,9 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                 </CardHeader>
                 <CardBody className="
                 FixCardBody min-h-[18vh]  max-h-[80vh] flex flex-col overflow-auto gap-6">
-                    <hr></hr>{element && typeof element === 'string' ? parse(element as string) : element}
+                    <hr></hr>
+                    <p className="text-center italic text-red-800">{notif}</p>
+                    {element && typeof element === 'string' ? parse(element as string) : element}
                 </CardBody>
                 <CardFooter className="justify-end FixCardFooter flex gap-8 pt-0">
                     {button2 &&
@@ -42,12 +45,13 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                             {button2.text}
                         </Button>}
                     {<Button
+                        disabled={notif ? true : false}
                         size='lg'
                         color="cyan"
                         className="rounded-full lgBtn max-w-max"
                         onClick={() => {
                             values.handleConfirm && values.handleConfirm();
-                            close && close() || setOpen(false)
+                            // close && close() || setOpen(false)
                         }
                         }>
                         {confirmString}

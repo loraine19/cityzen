@@ -10,6 +10,7 @@ import DI from "../../../../../di/ioc";
 import { useState } from "react";
 import { VoteCard } from "./VoteCard";
 import { Title } from "../../../common/CardTitle";
+import { PoolSurveyStatus } from "../../../../../domain/entities/PoolSurvey";
 
 
 type SurveyCardProps = {
@@ -30,7 +31,6 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
     const haveImage = survey?.image ? true : false
     const [open, setOpen] = useState(false);
     const color = { OK: 'green', NO: 'red', WO: 'orange' }
-
 
 
     return (
@@ -80,14 +80,11 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                         flagged={survey?.flagged}
                         id={survey?.id}
                         type="sondage" />
-
                     <Typography
                         color="blue-gray"
                         className="leading-[1.3rem] overflow-auto mb-2">
                         {survey?.description}
                     </Typography>
-
-
                 </CardBody>
                 <CardFooter
                     className="CardFooter items-center gap-6">
@@ -95,7 +92,8 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                         <ProgressBar
                             value={survey?.pourcent}
                             label="Votes"
-                            needed={survey?.needed} />
+                            needed={survey?.needed}
+                            status={survey?.status} />
                         :
                         <ModifBtnStack
                             disabled2={disabledEditCTA}
@@ -103,6 +101,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                             update={update} />}
                     <div className="flex items-center justify-between gap-2">
                         <button
+                            disabled={survey?.status !== PoolSurveyStatus.PENDING}
                             onClick={() => { setOpen(true) }}>
                             <Chip
                                 value={survey?.Votes?.length}

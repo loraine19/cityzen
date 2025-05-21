@@ -12,6 +12,7 @@ import { VoteCard } from './voteCards/VoteCard';
 import { Button } from '@material-tailwind/react';
 import { Icon } from '../../common/IconComp';
 import { useAlertStore } from '../../../../application/stores/alert.store';
+import { PoolSurveyStatus } from '../../../../domain/entities/PoolSurvey';
 
 export default function PoolDetailPage() {
     const { id } = useParams();
@@ -57,6 +58,7 @@ export default function PoolDetailPage() {
                 <CTAMines actions={myActions} /> :
                 <footer className={`CTA`}>
                     <Button
+                        disabled={pool?.status !== PoolSurveyStatus.PENDING}
                         size='lg'
                         color='orange'
                         className='lgBtn'
@@ -66,7 +68,7 @@ export default function PoolDetailPage() {
                             fill
                             icon='smart_card_reader'
                             color='white' />
-                        {pool.IVoted ? 'Modifier mon vote' : 'Voter'}
+                        {pool.IVoted ? pool.status !== PoolSurveyStatus.PENDING ? 'Modifier mon vote' : 'Voter' : 'Cette cagnotte est terminé'}
                     </Button>
                 </footer>
             }

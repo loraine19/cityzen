@@ -11,6 +11,7 @@ import { useState } from "react";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { Title } from "../../../common/CardTitle";
 import { User } from "../../../../../domain/entities/User";
+import { PoolSurveyStatus } from "../../../../../domain/entities/PoolSurvey";
 
 type PoolCardProps = {
     pool: any,
@@ -89,14 +90,18 @@ export function PoolCard({
                             value={pool.pourcent}
                             label="votes pour"
                             needed={pool.needed}
-                            size="md" />
+                            size="md"
+                            status={pool.status}
+                        />
                         :
                         <ModifBtnStack
                             disabled2={disabledEditCTA}
                             actions={actions}
                             update={update} />}
                     <div className="flex items-center justify-between gap-2">
-                        <button onClick={() => setOpen(true)}>
+                        <button
+                            disabled={pool?.status !== PoolSurveyStatus.PENDING}
+                            onClick={() => setOpen(true)}>
                             <Chip
                                 value={pool.Votes?.length}
                                 variant="ghost"

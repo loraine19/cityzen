@@ -6,6 +6,7 @@ import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEn
 import { ProgressBar } from "../../../common/ProgressBar";
 import { Title } from "../../../common/CardTitle";
 import { ProfileDiv } from "../../../common/ProfilDiv";
+import { PoolSurveyStatus } from "../../../../../domain/entities/PoolSurvey";
 
 type Props = { survey: PoolSurveyView, setOpen: (open: boolean) => void }
 
@@ -73,7 +74,9 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                     <ProfileDiv
                         profile={survey?.User} />
                     <div className="flex items-center gap-2 ">
-                        <button onClick={() => setOpen(true)}>
+                        <button
+                            disabled={survey?.status !== PoolSurveyStatus.PENDING}
+                            onClick={() => setOpen(true)}>
                             <Chip
                                 value={survey?.Votes?.length}
                                 variant="ghost"

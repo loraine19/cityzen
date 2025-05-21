@@ -94,8 +94,6 @@ export default function VoteListPage() {
         { label: "les miens", value: PoolSurveyFilter.MINE, result: () => filterTab(PoolSurveyFilter.MINE) },
     ]
 
-
-
     useEffect(() => {
         !isLoading && setNotif(count > 0 ? '' : `Aucun  ${tabSelected} ${step !== '' && step ? ' ' : ''} n'a été trouvé`);
     }, [isLoading]);
@@ -131,7 +129,6 @@ export default function VoteListPage() {
 
     return (
         <>
-
             <div className="Body orange">
                 <header className="px-4">
                     <NavBarTop />
@@ -150,7 +147,6 @@ export default function VoteListPage() {
                         {notif}
                     </div>
                 </header>
-
                 <main ref={divRef}
                     onScroll={() => handleScroll()}
                     className="Grid">
@@ -191,7 +187,6 @@ export default function VoteListPage() {
                         hasNextPage={hasNextPage}
                         handleScroll={() => handleScroll()} />
                 </main>
-
                 <NavBarBottom
                     addBtn={true}
                     color={'orange'} />

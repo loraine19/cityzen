@@ -2,12 +2,14 @@ import { Typography, Progress, TypographyProps } from "@material-tailwind/react"
 
 import { ProgressProps } from "@material-tailwind/react";
 
-export function ProgressBar(props: { value: number, label?: string, size?: ProgressProps['size'], needed: number }) {
-    const { value, label, needed } = props
+export function ProgressBar(props: { value: number, label?: string, size?: ProgressProps['size'], needed: number, status?: string }) {
+    const { value, label, needed, status } = props
     const size = props.size ? props.size : "md"
     const textSize = size === "lg" ? 'h6' : size === "md" ? 'small' : 'body1';
     const label2 = ` ${value > 0 ? value + '%' : ''}`
     const label3 = needed > 0 && value > 0 ? ` il manque ${needed} ${label}` : ''
+    const color = (value >= 100 || needed === 0 || status === 'VALIDATED') ? status === 'REJECTED' ? "red" : "green" : "gray"
+    const labelTexte = ((needed <= 0 && value < 100) || status === 'VALIDATED') ? status === 'REJECTED' ? 'n\'à pas été validé' : 'à été validé' : value > 0 ? `Validé à ` : `Pas encore de ${label}`
 
     return (
         < div className={`h-max w-full flex -m-1 flex-col px-2 pb-3 gap-2 ${size === "lg" && "mb-2"}`}>
@@ -15,7 +17,7 @@ export function ProgressBar(props: { value: number, label?: string, size?: Progr
                 <Typography
                     color={value < 1 ? "red" : "blue-gray"}
                     variant={textSize as TypographyProps['variant']} >
-                    {(needed <= 0 && value < 100) ? 'à été validé' : value > 0 ? `Validé à ` : `Pas encore de ${label}`}
+                    {labelTexte}
                 </Typography>
                 <Typography
                     color='blue-gray'
@@ -31,7 +33,7 @@ export function ProgressBar(props: { value: number, label?: string, size?: Progr
             </div>
             <Progress
                 value={needed === 0 ? 100 : value}
-                color={(value >= 100 || needed === 0) ? "green" : "gray"}
+                color={color}
                 size={size} />
         </div>)
 }

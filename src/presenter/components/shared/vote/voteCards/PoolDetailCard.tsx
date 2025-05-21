@@ -7,6 +7,7 @@ import { ProgressBar } from "../../../common/ProgressBar";
 import { Title } from "../../../common/CardTitle";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { User } from "../../../../../domain/entities/User";
+import { PoolSurveyStatus } from "../../../../../domain/entities/PoolSurvey";
 
 type PoolDetailCardProps = { pool: PoolSurveyView, setOpen: (open: boolean) => void }
 
@@ -69,7 +70,9 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                     <ProfileDiv
                         profile={pool?.User || {} as Partial<User>} />
                     <div className="flex items-center gap-2 ">
-                        <button onClick={() => { setOpen(true) }}>
+                        <button
+                            disabled={pool?.status !== PoolSurveyStatus.PENDING}
+                            onClick={() => { setOpen(true) }}>
                             <Chip
                                 value={pool.Votes?.length}
                                 variant="ghost"

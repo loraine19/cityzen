@@ -18,6 +18,7 @@ export class AlertValues {
     button2?: { text: string, onClick: () => void } = undefined;
     isOpen?: boolean = false;
     close?: () => void = () => { };
+    notif?: string = '';
 
     constructor(init?: any) {
         this.element = init?.message || init?.error?.message || init?.error || '-';
