@@ -126,9 +126,7 @@ export default function ServicesPage() {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
+                hasNextPage && fetchNextPage()
             } else {
                 setIsBottom(false);
             }
@@ -140,12 +138,13 @@ export default function ServicesPage() {
 
     const sortList = [
         {
-            label: "date", icon: "event",
-            action: () => setList([...services].sort((a, b) => b.createdAt - a.createdAt)),
-            reverse: () => setList([...services].sort((a, b) => a.createdAt - b.createdAt))
+            label: "Publié le",
+            icon: "event",
+            action: () => setList([...services].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())),
+            reverse: () => setList([...services].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
         },
         {
-            label: "nom", icon: "sort_by_alpha",
+            label: "Titre", icon: "sort_by_alpha",
             action: () => setList([...services].sort((a, b) => a.title.localeCompare(b.title))),
             reverse: () => setList([...services].sort((a, b) => b.title.localeCompare(a.title)))
         }

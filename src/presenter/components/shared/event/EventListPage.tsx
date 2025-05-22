@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { EventFilter } from "../../../../domain/entities/Event";
+import { EventCategory, EventFilter } from "../../../../domain/entities/Event";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -12,7 +12,7 @@ import { Icon } from "../../common/IconComp";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
-import { getLabel, getValue } from "../../../views/viewsEntities/utilsService";
+import { getValue } from "../../../views/viewsEntities/utilsService";
 import { eventCategories, eventCategoriesS } from "../../../constants";
 import { EventView } from "../../../views/viewsEntities/eventViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
@@ -55,13 +55,23 @@ export default function EventListPage() {
         refetch();
     }
 
+
+    const filterName = (): string => {
+        switch (filter) {
+            case EventFilter.MINE: return 'les miens';
+            case EventFilter.IGO: return 'j\'y vais';
+            case EventFilter.VALIDATED: return 'validé';
+            default: return '';
+        }
+    }
+
     useEffect(() => {
-        const notifUpdate =
-            (events?.length === 0 && !isLoading) &&
-            `Aucun évènement ${filter !== '' ? getLabel(filter, eventTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ''} n'a été trouvé`
-            || error && "Erreur lors du chargement des évènements, veuillez réessayer plus tard"
-            || '';
-        setNotif(notifUpdate);
+        switch (true) {
+            case isLoading: setNotif('Chargement...'); break;
+            case error: setNotif('Erreur de chargement'); break;
+            case count === 0: setNotif(`Aucun événement ${filterName()} trouvé`); break;
+            default: setNotif('');
+        }
     }, [events, isLoading, error, filter, category]);
 
     const switchClick = () => {
@@ -77,20 +87,17 @@ export default function EventListPage() {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
+                hasNextPage && fetchNextPage()
+            } else setIsBottom(false)
         }
     }
 
     const sortList = [
         {
-            label: "Date", icon: "event",
-            action: () => setList([...events].sort((a, b) => b.createdAt - a.createdAt)),
-            reverse: () => setList([...events].sort((a, b) => a.createdAt - b.createdAt))
+            label: "Commence le",
+            icon: "event",
+            action: () => setList([...events].sort((a, b) => new Date(b.start).getTime() - new Date(a.start).getTime())),
+            reverse: () => setList([...events].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()))
         },
         {
             label: 'Titre', icon: 'sort_by_alpha',
@@ -116,7 +123,7 @@ export default function EventListPage() {
                 <NavBarTop />
                 <SubHeader
                     qty={count || 0}
-                    type={`évènements ${category !== '' ? getLabel(category, eventCategories).toLowerCase() : ""}`} />
+                    type={`évènements  ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
                 {view === "view_agenda" &&
                     <TabsMenu
                         labels={eventTabs}

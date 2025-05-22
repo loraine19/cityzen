@@ -10,7 +10,6 @@ import { PoolCard } from "./voteCards/PoolCard";
 import { SurveyCard } from "./voteCards/SurveyCard";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
-import { getLabel } from "../../../views/viewsEntities/utilsService";
 import DI from "../../../../di/ioc";
 import { PoolSurveyFilter, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
@@ -19,7 +18,6 @@ import { VoteTarget } from "../../../../domain/entities/Vote";
 
 export default function VoteListPage() {
     const [notif, setNotif] = useState<string>('');
-    const [tabSelected] = useState<string>('');
     const [mine, setMine] = useState<boolean>(false)
     const [step, setStep] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
@@ -29,12 +27,8 @@ export default function VoteListPage() {
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), step: Params.get("step") }
 
-    useEffect(() => {
-        setStep(params.step || '');
-        setFilter(params.filter || '')
-    }, []);
-
-    useEffect(() => { poolsSurveys && setList(poolsSurveys) }, [isLoading]);
+    useEffect(() => { setStep(params.step || ''); setFilter(params.filter || '') }, []);
+    useEffect(() => { poolsSurveys && setList([...poolsSurveys]); console.log(count) }, [count]);
 
     const boxArray = ["nouveau", "en attente", "validé", "rejeté"];
     const filterName = (): string => {
@@ -45,48 +39,35 @@ export default function VoteListPage() {
             default: return '';
         }
     }
-    const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
+    const stepName = (): string => {
+        switch (step) {
+            case PoolSurveyStep.NEW: return 'nouveau';
+            case PoolSurveyStep.PENDING: return 'en attente';
+            case PoolSurveyStep.VALIDATED: return 'validé';
+            case PoolSurveyStep.REJECTED: return 'rejeté';
+            default: return '';
+        }
+    }
 
+    const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
     const CheckboxesFilter = () => {
         let steps = [];
         boxSelected.includes(boxArray[0]) && steps.push(PoolSurveyStep.NEW);
         boxSelected.includes(boxArray[1]) && steps.push(PoolSurveyStep.PENDING);
         boxSelected.includes(boxArray[2]) && steps.push(PoolSurveyStep.VALIDATED);
         boxSelected.includes(boxArray[3]) && steps.push(PoolSurveyStep.REJECTED);
-
-        if (boxSelected.length === 0) {
-            setStep('');
-        }
-        else {
-            setStep(steps.join(','));
-        }
+        boxSelected.length === 0 ? setStep('') : setStep(steps.join(','));
     }
-
-    useEffect(() => {
-        CheckboxesFilter()
-    }, [boxSelected]);
+    useEffect(() => { CheckboxesFilter() }, [boxSelected]);
 
 
     const filterTab = async (value?: PoolSurveyFilter) => {
-        setParams({ filter: value as string || '', step: step });
-        if (value !== filter) { setStep('') }
+        setParams({ filter: value as string || '', step });
+        value !== filter && setStep('')
         setFilter(value || '');
-        setMine(false)
-        switch (value) {
-            case PoolSurveyFilter.MINE:
-                { setMine(true), setStep(''), setBoxSelected(boxArray) };
-                break;
-            case PoolSurveyFilter.POOL:
-                { setMine(false), setStep(''), setBoxSelected(boxArray) };
-                break;
-            case PoolSurveyFilter.SURVEY:
-                { setMine(false), setStep(''), setBoxSelected(boxArray) };
-                break;
-            default:
-                { setMine(false), setStep(''), setBoxSelected(boxArray) };
-                break;
-        }
-        setParams({ filter: value as string || '', step: step })
+        setBoxSelected(boxArray)
+        value === PoolSurveyFilter.MINE ? setMine(true) : setMine(false);
+        setParams({ filter: value as string || '', step })
     };
 
     const tabs: TabLabel[] = [
@@ -99,13 +80,13 @@ export default function VoteListPage() {
 
     const sortList = [
         {
-            label: "date",
-            icon: "calendar_month",
-            action: () => setList([...poolsSurveys].sort((a, b) => b.createdAt - a.createdAt)),
-            reverse: () => setList([...poolsSurveys].sort((a, b) => a.createdAt - b.createdAt))
+            label: "Créé le",
+            icon: "event",
+            action: () => setList([...poolsSurveys].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())),
+            reverse: () => setList([...poolsSurveys].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
         },
         {
-            label: "nom",
+            label: "Titre",
             icon: "sort_by_alpha",
             action: () => setList([...poolsSurveys].sort((a, b) => a.title.localeCompare(b.title))),
             reverse: () => setList([...poolsSurveys].sort((a, b) => b.title.localeCompare(a.title)))
@@ -116,34 +97,26 @@ export default function VoteListPage() {
             action: () => setList([...poolsSurveys].sort((a, b) => b.pourcent - a.pourcent)),
             reverse: () => setList([...poolsSurveys].sort((a, b) => a.pourcent - b.pourcent))
         }
-    ];
+    ]
 
     useEffect(() => {
-        !isLoading && setNotif(count > 0 ? '' : `Aucun  ${tabSelected} ${step !== '' && step ? ' ' : ''} n'a été trouvé`);
-    }, [isLoading]);
-
-    useEffect(() => {
-        const notifUpdate =
-            (count === 0 && !isLoading) &&
-            `Aucun ${filter !== '' ? getLabel(filter, tabs).toLowerCase() : ''} ${step !== '' ? filterName() : ''} n'a été trouvé`
-            || error && "Erreur lors du chargement des sondages, veuillez réessayer plus tard"
-            || '';
-        setNotif(notifUpdate);
+        switch (true) {
+            case (isLoading): setNotif('Chargement des sondages...'); break;
+            case (count === 0): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
+            case (error): setNotif("Erreur lors du chargement des sondages, veuillez réessayer plus tard"); break;
+            default: setNotif('');
+        }
     }, [isLoading, error, filter, step]);
 
-    const divRef = useRef(null);
-    const [isBottom, setIsBottom] = useState(false);
+    const divRef = useRef(null)
+    const [isBottom, setIsBottom] = useState<boolean>(false);
     const handleScroll = () => {
         if (divRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
+                hasNextPage && fetchNextPage()
+            } else setIsBottom(false)
         }
     }
 
@@ -155,8 +128,9 @@ export default function VoteListPage() {
                     <NavBarTop />
                     <SubHeader
                         qty={count > 0 ? count : 'aucun'}
-                        type={tabSelected === "pools" && "cagnottes" ||
-                            tabSelected === "surveys" && "sondages" || 'sondages ou cagnottes'} />
+                        type={filter === PoolSurveyFilter.SURVEY ? 'sondage' :
+                            filter === PoolSurveyFilter.POOL ? 'cagnotte' :
+                                'cagnottes et sondages'} />
                     <TabsMenu labels={tabs} sortList={sortList} color={"orange"} />
                     <CheckCard
                         categoriesArray={boxArray}

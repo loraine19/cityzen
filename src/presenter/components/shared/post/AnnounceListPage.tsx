@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { PostFilter } from "../../../../domain/entities/Post";
+import { PostCategory, PostFilter } from "../../../../domain/entities/Post";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -8,7 +8,7 @@ import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import AnnouncesGridComp from "./announceComps/AnnouncesGridComp";
 import { SkeletonGrid } from "../../common/Skeleton";
-import { getLabel, getValue } from "../../../views/viewsEntities/utilsService";
+import { getValue } from "../../../views/viewsEntities/utilsService";
 import DI from "../../../../di/ioc";
 import { PostView } from "../../../views/viewsEntities/postViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
@@ -25,18 +25,17 @@ export default function AnnounceListPage() {
     const [notif, setNotif] = useState<string>('')
     const [mines, setMines] = useState<boolean>(false);
     const [view, setView] = useState(window.innerWidth > 768 ? "list" : "dashboard");
-
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
 
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
     const [list, setList] = useState<PostView[]>(posts);
-    useEffect(() => { posts && setList(posts) }, [isLoading])
+    useEffect(() => { posts && setList(posts) }, [isLoading, count])
 
     const filterTab = async (value?: PostFilter) => {
         setParams({ filter: value as string || '', category: category });
-        if (value !== filter) { setCategory('') }
+        value !== filter && setCategory('')
         setFilter(value || '');
         value === PostFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string || '', category: category })
@@ -57,15 +56,24 @@ export default function AnnounceListPage() {
         refetch();
     }
 
+
+    const filterName = (): string => {
+        switch (filter) {
+            case PostFilter.MINE: return 'les miens';
+            case PostFilter.ILIKE: return 'likée';
+            default: return '';
+        }
+    }
+
+
     useEffect(() => {
-        const notifUpdate =
-            (posts?.length === 0 && !isLoading) &&
-            `Aucune annonce ${filter !== '' ?
-                getLabel(filter, postCategories).toLowerCase() : ''} ${category !== '' ? getLabel(category, postCategories).toLowerCase() : ''} n'a été trouvé`
-            || error && "Erreur lors du chargement des annonces, veuillez réessayer plus tard"
-            || '';
-        setNotif(notifUpdate);
-    }, [posts, isLoading, error, filter, category]);
+        switch (true) {
+            case (isLoading): setNotif('Chargement des annonces...'); break;
+            case (count === 0): setNotif(`Aucune annonce ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''} n'a été trouvé`); break;
+            case (error): setNotif("Erreur lors du chargement des annonces, veuillez réessayer plus tard"); break;
+            default: setNotif('');
+        }
+    }, [isLoading, error, filter, category]);
 
 
     useEffect(() => {
@@ -76,9 +84,7 @@ export default function AnnounceListPage() {
 
     const AnnouncesByFour = (array: PostView[]) => {
         const arrayTotal: PostView[][] = [];
-        for (let i = 0; i < array?.length; i += 4) {
-            arrayTotal.push(array.slice(i, i + 4));
-        }
+        for (let i = 0; i < array?.length; i += 4)  arrayTotal.push(array.slice(i, i + 4))
         return arrayTotal;
     }
 
@@ -89,18 +95,12 @@ export default function AnnounceListPage() {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
+                hasNextPage && fetchNextPage()
+            } else setIsBottom(false)
         }
     }
     const announcesToGrid = AnnouncesByFour(list);
     const switchClick = () => setView(view === "dashboard" ? "list" : "dashboard");
-
-
 
     const sortList = [
         {
@@ -110,13 +110,13 @@ export default function AnnounceListPage() {
             reverse: () => setList([...posts].sort((a, b) => a?.Likes?.length - b?.Likes?.length))
         },
         {
-            label: "date",
+            label: "Créé le",
             icon: "event",
-            action: () => setList([...posts].sort((a, b) => b.createdAt - a.createdAt)),
-            reverse: () => setList([...posts].sort((a, b) => a.createdAt - b.createdAt))
+            action: () => setList([...posts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())),
+            reverse: () => setList([...posts].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
         },
         {
-            label: "nom",
+            label: "Titre",
             icon: "sort_by_alpha",
             action: () => setList([...posts].sort((a, b) => a.title.localeCompare(b.title))),
             reverse: () => setList([...posts].sort((a, b) => b.title.localeCompare(a.title)))
@@ -129,7 +129,7 @@ export default function AnnounceListPage() {
                 <NavBarTop />
                 <SubHeader
                     qty={count}
-                    type={`annonces ${category !== '' ? getLabel(category, postCategories).toLowerCase() : ""}`} />
+                    type={`annonces  ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
                 <TabsMenu
                     labels={postTabs}
                     sortList={sortList}
