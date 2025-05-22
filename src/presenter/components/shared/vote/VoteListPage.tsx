@@ -15,7 +15,6 @@ import { PoolSurveyFilter, PoolSurveyStep } from "../../../../domain/entities/Po
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
 import { VoteTarget } from "../../../../domain/entities/Vote";
 
-
 export default function VoteListPage() {
     const [notif, setNotif] = useState<string>('');
     const [mine, setMine] = useState<boolean>(false)
@@ -28,7 +27,7 @@ export default function VoteListPage() {
     const params = { filter: Params.get("filter"), step: Params.get("step") }
 
     useEffect(() => { setStep(params.step || ''); setFilter(params.filter || '') }, []);
-    useEffect(() => { poolsSurveys && setList([...poolsSurveys]); console.log(count) }, [count]);
+    useEffect(() => { setList([...poolsSurveys]) }, [refetch, isLoading, count]);
 
     const boxArray = ["nouveau", "en attente", "validé", "rejeté"];
     const filterName = (): string => {
@@ -78,6 +77,7 @@ export default function VoteListPage() {
     ]
 
 
+
     const sortList = [
         {
             label: "Créé le",
@@ -98,6 +98,7 @@ export default function VoteListPage() {
             reverse: () => setList([...poolsSurveys].sort((a, b) => a.pourcent - b.pourcent))
         }
     ]
+    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
 
     useEffect(() => {
         switch (true) {
@@ -131,7 +132,13 @@ export default function VoteListPage() {
                         type={filter === PoolSurveyFilter.SURVEY ? 'sondage' :
                             filter === PoolSurveyFilter.POOL ? 'cagnotte' :
                                 'cagnottes et sondages'} />
-                    <TabsMenu labels={tabs} sortList={sortList} color={"orange"} />
+                    <TabsMenu
+                        labels={tabs}
+                        sortList={sortList}
+                        color={"orange"}
+                        selectedSort={selectedSort}
+                        setSelectedSort={setSelectedSort}
+                    />
                     <CheckCard
                         categoriesArray={boxArray}
                         boxSelected={boxSelected}

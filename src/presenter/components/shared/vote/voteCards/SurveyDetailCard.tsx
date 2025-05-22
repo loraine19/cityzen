@@ -31,13 +31,11 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
-
                         <Chip
                             size='sm'
                             value={survey?.categoryS}
                             className="CyanChip">
                         </Chip>
-
                         <DateChip
                             start={survey?.createdAt}
                             ended={ended}

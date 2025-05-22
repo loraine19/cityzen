@@ -7,7 +7,7 @@ import { useState } from "react";
 import { AlertModal } from "../../../common/AlertModal";
 import { AlertValues } from "../../../../../domain/entities/Error";
 
-export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView, refetch: () => void, open: boolean, close: () => void }) => {
+export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView, refetch: (opinion: VoteOpinion) => void, open: boolean, close: () => void }) => {
     const [opinion, setOpinion] = useState<VoteOpinion>(vote.myOpinion ?? VoteOpinion.OK)
     const voteDTO = new VoteDTO({
         targetId: vote.id, target: vote.typeS === VoteTarget.POOL ?
@@ -54,7 +54,7 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
                 setVoteNotification(ok.error.message)
             }
             else {
-                refetch();
+                refetch(opinion);
                 close();
             }
         },

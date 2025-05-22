@@ -3,6 +3,8 @@ import { User } from "../../../domain/entities/User";
 import { Pool, PoolSurveyStatus, Survey, SurveyCategory } from "../../../domain/entities/PoolSurvey";
 import { Vote, VoteOpinion, VoteTarget } from "../../../domain/entities/Vote";
 import { Flag } from "../../../domain/entities/Flag";
+import DI from "../../../di/ioc";
+import { VoteDTO } from "../../../infrastructure/DTOs/VoteDTO";
 
 
 export class PoolSurveyView {
@@ -28,6 +30,7 @@ export class PoolSurveyView {
     categoryS?: string = SurveyCategory[SurveyCategory.CATEGORY_1 as string as keyof typeof SurveyCategory];
     Flags?: Flag[] = [];
     status?: PoolSurveyStatus = PoolSurveyStatus.PENDING;
+    toogleVote!: (opinion: VoteOpinion) => Promise<PoolSurveyView>;
 
     constructor
         (base: Pool | Survey, user: User, userCount: number) {
@@ -35,18 +38,33 @@ export class PoolSurveyView {
             Object.assign(this, base);
             this.flagged = false;
             this.typeS = VoteTarget.POOL;
+            this.toogleVote = async (opinion: VoteOpinion) => {
+                const voteDto: VoteDTO = { targetId: base.id, target: VoteTarget.POOL, opinion }
+                this.IVoted ? await DI.resolve('updateVoteUseCase').execute(voteDto) : await DI.resolve('postVoteUseCase').execute(voteDto);
+                const updatedEvent = await DI.resolve('getPoolByIdUseCase').execute(base.id);
+                return new PoolSurveyView(updatedEvent, user, userCount)
+            }
         }
         if ('category' in base) {
+            console.log(base)
             Object.assign(this, base);
             this.flagged = base?.Flags?.some(flag => flag?.userId === user?.id);
             this.typeS = VoteTarget.SURVEY;
             this.categoryS = SurveyCategory[base.category as string as keyof typeof SurveyCategory];
+            this.image = base?.image
+            this.toogleVote = async (opinion: VoteOpinion) => {
+                const voteDto: VoteDTO = { targetId: base.id, target: VoteTarget.SURVEY, opinion }
+                this.IVoted ? await DI.resolve('updateVoteUseCase').execute(voteDto) : await DI.resolve('postVoteUseCase').execute(voteDto);
+                const updated = await DI.resolve('getSurveyByIdUseCase').execute(base.id);
+                return new PoolSurveyView(updated, user, userCount)
+            }
         }
         this.mine = base.userId === user?.id || false;
         this.pourcent = Math.round(base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length / (userCount / 2) * 100);
         this.needed = base.status === PoolSurveyStatus.PENDING ? Math.round(userCount / 2) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length : 0;
         this.IVoted = base?.Votes?.some(vote => vote.userId === user?.id);
         this.myOpinion = base?.Votes?.find(vote => vote.userId === user?.id)?.opinion || null;
+        this.status = base.status;
 
     }
 

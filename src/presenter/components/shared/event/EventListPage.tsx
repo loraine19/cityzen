@@ -29,7 +29,7 @@ export default function EventListPage() {
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
     const [list, setList] = useState<EventView[]>(events);
-    useEffect(() => { setList(events) }, [isLoading])
+    useEffect(() => { setList(events) }, [isLoading, refetch, count])
 
     const filterTab = async (value?: EventFilter) => {
         setParams({ filter: value as string || '', category: category });
@@ -117,6 +117,8 @@ export default function EventListPage() {
         }
     ]
 
+    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
+
     return (
         <div className="Body cyan">
             <header className="px-4">
@@ -128,7 +130,12 @@ export default function EventListPage() {
                     <TabsMenu
                         labels={eventTabs}
                         defaultTab={params.filter || ''}
-                        sortList={sortList} />}
+                        sortList={sortList}
+                        selectedSort={selectedSort}
+                        setSelectedSort={setSelectedSort}
+
+
+                    />}
                 <div className={`flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect
                         categoriesArray={eventCategoriesS}

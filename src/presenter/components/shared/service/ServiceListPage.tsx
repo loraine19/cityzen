@@ -134,7 +134,7 @@ export default function ServicesPage() {
     }
 
     const [list, setList] = useState<ServiceView[]>(services);
-    useEffect(() => { setList(services) }, [isLoading])
+    useEffect(() => { setList(services) }, [isLoading, refetch, count])
 
     const sortList = [
         {
@@ -149,6 +149,7 @@ export default function ServicesPage() {
             reverse: () => setList([...services].sort((a, b) => b.title.localeCompare(a.title)))
         }
     ]
+    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
 
     return (
         <div className="Body cyan">
@@ -160,7 +161,9 @@ export default function ServicesPage() {
 
                 <TabsMenu
                     labels={serviceTabs}
-                    sortList={sortList} />
+                    sortList={sortList}
+                    selectedSort={selectedSort}
+                    setSelectedSort={setSelectedSort} />
                 {mine ?
                     <CheckCard
                         categoriesArray={boxArray}

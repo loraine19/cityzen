@@ -31,7 +31,7 @@ export default function AnnounceListPage() {
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
     const [list, setList] = useState<PostView[]>(posts);
-    useEffect(() => { posts && setList(posts) }, [isLoading, count])
+    useEffect(() => { posts && setList(posts) }, [isLoading, count, refetch])
 
     const filterTab = async (value?: PostFilter) => {
         setParams({ filter: value as string || '', category: category });
@@ -121,7 +121,8 @@ export default function AnnounceListPage() {
             action: () => setList([...posts].sort((a, b) => a.title.localeCompare(b.title))),
             reverse: () => setList([...posts].sort((a, b) => b.title.localeCompare(a.title)))
         }
-    ];
+    ]
+    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
 
     return (
         <div className="Body orange">
@@ -133,6 +134,8 @@ export default function AnnounceListPage() {
                 <TabsMenu
                     labels={postTabs}
                     sortList={sortList}
+                    selectedSort={selectedSort}
+                    setSelectedSort={setSelectedSort}
                     color={'orange'} />
                 <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
                     <CategoriesSelect

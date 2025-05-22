@@ -56,10 +56,10 @@ export enum PoolSurveyStatus {
 export type PoolSurveyPage = { poolsSurveys: (Pool | Survey)[], count: number };
 
 export enum SurveyCategory {
-    CATEGORY_1 = 'Régles de quartier',
-    CATEGORY_2 = 'je c pas ',
-    CATEGORY_3 = 'je c pas 3',
-    CATEGORY_4 = 'je c pas 4',
+    CATEGORY_1 = 'régles de quartier',
+    CATEGORY_2 = 'projet de travaux',
+    CATEGORY_3 = 'partage d\'opinion',
+    CATEGORY_4 = 'autres projets',
     CATEGORY_5 = 'autre',
 }
 

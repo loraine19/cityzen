@@ -93,7 +93,7 @@ export function ProgressBarBlur({ value, label, needed, status, size = 'md', isP
             {status === EventStatus.PENDING &&
                 (
                     <Progress
-                        barProps={{ className: "!line-clamp-1 px-2 !bg-orange-700 " }}
+                        barProps={{ className: " min-w-8 text-center !line-clamp-1 px-2 !bg-orange-700 " }}
                         value={(status === EventStatus.PENDING) ? value : 100}
                         size={size}
                         label={`, il manque ${needed} ${label}`} />)}

@@ -11,6 +11,7 @@ import { useState } from "react";
 import { VoteCard } from "./VoteCard";
 import { Title } from "../../../common/CardTitle";
 import { PoolSurveyStatus } from "../../../../../domain/entities/PoolSurvey";
+import { VoteOpinion } from "../../../../../domain/entities/Vote";
 
 
 type SurveyCardProps = {
@@ -20,8 +21,9 @@ type SurveyCardProps = {
     update: () => void
 }
 
-export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
+export function SurveyCard({ survey: initialSurvey, change, mines, update }: SurveyCardProps) {
     const now = new Date(Date.now())
+    const [survey, setSurvey] = useState<PoolSurveyView>(initialSurvey);
     const endDays: number = Math.floor((new Date(survey?.createdAt).getTime() + 15 * dayMS - (now.getTime())) / dayMS)
     const end = new Date(new Date(survey?.createdAt).getTime() + 15 * dayMS)
     const disabledEditCTA: boolean = survey?.pourcent >= 100 ? true : false
@@ -31,6 +33,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
     const haveImage = survey?.image ? true : false
     const [open, setOpen] = useState(false);
     const color = { OK: 'green', NO: 'red', WO: 'orange' }
+    const up = async (opinion: VoteOpinion) => { setSurvey(await survey.toogleVote(opinion)); update() }
 
 
     return (
@@ -39,7 +42,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                 open={open}
                 close={() => setOpen(false)}
                 vote={survey}
-                refetch={update} />}
+                refetch={(opinion: VoteOpinion) => up(opinion)} />}
             <Card className={haveImage ? "FixCard " : "FixCardNoImage  "}>
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}

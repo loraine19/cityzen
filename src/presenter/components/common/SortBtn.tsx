@@ -1,11 +1,10 @@
-import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+import { Menu, MenuHandler, MenuList } from "@material-tailwind/react";
 import { Icon } from "./IconComp";
 import { SortLabel } from "../../../domain/entities/frontEntities";
 import { useState } from "react";
 
-export const SortButton = (props: { sortList: SortLabel[], color?: string }) => {
-    const { sortList, color } = props
-    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
+export const SortButton = (props: { sortList: SortLabel[], color?: string, setSelectedSort: (value: string) => void, selectedSort: String }) => {
+    const { sortList, color = 'cyan', setSelectedSort, selectedSort } = props
     const [reverse, setReverse] = useState<boolean>(false)
 
     return (
@@ -22,7 +21,7 @@ export const SortButton = (props: { sortList: SortLabel[], color?: string }) => 
                     </MenuHandler>
                     <MenuList className="!rounded-2xl !shadow-l py-3 px-2">
                         {sortList.map((item: SortLabel, index: number) =>
-                            <MenuItem
+                            <div
                                 key={index}
                                 className="rounded-2xl pl-3 py-0 flex items-center font-normal justify-between gap-4 hover:!bg-white hover:!text-underline" >
                                 {item.label}
@@ -49,7 +48,7 @@ export const SortButton = (props: { sortList: SortLabel[], color?: string }) => 
                                         color={selectedSort === item.label ? color : 'gray'}
                                         icon={item.icon} fill />
                                 </div>
-                            </MenuItem>
+                            </div>
                         )}
                     </MenuList>
                 </Menu>

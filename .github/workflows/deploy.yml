@@ -27,8 +27,8 @@ jobs:
                   context: .
                   push: true
                   tags: |
-                      lorainep/cityzen:latest
-                      lorainep/cityzen:${{ github.sha }}
+                      lorainep/citydo:latest
+                      lorainep/citydo:${{ github.sha }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   build-args:
