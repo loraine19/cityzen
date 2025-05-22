@@ -29,6 +29,22 @@ export class ModalValues {
     element: any = '';
 }
 
+export class SortLabel {
+    label: string = '';
+    icon: string = '';
+    action: () => void;
+    reverse: () => void;
+
+    constructor(label: string, icon: string, action: () => void, reverse: () => void) {
+        this.label = label;
+        this.icon = icon;
+        this.action = action;
+        this.reverse = reverse
+    }
+
+
+}
+
 
 
 export const dayMS = 24 * 60 * 60 * 1000;

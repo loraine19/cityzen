@@ -22,14 +22,14 @@ export default function EventListPage() {
     const [category, setCategory] = useState<string>('');
     const eventViewModelFactory = DI.resolve('eventViewModel');
     const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(filter, category)
-
     const [view, setView] = useState("view_agenda");
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
-
-    useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
+    useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
+    const [list, setList] = useState<EventView[]>(events);
+    useEffect(() => { setList(events) }, [isLoading])
 
     const filterTab = async (value?: EventFilter) => {
         setParams({ filter: value as string || '', category: category });
@@ -38,14 +38,14 @@ export default function EventListPage() {
         value === EventFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string || '', category: category })
         refetch();
-    };
+    }
 
     const eventTabs: TabLabel[] = [
         { label: "tous", value: "", result: () => filterTab() },
         { label: "validé", value: EventFilter.VALIDATED, result: () => filterTab(EventFilter.VALIDATED) },
         { label: "j'y vais", value: EventFilter.IGO, result: () => filterTab(EventFilter.IGO) },
         { label: "j'organise", value: EventFilter.MINE, result: () => filterTab(EventFilter.MINE) },
-    ];
+    ]
 
     const change = (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
         const selectedCategory = typeof e !== "object" ?
@@ -86,6 +86,30 @@ export default function EventListPage() {
         }
     }
 
+    const sortList = [
+        {
+            label: "Date", icon: "event",
+            action: () => setList([...events].sort((a, b) => b.createdAt - a.createdAt)),
+            reverse: () => setList([...events].sort((a, b) => a.createdAt - b.createdAt))
+        },
+        {
+            label: 'Titre', icon: 'sort_by_alpha',
+            action: () => setList([...events].sort((a, b) => a.title.localeCompare(b.title))),
+            reverse: () => setList([...events].sort((a, b) => b.title.localeCompare(a.title)))
+        }
+        ,
+        {
+            label: 'Participants', icon: 'person',
+            action: () => setList([...events].sort((a, b) => b.Participants.length - a.Participants.length)),
+            reverse: () => setList([...events].sort((a, b) => a.Participants.length - b.Participants.length))
+        },
+        {
+            label: 'Durée', icon: 'calendar_month',
+            action: () => setList([...events].sort((a: EventView, b) => (b?.days?.length || 0) - (a?.days?.length || 0))),
+            reverse: () => setList([...events].sort((a, b) => a.days.length - b.days.length))
+        }
+    ]
+
     return (
         <div className="Body cyan">
             <header className="px-4">
@@ -96,7 +120,8 @@ export default function EventListPage() {
                 {view === "view_agenda" &&
                     <TabsMenu
                         labels={eventTabs}
-                        defaultTab={params.filter || ''} />}
+                        defaultTab={params.filter || ''}
+                        sortList={sortList} />}
                 <div className={`flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect
                         categoriesArray={eventCategoriesS}
@@ -128,7 +153,7 @@ export default function EventListPage() {
                                 count={4} />
                         ))
                         :
-                        events.map((event: EventView, index: number) => (
+                        list.map((event: EventView, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <EventCard
                                     key={event.id}

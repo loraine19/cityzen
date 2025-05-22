@@ -1,9 +1,10 @@
 import { Tabs, TabsHeader, Tab } from "@material-tailwind/react";
-import { TabLabel } from "../../../domain/entities/frontEntities";
+import { SortLabel, TabLabel } from "../../../domain/entities/frontEntities";
 import { useEffect } from "react";
+import { SortButton } from "./SortBtn";
 
-export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: string }) {
-    const { labels, defaultTab } = props
+export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: string, sortList?: SortLabel[], color?: string }) {
+    const { labels, defaultTab, sortList } = props
 
     useEffect(() => {
         const tab = document.querySelector(`[data-value="${defaultTab as string}"]`) as HTMLElement
@@ -11,21 +12,30 @@ export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: strin
     }, [])
 
     return (
-        <Tabs value={defaultTab as string || labels[0].value} className="w-full max-width-100vh overflow-auto">
-            <TabsHeader
-                className="w-full !gap-2 !px-0 my-2 bg-transparent "
-                indicatorProps={{ className: "bg-gray-900 rounded-full" }}>
-                {labels.map(({ label, value, result }, index: number) => (
-                    <Tab
-                        key={index}
-                        value={value}
-                        activeClassName="text-white"
-                        className="text-sm whitespace-nowrap bg-white rounded-full shadow !px-3"
-                        onClick={() => { result() }}>
-                        {label}
-                    </Tab>
-                ))}
-            </TabsHeader>
-        </Tabs>
+        <div className="flex items-center justify-between px-4 gap-1">
+            <Tabs value={defaultTab as string || labels[0].value}
+                className=" w-full max-w-100vh overflow-auto">
+                <TabsHeader
+                    className="w-full flex flex-1 !gap-2 !px-0 my-2 bg-transparent"
+                    indicatorProps={{ className: "bg-gray-900 rounded-full" }}>
+                    {labels.map(({ label, value, result }, index: number) => (
+                        <Tab
+                            key={index}
+                            value={value}
+                            activeClassName="text-white"
+                            className="text-sm whitespace-nowrap bg-white rounded-full shadow !px-3"
+                            onClick={() => { result() }}>
+                            {label}
+                        </Tab>
+                    ))}
+                </TabsHeader>
+            </Tabs>
+            {sortList &&
+                <SortButton
+                    sortList={sortList}
+                    color={props?.color}
+                />
+            }
+        </div>
     );
 }

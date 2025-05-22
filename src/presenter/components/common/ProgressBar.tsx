@@ -16,7 +16,6 @@ export function ProgressBar({ value, label, needed, status, size = 'md' }: Progr
     const textSize = size === "lg" ? 'h6' : size === "md" ? 'small' : 'body1';
     let color: string = 'gray'
     let labelTexte = ''
-
     switch (true) {
         case status === PoolSurveyStatus.REJECTED:
             color = 'bg-gray-300'
@@ -27,14 +26,13 @@ export function ProgressBar({ value, label, needed, status, size = 'md' }: Progr
             labelTexte = 'vote cloturé et approuvé'
             break;
         case (status === PoolSurveyStatus.PENDING && value === 0):
-            color = 'bg-orange-600'
+            color = 'bg-red-500'
             labelTexte = `Pas encore de ${label}`
             break;
         default:
-            color = 'bg-orange-600'
+            color = 'bg-orange-500'
             labelTexte = `il manque ${needed} ${label}`
     }
-
 
     return (
         < div className={`h-max w-full flex -m-1 flex-col px-2 pb-3 gap-2 ${size === "lg" && "mb-2"}`}>

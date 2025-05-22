@@ -88,14 +88,13 @@ export default function ServicesPage() {
         setCustomFilter(false);
         const value = searchLabel.value;
         const label = searchLabel.label;
-        console.log(searchLabel);
         if (value) {
             setCategory(value);
             setParams({ search: tabSelected, category: value });
         }
         else if (label !== 'tous') {
             setCustomFilter(true);
-            setCustomList(services && services.filter((service: ServiceView) =>
+            setCustomList(services && list.filter((service: ServiceView) =>
                 service.category.toString() === (value) ||
                 service.categoryS.includes(label) ||
                 service.typeS.includes(label) ||
@@ -134,7 +133,23 @@ export default function ServicesPage() {
                 setIsBottom(false);
             }
         }
-    };
+    }
+
+    const [list, setList] = useState<ServiceView[]>(services);
+    useEffect(() => { setList(services) }, [isLoading])
+
+    const sortList = [
+        {
+            label: "date", icon: "event",
+            action: () => setList([...services].sort((a, b) => b.createdAt - a.createdAt)),
+            reverse: () => setList([...services].sort((a, b) => a.createdAt - b.createdAt))
+        },
+        {
+            label: "nom", icon: "sort_by_alpha",
+            action: () => setList([...services].sort((a, b) => a.title.localeCompare(b.title))),
+            reverse: () => setList([...services].sort((a, b) => b.title.localeCompare(a.title)))
+        }
+    ]
 
     return (
         <div className="Body cyan">
@@ -143,7 +158,10 @@ export default function ServicesPage() {
                 <SubHeader
                     qty={count}
                     type={`services ${filterName()} ${category ? ServiceCategory[category as string as keyof typeof ServiceCategory] : ''}`} />
-                <TabsMenu labels={serviceTabs} />
+
+                <TabsMenu
+                    labels={serviceTabs}
+                    sortList={sortList} />
                 {mine ?
                     <CheckCard
                         categoriesArray={boxArray}
@@ -170,7 +188,7 @@ export default function ServicesPage() {
                     ))
                     :
                     !customFilter ?
-                        services.map((service: ServiceView, index: number) => (
+                        list.map((service: ServiceView, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <ServiceComp
                                     key={service.id}

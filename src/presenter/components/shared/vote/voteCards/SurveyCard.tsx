@@ -91,7 +91,7 @@ export function SurveyCard({ survey, change, mines, update }: SurveyCardProps) {
                     {!mines ?
                         <ProgressBar
                             value={survey?.pourcent}
-                            label="Votes"
+                            label="vote pour"
                             needed={survey?.needed}
                             status={survey?.status} />
                         :

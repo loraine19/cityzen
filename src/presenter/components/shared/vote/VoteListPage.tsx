@@ -25,14 +25,16 @@ export default function VoteListPage() {
     const [filter, setFilter] = useState<string>('');
     const voteViewModelFactory = DI.resolve('voteViewModel');
     const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = voteViewModelFactory(filter, step);
+    const [list, setList] = useState<any[]>(poolsSurveys);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), step: Params.get("step") }
-
 
     useEffect(() => {
         setStep(params.step || '');
         setFilter(params.filter || '')
     }, []);
+
+    useEffect(() => { poolsSurveys && setList(poolsSurveys) }, [isLoading]);
 
     const boxArray = ["nouveau", "en attente", "validé", "rejeté"];
     const filterName = (): string => {
@@ -94,6 +96,28 @@ export default function VoteListPage() {
         { label: "les miens", value: PoolSurveyFilter.MINE, result: () => filterTab(PoolSurveyFilter.MINE) },
     ]
 
+
+    const sortList = [
+        {
+            label: "date",
+            icon: "calendar_month",
+            action: () => setList([...poolsSurveys].sort((a, b) => b.createdAt - a.createdAt)),
+            reverse: () => setList([...poolsSurveys].sort((a, b) => a.createdAt - b.createdAt))
+        },
+        {
+            label: "nom",
+            icon: "sort_by_alpha",
+            action: () => setList([...poolsSurveys].sort((a, b) => a.title.localeCompare(b.title))),
+            reverse: () => setList([...poolsSurveys].sort((a, b) => b.title.localeCompare(a.title)))
+        },
+        {
+            label: "Nombre de votes",
+            icon: "smart_card_reader",
+            action: () => setList([...poolsSurveys].sort((a, b) => b.pourcent - a.pourcent)),
+            reverse: () => setList([...poolsSurveys].sort((a, b) => a.pourcent - b.pourcent))
+        }
+    ];
+
     useEffect(() => {
         !isLoading && setNotif(count > 0 ? '' : `Aucun  ${tabSelected} ${step !== '' && step ? ' ' : ''} n'a été trouvé`);
     }, [isLoading]);
@@ -121,10 +145,7 @@ export default function VoteListPage() {
                 setIsBottom(false);
             }
         }
-    };
-
-
-
+    }
 
 
     return (
@@ -136,8 +157,7 @@ export default function VoteListPage() {
                         qty={count > 0 ? count : 'aucun'}
                         type={tabSelected === "pools" && "cagnottes" ||
                             tabSelected === "surveys" && "sondages" || 'sondages ou cagnottes'} />
-                    <TabsMenu
-                        labels={tabs} />
+                    <TabsMenu labels={tabs} sortList={sortList} color={"orange"} />
                     <CheckCard
                         categoriesArray={boxArray}
                         boxSelected={boxSelected}
@@ -156,7 +176,7 @@ export default function VoteListPage() {
                                 key={index}
                                 count={4} />
                         )) :
-                        poolsSurveys.map((element: PoolSurveyView, index: number) =>
+                        list.map((element: PoolSurveyView, index: number) =>
                             element.typeS === VoteTarget.SURVEY ?
                                 <div className="SubGrid" key={'div' + index}>
                                     <SurveyCard

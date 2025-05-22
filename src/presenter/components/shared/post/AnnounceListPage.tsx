@@ -31,6 +31,9 @@ export default function AnnounceListPage() {
 
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
+    const [list, setList] = useState<PostView[]>(posts);
+    useEffect(() => { posts && setList(posts) }, [isLoading])
+
     const filterTab = async (value?: PostFilter) => {
         setParams({ filter: value as string || '', category: category });
         if (value !== filter) { setCategory('') }
@@ -94,8 +97,31 @@ export default function AnnounceListPage() {
             }
         }
     }
-    const announcesToGrid = AnnouncesByFour(posts);
+    const announcesToGrid = AnnouncesByFour(list);
     const switchClick = () => setView(view === "dashboard" ? "list" : "dashboard");
+
+
+
+    const sortList = [
+        {
+            label: "Nombre de likes",
+            icon: "thumb_up",
+            action: () => setList([...posts].sort((a, b) => b?.Likes?.lenght - a?.Likes?.lenght)),
+            reverse: () => setList([...posts].sort((a, b) => a?.Likes?.length - b?.Likes?.length))
+        },
+        {
+            label: "date",
+            icon: "event",
+            action: () => setList([...posts].sort((a, b) => b.createdAt - a.createdAt)),
+            reverse: () => setList([...posts].sort((a, b) => a.createdAt - b.createdAt))
+        },
+        {
+            label: "nom",
+            icon: "sort_by_alpha",
+            action: () => setList([...posts].sort((a, b) => a.title.localeCompare(b.title))),
+            reverse: () => setList([...posts].sort((a, b) => b.title.localeCompare(a.title)))
+        }
+    ];
 
     return (
         <div className="Body orange">
@@ -105,7 +131,9 @@ export default function AnnounceListPage() {
                     qty={count}
                     type={`annonces ${category !== '' ? getLabel(category, postCategories).toLowerCase() : ""}`} />
                 <TabsMenu
-                    labels={postTabs} />
+                    labels={postTabs}
+                    sortList={sortList}
+                    color={'orange'} />
                 <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
                     <CategoriesSelect
                         categoriesArray={postCategories}
@@ -145,7 +173,7 @@ export default function AnnounceListPage() {
                                     view={view} />))
                             :
                             <div className="Grid">
-                                {posts.map((post: PostView, index: number) => (
+                                {list.map((post: PostView, index: number) => (
                                     <div className="SubGrid" key={index}>
                                         <PostCard
                                             key={post.id}
