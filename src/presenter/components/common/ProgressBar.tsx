@@ -1,5 +1,4 @@
 import { Typography, Progress, TypographyProps } from "@material-tailwind/react";
-
 import { ProgressProps } from "@material-tailwind/react";
 import { EventStatus } from "../../../domain/entities/Event";
 import { PoolSurveyStatus } from "../../../domain/entities/PoolSurvey";
@@ -54,9 +53,6 @@ export function ProgressBar({ value, label, needed, status, size = 'md' }: Progr
 }
 
 
-
-
-
 export function ProgressBarBlur({ value, label, needed, status, size = 'md', isPast }: ProgressBarProps) {
     let color = 'bg-gray-600'
     let labelTexte = ''
@@ -69,7 +65,6 @@ export function ProgressBarBlur({ value, label, needed, status, size = 'md', isP
             color = 'bg-gray-800/50'
             labelTexte = 'n\'aura pas lieu manque de participants'
             break;
-
         case (status === EventStatus.VALIDATED && !isPast):
             color = 'bg-green-600'
             labelTexte = 'a été validé'
