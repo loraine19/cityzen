@@ -1,7 +1,7 @@
 services:
   front:
     container_name: front
-    image: lorainep/cityzen:latest
+    image: lorainep/citydo:latest
     restart: unless-stopped
 
     networks :
