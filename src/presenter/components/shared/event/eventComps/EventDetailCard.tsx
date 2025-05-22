@@ -7,12 +7,12 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "../../../common/Skeleton";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 import { Title } from "../../../common/CardTitle";
-import { ProgressLargebar } from "../../../common/ProgressBar";
+import { ProgressBarBlur } from "../../../common/ProgressBar";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type EventCardProps = { EventLoad: EventView, refetch?: () => void, change?: (e: any) => void }
 export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
-    const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, } = EventLoad;
+    const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, status, isPast } = EventLoad;
 
 
     return (
@@ -32,10 +32,13 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                 ended={new Date(end).getTime() < Date.now()}
                                 prefix={'commence dans '} />
                         </div>
-                        <ProgressLargebar
+                        <ProgressBarBlur
+                            isPast={isPast}
+                            label='participants'
                             value={pourcent || 0}
-                            float={true}
-                            label="Participants" />
+                            status={status as string}
+                            size="lg"
+                            needed={participantsMin - (Participants?.length || 0)} />
                     </div>
                     < img
                         src={image as string}

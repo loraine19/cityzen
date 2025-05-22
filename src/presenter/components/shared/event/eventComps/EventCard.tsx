@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFooter, Typography, Chip, Progress } from "@material-tailwind/react";
+import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
 import { AvatarStack } from "./AvatarStack";
 import { useState } from "react";
 import ModifBtnStack from "../../../common/ModifBtnStack";
@@ -8,6 +8,8 @@ import DI from "../../../../../di/ioc";
 import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
 import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 import { Title } from "../../../common/CardTitle";
+import { EventStatus } from "../../../../../domain/entities/Event";
+import { ProgressBarBlur } from "../../../common/ProgressBar";
 
 type EventCardProps = {
     event: EventView, refetch?: () => void,
@@ -23,6 +25,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id)
     const actions = GenereMyActions(event, "evenement", deleteEvent);
     const haveImage = Boolean(image);
+
 
     return (
         <Card className="FixCard w-respLarge">
@@ -46,22 +49,17 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             ended={new Date(end).getTime() < Date.now()}
                             prefix="commence dans" />
                     </div>
-                    <div className={` h-max w-full !rounded-full backdrop-blur flex items-center gap-2 shadow p-2`}>
-                        {pourcent > 0 ? (
-                            <Progress
-                                value={pourcent}
-                                color={pourcent >= 100 ? "green" : "gray"}
-                                size="md"
-                                label={pourcent >= 100 ? "VALIDÉ" : " "} />
-                        ) : (
-                            <div className="flex flex-1 bg-white/70 rounded-full h-max items-center justify-center">
-                                <Typography
-                                    className="mb-0 text-xs font-medium">
-                                    pas encore de participants
-                                </Typography>
-                            </div>
-                        )}
-                    </div>
+                    {event.isPast}
+                    <ProgressBarBlur
+                        isPast={event.isPast}
+                        label='participants'
+                        value={pourcent || 0}
+                        status={event.status as string}
+                        needed={participantsMin - (event?.Participants?.length || 0)}
+
+
+                    />
+
                 </div>
                 {image && (
                     <img
@@ -104,6 +102,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                 )}
                 <div className="flex items-center gap-2">
                     <button
+                        disabled={event?.status !== EventStatus.PENDING}
                         data-cy='btn-participate'
                         onClick={async () => {
                             const event = toogleParticipate && await toogleParticipate();

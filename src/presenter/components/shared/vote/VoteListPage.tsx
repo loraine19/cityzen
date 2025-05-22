@@ -183,6 +183,7 @@ export default function VoteListPage() {
                                 </div>
                         )}
                     <LoadMoreButton
+                        color={'orange'}
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
                         handleScroll={() => handleScroll()} />

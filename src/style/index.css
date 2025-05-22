@@ -252,7 +252,7 @@ button {
 }
 
 .lgBtn {
-    @apply flex items-center justify-center rounded-full w-full !shadow-md truncate px-4 py-2;
+    @apply flex items-center justify-center rounded-full w-full !shadow-md truncate px-4 py-1;
 }
 
 /* COMP */

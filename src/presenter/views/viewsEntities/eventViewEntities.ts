@@ -6,6 +6,7 @@ import { EventImage } from "../../constants";
 
 export class EventView extends Event {
     actif?: boolean;
+    isPast: boolean;
     days?: Date[] | string[];
     Igo: boolean;
     label: string;
@@ -20,6 +21,7 @@ export class EventView extends Event {
 
     constructor(event: Event, userId: number) {
         super(event);
+        this.isPast = new Date(event?.end) < new Date(Date.now());
         this.image = (typeof event?.image === 'string' && event?.image) ? event.image : this.getDefaultImage(event?.category as EventCategory);
         this.days = this.getDays(event);
         this.Igo = event?.Participants?.some((p) => p.userId === userId) ? true : false;
