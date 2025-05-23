@@ -10,7 +10,7 @@ import {
 } from "@material-tailwind/react";
 import { Group } from "../../../../domain/entities/Group";
 import { GroupUser, Role } from "../../../../domain/entities/GroupUser";
-
+//kk
 type CheckboxListGroupProps = {
   groups: Group[];
   userGroups: GroupUser[];
@@ -26,7 +26,7 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
           <div className="relative flex justify-between h-max w-full">
             <Typography
               variant="small"
-              className={`${userGroups.length > 0 ? "text-blue-gray-600 font-normal" : 'text-red-500'}`}>
+              className={`${userGroups && userGroups?.length > 0 ? "text-blue-gray-600 font-normal" : 'text-red-500'}`}>
               <span className="line-clamp-1" >{userGroups && userGroups?.length > 0
                 ? (userGroups?.length > 1 ?
                   `Vos groupes et rôles` : `votre groupe et rôle`) +
