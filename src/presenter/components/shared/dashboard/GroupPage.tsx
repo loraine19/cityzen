@@ -80,6 +80,8 @@ export default function GroupPage() {
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader
+                    closeBtn
+                    link={`/`}
                     qty={count}
                     type={`Groupes `}
                     place={`${filterName() ?? 'proche de chez vous'}`}

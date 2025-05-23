@@ -1,5 +1,5 @@
 import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
@@ -9,7 +9,6 @@ import { ImageBtn } from "../../../common/ImageBtn";
 import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
 import { CheckboxListGroup } from "../../myInfos/CheckboxListGroup";
-import { Group } from "../../../../../domain/entities/Group";
 import { GroupUser } from "../../../../../domain/entities/GroupUser";
 
 type ProfileFormProps = {
@@ -40,16 +39,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
         setNewSkill('');
     }
 
-    const groupsNear = async () => await DI.resolve('getNearestGroupsUseCase').execute() as Group[];
-    const [groups, setGroups] = useState<Group[]>([]);
-
-    useEffect(() => {
-        const fetchGroups = async () => {
-            const groups = await groupsNear()
-            setGroups([...groups])
-        }
-        fetchGroups();
-    }, []);
+    const { groups } = DI.resolve('groupViewModel')()
 
     return (
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >

@@ -64,7 +64,6 @@ export default function ChatPage() {
 
 
     useEffect(() => {
-
         if (params.with && params.with !== '0') {
             const convMap = conversations.filter((conv: MessageView) => conv?.isWith?.id === parseInt(params.with || '0'));
             if (conversations && convMap.length === 0) {
@@ -107,9 +106,9 @@ export default function ChatPage() {
             <header className="px-4">
                 <NavBarTop />
                 <SubHeader
-                    qty={countConv}
-                    type={`Conversations `}
-                    place={' avec des membres'}
+                    qty={open ? messages?.length : countConv}
+                    type={open ? 'messages' : 'conversation'}
+                    place={'avec ' + (userRec?.Profile?.firstName ?? 'des membres')}
                     closeBtn
                     link='/' />
                 {notif}
@@ -121,7 +120,6 @@ export default function ChatPage() {
                         title='actualiser'
                         onClick={() => connexion()} />}
             </header>
-
             <main className='flex pb-4 pt-6'>
                 {isLoadingConv ?
                     <Skeleton className=' m-auto !h-full !rounded-3xl' /> :

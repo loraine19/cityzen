@@ -97,7 +97,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     useEffect(() => { setPosition([address.lat, address.lng]) }, [address]);
     const [open, setOpen] = useState(false);
     const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${address.lat},${address.lng}`;
-    const zoom = (aera && aera > 16) ? (20 - aera / 100) : 16;
+    const zoom = (aera && (aera / 100) > 5) ? (21 - (aera / 100)) : 14;
 
     const IntenaryChip = () => (
         <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}>

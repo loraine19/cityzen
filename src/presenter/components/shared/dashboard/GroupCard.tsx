@@ -52,7 +52,7 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
 
                     <AddressMapOpen
                         color='#0092b8'
-                        aera={group?.area * 100}
+                        aera={group?.area}
                         address={Address} />}
             </CardHeader>
             <CardBody className="FixCardBody">
@@ -86,12 +86,12 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                             setGroup(group);
                         }}>
                         <Chip
-                            value={group?.ImModo ? '✓' : 'ˣ'}
+                            value={group?.ImModo ? '✓' : '⠀'}
                             variant="ghost"
-                            className="rounded-full h-max flex items-center pl-6 !min-w-max "
+                            className="rounded-full h-max flex items-center  !min-w-max "
                             icon={
                                 <Icon
-                                    style='scale-[1.6] ml-2 -mr-2 '
+                                    style='scale-[1.6] ml-2.5 -mr-4 '
                                     size="sm"
                                     icon="diversity_3"
                                     fill={group?.ImModo}
