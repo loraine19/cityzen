@@ -2,6 +2,7 @@
 import { EventView } from "../../presenter/views/viewsEntities/eventViewEntities";
 import { Address } from "./Address";
 import { Flag } from "./Flag";
+import { Group } from "./Group";
 import { Participant } from "./Participant";
 import { User } from "./User";
 
@@ -32,6 +33,8 @@ export class Event {
     updatedAt: Date = new Date();
     userId: number = 0;
     status: EventStatus = EventStatus.PENDING;
+    Group: Group = {} as Group;
+    groupId: number = 0;
     constructor(init?: Partial<Event>) {
         if (init) {
             Object.keys(init).forEach(key => {

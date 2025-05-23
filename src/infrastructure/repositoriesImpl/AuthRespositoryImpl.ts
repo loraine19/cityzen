@@ -26,6 +26,10 @@ export class AuthRepositoryImpl implements AuthRepositoryBase {
         return this.authData.signUp(credentials);
     }
 
+    public async googleAuth(): Promise<void> {
+        return this.authData.googleAuth();
+    }
+
     public async logOut(): Promise<MessageBack> {
         return this.authData.logOut();
     }

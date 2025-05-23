@@ -6,6 +6,7 @@ export interface AuthRepositoryBase {
     signIn(credentials: AccessDTO): Promise<Auth>;
     signInVerify(credentials: VerifyDTO): Promise<Auth>;
     signUp(credentials: AccessDTO): Promise<{ message: string }>
+    googleAuth(): Promise<void>;
     logOut(): Promise<MessageBack>
     deleteAccount(): Promise<{ message: string }>
     deleteAccountConfirm(data: DeleteDTO): Promise<{ message: string }>

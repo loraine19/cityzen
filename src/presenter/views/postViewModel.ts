@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import DI from '../../di/ioc';
-import { PostView } from '../views/viewsEntities/postViewEntities';
+import { PostView } from './viewsEntities/postViewEntities';
 
 export const postViewModel = () => {
   return (filter?: string, category?: string) => {

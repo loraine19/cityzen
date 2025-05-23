@@ -2,6 +2,8 @@ import { useState } from "react";
 import parse from "html-react-parser";
 import { Icon } from "./IconComp";
 import { Typography } from "@material-tailwind/react";
+import { GroupLink } from "./GroupLink";
+import { Group } from "../../../domain/entities/Group";
 
 /// Button to flag usable in any component
 export function FlagIcon(props: { flagged: boolean, id: number, type: string }) {
@@ -17,8 +19,8 @@ export function FlagIcon(props: { flagged: boolean, id: number, type: string }) 
             style="hover:!bg-red-500/30 hover:text-red-700 pb-1 pt-1" />
     )
 }
-export function Title(props: { title: string, flagged?: boolean, id?: number, CreatedAt?: string | Date, subTitle?: string, type?: string }) {
-    const { flagged, id, CreatedAt, subTitle, type } = props
+export function Title(props: { title: string, flagged?: boolean, id?: number, CreatedAt?: string | Date, subTitle?: string, type?: string, group?: Group }) {
+    const { flagged, id, CreatedAt, subTitle, type, group } = props
     const titleElement = document.getElementById(props.title);
     const maxLength = titleElement && titleElement.scrollWidth > titleElement.clientWidth ? 90 : 42;
     const [title, setTitle] = useState<string>(props.title?.length > maxLength ? props.title.slice(0, maxLength - 3) + '...' + (parse('&nbsp;').toString()).repeat(props.title?.length - maxLength) : props.title)
@@ -43,11 +45,18 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
                 }
             </div>
             {subTitle &&
-                <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="truncate font-normal">
-                    {subTitle}
-                </Typography>}
+                <div className="flex items-center justify-between pr-1">
+                    <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="truncate font-normal">
+                        {subTitle}
+                    </Typography>
+                    {group &&
+                        <GroupLink group={group ?? {} as Group} />}
+                </div>}
+            {group && !subTitle &&
+
+                <GroupLink group={group ?? {} as Group} />}
         </div>)
 }

@@ -2,9 +2,7 @@ import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@mater
 import { useNavigate } from "react-router-dom";
 import { ServiceStep, ServiceType, ServiceUpdate } from "../../../../../domain/entities/Service";
 import ModifBtnStack from "../../../common/ModifBtnStack";
-import {
-    Icon
-} from "../../../common/IconComp";
+import { Icon } from "../../../common/IconComp";
 import { DateChip } from "../../../common/ChipDate";
 import { Action } from "../../../../../domain/entities/frontEntities";
 import { useUserStore } from "../../../../../application/stores/user.store";
@@ -18,7 +16,7 @@ import { Title } from "../../../common/CardTitle";
 type ServiceProps = { service: ServiceView, mines?: boolean, change: (e: React.MouseEvent<HTMLButtonElement>) => void, update?: () => void }
 const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update }) => {
     const { user } = useUserStore()
-    const { id, title, description, image, createdAt, User, flagged, mine, IResp, points, typeS, categoryS, statusS } = service
+    const { id, title, description, image, createdAt, User, flagged, mine, IResp, points, typeS, categoryS, statusS, Group } = service
     const haveImage = service.image ? true : false
     const navigate = useNavigate();
     const isResp = service.statusS === ServiceStep.STEP_1 ? true : false;
@@ -113,14 +111,16 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                     <Title
                         title={title}
                         flagged={flagged} id={id}
-                        type='service' />
-                    <div className="flex flex-col h-full overflow-auto">
+                        type='service'
+                        group={Group}
+                    />
+                    <div className="flex flex-col justify-between h-full overflow-auto">
                         <Typography
-
-                            className="leading-1"
+                            className="leading-[1.3rem]  !line-clamp-2"
                             color="blue-gray">
                             {description}
                         </Typography>
+
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">

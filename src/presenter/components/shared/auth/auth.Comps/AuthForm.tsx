@@ -4,6 +4,7 @@ import PopUp from '../../../common/PopUp';
 import { Icon } from '../../../common/IconComp';
 import { FormikProps } from 'formik';
 import { useUserStore } from '../../../../../application/stores/user.store'
+import DI from '../../../../../di/ioc';
 
 type AuthFormProps = {
     lead: string;
@@ -37,19 +38,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     const [passWordInput, setPassWordInput] = useState<{ value: string, icon: string }>(passwordType)
     const [passWordInput2, setPassWordInput2] = useState<{ value: string, icon: string }>(passwordType)
     useEffect(() => { hidden && formik.resetForm() && (formik.values = {}) }, [hidden])
-    const setIsLoggedIn = useUserStore((state) => state.setIsLoggedIn)
+    const { setIsLoggedIn } = useUserStore()
     const toggleInputStyle = (inputState: { value: string, icon: string }, setInputState: React.Dispatch<React.SetStateAction<{ value: string, icon: string }>>) => {
         setInputState(inputState.value === 'password' ? textType : passwordType);
     }
 
+    const googleAuth = async () => await DI.resolve('googleAuthUseCase').execute()
+
     const googleAuthRedirect = async () => {
-        const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
-        const backendGoogleLoginUrl = `${baseURL}/auth/google`;
-        window.location.href = backendGoogleLoginUrl;
+        await googleAuth()
         setIsLoggedIn(true)
-        setTimeout(() => {
-            window.location.href = baseURL;
-        }, 1000)
     }
 
     return (

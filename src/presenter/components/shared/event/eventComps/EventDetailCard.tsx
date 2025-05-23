@@ -12,7 +12,7 @@ import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type EventCardProps = { EventLoad: EventView, refetch?: () => void, change?: (e: any) => void }
 export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
-    const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, status, isPast } = EventLoad;
+    const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, status, isPast, Group } = EventLoad;
 
 
     return (
@@ -52,14 +52,16 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                         id={id}
                         CreatedAt={start}
                         subTitle={eventDateInfo}
-                        type='evenement' />
+                        type='evenement'
+                        group={Group}
+                    />
                     <div className="flex flex-1 gap-x-3 py-1 md:flex-row">
                         <div className=" relative flex lex-col  flex-auto overflow-auto">
                             <div className="h-max break-all absolute ">
                                 <Link
                                     to={agendaLink as string}
                                     target="_blank" rel="noopener noreferrer"
-                                    className={`${Igo ? 'GreenChip' : 'GrayChip px-3 pb-1'} w-max !rounded-full mb-1 pt-1  text-xs font-medium flex items-center gap-1`}
+                                    className={`${Igo ? 'GreenChip' : 'GrayChip px-3 pb-0.5'} w-max !rounded-full mb-1 pt-0.5  text-xs font-medium flex items-center gap-1`}
                                     title="ajouter a mon agenda">
                                     <Icon
                                         style="-ml-1"
@@ -88,7 +90,10 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                         <AvatarStack avatarDatas={Participants} />
                         <button
                             data-cy='btn-participate'
-                            onClick={async () => { toogleParticipate && await toogleParticipate() && refetch && refetch() }}>
+                            onClick={async () => {
+                                toogleParticipate && await toogleParticipate();
+                                refetch && refetch()
+                            }}>
                             <Chip
                                 value={participantsMin}
                                 variant="ghost"

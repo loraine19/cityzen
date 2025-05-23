@@ -26,6 +26,7 @@ export default function DashboardPage() {
         if (user.GroupUser && user?.GroupUser.map((g) => g.role === Role.MODO)) setModo(true)
         async () => {
             if (!user || !user.Profile) await fetchUser()
+            if (user && user.Profile) setIsLoggedIn(true)
             if (user.GroupUser && user?.GroupUser.map((g) => g.role === Role.MODO)) setModo(true)
             await fetchNotif()
         }

@@ -62,7 +62,9 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                         title={title}
                         flagged={flagged}
                         id={id}
-                        type='service' />
+                        type='service'
+                        group={service.Group}
+                    />
                     <div className="flex justify-between items-end pt-2 ">
                         <div className="flex  items-center gap-2 mb-1">
                             <Chip

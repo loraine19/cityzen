@@ -68,7 +68,7 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAMinesProp
                         color={(buttons[0]?.color ?? defColor) as any}
                         disabled={disabled1} >
                         {buttons[0]?.iconImage &&
-                            <Icon fill color='white' icon={buttons[0]?.iconImage} />}
+                            <Icon fill color='white' icon={buttons[0]?.iconImage} style="!p-0" />}
                         {buttons[0]?.icon}
                     </Button>
 
@@ -77,7 +77,8 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAMinesProp
                         size='lg'
                         color={(buttons[1]?.color ?? defColor) as any}
                         disabled={disabled2} >
-                        {buttons[1]?.iconImage && <Icon fill color='white' icon={buttons[1]?.iconImage} />}
+                        {buttons[1]?.iconImage &&
+                            <Icon fill color='white' icon={buttons[1]?.iconImage} style="!p-0" />}
                         {buttons[1]?.icon}
                     </Button>
 
@@ -85,7 +86,8 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAMinesProp
                         size='lg'
                         color={(buttons[2]?.color ?? defColor) as any}
                         onClick={() => { setOpen(true), setIndex(2) }}>
-                        {buttons[2]?.iconImage && <Icon fill color='white' icon={buttons[2]?.iconImage} />}
+                        {buttons[2]?.iconImage &&
+                            <Icon fill color='white' icon={buttons[2]?.iconImage} />}
                         {buttons[2]?.icon}
 
                     </Button>
@@ -93,7 +95,8 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAMinesProp
                         size='lg'
                         color={(buttons[3]?.color ?? defColor) as any}
                         onClick={() => { setOpen(true), setIndex(3) }}>
-                        {buttons[3]?.iconImage && <Icon fill color='white' icon={buttons[3]?.iconImage} />}
+                        {buttons[3]?.iconImage &&
+                            <Icon fill color='white' icon={buttons[3]?.iconImage} style="!p-0" />}
                         {buttons[3]?.icon}
                     </Button>
                 </>}

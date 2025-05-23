@@ -14,10 +14,8 @@ type PostCardProps = { post: PostView, mines?: boolean, change: (e: any) => void
 
 export default function PostCard({ post: initialPost, mines, change, update }: PostCardProps) {
     const [post, setPost] = useState<PostView>(initialPost);
-    const { id, title, description, image, categoryS, createdAt, Likes, User, flagged, ILike, toogleLike } = post
+    const { id, title, description, image, categoryS, createdAt, Likes, User, flagged, ILike, toogleLike, Group } = post
     const haveImage: boolean = post.image ? true : false
-    console.log(post)
-
     const deletePost = async (id: number) => await DI.resolve('deletePostUseCase').execute(id)
     const myActions: Action[] = GenereMyActions(post, "annonce", deletePost)
 
@@ -49,10 +47,12 @@ export default function PostCard({ post: initialPost, mines, change, update }: P
                     <Title
                         title={title}
                         flagged={flagged} id={id}
-                        type='service' />
-                    <div className="flex flex-col h-full overflow-auto">
+                        type='service'
+                        group={Group}
+                    />
+                    <div className="flex flex-col h-full ">
                         <Typography
-                            className="leading-1"
+                            className="leading-[1.3rem] !line-clamp-2 overflow-x-auto"
                             color="blue-gray">
                             {description}
                         </Typography>

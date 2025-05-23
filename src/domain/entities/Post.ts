@@ -27,7 +27,7 @@ export class Post {
     id: number = 0;
     User: User = {} as User;
     userId: number = 0;
-    group: Group = {} as Group;
+    Group: Group = {} as Group;
     groupId: number = 0;
     image: string | File = '';
     title: string = '';

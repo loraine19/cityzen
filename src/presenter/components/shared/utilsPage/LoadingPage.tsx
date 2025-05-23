@@ -25,9 +25,11 @@ export const LoadingPage = () => {
 
                     {[...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <div
+                            key={index + 'div'}
                             className='flex lg:flex-row flex-col  h-full gap-3 w-full items-center justify-center flex-1'>
                             <Skeleton
-                                key={index} /> <Skeleton
+                                key={index} />
+                            <Skeleton
                                 key={index + '2'} />
                         </div>
                     ))}

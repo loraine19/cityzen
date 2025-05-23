@@ -31,15 +31,25 @@ export class SignInVerifyUseCase {
 
 export class SignUpUseCase {
     private authRepository: AuthRepositoryBase;
-    ;
 
     constructor({ authRepository }: { authRepository: AuthRepositoryBase }) {
         this.authRepository = authRepository;
-
     }
 
     public async execute(accessData: AccessDTO): Promise<{ message: string }> {
         return this.authRepository.signUp(accessData);
+    }
+}
+
+export class GoogleAuthUseCase {
+    private authRepository: AuthRepositoryBase;
+
+    constructor({ authRepository }: { authRepository: AuthRepositoryBase }) {
+        this.authRepository = authRepository;
+    }
+
+    public async execute(): Promise<void> {
+        return this.authRepository.googleAuth();
     }
 }
 

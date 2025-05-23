@@ -24,7 +24,7 @@ import { ServiceRepositoryImpl } from '../infrastructure/repositoriesImpl/Servic
 import { serviceIdViewModel, serviceViewModel } from '../presenter/views/serviceViewModel';
 import { GetUserByIdUseCase, GetUserCountUseCase, GetUserMeUseCase, GetUsersModosUseCase, GetUsersUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
-import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
+import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, GoogleAuthUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
 import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
 import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
@@ -88,6 +88,7 @@ container.register({
     authData: asClass(AuthApi),
     authService: asClass(AuthService),
     storage: asClass(cryptedStorage),
+    googleAuthUseCase: asClass(GoogleAuthUseCase),
 
     ////ADDRESS
     updateAddressUseCase: asClass(UpdateAddressUseCase),

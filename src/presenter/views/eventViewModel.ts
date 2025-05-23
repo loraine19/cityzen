@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import DI from '../../di/ioc';
 import { dayMS, shortDateString } from './viewsEntities/utilsService';
-import { EventView } from '../views/viewsEntities/eventViewEntities';
+import { EventView } from './viewsEntities/eventViewEntities';
 
 
 export const eventViewModel = () => {

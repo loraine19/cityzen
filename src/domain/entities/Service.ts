@@ -3,6 +3,7 @@ import { User } from './User';
 import { Flag } from './Flag';
 import { Label } from './frontEntities';
 import { getEnumLabel } from './utilsEntity';
+import { Group } from './Group';
 
 export enum ServiceType {
     GET = 'demande',
@@ -65,6 +66,8 @@ export class Service {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     Flags?: Flag[] = [{} as Flag];
+    Group: Group = {} as Group;
+    groupId: number = 0;
     constructor(data?: Partial<Service>) {
         if (data) {
             Object.assign(this, data);

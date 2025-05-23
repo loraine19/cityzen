@@ -5,6 +5,7 @@ import { Vote, VoteOpinion, VoteTarget } from "../../../domain/entities/Vote";
 import { Flag } from "../../../domain/entities/Flag";
 import DI from "../../../di/ioc";
 import { VoteDTO } from "../../../infrastructure/DTOs/VoteDTO";
+import { Group } from "../../../domain/entities/Group";
 
 
 export class PoolSurveyView {
@@ -31,6 +32,7 @@ export class PoolSurveyView {
     Flags?: Flag[] = [];
     status?: PoolSurveyStatus = PoolSurveyStatus.PENDING;
     toogleVote!: (opinion: VoteOpinion) => Promise<PoolSurveyView>;
+    Group: Group = {} as Group;
 
     constructor
         (base: Pool | Survey, user: User, userCount: number) {
@@ -65,6 +67,7 @@ export class PoolSurveyView {
         this.IVoted = base?.Votes?.some(vote => vote.userId === user?.id);
         this.myOpinion = base?.Votes?.find(vote => vote.userId === user?.id)?.opinion || null;
         this.status = base.status;
+
 
     }
 

@@ -82,10 +82,12 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                         title={survey?.title}
                         flagged={survey?.flagged}
                         id={survey?.id}
-                        type="sondage" />
+                        type="sondage"
+                        group={survey?.Group}
+                    />
                     <Typography
                         color="blue-gray"
-                        className="leading-[1.3rem] overflow-auto mb-2">
+                        className="leading-[1.3rem]  !line-clamp-2 overflow-auto  pt-0.5">
                         {survey?.description}
                     </Typography>
                 </CardBody>

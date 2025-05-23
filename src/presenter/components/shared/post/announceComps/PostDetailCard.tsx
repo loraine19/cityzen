@@ -46,7 +46,9 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                         title={title}
                         flagged={flagged}
                         id={id}
-                        type="annonce" />
+                        type="annonce"
+                        group={post.Group}
+                    />
                     <div className="CardOverFlow">
                         <Typography
                             color="blue-gray"

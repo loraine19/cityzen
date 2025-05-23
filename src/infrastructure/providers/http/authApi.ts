@@ -21,6 +21,11 @@ export class AuthApi {
         return this.api.post(`${this.dataType}/signup`, credentials)
     }
 
+    async googleAuth(): Promise<void> {
+        console.log('Google Auth API called', `${this.dataType}/google`);
+        return this.api.post(`${this.dataType}/google`)
+    }
+
     async logOut(): Promise<{ message: string }> {
         return this.api.post(`${this.dataType}/logout`, {})
     }

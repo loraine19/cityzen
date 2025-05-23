@@ -3,8 +3,7 @@ import { Address } from "./Address";
 export class Group {
     id: number = 0;
     name: string = '';
-    description: string = '';
-    address: Address = {} as Address;
+    Address: Address = {} as Address;
     addressId: number = 0;
     area: number = 0;
     rules: string = '';

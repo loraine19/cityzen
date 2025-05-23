@@ -36,7 +36,6 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                             size='sm'
                             className="CyanChip">
                         </Chip>
-
                         <DateChip
                             start={pool?.createdAt}
                             ended={ended}
@@ -48,7 +47,9 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                     className="FixCardBody">
                     <Title
                         title={pool?.title}
-                        CreatedAt={pool?.createdAt} />
+                        CreatedAt={pool?.createdAt}
+                        group={pool?.Group}
+                    />
                     <div className="CardOverFlow h-full justify-between pb-4 mb-6">
                         <Typography
                             color="blue-gray"

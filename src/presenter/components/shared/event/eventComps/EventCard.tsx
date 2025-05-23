@@ -75,8 +75,12 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                     flagged={flagged} id={id}
                     CreatedAt={createdAt}
                     subTitle={eventDateInfo}
-                    type='evenement' />
-                <Typography className="text-ellipsis overflow-auto max-h-[1.8rem] ">
+                    type='evenement'
+                    group={event.Group}
+                />
+                <Typography
+                    className="leading-[1.3rem] pt-1 !line-clamp-2"
+                    color="blue-gray">
                     {description}
                 </Typography>
             </CardBody>

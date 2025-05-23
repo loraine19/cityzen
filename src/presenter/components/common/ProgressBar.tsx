@@ -26,7 +26,7 @@ export function ProgressBar({ value, label, needed, status, size = 'md' }: Progr
             labelTexte = 'vote cloturé et approuvé'
             break;
         case (status === PoolSurveyStatus.PENDING && value === 0):
-            color = 'bg-red-500'
+            color = 'bg-gray-200'
             labelTexte = `Pas encore de ${label}`
             break;
         default:
@@ -93,7 +93,7 @@ export function ProgressBarBlur({ value, label, needed, status, size = 'md', isP
             {status === EventStatus.PENDING &&
                 (
                     <Progress
-                        barProps={{ className: " min-w-8 text-center !line-clamp-1 px-2 !bg-orange-700 " }}
+                        barProps={{ className: " !min-w-[2.7rem] text-center !line-clamp-1 px-2 !bg-orange-700 " }}
                         value={(status === EventStatus.PENDING) ? value : 100}
                         size={size}
                         label={`, il manque ${needed} ${label}`} />)}
