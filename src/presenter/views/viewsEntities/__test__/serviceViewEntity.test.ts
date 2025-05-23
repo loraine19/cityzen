@@ -1,4 +1,5 @@
 import { Address } from "../../../../domain/entities/Address";
+import { Group } from "../../../../domain/entities/Group";
 import { GroupUser } from "../../../../domain/entities/GroupUser";
 import { AssistanceLevel, Profile } from "../../../../domain/entities/Profile";
 import { HardLevel, Service, ServiceCategory, ServiceStep, ServiceType, SkillLevel } from "../../../../domain/entities/Service";
@@ -66,6 +67,8 @@ describe('ServiceView', () => {
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 image: '',
+                Group: { id: 1 } as Group,
+                groupId: 1
             };
             const baseExpected = Number((((2 / 2) + (3 / 2)) + 1).toFixed(1));
             const serviceView = new ServiceView(mockService, mockUser);
@@ -91,6 +94,8 @@ describe('ServiceView', () => {
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 image: '',
+                Group: { id: 1 } as Group,
+                groupId: 1
             };
             const baseExpected = Number(((1 / 2 + 1 / 2) + 1).toFixed(1)); // ((0.5 + 0.5) + 1) = 2.0
             const userPoints = 2;
@@ -117,6 +122,9 @@ describe('ServiceView', () => {
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 image: '',
+                Group: { id: 1 } as Group,
+                groupId: 1
+
             };
             const baseExpected = Number(((4 / 2 + 4 / 2) + 1).toFixed(1));
             const userRespPoints = parseInt(AssistanceLevel.LEVEL_4); // = 4
@@ -143,6 +151,8 @@ describe('ServiceView', () => {
                 image: '',
                 id: 4,
                 title: 'Test Default',
+                Group: { id: 1 } as Group
+                , groupId: 1
             };
             // Hard=0, Skill=0
             const baseExpected = Number(((0 / 2 + 0 / 2) + 1).toFixed(1)); // = 1.0
