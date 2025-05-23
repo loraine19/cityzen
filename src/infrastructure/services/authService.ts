@@ -14,6 +14,8 @@ export class AuthService implements AuthServiceI {
         this.storage = new cryptedCookie();
     }
 
+    /// TODO mettre à jour http only adapter pour mobile 
+
     getTokenExpirationDate = (token: string): Date | null => {
         const decoded: any = jwtDecode(token);
         if (!decoded.exp) { console.log('decoded exp not found', decoded) }

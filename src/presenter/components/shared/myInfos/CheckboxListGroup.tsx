@@ -63,7 +63,7 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
                           userGroups.push(newGroupUser);
                           setUserGroups([...userGroups]);
                         }
-                        console.log(userGroups);
+
                       }}
                       onClick={(e) => e.stopPropagation()}
                       id={group.id.toString()}

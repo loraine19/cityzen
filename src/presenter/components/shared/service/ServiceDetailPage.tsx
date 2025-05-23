@@ -59,6 +59,7 @@ export default function ServiceDetailPage() {
                         icon: 'Relancer',
                         title: 'Relancer le service - ',
                         body: 'Relancer le service',
+                        //// TODO: add function to relancer
                         function: () => { console.log('Relancer le service'); },
                     });
                 }

@@ -30,7 +30,7 @@ export default function IssueDetailPage() {
     const [modos, setModos] = useState<User[]>([])
     const [modoOnId, setModoOnId] = useState<number>(0)
 
-    console.log('issue', issue)
+    //// TODO : revoire recupration des modos grace a groupes ds services
     useEffect(() => {
         if (modos.length === 0) {
             const fetchModos = async () => {

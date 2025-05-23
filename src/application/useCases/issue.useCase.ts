@@ -56,7 +56,6 @@ export class RespIssueUseCase {
     }
 
     public async execute(id: number, step: IssueStep): Promise<Issue> {
-        console.log(step, 'use')
         return await this.issueRepository.updateIssueResp(id, step);
     }
 }

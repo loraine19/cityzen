@@ -14,8 +14,8 @@ export const ReadAllButton = ({ update }: { update?: any }) => {
         onClick={
             async () => {
                 const notifs = await readAll();
-                console.log(notifs);
                 if (notifs) {
+                    //// TODO verifier 
                     fetchNotif();
                     update();
                 }

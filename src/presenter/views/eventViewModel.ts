@@ -63,7 +63,6 @@ export const eventIdViewModel = () => {
 
 
     data?.error ? error = data.error : error = null
-    console.log("eventIdViewModel", data, error)
     const event = (!userLoading && !isLoading && !error) ? new EventView(data, userId) : {} as EventView
     return { event, isLoading, error, refetch }
   }
@@ -99,7 +98,6 @@ export const eventsWeekViewModel = () => {
     const userId = user?.id || 0
 
     const flat = data?.pages.flat().map(page => page.events).flat()
-    console.log("eventsWeekViewModel", flat)
     if (flat && new Date(flat[flat.length - 1]?.start).getTime() < new Date(startDate).getTime() + numberOfWeeks * 7 * dayMS) { refetch() }
     const eventList = userLoading ? [] : flat?.map(event => new EventView(event, userId)) || []
 

@@ -19,7 +19,6 @@ export class ResetPasswordRepositoryImpl implements ResetPasswordRepositoryBase 
     }
 
     public async resetPasswordUpdate(dataDTO: ResetDTO): Promise<MessageBack> {
-        console.log('resetPasswordRepositoryIMPL')
         return this.resetPasswordData.resetPasswordUpdate(dataDTO);
     }
 }

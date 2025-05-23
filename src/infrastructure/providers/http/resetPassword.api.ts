@@ -15,7 +15,6 @@ export class ResetPasswordApi {
     }
 
     async resetPasswordUpdate(data: ResetDTO): Promise<MessageBack> {
-        console.log('resetPasswordApi', data)
         return this.api.post(`${this.dataType}/update`, data)
     }
 }

@@ -65,7 +65,7 @@ export default function SurveyDetailPage() {
                             onClick={() => setOpenVote(true)}
                         >
                             {<Icon fill color='white' icon={survey.IVoted ? 'edit' : 'smart_card_reader'} />}
-                            {survey.IVoted ? survey.status !== PoolSurveyStatus.PENDING ? 'Modifier mon vote' : 'Voter' : 'Ce sondage est terminé'}
+                            {survey.IVoted ? 'Modifier mon vote' : survey?.status !== PoolSurveyStatus.PENDING ? 'Ce sondage est terminé' : 'Voter'}
                         </Button>
                     </footer>
                 }

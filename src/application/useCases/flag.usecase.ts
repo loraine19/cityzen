@@ -36,7 +36,6 @@ export class PostFlagUseCase {
         this.flagRepository = flagRepository;
     }
     public async execute(data: FlagDTO): Promise<any> {
-        console.log(data, 'use')
         return this.flagRepository.postFlag(data);
     }
 

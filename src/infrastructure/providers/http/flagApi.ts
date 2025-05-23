@@ -14,7 +14,6 @@ export class FlagApi {
     async getFlags(page?: number, filter?: FlagTarget): Promise<Flag[]> {
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
-        console.log(await this.api.get(`${this.dataType}${pageR}${filterR}`))
         return this.api.get(`${this.dataType}${pageR}${filterR}`);
     }
 

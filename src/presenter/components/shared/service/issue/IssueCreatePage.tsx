@@ -38,7 +38,7 @@ export default function IssueEditPage() {
             const fetchModos = async () => {
                 const modos = await getModos()
                 setModos([...modos])
-                console.log('modos', modos)
+                /// TODO mettre à jour modi par groupId de service 
             }; fetchModos()
         }
     }, [issue]);

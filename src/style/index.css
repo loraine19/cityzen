@@ -65,7 +65,7 @@ main {
 }
 
 .CTA {
-    @apply flex gap-2 gap-x-4 w-respLarge justify-around  pb-3 pt-2 min-h-max;
+    @apply flex gap-2 gap-x-4 w-respLarge justify-around  pb-3 pt-2 h-max;
 }
 
 .cyan {
@@ -123,7 +123,7 @@ main {
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !min-h-[50%] !max-h-[65%] lg:!max-h-[60%];
+    @apply flex flex-1 !h-[50%] !max-h-[320px];
 }
 
 .FixCardHeaderNoImage {

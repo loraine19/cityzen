@@ -131,6 +131,7 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
         icon: 'Relancer',
         title: "Relancer " + title,
         body: "Relancer " + title,
+        /// TODO : add function to relancer
         function: () => { console.log(`Voulez-vous relancer ${title}?`) }
     })
     return actions

@@ -68,7 +68,6 @@ export default function IssueEditPage() {
     const confirmPost: { confirm: () => Promise<void>, title: string, element: string } = {
         confirm: async () => {
             const ok = await updateFunction()
-            console.log('ok', ok)
             if (ok) { navigate(`/conciliation/${ok.serviceId}`); setOpen(false) }
         }
         , title: "Confirmer la demande de conciliation",

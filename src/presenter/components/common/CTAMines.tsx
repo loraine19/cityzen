@@ -42,7 +42,8 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAMinesProp
             element: buttons[index]?.body as string,
             disableConfirm: false,
             confirmString: 'Confirmer',
-        });
+        })
+        //// TODO voir utilisation de colorMap
         console.log(colorMap)
     }, [index]);
 

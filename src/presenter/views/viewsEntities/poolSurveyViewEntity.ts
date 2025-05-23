@@ -48,7 +48,6 @@ export class PoolSurveyView {
             }
         }
         if ('category' in base) {
-            console.log(base)
             Object.assign(this, base);
             this.flagged = base?.Flags?.some(flag => flag?.userId === user?.id);
             this.typeS = VoteTarget.SURVEY;

@@ -46,7 +46,6 @@ export const notifMapViewModel = () => {
       })
 
     const count = isLoading ? 0 : (data?.count)
-    console.log(data)
     const notifsMap = isLoading || !data ? [] : data?.notifs.map((notif: Notif) => new NotifView(notif))
 
     return {
