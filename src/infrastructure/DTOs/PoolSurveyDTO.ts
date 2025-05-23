@@ -6,11 +6,12 @@ export class SurveyDTO {
     image?: string;
     title?: string;
     category?: SurveyCategory;
+    groupId?: number;
     constructor(init?: Partial<SurveyDTO>) {
         if (init) {
-            Object.keys(init).forEach(key => {
-                if (key in this) {
-                    (this as any)[key] = init[key as keyof SurveyDTO];
+            (Object.keys(init) as (keyof SurveyDTO)[]).forEach(key => {
+                if (Object.prototype.hasOwnProperty.call(this, key)) {
+                    (this as any)[key] = init[key];
                 }
             });
         }

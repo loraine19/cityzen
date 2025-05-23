@@ -14,7 +14,6 @@ export class NotifApi {
         const pageR = page ? `?page=${page}` : `?page=${0}`;
         const filterR = filter ? `&filter=${filter}` : ``;
         const mapR = map ? `&map=${map}` : '';
-        console.log('useCase', page, filter, map, `${this.dataType}${pageR}${filterR}${mapR}`)
         return this.api.get(`${this.dataType}${pageR}${filterR}${mapR}`)
     }
 

@@ -45,6 +45,7 @@ const PoolDetailPage = lazy(() => import("./presenter/components/shared/vote/Poo
 const ConciliationListPage = lazy(() => import("./presenter/components/shared/service/issue/ConciationListPage"));
 const ChatPage = lazy(() => import("./presenter/components/shared/dashboard/ChatPage"));
 const RulesPage = lazy(() => import("./presenter/components/shared/dashboard/RulesPage"));
+const GroupPage = lazy(() => import("./presenter/components/shared/dashboard/GroupPage"));
 
 
 function App() {
@@ -74,6 +75,8 @@ function App() {
                             <Route path="/" element={<PrivateRoute />}>
                                 <Route path="/" element={<DashboardPage />} />
                                 <Route path="/chat" element={<ChatPage />} />
+
+                                <Route path="/group" element={<GroupPage />} />
                                 <Route path="/reglement" element={<RulesPage />} />
                                 <Route path="/msg" element={<DashboardPage />} />
                                 <Route path="/myprofile" element={<MyInfosPage />} />

@@ -96,6 +96,12 @@ export default function VoteListPage() {
             icon: "smart_card_reader",
             action: () => setList([...poolsSurveys].sort((a, b) => b.pourcent - a.pourcent)),
             reverse: () => setList([...poolsSurveys].sort((a, b) => a.pourcent - b.pourcent))
+        },
+        {
+            label: "Groupe",
+            icon: "groups",
+            action: () => setList([...poolsSurveys].sort((a, b) => a.Group?.name.localeCompare(b.Group?.name))),
+            reverse: () => setList([...poolsSurveys].sort((a, b) => b.Group?.name.localeCompare(a.Group?.name)))
         }
     ]
     const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)

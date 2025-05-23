@@ -19,6 +19,7 @@ export default function AnnounceCreatePage() {
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
         shareA: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
+        groupId: string().required("Groupe est obligatoire"),
     })
 
     const [open, setOpen] = useState(false);

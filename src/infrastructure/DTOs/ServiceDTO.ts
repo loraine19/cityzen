@@ -10,6 +10,7 @@ export class ServiceDTO implements Partial<Service> {
     skill?: SkillLevel;
     hard?: HardLevel;
     status?: ServiceStep;
+    groupId?: number;
     constructor(init?: Partial<ServiceDTO>) {
         if (init) {
             Object.keys(init).forEach(key => {

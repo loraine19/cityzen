@@ -11,11 +11,15 @@ import { eventCategories, EventImage } from "../../../../constants";
 import { AddressDTO } from "../../../../../infrastructure/DTOs/AddressDTO";
 import { DateChip } from "../../../common/ChipDate";
 import { Icon } from "../../../common/IconComp";
+import GroupSelect from "../../../common/GroupSelect";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 export function EventForm(props: { formik: any, Address: AddressDTO, setAddress: any }) {
     const { formik, Address, setAddress } = props;
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100) || 0;
     const today = new Date(new Date().getTime() + (1 * dayMS)).toISOString().slice(0, 16).replace('Z', '');
+    const [groupId, setGroupId] = useState<number | String | undefined>(formik.values.Group?.id);
+    const user = useUserStore((state) => state.user);
 
     ///// BLOB FUNCTION ;
     const imgCategory = EventImage[formik.values.category as keyof typeof EventImage] || EventImage.default
@@ -38,7 +42,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                     <SubHeader
                         type={title ? 'Modifier mon évenement ' : 'Créer mon évenement'}
                         place={category ? label : ''} closeBtn />
-                    <div className='w-respLarge'>
+                    <div className="w-respLarge flex  gap-2">
                         <Select className='rounded-full shadow bg-white border-none capitalize'
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                             name={"category"}
@@ -59,6 +63,11 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                                     </Option>);
                             })}
                         </Select>
+                        <GroupSelect
+                            groupId={groupId?.toString()}
+                            setGroupId={setGroupId}
+                            formik={formik}
+                            user={user} />
                     </div>
                 </header>
                 <main className='flex flex-1 pb-1 pt-[2rem]'>

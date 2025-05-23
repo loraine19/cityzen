@@ -27,7 +27,8 @@ export default function EventCreatePage() {
         Address: object({
             city: string().required("Ville est obligatoire"),
             zipcode: string().required("Code postal est obligatoire"),
-        })
+        }),
+        groupId: string().required("Groupe est obligatoire"),
     })
 
     const { setAlertValues, setOpen, handleApiError } = useAlertStore(state => state)

@@ -67,6 +67,7 @@ import { ErrorService } from '../infrastructure/services/errorService';
 import { GroupRepositoryImpl } from '../infrastructure/repositoriesImpl/GroupRespositoryImpl';
 import { GroupApi } from '../infrastructure/providers/http/groupApi';
 import { GetNearestGroupsUseCase } from '../application/useCases/group.usecase';
+import { groupViewModel } from '../presenter/views/groupViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -237,7 +238,7 @@ container.register({
     groupRepository: asClass(GroupRepositoryImpl),
     groupData: asClass(GroupApi),
     getNearestGroupsUseCase: asClass(GetNearestGroupsUseCase),
-
+    groupViewModel: asFunction(groupViewModel),
 
     ////SOCKETS 
     socketService: asClass(SocketService),

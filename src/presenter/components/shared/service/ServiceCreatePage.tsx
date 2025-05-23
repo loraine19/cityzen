@@ -19,6 +19,7 @@ export default function ServiceCreatePage() {
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        groupId: string().required("Groupe est obligatoire"),
     })
 
     const { setOpen, setAlertValues, handleApiError } = useAlertStore(state => state)

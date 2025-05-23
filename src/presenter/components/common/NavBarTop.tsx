@@ -14,8 +14,9 @@ export default function NavBarTop() {
         { icon: "home", text: "Accueil", onClick: () => navigate('/') },
         { icon: "forum", text: `Messagerie (${unReadMsgNotif ?? ''})`, onClick: () => navigate('/chat') },
         { icon: "person_edit", text: "Modifier mon profil", onClick: () => navigate('/myprofile') },
+        { icon: 'groups', text: "Groupes", onClick: () => navigate('/group') },
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null },
-        { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t " }
+        { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t " },
     ];
 
     return (

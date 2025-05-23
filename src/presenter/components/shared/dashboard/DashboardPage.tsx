@@ -132,11 +132,11 @@ export default function DashboardPage() {
                                             size="lg"
                                             title={modo ? "ouvrir la page conciliation" : "vous devez être concialiateur dans un groupe"} />
                                         <Icon
-                                            link="/reglement"
-                                            icon="two_pager"
+                                            link="/group"
+                                            icon="groups"
                                             color='green' fill bg
                                             size="lg"
-                                            title="ouvrir la page réglement" />
+                                            title="ouvrir la page des groupes" />
                                         <LogOutButton />
                                     </div>
                                     <Typography

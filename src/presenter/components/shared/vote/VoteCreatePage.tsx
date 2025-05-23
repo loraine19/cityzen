@@ -40,6 +40,7 @@ export default function VoteCreatePage() {
     const createFunction = async () => {
         if (type === VoteTarget.SURVEY) {
             const updateData = new SurveyDTO(formik.values as SurveyDTO)
+            console.log(updateData)
             const data = await postSurvey(updateData)
             data.error ? handleApiError(data?.error) :
                 navigate(`/sondage/${data?.id}`)

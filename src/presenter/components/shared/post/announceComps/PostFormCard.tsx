@@ -8,6 +8,8 @@ import { DateChip } from "../../../common/ChipDate";
 import { postCategories } from "../../../../constants";
 import { PostCategory } from "../../../../../domain/entities/Post";
 import { Icon } from "../../../common/IconComp";
+import GroupSelect from "../../../common/GroupSelect";
+import { useUserStore } from "../../../../../application/stores/user.store";
 
 
 interface PostFormCardProps {
@@ -19,6 +21,8 @@ export function PostFormCard({ formik }: PostFormCardProps) {
     const [imgBlob, setImgBlob] = useState<string>(formik.values.image || '');
     const checkShare = (word: string) => formik.values?.shareA?.toString().toLowerCase().includes(word);
     const start = formik.values.createdAt ? new Date(formik.values.createdAt) : new Date();
+    const [groupId, setGroupId] = useState<number | String | undefined>(formik.values.Group?.id);
+    const user = useUserStore((state) => state.user);
 
 
     return (
@@ -32,7 +36,7 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                     place={PostCategory[formik.values.category as keyof typeof PostCategory] || ''}
                     closeBtn
                 />
-                <div className="w-respLarge">
+                <div className="w-respLarge flex  gap-2">
                     <Select
                         className="rounded-full shadow bg-white border-none capitalize"
                         label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
@@ -51,6 +55,11 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                             </Option>
                         ))}
                     </Select>
+                    <GroupSelect
+                        groupId={groupId?.toString()}
+                        setGroupId={setGroupId}
+                        formik={formik}
+                        user={user} />
                 </div>
             </header>
             <main className={`flex flex-1 pb-1 pt-4 ' ${(imgBlob || formik.values.image) && "pt-[2.2rem]"}`}>

@@ -1,7 +1,7 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from 'react-leaflet';
 import { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import L, { CircleOptions } from 'leaflet';
 import { Popover, PopoverHandler, PopoverContent, Chip, Typography } from '@material-tailwind/react';
 import { Icon } from '../IconComp';
 import { Address } from '../../../../domain/entities/Address';
@@ -9,12 +9,12 @@ import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { NotifView } from '../../../views/viewsEntities/notifViewEntity';
 import { ElementNotif } from '../../../../domain/entities/Notif';
 
-function FlyToMarker({ position, setFly }: { position: [number, number], setFly?: React.Dispatch<React.SetStateAction<boolean>> }) {
+function FlyToMarker({ position, setFly, zoom }: { position: [number, number], zoom: number, setFly?: React.Dispatch<React.SetStateAction<boolean>> }) {
     const map = useMap();
     useEffect(() => {
         const currentCenter = map.getCenter();
         if (currentCenter.lat !== position[0] || currentCenter.lng !== position[1]) {
-            map.flyTo(position, 16, {
+            map.flyTo(position, zoom, {
                 animate: true,
                 duration: 1,
             })
@@ -89,14 +89,15 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
 }
 
 
-type AddressMapOpenProps = { address: AddressDTO | Address, message?: string | Element, notifs?: NotifView[] }
+type AddressMapOpenProps = { address: AddressDTO | Address, message?: string | Element, notifs?: NotifView[], aera?: number, color?: string };
 
-export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message, notifs }) => {
+export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message, notifs, aera, color }) => {
 
     const [position, setPosition] = useState<[number, number]>([address?.lat, address?.lng]);
     useEffect(() => { setPosition([address.lat, address.lng]) }, [address]);
     const [open, setOpen] = useState(false);
     const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${address.lat},${address.lng}`;
+    const zoom = (aera && aera > 16) ? (20 - aera / 100) : 16;
 
     const IntenaryChip = () => (
         <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}>
@@ -148,6 +149,15 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
         </div>)
 
     const [fly, setFly] = useState(false);
+
+    const circleOptions: Partial<CircleOptions> = {
+        color,
+        fillColor: color,
+        fillOpacity: 0.4,
+        weight: 1,
+    };
+    const circleRadius = aera ?? 200;
+
     return (
         <Popover open={open} >
             <PopoverHandler>
@@ -155,12 +165,13 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                     <ExpandButton />
                     <MapContainer
                         center={position}
-                        zoom={16}
+                        zoom={zoom}
                         scrollWheelZoom={false}
                         className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
+
                         <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
                         {notifs && <MarkerList notifsMap={notifs} />}
-                        <Marker
+                        {!aera ? <Marker
                             position={position}
                             icon={L.icon({
                                 iconUrl: '/image/marker_orange.svg',
@@ -174,10 +185,14 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                             <Popup>
                                 {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
                             </Popup>
-                        </Marker>
-
-                        {!message && <FlyToMarker position={position} />}
-                        {fly && <FlyToMarker position={position} setFly={setFly} />}
+                        </Marker> :
+                            <Circle
+                                center={position}
+                                radius={circleRadius}
+                                pathOptions={circleOptions}
+                            />}
+                        {!message && <FlyToMarker position={position} zoom={zoom} />}
+                        {fly && <FlyToMarker position={position} setFly={setFly} zoom={zoom} />}
                         <IntenaryChip />
                         <FlyButton />
                     </MapContainer>
@@ -187,13 +202,13 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 <div className='Map flex flex-col FixedCenter'>
                     <MapContainer
                         center={position}
-                        zoom={16}
+                        zoom={zoom}
                         scrollWheelZoom={false}
                         className='shadow-xl rounded-xl border-2 border-gray-300 flex w-full h-full' >
                         <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
 
                         {notifs && <MarkerList notifsMap={notifs} />}
-                        <Marker
+                        {!aera ? <Marker
                             position={position}
                             icon={L.icon({
                                 iconUrl: '/image/marker_orange.svg',
@@ -214,10 +229,15 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                                     y aller
                                 </a>
                             </Popup>
-                        </Marker>
+                        </Marker> :
+                            <Circle
+                                center={position}
+                                radius={circleRadius}
+                                pathOptions={circleOptions}
+                            />}
 
-                        {!message && <FlyToMarker position={position} />}
-                        {fly && <FlyToMarker position={position} setFly={setFly} />}
+                        {!message && <FlyToMarker position={position} zoom={zoom} />}
+                        {fly && <FlyToMarker position={position} setFly={setFly} zoom={zoom} />}
                         <IntenaryChip />
                         <FlyButton />
                         <CloseButton />

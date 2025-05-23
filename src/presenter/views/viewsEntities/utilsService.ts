@@ -13,6 +13,7 @@ import { LikeApi } from "../../../infrastructure/providers/http/likeApi";
 import { PostApi } from "../../../infrastructure/providers/http/postApi";
 import { EventView } from "./eventViewEntities";
 import { PoolSurveyView } from "./poolSurveyViewEntity";
+import { GroupView } from "./GroupViewEntity";
 
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -87,7 +88,7 @@ export const toggleLike = async (postId: number, userId: number, setPost: any) =
 export const formatDateForDB = (date: any) => (new Date(date).toISOString().slice(0, 16).replace('Z', '').split('.')[0]);
 
 //
-export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, icon3?: boolean): Action[] => {
+export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | GroupView | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
     const { setOpen, open, handleApiError } = useAlertStore(state => state)

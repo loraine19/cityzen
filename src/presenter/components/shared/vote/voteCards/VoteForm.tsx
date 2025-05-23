@@ -12,6 +12,7 @@ import { User } from "../../../../../domain/entities/User";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { Icon } from "../../../common/IconComp";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import GroupSelect from "../../../common/GroupSelect";
 
 type PoolSurveyFormProps = {
     formik: any;
@@ -26,7 +27,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
 
     const [users, setUsers] = useState<User[]>([])
     const { user } = useUserStore(state => state)
-    const [groupId] = useState<string>(formik.values.groupId || user.GroupUser[0].groupId.toString());
+    const [groupId, setGroupId] = useState<string>(formik.values.groupId || user.GroupUser[0].groupId.toString());
     const getUsers = async () => await DI.resolve('getUsersUseCase').execute(groupId);
 
     useEffect(() => {
@@ -123,25 +124,10 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                     })}
                                 </Select>
                             }
-                            <Select
-                                className="rounded-full shadow bg-white border-none capitalize"
-                                label={formik.errors.groupId ? formik.errors.groupId as string : "Choisir le groupe"}
-                                name={"groupId"}
-                                labelProps={{ className: `${formik.errors.groupId && "error"} before:border-none after:border-none ` }}
-                                defaultValue={formik.values.groupId?.toString() || user.GroupUser[0]?.Group.id.toString()}
-                                onChange={(val: string | undefined) => {
-                                    formik.setFieldValue('groupId', val)
-                                }} >
-                                {user?.GroupUser?.map((group: any, index: number) => {
-                                    return (
-                                        <Option
-                                            value={group.Group.id.toString()}
-                                            key={index}>
-                                            {group.Group.name}
-                                        </Option>
-                                    )
-                                })}
-                            </Select>
+                            <GroupSelect
+                                setGroupId={setGroupId}
+                                formik={formik}
+                                user={user} />
                         </div>
                     </div>
                 </header>

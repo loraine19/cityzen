@@ -4,8 +4,6 @@ import { Group } from "../../../domain/entities/Group"
 type ProfileDivProps = { group: Group }
 export const GroupLink: React.FC<ProfileDivProps> = ({ group }) => {
 
-    console.log(group)
-
     return (
         <>
             <div className={`flex  items-center  p-0 `}>

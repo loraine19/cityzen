@@ -62,7 +62,7 @@ export class PoolSurveyView {
             }
         }
         this.mine = base.userId === user?.id || false;
-        this.pourcent = Math.round(base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length / (userCount / 2) * 100);
+        this.pourcent = Math.round(base?.Votes?.filter(vote => vote.opinion === VoteOpinion.OK).length / (userCount / 2) * 100);
         this.needed = base.status === PoolSurveyStatus.PENDING ? Math.round(userCount / 2) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length : 0;
         this.IVoted = base?.Votes?.some(vote => vote.userId === user?.id);
         this.myOpinion = base?.Votes?.find(vote => vote.userId === user?.id)?.opinion || null;

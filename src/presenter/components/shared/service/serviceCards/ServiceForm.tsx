@@ -11,6 +11,7 @@ import { DateChip } from "../../../common/ChipDate";
 import { hardLevels, serviceCategoriesS, skillLevels } from "../../../../constants";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import { ServiceType } from "../../../../../domain/entities/Service";
+import GroupSelect from "../../../common/GroupSelect";
 
 export function ServiceForm(props: { formik: any }) {
     const { formik } = props;
@@ -30,6 +31,7 @@ export function ServiceForm(props: { formik: any }) {
     const end = new Date(new Date().getTime() + (1 * dayMS)).toLocaleDateString('fr-FR')
     const haveImage = formik.values.image ? true : false;
     const [imgBlob, setImgBlob] = useState<string | undefined>(formik.values.image);
+    const [groupId, setGroupId] = useState<string | undefined>(formik.values.groupId);
 
     return (
         <>
@@ -62,28 +64,35 @@ export function ServiceForm(props: { formik: any }) {
                                 onChange={(e) => { formik.handleChange(e) }}
                             />
                         </div>
-                        <Select
-                            className="rounded-full shadow bg-white border-none capitalize"
-                            label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
-                            name={"category"}
-                            labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
-                            value={formik.values.category}
-                            onChange={(val: any) => {
-                                formik.setFieldValue('category', val)
-                            }} >
-                            {serviceCategoriesS.map((category: Label, index: number) => {
-                                return (
-                                    <Option
-                                        className={category.value === '' ?
-                                            "hidden" : "rounded-full my-1 capitalize"}
-                                        value={category.value}
-                                        key={index}
-                                    >
-                                        {category.label}
-                                    </Option>
-                                )
-                            })}
-                        </Select>
+                        <div className="w-respLarge flex  gap-2">
+                            <Select
+                                className="rounded-full shadow bg-white border-none capitalize"
+                                label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
+                                name={"category"}
+                                labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
+                                value={formik.values.category}
+                                onChange={(val: any) => {
+                                    formik.setFieldValue('category', val)
+                                }} >
+                                {serviceCategoriesS.map((category: Label, index: number) => {
+                                    return (
+                                        <Option
+                                            className={category.value === '' ?
+                                                "hidden" : "rounded-full my-1 capitalize"}
+                                            value={category.value}
+                                            key={index}
+                                        >
+                                            {category.label}
+                                        </Option>
+                                    )
+                                })}
+                            </Select>
+                            <GroupSelect
+                                groupId={groupId}
+                                setGroupId={setGroupId}
+                                formik={formik}
+                                user={user} />
+                        </div>
                     </div>
                 </header>
                 <main className={`flex flex-1 pb-1 pt-2 ' ${haveImage && "pt-[2rem]"}`}>

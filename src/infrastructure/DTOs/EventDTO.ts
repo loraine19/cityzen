@@ -15,6 +15,7 @@ export class EventDTO {
     title: string = '';
     userId?: number = 0;
     Participants?: Participant[];
+    groupId?: number = 0;
 
     constructor(init?: Partial<EventDTO>) {
         if (init) {
