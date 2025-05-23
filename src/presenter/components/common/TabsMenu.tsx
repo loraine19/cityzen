@@ -12,7 +12,7 @@ export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: strin
     }, [])
 
     return (
-        <div className="flex items-center justify-between lg:px-4 gap-1">
+        <div className="flex items-center justify-between lg:px-4 gap-x-1">
             <Tabs value={defaultTab as string || labels[0].value}
                 className=" w-full max-w-100vh overflow-auto">
                 <TabsHeader

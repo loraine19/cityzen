@@ -45,10 +45,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     const googleAuth = async () => await DI.resolve('googleAuthUseCase').execute()
 
-    const googleAuthRedirect = async () => {
-        await googleAuth()
-        setIsLoggedIn(true)
-    }
 
     return (
         <div className='flex justify-center items-center h-full w-resp pt-6'>
@@ -152,7 +148,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 variant="outlined"
                                 color="gray"
                                 className=" !relative flex max-h-10 px-4 items-center justify-center rounded-full w-[90%] m-auto "
-                                onClick={async () => await googleAuthRedirect()}
+                                onClick={async () => {
+                                    setIsLoggedIn(true)
+                                    await googleAuth()
+
+                                }
+                                }
 
                             >
                                 <img src="https://docs.material-tailwind.com/icons/google.svg"

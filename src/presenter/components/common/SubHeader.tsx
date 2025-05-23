@@ -8,10 +8,10 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
     const goBack = link ? link : '/' + (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
 
     return (
-        <div className="flex w-full  justify-between items-end lg:pb-2">
+        <div className="flex w-full  justify-between items-end ">
             <Typography
                 variant="h3"
-                className="line-clamp-1 font-thin pr-4 flex-1 !text-blue-gray-900">
+                className="line-clamp-1 font-thin pr-4 flex-1 !text-blue-gray-900 -mb-1">
                 <span className="font-medium ">
                     {qty} {type}
                 </span>

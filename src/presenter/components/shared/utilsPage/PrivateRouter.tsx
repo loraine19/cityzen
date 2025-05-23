@@ -4,9 +4,9 @@ import { useUserStore } from '../../../../application/stores/user.store';
 export const PrivateRoute = () => {
     const isLoggedIn = useUserStore((state) => state.isLoggedIn);
 
-    return isLoggedIn ?
-        <Outlet /> :
-        <Navigate to="/signin?msg=Vous devez vous connecter pour accéder au service ..." />;
+    return (!isLoggedIn && !window.location.pathname.includes('/sign')) ?
+        <Navigate to="/signin" /> :
+        <Outlet />
 };
 
 

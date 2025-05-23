@@ -54,6 +54,7 @@ export type ApiServiceI = {
     post(url: string, data?: any, config?: any): Promise<any>;
     patch(url: string, data?: any, config?: any): Promise<any>;
     createFormData(element: any): FormData;
+    getBaseUrl(): string;
 }
 
 export class ApiService implements ApiServiceI {
@@ -69,6 +70,7 @@ export class ApiService implements ApiServiceI {
             error => this.handleResponseError(error)
         );
     }
+    getBaseUrl = () => baseURL;
 
     private logWithTime = (message: string) => {
         const now = new Date().toLocaleTimeString();
@@ -83,18 +85,18 @@ export class ApiService implements ApiServiceI {
     };
 
     private handleResponseError = async (error: any) => {
+        console.error('complete error:', error);
         let newError = new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard');
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
             this.logWithTime('not api error');
             return Promise.reject(newError);
-            return Promise.reject(newError);
         }
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
         const message = error.response?.data?.message || error.response?.message || '';
 
-        console.error('complete error:', error);
+
         newError = new ApiError(status, message);
         switch (status) {
             case 400:

@@ -192,6 +192,7 @@ export default function AnnounceListPage() {
                     </>
                 }
                 <LoadMoreButton
+                    color={'orange'}
                     isBottom={isBottom}
                     hasNextPage={hasNextPage}
                     handleScroll={handleScroll} />

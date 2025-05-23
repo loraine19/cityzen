@@ -49,7 +49,7 @@ export class GoogleAuthUseCase {
     }
 
     public async execute(): Promise<void> {
-        return this.authRepository.googleAuth();
+        await this.authRepository.googleAuth();
     }
 }
 

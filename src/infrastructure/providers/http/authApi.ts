@@ -22,7 +22,7 @@ export class AuthApi {
     }
 
     async googleAuth(): Promise<void> {
-        return this.api.post(`${this.dataType}/google`)
+        window.location.href = `${this.api.getBaseUrl()}/${this.dataType}/google`
     }
 
     async logOut(): Promise<{ message: string }> {
