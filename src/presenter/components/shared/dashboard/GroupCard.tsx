@@ -58,7 +58,7 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                 <Title
                     title={name ?? ''}
                     type='evenement'
-                    subTitle={'⌖ ' + group?.fullAddress + ' - ' + group?.area + '00 , metres'}
+                    subTitle={'⌖ ' + group?.fullAddress + ' - ' + group?.area + ', metres'}
                 />
                 <Typography
                     className="leading-[1.3rem] pt-1 !line-clamp-2"
