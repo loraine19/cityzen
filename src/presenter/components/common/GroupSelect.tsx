@@ -14,7 +14,6 @@ export default function GroupSelect({ formik, user, setGroupId, groupId }: { for
                 formik.setFieldValue('groupId', val)
                 formik.groupId = val
                 setGroupId(val as string)
-                alert(val)
             }} >
             {user?.GroupUser?.map((group: any, index: number) => {
                 return (

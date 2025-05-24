@@ -86,7 +86,7 @@ export class ApiService implements ApiServiceI {
 
     private handleResponseError = async (error: any) => {
         console.error('complete error:', error);
-        let newError = new ApiError(500, 'Serveur non disponible, veuillez réessayer plus tard');
+        let newError = new ApiError(500, 'Une erreur est survenue');
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
@@ -96,13 +96,13 @@ export class ApiService implements ApiServiceI {
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
         const message = error.response?.data?.message || error.response?.message || '';
 
-
         newError = new ApiError(status, message);
         switch (status) {
             case 400:
                 newError = new BadRequestError(message);
                 break;
             case 401:
+                this.logWithTime('token expired 401');
                 if (!originalRequest._retry) {
                     originalRequest._retry = true;
                     const refreshSuccess = await this.refreshAccess();
@@ -135,12 +135,15 @@ export class ApiService implements ApiServiceI {
     };
 
     refreshAccess = async (): Promise<boolean> => {
+        /// TODO check all condition 
         const errorRedirect = (message?: string) => {
-            this.authService.clearCookies();
+            this.authService.clearCookies()
             setTimeout(() => { window.location.replace(`/signin?msg=${message ?? 'Merci de vous re-identifier'}`) }, 2000)
         }
         if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
+        console.log('refreshAccess called');
         const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
+        console.log('refreshAccess data:', data);
         if (!data || data.error) errorRedirect('vous n\'êtes pas connecté');
         return true
     };
