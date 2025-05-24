@@ -11,6 +11,7 @@ export class Group {
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
     GroupUser: GroupUser[] = [];
+    category: GroupCategory = GroupCategory.CATEGORY_1;
     constructor(data?: Partial<Group>) {
         if (data) {
             Object.assign(this, data);
@@ -29,6 +30,16 @@ export class GroupUpdateDTO implements Partial<GroupDTO> { }
 
 export enum GroupFilter {
     MINE = 'MINE',
-    IMODO = 'IGO',
+    IMODO = 'IMODO',
     IMIN = 'IMIN'
 }
+
+export enum GroupCategory {
+    CATEGORY_1 = 'Quartier',
+    CATEGORY_2 = 'Copropriété',
+    CATEGORY_3 = 'Arrondissement',
+    CATEGORY_4 = 'Par activité',
+    CATEGORY_5 = 'autre',
+}
+
+export type GroupPage = { groups: Group[], count: number };

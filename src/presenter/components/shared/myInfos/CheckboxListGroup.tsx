@@ -19,6 +19,11 @@ type CheckboxListGroupProps = {
 
 export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: CheckboxListGroupProps) => {
 
+  const userGroupFind = (groupId: number): Boolean => {
+    if (userGroups) return userGroups?.find((groupUser: GroupUser) => groupUser.groupId === groupId) ? true : false
+    return false
+  }
+
   return (
     <div className="relative w-respLarge">
       <Menu placement="bottom-start">
@@ -57,8 +62,8 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
                     <Checkbox
                       color="cyan"
                       onChange={() => {
-                        if (userGroups.find((groupUser: GroupUser) => groupUser.groupId === group.id)) {
-                          setUserGroups(userGroups.filter((groupUser: GroupUser) => groupUser.groupId !== group.id));
+                        if (userGroupFind(group.id)) {
+                          setUserGroups(userGroups?.filter((groupUser: GroupUser) => groupUser.groupId !== group.id));
                         } else {
                           const newGroupUser = new GroupUser({ groupId: group.id, Group: group, role: Role.MEMBER });
                           userGroups.push(newGroupUser);
@@ -68,7 +73,7 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
                       }}
                       onClick={(e) => e.stopPropagation()}
                       id={group.id.toString()}
-                      checked={userGroups.find((groupU: GroupUser) => groupU.groupId === group.id) ? true : false}
+                      checked={userGroups?.find((groupU: GroupUser) => groupU.groupId === group.id) ? true : false}
                       ripple={false}
                       className="hover:before:opacity-0 rounded-full"
                       containerProps={{
@@ -80,7 +85,7 @@ export const CheckboxListGroup = ({ groups, setUserGroups, userGroups }: Checkbo
                     {group.name}
                   </Typography>
                 </label>
-                {userGroups.find((groupUser: GroupUser) => groupUser.groupId === group.id) &&
+                {userGroupFind(group.id) &&
                   <div className="flex w-max m-2 gap-4 flex-1 ">
                     <label
                       htmlFor="modo"

@@ -1,6 +1,6 @@
 // src/data/repositories/UserRepository.tsx
-import { Group } from "../entities/Group";
+import { GroupPage } from "../entities/Group";
 
 export abstract class GroupRepositoryBase {
-    abstract getNearestGroups(): Promise<Group[]>;
+    abstract getNearestGroups(page?: number, filter?: string, category?: string): Promise<GroupPage>;
 }

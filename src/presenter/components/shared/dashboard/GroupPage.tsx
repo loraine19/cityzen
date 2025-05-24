@@ -10,16 +10,20 @@ import { SkeletonGrid } from '../../common/Skeleton';
 import { GroupCard } from "./GroupCard";
 import TabsMenu from "../../common/TabsMenu";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
-import { GroupFilter } from "../../../../domain/entities/Group";
+import { GroupCategory, GroupFilter } from "../../../../domain/entities/Group";
+import { CategoriesSelect } from "../../common/CategoriesSelect";
+import { groupCategories } from "../../../constants";
+import { getValue } from "../../../views/viewsEntities/utilsService";
 
 
 export default function GroupPage() {
-    const { groups, count, isLoading, refetch, fetchNextPage, hasNextPage, error } = DI.resolve('groupViewModel')()
     const [notif, setNotif] = useState<string>('');
     const [selectedSort, setSelectedSort] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
 
+    const groupViewModelFactory = DI.resolve('groupViewModel');
+    const { groups, count, isLoading, refetch, fetchNextPage, hasNextPage, error } = groupViewModelFactory(filter, category);
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
@@ -27,19 +31,31 @@ export default function GroupPage() {
 
     //// TABS 
     const filterTab = async (value?: GroupFilter) => {
-        setParams({ filter: value as string || '', category: category });
+        setParams({ filter: value as string || '', category });
         if (value !== filter) { setCategory('') }
         setFilter(value || '');
         value === GroupFilter.MINE ? setMines(true) : setMines(false);
-        setParams({ filter: value as string || '', category: category })
+        setParams({ filter: value as string || '', category })
         refetch();
     }
+
+
     const Tabs: TabLabel[] = [
         { label: "tous", value: "", result: () => filterTab() },
         { label: "Je suis membre", value: GroupFilter.IMIN, result: () => filterTab(GroupFilter.IMIN) },
         { label: "Je suis conciliateur", value: GroupFilter.IMODO, result: () => filterTab(GroupFilter.IMODO) },
         { label: "j'ai créé", value: GroupFilter.MINE, result: () => filterTab(GroupFilter.MINE) },
     ]
+
+    /// CATEGORIES SELECT 
+    const change = (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
+        const selectedCategory = typeof e !== "object" ?
+            e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), groupCategories).toLowerCase();
+        console.log(selectedCategory);
+        setCategory(selectedCategory);
+        setParams({ filter: filter as string || '', category: selectedCategory });
+        refetch();
+    }
 
 
     /// HANDLE SCROLL
@@ -66,11 +82,13 @@ export default function GroupPage() {
             default: return '';
         }
     }
+    const categorieName = (category: string): string => GroupCategory[category as keyof typeof GroupCategory] ?? '';
+
     useEffect(() => {
         switch (true) {
             case isLoading: setNotif('Chargement...'); break;
             case error: setNotif('Erreur de chargement'); break;
-            case count === 0: setNotif(`Aucun événement ${filterName()} trouvé`); break;
+            case count === 0: setNotif(`Aucun groupe ${filterName()} ${categorieName(category)} trouvé`); break;
             default: setNotif('');
         }
     }, [groups, isLoading, error, filter, category]);
@@ -91,18 +109,14 @@ export default function GroupPage() {
                     labels={Tabs}
                     selectedSort={selectedSort}
                     setSelectedSort={setSelectedSort} />
-                {/* {mine ?
-                    <CheckCard
-                        categoriesArray={boxArray}
-                        boxSelected={boxSelected}
-                        setBoxSelected={setBoxSelected} />
-                    :
-                    <SelectSearch
-                        searchCat={searchCat}
-                        setSearchCat={setSearchCat}
-                        category={serviceCategoriesS}
-                        search={search} />
-                } */}
+                <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
+                    <CategoriesSelect
+                        categoriesArray={groupCategories}
+                        change={change}
+                        categorySelected={category.toString()} />
+
+
+                </div>
                 <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
             </header>
             <main

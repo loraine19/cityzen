@@ -1,6 +1,7 @@
 import { EventCategory } from "../domain/entities/Event";
 import { FlagReason } from "../domain/entities/Flag";
 import { Label } from "../domain/entities/frontEntities";
+import { GroupCategory } from "../domain/entities/Group";
 import { SurveyCategory } from "../domain/entities/PoolSurvey";
 import { PostCategory } from "../domain/entities/Post";
 import { ServiceCategory, SkillLevel, HardLevel } from "../domain/entities/Service";
@@ -24,6 +25,7 @@ export const serviceCategories: Label[] = getEnumLabel(ServiceCategory);
 export const skillLevels: Label[] = getEnumLabel(SkillLevel);
 export const hardLevels: Label[] = getEnumLabel(HardLevel);
 export const postCategories: Label[] = getEnumLabel(PostCategory);
+export const groupCategories: Label[] = getEnumLabel(GroupCategory);
 
 export enum PathElement {
     EVENT = 'evenement',
@@ -38,6 +40,7 @@ export enum PathElement {
     PARTICIPANT = 'evenement',
     LIKE = 'annonce',
     MESSAGE = 'message',
+    GROUP = 'groupe'
 }
 
 export enum EventImage {

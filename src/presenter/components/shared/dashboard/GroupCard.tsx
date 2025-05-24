@@ -49,7 +49,6 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                     onError={(e) => { e.currentTarget.src = '../../image/def.jpeg'; }}
                     alt={name}
                     className="CardImage flex " /> :
-
                     <AddressMapOpen
                         color='#0092b8'
                         aera={group?.area}
@@ -70,7 +69,11 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
             <CardFooter className="CardFooter">
                 {!mines ? (
                     <div className="flex w-full items-center gap-2">
-
+                        <Chip
+                            size='sm'
+                            value={group?.categoryS}
+                            className="CyanChip text-ellipsis  " >
+                        </Chip>
                     </div>
                 ) : (
                     <ModifBtnStack
