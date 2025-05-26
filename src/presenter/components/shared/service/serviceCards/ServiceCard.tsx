@@ -11,6 +11,7 @@ import { GenereMyActions, getEnumVal, isLate } from "../../../../views/viewsEnti
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { Title } from "../../../common/CardTitle";
+import { useAlertStore } from "../../../../../application/stores/alert.store";
 
 
 type ServiceProps = { service: ServiceView, mines?: boolean, change: (e: React.MouseEvent<HTMLButtonElement>) => void, update?: () => void }
@@ -27,6 +28,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
     const isLateValue = isLate(createdAt, 15) && statusSInt < 3
     const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
     const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
+    const { handleApiError } = useAlertStore(state => state);
 
     const myActions = [
         ...GenereMyActions(service, "service", deleteService, isLateValue),
@@ -48,7 +50,10 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
             iconImage: "person_cancel",
             title: `annuler ma réponse à ${title}`,
             body: `annuler ma réponse à ${title}`,
-            function: async () => { await updateServiceStep(id, ServiceUpdate.CANCEL_RESP); update && update() },
+            function: async () => {
+                const data = await updateServiceStep(id, ServiceUpdate.CANCEL_RESP);
+                data.error ? handleApiError(data.error) : update && update()
+            },
         },
         {
             iconImage: "groups",
@@ -101,7 +106,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                     </div>
                     {image &&
                         <img
-                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
+                            onError={(e) => e.currentTarget.src = "/image/placeholder.jpg"}
                             src={image as any}
                             alt={title}
                             className="CardImage"
@@ -117,7 +122,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                     />
                     <div className="flex flex-col justify-between h-full overflow-auto">
                         <Typography
-                            className="leading-[1.3rem]  !line-clamp-2"
+                            className="leading-[1.3rem] !line-clamp-2"
                             color="blue-gray">
                             {description}
                         </Typography>

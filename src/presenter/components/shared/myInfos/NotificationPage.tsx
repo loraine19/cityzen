@@ -19,13 +19,17 @@ export default function NotificationPage() {
     const [filter, setFilter] = useState<string>('');
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
-    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory(filter);
+    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory(filter)
+
+    //// PARAMS
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter") }
+    useEffect(() => { setFilter(params.filter || '') }, [])
 
 
+    //// FILTER TAB
     const notifTabs: TabLabel[] = [{
-        label: "tous", value: "", result: () => { filterTab() }
+        label: "tous", value: "", result: () => filterTab()
     },
     {
         label: "message",
@@ -79,9 +83,7 @@ export default function NotificationPage() {
     };
 
 
-    //// USE EFFECT 
-    useEffect(() => { setFilter(params.filter || '') }, [])
-
+    //// NOTIFICATION
     useEffect(() => {
         count > 0 ?
             setNotifFind('') :

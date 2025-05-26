@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServiceStep } from '../../../../domain/entities/Service';
-import CTAMines from '../../common/CTAMines';
+import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import ServiceDetailComp from './serviceCards/ServiceDetailCard';
@@ -168,7 +168,7 @@ export default function ServiceDetailPage() {
                 <SubHeader type={`${typeS} de service ${categoryS}`} closeBtn />
             </header>
             <main>
-                <div className="flex pt-6 pb-1 h-full">
+                <div className="flex pt-8 pb-1 h-full">
                     {isLoading || error || !service ?
                         <Skeleton />
                         :

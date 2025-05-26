@@ -66,9 +66,7 @@ export default function GroupPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
-            } else {
-                setIsBottom(false);
-            }
+            } else setIsBottom(false)
         }
     }
 
@@ -85,7 +83,6 @@ export default function GroupPage() {
 
     useEffect(() => {
         switch (true) {
-            case isLoading: setNotif('Chargement...'); break;
             case error: setNotif('Erreur de chargement'); break;
             case count === 0: setNotif(`Aucun groupe ${filterName()} ${categorieName(category)} trouvé`); break;
             default: setNotif('');

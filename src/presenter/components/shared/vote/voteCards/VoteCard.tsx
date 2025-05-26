@@ -50,9 +50,7 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
     const alertValues: AlertValues = {
         handleConfirm: async () => {
             const ok = vote.IVoted ? await updateVote(voteDTO) : await postVote(voteDTO)
-            if (ok.error) {
-                setVoteNotification(ok.error.message)
-            }
+            if (ok.error) setVoteNotification(ok.error.message)
             else {
                 refetch(opinion);
                 close();

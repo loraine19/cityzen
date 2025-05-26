@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Action } from '../../../../domain/entities/frontEntities';
-import CTAMines from '../../common/CTAMines';
+import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import PoolDetailCard from './voteCards/PoolDetailCard';

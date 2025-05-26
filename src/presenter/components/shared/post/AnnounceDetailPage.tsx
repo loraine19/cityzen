@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import CTAMines from '../../common/CTAMines';
+import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import PostDetailCard from './announceComps/PostDetailCard';
@@ -55,7 +55,7 @@ export default function AnnounceDetailPage() {
             </header>
             <main>
                 {!isLoading && !error && post ?
-                    <div className="flex pt-6 pb-1 h-full">
+                    <div className="flex pt-8 pb-1 h-full">
                         <PostDetailCard
                             post={post}
                             mines={post?.isMine}
@@ -70,12 +70,13 @@ export default function AnnounceDetailPage() {
                             actions={myActions} /> :
                         <CTAMines
                             actions={ContactActions}
-                            disabled1={post?.shareA?.find((s: string) => s === "PHONE") ? false : true}
-                            disabled2={post?.shareA?.find((s: string) => s === "EMAIL") ? false : true} />
+                            disabled1={post?.shareA?.find((s: string) => s === "PHONE") ?
+                                false : true}
+                            disabled2={post?.shareA?.find((s: string) => s === "EMAIL") ?
+                                false : true} />
                     }
                 </> :
                 <footer className={`CTA`}> </footer>}
-
         </div>
     )
 }

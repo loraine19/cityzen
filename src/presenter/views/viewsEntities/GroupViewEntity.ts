@@ -9,8 +9,8 @@ export class GroupView extends Group {
     ImModo: boolean = false
     fullAddress: string = ''
     categoryS: string = ''
-    toogleMember: () => Promise<GroupView>;
-    toogleModo: () => Promise<GroupView>;
+    toogleMember: () => Promise<GroupView | any>;
+    toogleModo: () => Promise<GroupView | any>;
     constructor(group: Group, userId: number) {
         super(group);
         this.ImIn = group?.GroupUser?.find((gu) => gu.userId === userId) ? true : false

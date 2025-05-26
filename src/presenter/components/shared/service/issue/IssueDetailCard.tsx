@@ -10,11 +10,11 @@ import { ProfileDiv } from "../../../common/ProfilDiv"
 import { GroupLink } from "../../../common/GroupLink"
 
 type IssueFormProps = { issue: IssueView, service?: Service, formik?: any, modos: User[] }
-export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, modos = [] }) => {
+export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, modos }) => {
     const Service = service ? service : issue.Service
     const [imgBlob, setImgBlob] = useState<string>(formik?.values.image ?? issue.image)
     const start = new Date(Service?.createdAt).toLocaleDateString('fr-FR')
-
+    console.log(modos)
 
     return (
         <>
@@ -95,7 +95,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                             className="!bg-transparent !border-none flex justify-center items-center z-50 ">
                                             <div className="fixed top-[16rem] left-1/2 transform -translate-x-1/2 max-h-[calc(100vh-19rem)] max-w-[calc(100vw-2rem)] flex justify-center items-center ">
                                                 <img
-                                                    onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
+                                                    onError={(e) => e.currentTarget.src = '/image/placeholder.jpg'}
                                                     title='cliquez pour fermer'
                                                     src={imgBlob}
                                                     alt='image'
@@ -105,7 +105,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                         </PopoverContent>
                                     </Popover>
                                 </div>
-                                <div className={formik ? 'flex  absolute bottom-12 right-12' : `hidden`}>
+                                <div className={formik ? 'flex absolute bottom-12 right-12' : `hidden`}>
                                     <ImageBtn
                                         setImgBlob={setImgBlob}
                                         formik={formik}
@@ -115,7 +115,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                         </div>
                         <Typography variant="small">Concilateurs :</Typography>
                     </CardBody>
-                    <CardFooter className="CardFooter !overflow-auto  w-full flex-1 flex flex-col  gap-3 !pt-2 !pb-4">
+                    <CardFooter className="CardFooter !overflow-auto w-full flex-1 flex flex-col  gap-3 !pt-2 lg:!pb-4">
                         <div className='flex gap-3 md:!flex-row flex-col max-w-[100%] min-h-max '>
                             <Select
                                 key='userIdModo'
@@ -129,15 +129,16 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                 onChange={(e: string | undefined) => { formik.values.userIdModo = parseInt(e || '1') }}
                                 containerProps={{ className: "h-[2rem] !py-0 !flex justify-center" }}
                             >
-                                {!issue?.UserModo && formik ? modos.map((modo: User) =>
-                                    <Option
-                                        key={modo.id}
-                                        className={` rounded-full   `}
-                                        value={issue?.userIdModo?.toString() || '0'} >
-                                        <ProfileDiv
-                                            size="xs"
-                                            profile={modo.Profile} />
-                                    </Option>) :
+                                {!issue?.UserModo && formik ?
+                                    modos.map((modo: User) =>
+                                        <Option
+                                            key={modo.id}
+                                            className={` rounded-full   `}
+                                            value={issue?.userIdModo?.toString() || '0'} >
+                                            <ProfileDiv
+                                                size="xs"
+                                                profile={modo} />
+                                        </Option>) :
                                     <Option
                                         key={'modoId'}
                                         className={` rounded-full   `}
@@ -153,12 +154,12 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                 name={"userIdModoOn"}
                                 labelProps={{ className: `before:border-none after:border-none ` }}
                                 menuProps={{ className: 'overflow-auto max-h-44' }}
-                                disabled={!formik || !issue.onMe || issue.UserModoOn ? true : false}
+                                disabled={!formik || !issue.mine || issue.UserModoOn ? true : false}
                                 value={issue?.userIdModoOn?.toString() || '0'}
                                 onChange={(e: string | undefined) => { formik.values.userIdModoOn = e }}
                                 containerProps={{ className: "h-[2rem] !py-0 !flex justify-center" }}
                             >
-                                {!issue.UserModoOn && formik ?
+                                {!issue.UserModoOn ?
                                     modos.map((modo: User) =>
                                         <Option
                                             key={modo.id}
@@ -166,11 +167,11 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                             value={modo.id && modo?.id?.toString() || '0'} >
                                             <ProfileDiv
                                                 size="xs"
-                                                profile={modo.Profile} />
+                                                profile={modo} />
                                         </Option >) :
                                     <Option
                                         key={'modo.id'}
-                                        className={` rounded-full   `}
+                                        className={`rounded-full   `}
                                         value={issue?.userIdModoOn?.toString() || '0'} >
                                         <ProfileDiv
                                             size="xs"

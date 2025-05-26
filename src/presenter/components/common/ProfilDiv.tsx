@@ -15,6 +15,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
     const textSize = size === "xl" && "h5" || size === "sm" && "h6" || "small"
     const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
     const user = useUserStore(state => state.user)
+    console.log(profile)
 
     return (
         <>
@@ -25,7 +26,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                             <Avatar
                                 onError={(e) => e.currentTarget.src = "/image/person.svg"}
                                 data-cy={`big-avatar-${profile?.firstName}`}
-                                src={profile?.image as string ?? "../image/person.svg"}
+                                src={profile?.image as string ?? '/image/person.svg'}
                                 size={size as any}
                                 referrerPolicy="unsafe-url"
                                 alt="avatar"
@@ -47,7 +48,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                     icon="sms"
                                 />
                                 <Avatar
-                                    onError={(e) => e.currentTarget.src = "/images/person.svg"}
+                                    onError={(e) => e.currentTarget.src = "/image/person.svg"}
                                     src={profile?.image as string ?? '/image/person.svg'}
                                     size="sm"
                                     alt="avatar"

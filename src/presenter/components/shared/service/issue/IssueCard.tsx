@@ -29,15 +29,18 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
     const myActions = GenereMyActions(issue, "concialtion", deleteIssue)
     const takenCTA: Action[] = [
 
+        //// TODO : mettre à jour les actions en fonction du status de la concialtion
         {
-            icon: "person_cancel", title: `annuler ma réponse à concialtion : ${Service?.title}`,
+            icon: "person_cancel",
+            title: `annuler ma réponse à concialtion : ${Service?.title}`,
             body: `annuler ma réponse à concialtion : ${Service?.title}`,
             function: async () => {
                 //await updateServiceStep(id, ServiceUpdate.CANCEL_RESP); update && update()
             },
         },
         {
-            icon: "groups", title: `Relancer concialtion : ${Service?.title}`,
+            icon: "groups",
+            title: `Relancer concialtion : ${Service?.title}`,
             body: ` Relancer concialtion : ${Service?.title}`,
             function: () => { alert(`Voulez-vous relancer concialtion ?`) },
         },

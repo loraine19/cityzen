@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import CTAMines from '../../common/CTAMines';
+import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import { Action } from '../../../../domain/entities/frontEntities';
@@ -61,7 +61,7 @@ export default function GroupDetailPage() {
             </header>
             <main>
                 {!isLoading && !error && group ?
-                    <div className="flex pt-6 pb-1 h-full">
+                    <div className="flex pt-8 pb-1 h-full">
                         <GroupDetailCard
                             actions={myActions}
                             refetch={refetch}

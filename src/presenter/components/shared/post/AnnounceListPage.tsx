@@ -25,14 +25,16 @@ export default function AnnounceListPage() {
     const [notif, setNotif] = useState<string>('')
     const [mines, setMines] = useState<boolean>(false);
     const [view, setView] = useState(window.innerWidth > 768 ? "list" : "dashboard");
+
+    //// PARAMS
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
-
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
 
     const [list, setList] = useState<PostView[]>(posts);
     useEffect(() => { posts && setList(posts) }, [isLoading, count, refetch])
 
+    //// FILTER TAB
     const filterTab = async (value?: PostFilter) => {
         setParams({ filter: value as string || '', category: category });
         value !== filter && setCategory('')
@@ -56,7 +58,7 @@ export default function AnnounceListPage() {
         await refetch();
     }
 
-
+    //// NAMING
     const filterName = (): string => {
         switch (filter) {
             case PostFilter.MINE: return 'les miens';
@@ -65,12 +67,11 @@ export default function AnnounceListPage() {
         }
     }
 
-
+    //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (isLoading): setNotif('Chargement des annonces...'); break;
             case (count === 0): setNotif(`Aucune annonce ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''} n'a été trouvé`); break;
-            case (error): setNotif("Erreur lors du chargement des annonces, veuillez réessayer plus tard"); break;
+            case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }
     }, [isLoading, error, filter, category]);
@@ -104,6 +105,7 @@ export default function AnnounceListPage() {
     const announcesToGrid = AnnouncesByFour(list);
     const switchClick = () => setView(view === "dashboard" ? "list" : "dashboard");
 
+    //// SORT LIST
     const sortList = [
         {
             label: "Nombre de likes",

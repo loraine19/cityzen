@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
-import CTAMines from '../../common/CTAMines';
+import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import { EventDetailCard } from './eventComps/EventDetailCard';
@@ -28,30 +28,17 @@ export default function EventDetailPage() {
 
     const buttons: Action[] = [
         {
-            color: 'red',
-            iconImage: event?.Igo ? 'person' : '',
-            icon: event?.Igo ? 'Annuler votre participation' : '',
-            title: `annuler votre participation a ${event?.title}`,
-            body: `annuler votre participation a ${event?.title}`,
+            color: event.Igo ? 'red' : 'cyan',
+            iconImage: event?.Igo ? 'cancel' : 'person',
+            icon: event?.Igo ? 'Annuler votre participation' : 'Participer',
+            title: event?.Igo ? `Annuler votre participation ` : `Participer à l'évenement`,
+            body: event?.Igo ? `Voulez-vous vraiment annuler votre participation à ${event?.title}` :
+                `Confirmer votre participation à ${event?.title}`,
             function: async () => {
-                await event?.toogleParticipate();
-                await refetch()
-                handleOpen()
-
+                const data = await event?.toogleParticipate();
+                data.error ? handleApiError(data.error) : await refetch() && handleOpen()
             }
-        },
-        {
-            iconImage: event?.Igo ? '' : 'person',
-            icon: event?.Igo ? '' : `Participer`,
-            title: `Participer a ${event?.title}`,
-            body: `Participer a ${event?.title}`,
-            function: async () => {
-                await event?.toogleParticipate();
-                await refetch()
-                handleOpen()
-            }
-        },
-
+        }
     ];
 
 
@@ -70,7 +57,9 @@ export default function EventDetailPage() {
                 {!isLoading && event ?
                     <EventDetailCard
                         EventLoad={event}
-                        refetch={refetch} /> :
+                        refetch={refetch}
+
+                    /> :
                     <Skeleton />}
             </main>
             {(!isLoading && event) && <>

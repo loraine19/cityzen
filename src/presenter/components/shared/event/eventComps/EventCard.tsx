@@ -10,6 +10,7 @@ import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 import { Title } from "../../../common/CardTitle";
 import { EventStatus } from "../../../../../domain/entities/Event";
 import { ProgressBarBlur } from "../../../common/ProgressBar";
+import { useAlertStore } from "../../../../../application/stores/alert.store";
 
 type EventCardProps = {
     event: EventView, refetch?: () => void,
@@ -25,6 +26,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id)
     const actions = GenereMyActions(event, "evenement", deleteEvent);
     const haveImage = Boolean(image);
+    const { handleApiError } = useAlertStore()
 
 
     return (
@@ -56,15 +58,12 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         value={pourcent || 0}
                         status={event.status as string}
                         needed={participantsMin - (event?.Participants?.length || 0)}
-
-
                     />
-
                 </div>
                 {image && (
                     <img
-                        src={image as string || '../../image/def.jpeg'}
-                        onError={(e) => { e.currentTarget.src = '../../image/def.jpeg'; }}
+                        src={image as string || '/image/placeholder.jpg'}
+                        onError={(e) => { e.currentTarget.src = '/image/placeholder.jpg' }}
                         alt={title}
                         className="CardImage flex " />
                 )}
@@ -109,8 +108,8 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         disabled={event?.status !== EventStatus.PENDING}
                         data-cy='btn-participate'
                         onClick={async () => {
-                            const event = toogleParticipate && await toogleParticipate();
-                            setEvent(event);
+                            const event = toogleParticipate && await toogleParticipate()
+                            event?.error ? handleApiError(event.error) : setEvent(event)
                         }}>
                         <Chip
                             value={participantsMin}

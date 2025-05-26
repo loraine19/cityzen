@@ -34,7 +34,6 @@ export default function ConciationListPage() {
     const user = useUserStore().user
     const ImModo = (user.GroupUser.map(g => g.role).includes(Role.MODO))
 
-
     //// NAMING
     const filterName = (): string => filter === IssueFilter.FINISH && 'resolus' || filter === IssueFilter.PENDING && 'demande' || filter === IssueFilter.WAITING && 'en cours' || ''
 
@@ -68,9 +67,8 @@ export default function ConciationListPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (isLoading): setNotif('Chargement...'); break;
             case (count === 0): setNotif(`Aucun ${filterName()} n'a été trouvé`); break;
-            case (error): setNotif("Erreur lors du chargement , veuillez réessayer plus tard"); break;
+            case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }
     }, [issues, isLoading, error, filter, category, count, ImModo]);

@@ -71,13 +71,13 @@ export default function EventListPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case isLoading: setNotif('Chargement...'); break;
             case error: setNotif('Erreur de chargement'); break;
             case count === 0: setNotif(`Aucun événement ${filterName()} trouvé`); break;
             default: setNotif('');
         }
     }, [events, isLoading, error, filter, category]);
 
+    //// HANDLE VIEW CHANGE
     const switchClick = () => {
         setView(view === "view_agenda" ? "event" : "view_agenda");
         setCategory('');

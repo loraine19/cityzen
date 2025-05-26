@@ -121,7 +121,6 @@ export default function ServicesPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (isLoading): setNotif('Chargement...'); break;
             case (count === 0): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');

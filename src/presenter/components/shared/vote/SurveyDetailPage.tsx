@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CTAMines from '../../common/CTAMines';
+import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import SurveyDetailCard from './voteCards/SurveyDetailCard';
@@ -47,7 +47,7 @@ export default function SurveyDetailPage() {
                 <main>
                     {isLoading || error ?
                         <Skeleton
-                            className='!rounded-2xl flex pt-6 pb-1 h-full' /> :
+                            className='!rounded-2xl flex pt-8 pb-1 h-full' /> :
                         <SurveyDetailCard
                             setOpen={setOpenVote}
                             survey={survey} />

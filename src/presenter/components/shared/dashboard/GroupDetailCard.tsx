@@ -7,6 +7,8 @@ import { GroupView } from "../../../views/viewsEntities/GroupViewEntity"
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen"
 import ModifBtnStack from "../../common/ModifBtnStack"
 import { Action, Label } from "../../../../domain/entities/frontEntities"
+import { useAlertStore } from "../../../../application/stores/alert.store"
+import { AlertValues } from "../../../../domain/entities/Error"
 
 type groupDetailCardProps = {
     group: GroupView,
@@ -15,14 +17,52 @@ type groupDetailCardProps = {
     actions: Action[]
 }
 export default function GroupDetailCard({ group: initGroup, mines, refetch, actions }: groupDetailCardProps) {
+
+    const { setOpen, handleApiError, setAlertValues } = useAlertStore()
     const [group, setGroup] = useState<GroupView>(initGroup)
     const { id, name, categoryS, Address, createdAt, toogleMember, toogleModo } = group
     const [infos] = useState<Label[]>(
         [{ label: 'Règlement', value: group?.rules },
-        { label: 'Participants', value: group?.GroupUser?.length },
+        { label: 'Participants', value: `${group?.GroupUser?.length} membres dont ${group?.GroupUser?.filter(gu => gu.role === 'MODO').length} conciliateurs` },
         ]
     )
     const [dot, setDot] = useState<number>(0)
+
+    const toogleModoValues: AlertValues = {
+        title: group?.ImModo ?
+            "Voulez Vous quittez le rôle de conciliateur ?" :
+            "Voulez Vous rejoindre le rôle de conciliateur ?",
+        element: group?.ImModo ?
+            `Vous ne serez plus conciliateur, vous ne pourrez plus gérer les conflits dans le groupe ${name}` :
+            `Vous allez rejoindre le rôle de conciliateur, vous pourrez gérer les conflits dans le groupe ${name}`,
+        handleConfirm: async () => {
+            const data = await toogleModo()
+            if (data.error) handleApiError(data.error)
+            else {
+                setGroup(data)
+                await refetch()
+                setOpen(false)
+            }
+        },
+    }
+
+    const toogleMemberValues: AlertValues = {
+        title: group?.ImIn ?
+            "Voulez Vous quittez le groupe?" :
+            "Voulez Vous rejoindre le groupe ?",
+        element: group?.ImModo ?
+            `Vous ne serez plus membre, vous ne pourrez plus intervenir dans le groupe ${name}` :
+            `Vous allez rejoindre le groupe ${name}, vous pourrez intervenir dans le groupe`,
+        handleConfirm: async () => {
+            const data = await toogleMember()
+            if (data.error) handleApiError(data.error)
+            else {
+                setGroup(data)
+                await refetch()
+                setOpen(false)
+            }
+        },
+    }
 
     return (
         <>
@@ -112,10 +152,9 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                     )}
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={async () => {
-                                const group = toogleModo && await toogleModo()
-                                setGroup(group)
-                                await refetch()
+                            onClick={() => {
+                                setOpen(true);
+                                setAlertValues(toogleModoValues)
                             }}>
                             <Chip
                                 value={group?.ImModo ? '⠀✓' : '⠀'}
@@ -132,10 +171,9 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                             />
                         </button>
                         <button
-                            onClick={async () => {
-                                const group = toogleMember && await toogleMember();
-                                setGroup(group)
-                                await refetch()
+                            onClick={() => {
+                                setOpen(true);
+                                setAlertValues(toogleMemberValues)
                             }}>
                             <Chip
                                 value={group?.GroupUser?.length}

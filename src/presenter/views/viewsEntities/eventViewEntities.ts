@@ -16,7 +16,7 @@ export class EventView extends Event {
     isValidate: boolean;
     agendaLink: string;
     eventDateInfo: string;
-    toogleParticipate: () => Promise<EventView>;
+    toogleParticipate: () => Promise<EventView | any>;
     image: string = '';
 
     constructor(event: Event, userId: number) {

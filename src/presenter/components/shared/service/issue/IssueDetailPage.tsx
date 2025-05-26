@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServiceType } from '../../../../../domain/entities/Service'
-import CTAMines from '../../../common/CTAMines';
+import CTAMines from '../../../common/CTA';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from './IssueDetailCard';
@@ -14,6 +14,7 @@ import { Input, Select, Typography, Option } from '@material-tailwind/react';
 import { IssueStep } from '../../../../../domain/entities/Issue';
 import { User } from '../../../../../domain/entities/User';
 import { ProfileDiv } from '../../../common/ProfilDiv';
+import { useAlertStore } from '../../../../../application/stores/alert.store';
 
 export default function IssueDetailPage() {
     const { id } = useParams()
@@ -29,32 +30,39 @@ export default function IssueDetailPage() {
     const getModos = async (groupId: number) => await DI.resolve('getUsersModosUseCase').execute(groupId)
     const [modos, setModos] = useState<User[]>([])
     const [modoOnId, setModoOnId] = useState<number>(0)
+    const { handleApiError } = useAlertStore(state => state);
 
-    //// TODO : revoire recupration des modos grace a groupes ds services
     useEffect(() => {
-
         const groupId = issue?.Service?.Group?.id
         if (modos.length === 0 && groupId) {
             const fetchModos = async () => {
-                const modos = await getModos(groupId)
-                setModos([...modos])
-                console.log(modos)
-            }; fetchModos()
+                const data = await getModos(groupId)
+                console.log('data modos', data)
+                data.error ? handleApiError(data.error) : setModos([...data])
+            }
+            fetchModos()
         }
-    }, [issue]);
+    }, [isLoading]);
 
 
     const MyActions: Action[] = [{
+        iconImage: 'edit',
         icon: issue.stepValue < 2 ? 'Modifier ' : '',
         title: 'Modifier la conciliation',
         body: 'Aller à la page de modification de la conciliation',
+        color: 'orange',
         function: () => { navigate('/conciliation/edit/' + issue.serviceId) }
     },
     {
+        iconImage: 'close',
         icon: issue.stepValue <= 3 ? 'Supprimer ' : issue.statusS,
         title: 'Supprimer la conciliation',
         body: 'service.title as string',
-        function: async () => { const ok = await deleteIssue(issue.serviceId); ok && navigate('/service?search=myservices') }
+        color: 'red',
+        function: async () => {
+            const data = await deleteIssue(issue.serviceId);
+            data.error ? handleApiError(data.error) : navigate('/service?search=myservices')
+        }
     }]
 
     const ChoiceModoSelect: JSX.Element = issue &&
@@ -126,14 +134,18 @@ export default function IssueDetailPage() {
             body: `Vous pouvez contacter l'utilisateur qui vous à choisi : ${generateContact(issue.ImModo ? issue.User : issue.UserOn)}`,
             function: async () => {
                 const update = issue.ImModo ? IssueStep.STEP_1 : IssueStep.STEP_2
-                await respIssue(issue.serviceId, update)
+                const data = await respIssue(issue.serviceId, update)
+                data.error && handleApiError(data.error)
             }
         },
         {
             icon: issue.stepValue > 2 && (((issue.ImModo && issue.statusS === IssueStep.STEP_3) || (issue.ImModoOn && issue.statusS === IssueStep.STEP_4)) ? 'Cloturer le litige' : issue.statusS),
             title: `Attribution de la moitié des points la conciliation`,
             body: pourcentInput,
-            function: async () => await finishIssue(issue.serviceId, pourcent.IModo)
+            function: async () => {
+                const data = await finishIssue(issue.serviceId, pourcent.IModo)
+                data.error ? handleApiError(data.error) : navigate('/service?search=myservices')
+            }
         }]
 
 

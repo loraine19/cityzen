@@ -127,8 +127,8 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                     </Typography>
                                     <Avatar
 
-                                        onError={(e) => e.currentTarget.src = "/images/person.svg"}
-                                        src={UserResp.Profile?.image as string || './image/person.png'}
+                                        onError={(e) => e.currentTarget.src = "/image/person.svg"}
+                                        src={UserResp.Profile?.image as string}
                                         size="sm"
                                         alt="avatar"
                                         withBorder={true}

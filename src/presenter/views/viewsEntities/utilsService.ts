@@ -105,7 +105,7 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
             color: 'red',
             icon: 'Supprimer',
             title: "Confirmer la suppression",
-            body: "Confirmer la suppression de " + title + " ?",
+            body: "Voulez-vous vraiment supprimer " + title + " ?",
             function: async () => {
                 const data = await deleteRoute(id);
                 if (data.error) handleApiError(data?.error)
@@ -114,7 +114,6 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
             },
         },
         {
-
             iconImage: 'edit',
             icon: 'Modifier',
             title: "Confirmer la modification",
@@ -196,16 +195,3 @@ export const generateDivObject = (element: any) => {
 }
 
 
-export const handleScroll = (divRef: any, setIsBottom: any, hasNextPage: any, fetchNextPage: any) => {
-    if (divRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-        if (scrollTop + clientHeight + 2 >= scrollHeight) {
-            setIsBottom(true);
-            if (hasNextPage) {
-                fetchNextPage();
-            }
-        } else {
-            setIsBottom(false);
-        }
-    }
-};

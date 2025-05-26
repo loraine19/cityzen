@@ -56,7 +56,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         </div>
                         <div className="flex gap-2 ">
                             <Avatar
-                                onError={(e) => e.currentTarget.src = "../../image/person.svg"}
+                                onError={(e) => e.currentTarget.src = "/image/person.svg"}
                                 src={User.Profile?.image as string}
                                 size="sm"
                                 alt="avatar" />
@@ -88,7 +88,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         </Typography>
                         <div className="flex flex-row-reverse gap-2 ">
                             <Avatar
-                                onError={(e) => e.currentTarget.src = "../../image/person.svg"}
+                                onError={(e) => e.currentTarget.src = "/image/person.svg"}
                                 src={UserResp?.Profile?.image as string}
                                 size="sm"
                                 alt="avatar" />

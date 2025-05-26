@@ -16,7 +16,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
 
 
     return (
-        <div className="pt-6 pb-1 h-full flex">
+        <div className="pt-8 pb-1 h-full flex">
             <Card className="w-respLarge FixCard !h-full">
                 <CardHeader className="FixCardHeader">
                     <div className="ChipDiv flex-col justify-between !h-full">
@@ -41,7 +41,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                             needed={participantsMin - (Participants?.length || 0)} />
                     </div>
                     < img
-                        onError={(e) => e.currentTarget.src = '/images/eventDefault.png'}
+                        onError={(e) => e.currentTarget.src = '/image/placeholder.jpg'}
                         src={image as string}
                         alt={title}
                         className="h-full w-full object-cover" />
