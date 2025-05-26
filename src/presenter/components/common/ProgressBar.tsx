@@ -44,7 +44,7 @@ export function ProgressBar({ value, label, needed, status, size = 'md' }: Progr
                 </Typography>
             </div>
             <Progress
-                barProps={{ className: `!line-clamp-1 px-2 ${color} ` }}
+                barProps={{ className: `!line-clamp-0  px-2 ${color}   ` }}
                 value={value}
                 size={size} />
         </div>)
@@ -93,7 +93,7 @@ export function ProgressBarBlur({ value, label, needed, status, size = 'md', isP
             {status === EventStatus.PENDING &&
                 (
                     <Progress
-                        barProps={{ className: " !min-w-[2.7rem] text-center !line-clamp-1 px-2 !bg-orange-700 " }}
+                        barProps={{ className: `!min-w-[2.7rem] text-center !line-clamp-1 whitespace-nowrap truncate flex items-center ${size === "lg" ? 'py-0.5  px-3' : 'px-2'} !bg-orange-700 "` }}
                         value={(status === EventStatus.PENDING) ? value : 100}
                         size={size}
                         label={`, il manque ${needed} ${label}`} />)}
