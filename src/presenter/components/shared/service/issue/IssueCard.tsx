@@ -49,9 +49,9 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
 
     return (
         <>
-            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-red-400/50 !border-2" : ""}`}>
+            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-orange-400 !border-[1px]" : ""}`}>
                 <CardHeader
-                    className={haveImage ? "h-full !max-h-[16vh] !mb-0" : "FixCardHeaderNoImage"}
+                    className={haveImage ? "h-full lg:!max-h-[16vh] !max-h-[14vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
@@ -99,15 +99,15 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                             style="absolute top-1.5 right-0"
                             fill />
                     </div>
-                    <div className="flex flex-col h-full line-clamp-1  ">
-                        <Typography
-                            color="blue-gray">
-                            {description}
-                        </Typography>
-                    </div>
+
+                    <Typography
+                        className="leading-[1.3rem] !line-clamp-1 pr-6"
+                        color="blue-gray">
+                        {description}
+                    </Typography>
                 </CardBody>
 
-                <CardFooter className="CardFooter   flex-col flex-1 !-mt-1.5 pb-2 ">
+                <CardFooter className="CardFooter  flex-col flex-1 !-mt-1.5 pb-2 ">
                     <ServiceIssueCard service={Service} />
                     <div
                         className="flex items-center justify-between">
