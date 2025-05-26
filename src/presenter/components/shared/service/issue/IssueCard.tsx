@@ -13,6 +13,7 @@ import { PathElement } from "../../../../constants";
 import React from 'react';
 import { IssueStep } from '../../../../../domain/entities/Issue';
 import { User } from "../../../../../domain/entities/User";
+import { GroupLink } from "../../../common/GroupLink";
 
 type IssueCardProps = { issue: IssueView, mines?: boolean, change: (e: any) => void, update?: () => void }
 const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) => {
@@ -20,6 +21,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
     const userService: User = issue?.Service?.type === ServiceType.GET ? issue?.Service.User : issue?.Service?.UserResp || {} as User
     const Service = new ServiceView(issue?.Service, userService)
     const haveImage = image ? true : false
+    const withMe = (issue?.onMe || issue?.mine) ? true : false
     const isLateValue = isLate(createdAt, 15)
     const deleteIssue = async (id: number) => await DI.resolve('deleteIssueUseCase').execute(id);
     // const updateIssue = async (id: number, data: IssueDTO) => await DI.resolve('updateServiceStepUseCase').execute(id, data)
@@ -44,7 +46,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
 
     return (
         <>
-            <Card className={haveImage ? "FixCard  " : "FixCardNoImage"}>
+            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!bg-gray-200" : ""}`}>
                 <CardHeader
                     className={haveImage ? "h-full !max-h-[16vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
@@ -63,14 +65,13 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                                 </Chip>
                             </button>
                         </div>
-
                         <DateChip
                             start={createdAt}
                             prefix="le" />
                     </div>
                     {image &&
                         <img
-                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
+                            onError={(e) => e.currentTarget.src = "/image/placeholder.jpg"}
                             title="image de concialtion"
                             src={image as any}
                             alt={Service.title}
@@ -80,9 +81,14 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1 max-h-max -mt-2.5 mb-0`}>
                     <div className="relative flex items-center justify-between">
-                        <Typography variant="h6">Probleme : </Typography>
+                        <div className="flex gap-4">
+                            <Typography
+                                variant="h6">
+                                Probleme : {withMe ? 'me' : 'n'}
+                            </Typography>
+                            <GroupLink group={Service.Group} />
+                        </div>
                         <Icon
-
                             icon="arrow_circle_right"
                             link={`/${PathElement.ISSUE}/${serviceId}`}
                             title={`voir les details de concialtion  ${Service.title}`}
@@ -101,7 +107,8 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                 <CardFooter className="CardFooter   flex-col flex-1 !-mt-1.5 pb-2 ">
                     <ServiceIssueCard service={Service} />
                     <div
-                        className="flex items-center justify-between"> {mine && mines &&
+                        className="flex items-center justify-between">
+                        {mine && mines &&
                             <ModifBtnStack
                                 actions={myActions}
                                 icon3={isLateValue}
@@ -110,8 +117,6 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                         {mines &&
                             <ModifBtnStack
                                 actions={takenCTA} />}
-
-
                     </div>
                 </CardFooter>
             </Card >

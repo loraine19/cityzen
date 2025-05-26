@@ -88,6 +88,7 @@ export default function AnnounceListPage() {
         return arrayTotal;
     }
 
+    //// HANDLE SCROLL
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
@@ -96,6 +97,7 @@ export default function AnnounceListPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
+                sortList.find((s) => s.label === selectedSort)?.action();
             } else setIsBottom(false)
         }
     }

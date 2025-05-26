@@ -80,9 +80,7 @@ export default function NotificationPage() {
 
 
     //// USE EFFECT 
-    useEffect(() => {
-        setFilter(params.filter || '');
-    }, [])
+    useEffect(() => { setFilter(params.filter || '') }, [])
 
     useEffect(() => {
         count > 0 ?
@@ -91,6 +89,7 @@ export default function NotificationPage() {
     }, [notifs, count, isLoading, filter])
 
 
+    //// HANDLE SCROLL
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(true);
     const handleScroll = () => {
@@ -99,9 +98,7 @@ export default function NotificationPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 if (hasNextPage) fetchNextPage()
-            } else {
-                setIsBottom(false);
-            }
+            } else setIsBottom(false)
         }
     }
 

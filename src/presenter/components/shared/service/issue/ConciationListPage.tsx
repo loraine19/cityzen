@@ -7,9 +7,7 @@ import TabsMenu from "../../../common/TabsMenu";
 import { Label, TabLabel } from "../../../../../domain/entities/frontEntities";
 import { SkeletonGrid } from "../../../common/Skeleton";
 import DI from '../../../../../di/ioc';
-import { getLabel } from "../../../../views/viewsEntities/utilsService";
 import { LoadMoreButton } from "../../../common/LoadMoreBtn";
-import { serviceCategories } from "../../../../constants";
 import IssueCard from "./IssueCard";
 import { IssueView } from "../../../../views/viewsEntities/issueViewEntity";
 import { useUserStore } from "../../../../../application/stores/user.store";
@@ -22,23 +20,31 @@ export default function ConciationListPage() {
     const [step, setStep] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
-    const issueViewModelFactory = DI.resolve('issueViewModel');
-    const { issues, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = issueViewModelFactory(step);
+
+    //// PARAMS
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
+    useEffect(() => { setFilter(params.filter || '') }, []);
+
+    //// VIEW MODEL
+    const issueViewModelFactory = DI.resolve('issueViewModel');
+    const { issues, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = issueViewModelFactory(step)
+
+    //// STATE
     const user = useUserStore().user
     const ImModo = (user.GroupUser.map(g => g.role).includes(Role.MODO))
 
-    useEffect(() => { setFilter(params.filter || '') }, []);
 
+    //// NAMING
     const filterName = (): string => filter === IssueFilter.FINISH && 'resolus' || filter === IssueFilter.PENDING && 'demande' || filter === IssueFilter.WAITING && 'en cours' || ''
 
+    //// FILTER TAB
     const filterTab = async (value?: IssueFilter) => {
-        setParams({ filter: value as string || '', category: category });
-        if (value !== filter) { setCategory('') }
-        setFilter(value || '');
-        setStep(value || '')
-        setParams({ filter: value as string || '', category: category })
+        setParams({ filter: value as string ?? '', category });
+        value !== filter && setCategory('')
+        setFilter(value ?? '');
+        setStep(value ?? '')
+        setParams({ filter: value as string ?? '', category })
     }
 
     const serviceTabs: TabLabel[] = [
@@ -48,6 +54,8 @@ export default function ConciationListPage() {
         { label: "terminés", value: IssueFilter.FINISH, result: () => filterTab(IssueFilter.FINISH) },
     ]
 
+    //// TODO KEEP SEARCH ? ADD SORT ?
+    //// SEARCH
     const search = (searchLabel: Label) => {
         const value = searchLabel.value;
         if (value) {
@@ -56,15 +64,17 @@ export default function ConciationListPage() {
         }
     }
 
+    //// NOTIFICATION
     useEffect(() => {
-        const notifUpdate =
-            (count === 0 && !isLoading) &&
-            `Aucune conciliation ${filter !== '' ? getLabel(filter, serviceTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, serviceCategories).toLowerCase() : ''} n'a été trouvée(s)`
-            || error && "Erreur lors du chargement des conciliations, veuillez réessayer plus tard"
-            || !ImModo && "Vous n'êtes pas conciliateur"
-        setNotif(notifUpdate);
+        switch (true) {
+            case (isLoading): setNotif('Chargement...'); break;
+            case (count === 0): setNotif(`Aucun ${filterName()} n'a été trouvé`); break;
+            case (error): setNotif("Erreur lors du chargement , veuillez réessayer plus tard"); break;
+            default: setNotif('');
+        }
     }, [issues, isLoading, error, filter, category, count, ImModo]);
 
+    //// HANDLE SCROLL
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
@@ -72,12 +82,8 @@ export default function ConciationListPage() {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
+                hasNextPage && fetchNextPage()
+            } else setIsBottom(false)
         }
     }
 

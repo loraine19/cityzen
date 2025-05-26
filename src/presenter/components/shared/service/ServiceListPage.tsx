@@ -11,10 +11,9 @@ import ServiceComp from "./serviceCards/ServiceCard";
 import { Label, TabLabel } from "../../../../domain/entities/frontEntities";
 import { SkeletonGrid } from "../../common/Skeleton";
 import DI from '../../../../di/ioc';
-import { getLabel } from "../../../views/viewsEntities/utilsService";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { ServiceView } from "../../../views/viewsEntities/serviceViewEntity";
-import { serviceCategories, serviceCategoriesS } from "../../../constants";
+import { serviceCategoriesS } from "../../../constants";
 
 export default function ServicesPage() {
     const [notif, setNotif] = useState<string>('');
@@ -25,17 +24,31 @@ export default function ServicesPage() {
     const [step, setStep] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
-    const serviceViewModelFactory = DI.resolve('serviceViewModel');
-    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory(mine, type, step, category);
     const [customFilter, setCustomFilter] = useState<boolean>(false);
-    const [customList, setCustomList] = useState<ServiceView[]>([]);
+    const [customList, setCustomList] = useState<ServiceView[]>([])
+
+    //// PARAMS
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
 
+    //// VIEW MODEL
+    const serviceViewModelFactory = DI.resolve('serviceViewModel');
+    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory(mine, type, step, category);
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
+    //// NAMING
+    const filterName = (): string => {
+        switch (filter) {
+            case ServiceFilter.MINE: return 'les miens';
+            case ServiceFilter.DO: return 'offres';
+            case ServiceFilter.GET: return 'demandes';
+            default: return '';
+        }
+    }
+    const stepName = (): string => ServiceStepFilter[step as keyof typeof ServiceStepFilter] ?? ''
+
+    //// BOXES FILTER
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé", "litige"];
-    const filterName = (): string => mine && 'les miens' || filter === ServiceFilter.GET && 'demande' || filter === ServiceFilter.DO && 'offre' || ''
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
 
     const CheckboxesFilter = () => {
@@ -58,23 +71,22 @@ export default function ServicesPage() {
             setType(types.join(','));
         }
     }
-
     useEffect(() => { mine && CheckboxesFilter() }, [boxSelected]);
 
-
+    //// FILTER TAB
     const filterTab = async (value?: ServiceFilter) => {
         setCustomFilter(false);
-        setParams({ filter: value as string || '', category: category });
-        if (value !== filter) { setCategory('') }
+        setParams({ filter: value as string || '', category });
+        value !== filter && setCategory('')
         setFilter(value || '');
         setMine(false)
         switch (value) {
-            case ServiceFilter.MINE: { setMine(true), setType(''), setStep(''), setBoxSelected(boxArray) }; break;
-            case ServiceFilter.GET: { setMine(false), setType('GET'), setStep('') }; break;
-            case ServiceFilter.DO: { setMine(false), setType('DO'), setStep('') }; break;
-            default: { setMine(false), setType(''), setStep('') }; break;
+            case ServiceFilter.MINE: { setMine(true), setType(''), setStep(''), setBoxSelected(boxArray) } break;
+            case ServiceFilter.GET: { setType('GET'), setStep('') }; break;
+            case ServiceFilter.DO: { setType('DO'), setStep('') }; break;
+            default: { setType(''), setStep('') }; break;
         }
-        setParams({ filter: value as string || '', category: category })
+        setParams({ filter: value as string || '', category })
     };
 
     const serviceTabs: TabLabel[] = [
@@ -84,6 +96,7 @@ export default function ServicesPage() {
         { label: "les miens", value: ServiceFilter.MINE, result: () => filterTab(ServiceFilter.MINE) },
     ]
 
+    //// SEARCH
     const search = (searchLabel: Label) => {
         setCustomFilter(false);
         const value = searchLabel.value;
@@ -105,20 +118,17 @@ export default function ServicesPage() {
         }
     };
 
+    //// NOTIFICATION
     useEffect(() => {
-        !isLoading && setNotif(count > 0 ? '' : `Aucun service ${tabSelected} ${category !== '' && category ? ' ' + searchCat.label.toLowerCase() : ''} n'a été trouvé`);
-        !error && setNotif('erreur de chargement des services');
-    }, [services]);
+        switch (true) {
+            case (isLoading): setNotif('Chargement...'); break;
+            case (count === 0): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
+            case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
+            default: setNotif('');
+        }
+    }, [isLoading, error, filter, step]);
 
-    useEffect(() => {
-        const notifUpdate =
-            (count === 0 && !isLoading) &&
-            `Aucun service ${filter !== '' ? getLabel(filter, serviceTabs).toLowerCase() : ''} ${category !== '' ? getLabel(category, serviceCategories).toLowerCase() : ''} n'a été trouvé`
-            || error && "Erreur lors du chargement des services, veuillez réessayer plus tard"
-            || '';
-        setNotif(notifUpdate);
-    }, [services, isLoading, error, filter, category]);
-
+    //// HANDLE SCROLL
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
@@ -127,12 +137,13 @@ export default function ServicesPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
-            } else {
-                setIsBottom(false);
+                sortList.find((s) => s.label === selectedSort)?.action();
             }
+            else setIsBottom(false)
         }
     }
 
+    //// SORT LIST
     const [list, setList] = useState<ServiceView[]>(services);
     useEffect(() => { setList(services) }, [isLoading, refetch, count])
 
@@ -151,6 +162,7 @@ export default function ServicesPage() {
     ]
     const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
 
+    //// RENDER
     return (
         <div className="Body cyan">
             <header className="px-4">

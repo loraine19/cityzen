@@ -22,14 +22,14 @@ export default function VoteListPage() {
     const [filter, setFilter] = useState<string>('');
     const voteViewModelFactory = DI.resolve('voteViewModel');
     const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = voteViewModelFactory(filter, step);
-    const [list, setList] = useState<any[]>(poolsSurveys);
+    const [list, setList] = useState<PoolSurveyView[]>(poolsSurveys);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), step: Params.get("step") }
 
     useEffect(() => { setStep(params.step || ''); setFilter(params.filter || '') }, []);
     useEffect(() => { setList([...poolsSurveys]) }, [refetch, isLoading, count]);
 
-    const boxArray = ["nouveau", "en attente", "validé", "rejeté"];
+    //// NAMING
     const filterName = (): string => {
         switch (filter) {
             case PoolSurveyFilter.MINE: return 'les miens';
@@ -48,6 +48,8 @@ export default function VoteListPage() {
         }
     }
 
+    //// BOXES FILTER
+    const boxArray = ["nouveau", "en attente", "validé", "rejeté"];
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
     const CheckboxesFilter = () => {
         let steps = [];
@@ -60,6 +62,7 @@ export default function VoteListPage() {
     useEffect(() => { CheckboxesFilter() }, [boxSelected]);
 
 
+    //// FILTER TAB
     const filterTab = async (value?: PoolSurveyFilter) => {
         setParams({ filter: value as string || '', step });
         value !== filter && setStep('')
@@ -77,7 +80,7 @@ export default function VoteListPage() {
     ]
 
 
-
+    //// SORT LIST
     const sortList = [
         {
             label: "Créé le",
@@ -106,15 +109,17 @@ export default function VoteListPage() {
     ]
     const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
 
+    //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (isLoading): setNotif('Chargement des sondages...'); break;
+            case (isLoading): setNotif('Chargement...'); break;
             case (count === 0): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement des sondages, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }
     }, [isLoading, error, filter, step]);
 
+    //// HANDLE SCROLL
     const divRef = useRef(null)
     const [isBottom, setIsBottom] = useState<boolean>(false);
     const handleScroll = () => {
@@ -123,6 +128,7 @@ export default function VoteListPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
+                sortList.find((s) => s.label === selectedSort)?.action();
             } else setIsBottom(false)
         }
     }

@@ -26,14 +26,17 @@ export default function EventListPage() {
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
+    const [list, setList] = useState<EventView[]>(events)
+
     const params = { filter: Params.get("filter"), category: Params.get("category") }
+
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
-    const [list, setList] = useState<EventView[]>(events);
     useEffect(() => { setList(events) }, [isLoading, refetch, count])
 
+    //// FILTER TAB 
     const filterTab = async (value?: EventFilter) => {
         setParams({ filter: value as string || '', category: category });
-        if (value !== filter) { setCategory('') }
+        value !== filter && setCategory('')
         setFilter(value || '');
         value === EventFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string || '', category: category })
@@ -65,6 +68,7 @@ export default function EventListPage() {
         }
     }
 
+    //// NOTIFICATION
     useEffect(() => {
         switch (true) {
             case isLoading: setNotif('Chargement...'); break;
@@ -77,9 +81,10 @@ export default function EventListPage() {
     const switchClick = () => {
         setView(view === "view_agenda" ? "event" : "view_agenda");
         setCategory('');
-        filterTab("" as EventFilter);
+        filterTab("" as EventFilter)
     }
 
+    //// HANDLE SCROLL
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
@@ -88,6 +93,7 @@ export default function EventListPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
+                sortList.find((s) => s.label === selectedSort)?.action();
             } else setIsBottom(false)
         }
     }
@@ -133,8 +139,6 @@ export default function EventListPage() {
                         sortList={sortList}
                         selectedSort={selectedSort}
                         setSelectedSort={setSelectedSort}
-
-
                     />}
                 <div className={`flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect

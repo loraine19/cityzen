@@ -26,15 +26,18 @@ export default function IssueDetailPage() {
     const deleteIssue = async (id: number) => await DI.resolve('deleteIssueUseCase').execute(id);
     const respIssue = async (id: number, step: IssueStep) => await DI.resolve('respIssueUseCase').execute(id, step);
     const finishIssue = async (id: number, pourcent: number) => await DI.resolve('finishIssueUseCase').execute(id, pourcent);
-    const getModos = async () => await DI.resolve('getUsersModosUseCase').execute()
+    const getModos = async (groupId: number) => await DI.resolve('getUsersModosUseCase').execute(groupId)
     const [modos, setModos] = useState<User[]>([])
     const [modoOnId, setModoOnId] = useState<number>(0)
 
     //// TODO : revoire recupration des modos grace a groupes ds services
     useEffect(() => {
-        if (modos.length === 0) {
+
+        const groupId = issue?.Service?.Group?.id
+        if (modos.length === 0 && groupId) {
+            console.log(modos)
             const fetchModos = async () => {
-                const modos = await getModos()
+                const modos = await getModos(groupId)
                 setModos([...modos])
             }; fetchModos()
         }

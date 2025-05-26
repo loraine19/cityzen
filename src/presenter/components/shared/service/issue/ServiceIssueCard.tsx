@@ -34,7 +34,6 @@ export default function ServiceIssueCard(props: { service: Service }) {
                             value={(new Date(createdAt)).toLocaleDateString('fr-FR')}
                             className="GrayChip lowercase">
                         </Chip>
-
                     </div>
                 </div>
             </CardHeader>
@@ -57,8 +56,8 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         </div>
                         <div className="flex gap-2 ">
                             <Avatar
-                                onError={(e) => e.currentTarget.src = "/images/person.svg"}
-                                src={User.Profile?.image as string || '../../image/person.svg'}
+                                onError={(e) => e.currentTarget.src = "../../image/person.svg"}
+                                src={User.Profile?.image as string}
                                 size="sm"
                                 alt="avatar" />
                             <div className="flex flex-col">
@@ -89,7 +88,8 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         </Typography>
                         <div className="flex flex-row-reverse gap-2 ">
                             <Avatar
-                                src={UserResp?.Profile?.image as string || '../../image/person.svg'}
+                                onError={(e) => e.currentTarget.src = "../../image/person.svg"}
+                                src={UserResp?.Profile?.image as string}
                                 size="sm"
                                 alt="avatar" />
                             <div className="flex flex-col items-end">
@@ -116,7 +116,6 @@ export default function ServiceIssueCard(props: { service: Service }) {
                     </div>
                 </div>
             </CardBody>
-
         </Card >
 
     )

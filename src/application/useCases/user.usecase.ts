@@ -58,8 +58,8 @@ export class GetUsersModosUseCase {
         this.userRepository = userRepository;
     }
 
-    public async execute(): Promise<User[]> {
-        return this.userRepository.getUsersModos()
+    public async execute(groupId: number): Promise<User[]> {
+        return this.userRepository.getUsersModos(groupId)
     }
 }
 

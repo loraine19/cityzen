@@ -10,8 +10,9 @@ export class UserApi {
     constructor() { this.api = new ApiService(); }
 
 
-    async getUsersModos(): Promise<User[]> {
-        return this.api.get(`${this.dataType}/modos`);
+    async getUsersModos(groupId: number): Promise<User[]> {
+        console.log(groupId, 'groupId in getUsersModos', `${this.dataType}/modos/${groupId}`);
+        return this.api.get(`${this.dataType}/modos/${groupId}`);
     }
 
     async getUsers(groupId: number): Promise<User[]> {

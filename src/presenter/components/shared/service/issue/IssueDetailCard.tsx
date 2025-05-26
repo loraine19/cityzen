@@ -7,11 +7,12 @@ import { ImageBtn } from "../../../common/ImageBtn"
 import { IssueView } from "../../../../views/viewsEntities/issueViewEntity"
 import { IssueStep } from "../../../../../domain/entities/Issue"
 import { ProfileDiv } from "../../../common/ProfilDiv"
+import { GroupLink } from "../../../common/GroupLink"
 
 type IssueFormProps = { issue: IssueView, service?: Service, formik?: any, modos: User[] }
-export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, modos }) => {
+export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, modos = [] }) => {
     const Service = service ? service : issue.Service
-    const [imgBlob, setImgBlob] = useState<string>(formik?.values.image ? formik?.values.image : issue.image)
+    const [imgBlob, setImgBlob] = useState<string>(formik?.values.image ?? issue.image)
     const start = new Date(Service?.createdAt).toLocaleDateString('fr-FR')
 
 
@@ -23,12 +24,15 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                     <CardHeader
                         className={"FixCardHeaderNoImage px-4 min-h-max py-3 justify-between items-center shadow-none flex"}
                         floated={false}>
-                        <Typography
-                            className="truncate"
-                            variant="h6"
-                            color="blue-gray" >
-                            {`${issue?.User?.Profile?.firstName ? issue?.User?.Profile?.firstName : 'Vous'} ${issue?.UserModo ? "à demander de l'aide" : "demandez de l'aide"}`}
-                        </Typography>
+                        <div className="flex gap-4">
+                            <Typography
+                                className="truncate"
+                                variant="h6"
+                                color="blue-gray" >
+                                {`${issue?.User?.Profile?.firstName ?? 'Vous'} ${issue?.UserModo ? "à demander de l'aide" : "demandez de l'aide"}`}
+                            </Typography>
+                            <GroupLink group={issue?.Service?.Group} />
+                        </div>
                         <div className="flex gap-2 items-center">
                             <Chip
                                 className={`${issue?.statusS === IssueStep.STEP_3 && 'GreenChip' || issue?.statusS === IssueStep.STEP_4 && 'GrayChip' || 'OrangeChip'} lowercase`}
@@ -80,8 +84,8 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                     <Popover>
                                         <PopoverHandler>
                                             <img
-                                                onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
-                                                src={imgBlob}
+                                                onError={(e) => e.currentTarget.src = '/image/placeholder.jpg'}
+                                                src={imgBlob ?? issue.image ?? '/image/placeholder.jpg'}
                                                 alt='image'
                                                 title='cliquez pour agrandir'
                                                 className="lg:max-h-[calc(25vh-1.5rem)] max-h-[calc(30vh-1.4rem)] w-full  shadow rounded-2xl object-cover"
