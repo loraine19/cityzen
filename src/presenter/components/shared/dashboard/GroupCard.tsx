@@ -19,7 +19,7 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
     const [group, setGroup] = useState<GroupView>(initialGroup);
     const { id, name, Address, createdAt } = group;
     const deletegroup = async (id: number) => await DI.resolve('deletegroupUseCase').execute(id)
-    const actions = GenereMyActions(group, "evenement", deletegroup);
+    const actions = GenereMyActions(group, "groupe", deletegroup);
     const haveImage: boolean = true
 
 
@@ -85,11 +85,11 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                 <div className="flex items-center gap-2">
                     <button
                         onClick={async () => {
-                            // const group = toogleParticipate && await toogleParticipate();
-                            setGroup(group);
+                            const groupUpdated = group.toogleModo && await group?.toogleModo();
+                            setGroup(groupUpdated)
                         }}>
                         <Chip
-                            value={group?.ImModo ? '✓' : '⠀'}
+                            value={group?.ImModo ? '⠀✓' : '⠀'}
                             variant="ghost"
                             className="rounded-full h-max flex items-center  !min-w-max "
                             icon={
@@ -105,8 +105,8 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                     </button>
                     <button
                         onClick={async () => {
-                            // const group = toogleParticipate && await toogleParticipate();
-                            // setGroup(group);
+                            const groupUpdated = group.toogleModo && await group?.toogleModo();
+                            setGroup(groupUpdated)
                         }}>
                         <Chip
                             value={group?.GroupUser?.length}
@@ -121,12 +121,11 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                                     color={group?.ImIn ? "cyan" : "gray"}
                                     title={group?.ImIn ? "Je suis membre" : "Je ne suis pas membre"} />}
                         />
-
                     </button>
 
                     <Icon
                         icon="arrow_circle_right"
-                        link={`/group/${id}`}
+                        link={`/groupe/${id}`}
                         title={`voir les details de ${name}`}
                         size="4xl"
                         fill />

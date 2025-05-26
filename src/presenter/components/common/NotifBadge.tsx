@@ -49,7 +49,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                     setUnReadMsgNotif(messages?.count)
                 }
                 else {
-                    refetch()
+                    await refetch()
                     setUnReadNotMessages(count)
                 }
             } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
@@ -147,7 +147,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                         onClick={
                                                             async () => {
                                                                 await readNotif(notif.id);
-                                                                refetch();
+                                                                await refetch();
                                                                 notif.link && navigate(notif.link)
                                                             }}
                                                         size="3xl"

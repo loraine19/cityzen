@@ -39,3 +39,31 @@ export const groupViewModel = () => {
     }
   }
 }
+
+
+export const groupIdViewModel = () => {
+  return (id: number) => {
+
+    const { data: user, isLoading: userLoading } = useQuery({
+      queryKey: ['user'],
+      refetchOnWindowFocus: false,
+      staleTime: 600000, // 10 minutes,
+      queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
+
+    })
+    const userId = user?.id
+    const getGroupById = DI.resolve('getGroupByIdUseCase')
+
+    let { data, isLoading, error, refetch } = useQuery({
+      queryKey: ['groupById', id],
+      staleTime: 600000,
+      refetchOnWindowFocus: false,
+      queryFn: async () => await getGroupById.execute(id),
+    })
+
+
+    data?.error ? error = data.error : error = null
+    const group = (!userLoading && !isLoading && !error) ? new GroupView(data, userId) : {} as GroupView
+    return { group, isLoading, error, refetch }
+  }
+}

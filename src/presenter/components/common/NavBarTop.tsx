@@ -19,9 +19,6 @@ export default function NavBarTop() {
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t " },
     ];
 
-    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-        e.currentTarget.src = '/image/person.svg';
-    }
 
     return (
         <div className="relative flex justify-between w-full items-center py-3 ">
@@ -30,12 +27,12 @@ export default function NavBarTop() {
                     <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Avatar
-                                onError={handleImageError}
+                                onError={(e) => e.currentTarget.src = '/image/person.svg'}
                                 referrerPolicy="unsafe-url"
                                 className="!flex BgUser !shadow cursor-pointer !h-12 !w-19"
                                 variant="circular"
-                                alt={user?.Profile.firstName || 'user'}
-                                src={user?.Profile.image as string ?? '/image/person.svg'}
+                                alt={user?.Profile?.firstName || 'user'}
+                                src={user?.Profile?.image as string ?? '/image/person.svg'}
                             />
                             <OnlineDot
                                 className="!bottom-0 !-right-0.5"
@@ -57,8 +54,16 @@ export default function NavBarTop() {
                     </MenuList>
                 </Menu>
                 <div className="flex flex-col w-full items-start">
-                    <Typography variant="h5" color="blue-gray">{user.Profile.firstName}</Typography>
-                    <Typography color="blue-gray" className="-mt-1">{user?.GroupUser?.map((group) => group.Group?.name).join(', ')}</Typography>
+                    <Typography
+                        variant="h5"
+                        color="blue-gray">
+                        {user?.Profile?.firstName}
+                    </Typography>
+                    <Typography
+                        color="blue-gray"
+                        className="-mt-1">
+                        {user?.GroupUser?.map((group) => group.Group?.name).join(', ')}
+                    </Typography>
                 </div>
             </div>
             <NotifBadge />

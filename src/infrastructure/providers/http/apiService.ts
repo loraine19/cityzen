@@ -46,7 +46,6 @@ class ServerError extends ApiError {
     }
 }
 
-
 export type ApiServiceI = {
     get(url: string): Promise<any>;
     delete(url: string): Promise<any>;
@@ -80,9 +79,8 @@ export class ApiService implements ApiServiceI {
 
     private handleRequest = (config: any) => {
         // implemente here cookies filter 
-        return config;
-
-    };
+        return config
+    }
 
     private handleResponseError = async (error: any) => {
         console.error('complete error:', error);
@@ -94,7 +92,8 @@ export class ApiService implements ApiServiceI {
             return Promise.reject(newError);
         }
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
-        const message = error.response?.data?.message || error.response?.message || '';
+        let message = error.response?.data?.message || error.response?.message || '';
+        message.includes('PRISMA ERROR') && (message = 'Erreur de données');
 
         newError = new ApiError(status, message);
         switch (status) {
@@ -105,16 +104,10 @@ export class ApiService implements ApiServiceI {
                 this.logWithTime('token expired 401');
                 if (!originalRequest._retry) {
                     originalRequest._retry = true;
-                    const refreshSuccess = await this.refreshAccess();
-                    if (refreshSuccess) {
-                        this.logWithTime('token refreshed SUCCESS 401');
-                        return this.api(originalRequest);
-                    } else {
-                        newError = new UnauthorizedError(message || 'Erreur lors du rafraîchissement du token');
-                    }
-                } else {
-                    newError = new UnauthorizedError();
-                }
+                    const refreshSuccess = await this.refreshAccess()
+                    if (refreshSuccess) return this.api(originalRequest)
+                    else newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
+                } else newError = new UnauthorizedError()
                 break;
             case 403:
                 newError = new ForbiddenError(message);
@@ -135,16 +128,21 @@ export class ApiService implements ApiServiceI {
     };
 
     refreshAccess = async (): Promise<boolean> => {
-        /// TODO check all condition 
         const errorRedirect = (message?: string) => {
             this.authService.clearCookies()
             setTimeout(() => { window.location.replace(`/signin?msg=${message ?? 'Merci de vous re-identifier'}`) }, 2000)
         }
         if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
-        console.log('refreshAccess called');
-        const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
-        console.log('refreshAccess data:', data);
-        if (!data || data.error) errorRedirect('vous n\'êtes pas connecté');
+        try {
+            console.log('refreshAccess called')
+            const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
+            if (!data || data.error) errorRedirect('vous n\'êtes pas connecté');
+        }
+        catch (error) {
+            console.error('refreshAccess error:', error);
+            errorRedirect('Merci de vous re-identifier');
+            return false;
+        }
         return true
     };
 

@@ -47,7 +47,10 @@ export default function ServiceDetailPage() {
                         icon: isNew ? 'Répondre au service' : isFinish ? 'ce service est terminé' : service.statusS,
                         title: isNew ? 'Nous envoyerons un message à ' + service.User?.email + ' pour le premier contact' : '',
                         body: service?.title,
-                        function: isNew ? async () => { await respService(service.id); await refetch() } : () => { },
+                        function: isNew ? async () => {
+                            await respService(service.id)
+                            await refetch()
+                        } : () => { },
                     },
                 ];
                 break;
@@ -84,7 +87,10 @@ export default function ServiceDetailPage() {
                         icon: 'Refuser ',
                         title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
                         body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
-                        function: async () => { await cancelRespService(service.id); await refetch() },
+                        function: async () => {
+                            await cancelRespService(service.id)
+                            await refetch()
+                        },
                     },
                 ];
                 break;

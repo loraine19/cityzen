@@ -1,6 +1,7 @@
 //src/infrastructure/services/notifService.ts
 import { Group, GroupCategory } from '../../../domain/entities/Group';
 import { Role } from '../../../domain/entities/GroupUser';
+import DI from '../../../di/ioc';
 
 
 export class GroupView extends Group {
@@ -8,15 +9,31 @@ export class GroupView extends Group {
     ImModo: boolean = false
     fullAddress: string = ''
     categoryS: string = ''
+    toogleMember: () => Promise<GroupView>;
+    toogleModo: () => Promise<GroupView>;
     constructor(group: Group, userId: number) {
         super(group);
         this.ImIn = group?.GroupUser?.find((gu) => gu.userId === userId) ? true : false
         this.ImModo = group?.GroupUser?.find((gu) => gu.userId === userId && gu.role === Role.MODO) ? true : false
         this.fullAddress = group?.Address?.address + ' ' + group?.Address?.zipcode + ' ' + group?.Address.city
         this.categoryS = GroupCategory[group?.category as string as keyof typeof GroupCategory]
+        this.toogleMember = async () => {
+            this.ImIn ?
+                await DI.resolve('deleteGroupUserUseCase').execute(group.id) :
+                await DI.resolve('postGroupUserUseCase').execute({ groupId: group.id, role: Role.MEMBER });
+            const updatedGroup = await DI.resolve('getGroupByIdUseCase').execute(group.id);
+            return new GroupView(updatedGroup, userId)
+        }
+        this.toogleModo = async () => {
+            this.ImModo ?
+                await DI.resolve('updateGroupUserUseCase').execute({ groupId: group.id, role: Role.MEMBER }) :
+                this.ImIn ?
+                    await DI.resolve('updateGroupUserUseCase').execute({ groupId: group.id, role: Role.MODO }) :
+                    await DI.resolve('postGroupUserUseCase').execute({ groupId: group.id, role: Role.MODO });
+            const updatedGroup = await DI.resolve('getGroupByIdUseCase').execute(group.id);
+            return new GroupView(updatedGroup, userId)
+        }
     }
-
-
 }
 
 

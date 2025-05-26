@@ -39,7 +39,7 @@ export default function AnnounceListPage() {
         setFilter(value || '');
         value === PostFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string || '', category: category })
-        refetch();
+        await refetch();
     }
 
     const postTabs: TabLabel[] = [
@@ -48,12 +48,12 @@ export default function AnnounceListPage() {
         { label: "Mes annonces", value: PostFilter.MINE, result: () => filterTab(PostFilter.MINE) }
     ]
 
-    const change = (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
+    const change = async (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
         const selectedCategory = typeof e !== "object" ?
             e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), postCategories).toLowerCase();
         setCategory(selectedCategory);
         setParams({ filter: filter as string || '', category: selectedCategory });
-        refetch();
+        await refetch();
     }
 
 

@@ -54,7 +54,7 @@ export default function VoteEditPage() {
             const updateData = new SurveyDTO(formik.values as SurveyDTO)
             const data = await updateSurvey(survey.id, updateData)
             if (data.error) handleApiError(data?.error)
-            else { refetch(); setOpen(false); navigate(`/sondage/${data?.id}`) }
+            else { await refetch(); setOpen(false); navigate(`/sondage/${data?.id}`) }
         }
         else if (target === "cagnotte") {
             const updateData = new PoolDTO(formik.values as PoolDTO)

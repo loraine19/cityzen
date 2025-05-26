@@ -42,7 +42,7 @@ export default function AnnounceEditPage() {
         if (data.error) handleApiError(data?.error)
         else {
             setOpen(false);
-            refetch();
+            await refetch();
             navigate(`/annonce/${data?.id}`)
         }
     }

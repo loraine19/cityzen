@@ -62,7 +62,7 @@ export default function ServiceEditPage() {
         const updateData = new ServiceDTO(formik.values as ServiceDTO)
         const data = await updateService(service.id, updateData)
         if (data.error) handleApiError(data?.error)
-        else { refetch(); setOpen(false); navigate(`/service/${data?.id}`) }
+        else { await refetch(); setOpen(false); navigate(`/service/${data?.id}`) }
     }
 
 

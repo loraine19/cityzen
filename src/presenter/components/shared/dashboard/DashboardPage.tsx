@@ -137,7 +137,7 @@ export default function DashboardPage() {
                                             size="lg"
                                             title={modo ? "ouvrir la page conciliation" : "vous devez être concialiateur dans un groupe"} />
                                         <Icon
-                                            link="/group"
+                                            link="/groupe"
                                             icon="groups"
                                             color='green' fill bg
                                             size="lg"
@@ -196,7 +196,7 @@ export default function DashboardPage() {
                                                 className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex mr-8 items-center pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5`}
                                                 onClick={async () => {
                                                     await readNotif(notif.id);
-                                                    refetch();
+                                                    await refetch();
                                                     notif.link && navigate(notif.link)
                                                 }}>
                                                 <p className="line-clamp-1">
@@ -212,7 +212,7 @@ export default function DashboardPage() {
                                                     icon={"cancel"}
                                                     onClick={async () => {
                                                         await readNotif(notif.id);
-                                                        refetch();
+                                                        await refetch();
                                                         notif.link && navigate(notif.link)
                                                     }}
                                                     style={'absolute z-40 right-0'}

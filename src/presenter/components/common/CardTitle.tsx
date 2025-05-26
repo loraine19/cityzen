@@ -30,7 +30,7 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
                     <Typography
                         onScroll={() => { setTitle(props.title) }}
-                        id={props.title} variant="h6" color="blue-gray"
+                        id={props.title} variant="h6"
                         className="w-full flex whitespace-nowrap overflow-x-auto "
                         title={props.title}>
                         {title}
@@ -48,7 +48,6 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
                 <div className="flex lg:flex-row flex-col justify-between pr-1">
                     <Typography
                         variant="small"
-                        color="blue-gray"
                         className="truncate font-normal">
                         {subTitle}
                     </Typography>

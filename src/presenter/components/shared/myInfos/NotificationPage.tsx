@@ -75,7 +75,7 @@ export default function NotificationPage() {
         setParams({ filter: String(value) || '' });
         setFilter(value ? String(value) : '');
         setParams({ filter: (value as unknown as string) || '' })
-        refetch();
+        await refetch();
     };
 
 
@@ -140,9 +140,9 @@ export default function NotificationPage() {
                             <NotifCard
                                 key={index}
                                 notif={notif}
-                                handleClick={(notif: NotifView) => {
+                                handleClick={async (notif: NotifView) => {
                                     readNotif(notif.id);
-                                    refetch();
+                                    await refetch();
                                 }} />
                         </div>)}
                 <LoadMoreButton

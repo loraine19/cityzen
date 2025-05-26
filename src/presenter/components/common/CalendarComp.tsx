@@ -6,6 +6,7 @@ import DI from '../../../di/ioc'
 import { dayMS } from '../../../domain/entities/frontEntities';
 import { getLabel } from '../../views/viewsEntities/utilsService';
 import { eventCategories } from '../../constants';
+import { EventStatus } from '../../../domain/entities/Event';
 
 export default function CalendarCompLarge(props: { logo?: boolean }) {
     const { logo } = props || {}
@@ -149,7 +150,8 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                                                 <PopoverHandler>
                                                                     <div
                                                                         className=
-                                                                        {`${!event.actif && 'invisible'} bg-cyan-500 shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-6 truncate flex items-center justify-center font-normal z-50
+                                                                        {`${!event.actif && 'invisible'} 
+                                                                             ${event.status !== EventStatus.VALIDATED ? `!bg-cyan-300` : `bg-cyan-600`} shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-6 truncate flex items-center justify-center font-normal z-50
                                                         ${(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) && 'rounded-l-2xl !justify-start !z-50 pl-4 !font-medium'}
                                                         ${(eventDays[eventDays.length - 1] === currentDay || new Date(day.date).getDay() === 0) && 'rounded-r-2xl '}
                                                     `}>

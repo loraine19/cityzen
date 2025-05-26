@@ -35,7 +35,7 @@ export default function EventDetailPage() {
             body: `annuler votre participation a ${event?.title}`,
             function: async () => {
                 await event?.toogleParticipate();
-                refetch()
+                await refetch()
                 handleOpen()
 
             }
@@ -47,7 +47,7 @@ export default function EventDetailPage() {
             body: `Participer a ${event?.title}`,
             function: async () => {
                 await event?.toogleParticipate();
-                refetch()
+                await refetch()
                 handleOpen()
             }
         },

@@ -46,6 +46,7 @@ const ConciliationListPage = lazy(() => import("./presenter/components/shared/se
 const ChatPage = lazy(() => import("./presenter/components/shared/dashboard/ChatPage"));
 const RulesPage = lazy(() => import("./presenter/components/shared/dashboard/RulesPage"));
 const GroupPage = lazy(() => import("./presenter/components/shared/dashboard/GroupPage"));
+const GroupDetailPage = lazy(() => import("./presenter/components/shared/dashboard/GroupDetailPage"));
 
 
 function App() {
@@ -77,7 +78,8 @@ function App() {
                                 <Route path="/" element={<DashboardPage />} />
                                 <Route path="/chat" element={<ChatPage />} />
 
-                                <Route path="/group" element={<GroupPage />} />
+                                <Route path="/groupe" element={<GroupPage />} />
+                                <Route path="/groupe/:id" element={<GroupDetailPage />} />
                                 <Route path="/reglement" element={<RulesPage />} />
                                 <Route path="/msg" element={<DashboardPage />} />
                                 <Route path="/myprofile" element={<MyInfosPage />} />

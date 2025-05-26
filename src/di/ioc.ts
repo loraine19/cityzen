@@ -66,8 +66,8 @@ import { AlertStoreFunctions } from '../infrastructure/adaptaters/alertStoreFunc
 import { ErrorService } from '../infrastructure/services/errorService';
 import { GroupRepositoryImpl } from '../infrastructure/repositoriesImpl/GroupRespositoryImpl';
 import { GroupApi } from '../infrastructure/providers/http/groupApi';
-import { GetNearestGroupsUseCase } from '../application/useCases/group.usecase';
-import { groupViewModel } from '../presenter/views/groupViewModel';
+import { DeleteGroupUserUseCase, GetGroupByIdUseCase, GetNearestGroupsUseCase, PostGroupUserUseCase, UpdateGroupUserUseCase } from '../application/useCases/group.usecase';
+import { groupIdViewModel, groupViewModel } from '../presenter/views/groupViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -238,7 +238,13 @@ container.register({
     groupRepository: asClass(GroupRepositoryImpl),
     groupData: asClass(GroupApi),
     getNearestGroupsUseCase: asClass(GetNearestGroupsUseCase),
+    getGroupByIdUseCase: asClass(GetGroupByIdUseCase),
     groupViewModel: asFunction(groupViewModel),
+    groupIdViewModel: asFunction(groupIdViewModel),
+    postGroupUserUseCase: asClass(PostGroupUserUseCase),
+    updateGroupUserUseCase: asClass(UpdateGroupUserUseCase),
+    deleteGroupUserUseCase: asClass(DeleteGroupUserUseCase),
+
 
     ////SOCKETS 
     socketService: asClass(SocketService),

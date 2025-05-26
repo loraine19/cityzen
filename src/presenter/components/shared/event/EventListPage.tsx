@@ -40,7 +40,7 @@ export default function EventListPage() {
         setFilter(value || '');
         value === EventFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string || '', category: category })
-        refetch();
+        await refetch();
     }
 
     const eventTabs: TabLabel[] = [
@@ -50,12 +50,12 @@ export default function EventListPage() {
         { label: "j'organise", value: EventFilter.MINE, result: () => filterTab(EventFilter.MINE) },
     ]
 
-    const change = (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
+    const change = async (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
         const selectedCategory = typeof e !== "object" ?
             e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), eventCategories).toLowerCase();
         setCategory(selectedCategory);
         setParams({ filter: filter as string || '', category: selectedCategory });
-        refetch();
+        await refetch();
     }
 
 

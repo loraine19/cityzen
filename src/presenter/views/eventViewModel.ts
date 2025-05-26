@@ -69,8 +69,6 @@ export const eventIdViewModel = () => {
 }
 
 
-
-
 export const eventsWeekViewModel = () => {
   return (startDate: any, numberOfWeeks: number): {
     weeks: { date: Date, events: EventView[], text: string }[][],

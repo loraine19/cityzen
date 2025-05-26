@@ -36,7 +36,7 @@ export default function GroupPage() {
         setFilter(value || '');
         value === GroupFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string || '', category })
-        refetch();
+        await refetch();
     }
 
 
@@ -48,13 +48,12 @@ export default function GroupPage() {
     ]
 
     /// CATEGORIES SELECT 
-    const change = (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
+    const change = async (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
         const selectedCategory = typeof e !== "object" ?
-            e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), groupCategories).toLowerCase();
-        console.log(selectedCategory);
+            e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), groupCategories).toLowerCase()
         setCategory(selectedCategory);
         setParams({ filter: filter as string || '', category: selectedCategory });
-        refetch();
+        await refetch()
     }
 
 

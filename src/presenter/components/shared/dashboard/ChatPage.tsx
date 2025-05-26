@@ -57,7 +57,7 @@ export default function ChatPage() {
         if (newMessage?.users) { setOnline(newMessage.users); return }
         refetchConv()
         if (newMessage.userIdRec === userRec.id || newMessage.userId === userRec.id) {
-            refetch()
+            await refetch()
             setUnReadMsgNotif(unReadMsgNotif + 1)
         }
     });
@@ -87,7 +87,7 @@ export default function ChatPage() {
             const messageData = { userIdRec, message };
             const ret = await socketService.sendMessage(messageData, nameSpace);
             if (ret) {
-                refetch();
+                await refetch();
                 setMessage('')
             }
             else {

@@ -6,7 +6,6 @@ import { Issue } from "../../../domain/entities/Issue";
 import { notifCategory } from "../../../domain/entities/Notif";
 import { Pool, Survey } from "../../../domain/entities/PoolSurvey";
 import { Post, postCategory } from "../../../domain/entities/Post";
-import { Profile } from "../../../domain/entities/Profile";
 import { Service } from "../../../domain/entities/Service";
 import { User } from "../../../domain/entities/User";
 import { LikeApi } from "../../../infrastructure/providers/http/likeApi";
@@ -18,64 +17,65 @@ import { GroupView } from "./GroupViewEntity";
 
 export const dayMS = 24 * 60 * 60 * 1000
 
-export const getFlagsInElement = (array: any[], arrayOfJoin: any[]): any => {
-    return array.map((element: any) => {
-        let flags: any = [];
-        flags = (arrayOfJoin.filter((tag: any) => tag.type === 'event' && tag.target_id === element.id))
-        element.flags = flags;
-        return element
-    })
-}
+// export const getFlagsInElement = (array: any[], arrayOfJoin: any[]): any => {
+//     return array.map((element: any) => {
+//         let flags: any = [];
+//         flags = (arrayOfJoin.filter((tag: any) => tag.type === 'event' && tag.target_id === element.id))
+//         element.flags = flags;
+//         return element
+//     })
+// }
 
 
 
-export const GetPathElement = (type: string) => type === "post" ? "annonce" : type === "event" ? "evenement" : type === "survey" ? "sondage" : type === "pool" ? "cagnotte" : type === "service" ? "service" : type === "issue" ? "Conciliation" : ""
-export const GetArrayElement = (type: string) => type === "annonce" ? "posts" : type === "evenement" ? "events" : type === "sondage" ? "surveys" : type === "cagnotte" ? "pools" : type === "service" ? "services" : type === "litige" ? "issues" : ""
+// export const GetPathElement = (type: string) => type === "post" ? "annonce" : type === "event" ? "evenement" : type === "survey" ? "sondage" : type === "pool" ? "cagnotte" : type === "service" ? "service" : type === "issue" ? "Conciliation" : ""
+// export const GetArrayElement = (type: string) => type === "annonce" ? "posts" : type === "evenement" ? "events" : type === "sondage" ? "surveys" : type === "cagnotte" ? "pools" : type === "service" ? "services" : type === "litige" ? "issues" : ""
 
 
 
-///// Convert Date 
-export const shortDateString = (date: Date) => {
-    return date.toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric' })
-}
 
 
-///// DELET ELEMENT NOTIF / FLAG 
-export const deleteElement = (id: number, array: any[], setArray: any,) => {
-    setArray([...array.filter((element: any) => element.id !== id)]);
-}
 
-export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any) => {
-    const index = array.findIndex((element: any) => (element.userId + element.type + element.target_id) === (elementJoin.userId + elementJoin.type + elementJoin.target_id));
-    confirm(" voulez vous supprimer " + array[index].element.title + " ?") && array.splice(index, 1); setArray([...array])
-}
+// ///// DELET ELEMENT NOTIF / FLAG 
+// export const deleteElement = (id: number, array: any[], setArray: any,) => {
+//     setArray([...array.filter((element: any) => element.id !== id)]);
+// }
+
+// export const deleteElementJoin = (elementJoin: any, array: any[], setArray: any) => {
+//     const index = array.findIndex((element: any) => (element.userId + element.type + element.target_id) === (elementJoin.userId + elementJoin.type + elementJoin.target_id));
+//     confirm(" voulez vous supprimer " + array[index].element.title + " ?") && array.splice(index, 1); setArray([...array])
+// }
 
 
-export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefined, keyOf?: string) => {
-    keyOf ? keyOf = keyOf : keyOf = 'target_id'
-    return arrayJoin.find((element: any) => element[keyOf] === elementCheck.id && element.userId === userId) ? true : false
-}
+// export const imIn = (elementCheck: any, arrayJoin: any, userId: number | undefined, keyOf?: string) => {
+//     keyOf ? keyOf = keyOf : keyOf = 'target_id'
+//     return arrayJoin.find((element: any) => element[keyOf] === elementCheck.id && element.userId === userId) ? true : false
+// }
+
+// export const takeElement = (id: number, array: Service[], setArray: any, userProfile: Profile) => {
+//     let index = array.findIndex((element: Service) => element.id === id);
+//     if (array[index].userIdResp === userProfile?.userId) {
+//         array[index].userIdResp = 0;
+//         // array[index].status = 0;
+//     }
+//     else {
+//         array[index].userIdResp = userProfile?.userId;
+//         //   array[index].status = 1;
+//     }
+//     setArray([...array]);
+// }
+
+
+//// NEW FUNCTIONS
 
 
 //// GET CATEGORI SERVICE 
 export const isLate = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000))
 
-
-export const takeElement = (id: number, array: Service[], setArray: any, userProfile: Profile) => {
-    let index = array.findIndex((element: Service) => element.id === id);
-    if (array[index].userIdResp === userProfile?.userId) {
-        array[index].userIdResp = 0;
-        // array[index].status = 0;
-    }
-    else {
-        array[index].userIdResp = userProfile?.userId;
-        //   array[index].status = 1;
-    }
-    setArray([...array]);
+///// Convert Date 
+export const shortDateString = (date: Date) => {
+    return date.toLocaleDateString('fr-FR', { weekday: 'short', month: 'short', day: 'numeric' })
 }
-
-
-//// NEW FUNCTIONS
 export const toggleLike = async (postId: number, userId: number, setPost: any) => {
     const { getPostById } = new PostApi();
     const { postLike, deleteLike } = new LikeApi();
