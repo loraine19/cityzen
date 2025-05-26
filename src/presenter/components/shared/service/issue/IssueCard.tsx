@@ -70,6 +70,8 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                     </div>
                     {image &&
                         <img
+                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
+                            title="image de concialtion"
                             src={image as any}
                             alt={Service.title}
                             className="CardImage"

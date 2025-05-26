@@ -80,6 +80,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                     <Popover>
                                         <PopoverHandler>
                                             <img
+                                                onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
                                                 src={imgBlob}
                                                 alt='image'
                                                 title='cliquez pour agrandir'
@@ -90,6 +91,8 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                             className="!bg-transparent !border-none flex justify-center items-center z-50 ">
                                             <div className="fixed top-[16rem] left-1/2 transform -translate-x-1/2 max-h-[calc(100vh-19rem)] max-w-[calc(100vw-2rem)] flex justify-center items-center ">
                                                 <img
+                                                    onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
+                                                    title='cliquez pour fermer'
                                                     src={imgBlob}
                                                     alt='image'
                                                     className="h-full w-full rounded-2xl object-cover shadow-2xl "

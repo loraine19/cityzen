@@ -51,6 +51,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     </div>
                     {image &&
                         <img
+                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
                             src={image as any}
                             alt={title}
                             className="h-full w-full object-cover"
@@ -125,7 +126,9 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                         {UserResp.Profile?.skills} ◦
                                     </Typography>
                                     <Avatar
-                                        src={UserResp.Profile?.image as string || './person.png'}
+
+                                        onError={(e) => e.currentTarget.src = "/images/person.svg"}
+                                        src={UserResp.Profile?.image as string || './image/person.png'}
                                         size="sm"
                                         alt="avatar"
                                         withBorder={true}

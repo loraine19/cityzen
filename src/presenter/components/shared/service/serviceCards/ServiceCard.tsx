@@ -101,6 +101,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                     </div>
                     {image &&
                         <img
+                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
                             src={image as any}
                             alt={title}
                             className="CardImage"

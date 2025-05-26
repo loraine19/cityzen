@@ -57,6 +57,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         </div>
                         <div className="flex gap-2 ">
                             <Avatar
+                                onError={(e) => e.currentTarget.src = "/images/person.svg"}
                                 src={User.Profile?.image as string || '../../image/person.svg'}
                                 size="sm"
                                 alt="avatar" />

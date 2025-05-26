@@ -71,6 +71,7 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                     </div>
                     {survey?.image &&
                         <img
+                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
                             src={survey?.image as any}
                             alt={survey?.title}
                             className="h-full w-full object-cover"

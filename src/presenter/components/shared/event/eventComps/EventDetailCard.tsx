@@ -41,6 +41,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                             needed={participantsMin - (Participants?.length || 0)} />
                     </div>
                     < img
+                        onError={(e) => e.currentTarget.src = '/images/eventDefault.png'}
                         src={image as string}
                         alt={title}
                         className="h-full w-full object-cover" />

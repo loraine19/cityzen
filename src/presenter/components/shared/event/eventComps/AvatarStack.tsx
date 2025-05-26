@@ -7,12 +7,18 @@ import { OnlineDot } from "../../../common/onlineDot";
 type AvatarStackProps = { avatarDatas: Participant[] };
 export function AvatarStack(props: AvatarStackProps) {
     const { avatarDatas } = props;
+
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+        e.currentTarget.src = '/image/person.svg';
+    }
+
     return (
         <div className="flex items-center -space-x-3 max-w-100% overflow-auto rounded-full mr-2">
             {avatarDatas?.map((Participant: Participant, index) =>
                 <Popover key={index} >
                     <PopoverHandler>
                         <Avatar
+                            onError={handleImageError}
                             data-cy={`avatar-${Participant.User?.Profile?.firstName}`}
                             variant="circular"
                             alt={Participant.User?.Profile?.firstName + " " + Participant.User.Profile?.lastName}

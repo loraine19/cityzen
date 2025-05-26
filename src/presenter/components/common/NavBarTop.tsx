@@ -19,6 +19,10 @@ export default function NavBarTop() {
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t " },
     ];
 
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+        e.currentTarget.src = '/image/person.svg';
+    }
+
     return (
         <div className="relative flex justify-between w-full items-center py-3 ">
             <div className="flex items-center  gap-2">
@@ -26,6 +30,7 @@ export default function NavBarTop() {
                     <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Avatar
+                                onError={handleImageError}
                                 referrerPolicy="unsafe-url"
                                 className="!flex BgUser !shadow cursor-pointer !h-12 !w-19"
                                 variant="circular"

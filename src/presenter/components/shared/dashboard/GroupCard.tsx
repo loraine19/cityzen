@@ -43,12 +43,12 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                     </div>
 
                 </div>
-
-                {!Address ? <img
-                    src={'../../image/def.jpeg'}
-                    onError={(e) => { e.currentTarget.src = '../../image/def.jpeg'; }}
-                    alt={name}
-                    className="CardImage flex " /> :
+                {!Address ?
+                    <img
+                        src={'image/placeholder.jpg'}
+                        onError={(e) => { e.currentTarget.src = '/image/placeholder.jpg'; }}
+                        alt={name}
+                        className="CardImage flex " /> :
                     <AddressMapOpen
                         color='#0092b8'
                         aera={group?.area}

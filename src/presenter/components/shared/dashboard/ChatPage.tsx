@@ -144,6 +144,7 @@ export default function ChatPage() {
                                                     >
                                                         <ListItemPrefix className='relative flex min-w-max'>
                                                             <Avatar
+                                                                onError={(e) => e.currentTarget.src = "/images/person.svg"}
                                                                 className={`bg-user border-[3px] p-0.5
                                                                     ${(userIdRec === message?.isWith.id) && '!border-cyan-300' ||
                                                                     (message.read || message.IWrite) && 'border-white' || '!border-orange-500'}`}

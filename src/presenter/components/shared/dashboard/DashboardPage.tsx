@@ -38,6 +38,10 @@ export default function DashboardPage() {
     }, [user])
 
 
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+        e.currentTarget.src = '/image/person.svg';
+    }
+
     const navigate = useNavigate();
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
@@ -101,6 +105,7 @@ export default function DashboardPage() {
                             <Card className="lg:h-full p-0 flex-1 flex ">
                                 <CardHeader className="flex flex-col items-center !p-0 justify-centerp-0 bg-transparent shadow-none">
                                     <Avatar
+                                        onError={handleImageError}
                                         src={user?.Profile?.image as string || '/image/person.svg'}
                                         alt={user?.Profile?.firstName}
                                         variant="circular"

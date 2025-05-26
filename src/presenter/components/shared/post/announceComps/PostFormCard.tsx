@@ -81,6 +81,7 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                             formik={formik}
                             setImgBlob={setImgBlob} />
                         <img
+                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
                             src={(imgBlob || formik.values.image) || ""}
                             alt={formik.values.title || 'image'}
                             width={100}

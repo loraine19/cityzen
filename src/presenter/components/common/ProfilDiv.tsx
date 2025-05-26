@@ -23,6 +23,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                     <PopoverHandler>
                         <div className={`relative`}>
                             <Avatar
+                                onError={(e) => e.currentTarget.src = "/images/person.svg"}
                                 data-cy={`big-avatar-${profile?.firstName}`}
                                 src={profile?.image as string ?? "../image/person.svg"}
                                 size={size as any}
@@ -46,6 +47,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                     icon="sms"
                                 />
                                 <Avatar
+                                    onError={(e) => e.currentTarget.src = "/images/person.svg"}
                                     src={profile?.image as string ?? '/image/person.svg'}
                                     size="sm"
                                     alt="avatar"

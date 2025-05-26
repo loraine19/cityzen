@@ -54,6 +54,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             imgDef="../../image/person.svg"
                             className="-ml-20 " />
                         <Avatar
+                            onError={(e) => e.currentTarget.src = "/images/person.svg"}
                             src={imgBlob as string || '../../image/person.svg'}
                             alt={formik.values.firstName ?? 'avatar'}
                             className={"shadow-md BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />

@@ -114,6 +114,7 @@ export function ServiceForm(props: { formik: any }) {
                                 formik={formik}
                                 setImgBlob={setImgBlob} />
                             <img
+                                onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
                                 src={imgBlob || formik.values.image || './image/load.gif'}
                                 alt={formik.values.title || 'image'}
                                 width={100}

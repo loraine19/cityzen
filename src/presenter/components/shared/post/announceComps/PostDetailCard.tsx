@@ -36,10 +36,12 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                             start={createdAt}
                             prefix="publié le " />
                     </div>
-                    {image && <img
-                        src={image as any}
-                        alt={title}
-                        className="h-full w-full object-cover" />}
+                    {image &&
+                        <img
+                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
+                            src={image as any}
+                            alt={title}
+                            className="h-full w-full object-cover" />}
                 </CardHeader>
                 <CardBody className="FixCardBody">
                     <Title

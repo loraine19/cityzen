@@ -150,13 +150,15 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                     "!absolute z-40 !h-max top-3 !left-3 " : "hidden"}
                                 formik={formik}
                                 setImgBlob={setImgBlob} />
-                            {haveImage && <img
-                                src={imgBlob || formik.values.image || './image/load.gif'}
-                                alt={formik.values.title || 'image'}
-                                width={100}
-                                height={100}
-                                className={"h-full w-full object-cover"}
-                            />
+                            {haveImage &&
+                                <img
+                                    onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
+                                    src={imgBlob || formik.values.image || './image/load.gif'}
+                                    alt={formik.values.title || 'image'}
+                                    width={100}
+                                    height={100}
+                                    className={"h-full w-full object-cover"}
+                                />
                             }
                             {formik.values?.UserBenef && formik.values?.typeS === VoteTarget.POOL &&
                                 <ProfileDiv

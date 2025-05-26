@@ -44,6 +44,7 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                     </div>
                     {survey?.image &&
                         <img
+                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
                             src={survey?.image as string}
                             alt={survey?.title}
                             className="h-full w-full object-cover" />}
