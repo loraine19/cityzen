@@ -124,7 +124,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                 name={"userIdModo"}
                                 labelProps={{ className: `before:border-none after:border-none ` }}
                                 menuProps={{ className: 'overflow-auto max-h-44' }}
-                                disabled={!formik || issue.UserModo ? true : false}
+                                disabled={!formik || !issue.mine || issue.UserModo ? true : false}
                                 value={issue?.userIdModoOn?.toString() || '0'}
                                 onChange={(e: string | undefined) => { formik.values.userIdModo = parseInt(e || '1') }}
                                 containerProps={{ className: "h-[2rem] !py-0 !flex justify-center" }}
@@ -153,7 +153,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                 name={"userIdModoOn"}
                                 labelProps={{ className: `before:border-none after:border-none ` }}
                                 menuProps={{ className: 'overflow-auto max-h-44' }}
-                                disabled={!formik || issue.UserModoOn ? true : false}
+                                disabled={!formik || !issue.onMe || issue.UserModoOn ? true : false}
                                 value={issue?.userIdModoOn?.toString() || '0'}
                                 onChange={(e: string | undefined) => { formik.values.userIdModoOn = e }}
                                 containerProps={{ className: "h-[2rem] !py-0 !flex justify-center" }}

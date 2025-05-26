@@ -52,6 +52,7 @@ export default function ConciationListPage() {
         { label: "demande", value: IssueFilter.WAITING, result: () => filterTab(IssueFilter.WAITING) },
         { label: "en cours", value: IssueFilter.PENDING, result: () => filterTab(IssueFilter.PENDING) },
         { label: "terminés", value: IssueFilter.FINISH, result: () => filterTab(IssueFilter.FINISH) },
+        { label: "me concerne", value: IssueFilter.MINE, result: () => filterTab(IssueFilter.MINE) }
     ]
 
     //// TODO KEEP SEARCH ? ADD SORT ?

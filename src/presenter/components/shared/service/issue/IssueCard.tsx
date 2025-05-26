@@ -46,7 +46,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
 
     return (
         <>
-            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!bg-gray-200" : ""}`}>
+            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-red-400/50 !border-2" : ""}`}>
                 <CardHeader
                     className={haveImage ? "h-full !max-h-[16vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
@@ -81,10 +81,10 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1 max-h-max -mt-2.5 mb-0`}>
                     <div className="relative flex items-center justify-between">
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 justify-between w-full mr-12">
                             <Typography
                                 variant="h6">
-                                Probleme : {withMe ? 'me' : 'n'}
+                                Probleme :
                             </Typography>
                             <GroupLink group={Service.Group} />
                         </div>
@@ -93,7 +93,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                             link={`/${PathElement.ISSUE}/${serviceId}`}
                             title={`voir les details de concialtion  ${Service.title}`}
                             size="3xl"
-                            style="absolute top-1 right-0"
+                            style="absolute top-1.5 right-0"
                             fill />
                     </div>
                     <div className="flex flex-col h-full line-clamp-1  ">

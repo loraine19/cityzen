@@ -35,10 +35,10 @@ export default function IssueDetailPage() {
 
         const groupId = issue?.Service?.Group?.id
         if (modos.length === 0 && groupId) {
-            console.log(modos)
             const fetchModos = async () => {
                 const modos = await getModos(groupId)
                 setModos([...modos])
+                console.log(modos)
             }; fetchModos()
         }
     }, [issue]);
