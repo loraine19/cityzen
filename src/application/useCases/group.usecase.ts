@@ -49,8 +49,8 @@ export class UpdateGroupUserUseCase {
         this.groupRepository = groupRepository;
     }
 
-    public async execute(groupId: number, dataDTO: GroupUserDTO): Promise<GroupUser> {
-        return this.groupRepository.updateGroupUser(groupId, dataDTO);
+    public async execute(dataDTO: GroupUserDTO): Promise<GroupUser> {
+        return this.groupRepository.updateGroupUser(dataDTO);
     }
 }
 
