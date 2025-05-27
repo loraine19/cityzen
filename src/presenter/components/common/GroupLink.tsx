@@ -1,8 +1,11 @@
-import { Popover, PopoverHandler, PopoverContent, Typography } from "@material-tailwind/react"
-import { Group } from "../../../domain/entities/Group"
+import { Popover, PopoverHandler, PopoverContent, Typography, Chip } from "@material-tailwind/react"
+import { Icon } from "./IconComp"
+import { GroupView } from "../../views/viewsEntities/GroupViewEntity"
+import { groupCategories } from "../../constants"
 
-type ProfileDivProps = { group: Group }
-export const GroupLink: React.FC<ProfileDivProps> = ({ group }) => {
+type GroupDivProps = { group: GroupView }
+export const GroupLink: React.FC<GroupDivProps> = ({ group }) => {
+    const category: string = groupCategories.find(cat => cat.value === group?.category)?.label ?? 'Autre'
 
     return (
         <>
@@ -11,15 +14,28 @@ export const GroupLink: React.FC<ProfileDivProps> = ({ group }) => {
                     <PopoverHandler>
                         <Typography
                             variant="small"
-                            className={'italic text-gray-500'}>
+                            className={'italic text-gray-600'}>
                             ⌖ {group?.name}
                         </Typography>
                     </PopoverHandler>
-                    <PopoverContent className=" w-72 z-50 ">
-                        <div className=" flex flex-col gap-6 border-b border-blue-gray-50  pb-2 ">
+                    <PopoverContent className=" w-72 z-50 flex gap-2 flex-col ">
+                        <div className=" flex justify-between items-center border-b border-blue-gray-50  ">
                             <p>groupe {group?.name}</p>
-                            <p> {group?.Address?.address}, {group?.Address?.city}</p>
+                            <Icon
+                                size='3xl'
+                                fill
+                                link={`/groupe/${group?.id}`}
+                                icon="arrow_circle_right" />
                         </div>
+                        <div className="flex items-center gap-2 justify-between text-gray-500">
+                            <p className="text-xs italic ">
+                                {group?.Address?.address}, {group?.Address?.zipcode} {group?.Address?.city}
+                            </p>
+                            <Chip
+                                size='sm'
+                                value={category}
+                                className="GrayChip text-ellipsis scale-[0.8] " >
+                            </Chip></div>
                     </PopoverContent>
                 </Popover>
             </div>

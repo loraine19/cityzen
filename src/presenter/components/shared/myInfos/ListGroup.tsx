@@ -1,0 +1,100 @@
+import {
+  ListItem,
+  Typography,
+  Menu,
+  MenuHandler,
+  MenuList,
+  Chip,
+} from "@material-tailwind/react";
+import { Icon } from "../../common/IconComp";
+import { GroupView } from "../../../views/viewsEntities/GroupViewEntity";
+import { GroupLink } from "../../common/GroupLink";
+import { useNavigate } from "react-router";
+import { useState } from "react";
+//kk
+type ListGroupProps = {
+  groups: GroupView[];
+}
+
+export const ListGroup = ({ groups }: ListGroupProps) => {
+  const navigate = useNavigate();
+  const haveAGroup: GroupView[] = groups.filter((group: GroupView) => group.ImIn || group.ImModo)
+  const [open, setOpen] = useState<boolean>(true);
+
+  return (
+    <div
+      className="relative w-respLarge">
+      <Menu open={open} placement="bottom-start">
+        <MenuHandler
+          className={`relative flex justify-between h-max w-full z-50  items-center cursor-pointer ${open ? '!border-b-[2px] border-blue-gray-900' : '!border-b-[1px] border-blue-gray-200'} py-1`}>
+          <div
+            className="relative flex justify-between h-max w-full">
+            <div onClick={() => setOpen(!open)}
+              className="flex flex-col gap-2">
+              <label className="text-gray-500 text-xs" htmlFor="">
+                {haveAGroup?.length > 1 ? 'Vos groupes' : 'Votre groupe'}
+              </label>
+              <Typography
+                variant="small"
+                className={`line-clamp-1`}>
+                {haveAGroup?.length > 0 ?
+                  <span className="text-blue-gray-600 font-normal">
+                    {haveAGroup.map((group: GroupView) => group.name).join(', ')}
+                  </span>
+                  :
+                  <span className="italic text-red-600">'Vous n'avez pas de groupe' </span>}
+              </Typography>
+            </div>
+            <div onClick={() => setOpen(!open)}
+              className="h-3 w-5 mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="grey">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd">
+                </path>
+              </svg>
+            </div>
+          </div>
+        </MenuHandler>
+        <MenuList className="w-respLarge border-[1px] !-mt-3 bg-transparent !-ml-6 shadow-none border-none ">
+          <div className="bg-white divide-y-[1px] p-2 shadow-lg rounded-lg mx-2 border-[1px] border-blue-gray-50">
+            {groups.map((group: GroupView) =>
+              <ListItem
+                onClick={() => navigate(`/groupe/${group.id}`)}
+                key={group.id}
+                title="Voir les détails du groupe"
+                className="justify-between py-1.5">
+                <GroupLink group={group} />
+                <div className="flex items-center gap-2">
+                  <Chip
+                    value={'⠀'}
+                    variant="ghost"
+                    className="rounded-full h-max flex items-center  !min-w-max "
+                    icon={
+                      <Icon
+                        style='scale-[1.7] ml-2.5 -mr-2.5 '
+                        size="sm"
+                        icon="diversity_3"
+                        fill={group?.ImModo}
+                        color={group?.ImModo ? "orange" : "gray"}
+                        title={group?.ImModo ? "Je suis conciliateur" : "Je ne suis pas conciliateur"} />}
+                  />
+                  <Chip
+                    value={'⠀'}
+                    variant="ghost"
+                    className="rounded-full h-max  flex items-center  !min-w-max "
+                    icon={
+                      <Icon
+                        style='scale-[2] ml-2.5 -mr-2.5 '
+                        size="sm"
+                        icon="groups"
+                        fill={group?.ImIn}
+                        color={group?.ImIn ? "cyan" : "gray"}
+                        title={group?.ImIn ? "Je suis membre" : "Je ne suis pas membre"} />}
+                  />
+                </div>
+              </ListItem>)}
+          </div>
+        </MenuList>
+      </Menu>
+    </div>
+  );
+}

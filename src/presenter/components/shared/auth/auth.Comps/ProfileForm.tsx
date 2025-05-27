@@ -8,20 +8,17 @@ import { Label } from "../../../../../domain/entities/frontEntities";
 import { ImageBtn } from "../../../common/ImageBtn";
 import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
-import { CheckboxListGroup } from "../../myInfos/CheckboxListGroup";
-import { GroupUser } from "../../../../../domain/entities/GroupUser";
+import { ListGroup } from "../../myInfos/ListGroup";
 
 type ProfileFormProps = {
     formik: any,
     setAssistance?: any,
     setAddress?: any,
     setMailSub?: any,
-    setUserGroups: any,
-    userGroups: GroupUser[]
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress, setUserGroups, userGroups }) => {
-    const [imgBlob, setImgBlob] = useState<string | Blob>(formik?.values?.image || '../../image/person.svg');
+export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress }) => {
+    const [imgBlob, setImgBlob] = useState<string | Blob>(formik?.values?.image ?? '../../image/person.svg');
     const { user } = useUserStore()
     const [newSkill, setNewSkill] = useState<string | undefined>()
     const [skillList, setSkillList] = useState<string[]>(formik.values?.skills?.split(',') || [])
@@ -54,8 +51,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             imgDef="../../image/person.svg"
                             className="-ml-20 " />
                         <Avatar
-                            onError={(e) => e.currentTarget.src = "/images/person.svg"}
-                            src={imgBlob as string || '../../image/person.svg'}
+                            onError={(e) => e.currentTarget.src = "/image/person.svg"}
+                            src={imgBlob as string}
                             alt={formik.values.firstName ?? 'avatar'}
                             className={"shadow-md BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
@@ -110,6 +107,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             error={formik.errors.Address}
                         />
                         <Select
+                            labelProps={{ className: "text-gray-500" }}
                             className="p-5 capitaliz "
                             label={formik.errors.mailSub ? formik.errors.mailSub as string : "Notifications mails"}
                             name="mailSub"
@@ -132,6 +130,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             })}
                         </Select>
                         <Select
+                            labelProps={{ className: "text-gray-500" }}
                             className="p-5 capitaliz "
                             label={formik.errors.assistance ? formik.errors.assistance as string : "Assistance"}
                             name="level"
@@ -152,23 +151,27 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                                 )
                             })}
                         </Select>
-                        <CheckboxListGroup
-                            groups={groups}
-                            userGroups={userGroups}
-                            setUserGroups={setUserGroups} />
+                        <ListGroup
+                            groups={groups} />
                         <Input
+                            labelProps={{ className: "text-gray-500 " }}
                             label="Ajouter une compétences"
-                            name="skills" value={newSkill}
+                            name="skills"
+                            value={newSkill}
                             variant="standard"
                             onChange={(e: any) => { e.preventDefault(); setNewSkill(e.target.value) }}
                             onSubmit={addSkill}
-                            icon={<Icon
-                                icon='add'
-                                onClick={addSkill}
-                                style={`py-1 !-mt-1 ${newSkill && 'error bg-red-100 rounded-full'}`} />}
+                            icon={
+                                <Icon
+                                    color='blue-gray'
+                                    icon='add'
+                                    onClick={addSkill}
+                                    style={`py-1 !-ml-3 !-mt-2 ${newSkill && 'error bg-red-100 rounded-full'}`} />}
                         />
-                        <List className='flex  p-0'>
-                            <Typography className='text-xs'>Liste des compétences</Typography>
+                        <List className='flex p-0'>
+                            <Typography className='text-xs text-gray-500 font-normal'>
+                                Liste des compétences
+                            </Typography>
                             {skillList.map((skill: string, index: number) =>
                                 <ListItem
                                     ripple={true}

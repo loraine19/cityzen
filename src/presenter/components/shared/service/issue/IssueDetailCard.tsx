@@ -8,6 +8,7 @@ import { IssueView } from "../../../../views/viewsEntities/issueViewEntity"
 import { IssueStep } from "../../../../../domain/entities/Issue"
 import { ProfileDiv } from "../../../common/ProfilDiv"
 import { GroupLink } from "../../../common/GroupLink"
+import { GroupView } from "../../../../views/viewsEntities/GroupViewEntity"
 
 type IssueFormProps = { issue: IssueView, service?: Service, formik?: any, modos: User[] }
 export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, modos }) => {
@@ -31,7 +32,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                 color="blue-gray" >
                                 {`${issue?.User?.Profile?.firstName ?? 'Vous'} ${issue?.UserModo ? "à demander de l'aide" : "demandez de l'aide"}`}
                             </Typography>
-                            <GroupLink group={issue?.Service?.Group} />
+                            <GroupLink group={new GroupView(issue?.Service?.Group, 0)} />
                         </div>
                         <div className="flex gap-2 items-center">
                             <Chip
