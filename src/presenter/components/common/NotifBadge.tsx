@@ -66,7 +66,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     }, [])
 
 
-
+    //// HANDLE SCROLL
     const divRef = useRef<HTMLDivElement>(null);
     const [isBottom, setIsBottom] = useState(true);
     const handleScroll = () => {
@@ -75,10 +75,8 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                if (hasNextPage) fetchNextPage();
-            } else {
-                setIsBottom(false);
-            }
+                if (hasNextPage) fetchNextPage()
+            } else setIsBottom(false)
         }
     };
     type NotifBadgeProps = { count: number, notifs: NotifView[], color: string, icon: string, link: string }
@@ -141,18 +139,19 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                         className="max-w-[calc(100%-2rem)] truncate">
                                                         {notif.description}
                                                     </Typography>
-                                                    {notif.link && <Icon
-                                                        icon="chevron_right"
-                                                        fill
-                                                        onClick={
-                                                            async () => {
-                                                                await readNotif(notif.id);
-                                                                await refetch();
-                                                                notif.link && navigate(notif.link)
-                                                            }}
-                                                        size="3xl"
-                                                        style="bg-white"
-                                                    />}
+                                                    {notif.link &&
+                                                        <Icon
+                                                            icon="chevron_right"
+                                                            fill
+                                                            onClick={
+                                                                async () => {
+                                                                    await readNotif(notif.id);
+                                                                    await refetch();
+                                                                    notif.link && navigate(notif.link)
+                                                                }}
+                                                            size="3xl"
+                                                            style="bg-white"
+                                                        />}
                                                 </div>
                                             </MenuItem>)
                                         )}
@@ -178,8 +177,6 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                 </div>)
 
             }
-
-
         </div>
     )
 }

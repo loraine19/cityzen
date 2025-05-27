@@ -2,16 +2,16 @@ import { useFormik } from 'formik';
 import { object, string, array } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { PostFormCard } from './announceComps/PostFormCard';
+import { PostFormCard } from './PostComps/PostFormCard';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { PostDTO } from '../../../../infrastructure/DTOs/PostDTO';
 import { Share } from '../../../../domain/entities/Post';
 import { PostView } from '../../../views/viewsEntities/postViewEntities';
 import { useAlertStore } from '../../../../application/stores/alert.store';
-import PostCard from './announceComps/PostCard';
+import PostCard from './PostComps/PostCard';
 
-export default function AnnounceEditPage() {
+export default function PostEditPage() {
     const { id } = useParams()
     const navigate = useNavigate();
     const updatePost = (id: number, data: PostDTO) => DI.resolve('updatePostUseCase').execute(id, data);

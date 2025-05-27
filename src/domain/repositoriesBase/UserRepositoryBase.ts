@@ -7,7 +7,7 @@ export abstract class UserRepositoryBase {
     abstract getUserById(id: number): Promise<User>;
     abstract getUsers(groupId: number): Promise<User[]>;
     abstract getUsersModos(groupId: number): Promise<User[]>;
-    abstract getUserCount(): Promise<number>;
+    abstract getUserCount(groupId: number): Promise<number>;
     abstract updateUser(dataDTO: UserDTO): Promise<User>;
     abstract deleteUser(id: number): Promise<void>;
 }

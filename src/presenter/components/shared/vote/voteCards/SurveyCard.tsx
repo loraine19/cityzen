@@ -22,27 +22,35 @@ type SurveyCardProps = {
 }
 
 export function SurveyCard({ survey: initialSurvey, change, mines, update }: SurveyCardProps) {
-    const now = new Date(Date.now())
     const [survey, setSurvey] = useState<PoolSurveyView>(initialSurvey);
-    const endDays: number = Math.floor((new Date(survey?.createdAt).getTime() + 15 * dayMS - (now.getTime())) / dayMS)
     const end = new Date(new Date(survey?.createdAt).getTime() + 15 * dayMS)
-    const disabledEditCTA: boolean = survey?.pourcent >= 100 ? true : false
-    const ended: boolean = survey?.pourcent >= 100 || endDays <= 0 ? true : false
+    const ended: boolean = survey?.status !== PoolSurveyStatus.PENDING
     const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
     const actions = GenereMyActions(survey, "vote/sondage", deleteSurvey)
     const haveImage = survey?.image ? true : false
     const [open, setOpen] = useState(false);
-    const color = { OK: 'green', NO: 'red', WO: 'orange' }
-    const up = async (opinion: VoteOpinion) => { setSurvey(await survey.toogleVote(opinion)); update() }
+    const color = (): string => {
+        switch (survey.myOpinion) {
+            case 'OK': return 'green';
+            case 'NO': return 'red';
+            case 'WO': return 'orange';
+            default: return 'blue-gray';
+        }
+    }
 
+    const up = async (opinion: VoteOpinion) => {
+        setSurvey(await survey.toogleVote(opinion));
+        update()
+    }
 
     return (
         <>
-            {open && <VoteCard
-                open={open}
-                close={() => setOpen(false)}
-                vote={survey}
-                refetch={(opinion: VoteOpinion) => up(opinion)} />}
+            {open &&
+                <VoteCard
+                    open={open}
+                    close={() => setOpen(false)}
+                    vote={survey}
+                    refetch={(opinion: VoteOpinion) => up(opinion)} />}
             <Card className={haveImage ? "FixCard " : "FixCardNoImage  "}>
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
@@ -102,7 +110,7 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                             status={survey?.status} />
                         :
                         <ModifBtnStack
-                            disabled2={disabledEditCTA}
+                            disabled2={ended}
                             actions={actions}
                             update={update} />}
                     <div className="flex items-center justify-between gap-2">
@@ -113,14 +121,14 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                                 value={survey?.Votes?.length}
                                 variant="ghost"
                                 size='md'
-                                className="GrayChip px-3.5"
+                                className="GrayChip !px-3.5"
                                 icon={<Icon
                                     icon="smart_card_reader"
                                     fill={survey?.IVoted}
-                                    color={survey?.IVoted ? color[survey?.myOpinion as keyof typeof color] : 'gray'}
-                                    size="md"
-                                    title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
-                                    style="scale-150 -mt-0.5" />}>
+                                    color={color()}
+                                    size="sm"
+                                    title={`${survey?.Votes?.length} personnes ${survey?.IVoted && `dont vous`} ont voté`}
+                                    style="scale-150  ml-0.5 !-mr-1" />}>
                             </Chip>
                         </button>
                         <Icon

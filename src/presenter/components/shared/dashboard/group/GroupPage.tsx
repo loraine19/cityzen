@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import NavBarTop from '../../common/NavBarTop';
-import SubHeader from '../../common/SubHeader';
-import DI from '../../../../di/ioc';
+import NavBarTop from '../../../common/NavBarTop';
+import SubHeader from '../../../common/SubHeader';
+import DI from '../../../../../di/ioc';
 import { useSearchParams } from 'react-router-dom';
-import { GroupView } from '../../../views/viewsEntities/GroupViewEntity';
-import { LoadMoreButton } from '../../common/LoadMoreBtn';
-import NavBarBottom from '../../common/NavBarBottom';
-import { SkeletonGrid } from '../../common/Skeleton';
+import { GroupView } from '../../../../views/viewsEntities/GroupViewEntity';
+import { LoadMoreButton } from '../../../common/LoadMoreBtn';
+import NavBarBottom from '../../../common/NavBarBottom';
+import { SkeletonGrid } from '../../../common/Skeleton';
 import { GroupCard } from "./GroupCard";
-import TabsMenu from "../../common/TabsMenu";
-import { TabLabel } from "../../../../domain/entities/frontEntities";
-import { GroupCategory, GroupFilter } from "../../../../domain/entities/Group";
-import { CategoriesSelect } from "../../common/CategoriesSelect";
-import { groupCategories } from "../../../constants";
-import { getValue } from "../../../views/viewsEntities/utilsService";
+import TabsMenu from "../../../common/TabsMenu";
+import { TabLabel } from "../../../../../domain/entities/frontEntities";
+import { GroupCategory, GroupFilter } from "../../../../../domain/entities/Group";
+import { CategoriesSelect } from "../../../common/CategoriesSelect";
+import { groupCategories } from "../../../../constants";
+import { getValue } from "../../../../views/viewsEntities/utilsService";
 
 
 export default function GroupPage() {

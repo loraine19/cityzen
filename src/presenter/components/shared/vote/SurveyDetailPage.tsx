@@ -16,28 +16,35 @@ import { PoolSurveyStatus } from '../../../../domain/entities/PoolSurvey';
 
 
 export default function SurveyDetailPage() {
+    const pageColor = 'orange'
+
+    //// PARAMS
     const { id } = useParams();
     const idS = id ? parseInt(id) : 0
+
+    //// VIEW MODEL 
     const surveyIdViewModelFactory = DI.resolve('surveyIdViewModel');
     const { survey, isLoading, refetch, error } = surveyIdViewModelFactory(idS);
     const deleteSurvey = async (id: number) => await DI.resolve('deleteSurveyUseCase').execute(id)
+
+    //// FUNCTIONS
     const myActions: Action[] = GenereMyActions(survey, "vote/sondage", deleteSurvey)
     const [openVote, setOpenVote] = useState(false);
-    const { handleApiError } = useAlertStore()
     const navigate = useNavigate();
-    useEffect(() => { if (error) handleApiError(error, () => navigate('/vote/sondage')) }, [isLoading]);
+
+    //// HANDLE API ERROR
+    const { handleApiError } = useAlertStore()
+    useEffect(() => { (error) && handleApiError(error, () => navigate('/vote/sondage')) }, [isLoading]);
 
     return (
         <>
-            {
-                <VoteCard
-                    open={openVote}
-                    close={() => setOpenVote(false)}
-                    vote={survey}
-                    refetch={refetch} />
-            }
-            <div className="Body orange">
-                <header className="px-4">
+            <VoteCard
+                open={openVote}
+                close={() => setOpenVote(false)}
+                vote={survey}
+                refetch={refetch} />
+            <div className={`Body ${pageColor}`}>
+                <header>
                     <NavBarTop />
                     <SubHeader
                         type={`sondage ${survey?.categoryS}`}
@@ -45,7 +52,7 @@ export default function SurveyDetailPage() {
                         closeBtn />
                 </header>
                 <main>
-                    {isLoading || error ?
+                    {isLoading || !survey ?
                         <Skeleton
                             className='!rounded-2xl flex pt-8 pb-1 h-full' /> :
                         <SurveyDetailCard
@@ -54,18 +61,21 @@ export default function SurveyDetailPage() {
                     }
                 </main>
                 {survey?.mine ?
-                    <CTAMines actions={myActions} />
-                    :
+                    <CTAMines actions={myActions} /> :
                     <footer className={`CTA `}>
                         <Button
                             disabled={survey?.status !== PoolSurveyStatus.PENDING}
                             size='lg'
-                            color='orange'
+                            color={pageColor}
                             className='lgBtn w-respLarge min-h-max'
-                            onClick={() => setOpenVote(true)}
-                        >
-                            {<Icon fill color='white' icon={survey.IVoted ? 'edit' : 'smart_card_reader'} />}
-                            {survey.IVoted ? 'Modifier mon vote' : survey?.status !== PoolSurveyStatus.PENDING ? 'Ce sondage est terminé' : 'Voter'}
+                            onClick={() => setOpenVote(true)} >
+                            <Icon
+                                fill
+                                color='white'
+                                icon={survey.IVoted ? 'edit' : 'smart_card_reader'} />
+                            {survey.IVoted ? 'Modifier mon vote' :
+                                survey?.status !== PoolSurveyStatus.PENDING ?
+                                    'Ce sondage est terminé' : 'Voter'}
                         </Button>
                     </footer>
                 }

@@ -1,7 +1,7 @@
 import { PostView } from "../../../../views/viewsEntities/postViewEntities";
 import PostCard from "./PostCard";
 
-export default function AnnouncesGridComp(props: { line: PostView[], mines?: boolean, change: (e: any) => void, update?: () => void, view?: string, }) {
+export default function PostGridComp(props: { line: PostView[], mines?: boolean, change: (e: any) => void, update?: () => void, view?: string, }) {
     const { line, mines, change, update } = props
     const short = "pt-8 row-span-5 h-full  !h-[48vh] ";
     const long = "pt-8 row-span-6 h-full  !h-[55vh] ";

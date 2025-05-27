@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import CTAMines from '../../common/CTA';
-import NavBarTop from '../../common/NavBarTop';
-import SubHeader from '../../common/SubHeader';
-import { Action } from '../../../../domain/entities/frontEntities';
-import { GenereMyActions, } from '../../../views/viewsEntities/utilsService';
-import DI from '../../../../di/ioc';
-import { Skeleton } from '../../common/Skeleton';
-import { useAlertStore } from '../../../../application/stores/alert.store';
+import CTAMines from '../../../common/CTA';
+import NavBarTop from '../../../common/NavBarTop';
+import SubHeader from '../../../common/SubHeader';
+import { Action } from '../../../../../domain/entities/frontEntities';
+import { GenereMyActions, } from '../../../../views/viewsEntities/utilsService';
+import DI from '../../../../../di/ioc';
+import { Skeleton } from '../../../common/Skeleton';
+import { useAlertStore } from '../../../../../application/stores/alert.store';
 import { useEffect } from 'react';
 import GroupDetailCard from './GroupDetailCard';
 
@@ -61,12 +61,10 @@ export default function GroupDetailPage() {
             </header>
             <main>
                 {!isLoading && !error && group ?
-                    <div className="flex pt-8 pb-1 h-full">
-                        <GroupDetailCard
-                            actions={myActions}
-                            refetch={refetch}
-                            group={group} />
-                    </div> :
+                    <GroupDetailCard
+                        actions={myActions}
+                        refetch={refetch}
+                        group={group} /> :
                     <Skeleton />}
             </main>
             {(!isLoading && !error && group) ?

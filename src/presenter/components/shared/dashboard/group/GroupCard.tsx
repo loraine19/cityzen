@@ -1,13 +1,13 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography, Chip } from "@material-tailwind/react";
 import { useState } from "react";
-import { GenereMyActions } from "../../../views/viewsEntities/utilsService";
-import { DateChip } from "../../common/ChipDate";
-import ModifBtnStack from "../../common/ModifBtnStack";
-import { GroupView } from "../../../views/viewsEntities/GroupViewEntity";
-import DI from "../../../../di/ioc";
-import { Icon } from "../../common/IconComp";
-import { Title } from "../../common/CardTitle";
-import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
+import { GenereMyActions } from "../../../../views/viewsEntities/utilsService";
+import { DateChip } from "../../../common/ChipDate";
+import ModifBtnStack from "../../../common/ModifBtnStack";
+import { GroupView } from "../../../../views/viewsEntities/GroupViewEntity";
+import DI from "../../../../../di/ioc";
+import { Icon } from "../../../common/IconComp";
+import { Title } from "../../../common/CardTitle";
+import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
 
 
 type GroupCardProps = {

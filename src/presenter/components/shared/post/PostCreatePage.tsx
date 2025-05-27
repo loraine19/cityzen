@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Share } from '../../../../domain/entities/Post';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { PostFormCard } from './announceComps/PostFormCard';
+import { PostFormCard } from './PostComps/PostFormCard';
 import { PostDTO } from '../../../../infrastructure/DTOs/PostDTO';
 import { PostView } from '../../../views/viewsEntities/postViewEntities';
 import DI from '../../../../di/ioc';
 
 
-export default function AnnounceCreatePage() {
+export default function PostCreatePage() {
     const navigate = useNavigate();
     const postPost = async (data: PostDTO) => DI.resolve('postPostUseCase').execute(data);
 

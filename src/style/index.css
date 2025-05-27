@@ -60,12 +60,16 @@ main {
     @apply w-full max-w-[1100px] m-auto;
 }
 
+header {
+    @apply px-4 pb-1.5;
+}
+
 .w-respXl {
     @apply w-full my-0 mx-auto max-w-[1100px];
 }
 
 .CTA {
-    @apply flex gap-2 gap-x-4 w-respLarge justify-around  pb-3 pt-2 h-max;
+    @apply flex gap-2 gap-x-4 w-respLarge justify-around pb-3 pt-2 h-max;
 }
 
 .cyan {
@@ -88,7 +92,7 @@ main {
     background-image: linear-gradient(#f9fafb, #ffedd5);
 }
 .Grid {
-    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)]  pt-2 lg:auto-rows-[minmax(320px,46vh)] auto-rows-[minmax(330px,40vh)];
+    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] lg:auto-rows-[minmax(320px,46vh)] auto-rows-[minmax(330px,40vh)];
 }
 .Grid2 {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
@@ -123,7 +127,7 @@ main {
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !h-[50%] !max-h-[320px];
+    @apply flex flex-1 h-[50%] lg:!max-h-[320px] max-h-[300px] !shadow-md;
 }
 
 .FixCardHeaderNoImage {
@@ -151,7 +155,11 @@ main {
 }
 
 .CardImage {
-    @apply object-cover bg-transparent w-full max-h-full !bg-blue-gray-400;
+    @apply object-cover !shadow-lg bg-transparent w-full max-h-full !bg-blue-gray-400;
+}
+
+.DetailCardDiv {
+    @apply lg:pt-8 pt-6 pb-1 h-full flex;
 }
 
 /* ICON */

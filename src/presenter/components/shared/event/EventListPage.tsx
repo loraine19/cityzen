@@ -61,8 +61,8 @@ export default function EventListPage() {
 
     const filterName = (): string => {
         switch (filter) {
-            case EventFilter.MINE: return 'les miens';
-            case EventFilter.IGO: return 'j\'y vais';
+            case EventFilter.MINE: return 'que j\'organise';
+            case EventFilter.IGO: return 'où je vais';
             case EventFilter.VALIDATED: return 'validé';
             default: return '';
         }

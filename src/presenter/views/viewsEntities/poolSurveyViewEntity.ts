@@ -35,7 +35,7 @@ export class PoolSurveyView {
     Group: Group = {} as Group;
 
     constructor
-        (base: Pool | Survey, user: User, userCount: number) {
+        (base: Pool | Survey, user: User) {
         if ('userIdBenef' in base) {
             Object.assign(this, base);
             this.flagged = false;
@@ -44,7 +44,7 @@ export class PoolSurveyView {
                 const voteDto: VoteDTO = { targetId: base.id, target: VoteTarget.POOL, opinion }
                 this.IVoted ? await DI.resolve('updateVoteUseCase').execute(voteDto) : await DI.resolve('postVoteUseCase').execute(voteDto);
                 const updatedEvent = await DI.resolve('getPoolByIdUseCase').execute(base.id);
-                return new PoolSurveyView(updatedEvent, user, userCount)
+                return new PoolSurveyView(updatedEvent, user)
             }
         }
         if ('category' in base) {
@@ -57,17 +57,15 @@ export class PoolSurveyView {
                 const voteDto: VoteDTO = { targetId: base.id, target: VoteTarget.SURVEY, opinion }
                 this.IVoted ? await DI.resolve('updateVoteUseCase').execute(voteDto) : await DI.resolve('postVoteUseCase').execute(voteDto);
                 const updated = await DI.resolve('getSurveyByIdUseCase').execute(base.id);
-                return new PoolSurveyView(updated, user, userCount)
+                return new PoolSurveyView(updated, user)
             }
         }
         this.mine = base.userId === user?.id || false;
-        this.pourcent = Math.round(base?.Votes?.filter(vote => vote.opinion === VoteOpinion.OK).length / (userCount / 2) * 100);
-        this.needed = base.status === PoolSurveyStatus.PENDING ? Math.round(userCount / 2) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length : 0;
+        this.pourcent = Math.round(base?.Votes?.filter(vote => vote.opinion === VoteOpinion.OK).length / (base.neededVotes) * 100);
+        this.needed = base.status === PoolSurveyStatus.PENDING ? Math.round(base.neededVotes) - base.Votes.filter(vote => vote.opinion === VoteOpinion.OK).length : 0;
         this.IVoted = base?.Votes?.some(vote => vote.userId === user?.id);
         this.myOpinion = base?.Votes?.find(vote => vote.userId === user?.id)?.opinion || null;
         this.status = base.status;
-
-
     }
 
 }

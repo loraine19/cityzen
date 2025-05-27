@@ -52,8 +52,6 @@ export default function VoteCreatePage() {
         }
     }
 
-    //// TODO add handle error in all form
-
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: initialValues as any,
@@ -69,12 +67,12 @@ export default function VoteCreatePage() {
                     <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl pt-12 p-5'>
                         {type === VoteTarget.SURVEY ?
                             <SurveyCard
-                                survey={new PoolSurveyView({ ...formik.values, Votes: [], image: formik.values?.blob || formik.values?.image }, {} as User, 0)}
+                                survey={new PoolSurveyView({ ...formik.values, Votes: [], image: formik.values?.blob || formik.values?.image }, {} as User)}
                                 change={() => { }}
                                 update={() => { }}
                             /> :
                             <PoolCard
-                                pool={new PoolSurveyView({ ...formik.values, Votes: [] }, {} as User, 0)}
+                                pool={new PoolSurveyView({ ...formik.values, Votes: [] }, {} as User)}
                                 change={() => { }}
                                 update={() => { }}
                             />}

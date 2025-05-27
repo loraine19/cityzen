@@ -16,27 +16,34 @@ import { SurveyCard } from './voteCards/SurveyCard';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 
 export default function VoteEditPage() {
+    //// PARAMS
     const { id, target } = useParams();
     const idS = id ? parseInt(id) : 0
-    const user = useUserStore((state) => state.user);
-    const surveyIdViewModelFactory = DI.resolve('surveyIdViewModel');
-    const { survey, isLoading, error, refetch } = surveyIdViewModelFactory(idS);
-    const poolIdViewModelFactory = DI.resolve('poolIdViewModel');
-    const { pool, isLoading: isLoadingPool, error: errorPool, refetch: refetchPool } = poolIdViewModelFactory(idS);
-    const [initialValues, setInitialValues] = useState<PoolSurveyView>({} as PoolSurveyView);
-    const updateSurvey = async (id: number, data: SurveyDTO) => await DI.resolve('updateSurveyUseCase').execute(id, data)
-    const updatePool = async (id: number, data: PoolDTO) => await DI.resolve('updatePoolUseCase').execute(id, data)
-    const [type, setType] = useState<VoteTarget>(target as VoteTarget)
+
+    //// STORES
+    const user = useUserStore((state) => state.user)
     const { setOpen, setAlertValues, handleApiError } = useAlertStore()
 
-    const navigate = useNavigate();
+    //// VIEW MODEL SURVEY
+    const surveyIdViewModelFactory = DI.resolve('surveyIdViewModel');
+    const { survey, isLoading, error, refetch } = surveyIdViewModelFactory(idS)
+    const updateSurvey = async (id: number, data: SurveyDTO) => await DI.resolve('updateSurveyUseCase').execute(id, data)
+    //// VIEW MODEL POOL
+    const poolIdViewModelFactory = DI.resolve('poolIdViewModel');
+    const { pool, isLoading: isLoadingPool, error: errorPool, refetch: refetchPool } = poolIdViewModelFactory(idS)
+    const updatePool = async (id: number, data: PoolDTO) => await DI.resolve('updatePoolUseCase').execute(id, data)
+
+    const [initialValues, setInitialValues] = useState<PoolSurveyView>({} as PoolSurveyView);
+    const [type, setType] = useState<VoteTarget>(target as VoteTarget)
+    const navigate = useNavigate()
+
+    //// FORM SCHEMA
     const formSchemaSurvey = object({
         typeS: string().required("Type est obligatoire"),
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
     })
-
     const formSchemaPool = object({
         typeS: string().required("Type est obligatoire"),
         userIdBenef: string().required("Le beneficiaire est obligatoire"),
@@ -44,9 +51,10 @@ export default function VoteEditPage() {
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
     })
 
+    //// HANDLE ERROR
     useEffect(() => {
         if (survey && pool) target === "sondage" ? setInitialValues(survey) : setInitialValues(pool)
-        if (initialValues.userId && initialValues.userId !== user.id) handleApiError({ message: "Vous n'avez pas le droit de modifier ce vote" }, () => navigate('/vote'))
+        if (initialValues?.userId !== user.id) handleApiError({ message: "Vous n'avez pas le droit de modifier ce vote" }, () => navigate('/vote'))
     }, [isLoading, isLoadingPool])
 
     const updateFunction = async () => {
@@ -83,12 +91,12 @@ export default function VoteEditPage() {
                         </Typography>
                         {type === VoteTarget.SURVEY ?
                             <SurveyCard
-                                survey={new PoolSurveyView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, {} as User, 0)}
+                                survey={new PoolSurveyView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, {} as User)}
                                 change={() => { }}
                                 update={() => { }}
                             /> :
                             <PoolCard
-                                pool={new PoolSurveyView({ ...formik.values }, {} as User, 0)}
+                                pool={new PoolSurveyView({ ...formik.values }, {} as User)}
                                 change={() => { }}
                                 update={() => { }}
                             />}

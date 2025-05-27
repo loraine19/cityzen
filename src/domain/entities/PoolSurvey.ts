@@ -18,6 +18,7 @@ export class Pool {
     status: PoolSurveyStatus = PoolSurveyStatus.PENDING;
     groupId: number = 0;
     Group: Group = {} as Group;
+    neededVotes: number = 0;
     constructor(data?: Partial<Pool>) {
         if (data) {
             Object.assign(this, data);
@@ -72,6 +73,7 @@ export class SurveyDTO {
     title?: string;
     category?: SurveyCategory;
     groupId?: number;
+
 }
 
 export class Survey {
@@ -89,6 +91,7 @@ export class Survey {
     status: PoolSurveyStatus = PoolSurveyStatus.PENDING;
     groupId: number = 0;
     Group: Group = {} as Group;
+    neededVotes: number = 0;
     constructor(data?: Partial<Survey>) {
         if (data) {
             Object.assign(this, data);

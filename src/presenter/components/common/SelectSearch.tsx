@@ -42,7 +42,7 @@ export default function SelectSearch(props: selectSearchProps) {
                 </MenuList>
             </Menu>
             <Input
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => { e.stopPropagation(); setSearchCat({ label: '', value: null }) }}
                 data-cy="input-search"
                 type="search"
                 placeholder="Rechercher"

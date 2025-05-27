@@ -12,9 +12,8 @@ import { PoolSurveyStatus } from "../../../../../domain/entities/PoolSurvey";
 type PoolDetailCardProps = { pool: PoolSurveyView, setOpen: (open: boolean) => void }
 
 export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
-    const now = new Date(Date.now())
     const end = new Date(new Date(pool?.createdAt).getTime() + 15 * dayMS)
-    const ended: boolean = end < now || pool?.pourcent >= 100 ? true : false
+    const ended: boolean = pool?.status !== PoolSurveyStatus.PENDING || pool?.pourcent >= 100 ? true : false
 
     const color = (): string => {
         switch (pool?.myOpinion) {
@@ -24,9 +23,8 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
             default: return 'blue-gray';
         }
     }
-
     return (
-        <div className="pt-8 pb-1 h-full flex">
+        <div className="DetailCardDiv">
             <Card className="FixCardNoImage w-respLarge" >
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
@@ -78,7 +76,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                 value={pool.Votes?.length}
                                 variant="ghost"
                                 size='lg'
-                                className="rounded-full px-4"
+                                className="rounded-full pl-5"
                                 icon={
                                     <Icon
                                         icon="smart_card_reader"
@@ -86,7 +84,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                         color={color()}
                                         size="md"
                                         title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                        style="scale-125" />}>
+                                        style="scale-125 ml-1 -mr-3" />}>
                             </Chip>
                         </button>
                     </div>

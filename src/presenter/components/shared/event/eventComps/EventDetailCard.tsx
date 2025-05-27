@@ -10,13 +10,17 @@ import { Title } from "../../../common/CardTitle";
 import { ProgressBarBlur } from "../../../common/ProgressBar";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 
-type EventCardProps = { EventLoad: EventView, refetch?: () => void, change?: (e: any) => void }
+type EventCardProps = {
+    EventLoad: EventView,
+    refetch?: () => void,
+    change?: (e: any) => void
+}
+
 export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
     const { id, title, description, label, image, participantsMin, pourcent, Participants, Igo, User, Address, flagged, end, start, toogleParticipate, agendaLink, eventDateInfo, status, isPast, Group } = EventLoad;
 
-
     return (
-        <div className="pt-8 pb-1 h-full flex">
+        <div className="DetailCardDiv">
             <Card className="w-respLarge FixCard !h-full">
                 <CardHeader className="FixCardHeader">
                     <div className="ChipDiv flex-col justify-between !h-full">
@@ -80,7 +84,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                             {Address ?
                                 <AddressMapOpen
                                     address={Address}
-                                    message={title} /> :
+                                    message={`${Address.address}, ${Address.zipcode} ${Address.city}`} /> :
                                 <Skeleton />}
                         </div>
                     </div>

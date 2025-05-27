@@ -1,14 +1,14 @@
 import { Card, CardHeader, Chip, CardBody, Typography, CardFooter } from "@material-tailwind/react"
 import { useState } from "react"
-import { DateChip } from "../../common/ChipDate"
-import { Title } from "../../common/CardTitle"
-import { Icon } from "../../common/IconComp"
-import { GroupView } from "../../../views/viewsEntities/GroupViewEntity"
-import AddressMapOpen from "../../common/mapComps/AddressMapOpen"
-import ModifBtnStack from "../../common/ModifBtnStack"
-import { Action, Label } from "../../../../domain/entities/frontEntities"
-import { useAlertStore } from "../../../../application/stores/alert.store"
-import { AlertValues } from "../../../../domain/entities/Error"
+import { DateChip } from "../../../common/ChipDate"
+import { Title } from "../../../common/CardTitle"
+import { Icon } from "../../../common/IconComp"
+import { GroupView } from "../../../../views/viewsEntities/GroupViewEntity"
+import AddressMapOpen from "../../../common/mapComps/AddressMapOpen"
+import ModifBtnStack from "../../../common/ModifBtnStack"
+import { Action, Label } from "../../../../../domain/entities/frontEntities"
+import { useAlertStore } from "../../../../../application/stores/alert.store"
+import { AlertValues } from "../../../../../domain/entities/Error"
 
 type groupDetailCardProps = {
     group: GroupView,
@@ -21,10 +21,13 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
     const { setOpen, handleApiError, setAlertValues } = useAlertStore()
     const [group, setGroup] = useState<GroupView>(initGroup)
     const { id, name, categoryS, Address, createdAt, toogleMember, toogleModo } = group
+    const member = group?.GroupUser?.length
+    const modo = group?.GroupUser?.filter(gu => gu.role === 'MODO').length
+
+    //// MAP GROUP INFO
     const [infos] = useState<Label[]>(
         [{ label: 'Règlement', value: group?.rules },
-        { label: 'Participants', value: `${group?.GroupUser?.length} membres dont ${group?.GroupUser?.filter(gu => gu.role === 'MODO').length} conciliateurs` },
-        ]
+        { label: 'Participants', value: `${member} membres dont ${modo} conciliateurs` }]
     )
     const [dot, setDot] = useState<number>(0)
 
@@ -65,7 +68,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
     }
 
     return (
-        <>
+        <div className="DetailCardDiv">
             <Card className="FixCard w-respLarge" >
                 <CardHeader
                     className={"FixCardHeader"}
@@ -91,12 +94,11 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                             aera={group?.area}
                             address={Address} />}
                 </CardHeader>
-                <CardBody
-                    className="FixCardBody">
+                <CardBody className="FixCardBody">
                     <Title
                         title={name ?? ''}
                         type='groupe'
-                        subTitle={'⌖ ' + group?.fullAddress + ' - ' + group?.area + ' mètres'}
+                        subTitle={`⌖ ${group?.fullAddress}  - ${group?.area} mètres`}
                     />
                     <div className='h-full w-full grid grid-cols-1 gap-x-4 grid-rows-1 overflow-x-hidden'>
                         <div className='flex overflow-x-auto scrollbar-hide snap-x snap-mandatory'>
@@ -117,16 +119,18 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                         </div>
                         <div className='flex justify-center gap-3 p-2.5'>
                             {infos.map((_, index) => (
-                                <div onClick={() => {
-                                    const scrollContainer = document.querySelector('.scrollbar-hide');
-                                    if (scrollContainer) {
-                                        const scrollAmount = scrollContainer.clientWidth * index;
-                                        scrollContainer.scrollTo({
-                                            left: scrollAmount, behavior: 'smooth'
-                                        })
-                                        setDot(index);
-                                    }
-                                }}
+                                <div
+                                    title={`Voir ${infos[index].label}`}
+                                    onClick={() => {
+                                        const scrollContainer = document.querySelector('.scrollbar-hide');
+                                        if (scrollContainer) {
+                                            const scrollAmount = scrollContainer.clientWidth * index;
+                                            scrollContainer.scrollTo({
+                                                left: scrollAmount, behavior: 'smooth'
+                                            })
+                                            setDot(index);
+                                        }
+                                    }}
                                     key={index}
                                     className={`h-3 w-3 rounded-full cursor-pointer transition-all duration-300 ${dot === index ? 'bg-cyan-700 scale-125' : 'bg-cyan-400 hover:scale-110'}`}>
                                 </div>
@@ -188,9 +192,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                                         color={group?.ImIn ? "cyan" : "gray"}
                                         title={group?.ImIn ? "Je suis membre" : "Je ne suis pas membre"} />}
                             />
-
                         </button>
-
                         <Icon
                             icon="arrow_circle_right"
                             link={`/groupe/${id}`}
@@ -200,7 +202,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                     </div>
                 </CardFooter>
             </Card>
-        </>
+        </div>
     )
 }
 

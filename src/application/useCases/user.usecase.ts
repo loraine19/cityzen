@@ -33,8 +33,8 @@ export class GetUserCountUseCase {
         this.userRepository = userRepository;
     }
 
-    public async execute(): Promise<number> {
-        return this.userRepository.getUserCount();
+    public async execute(groupId: number): Promise<number> {
+        return this.userRepository.getUserCount(groupId);
     }
 }
 

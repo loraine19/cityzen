@@ -13,25 +13,27 @@ import { Typography } from '@material-tailwind/react';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 
 export default function EventDetailPage() {
+
+    //// PARAMS
     const { id } = useParams()
-    const idS = id ? parseInt(id) : 0;
+    const idS = id ? parseInt(id) : 0
+
+    //// VIEW MODEL
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, isLoading } = eventIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<EventView>({} as EventView)
     const [Address, setAddress] = useState<AddressDTO>(initialValues.Address || {} as AddressDTO)
     const updateEvent = async (id: number, data: EventUpdateDTO, address: AddressDTO) => await DI.resolve('updateEventUseCase').execute(id, data, address)
 
+    //// HANDLE API ERROR
     const { setAlertValues, setOpen } = useAlertStore()
-
-
+    const navigate = useNavigate()
     useEffect(() => {
         if (event && !event?.mine && !isLoading) navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
         setInitialValues(event as EventView)
     }, [isLoading]);
 
-
-    const navigate = useNavigate()
-
+    //// FORM SCHEMA
     const formSchema = object({
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         start: date().required("Date est obligatoire").max(ref('end'), "la date de debut doit etre avant a la date de fin"),
@@ -45,6 +47,7 @@ export default function EventDetailPage() {
         })
     })
 
+    //// FORMIK 
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: initialValues as any,

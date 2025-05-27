@@ -168,18 +168,16 @@ export default function ServiceDetailPage() {
                 <SubHeader type={`${typeS} de service ${categoryS}`} closeBtn />
             </header>
             <main>
-                <div className="flex pt-8 pb-1 h-full">
-                    {isLoading || error || !service ?
-                        <Skeleton />
-                        :
-                        <ServiceDetailComp
-                            service={service}
-                            mines={mine}
-                        />}
-                </div>
+                {isLoading || error || !service ?
+                    <Skeleton />
+                    :
+                    <ServiceDetailComp
+                        service={service}
+                        mines={mine}
+                    />}
             </main>
-
-            {!isLoading && !error && service && <CTAMines actions={ok} disabled1={disabled1} />}
+            {!isLoading && !error && service &&
+                <CTAMines actions={ok} disabled1={disabled1} />}
         </div>
     );
 }

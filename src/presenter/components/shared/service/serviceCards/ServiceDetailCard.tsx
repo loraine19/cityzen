@@ -21,7 +21,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
     const inIssue = statusS === ServiceStep.STEP_4 ? true : false;
 
     return (
-        <>
+        <div className="DetailCardDiv">
             <Card className="FixCard w-respLarge !h-full" >
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
@@ -156,6 +156,6 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     </div>
                 </CardFooter>
             </Card >
-        </>
+        </div>
     )
 }

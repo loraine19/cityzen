@@ -12,11 +12,11 @@ type Props = { survey: PoolSurveyView, setOpen: (open: boolean) => void }
 
 export default function SurveyDetailCard({ survey, setOpen }: Props) {
     const haveImage: boolean = survey.image ? true : false
-    const now = new Date(Date.now())
     const end = new Date(new Date(survey.createdAt).getTime() + 15 * dayMS)
-    const ended: boolean = end < now || survey?.pourcent >= 100 ? true : false
+    const { title, description, categoryS, createdAt, pourcent, status, myOpinion, IVoted, image, flagged, id, Votes, User, needed } = survey
+
     const color = (): string => {
-        switch (survey?.myOpinion) {
+        switch (myOpinion) {
             case 'OK': return 'green';
             case 'NO': return 'red';
             case 'WO': return 'orange';
@@ -25,7 +25,7 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
     }
 
     return (
-        <div className="pt-8 pb-1 h-full flex">
+        <div className="DetailCardDiv">
             <Card className="FixCard w-respLarge" >
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
@@ -33,61 +33,60 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <Chip
                             size='sm'
-                            value={survey?.categoryS}
+                            value={categoryS}
                             className="CyanChip">
                         </Chip>
                         <DateChip
-                            start={survey?.createdAt}
-                            ended={ended}
+                            start={createdAt}
+                            ended={status !== PoolSurveyStatus.PENDING}
                             end={end}
                             prefix="finis dans" />
                     </div>
-                    {survey?.image &&
+                    {image &&
                         <img
-                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
-                            src={survey?.image as string}
-                            alt={survey?.title}
+                            onError={(e) => e.currentTarget.src = "/image/placeholder.jpg"}
+                            src={image as string}
+                            alt={title}
                             className="h-full w-full object-cover" />}
                 </CardHeader>
                 <CardBody className="FixCardBody">
                     <Title
-                        title={survey?.title}
-                        flagged={survey?.flagged}
-                        id={survey?.id}
-                        CreatedAt={survey?.createdAt}
+                        title={title}
+                        flagged={flagged}
+                        id={id}
+                        CreatedAt={createdAt}
                         type='sondage' />
                     <div className="CardOverFlow h-full">
                         <Typography
-                            color="blue-gray"
                             className="mb-2">
-                            {survey?.description}
+                            {description}
                         </Typography>
                     </div>
                     <ProgressBar
-                        value={survey?.pourcent}
+                        value={pourcent}
                         label="votes pour"
                         size={'lg'}
-                        needed={survey?.needed} />
+                        needed={needed} />
                 </CardBody>
                 <CardFooter className="CardFooter mb-2">
                     <ProfileDiv
-                        profile={survey?.User} />
+                        profile={User} />
                     <div className="flex items-center gap-2 ">
                         <button
-                            disabled={survey?.status !== PoolSurveyStatus.PENDING}
+                            disabled={status !== PoolSurveyStatus.PENDING}
                             onClick={() => setOpen(true)}>
                             <Chip
-                                value={survey?.Votes?.length}
+                                value={Votes?.length}
                                 variant="ghost"
                                 size='lg'
-                                className="rounded-full  px-4"
+                                className="rounded-full pl-5"
                                 icon={<Icon
                                     icon="smart_card_reader"
-                                    fill={survey?.IVoted}
+                                    fill={IVoted}
                                     color={color()}
                                     size="md"
-                                    title={`  ${survey?.Votes?.length} personnes ${survey?.IVoted ? `dont vous ` : ''} ont voté`}
-                                    style="scale-125" />}>
+                                    title={`${Votes?.length} personnes ${IVoted && `dont vous `} ont voté`}
+                                    style="scale-125 ml-1 !-mr-3" />}>
                             </Chip>
                         </button>
                     </div>

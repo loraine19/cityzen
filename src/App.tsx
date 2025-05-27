@@ -21,10 +21,10 @@ const ServiceListPage = lazy(() => import("./presenter/components/shared/service
 const IssueCreatePage = lazy(() => import("./presenter/components/shared/service/issue/IssueCreatePage"));
 const IssueDetailPage = lazy(() => import("./presenter/components/shared/service/issue/IssueDetailPage"));
 const IssueEditPage = lazy(() => import("./presenter/components/shared/service/issue/IssueEditPage"));
-const AnnounceCreatePage = lazy(() => import("./presenter/components/shared/post/AnnounceCreatePage"));
-const AnnounceDetailPage = lazy(() => import("./presenter/components/shared/post/AnnounceDetailPage"));
-const AnnounceEditPage = lazy(() => import("./presenter/components/shared/post/AnnounceEditPage"));
-const AnnounceListPage = lazy(() => import("./presenter/components/shared/post/AnnounceListPage"));
+const PostCreatePage = lazy(() => import("./presenter/components/shared/post/PostCreatePage"));
+const PostDetailPage = lazy(() => import("./presenter/components/shared/post/PostDetailPage"));
+const PostEditPage = lazy(() => import("./presenter/components/shared/post/PostEditPage"));
+const PostListPage = lazy(() => import("./presenter/components/shared/post/PostListPage"));
 const ForgotPasswordPage = lazy(() => import("./presenter/components/shared/auth/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("./presenter/components/shared/auth/ResetPasswordPage"));
 const DeleteAccountPage = lazy(() => import("./presenter/components/shared/auth/DeleteAccountPage"));
@@ -45,8 +45,8 @@ const PoolDetailPage = lazy(() => import("./presenter/components/shared/vote/Poo
 const ConciliationListPage = lazy(() => import("./presenter/components/shared/service/issue/ConciationListPage"));
 const ChatPage = lazy(() => import("./presenter/components/shared/dashboard/ChatPage"));
 const RulesPage = lazy(() => import("./presenter/components/shared/dashboard/RulesPage"));
-const GroupPage = lazy(() => import("./presenter/components/shared/dashboard/GroupPage"));
-const GroupDetailPage = lazy(() => import("./presenter/components/shared/dashboard/GroupDetailPage"));
+const GroupPage = lazy(() => import("./presenter/components/shared/dashboard/group/GroupPage"));
+const GroupDetailPage = lazy(() => import("./presenter/components/shared/dashboard/group/GroupDetailPage"));
 
 
 function App() {
@@ -112,10 +112,10 @@ function App() {
                                 <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
                                 <Route path="/sondage/:id" element={<SurveyDetailPage />} />
 
-                                <Route path="/annonce" element={<AnnounceListPage />} />
-                                <Route path="/annonce/:id" element={<AnnounceDetailPage />} />
-                                <Route path="/annonce/create" element={<AnnounceCreatePage />} />
-                                <Route path="/annonce/edit/:id" element={<AnnounceEditPage />} />
+                                <Route path="/annonce" element={<PostListPage />} />
+                                <Route path="/annonce/:id" element={<PostDetailPage />} />
+                                <Route path="/annonce/create" element={<PostCreatePage />} />
+                                <Route path="/annonce/edit/:id" element={<PostEditPage />} />
 
                                 <Route path="/*" element={<NotFindPage />} />
 

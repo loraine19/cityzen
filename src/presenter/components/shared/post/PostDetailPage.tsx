@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
-import PostDetailCard from './announceComps/PostDetailCard';
+import PostDetailCard from './PostComps/PostDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
 import { GenereMyActions, } from '../../../views/viewsEntities/utilsService';
 import DI from '../../../../di/ioc';
@@ -10,7 +10,7 @@ import { Skeleton } from '../../common/Skeleton';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 import { useEffect } from 'react';
 
-export default function AnnounceDetailPage() {
+export default function PostDetailPage() {
     const { id } = useParams();
     const idS = id ? parseInt(id) : 0;
     const postIdViewModelFactory = DI.resolve('postIdViewModel');
@@ -55,12 +55,10 @@ export default function AnnounceDetailPage() {
             </header>
             <main>
                 {!isLoading && !error && post ?
-                    <div className="flex pt-8 pb-1 h-full">
-                        <PostDetailCard
-                            post={post}
-                            mines={post?.isMine}
-                            change={() => { }} />
-                    </div> :
+                    <PostDetailCard
+                        post={post}
+                        mines={post?.isMine}
+                        change={() => { }} /> :
                     <Skeleton />}
             </main>
             {(!isLoading && !error && post) ?

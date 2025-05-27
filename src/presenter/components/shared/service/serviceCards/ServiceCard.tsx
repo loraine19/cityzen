@@ -126,7 +126,6 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                             color="blue-gray">
                             {description}
                         </Typography>
-
                     </div>
                 </CardBody>
                 <CardFooter className="CardFooter">

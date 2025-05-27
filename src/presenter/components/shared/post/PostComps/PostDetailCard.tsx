@@ -23,7 +23,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
     const ILike: boolean = post?.Likes?.find((like: Like) => like.userId === userId) ? true : false
 
     return (
-        <>
+        <div className="DetailCardDiv">
             <Card className="FixCard w-respLarge" >
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
@@ -86,7 +86,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                     </div>
                 </CardFooter>
             </Card>
-        </>
+        </div>
     )
 }
 

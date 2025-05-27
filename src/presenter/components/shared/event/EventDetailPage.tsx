@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import parse from 'html-react-parser';
+//import parse from 'html-react-parser';
 import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -10,20 +10,24 @@ import { Skeleton } from '../../common/Skeleton';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 import { useEffect } from 'react';
+import { EventStatus } from '../../../../domain/entities/Event';
 
 
 export default function EventDetailPage() {
+    //// PARAMS 
     const { id } = useParams();
     const idS = id ? parseInt(id) : 0;
+
+    //// VIEW MODEL
     const eventIdViewModelFactory = DI.resolve('eventIdViewModel');
     const { event, isLoading, refetch, error } = eventIdViewModelFactory(idS);
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id);
-    const disabledDelete = new Date(event?.start).getTime() < Date.now();
-    const disabledEdit = new Date(event?.start).getTime() < Date.now();
+    const myActions = event && GenereMyActions(event, "evenement", deleteEvent)
+
+    //// HANDLE API ERROR
+    const navigate = useNavigate()
     const { setOpen, open, handleApiError } = useAlertStore(state => state);
     const handleOpen = () => setOpen(!open)
-    const myActions = event && GenereMyActions(event, "evenement", deleteEvent);
-    const navigate = useNavigate();
     useEffect(() => { if (error) handleApiError(error, () => navigate('/evenement')) }, [isLoading]);
 
     const buttons: Action[] = [
@@ -50,24 +54,22 @@ export default function EventDetailPage() {
                 <NavBarTop />
                 <SubHeader
                     type={`évenement ${event?.label ?? ''}`}
-                    place={parse(`<br><div className="text-xl whitespace-nowrap text-ellipsis overflow-hidden ">${event?.Address?.address ?? ''} ${event?.Address?.city ?? ''}</div>`)}
+                    place={` ${event?.Address?.address ?? ''} ${event?.Address?.city ?? ''}`}
                     closeBtn />
             </header>
             <main>
                 {!isLoading && event ?
                     <EventDetailCard
                         EventLoad={event}
-                        refetch={refetch}
-
-                    /> :
+                        refetch={refetch} /> :
                     <Skeleton />}
             </main>
             {(!isLoading && event) && <>
                 {event?.mine && !isLoading ?
                     <CTAMines
                         actions={myActions}
-                        disabled1={disabledDelete}
-                        disabled2={disabledEdit} />
+                        disabled1={event?.status !== EventStatus.PENDING}
+                        disabled2={event?.status !== EventStatus.PENDING} />
                     :
                     <CTAMines
                         disabled1={false}

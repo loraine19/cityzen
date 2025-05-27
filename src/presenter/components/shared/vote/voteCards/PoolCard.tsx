@@ -20,20 +20,16 @@ type PoolCardProps = {
     update: () => void,
 }
 
-export function PoolCard({
-    pool,
-    change,
-    mines,
-    update,
-}: PoolCardProps) {
-    const now = new Date(Date.now())
-    const endDays: number = Math.floor((new Date(pool.createdAt).getTime() + 15 * dayMS - (now.getTime())) / dayMS)
-    const ended: boolean = pool.pourcent < 100 && endDays <= 0 ? true : false
+export function PoolCard({ pool, change, mines, update }: PoolCardProps) {
+    const ended: boolean = pool.pourcent < 100 || pool.status !== PoolSurveyStatus.PENDING
     const end: Date = new Date(new Date(pool.createdAt).getTime() + 15 * dayMS)
-    const disabledEditCTA: boolean = pool.pourcent >= 100 ? true : false
+    const disabledEditCTA: boolean = pool?.status !== PoolSurveyStatus.PENDING
+
+    //// FUNCTIONS
     const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
     const actions: Action[] = GenereMyActions(pool, "vote/cagnotte", deletePool)
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
+
     const color = (): string => {
         switch (pool?.myOpinion) {
             case 'OK': return 'green';
@@ -108,15 +104,15 @@ export function PoolCard({
                             <Chip
                                 value={pool.Votes?.length}
                                 variant="ghost"
-                                className="GrayChip px-3.5"
+                                className="GrayChip !px-3.5"
                                 icon={
                                     <Icon
                                         icon="smart_card_reader"
                                         fill={pool?.IVoted}
                                         color={color()}
-                                        size="md"
+                                        size="sm"
                                         title={`  ${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                        style="scale-150 -mt-0.5" />}>
+                                        style="scale-150 ml-0.5 -mr-1" />}>
                             </Chip>
                         </button>
                         <Icon

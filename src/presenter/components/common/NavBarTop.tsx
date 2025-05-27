@@ -21,7 +21,7 @@ export default function NavBarTop() {
 
 
     return (
-        <div className="relative flex justify-between w-full items-center py-3 ">
+        <div className="relative flex justify-between w-full items-center py-2 lg:py-2.5 border-b border-blue-gray-50 mb-0.5">
             <div className="flex items-center  gap-2">
                 <Menu placement="bottom-start">
                     <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
@@ -60,8 +60,8 @@ export default function NavBarTop() {
                         {user?.Profile?.firstName}
                     </Typography>
                     <Typography
-                        color="blue-gray"
-                        className="-mt-1">
+                        variant="small"
+                        className="-mt-1 text-gray-700">
                         {user?.GroupUser?.map((group) => group.Group?.name).join(', ')}
                     </Typography>
                 </div>

@@ -15,15 +15,21 @@ import { useAlertStore } from '../../../../application/stores/alert.store';
 import { PoolSurveyStatus } from '../../../../domain/entities/PoolSurvey';
 
 export default function PoolDetailPage() {
+    const pageColor = 'orange'
+
+    // PARAMS
     const { id } = useParams();
     const idS = id ? parseInt(id) : 0
+
+    // VIEW MODEL
     const poolIdViewModelFactory = DI.resolve('poolIdViewModel');
-    const { pool, isLoading, refetch, error } = poolIdViewModelFactory(idS);
+    const { pool, isLoading, refetch, error } = poolIdViewModelFactory(idS)
+
+    // FUNCTIONS
     const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
     const myActions: Action[] = pool && GenereMyActions(pool, "vote/cagnotte", deletePool)
 
-    //// ACTIONS
-
+    //// ALERT STORE
     const { handleApiError } = useAlertStore()
     const navigate = useNavigate();
     useEffect(() => { if (error) handleApiError(error, () => navigate('/vote/sondage')) }, [isLoading]);
@@ -36,9 +42,8 @@ export default function PoolDetailPage() {
                 close={() => setOpenVote(false)}
                 vote={pool}
                 refetch={refetch} />}
-        <div className="Body orange">
-
-            <header className="px-4">
+        <div className={`Body ${pageColor}`}>
+            <header>
                 <NavBarTop />
                 <SubHeader
                     type={`Cagnotte `}
@@ -53,27 +58,27 @@ export default function PoolDetailPage() {
                         setOpen={setOpenVote} />
                 }
             </main>
-
             {pool?.mine ?
                 <CTAMines actions={myActions} /> :
                 <footer className={`CTA`}>
                     <Button
                         disabled={pool?.status !== PoolSurveyStatus.PENDING}
                         size='lg'
-                        color='orange'
+                        color={pageColor}
                         className='lgBtn'
-                        onClick={() => setOpenVote(true)}
-                    >
+                        onClick={() => setOpenVote(true)}>
                         <Icon
                             fill
                             icon='smart_card_reader'
                             color='white' />
-                        {pool.IVoted ? pool.status !== PoolSurveyStatus.PENDING ? 'Modifier mon vote' : 'Voter' : 'Cette cagnotte est terminé'}
+                        {pool.IVoted ? 'Modifier mon vote' :
+                            pool.status === PoolSurveyStatus.PENDING ?
+                                'Voter' : 'Cette cagnotte est terminé'}
                     </Button>
                 </footer>
             }
         </div>
     </>
-    );
+    )
 }
 

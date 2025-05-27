@@ -19,16 +19,15 @@ export class AlertValues {
     close?: () => void = () => { };
     notif?: string = '';
 
-    constructor(init?: any) {
-        this.element = init?.message || init?.error?.message || init?.error || '-';
+    constructor(init?: Partial<AlertValues> | any) {
+        this.element = init?.message || init?.element || '';
+        this.notif = init?.error || init?.error.message || init?.notif || '';
         if (init) {
             Object.keys(init).forEach(key => {
                 if (key in this) {
                     (this as any)[key] = init[key as keyof Event];
                 }
-            });
+            })
         }
     }
-
 }
-// 

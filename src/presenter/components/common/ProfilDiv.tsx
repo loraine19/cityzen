@@ -7,6 +7,7 @@ import AddressMapOpen from "./mapComps/AddressMapOpen"
 import { OnlineDot } from "./onlineDot"
 import { User } from "../../../domain/entities/User"
 import { ProfileView } from "../../views/viewsEntities/profileViewEntity"
+import { GroupUser } from "../../../domain/entities/GroupUser"
 
 type ProfileDivProps = { profile: Partial<User>, size?: string }
 export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props }) => {
@@ -15,7 +16,6 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
     const textSize = size === "xl" && "h5" || size === "sm" && "h6" || "small"
     const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
     const user = useUserStore(state => state.user)
-    console.log(profile)
 
     return (
         <>
@@ -65,12 +65,12 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                     className={profile?.skills ? "font-normal text-blue-gray-500" : 'hidden'}>
                                     • {profile?.skills}
                                 </Typography>
-                                <div
-                                    className="font-normal flex flex-col text-blue-gray-500">
-                                    {userDiv?.GroupUser?.map((group) =>
-                                        <div>{'⌖ ' + group.Group?.name}
-                                        </div>)
-                                    }
+                                <div className="font-normal flex flex-col text-blue-gray-500">
+                                    {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
+                                        <div key={index}>
+                                            {'⌖ ' + group.Group?.name}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -116,10 +116,10 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                     </Typography>
                     <Typography
                         className={`font-normal text-blue-gray-500 ${texteSize2} line-clamp-1 truncate max-w-full pr-2`}>
-                        {userDiv?.GroupUser?.map((group) =>
-                            <span >{' ⌖ ' + group.Group?.name + ' '}
-                            </span>)
-                        }
+                        {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
+                            <span key={index} >
+                                {' ⌖ ' + group.Group?.name + ' '}
+                            </span>)}
                     </Typography>
                 </div>
             </div>

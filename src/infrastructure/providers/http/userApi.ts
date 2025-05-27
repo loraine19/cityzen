@@ -19,8 +19,8 @@ export class UserApi {
         return this.api.get(`${this.dataType}/inGroup/${groupId}`);
     }
 
-    async getUserCount(): Promise<number> {
-        return this.api.get(`${this.dataType}/count`);
+    async getUserCount(groupId: number): Promise<number> {
+        return this.api.get(`${this.dataType}/count/${groupId}`);
     }
 
 

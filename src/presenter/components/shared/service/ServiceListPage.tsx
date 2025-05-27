@@ -46,6 +46,7 @@ export default function ServicesPage() {
         }
     }
     const stepName = (): string => ServiceStepFilter[step as keyof typeof ServiceStepFilter] ?? ''
+    const categoryName = (): string => ServiceCategory[category as string as keyof typeof ServiceCategory] ?? ''
 
     //// BOXES FILTER
     const boxArray = ["offre", "demande", "nouveau", "en attente", "en cours", "terminé", "litige"];
@@ -164,12 +165,11 @@ export default function ServicesPage() {
     //// RENDER
     return (
         <div className="Body cyan">
-            <header className="px-4">
+            <header>
                 <NavBarTop />
                 <SubHeader
                     qty={count}
-                    type={`services ${filterName()} ${category ? ServiceCategory[category as string as keyof typeof ServiceCategory] : ''}`} />
-
+                    type={`services ${filterName()} ${categoryName()}`} />
                 <TabsMenu
                     labels={serviceTabs}
                     sortList={sortList}

@@ -6,18 +6,18 @@ import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
-import AnnouncesGridComp from "./announceComps/AnnouncesGridComp";
+import PostGridComp from "./PostComps/PostGridComp";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { getValue } from "../../../views/viewsEntities/utilsService";
 import DI from "../../../../di/ioc";
 import { PostView } from "../../../views/viewsEntities/postViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { postCategories } from "../../../constants";
-import PostCard from "./announceComps/PostCard";
+import PostCard from "./PostComps/PostCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { Icon } from "../../common/IconComp";
 
-export default function AnnounceListPage() {
+export default function PostListPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
     const postViewModelFactory = DI.resolve('postViewModel');
@@ -29,18 +29,18 @@ export default function AnnounceListPage() {
     //// PARAMS
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
-    useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || ''); }, []);
+    useEffect(() => { setCategory(params.category ?? ''); setFilter(params.filter ?? ''); }, []);
 
     const [list, setList] = useState<PostView[]>(posts);
     useEffect(() => { posts && setList(posts) }, [isLoading, count, refetch])
 
     //// FILTER TAB
     const filterTab = async (value?: PostFilter) => {
-        setParams({ filter: value as string || '', category: category });
+        setParams({ filter: value as string ?? '', category });
         value !== filter && setCategory('')
         setFilter(value || '');
         value === PostFilter.MINE ? setMines(true) : setMines(false);
-        setParams({ filter: value as string || '', category: category })
+        setParams({ filter: value as string ?? '', category })
         await refetch();
     }
 
@@ -61,16 +61,17 @@ export default function AnnounceListPage() {
     //// NAMING
     const filterName = (): string => {
         switch (filter) {
-            case PostFilter.MINE: return 'les miens';
-            case PostFilter.ILIKE: return 'likée';
+            case PostFilter.MINE: return 'que j\'ai posté';
+            case PostFilter.ILIKE: return 'que j\'aime';
             default: return '';
         }
     }
+    const categoryName = (): string => PostCategory[category as keyof typeof PostCategory] ?? '';
 
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (count === 0): setNotif(`Aucune annonce ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''} n'a été trouvé`); break;
+            case (count === 0): setNotif(`Aucune annonce ${filterName()} ${categoryName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }
@@ -162,7 +163,7 @@ export default function AnnounceListPage() {
             <main
                 ref={divRef}
                 onScroll={handleScroll}>
-                {isLoading ?
+                {isLoading || !list ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <SkeletonGrid
                             key={index}
@@ -171,7 +172,7 @@ export default function AnnounceListPage() {
                     : <>
                         {view === "list" ?
                             announcesToGrid.map((line, index) => (
-                                <AnnouncesGridComp
+                                <PostGridComp
                                     key={index}
                                     line={line}
                                     update={refetch}
@@ -180,7 +181,7 @@ export default function AnnounceListPage() {
                                     view={view} />))
                             :
                             <div className="Grid">
-                                {list.map((post: PostView, index: number) => (
+                                {list?.map((post: PostView, index: number) => (
                                     <div className="SubGrid" key={index}>
                                         <PostCard
                                             key={post.id}
@@ -190,7 +191,6 @@ export default function AnnounceListPage() {
                                             mines={mines} />
                                     </div>
                                 ))}
-
                             </div>
                         }
                     </>
