@@ -13,13 +13,17 @@ import { ElementNotif } from "../../../../domain/entities/Notif";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { PathElement } from "../../../constants";
 import { ReadAllButton } from "../../common/ReadAllBtn";
+import { useNotificationStore } from "../../../../application/stores/notification.store";
 
 export default function NotificationPage() {
     const [notifFind, setNotifFind] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
+
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory(filter)
+
+    const { setUnReadNotif } = useNotificationStore()
 
     //// PARAMS
     const [Params, setParams] = useSearchParams();
@@ -143,7 +147,8 @@ export default function NotificationPage() {
                                 key={index}
                                 notif={notif}
                                 handleClick={async (notif: NotifView) => {
-                                    readNotif(notif.id);
+                                    readNotif(notif.id)
+                                    setUnReadNotif(count - 1);
                                     await refetch();
                                 }} />
                         </div>)}

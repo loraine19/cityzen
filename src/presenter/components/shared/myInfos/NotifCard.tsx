@@ -9,6 +9,7 @@ export function NotifCard(props: notifCardProps) {
     const { handleClick, notif } = props
     const { update, read, typeS, } = notif
 
+
     return (
         <Card className={`${!read ? 'FixCardNoImage w-resp  !justify-start' : 'hidden'}`}>
             <CardHeader className={"FixCardHeaderNoImage !my-0 "} floated={false}>

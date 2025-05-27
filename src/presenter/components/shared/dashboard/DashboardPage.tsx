@@ -30,7 +30,7 @@ export default function DashboardPage() {
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid ";
-    const notifClasse = " row-span-2 grid min-h-[7.8rem] lg:pt-6";
+    const notifClasse = " row-span-2 grid min-h-[8rem] lg:pt-6";
     const mapClasse = "flex row-span-6 lg:grid";
 
     //// PARAMS
@@ -52,7 +52,7 @@ export default function DashboardPage() {
         if (divRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
+                setIsBottom(true)
                 if (hasNextPage) fetchNextPage()
             } else setIsBottom(false)
         }
@@ -76,8 +76,8 @@ export default function DashboardPage() {
         <>
             <div className="Body gray"
                 data-cy="dashboard-body" >
-                <div className="relative w-respXl w-full flex lg:justify-center justify-between items-center ">
-                    <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0  py-2.5 lg:-ml-16 lg:pr-8 ">
+                <div className="relative w-respXl w-full flex lg:justify-center justify-between items-center">
+                    <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0 py-2.5 lg:-ml-16 lg:pr-8 ">
                         <img
                             className="h-12 w-12 mx-2 lg:h-16 lg:w-16 object-cover object-center"
                             src="/image/logo.svg"
@@ -91,7 +91,7 @@ export default function DashboardPage() {
                         <NotifBadge onBoard />
                     </div>
                 </div>
-                <main className="relative flex -top-6 -mb-5 h-[calc(100%-3.5rem)]">
+                <main className="relative flex -top-5 -mb-3 h-[calc(100%-3.5rem)]">
                     <div className={" flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                         <div className={`${userClasse}`}>
                             <Card className="lg:h-full p-0 flex-1 flex ">
@@ -112,7 +112,7 @@ export default function DashboardPage() {
                                     </div>
                                 </CardHeader>
                                 <CardBody className="flex flex-col items-center justify-center px-4 py-0">
-                                    <div className="flex gap-2 pt-2 pb-3 justify-center items-center ">
+                                    <div className="flex gap-2 pt-3 pb-4 justify-center items-center ">
                                         <Icon
                                             link="/myprofile"
                                             icon="person_edit"
@@ -148,7 +148,7 @@ export default function DashboardPage() {
                         <div className={`hidden lg:${notifClasse} h-full lg:grid`}>
                             <Card className=" orange100 ">
                                 <CardBody className="h-full flex flex-col pt-2.5 pb-0 px-4">
-                                    <div className="flex gap-2 py-1.5 items-center">
+                                    <div className="flex gap-2.5 py-1 items-center">
                                         <div className="relative">
                                             <Icon
                                                 fill bg
@@ -174,12 +174,12 @@ export default function DashboardPage() {
                                             'Vous n\'avez pas de notifications'}
                                         </Typography>
                                     </div>
-                                    <div className="relative flex flex-col -mt-0.5 max-h-10 overflow-y-auto"
+                                    <div className="relative flex flex-col max-h-12 overflow-y-auto"
                                         onScroll={() => handleScroll()}
                                         ref={divRef}>
                                         {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
                                             <div key={index}
-                                                className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex mr-8 items-center pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5`}
+                                                className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex mr-9 items-center pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5`}
                                                 onClick={async () => {
                                                     await readNotif(notif.id);
                                                     await refetch();
@@ -195,14 +195,14 @@ export default function DashboardPage() {
                                                     </span>
                                                 </p>
                                                 {<Icon
-                                                    icon={"cancel"}
+                                                    icon={"close"}
                                                     onClick={async () => {
                                                         await readNotif(notif.id);
                                                         await refetch();
                                                         notif.link && navigate(notif.link)
                                                     }}
                                                     style={'absolute z-40 right-0'}
-                                                    size="lg"
+                                                    size="md"
                                                     title={"fermer " + notif?.title} />}
                                             </div>))}
                                     </div>
@@ -257,7 +257,7 @@ export default function DashboardPage() {
                         </div>
                         <div className={eventClasse}>
                             <Card className="h-full flex-1 gray100 ">
-                                <CardBody className="h-full flex flex-col !pt-1 p-4 ">
+                                <CardBody className="h-full flex flex-col !pt-0 p-4 ">
                                     <CalendarComp logo={true} />
                                 </CardBody>
                             </Card>

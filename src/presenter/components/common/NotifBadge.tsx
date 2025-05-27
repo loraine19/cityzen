@@ -21,7 +21,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const [connected, setConnected] = useState(false);
     const socketService = DI.resolve('socketService');
     const { setConnectedUsers } = connectedUsersStore();
-    const { setUnReadMsgNotif, setUnReadNotMessages } = useNotificationStore();
+    const { setUnReadMsgNotif, setUnReadNotMessages, setUnReadNotif } = useNotificationStore();
 
     const connexion = () => {
         socketService.connect(nameSpace);
@@ -82,7 +82,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     type NotifBadgeProps = { count: number, notifs: NotifView[], color: string, icon: string, link: string }
 
     return (
-        <div className={`${onBoard ? ' w-respXl relative pt-4' : ''} gap-3  flex justify-end flex-1 w-full  right-0`}>
+        <div className={`${onBoard ? ' w-respXl relative pt-4' : ''} gap-4 flex justify-end flex-1 w-full  right-0`}>
             <div className={` w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
                 <Card className={`${notif ? 'animate-bounce absolute' : ''} z-50 mt-4 h-max px-4 py-2 w-respLarge rounded-2xl shadow-lg transition-all duration-1000 ease-in-out transform
                  ${notif ?
@@ -101,7 +101,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         ref={divRef}>
                         <Menu placement="bottom-end" >
                             <MenuHandler title="Notifications">
-                                <span className={`${!list.count || list.count === 0 ? 'hidden' : `text-white absolute flex font-medium items-center justify-center w-[1.3rem] h-[1.3rem] text-[0.70rem] !min-w-max pt-[0.3rem] pb-1  bg-${list.color}-500 rounded-full bottom-0 -left-2.5 shadow z-50`}`}>
+                                <span className={`${!list.count || list.count === 0 ? 'hidden' : `text-white absolute flex font-medium items-center justify-center w-[1.4rem] h-[1.4rem] text-[0.75rem] !min-w-max pt-[0.3rem] pb-1 bg-${list.color}-500 rounded-full bottom-0 -left-2.5 shadow z-50`}`}>
                                     {list.count >= 99 ? '⁺99 ' :
                                         (list.count ? list.count.toString() : '0')}
                                 </span>
@@ -147,6 +147,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                                 async () => {
                                                                     await readNotif(notif.id);
                                                                     await refetch();
+                                                                    setUnReadNotif(list.notifs.length - 1);
                                                                     notif.link && navigate(notif.link)
                                                                 }}
                                                             size="3xl"
@@ -171,9 +172,9 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         icon={list.icon}
                         color={list.count > 0 ? list.color : 'gray'}
                         fill bg
-                        size="2xl"
+                        size="3xl"
                         title={list.count ? "voir la liste" : "aucune notification"}
-                        style=" rounded-full z-40 relative  !w-10 !h-10" />
+                        style=" rounded-full z-40 relative  !w-[3rem] !h-[3rem]" />
                 </div>)
 
             }

@@ -59,6 +59,7 @@ export type ApiServiceI = {
 export class ApiService implements ApiServiceI {
     private api: AxiosInstance;
     private authService: AuthService;
+    private refreshPromise: Promise<boolean> | null = null;
 
     constructor() {
         this.authService = new AuthService();
@@ -104,10 +105,17 @@ export class ApiService implements ApiServiceI {
                 this.logWithTime('token expired 401');
                 if (!originalRequest._retry) {
                     originalRequest._retry = true;
-                    const refreshSuccess = await this.refreshAccess()
-                    if (refreshSuccess) return this.api(originalRequest)
+                    // Prevent multiple simultaneous refreshes
+                    if (!this.refreshPromise) {
+                        this.refreshPromise = this.refreshAccess().finally(() => {
+                            this.refreshPromise = null;
+                        });
+                    }
+                    const refreshSuccess = await this.refreshPromise;
+                    if (refreshSuccess) return this.api(originalRequest);
                     else newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
-                } else newError = new UnauthorizedError()
+                }
+                else newError = new UnauthorizedError();
                 break;
             case 403:
                 newError = new ForbiddenError(message);

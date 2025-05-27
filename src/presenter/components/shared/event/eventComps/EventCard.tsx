@@ -71,7 +71,8 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
             <CardBody className="FixCardBody">
                 <Title
                     title={title}
-                    flagged={flagged} id={id}
+                    flagged={flagged}
+                    id={id}
                     CreatedAt={createdAt}
                     subTitle={eventDateInfo}
                     type='evenement'

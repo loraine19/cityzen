@@ -21,21 +21,21 @@ export default function NavBarTop() {
 
 
     return (
-        <div className="relative flex justify-between w-full items-center py-2 lg:py-2.5 border-b border-blue-gray-50 mb-0.5">
-            <div className="flex items-center  gap-2">
+        <div className="relative flex  justify-between w-full items-center py-2 lg:py-2.5 border-b border-blue-gray-50 mb-1">
+            <div className="flex items-center gap-4">
                 <Menu placement="bottom-start">
                     <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Avatar
                                 onError={(e) => e.currentTarget.src = '/image/person.svg'}
                                 referrerPolicy="unsafe-url"
-                                className="!flex BgUser !shadow cursor-pointer !h-12 !w-19"
+                                className="!flex BgUser !shadow cursor-pointer !h-[3.2rem] !w-[3.2rem] "
                                 variant="circular"
                                 alt={user?.Profile?.firstName || 'user'}
                                 src={user?.Profile?.image as string ?? '/image/person.svg'}
                             />
                             <OnlineDot
-                                className="!bottom-0 !-right-0.5"
+                                className="!bottom-0 !-right-1"
                                 id={user?.id} />
                         </div>
                     </MenuHandler>
@@ -60,8 +60,7 @@ export default function NavBarTop() {
                         {user?.Profile?.firstName}
                     </Typography>
                     <Typography
-                        variant="small"
-                        className="-mt-1 text-gray-700">
+                        className="-mt-1 text-gray-700 italic text-[0.9rem] truncate">
                         {user?.GroupUser?.map((group) => group.Group?.name).join(', ')}
                     </Typography>
                 </div>

@@ -80,7 +80,7 @@ export default function SignInPage() {
     const terms = "Vous resterez connecté pour 48h ...";
 
     return (
-        <div className="Body gray pb-2">
+        <div className="Body gray">
             <AuthHeader />
             <main className='items-center gap-4 pb-2'>
                 <AuthForm
@@ -96,7 +96,7 @@ export default function SignInPage() {
                 />
 
             </main>
-            <footer className="flex flex-col items-center gap-2 py-2">
+            <footer className="flex flex-col items-center gap-2 py-3 mb-4">
                 <Link to="/motdepasse_oublie">
                     <Typography className="text-xs font-medium p-2 text-center underline underline-offset-8 uppercase">
                         Mot de pass oublié
@@ -106,7 +106,7 @@ export default function SignInPage() {
                     Pas encore de compte ?
                 </Typography>
                 <Link to="/signup">
-                    <Button size="sm" className="rounded-full mb-2">
+                    <Button size="sm" className="rounded-full">
                         inscrivez-vous
                     </Button>
                 </Link>

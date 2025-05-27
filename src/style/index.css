@@ -92,20 +92,20 @@ header {
     background-image: linear-gradient(#f9fafb, #ffedd5);
 }
 .Grid {
-    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] lg:auto-rows-[minmax(320px,46vh)] auto-rows-[minmax(330px,40vh)];
+    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
+    lg:auto-rows-[minmax(330px,46vh)]  auto-rows-[minmax(330px,40vh)];
 }
 .Grid2 {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
     grid-auto-rows: minmax(320px, 53vh);
 }
-/* */
 
 .GridSmall {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)]  pt-2;
     grid-auto-rows: max-content;
 }
 .SubGrid {
-    @apply pt-7 max-w-[calc(100vw-1rem)] mx-2;
+    @apply pt-6 max-w-[calc(100vw-1rem)] mx-2;
 }
 
 .w-resp {
@@ -123,11 +123,11 @@ header {
 }
 
 .FixCardNoImage {
-    @apply w-full my-0 mx-auto  !h-[calc(100%+1.5rem)] !-mt-6 !p-0;
+    @apply w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0;
 }
 
 .FixCardHeader {
-    @apply flex flex-1 h-[50%] lg:!max-h-[320px] max-h-[300px] !shadow-md;
+    @apply flex flex-1 !min-h-[10.5rem] max-h-[50%] !shadow-md;
 }
 
 .FixCardHeaderNoImage {

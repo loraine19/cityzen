@@ -60,8 +60,8 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                         type='evenement'
                         group={Group}
                     />
-                    <div className="flex flex-1 gap-x-3 py-1 md:flex-row">
-                        <div className=" relative flex lex-col  flex-auto overflow-auto">
+                    <div className="flex flex-1 gap-x-3 py-1.5 md:flex-row">
+                        <div className="relative flex flex-col flex-auto overflow-auto">
                             <div className="h-max break-all absolute ">
                                 <Link
                                     to={agendaLink as string}

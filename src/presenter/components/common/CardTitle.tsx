@@ -35,13 +35,13 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
                         title={props.title}>
                         {title}
                     </Typography>
-                    {CreatedAt && <span className="text-xs">{new Date(CreatedAt).toLocaleDateString('fr-FR')}</span>}
+                    {CreatedAt && <span className="text-xs text-gray-500 italic">{new Date(CreatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>}
                 </div>
                 {id &&
                     <FlagIcon
                         flagged={flagged ? true : false}
                         id={id}
-                        type={type || ''} />
+                        type={type ?? ''} />
                 }
             </div>
             {subTitle &&
