@@ -12,10 +12,8 @@ import { Skeleton } from '../../common/Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { Icon } from '../../common/IconComp';
-import { GroupUser } from '../../../../domain/entities/GroupUser';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 import { ProfileDiv } from '../../common/ProfilDiv';
-import { GroupUserDTO } from '../../../../infrastructure/DTOs/GroupUserDTO';
 
 export default function MyInfosPage() {
     const { setUser } = useUserStore()
@@ -36,8 +34,6 @@ export default function MyInfosPage() {
 
     const { setOpen, setAlertValues } = useAlertStore(state => state)
 
-    const [userGroups, setUserGroups] = useState<GroupUser[]>(user.GroupUser)
-
     const updateFunction = async () => {
         const { blob, ...rest } = formik.values;
         const updateData = new ProfileDTO({ assistance, ...rest })
@@ -49,13 +45,7 @@ export default function MyInfosPage() {
         else {
             navigate("/");
             setOpen(false)
-            const dto = userGroups.map((groupUser: GroupUser) => new GroupUserDTO(groupUser))
-            const data = await DI.resolve('updateAllRoleUseCase').execute(dto)
-            if (data.error) {
-                setOpen(false)
-                setAlertValues({ ...data.error })
-            }
-            else setUser({ ...user, Profile: updated, GroupUser: data })
+            setUser({ ...user, Profile: updated })
         }
     }
 
@@ -116,8 +106,6 @@ export default function MyInfosPage() {
                     setAssistance={setAssistance}
                     setAddress={setAddress}
                     setMailSub={setMailSub}
-                    setUserGroups={setUserGroups}
-                    userGroups={userGroups}
                 />}
         </div >
     )

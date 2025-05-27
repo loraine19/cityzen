@@ -16,8 +16,6 @@ import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { Address } from '../../../../domain/entities/Address';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { ProfileDiv } from '../../common/ProfilDiv';
-import { GroupUser } from '../../../../domain/entities/GroupUser';
-import { GroupUserDTO } from '../../../../infrastructure/DTOs/GroupUserDTO';
 
 export default function ProfileCreatePage() {
     const { setUser } = useUserStore()
@@ -54,7 +52,6 @@ export default function ProfileCreatePage() {
             setOpen(true)
         }
     })
-    const [userGroups, setUserGroups] = useState<GroupUser[]>(user.GroupUser)
     const post = async () => {
         const { ...rest } = formik.values;
         const updateData = { ...rest }
@@ -63,13 +60,6 @@ export default function ProfileCreatePage() {
             setUser({ ...user, Profile: updated })
             navigate("/");
             setOpen(false)
-            if (userGroups) {
-                const dto = userGroups.map((group: GroupUser) => { new GroupUserDTO(group) })
-                const groupUserUpdated = await DI.resolve('updateAllRoleUseCase').execute(dto);
-                if (groupUserUpdated) {
-                    setUser({ ...user, GroupUser: [groupUserUpdated] })
-                }
-            }
         }
     }
 
@@ -99,8 +89,6 @@ export default function ProfileCreatePage() {
             {!user || user.Profile ?
                 <Skeleton /> :
                 <ProfileForm
-                    setUserGroups={setUserGroups}
-                    userGroups={userGroups}
                     formik={formik}
                     setAssistance={setAssistance}
                     setAddress={setAddress}

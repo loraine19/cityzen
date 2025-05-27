@@ -2,8 +2,9 @@ import { Popover, PopoverHandler, PopoverContent, Typography, Chip } from "@mate
 import { Icon } from "./IconComp"
 import { GroupView } from "../../views/viewsEntities/GroupViewEntity"
 import { groupCategories } from "../../constants"
+import { Group } from "../../../domain/entities/Group"
 
-type GroupDivProps = { group: GroupView }
+type GroupDivProps = { group: GroupView | Group }
 export const GroupLink: React.FC<GroupDivProps> = ({ group }) => {
     const category: string = groupCategories.find(cat => cat.value === group?.category)?.label ?? 'Autre'
 

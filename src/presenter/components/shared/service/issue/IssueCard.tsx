@@ -14,7 +14,6 @@ import React from 'react';
 import { IssueStep } from '../../../../../domain/entities/Issue';
 import { User } from "../../../../../domain/entities/User";
 import { GroupLink } from "../../../common/GroupLink";
-import { GroupView } from "../../../../views/viewsEntities/GroupViewEntity";
 
 type IssueCardProps = { issue: IssueView, mines?: boolean, change: (e: any) => void, update?: () => void }
 const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) => {
@@ -90,8 +89,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                                 variant="h6">
                                 Probleme :
                             </Typography>
-                            <GroupLink
-                                group={new GroupView(Service.Group, 0)} />
+                            <GroupLink group={Service.Group} />
                         </div>
                         <Icon
                             icon="arrow_circle_right"
