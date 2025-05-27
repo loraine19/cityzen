@@ -23,7 +23,7 @@ export const useAlertStore = create<alertStore>((set) => {
                 open: true,
                 alertValues: new AlertValues({
                     title: 'Cette action n\'a pas pu être effectuée',
-                    element: error?.message as string | undefined,
+                    element: error?.message as string ?? 'Une erreur est survenue, veuillez réessayer plus tard.',
                     disableConfirm: true,
                     confirmString: 'Ok',
                     handleConfirm: () => {

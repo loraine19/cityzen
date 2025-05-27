@@ -21,7 +21,7 @@ export class AlertValues {
 
     constructor(init?: Partial<AlertValues> | any) {
         this.element = init?.message || init?.element || '';
-        this.notif = init?.error || init?.error.message || init?.notif || '';
+        this.notif = init?.error || init?.error?.message || init?.notif || '';
         if (init) {
             Object.keys(init).forEach(key => {
                 if (key in this) {
