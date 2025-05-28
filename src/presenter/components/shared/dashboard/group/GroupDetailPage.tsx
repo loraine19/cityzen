@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CTAMines from '../../../common/CTA';
 import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
@@ -7,7 +7,6 @@ import { GenereMyActions, } from '../../../../views/viewsEntities/utilsService';
 import DI from '../../../../../di/ioc';
 import { Skeleton } from '../../../common/Skeleton';
 import { useAlertStore } from '../../../../../application/stores/alert.store';
-import { useEffect } from 'react';
 import GroupDetailCard from './GroupDetailCard';
 
 export default function GroupDetailPage() {
@@ -16,11 +15,9 @@ export default function GroupDetailPage() {
     const groupIdViewModelFactory = DI.resolve('groupIdViewModel');
     const { group, isLoading, error, refetch } = groupIdViewModelFactory(idS);
     const deleteGroup = async (id: number) => await DI.resolve('deleteGroupUseCase').execute(id);
-    const { setOpen, open, handleApiError } = useAlertStore(state => state);
+    const { setOpen, open } = useAlertStore(state => state);
     const handleOpen = () => setOpen(!open)
     const myActions = group && GenereMyActions(group, "groupe", deleteGroup)
-    const navigate = useNavigate();
-    useEffect(() => { if (error) handleApiError(error, () => navigate('/groupe')) }, [isLoading])
 
 
 

@@ -33,11 +33,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
     useEffect(() => {
         const fetchUsers = async () => {
             const data = await getUsers()
-            if (data.error) {
-                console.error(data.error);
-            } else {
-                setUsers([...data]);
-            }
+            if (data) setUsers([...data])
         }
         if (type === VoteTarget.POOL && users.length === 0) fetchUsers()
         formik.setFieldValue('typeS', type)

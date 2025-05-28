@@ -32,15 +32,14 @@ export default function EventCreatePage() {
         groupId: string().required("Groupe est obligatoire"),
     })
 
-    const { setAlertValues, setOpen, handleApiError } = useAlertStore(state => state)
+    const { setAlertValues, setOpen } = useAlertStore(state => state)
 
     const postFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
         const dataDTO = new EventDTO(formik.values)
         const data = await postEvent(dataDTO);
-        if (data.error) handleApiError(data?.error)
-        else {
+        if (data) {
             setOpen(false);
             navigate("/evenement/" + data.id);
         }

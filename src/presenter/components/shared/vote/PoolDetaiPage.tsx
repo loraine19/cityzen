@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Action } from '../../../../domain/entities/frontEntities';
 import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
@@ -11,7 +11,6 @@ import { Skeleton } from '../../common/Skeleton';
 import { VoteCard } from './voteCards/VoteCard';
 import { Button } from '@material-tailwind/react';
 import { Icon } from '../../common/IconComp';
-import { useAlertStore } from '../../../../application/stores/alert.store';
 import { PoolSurveyStatus } from '../../../../domain/entities/PoolSurvey';
 
 export default function PoolDetailPage() {
@@ -29,10 +28,7 @@ export default function PoolDetailPage() {
     const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
     const myActions: Action[] = pool && GenereMyActions(pool, "vote/cagnotte", deletePool)
 
-    //// ALERT STORE
-    const { handleApiError } = useAlertStore()
-    const navigate = useNavigate();
-    useEffect(() => { if (error) handleApiError(error, () => navigate('/vote/sondage')) }, [isLoading]);
+
     const [openVote, setOpenVote] = useState(false);
 
     return (<>
@@ -51,7 +47,7 @@ export default function PoolDetailPage() {
                     closeBtn />
             </header>
             <main>
-                {isLoading || !pool ?
+                {isLoading || !pool || error ?
                     <Skeleton /> :
                     <PoolDetailCard
                         pool={pool}

@@ -10,7 +10,6 @@ import { EventView } from "../../../../views/viewsEntities/eventViewEntities";
 import { Title } from "../../../common/CardTitle";
 import { EventStatus } from "../../../../../domain/entities/Event";
 import { ProgressBarBlur } from "../../../common/ProgressBar";
-import { useAlertStore } from "../../../../../application/stores/alert.store";
 
 type EventCardProps = {
     event: EventView, refetch?: () => void,
@@ -26,7 +25,6 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id)
     const actions = GenereMyActions(event, "evenement", deleteEvent);
     const haveImage = Boolean(image);
-    const { handleApiError } = useAlertStore()
 
 
     return (
@@ -110,7 +108,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         data-cy='btn-participate'
                         onClick={async () => {
                             const event = toogleParticipate && await toogleParticipate()
-                            event?.error ? handleApiError(event.error) : setEvent(event)
+                            event && setEvent(event)
                         }}>
                         <Chip
                             value={participantsMin}

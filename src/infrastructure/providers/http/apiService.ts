@@ -143,8 +143,7 @@ export class ApiService implements ApiServiceI {
 
             console.error('newError:', newError, newError.message);
             count = 0;
-            //  return Promise.reject(newError);
-            return { data: { error: newError } }
+            throw Error(newError.message || 'Une erreur est survenue');
         }
         else {
             console.error('handleResponseError count:', count, 'error:', error);
@@ -159,11 +158,9 @@ export class ApiService implements ApiServiceI {
         }
         if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
         try {
-
             const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
             console.log('refreshAccess', data, new Date().toLocaleTimeString());
-            alert('Votre session a été rafraîchie à ' + new Date().toLocaleTimeString());
-            if (!data || data.error) errorRedirect('vous n\'êtes pas connecté');
+            if (!data) errorRedirect('vous n\'êtes pas connecté');
         }
         catch (error) {
             console.error('refreshAccess error:', error);

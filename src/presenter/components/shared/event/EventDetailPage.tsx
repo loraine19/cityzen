@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 //import parse from 'html-react-parser';
 import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
@@ -9,7 +9,6 @@ import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 import { useAlertStore } from '../../../../application/stores/alert.store';
-import { useEffect } from 'react';
 import { EventStatus } from '../../../../domain/entities/Event';
 
 
@@ -25,10 +24,8 @@ export default function EventDetailPage() {
     const myActions = event && GenereMyActions(event, "evenement", deleteEvent)
 
     //// HANDLE API ERROR
-    const navigate = useNavigate()
-    const { setOpen, open, handleApiError } = useAlertStore(state => state);
+    const { setOpen, open, } = useAlertStore(state => state);
     const handleOpen = () => setOpen(!open)
-    useEffect(() => { if (error) handleApiError(error, () => navigate('/evenement')) }, [isLoading]);
 
     const buttons: Action[] = [
         {
@@ -40,7 +37,7 @@ export default function EventDetailPage() {
                 `Confirmer votre participation à ${event?.title}`,
             function: async () => {
                 const data = await event?.toogleParticipate();
-                data.error ? handleApiError(data.error) : await refetch() && handleOpen()
+                data && await refetch() && handleOpen()
             }
         }
     ];
@@ -64,7 +61,7 @@ export default function EventDetailPage() {
                         refetch={refetch} /> :
                     <Skeleton />}
             </main>
-            {(!isLoading && event) && <>
+            {(!isLoading && event && !error) && <>
                 {event?.mine && !isLoading ?
                     <CTAMines
                         actions={myActions}

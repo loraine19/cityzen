@@ -6,13 +6,14 @@ import { Like } from "../../../domain/entities/Like";
 export class PostView extends Post {
     flagged: boolean = false;
     ILike: boolean = false;
-    categoryS: string = '';
+    categoryS: string = 'error';
     isMine: boolean = false;
     shareA: string[] = [];
     toogleLike: () => Promise<PostView>;
 
     constructor(post: Post, userId: number) {
-        super(post);
+        super(post)
+        if (!post) throw new Error('Impossible de récupérer les annonces');
         this.flagged = post?.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false;
         this.ILike = post?.Likes?.find((like: Like) => like.userId === userId) ? true : false;
         this.categoryS = PostCategory[this.category as string as keyof typeof PostCategory];

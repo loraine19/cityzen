@@ -22,14 +22,13 @@ export default function ServiceCreatePage() {
         groupId: string().required("Groupe est obligatoire"),
     })
 
-    const { setOpen, setAlertValues, handleApiError } = useAlertStore(state => state)
+    const { setOpen, setAlertValues } = useAlertStore(state => state)
 
     const postFunction = async () => {
         const { ...rest } = new ServiceDTO(formik.values as ServiceDTO);
         const postData = { ...rest, userId: user.id }
         const data = await postService(postData);
-        if (data.error) handleApiError(data?.error)
-        else {
+        if (data) {
             setOpen(false);
             navigate(`/service/${data?.id}`)
         }

@@ -18,7 +18,7 @@ type groupDetailCardProps = {
 }
 export default function GroupDetailCard({ group: initGroup, mines, refetch, actions }: groupDetailCardProps) {
 
-    const { setOpen, handleApiError, setAlertValues } = useAlertStore()
+    const { setOpen, setAlertValues } = useAlertStore()
     const [group, setGroup] = useState<GroupView>(initGroup)
     const { name, categoryS, Address, createdAt, toogleMember, toogleModo } = group
     const member = group?.GroupUser?.length
@@ -40,8 +40,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
             `Vous allez rejoindre le rôle de conciliateur, vous pourrez gérer les conflits dans le groupe ${name}`,
         handleConfirm: async () => {
             const data = await toogleModo()
-            if (data.error) handleApiError(data.error)
-            else {
+            if (data) {
                 setGroup(data)
                 await refetch()
                 setOpen(false)
@@ -58,8 +57,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
             `Vous allez rejoindre le groupe ${name}, vous pourrez intervenir dans le groupe`,
         handleConfirm: async () => {
             const data = await toogleMember()
-            if (data.error) handleApiError(data.error)
-            else {
+            if (data) {
                 setGroup(data)
                 await refetch()
                 setOpen(false)

@@ -8,7 +8,6 @@ import { GenereMyActions, } from '../../../views/viewsEntities/utilsService';
 import DI from '../../../../di/ioc';
 import { Skeleton } from '../../common/Skeleton';
 import { useAlertStore } from '../../../../application/stores/alert.store';
-import { useEffect } from 'react';
 
 export default function PostDetailPage() {
     const { id } = useParams();
@@ -16,11 +15,10 @@ export default function PostDetailPage() {
     const postIdViewModelFactory = DI.resolve('postIdViewModel');
     const { post, isLoading, error } = postIdViewModelFactory(idS);
     const deletePost = async (id: number) => await DI.resolve('deletePostUseCase').execute(id);
-    const { setOpen, open, handleApiError } = useAlertStore(state => state);
+    const { setOpen, open } = useAlertStore(state => state);
     const handleOpen = () => setOpen(!open)
     const myActions = post && GenereMyActions(post, "annonce", deletePost)
     const navigate = useNavigate();
-    useEffect(() => { if (error) handleApiError(error, () => navigate('/annonce')) }, [isLoading]);
 
     //// CONTACT ACTIONS
     const ContactActions: Action[] = !post ? [] : [

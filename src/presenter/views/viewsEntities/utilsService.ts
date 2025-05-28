@@ -13,6 +13,7 @@ import { PostApi } from "../../../infrastructure/providers/http/postApi";
 import { EventView } from "./eventViewEntities";
 import { PoolSurveyView } from "./poolSurveyViewEntity";
 import { GroupView } from "./GroupViewEntity";
+import { useState } from "react";
 
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -41,13 +42,14 @@ export const formatDateForDB = (date: any) => (new Date(date).toISOString().slic
 export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | GroupView | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
-    const { setOpen, open, handleApiError } = useAlertStore(state => state)
+    const { setOpen, open } = useAlertStore(state => state)
     const navigate = useNavigate()
 
     'title' in element ? title = element.title ?? 'litige' : 'litige';
     'serviceId' in element && (id = element.serviceId);
     'targetId' in element && (id = element.targetId);
     'id' in element && (id = element.id);
+    const [notif, setNotif] = useState<string>('');
 
     const actions = [
         {
@@ -58,10 +60,13 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
             body: "Voulez-vous vraiment supprimer " + title + " ?",
             function: async () => {
                 const data = await deleteRoute(id);
-                if (data.error) handleApiError(data?.error)
-                setOpen(!open);
-                (navigate(`/${type}`))
+                if (!data) setNotif('Erreur lors de la suppression');
+                else {
+                    setOpen(!open);
+                    (navigate(`/${type}`))
+                }
             },
+            notif: notif,
         },
         {
             iconImage: 'edit',

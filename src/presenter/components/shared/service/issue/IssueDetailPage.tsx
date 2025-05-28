@@ -14,7 +14,6 @@ import { Input, Select, Typography, Option } from '@material-tailwind/react';
 import { IssueStep } from '../../../../../domain/entities/Issue';
 import { User } from '../../../../../domain/entities/User';
 import { ProfileDiv } from '../../../common/ProfilDiv';
-import { useAlertStore } from '../../../../../application/stores/alert.store';
 
 export default function IssueDetailPage() {
     const { id } = useParams()
@@ -30,15 +29,13 @@ export default function IssueDetailPage() {
     const getModos = async (groupId: number) => await DI.resolve('getUsersModosUseCase').execute(groupId)
     const [modos, setModos] = useState<User[]>([])
     const [modoOnId, setModoOnId] = useState<number>(0)
-    const { handleApiError } = useAlertStore(state => state);
 
     useEffect(() => {
         const groupId = issue?.Service?.Group?.id
         if (modos.length === 0 && groupId) {
             const fetchModos = async () => {
                 const data = await getModos(groupId)
-                console.log('data modos', data)
-                data.error ? handleApiError(data.error) : setModos([...data])
+                data && setModos([...data])
             }
             fetchModos()
         }
@@ -61,7 +58,7 @@ export default function IssueDetailPage() {
         color: 'red',
         function: async () => {
             const data = await deleteIssue(issue.serviceId);
-            data.error ? handleApiError(data.error) : navigate('/service?search=myservices')
+            data && navigate('/service?search=myservices')
         }
     }]
 
@@ -135,7 +132,7 @@ export default function IssueDetailPage() {
             function: async () => {
                 const update = issue.ImModo ? IssueStep.STEP_1 : IssueStep.STEP_2
                 const data = await respIssue(issue.serviceId, update)
-                data.error && handleApiError(data.error)
+                data && navigate('/service?search=myservices')
             }
         },
         {
@@ -144,7 +141,7 @@ export default function IssueDetailPage() {
             body: pourcentInput,
             function: async () => {
                 const data = await finishIssue(issue.serviceId, pourcent.IModo)
-                data.error ? handleApiError(data.error) : navigate('/service?search=myservices')
+                data && navigate('/service?search=myservices')
             }
         }]
 

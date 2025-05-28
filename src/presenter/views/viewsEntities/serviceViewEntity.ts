@@ -18,6 +18,7 @@ export class ServiceView extends Service {
     statusValue: number
     constructor(service: Service, user: User) {
         super(service);
+        if (!service) throw new Error('Impossible de récupérer le service');
         this.IResp = service?.userIdResp ? service.userIdResp === user.id : false;
         this.flagged = service?.Flags ? service?.Flags?.some((flag: Flag) => flag.userId === user.id) : false;
         this.mine = service?.userId === user?.id;

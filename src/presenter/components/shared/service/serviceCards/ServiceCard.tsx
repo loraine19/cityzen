@@ -11,7 +11,6 @@ import { GenereMyActions, getEnumVal, isLate } from "../../../../views/viewsEnti
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { Title } from "../../../common/CardTitle";
-import { useAlertStore } from "../../../../../application/stores/alert.store";
 
 
 type ServiceProps = { service: ServiceView, mines?: boolean, change: (e: React.MouseEvent<HTMLButtonElement>) => void, update?: () => void }
@@ -28,7 +27,6 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
     const isLateValue = isLate(createdAt, 15) && statusSInt < 3
     const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
     const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
-    const { handleApiError } = useAlertStore(state => state);
 
     const myActions = [
         ...GenereMyActions(service, "service", deleteService, isLateValue),
@@ -52,7 +50,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
             body: `annuler ma réponse à ${title}`,
             function: async () => {
                 const data = await updateServiceStep(id, ServiceUpdate.CANCEL_RESP);
-                data.error ? handleApiError(data.error) : update && update()
+                (data && update) && update()
             },
         },
         {

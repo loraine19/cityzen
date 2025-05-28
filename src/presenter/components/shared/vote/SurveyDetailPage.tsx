@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import CTAMines from '../../common/CTA';
 import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
@@ -11,7 +11,6 @@ import DI from '../../../../di/ioc';
 import { VoteCard } from './voteCards/VoteCard';
 import { Button } from '@material-tailwind/react';
 import { Icon } from '../../common/IconComp';
-import { useAlertStore } from '../../../../application/stores/alert.store';
 import { PoolSurveyStatus } from '../../../../domain/entities/PoolSurvey';
 
 
@@ -30,11 +29,7 @@ export default function SurveyDetailPage() {
     //// FUNCTIONS
     const myActions: Action[] = GenereMyActions(survey, "vote/sondage", deleteSurvey)
     const [openVote, setOpenVote] = useState(false);
-    const navigate = useNavigate();
 
-    //// HANDLE API ERROR
-    const { handleApiError } = useAlertStore()
-    useEffect(() => { (error) && handleApiError(error, () => navigate('/vote/sondage')) }, [isLoading]);
 
     return (
         <>
@@ -52,7 +47,7 @@ export default function SurveyDetailPage() {
                         closeBtn />
                 </header>
                 <main>
-                    {isLoading || !survey ?
+                    {isLoading || !survey || error ?
                         <Skeleton
                             className='!rounded-2xl flex pt-8 pb-1 h-full' /> :
                         <SurveyDetailCard

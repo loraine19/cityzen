@@ -20,7 +20,7 @@ export default function ServiceEditPage() {
     const { service, isLoading, error, refetch } = serviceIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<ServiceView>({} as ServiceView);
     const updateService = async (id: number, data: ServiceDTO) => await DI.resolve('updateServiceUseCase').execute(id, data)
-    const { handleApiError, setAlertValues, setOpen } = useAlertStore(state => state)
+    const { setAlertValues, setOpen } = useAlertStore(state => state)
     const navigate = useNavigate();
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -29,7 +29,7 @@ export default function ServiceEditPage() {
     })
 
     useEffect(() => {
-        if (!isLoading && service && service.userId !== user.id) handleApiError({ message: "Vous n'avez pas le droit de modifier ce service" }, () => navigate('/service'))
+        if (!isLoading && service && service.userId !== user.id) throw new Error("Vous n'avez pas le droit de modifier ce service");
         setInitialValues(service)
     }, [isLoading]);
 
@@ -61,8 +61,7 @@ export default function ServiceEditPage() {
     const updateFunction = async () => {
         const updateData = new ServiceDTO(formik.values as ServiceDTO)
         const data = await updateService(service.id, updateData)
-        if (data.error) handleApiError(data?.error)
-        else { await refetch(); setOpen(false); navigate(`/service/${data?.id}`) }
+        if (data) { await refetch(); setOpen(false); navigate(`/service/${data?.id}`) }
     }
 
 

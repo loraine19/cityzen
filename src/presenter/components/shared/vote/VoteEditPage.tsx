@@ -23,7 +23,7 @@ export default function VoteEditPage() {
 
     //// STORES
     const user = useUserStore((state) => state.user)
-    const { setOpen, setAlertValues, handleApiError } = useAlertStore()
+    const { setOpen, setAlertValues } = useAlertStore()
 
     //// VIEW MODEL SURVEY
     const surveyIdViewModelFactory = DI.resolve('surveyIdViewModel');
@@ -55,21 +55,19 @@ export default function VoteEditPage() {
     //// HANDLE ERROR
     useEffect(() => {
         if (survey && pool) target === "sondage" ? setInitialValues(survey) : setInitialValues(pool)
-        if (initialValues?.userId !== user.id) handleApiError({ message: "Vous n'avez pas le droit de modifier ce vote" }, () => navigate('/vote'))
+        if (initialValues?.userId !== user.id) throw new Error("Vous n'avez pas le droit de modifier ce sondage/cagnotte");
     }, [isLoading, isLoadingPool])
 
     const updateFunction = async () => {
         if (target === "sondage") {
             const updateData = new SurveyDTO(formik.values as SurveyDTO)
             const data = await updateSurvey(survey.id, updateData)
-            if (data.error) handleApiError(data?.error)
-            else { await refetch(); setOpen(false); navigate(`/sondage/${data?.id}`) }
+            if (data) { await refetch(); setOpen(false); navigate(`/sondage/${data?.id}`) }
         }
         else if (target === "cagnotte") {
             const updateData = new PoolDTO(formik.values as PoolDTO)
             const data = await updatePool(pool.id, updateData)
-            if (data.error) handleApiError(data?.error)
-            else { refetchPool(); setOpen(false); navigate(`/sondage/${data?.id}`) }
+            if (data) { await refetchPool(); setOpen(false); navigate(`/sondage/${data?.id}`) }
         }
     }
 

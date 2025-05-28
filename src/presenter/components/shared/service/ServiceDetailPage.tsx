@@ -10,7 +10,6 @@ import { Skeleton } from '../../common/Skeleton';
 import { generateContact, GenereMyActions, getEnumVal, isLate } from '../../../views/viewsEntities/utilsService';
 import { ContactDiv } from '../../common/ContactDiv';
 import { User } from '../../../../domain/entities/User';
-import { useAlertStore } from '../../../../application/stores/alert.store';
 
 export default function ServiceDetailPage() {
     const { id } = useParams();
@@ -19,7 +18,6 @@ export default function ServiceDetailPage() {
     const idS = id ? parseInt(id) : 0;
     const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const { service, isLoading, error, refetch } = serviceIdViewModelFactory(idS);
-    const { handleApiError } = useAlertStore(state => state);
 
     const deleteService = async (id: number) => await DI.resolve('deleteServiceUseCase').execute(id);
     const respService = async (id: number) => await DI.resolve('respServiceUseCase').execute(id);
@@ -78,7 +76,7 @@ export default function ServiceDetailPage() {
                         body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone} , ${service?.points} points seront débités de votre compte, et crédités à ${service.UserResp?.Profile.firstName} après validation de la fin du service`,
                         function: async () => {
                             const data = await validRespService(service.id);
-                            data.error ? handleApiError(data.error) : await refetch()
+                            data && await refetch()
                         },
                     },
                     {

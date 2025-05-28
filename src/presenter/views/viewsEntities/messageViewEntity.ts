@@ -11,6 +11,7 @@ export class MessageView extends Message {
     isDeleted: boolean = false;
     constructor(message: Message, userId: number) {
         super(message);
+        if (!message) throw new Error('Impossible de récupérer le message');
         this.IWrite = userId === message.userId
         this.isWith = userId === message.userId ? message.UserRec : message.User
 

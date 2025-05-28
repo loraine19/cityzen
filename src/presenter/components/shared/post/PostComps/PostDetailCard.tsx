@@ -9,13 +9,11 @@ import { PostView } from "../../../../views/viewsEntities/postViewEntities";
 import { Title } from "../../../common/CardTitle";
 import { ProfileDiv } from "../../../common/ProfilDiv";
 import { User } from "../../../../../domain/entities/User";
-import { useAlertStore } from "../../../../../application/stores/alert.store";
 
 export default function PostDetailCard(props: { post: PostView, mines?: boolean, change: (e: any) => void }) {
     const [post, setPost] = useState<PostView>(props.post)
     const { id, title, description, image, categoryS, createdAt, Likes, toogleLike } = post
     const { user } = useUserStore()
-    const { handleApiError } = useAlertStore()
     const userId: number = user.id
     const haveImage: boolean = post?.image ? true : false
     const Author: User = post?.User
@@ -67,7 +65,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                         <button
                             onClick={async () => {
                                 const data = await toogleLike()
-                                data.error ? handleApiError(data.error) : setPost(data)
+                                data && setPost(data)
                             }}>
                             <Chip
                                 value={`${Likes?.length}`}

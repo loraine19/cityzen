@@ -5,7 +5,8 @@ export class FlagView extends Flag {
     reasonS: string = '';
 
     constructor(flag: Flag) {
-        super(flag);
+        super(flag)
+        if (!flag) throw new Error('Impossible de récupérer le flag');
         this.targetS = FlagTarget[this.target as unknown as keyof typeof FlagTarget]
         this.reasonS = FlagReason[this.reason as unknown as keyof typeof FlagReason]
     }

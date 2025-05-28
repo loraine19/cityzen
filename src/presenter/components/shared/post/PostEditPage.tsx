@@ -20,7 +20,7 @@ export default function PostEditPage() {
     const postIdViewModelFactory = DI.resolve('postIdViewModel');
     const { post, error, isLoading, refetch } = postIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<PostView>({} as PostView);
-    const { setOpen, setAlertValues, handleApiError } = useAlertStore()
+    const { setOpen, setAlertValues } = useAlertStore()
 
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -30,7 +30,7 @@ export default function PostEditPage() {
     })
 
     useEffect(() => {
-        if (!isLoading && post && !post?.isMine) handleApiError({ message: "Vous n'avez pas le droit de modifier cette annonce" }, () => navigate('/annonce'))
+        if (!isLoading && post && !post?.isMine) throw new Error("Vous n'avez pas le droit de modifier ce post");
         post && setInitialValues(post)
     }, [isLoading]);
 
@@ -40,8 +40,7 @@ export default function PostEditPage() {
         const share = shareArray.sort().join('_').toUpperCase() as unknown as Share;
         const updateData = new PostDTO({ ...formik.values as PostDTO, share });
         const data = await updatePost(post.id, updateData);
-        if (data.error) handleApiError(data?.error)
-        else {
+        if (data) {
             setOpen(false);
             await refetch();
             navigate(`/annonce/${data?.id}`)

@@ -52,7 +52,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
             notif: notifRemove,
             handleConfirm: async () => {
                 const data = await removeMessage(id);
-                if (data.error) setNotifRemove(data.error)
+                if (!data) setNotifRemove('Erreur lors de la suppression du message')
                 else {
                     messages[index].message = data.message;
                     refetch && refetch();

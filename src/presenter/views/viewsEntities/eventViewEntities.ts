@@ -20,7 +20,8 @@ export class EventView extends Event {
     image: string = '';
 
     constructor(event: Event, userId: number) {
-        super(event);
+        super(event)
+        if (!event) throw new Error('Impossible de récupérer l\'événement');
         this.isPast = new Date(event?.end) < new Date(Date.now());
         this.image = (typeof event?.image === 'string' && event?.image) ? event.image : this.getDefaultImage(event?.category as EventCategory);
         this.days = this.getDays(event);

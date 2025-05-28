@@ -61,8 +61,6 @@ export const eventIdViewModel = () => {
       queryFn: async () => await getEventById.execute(id),
     })
 
-
-    data?.error ? error = data.error : error = null
     const event = (!userLoading && !isLoading && !error) ? new EventView(data, userId) : {} as EventView
     return { event, isLoading, error, refetch }
   }

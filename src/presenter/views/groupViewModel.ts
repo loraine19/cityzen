@@ -62,7 +62,6 @@ export const groupIdViewModel = () => {
     })
 
 
-    data?.error ? error = data.error : error = null
     const group = (!userLoading && !isLoading && !error) ? new GroupView(data, userId) : {} as GroupView
     return { group, isLoading, error, refetch }
   }

@@ -25,8 +25,8 @@ export const postViewModel = () => {
 
     const count = isLoading || error ? 0 : (data?.pages[data?.pages.length - 1].count)
     const userId = user?.id || 0
-    const flat = error ? [] : data?.pages.flat().map(page => page.posts).flat()
-    const posts = userLoading ? [] : flat?.map(post => !post?.error && new PostView(post, userId))
+    const flat = error || isLoading || !data ? [] : data?.pages.flat().map(page => page.posts).flat()
+    const posts = userLoading || isLoading || !flat ? [] : flat?.map(post => !post?.error && new PostView(post, userId))
 
 
     return {
@@ -63,9 +63,7 @@ export const postIdViewModel = () => {
       queryFn: async () => await getPostById.execute(id),
     })
 
-
-    data?.error ? error = data.error : error = null
-    const post = (!userLoading && !isLoading && data) ? new PostView(data, userId) : {} as PostView
+    const post = (!error && !userLoading && !isLoading && data) ? new PostView(data, userId) : {} as PostView
     return { post, isLoading, error, refetch }
   }
 

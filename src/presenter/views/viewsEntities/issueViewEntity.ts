@@ -14,6 +14,7 @@ export class IssueView extends Issue {
 
     constructor(issue: Issue, userId: number) {
         super(issue);
+        if (!issue) throw new Error('Impossible de récupérer l\'issue');
         this.mine = issue?.userId === userId
         this.ImModo = this.userIdModo === userId
         this.ImModoOn = this.userIdModoOn === userId
