@@ -9,5 +9,6 @@ export abstract class MessageRepositoryBase {
     abstract deleteMessage(id: number): Promise<Message>;
     abstract updateMessage(message: Message): Promise<Message>;
     abstract readConversation(withId: number): Promise<Message[]>
+    abstract removeMessage(id: number): Promise<Message>;
 
 }

@@ -82,3 +82,13 @@ export class ReadConversationUseCase {
     }
 }
 
+export class RemoveMessageUseCase {
+    private messageRepository: MessageRepositoryBase;
+
+    constructor({ messageRepository }: { messageRepository: MessageRepositoryBase }) {
+        this.messageRepository = messageRepository;
+    }
+    public async execute(id: number): Promise<Message> {
+        return this.messageRepository.removeMessage(id);
+    }
+}

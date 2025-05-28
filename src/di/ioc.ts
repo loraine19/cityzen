@@ -56,7 +56,7 @@ import { VoteApi } from '../infrastructure/providers/http/voteApi';
 import { GetIssuesUseCase, GetIssueByIdUseCase, PostIssueUseCase, UpdateIssueUseCase, DeleteIssueUseCase, FinishIssueUseCase } from '../application/useCases/issue.useCase';
 import { issueViewModel, IssueIdViewModel } from '../presenter/views/issueViewModel';
 import { RespIssueUseCase } from '../application/useCases/issue.useCase';
-import { DeleteMessageUseCase, GetConversationUseCase, GetMessagesUseCase, ReadConversationUseCase, ReadMessageUseCase, SendMessageUseCase, UpdateMessageUseCase } from '../application/useCases/message.usecase';
+import { DeleteMessageUseCase, GetConversationUseCase, GetMessagesUseCase, ReadConversationUseCase, ReadMessageUseCase, RemoveMessageUseCase, SendMessageUseCase, UpdateMessageUseCase } from '../application/useCases/message.usecase';
 import { MessageRepositoryImpl } from '../infrastructure/repositoriesImpl/MessageRespositoryImpl';
 import { MessageApi } from '../infrastructure/providers/http/messageApi';
 import { conversationsViewModel, conversationViewModel } from '../presenter/views/messageViewModel';
@@ -142,6 +142,7 @@ container.register({
     conversationViewModel: asFunction(conversationViewModel),
     conversationsViewModel: asFunction(conversationsViewModel),
     readConversationUseCase: asClass(ReadConversationUseCase),
+    removeMessageUseCase: asClass(RemoveMessageUseCase),
 
     ////EVENTS
     getEventsUseCase: asClass(GetEventsUseCase),

@@ -41,4 +41,8 @@ export class MessageRepositoryImpl implements MessageRepositoryBase {
         return this.messageData.readConversation(withId);
     }
 
+    public async removeMessage(id: number): Promise<Message> {
+        return this.messageData.removeMessage(id);
+    }
+
 }

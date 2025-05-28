@@ -41,9 +41,9 @@ export default function PostDetailPage() {
         {
             iconImage: 'forum',
             icon: 'Chat',
-            title: "Envoyer un message à " + post?.User?.Profile?.firstName,
-            body: `<a href="/chat?with=${post?.User?.Profile?.userId ?? 0}" class="text-orange-500 font-medium underline">Envoyer un message à ${post?.User?.Profile?.firstName}</a>`,
-            function: () => { navigate(`/chat?with=${post?.User?.Profile?.userId ?? 0}`); handleOpen(); }
+            title: "Envoyer le message suivant à " + post?.User?.Profile?.firstName,
+            body: ` Bonjour ${post?.User?.Profile?.firstName}, je suis intéressé par votre annonce "${post?.title}`,
+            function: () => { navigate(`/chat?with=${post?.User?.Profile?.userId ?? 0}&text=${ContactActions[2].body}`); handleOpen(); }
         },
     ]
 

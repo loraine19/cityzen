@@ -27,5 +27,10 @@ export class MessageApi {
     async readConversation(withId: number): Promise<Message[]> {
         return this.api.patch(`${this.dataType}/readConverstaion/${withId}`)
     }
+
+    async removeMessage(id: number): Promise<Message> {
+        console.log(`Removing message with id: ${id}`);
+        return this.api.put(`${this.dataType}/remove/${id}`)
+    }
 }
 

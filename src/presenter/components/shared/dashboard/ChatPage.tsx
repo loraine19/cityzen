@@ -13,18 +13,24 @@ import { useNotificationStore } from '../../../../application/stores/notificatio
 
 
 export default function ChatPage() {
+
+    //// PARAMS
     const [Params, setParams] = useSearchParams();
-    const params = { with: Params.get("with") }
+    const params = { with: Params.get("with"), text: Params.get("text") }
     const [userIdRec, setUserIdRec] = useState(parseInt(params.with || '0'));
+
     const [open, setOpen] = useState(params.with ? true : false);
     const [userRec, setUserRec] = useState<User>({} as User);
+
+    //// VIEW MODEL
     const { conversations, countConv, isLoadingConv, refetchConv } = DI.resolve('conversationsViewModel')()
     const [notif, setNotif] = useState<string>('');
     const conversationViewModelFactory = DI.resolve('conversationViewModel')
     const { messages, isLoading, refetch, fetchNextPage, hasNextPage } = conversationViewModelFactory(userIdRec)
+    const getUserById = async (id: number) => await DI.resolve('getUserByIdUseCase').execute(id);
+
     const nameSpace = 'chat';
     const [online, setOnline] = useState<number[]>([]);
-    const getUserById = async (id: number) => await DI.resolve('getUserByIdUseCase').execute(id);
     const [newConv, setNewConv] = useState<boolean>(false);
     const [connected, setConnected] = useState<boolean>(false);
     const socketService = DI.resolve('socketService');
@@ -80,7 +86,7 @@ export default function ChatPage() {
     }
 
 
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState(params?.text ?? '');
     const handleSendMessage = async () => {
         !connected && connexion()
         if (message.trim() !== '') {
@@ -89,8 +95,10 @@ export default function ChatPage() {
             if (ret) {
                 await refetch();
                 setMessage('')
+                setParams({ with: userIdRec.toString(), text: '' });
             }
             else {
+                setMessage(message)
                 setConnected(false);
                 setNotif('Erreur de connexion à la conversation');
             }
@@ -108,7 +116,7 @@ export default function ChatPage() {
                 <SubHeader
                     qty={open ? messages?.length : countConv}
                     type={open ? 'messages' : 'conversation'}
-                    place={'avec ' + (userRec?.Profile?.firstName ?? 'des membres')}
+                    place={' avec ' + (userRec?.Profile?.firstName ?? 'des membres')}
                     closeBtn
                     link='/' />
                 {notif}
@@ -130,7 +138,7 @@ export default function ChatPage() {
                                     <List className=' flex-1 '>
                                         {conversations &&
                                             conversations.map((message: MessageView, index: number) =>
-                                                <div>
+                                                <div key={index + 'div'}>
                                                     <ListItem
                                                         key={index}
                                                         className={` p-1 ${(userIdRec === message?.isWith.id) ? '!bg-gray-200 border-white border-8 shadow-md hover:pointer-events-none -ml-2' : ''}`}
@@ -189,6 +197,7 @@ export default function ChatPage() {
                                 {open &&
                                     <div className='relative !w-[calc(100%-4.5rem)]'>
                                         <Chat
+                                            refetch={refetch}
                                             setNewConv={setNewConv}
                                             newConv={newConv}
                                             isLoading={isLoading}

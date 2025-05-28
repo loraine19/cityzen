@@ -20,6 +20,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const [notif, setNotif] = useState<string | null>(null);
     const [connected, setConnected] = useState(false);
     const socketService = DI.resolve('socketService');
+
     const { setConnectedUsers } = connectedUsersStore();
     const { setUnReadMsgNotif, setUnReadNotMessages, setUnReadNotif } = useNotificationStore();
 
@@ -59,11 +60,13 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
 
         setUnReadMsgNotif(messages?.count)
         setUnReadNotMessages(count)
-        return () => {
-            console.warn('unmounted NOTIF')
-            socketService.disconnect(nameSpace);
-        }
+        // return () => {
+        //     console.warn('unmounted NOTIF')
+        //     socketService.disconnect(nameSpace);
+        // }
     }, [])
+
+
 
 
     //// HANDLE SCROLL

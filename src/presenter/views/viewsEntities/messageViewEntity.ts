@@ -8,12 +8,14 @@ export class MessageView extends Message {
     IWrite: boolean;
     formatedDate: string = ''
     isWith: User = {} as User
+    isDeleted: boolean = false;
     constructor(message: Message, userId: number) {
         super(message);
         this.IWrite = userId === message.userId
         this.isWith = userId === message.userId ? message.UserRec : message.User
 
         this.formatedDate = this.formatDate(message.createdAt)
+        this.isDeleted = message.message === 'Ce message a été supprimé'
     }
 
 

@@ -11,7 +11,7 @@ export const notifViewModel = () => {
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['notifs', filter],
-        staleTime: 6000,
+        staleTime: 60000,
         refetchOnWindowFocus: true,
         queryFn: async ({ pageParam = 1 }) => await getNotifs.execute(pageParam, filter) || [],
         initialPageParam: 1,
