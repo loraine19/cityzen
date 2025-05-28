@@ -32,8 +32,8 @@ export class ServiceView extends Service {
     private isLateCalc = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000)) ? true : false
 
     private GetPoints = (service: Service, user?: Profile): number[] => {
-        const userResp = service?.UserResp ? service.UserResp?.Profile : null
-        const userP = user ? user : service.User?.Profile
+        const userResp = service?.UserResp?.Profile ?? null
+        const userP = user ?? service?.User?.Profile
         const hard = parseInt(HardLevel[service?.hard as unknown as keyof typeof HardLevel]) || parseInt(HardLevel.LEVEL_0)
         const skill = parseInt(SkillLevel[service?.skill as unknown as keyof typeof SkillLevel]) || parseInt(SkillLevel.LEVEL_0)
         const userPoints = parseInt(AssistanceLevel[userP.assistance as keyof typeof AssistanceLevel]) || 0

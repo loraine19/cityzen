@@ -193,7 +193,7 @@ export default function ServicesPage() {
                 ref={divRef}
                 onScroll={() => handleScroll()}
                 className="Grid">
-                {isLoading || error ?
+                {isLoading || error || !services ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <SkeletonGrid
                             key={index}
