@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 import { AuthService } from "../../services/authService";
-import { count } from "console";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
 
@@ -90,7 +89,8 @@ export class ApiService implements ApiServiceI {
 
     private handleResponseError = async (error: any) => {
         let count = this.count++;
-        if (count > 2) {
+        console.error('handleResponseError count:', count, 'error:', error);
+        if (count < 2) {
             console.error('complete error:', error);
             let newError = new ApiError(500, 'Une erreur est survenue');
             const originalRequest = error.config || {};
@@ -140,15 +140,9 @@ export class ApiService implements ApiServiceI {
                     newError = new ServerError();
                     break;
             }
-
-            console.error('newError:', newError, newError.message);
             count = 0;
             throw Error(newError.message || 'Une erreur est survenue');
         }
-        else {
-            console.error('handleResponseError count:', count, 'error:', error);
-            return { data: { error: new ApiError(500, 'trop de requêtes') } }
-        };
     };
 
     refreshAccess = async (): Promise<boolean> => {
@@ -164,7 +158,7 @@ export class ApiService implements ApiServiceI {
         }
         catch (error) {
             console.error('refreshAccess error:', error);
-            //   cerrorRedirect('Merci de vous re-identifier');
+            errorRedirect('Merci de vous re-identifier' + error);
             return false;
         }
         return true

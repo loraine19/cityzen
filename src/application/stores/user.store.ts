@@ -21,12 +21,14 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
     persist((set) => {
         const fetchUser = async () => {
             if (!window.location.pathname.includes('/sign')) {
-                const user = await DI.resolve('getUserMeUseCase').execute() as User;
-                if (!user) { window.location.replace('/signin') };
-                if (!user.Profile) { window.location.replace('/profile/create') };
-                set({ user: user });
-                set({ profile: new ProfileView(user.Profile) });
-                set({ isLoggedIn: user ? true : false });
+                const userUpdated = await DI.resolve('getUserMeUseCase').execute() as User;
+                const loggedIn = userUpdated ? true : false;
+                console.log('fetchUser', userUpdated);
+                if (!userUpdated) { window.location.replace('/signin') };
+                //  if (!userUpdated?.Profile) { window.location.replace('/profile/create') };
+                set({ user: userUpdated });
+                set({ profile: new ProfileView(userUpdated.Profile) });
+                set({ isLoggedIn: loggedIn });
             }
         }
 

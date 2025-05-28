@@ -79,10 +79,7 @@ export default function MyInfosPage() {
 
 
 
-    useEffect(() => {
-        if (address) formik.values.Address = address
-        // else navigate("/profile/create")
-    }, [address])
+    useEffect(() => { if (address) formik.values.Address = address }, [address])
 
     return (
         <div className="Body gray flex">

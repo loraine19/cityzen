@@ -23,7 +23,8 @@ export default function DashboardPage() {
     const { user, fetchUser, setIsLoggedIn } = useUserStore((state) => state);
     const modo = user?.GroupUser?.map(g => g.role).includes(Role.MODO) || false;
     useEffect(() => {
-        !user && setIsLoggedIn(false); !user.Profile && fetchUser()
+        !user && setIsLoggedIn(false);
+        !user.Profile && fetchUser()
     }, [user])
     const navigate = useNavigate();
 
