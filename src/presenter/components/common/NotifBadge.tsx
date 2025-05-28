@@ -174,7 +174,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         fill bg
                         size="3xl"
                         title={list.count ? "voir la liste" : "aucune notification"}
-                        style=" rounded-full z-40 relative  !w-[3rem] !h-[3rem]" />
+                        style=" rounded-full z-40 relative  !w-[2.8rem] !h-[2.8rem]" />
                 </div>)
 
             }

@@ -26,12 +26,13 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
     const [title, setTitle] = useState<string>(props.title?.length > maxLength ? props.title.slice(0, maxLength - 3) + '...' + (parse('&nbsp;').toString()).repeat(props.title?.length - maxLength) : props.title)
     return (
         <div className="min-h-max">
-            <div className="flex items-center w-full  justify-between  gap-2">
+            <div className="flex items-center w-full justify-between gap-2">
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
                     <Typography
                         onScroll={() => { setTitle(props.title) }}
-                        id={props.title} variant="h6"
-                        className="w-full flex whitespace-nowrap overflow-x-auto "
+                        id={props.title}
+                        variant="h6"
+                        className="w-full flex whitespace-nowrap overflow-x-auto pt-1"
                         title={props.title}>
                         {title}
                     </Typography>

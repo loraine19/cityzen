@@ -203,7 +203,7 @@ export default function ChatPage() {
                                         <Icon
                                             style='absolute top-2 right-4'
                                             color='red'
-                                            icon='cancel'
+                                            icon='close'
                                             title='fermer'
                                             onClick={() => {
                                                 setParams({ with: '0' })

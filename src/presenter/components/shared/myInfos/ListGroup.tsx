@@ -19,7 +19,7 @@ type ListGroupProps = {
 export const ListGroup = ({ groups }: ListGroupProps) => {
   const navigate = useNavigate();
   const haveAGroup: GroupView[] = groups.filter((group: GroupView) => group.ImIn || group.ImModo)
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <div
@@ -54,7 +54,7 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
             </div>
           </div>
         </MenuHandler>
-        <MenuList className="w-respLarge border-[1px] !-mt-3 bg-transparent !-ml-6 shadow-none border-none ">
+        <MenuList className="w-respLarge border-[1px] !-mt-3  bg-transparent !-ml-6 shadow-none border-none ">
           <div className="bg-white divide-y-[1px] p-2 shadow-lg rounded-lg mx-2 border-[1px] border-blue-gray-50">
             {groups.map((group: GroupView) =>
               <ListItem

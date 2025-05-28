@@ -20,7 +20,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
 
     const { setOpen, handleApiError, setAlertValues } = useAlertStore()
     const [group, setGroup] = useState<GroupView>(initGroup)
-    const { id, name, categoryS, Address, createdAt, toogleMember, toogleModo } = group
+    const { name, categoryS, Address, createdAt, toogleMember, toogleModo } = group
     const member = group?.GroupUser?.length
     const modo = group?.GroupUser?.filter(gu => gu.role === 'MODO').length
 
@@ -117,7 +117,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                                 </div>
                             ))}
                         </div>
-                        <div className='flex justify-center gap-3 p-2.5'>
+                        <div className='flex justify-center gap-3 py-1.5'>
                             {infos.map((_, index) => (
                                 <div
                                     title={`Voir ${infos[index].label}`}
@@ -193,12 +193,6 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                                         title={group?.ImIn ? "Je suis membre" : "Je ne suis pas membre"} />}
                             />
                         </button>
-                        <Icon
-                            icon="arrow_circle_right"
-                            link={`/groupe/${id}`}
-                            title={`voir les details de ${name}`}
-                            size="4xl"
-                            fill />
                     </div>
                 </CardFooter>
             </Card>
