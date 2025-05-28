@@ -11,6 +11,7 @@ import { useAlertStore } from '../../../../application/stores/alert.store';
 import { SurveyCard } from './voteCards/SurveyCard';
 import { User } from '../../../../domain/entities/User';
 import { PoolCard } from './voteCards/PoolCard';
+import { TextLength } from '../../../../domain/entities/utilsEntity';
 
 export default function VoteCreatePage() {
     const [initialValues] = useState<PoolSurveyView>({} as PoolSurveyView);
@@ -24,7 +25,7 @@ export default function VoteCreatePage() {
         typeS: string().required("Type est obligatoire"),
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
-        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres").max(TextLength.MAX_LONGTEXT, "le texte est trop long"),
         groupId: string().required("Groupe est obligatoire"),
     })
 

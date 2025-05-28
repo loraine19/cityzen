@@ -14,7 +14,6 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
     const Service = service ? service : issue.Service
     const [imgBlob, setImgBlob] = useState<string>(formik?.values.image ?? issue.image)
     const start = new Date(Service?.createdAt).toLocaleDateString('fr-FR')
-    console.log(modos)
 
     return (
         <>

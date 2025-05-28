@@ -10,7 +10,7 @@ export enum EventCategory {
     CATEGORY_1 = 'sport',
     CATEGORY_2 = 'social',
     CATEGORY_3 = 'culturelle',
-    CATEGORY_4 = 'blob',
+    CATEGORY_4 = 'musique',
     CATEGORY_5 = 'autre',
 }
 

@@ -48,7 +48,7 @@ export default function SignUpPage() {
 
 
     return (
-        <div className="Body gray">
+        <div className="Body gray pb-8">
             <AuthHeader />
             <main className='items-center gap-4'>
                 <AuthForm
@@ -65,7 +65,7 @@ export default function SignUpPage() {
                 />
 
             </main>
-            <footer className="flex flex-col items-center gap-2 py-2 mb-4">
+            <footer className="flex flex-col items-center gap-2 py-4 mt-5">
                 <Typography
                     variant="small"
                     className=" flex justify-center">

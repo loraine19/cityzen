@@ -38,10 +38,10 @@ export enum HardLevel {
 }
 
 export enum ServiceCategory {
-    CATEGORY_1 = 'bricolage',
+    CATEGORY_1 = 'bricolage et entretiens',
     CATEGORY_2 = 'cours',
     CATEGORY_3 = 'animaux',
-    CATEGORY_4 = 'blob',
+    CATEGORY_4 = 'enfants',
     CATEGORY_5 = 'autre',
 }
 

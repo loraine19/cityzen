@@ -40,7 +40,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
 
     return (
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
-            <main className='relative flex flew-1 pt-6 -mt-4'>
+            <main className='relative flex flex-1 pt-6 -mt-4'>
+
                 <Card className="w-respLarge h-full justify-between ">
                     <CardHeader
                         className="!bg-transparent shadow-none flex justify-center items-end"

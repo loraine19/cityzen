@@ -8,6 +8,7 @@ import { PostFormCard } from './PostComps/PostFormCard';
 import { PostDTO } from '../../../../infrastructure/DTOs/PostDTO';
 import { PostView } from '../../../views/viewsEntities/postViewEntities';
 import DI from '../../../../di/ioc';
+import { TextLength } from '../../../../domain/entities/utilsEntity';
 
 
 export default function PostCreatePage() {
@@ -17,7 +18,7 @@ export default function PostCreatePage() {
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
-        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres").max(TextLength.MAX_LONGTEXT, "le texte est trop long"),
         shareA: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
         groupId: string().required("Groupe est obligatoire"),
     })

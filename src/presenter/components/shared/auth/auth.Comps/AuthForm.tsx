@@ -47,8 +47,21 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
 
     return (
-        <div className='flex justify-center items-center h-full w-resp pt-6'>
-            <Card className=" flex FixCardNoImage !gap-0 ">
+        <div className='flex justify-center items-center h-full w-full gap-8 pt-6'>
+            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 !bg-[url('image/def.jpeg')] bg-cover relative bg-center "
+            >
+                <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
+                <Typography
+                    color="white"
+                    className="py-6 px-8 !leading-[1] text-[2.5rem] font-bold !text-center font-comfortaa relative z-10"
+                    style={{
+                        textShadow: "0px 1px 4px #000000"
+                    }}
+                >
+                    Connecter vous à votre Quartier
+                </Typography>
+            </Card>
+            <Card className="flex-[50%] !min-w-[400px] flex FixCardNoImage !gap-0 ">
                 <form
                     onSubmit={formik.handleSubmit}
                     className="flex flex-col h-full gap-2 ">
@@ -114,11 +127,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                         </div>
                     </CardBody>
 
-                    <CardFooter className="flex flex-col  !py-4">
-                        <Typography className='text-xs error'>
+                    <CardFooter className={`flex flex-col !py-4 `}>
+                        <Typography className={`${!checkbox ? "hidden" : 'text-xs error'}`} >
                             {typeof formik.errors.checkbox === 'string' && formik.errors.checkbox}
                         </Typography>
-                        <div className={`${!checkbox ? "hidden" : "flex justify-center items-center"} `}>
+                        <div className={`${!checkbox ? "hidden" : "flex justify-center  items-center"} `}>
                             <Checkbox
                                 data-cy="terms-checkbox"
                                 type="checkbox"

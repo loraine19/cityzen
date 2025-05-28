@@ -11,6 +11,7 @@ import { EventView } from '../../../views/viewsEntities/eventViewEntities';
 import { EventCard } from './eventComps/EventCard';
 import { Typography } from '@material-tailwind/react';
 import { useAlertStore } from '../../../../application/stores/alert.store';
+import { TextLength } from '../../../../domain/entities/utilsEntity';
 
 export default function EventDetailPage() {
 
@@ -39,7 +40,7 @@ export default function EventDetailPage() {
         start: date().required("Date est obligatoire").max(ref('end'), "la date de debut doit etre avant a la date de fin"),
         end: date().required("Date est obligatoire").min(ref('start'), "la date de fin doit etre aprés a la date de debut"),
         participantsMin: number().required("Participants est obligatoire").min(1, "minmum 1 personne"),
-        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres").max(TextLength.MAX_LONGTEXT, "le texte est trop long"),
         category: string().required("Catégorie est obligatoire"),
         Address: object({
             city: string().required("Ville est obligatoire"),

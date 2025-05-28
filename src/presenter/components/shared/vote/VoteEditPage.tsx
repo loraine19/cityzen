@@ -14,6 +14,7 @@ import { User } from '../../../../domain/entities/User';
 import { PoolCard } from './voteCards/PoolCard';
 import { SurveyCard } from './voteCards/SurveyCard';
 import { useAlertStore } from '../../../../application/stores/alert.store';
+import { TextLength } from '../../../../domain/entities/utilsEntity';
 
 export default function VoteEditPage() {
     //// PARAMS
@@ -48,7 +49,7 @@ export default function VoteEditPage() {
         typeS: string().required("Type est obligatoire"),
         userIdBenef: string().required("Le beneficiaire est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
-        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        description: string().required("Description est obligatoire").min(2, "minmum 2 lettres").max(TextLength.MAX_LONGTEXT, "le texte est trop long"),
     })
 
     //// HANDLE ERROR

@@ -10,12 +10,12 @@ export const GroupLink: React.FC<GroupDivProps> = ({ group }) => {
 
     return (
         <>
-            <div className={`flex  items-center  p-0 `}>
+            <div className={`flex  items-center  p-0 pb-0.5`}>
                 <Popover placement="bottom-start">
                     <PopoverHandler>
                         <Typography
                             variant="small"
-                            className={'italic text-gray-600'}>
+                            className={'italic text-gray-600 !line-clamp-1'}>
                             ⌖ {group?.name}
                         </Typography>
                     </PopoverHandler>

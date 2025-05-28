@@ -80,9 +80,9 @@ export default function SignInPage() {
     const terms = "Vous resterez connecté pour 48h ...";
 
     return (
-        <div className="Body gray">
+        <div className="Body gray pb-8">
             <AuthHeader />
-            <main className='items-center gap-4 pb-2'>
+            <main className='items-center gap-4 '>
                 <AuthForm
                     formik={formik}
                     lead="Acceder à votre compte"
@@ -96,7 +96,7 @@ export default function SignInPage() {
                 />
 
             </main>
-            <footer className="flex flex-col items-center gap-2 py-3 mb-4">
+            <footer className="flex flex-col items-center gap-2 py-3 mt-2">
                 <Link to="/motdepasse_oublie">
                     <Typography className="text-xs font-medium p-2 text-center underline underline-offset-8 uppercase">
                         Mot de pass oublié
