@@ -23,8 +23,8 @@ export default function NavBarTop() {
 
 
     return (
-        <div className="relative flex  justify-between w-full items-center py-2 lg:py-2.5 border-b border-blue-gray-50 mb-1">
-            <div className="flex items-center gap-4">
+        <div className="relative flex flex-0 justify-between items-center py-2 lg:py-2.5 border-b border-blue-gray-50 mb-1">
+            <div className="flex truncate items-center gap-4">
                 <Menu placement="bottom-start">
                     <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
@@ -62,19 +62,20 @@ export default function NavBarTop() {
                         ))}
                     </MenuList>
                 </Menu>
-                <div className="flex flex-col w-full items-start">
+                <div className="flex flex-col  items-start">
                     <Typography
                         variant="h5"
                         color="blue-gray">
                         {user?.Profile?.firstName}
                     </Typography>
                     <Typography
-                        className="-mt-1 text-gray-700 italic text-[0.9rem] truncate">
+                        className="-mt-1 flex text-gray-700 italic text-[0.9rem] truncate">
                         {user?.GroupUser?.map((group) => group.Group?.name).join(', ')}
                     </Typography>
                 </div>
             </div>
-            <NotifBadge />
+            <div className="relative right-0 flex items-center gap-2"
+            > <NotifBadge /></div>
         </div >
     );
 }
