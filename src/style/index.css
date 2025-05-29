@@ -39,7 +39,7 @@
 body,
 #root,
 .Body {
-    @apply flex flex-col w-screen h-screen truncate;
+    @apply flex flex-col w-screen h-screen;
 }
 
 #root {
