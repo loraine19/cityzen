@@ -123,7 +123,6 @@ export class ApiService implements ApiServiceI {
                             newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
                         }
                     } else {
-                        alert(originalRequest.url + ' : ' + message);
                         newError = new UnauthorizedError();
                     }
                     break;
@@ -158,7 +157,7 @@ export class ApiService implements ApiServiceI {
         }
         catch (error) {
             console.error('refreshAccess error:', error);
-            errorRedirect('Merci de vous re-identifier' + error);
+            errorRedirect('Merci de vous re-identifier');
             return false;
         }
         return true

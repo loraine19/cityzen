@@ -21,6 +21,8 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
   const haveAGroup: GroupView[] = groups.filter((group: GroupView) => group.ImIn || group.ImModo)
   const [open, setOpen] = useState<boolean>(false);
 
+  const [notif] = useState<string>(groups.length === 0 || !groups ? ' Enregistrez votre adresse pour voir les groupes à proximité' : haveAGroup.length === 0 ? 'Vous n\'êtes pas membre d\'un groupe' : '');
+
   return (
     <div
       className="relative w-respLarge">
@@ -42,7 +44,7 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
                     {haveAGroup.map((group: GroupView) => group.name).join(', ')}
                   </span>
                   :
-                  <span className="italic text-red-600">'Vous n'avez pas de groupe' </span>}
+                  <span className="italic text-red-600">{notif} </span>}
               </Typography>
             </div>
             <div onClick={() => setOpen(!open)}
@@ -56,7 +58,7 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
         </MenuHandler>
         <MenuList className="w-respLarge border-[1px] !-mt-3  bg-transparent !-ml-6 shadow-none border-none ">
           <div className="bg-white divide-y-[1px] p-2 shadow-lg rounded-lg mx-2 border-[1px] border-blue-gray-50">
-            {groups.map((group: GroupView) =>
+            {groups.length > 0 && groups.map((group: GroupView) =>
               <ListItem
                 onClick={() => navigate(`/groupe/${group.id}`)}
                 key={group.id}
