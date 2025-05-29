@@ -80,7 +80,7 @@ export default function DashboardPage() {
                 <div className="relative w-respXl w-full flex lg:justify-center justify-between items-center">
                     <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0 py-2 lg:-ml-16 lg:pr-8 ">
                         <img
-                            className="h-12 w-12 mx-2 lg:h-16 lg:w-16 object-cover object-center"
+                            className="h-12 w-12 mx-2 lg:h-16 lg:w-16 object-cover object-center drop-shadow-[0_0_1px_rgba(0,0,0,0.1)]"
                             src="/image/logo.svg"
                             alt="logo" />
                         <Typography

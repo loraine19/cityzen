@@ -135,21 +135,20 @@ export default function ChatPage() {
                         <CardBody className='FixCardBody !p-0 !pt-2 !flex overflow-hidden'>
                             <div className='flex h-full  '>
                                 <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
-                                    <List className=' flex-1 '>
+                                    <List className='flex-1 '>
                                         {conversations &&
                                             conversations.map((message: MessageView, index: number) =>
                                                 <div key={index + 'div'}>
                                                     <ListItem
+                                                        className={`p-1 ${(userIdRec === message?.isWith.id) ? '!bg-gray-200 border-white border-8 shadow-md hover:pointer-events-none -ml-2' : ''}`}
                                                         key={index}
-                                                        className={` p-1 ${(userIdRec === message?.isWith.id) ? '!bg-gray-200 border-white border-8 shadow-md hover:pointer-events-none -ml-2' : ''}`}
                                                         onClick={() => {
                                                             setOpen(true)
                                                             const userRec = message?.IWrite ? message?.UserRec : message?.User
                                                             setUserRec(userRec)
                                                             setUserIdRec(userRec.id)
                                                             setParams({ with: userRec.id.toString() })
-                                                        }}
-                                                    >
+                                                        }} >
                                                         <ListItemPrefix className='relative flex min-w-max'>
                                                             <Avatar
                                                                 onError={(e) => e.currentTarget.src = "/images/person.svg"}
@@ -159,11 +158,12 @@ export default function ChatPage() {
                                                                 variant="circular"
                                                                 alt="avatar"
                                                                 size='md'
-                                                                src={message?.isWith?.Profile?.image as string || 'image/person.svg'} />
+                                                                src={message?.isWith?.Profile?.image as string} />
                                                             {(online.length > 0 &&
                                                                 online.includes(message.isWith.id)) &&
                                                                 <span className='absolute top-0 -right-2 bg-green-500 rounded-full
-                                                                border-4  p-1.5 border-white'></span>
+                                                                border-4  p-1.5 border-white'>
+                                                                </span>
                                                             }
                                                         </ListItemPrefix>
                                                         <div className="font-normal w-full flex flex-col">
@@ -185,17 +185,17 @@ export default function ChatPage() {
                                                                         {message.read && '🗸'}
                                                                         {' vous : '}
                                                                     </span>}
-                                                                {message?.message || '...'}
+                                                                {message?.message ?? '...'}
                                                             </Typography>
                                                         </div>
                                                     </ListItem>
-                                                    <hr className='h-[0px] mx-4 bg-blue-gray-100'></hr>
+                                                    <hr className='h-[0px] mx-3 bg-blue-gray-900'></hr>
                                                 </div>
                                             )}
                                     </List>
                                 </div>
                                 {open &&
-                                    <div className='relative !w-[calc(100%-4.5rem)]'>
+                                    <div className='relative !w-[calc(100%-4rem)]'>
                                         <Chat
                                             refetch={refetch}
                                             setNewConv={setNewConv}
@@ -210,8 +210,8 @@ export default function ChatPage() {
                                             userRec={userRec}
                                         />
                                         <Icon
-                                            style='absolute top-2 right-4'
-                                            color='red'
+                                            style='absolute top-2 right-2'
+                                            color='blue-gray'
                                             icon='close'
                                             title='fermer'
                                             onClick={() => {

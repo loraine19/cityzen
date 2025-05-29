@@ -48,7 +48,7 @@ export default function SignUpPage() {
 
 
     return (
-        <div className="Body gray pb-8">
+        <div className="Body gray pb-4">
             <AuthHeader />
             <main className='items-center gap-4'>
                 <AuthForm
@@ -65,7 +65,7 @@ export default function SignUpPage() {
                 />
 
             </main>
-            <footer className="flex flex-col items-center gap-2 py-4 mt-5">
+            <footer className="flex flex-col items-center gap-2 py-3 mt-5">
                 <Typography
                     variant="small"
                     className=" flex justify-center">
@@ -73,8 +73,7 @@ export default function SignUpPage() {
                 </Typography>
                 <Link to="/signin">
                     <Button
-                        size="sm"
-                        className="rounded-full">
+                        className="rounded-full !lgBtn">
                         Connectez-vous
                     </Button>
                 </Link>

@@ -48,16 +48,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     return (
         <div className='flex justify-center items-center h-full w-full gap-8 pt-6'>
-            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 !bg-[url('image/def.jpeg')] bg-cover relative bg-center "
-            >
+            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 !bg-[url('image/def.jpeg')] bg-cover relative bg-center" >
                 <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
                 <Typography
                     color="white"
                     className="py-6 px-8 !leading-[1] text-[2.5rem] font-bold !text-center font-comfortaa relative z-10"
-                    style={{
-                        textShadow: "0px 1px 4px #000000"
-                    }}
-                >
+                    style={{ textShadow: "0px 1px 4px #000000" }} >
                     Connecter vous à votre Quartier
                 </Typography>
             </Card>
@@ -77,7 +73,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             {notif}
                         </Typography>
                     </CardHeader>
-
                     <CardBody className='FixCardBody gap-3 min-h-24'>
                         <Input
                             size='md'
@@ -86,8 +81,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             name="email"
                             variant="standard"
                             onChange={formik.handleChange}
-                            data-cy="email-input"
-                        />
+                            data-cy="email-input" />
                         <Input
                             size='md'
                             icon={
@@ -103,8 +97,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             variant="standard"
                             onChange={formik.handleChange}
                             type={passWordInput.value}
-                            data-cy="password-input"
-                        />
+                            data-cy="password-input" />
                         <div className={!confirm ? "hidden" : ""}>
                             <Input
                                 size='md'
@@ -122,8 +115,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 type={passWordInput2.value}
                                 variant="standard"
                                 onChange={formik.handleChange}
-                                data-cy="password-confirm-input"
-                            />
+                                data-cy="password-confirm-input" />
                         </div>
                     </CardBody>
 
@@ -146,7 +138,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                     content={popOverContent} />
                             </div>
                         </div>
-
                         <div className='flex flex-col gap-4 pb-2'>
                             <Button
                                 data-cy="submit-button"
@@ -164,15 +155,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 onClick={async () => {
                                     setIsLoggedIn(true)
                                     await googleAuth()
-
-                                }
-                                }
-
-                            >
-                                <img src="https://docs.material-tailwind.com/icons/google.svg"
+                                }}>
+                                <img
+                                    src="image/google.svg"
                                     alt="metamask" className="h-6 w-6 !absolute left-2" />
                                 {submitText} avec Google
-                            </Button></div>
+                            </Button>
+                        </div>
                     </CardFooter>
                 </form>
             </Card>
