@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Card, CardBody, CardFooter, CardHeader, List, Typography } from '@material-tailwind/react';
+import { Card, CardBody, CardFooter, CardHeader, Typography } from '@material-tailwind/react';
 import { MessageView } from '../../../views/viewsEntities/messageViewEntity';
 import { User } from '../../../../domain/entities/User';
 import { LoadMoreButton } from '../../common/LoadMoreBtn';
@@ -95,36 +95,33 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                     ref={divRef}
                     onScroll={() => handleScroll()}
                     className='overflow-auto flex-1 flex flex-col-reverse pt-4'>
-                    <List className='gap-3  justify-end items-end flex flex-col-reverse' >
+                    <div className='gap-4 p-3 justify-end items-end flex flex-col-reverse' >
                         {!isLoading && messages && messages.map((msg: MessageView, index: number) => (
-                            <div
-                                onClick={(e => e.stopPropagation())}
-                                className="flex p-0 w-full items-start hover:!pointer-events-none "
+                            <div className={`flex p-0 w-full items-start ${msg.userId === messages[index + 1]?.userId ? ' pt-0' : ' pt-4'}`}
                                 key={index}>
-                                <div className={`flex flex-1 flex-col px-5 shadow-sm pt-3 pb-5 justify-between relative  ${msg.isDeleted && 'italic text-blue-gray-400'} ${msg.IWrite ?
+
+                                <div className={`flex flex-1 flex-col px-5 shadow-sm pt-3 pb-6 justify-between relative  ${msg.isDeleted ? 'italic text-blue-gray-400' : ''} ${msg.IWrite ?
                                     'bg-cyan-100 !text-right justify-end rounded-s-[1.5rem] rounded-tr-[1.5rem] !ml-[30%] ' :
                                     'bg-orange-100 rounded-ss-[1.5rem] rounded-r-[1.5rem] !mr-[30%]'}`}>
-                                    <div className='text-xs font-light items-center  flex  flex-row-reverse justify-between'>
+                                    <div className='text-xs font-light items-center flex flex-row-reverse justify-between'>
                                         {msg.formatedDate}
                                         {(msg.IWrite && !msg.isDeleted) &&
                                             <Icon
                                                 style='-ml-2'
-                                                disabled={msg.isDeleted}
+                                                key={'remove' + msg.id}
                                                 size='sm'
                                                 fill
                                                 bg
                                                 onClick={() => handleRemoveMessage(msg.id, index)}
-                                                color={'cyan'}
+                                                color='cyan'
                                                 title='Supprimer le texte du message'
                                                 icon='close' />}
                                     </div>
                                     {msg.message}
                                 </div>
                             </div>
-
                         ))}
-
-                    </List>
+                    </div>
                     <LoadMoreButton
                         revers
                         isBottom={isBottom}
@@ -193,6 +190,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                         icon='send'
                         size='3xl'
                     />
+
                 </CardFooter>
             </Card >
         </div >

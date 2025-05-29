@@ -17,11 +17,11 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
     const handleNavigate = () => navigate(`/${type}/create`);
 
     const navItems = [
-        { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-500/30", col: 'blue-gray' },
-        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-cyan-500/30", col: 'cyan' },
-        { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-500/30", col: 'cyan' },
-        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-500/30", col: 'orange' },
-        { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/30", col: 'orange' },
+        { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-500/20", col: 'blue-gray' },
+        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-cyan-500/20", col: 'cyan' },
+        { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-500/20", col: 'cyan' },
+        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-500/20", col: 'orange' },
+        { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
     ];
 
     return (
@@ -40,14 +40,14 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                 <NavLink
                                     to={to}
                                     className={({ isActive }) =>
-                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full  rounded-full px-2.5 lg:px-3  ${isActive ? `border-2 ${color}` : ''}`
+                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full  rounded-full px-2.5 lg:px-3  ${isActive ? `border-[1px] ${color} shadow-md` : ''}`
                                     }
                                 >
                                     {({ isActive }) => (
                                         <>
                                             <Icon
                                                 bg
-                                                style={`!pb-[0.4rem] !text-[1.9rem] ${isActive ? 'bg-opacity-30' : ''}`}
+                                                style={`!pb-[0.4rem] !text-[1.9rem] `}
                                                 icon={icon}
                                                 fill={isActive ? true : false}
                                                 color={col}
