@@ -47,12 +47,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                         <>
                                             <Icon
                                                 bg
-                                                style={`!pb-[0.4rem] !text-[1.8rem] ${isActive ? 'bg-opacity-30' : ''}`}
+                                                style={`!pb-[0.4rem] !text-[1.9rem] ${isActive ? 'bg-opacity-30' : ''}`}
                                                 icon={icon}
                                                 fill={isActive ? true : false}
                                                 color={col}
                                             />
-                                            <span className={`!text-[0.85rem] font-medium font-comfortaa hidden lg:block lg:text-sm pr-2.5`}>
+                                            <span className={`!text-[0.85rem] font-medium font-comfortaa hidden lg:block  pr-2.5`}>
                                                 {label}
                                             </span>
                                         </>

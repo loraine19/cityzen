@@ -234,9 +234,12 @@ nav li .icon {
     @apply bg-cyan-200 text-cyan-900  px-3 !pb-1 rounded-2xl;
 }
 
-.GrayChip,
-.lgBtn:disabled {
+.GrayChip {
     @apply bg-gray-300 text-gray-600 px-3 !pb-1 min-w-max rounded-full;
+}
+
+.lgBtn:disabled {
+    @apply bg-gray-300 text-gray-600;
 }
 
 /* CHIP OUTLINED */

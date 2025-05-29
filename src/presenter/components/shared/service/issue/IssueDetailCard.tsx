@@ -71,9 +71,9 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                     label={formik?.errors.description as string || "Description du probleme"}
                                     name="description"
                                     onChange={formik?.handleChange}
-                                    defaultValue={formik?.value?.description ? formik?.value.description : issue.description}
+                                    defaultValue={formik?.value?.description ?? issue.description}
                                     disabled={formik ? false : true}
-                                    className="!rounded-2xl flex flex-1 after:!border-none peer-focus:after:!border-none"
+                                    className="!rounded-2xl flex flex-1 after:!border-none peer-focus:after:!border-none "
                                     labelProps={{ className: "peer-focus:after:!border-none h-full" }}
                                 />
                             </div>
@@ -86,7 +86,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                                 src={imgBlob ?? issue.image ?? '/image/placeholder.jpg'}
                                                 alt='image'
                                                 title='cliquez pour agrandir'
-                                                className="lg:max-h-[calc(25vh-1.5rem)] max-h-[calc(30vh-1.4rem)] w-full  shadow rounded-2xl object-cover"
+                                                className="lg:max-h-[calc(25vh-1.5rem)] max-h-[calc(30vh-1.4rem)] w-full  !shadow-sm rounded-2xl object-cover"
                                             />
                                         </PopoverHandler>
                                         <PopoverContent

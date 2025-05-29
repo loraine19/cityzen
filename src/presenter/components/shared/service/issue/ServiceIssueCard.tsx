@@ -11,9 +11,9 @@ export default function ServiceIssueCard(props: { service: Service }) {
 
 
     return (
-        <Card className={`CardFix !h-full shadow-none !flex !gap-0 bg-blue-gray-50  !py-0`}>
+        <Card className={`CardFix !h-full shadow-none !flex !gap-0 bg-blue-gray-50 !py-0`}>
             <CardHeader
-                className="fixCardHeaderNoImage  mx-2 mt-1 py-1 shadow-none bg-transparent"
+                className="fixCardHeaderNoImage mx-2 mt-1 py-1 shadow-none bg-transparent"
                 floated={false}>
                 <div className="flex justify-between items-center ">
                     <div className="flex items-center gap-2 ">
@@ -37,9 +37,9 @@ export default function ServiceIssueCard(props: { service: Service }) {
                     </div>
                 </div>
             </CardHeader>
-            <CardBody className={` FixCardBody  !flex-1 !py-1.5 `}>
+            <CardBody className={` FixCardBody  !flex-1 !py-2.5 `}>
                 <div className="flex h-full ">
-                    <div className="flex flex-col flex-1 gap-1.5 overflow-y-auto">
+                    <div className="flex flex-col flex-1 gap-1.5 justify-between overflow-y-auto">
                         <div className="flex items-center justify-between pr-2">
                             <Typography
                                 variant="small"
@@ -75,11 +75,11 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         <Typography
                             color="blue-gray"
                             variant="small"
-                            className="flex-1 pr-2 lg:max-h-[1.3rem] overflow-auto truncate">
+                            className="flex-0 pr-2 !line-clamp-2 leading-[1.2] ">
                             {description}
                         </Typography>
                     </div>
-                    <div className="flex flex-1 flex-col pt-1 items-end border-l-[1px] border-gray-400 overflow-y-auto gap-0.5">
+                    <div className="flex flex-1 flex-col pt-1 justify-between items-end border-l-[1px] border-gray-400 overflow-y-auto gap-0.5">
                         <Typography
                             variant="small"
                             color="blue-gray"

@@ -104,7 +104,7 @@ export default function ConciationListPage() {
             </header>
             <main ref={divRef}
                 onScroll={() => handleScroll()}
-                className="Grid2 ">
+                className="Grid">
                 {isLoading ?
                     [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                         <SkeletonGrid

@@ -101,7 +101,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                     </div>
 
                     <Typography
-                        className="leading-[1.3rem] !line-clamp-1 pr-6"
+                        className="leading-[1.35rem] py-1 !line-clamp-2 pr-6"
                         color="blue-gray">
                         {description}
                     </Typography>

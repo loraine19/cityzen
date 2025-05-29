@@ -136,6 +136,7 @@ export default function IssueDetailPage() {
             }
         },
         {
+            iconImg: 'check',
             icon: issue.stepValue > 2 && (((issue.ImModo && issue.statusS === IssueStep.STEP_3) || (issue.ImModoOn && issue.statusS === IssueStep.STEP_4)) ? 'Cloturer le litige' : issue.statusS),
             title: `Attribution de la moitié des points la conciliation`,
             body: pourcentInput,
