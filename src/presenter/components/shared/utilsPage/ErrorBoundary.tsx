@@ -1,6 +1,6 @@
 import { Component, ReactNode, ErrorInfo } from 'react';
 import { AuthHeader } from '../auth/auth.Comps/AuthHeader';
-import { Typography } from '@material-tailwind/react';
+import { Card, Typography } from '@material-tailwind/react';
 import { PathElement } from '../../../constants';
 import { AlertModal } from '../../common/AlertModal';
 import Cookies from 'js-cookie';
@@ -158,7 +158,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                         </div>
                         <main
                             className="flex items-center gap-8 h-full py-12">
-
+                            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 !bg-[url('public/image/welcom.jpg')] bg-cover relative bg-center" >
+                                <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
+                                <Typography
+                                    color="white"
+                                    className="py-6 px-8 !leading-[1] text-[2.5rem] font-bold !text-center font-comfortaa relative z-10"
+                                    style={{ textShadow: "0px 1px 4px #000000" }} >
+                                    oups...
+                                </Typography>
+                            </Card>
                         </main>
                     </div>
                 </>

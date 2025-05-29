@@ -48,7 +48,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     return (
         <div className='flex justify-center items-center h-full w-full gap-8 pt-6'>
-            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 !bg-[url('image/def.jpeg')] bg-cover relative bg-center" >
+            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 !bg-[url('public/image/welcom.jpg')] bg-cover relative bg-center" >
                 <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
                 <Typography
                     color="white"
