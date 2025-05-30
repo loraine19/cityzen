@@ -21,17 +21,18 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
     const { flagged, id, CreatedAt, subTitle, type, group, title } = props
 
     return (
-        <div className="min-h-max pt-1">
+        <div className="min-h-max pt-0.5">
             <div className="flex items-center w-full justify-between gap-2">
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
                     <Typography
                         id={title}
                         variant="h6"
-                        className="w-full flex !line-clamp-1 py-1"
+                        className="w-full flex !line-clamp-1 leading-[1] pt-1"
                         title={title}>
                         {title}
                     </Typography>
-                    {CreatedAt && <span className="text-xs text-gray-500 italic">{new Date(CreatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>}
+                    {CreatedAt &&
+                        <span className="hidden lg:flex text-xs text-gray-500 italic">{new Date(CreatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>}
                 </div>
                 {id &&
                     <FlagIcon

@@ -126,7 +126,7 @@ header {
 
 .Grid {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
-    lg:auto-rows-[minmax(346px,46vh)] auto-rows-[minmax(360px,46vh)];
+    lg:auto-rows-[minmax(348px,46vh)] auto-rows-[minmax(360px,48vh)];
 }
 .Grid2 {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];

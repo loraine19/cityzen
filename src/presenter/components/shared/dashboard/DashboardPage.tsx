@@ -43,9 +43,9 @@ export default function DashboardPage() {
 
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
-    const eventClasse = "h-full flex row-span-5 lg:grid ";
+    const eventClasse = "h-full flex row-span-5 lg:grid pb-1 ";
     const notifClasse = " row-span-2 grid  lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5rem]")
-    const mapClasse = "flex row-span-6 min-h-[32%] lg:grid";
+    const mapClasse = "flex row-span-6 min-h-[32%] lg:grid pb-1";
 
 
     //// HANDLE SCROLL NOTIFICATIONS
@@ -79,6 +79,7 @@ export default function DashboardPage() {
         <>
             <div className="Body gray"
                 data-cy="dashboard-body" >
+
                 <div className="relative w-respXl w-full flex lg:justify-center justify-between items-center">
                     <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0 py-4 lg:-ml-16 lg:pr-8 ">
                         <img
@@ -237,7 +238,7 @@ export default function DashboardPage() {
                                                 color="blue-gray">
                                                 {isLoadingMap ?
                                                     'Chargement...' :
-                                                    ` ${notifsMap?.length} nouveautés à proximité`}
+                                                    ` ${notifsMap ? notifsMap?.length : 0} nouveautés à proximité`}
                                             </Typography>
                                         </div>
                                     </div>
@@ -248,9 +249,11 @@ export default function DashboardPage() {
                                                 address={user?.Profile?.Address}
                                                 notifs={notifsMap} /> : <>
 
-                                                {isLoadingMap ? <Skeleton /> :
+                                                {isLoadingMap || !notifsMap ?
+                                                    <Skeleton /> :
                                                     <Card className="FixCard h-full w-full flex-1 justify-center items-center bg-gray-50">
-                                                        <Typography variant="small" className="p-8"> Veuillez renseigner votre adresse pour voir les services à proximité
+                                                        <Typography variant="small" className="p-8"> {
+                                                            user.Profile?.Address ? 'Aucun service à proximité' : 'Veuillez renseigner votre adresse pour voir les services à proximité'}
                                                         </Typography>
                                                     </Card>
                                                 }</>}

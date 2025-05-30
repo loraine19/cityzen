@@ -10,7 +10,7 @@ export const GroupLink: React.FC<GroupDivProps> = ({ group }) => {
 
     return (
         <>
-            <div className={`flex  items-center  p-0 pb-0.5`}>
+            <div className={`flex items-center  pb-0.5`}>
                 <Popover placement="bottom-start">
                     <PopoverHandler>
                         <Typography

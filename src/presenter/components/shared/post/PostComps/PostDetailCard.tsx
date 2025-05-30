@@ -59,7 +59,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                         </Typography>
                     </div>
                 </CardBody>
-                <CardFooter className="CardFooter mb-2">
+                <CardFooter className="CardFooter flex gap-4  mb-2">
                     <ProfileDiv profile={Author} />
                     <div className="flex items-center gap-2 ">
                         <button

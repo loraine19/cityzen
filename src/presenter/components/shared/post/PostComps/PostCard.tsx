@@ -37,7 +37,7 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                 </div>
                 {image &&
                     <img
-                        onError={(e) => e.currentTarget.src = "/image/placeholder.jpg"}
+                        onError={(e) => e.currentTarget.src = "/image/placeholder2.png"}
                         src={image as any}
                         alt={title}
                         className="h-full  w-full object-cover"

@@ -16,7 +16,7 @@ import { ServiceView } from "../../../views/viewsEntities/serviceViewEntity";
 import { serviceCategoriesS } from "../../../constants";
 
 export default function ServicesPage() {
-    const [notif, setNotif] = useState<string>('');
+    const [notif, setNotif] = useState<string>('l');
     const [tabSelected] = useState<string>('');
     const [searchCat, setSearchCat] = useState<Label>({ label: 'tous', value: '' });
     const [mine, setMine] = useState<boolean>(false);
@@ -203,7 +203,7 @@ export default function ServicesPage() {
                         category={serviceCategoriesS}
                         search={search} />
                 }
-                <div className={notif && "notif"}>{notif}</div>
+                <div className={notif ? "notif" : "hidden"}>{notif}nn</div>
             </header>
             <main
                 ref={divRef}
@@ -234,6 +234,7 @@ export default function ServicesPage() {
                                     change={search as any}
                                     mines={mine}
                                     update={refetch} />
+
                             </div>
                         ))}
                 <LoadMoreButton

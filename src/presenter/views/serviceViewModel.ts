@@ -24,9 +24,9 @@ export const serviceViewModel = () => {
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
-
     const flat = data?.pages.flat().map(page => page.services).flat()
-    const services = userLoading || isLoading ? [] : flat?.map((service: Service) => new ServiceView(service, user))
+    const services = userLoading || isLoading || !flat ? [] : flat?.map((service: Service) => new ServiceView(service, user))
+    console.log('services', services, data)
 
     return {
       count,

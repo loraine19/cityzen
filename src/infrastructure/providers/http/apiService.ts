@@ -114,33 +114,16 @@ export class ApiService implements ApiServiceI {
                 break;
             case 401:
                 this.logWithTime('token expired 401');
-                if (this.count < 1) {
-                    this.count++
-                    try {
-                        const refreshSuccess = await this.refreshAccess();
-                        if (refreshSuccess) {
-                            this.logWithTime('token refreshed successfully');
-                            this.count = 0;
-                            return refreshSuccess
-                        }
-                    } catch (error) {
-                        console.error('refreshAccess error:', error);
-                        newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
+                try {
+                    const refreshSuccess = await this.refreshAccess();
+                    if (refreshSuccess) {
+                        this.logWithTime('token refreshed successfully');
+                        return refreshSuccess
                     }
+                } catch (error) {
+                    console.error('refreshAccess error:', error);
+                    newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
                 }
-                else if (this.count === 1) {
-                    this.count++
-                    try {
-                        const refreshSuccess = await this.refreshAccess();
-                        if (refreshSuccess) return refreshSuccess
-                    } catch (error) {
-                        console.error('refreshAccess error:', error);
-                        newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
-                    }
-                }
-                else if (this.count > 1) setTimeout(() => {
-                    window.location.replace('/signin?msg=Merci de vous re-identifier ' + this.count);
-                }, 1000)
                 break;
             case 403:
                 newError = new ForbiddenError(message);
@@ -163,18 +146,20 @@ export class ApiService implements ApiServiceI {
     //// REFRESH ACCESS
     refreshAccess = async (): Promise<boolean> => {
         if (window.location.pathname.includes('/sign')) return false;
-        const echec = () => { return false; }
-        const good = () => { this.count = 0; return true; }
-        try {
-            const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
-            if (data?.message !== 'Token rafraichi') return echec()
-            else return good()
+        this.count++
+
+        const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
+        if (data?.message || data?.status === 201) {
+            this.count = 0;
+            this.logWithTime('refreshAccess message: ' + data.message);
+            return true;
         }
-        catch (error) {
-            console.error('refreshAccess error:', error);
-            return false
+        else {
+            this.logWithTime('refreshAccess error ');
+            return false;
         }
-    };
+
+    }
 
     public async get(url: string): Promise<any> {
         try {

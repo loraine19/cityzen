@@ -39,7 +39,7 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                         popupAnchor: [0, -20],
                         shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         shadowSize: [50, 50],
-                        shadowUrl: '/image/marker_shadow.png',
+                        shadowUrl: '/image/marker_shadow.svg',
                         pane: 'markerPane',
                     }) :
                     L.icon({
@@ -48,7 +48,7 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                         iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         popupAnchor: [0, -20],
                         shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
-                        shadowUrl: '/image/marker_shadow.png',
+                        shadowUrl: '/image/marker_shadow.svg',
                         shadowSize: [50, 50],
                         pane: 'markerPane',
                     })} >
