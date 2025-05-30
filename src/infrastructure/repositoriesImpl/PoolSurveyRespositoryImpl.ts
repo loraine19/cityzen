@@ -12,8 +12,8 @@ export class PoolSurveyRepositoryImpl implements PoolSurveyRepositoryBase {
     private poolSurveyData: IData;
     constructor({ poolSurveyData }: { poolSurveyData: IData }) { this.poolSurveyData = poolSurveyData }
 
-    public async getPoolsSurveys(page?: number, filter?: string, subFilter?: string): Promise<PoolSurveyPage> {
-        return await this.poolSurveyData.getPoolsSurveys(page, filter, subFilter);
+    public async getPoolsSurveys(page?: number, filter?: string, subFilter?: string, sort?: string, reverse?: boolean): Promise<PoolSurveyPage> {
+        return await this.poolSurveyData.getPoolsSurveys(page, filter, subFilter, sort, reverse);
     }
 
     public async getPoolById(id: number): Promise<Pool> {

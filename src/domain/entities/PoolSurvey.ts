@@ -64,6 +64,13 @@ export enum SurveyCategory {
     CATEGORY_5 = 'autre',
 }
 
+export enum PoolSurveySort {
+    CREATED_AT = 'CREATED_AT',
+    USER = 'USER',
+    BENEF = 'BENEF',
+    TITLE = 'TITLE',
+    VOTES = 'VOTES',
+}
 
 export class SurveyDTO {
     name?: string;

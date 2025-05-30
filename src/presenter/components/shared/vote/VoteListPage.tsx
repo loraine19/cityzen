@@ -11,7 +11,7 @@ import { SurveyCard } from "./voteCards/SurveyCard";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import DI from "../../../../di/ioc";
-import { PoolSurveyFilter, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
+import { PoolSurveyFilter, PoolSurveySort, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
 import { VoteTarget } from "../../../../domain/entities/Vote";
 
@@ -21,14 +21,14 @@ export default function VoteListPage() {
     const [mine, setMine] = useState<boolean>(false)
     const [step, setStep] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
+    const [sort, setSort] = useState<PoolSurveySort>(PoolSurveySort.CREATED_AT);
+    const [reverse, setReverse] = useState<boolean>(true);
     const voteViewModelFactory = DI.resolve('voteViewModel');
-    const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = voteViewModelFactory(filter, step);
-    const [list, setList] = useState<PoolSurveyView[]>(poolsSurveys);
+    const { poolsSurveys, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = voteViewModelFactory(filter, step, sort, reverse);
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), step: Params.get("step") }
 
     useEffect(() => { setStep(params.step || ''); setFilter(params.filter || '') }, []);
-    useEffect(() => { setList([...poolsSurveys]) }, [refetch, isLoading, count]);
 
     //// NAMING
     const filterName = (): string => {
@@ -86,29 +86,28 @@ export default function VoteListPage() {
         {
             label: "Créé le",
             icon: "event",
-            action: () => setList([...poolsSurveys].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())),
-            reverse: () => setList([...poolsSurveys].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+            key: PoolSurveySort.CREATED_AT,
+            action: async () => await refetch(),
         },
         {
             label: "Titre",
             icon: "sort_by_alpha",
-            action: () => setList([...poolsSurveys].sort((a, b) => a.title.localeCompare(b.title))),
-            reverse: () => setList([...poolsSurveys].sort((a, b) => b.title.localeCompare(a.title)))
+            key: PoolSurveySort.TITLE,
+            action: async () => await refetch(),
         },
         {
             label: "Nombre de votes",
             icon: "smart_card_reader",
-            action: () => setList([...poolsSurveys].sort((a, b) => b.pourcent - a.pourcent)),
-            reverse: () => setList([...poolsSurveys].sort((a, b) => a.pourcent - b.pourcent))
+            key: PoolSurveySort.VOTES,
+            action: async () => await refetch(),
         },
         {
-            label: "Groupe",
-            icon: "groups",
-            action: () => setList([...poolsSurveys].sort((a, b) => a.Group?.name.localeCompare(b.Group?.name))),
-            reverse: () => setList([...poolsSurveys].sort((a, b) => b.Group?.name.localeCompare(a.Group?.name)))
+            label: "Utilisateur",
+            icon: "person",
+            key: PoolSurveySort.USER,
+            action: async () => await refetch(),
         }
     ]
-    const [selectedSort, setSelectedSort] = useState<string>(sortList[0].label)
 
     //// NOTIFICATION
     useEffect(() => {
@@ -129,7 +128,6 @@ export default function VoteListPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
-                sortList.find((s) => s.label === selectedSort)?.action();
             } else setIsBottom(false)
         }
     }
@@ -148,8 +146,10 @@ export default function VoteListPage() {
                     labels={tabs}
                     sortList={sortList}
                     color={pageColor}
-                    selectedSort={selectedSort}
-                    setSelectedSort={setSelectedSort}
+                    selectedSort={sort}
+                    setSelectedSort={setSort}
+                    reverse={reverse}
+                    setReverse={setReverse}
                 />
                 <CheckCard
                     categoriesArray={boxArray}
@@ -169,7 +169,7 @@ export default function VoteListPage() {
                             key={index}
                             count={4} />
                     )) :
-                    list.map((element: PoolSurveyView, index: number) =>
+                    poolsSurveys.map((element: PoolSurveyView, index: number) =>
                         element.typeS === VoteTarget.SURVEY ?
                             <div className="SubGrid" key={'div' + index}>
                                 <SurveyCard

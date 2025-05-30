@@ -4,7 +4,7 @@ import { Pool, Survey } from '../../domain/entities/PoolSurvey';
 import { PoolSurveyView } from './viewsEntities/poolSurveyViewEntity';
 
 export const voteViewModel = () => {
-  return (filter: string, step: string) => {
+  return (filter: string, step: string, sort?: string, reverse?: boolean) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -18,7 +18,7 @@ export const voteViewModel = () => {
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['poolsSurveys', filter, step],
-        queryFn: async ({ pageParam = 1 }) => await getPoolsSurveys.execute(pageParam, filter, step) || [],
+        queryFn: async ({ pageParam = 1 }) => await getPoolsSurveys.execute(pageParam, filter, step, sort, reverse) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.poolsSurveys?.length ? pages.length + 1 : undefined
       })

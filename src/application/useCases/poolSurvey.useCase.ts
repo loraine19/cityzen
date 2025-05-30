@@ -7,8 +7,8 @@ export class GetPoolsSurveysUseCase {
     constructor({ poolSurveyRepository }: { poolSurveyRepository: PoolSurveyRepositoryBase }) {
         this.poolSurveyRepository = poolSurveyRepository;
     }
-    public async execute(page?: number, filter?: string, step?: string,): Promise<PoolSurveyPage> {
-        return await this.poolSurveyRepository.getPoolsSurveys(page, filter, step,);
+    public async execute(page?: number, filter?: string, step?: string, sort?: string, reverse?: boolean): Promise<PoolSurveyPage> {
+        return await this.poolSurveyRepository.getPoolsSurveys(page, filter, step, sort, reverse);
     }
 }
 

@@ -11,11 +11,13 @@ export class PoolSurveyApi {
         this.getPoolsSurveys = this.getPoolsSurveys.bind(this);
     }
 
-    async getPoolsSurveys(page?: number, filter?: string, step?: string): Promise<PoolSurveyPage> {
+    async getPoolsSurveys(page?: number, filter?: string, step?: string, sort?: string, reverse?: boolean): Promise<PoolSurveyPage> {
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const stepR = step ? `&step=${step}` : '';
-        return this.api.get(`${this.dataType}${pageR}${filterR}${stepR}`);
+        const sortR = sort ? `&sort=${sort}` : '';
+        const reverseR = reverse ? `&reverse=${reverse}` : '';
+        return this.api.get(`${this.dataType}${pageR}${filterR}${stepR}${sortR}${reverseR}`);
 
     }
 
