@@ -52,7 +52,7 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                 />
                 <div className="flex flex-col h-full ">
                     <Typography
-                        className={`${short ? '!line-clamp-1' : '!line-clamp-2'} leading-[1.5rem] overflow-x-auto`}
+                        className={`${short ? '!line-clamp-1' : '!line-clamp-2'} leading-[1.3rem] overflow-x-auto`}
                         color="blue-gray">
                         {description}
                     </Typography>

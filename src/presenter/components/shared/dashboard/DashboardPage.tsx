@@ -28,11 +28,6 @@ export default function DashboardPage() {
     }, [user])
     const navigate = useNavigate();
 
-    //// CLASSES
-    const userClasse = "flex row-span-3 lg:grid pt-6 ";
-    const eventClasse = "h-full flex row-span-5 lg:grid ";
-    const notifClasse = " row-span-2 grid min-h-[8rem] lg:pt-6";
-    const mapClasse = "flex row-span-6 lg:grid";
 
     //// PARAMS
     const [searchParams] = useSearchParams();
@@ -45,6 +40,13 @@ export default function DashboardPage() {
     const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
     const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
     const { notifsMap, isLoadingMap } = notifMapViewModelFactory();
+
+    //// CLASSES
+    const userClasse = "flex row-span-3 lg:grid pt-6 ";
+    const eventClasse = "h-full flex row-span-5 lg:grid ";
+    const notifClasse = " row-span-2 grid  lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5rem]")
+    const mapClasse = "flex row-span-6 min-h-[30%] lg:grid";
+
 
     //// HANDLE SCROLL NOTIFICATIONS
     const divRef = useRef(null);
@@ -78,7 +80,7 @@ export default function DashboardPage() {
             <div className="Body gray"
                 data-cy="dashboard-body" >
                 <div className="relative w-respXl w-full flex lg:justify-center justify-between items-center">
-                    <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0 py-2 lg:-ml-16 lg:pr-8 ">
+                    <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0 py-4 lg:-ml-16 lg:pr-8 ">
                         <img
                             className="h-12 w-12 mx-2 lg:h-16 lg:w-16 object-cover object-center drop-shadow-[0_0_1px_rgba(0,0,0,0.1)]"
                             src="/image/logo.svg"

@@ -61,7 +61,7 @@ main {
 }
 
 header {
-    @apply px-4 pb-1.5;
+    @apply px-4 pb-4;
 }
 
 .w-respXl {

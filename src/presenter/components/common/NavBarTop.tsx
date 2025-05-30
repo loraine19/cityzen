@@ -23,7 +23,7 @@ export default function NavBarTop() {
 
 
     return (
-        <div className="relative flex flex-0 justify-between items-center py-2 lg:py-2.5 border-b border-blue-gray-50 mb-1">
+        <div className="relative flex flex-0 justify-between items-center py-2 lg:py-2.5 border-b border-blue-gray-50 my-1.5">
             <div className="flex truncate items-center gap-4 mr-6">
                 <Menu placement="bottom-start">
                     <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
