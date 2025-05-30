@@ -7,7 +7,7 @@ import { Event, EventPage } from "../entities/Event";
 
 
 export abstract class EventRepositoryBase {
-    abstract getEvents(page?: number, filter?: string, category?: string): Promise<EventPage>;
+    abstract getEvents(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<EventPage>;
     abstract getEventById(id: number): Promise<Event>;
     abstract postEvent(data: EventDTO, address?: AddressDTO): Promise<Event>;
     abstract updateEvent(id: number, data: EventDTO, address?: AddressDTO): Promise<Event>;

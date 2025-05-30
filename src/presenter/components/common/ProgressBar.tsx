@@ -72,7 +72,7 @@ export function ProgressBarBlur({ value, label, needed, status, size = 'md', isP
             labelTexte = 'a eu lieu'
             break;
         case (status === EventStatus.PENDING && value === 0):
-            color = 'bg-white/70'
+            color = 'bg-gray-500/70'
             labelTexte = `pas encore de ${label}`
             break;
     }
@@ -90,7 +90,7 @@ export function ProgressBarBlur({ value, label, needed, status, size = 'md', isP
                     </div>
                 )}
 
-            {status === EventStatus.PENDING &&
+            {status === EventStatus.PENDING && value !== 0 &&
                 (
                     <Progress
                         barProps={{ className: `!min-w-[2.7rem] text-center !line-clamp-1 whitespace-nowrap truncate flex items-center ${size === "lg" ? 'py-0.5  px-3' : 'px-2'} !bg-orange-700 "` }}

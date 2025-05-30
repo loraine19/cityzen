@@ -5,7 +5,7 @@ import { EventView } from './viewsEntities/eventViewEntities';
 
 
 export const eventViewModel = () => {
-  return (filter?: string, category?: string) => {
+  return (filter?: string, category?: string, sort?: string, reverse?: boolean) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -17,9 +17,9 @@ export const eventViewModel = () => {
     const getEvents = DI.resolve('getEventsUseCase')
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
-        queryKey: ['events', filter, category],
+        queryKey: ['events', filter, category, sort, reverse],
         staleTime: 600000,
-        queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam, filter, category) || { events: [], count: 0 },
+        queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam, filter, category, sort, reverse) || { events: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.events?.length ? pages.length + 1 : undefined
       })

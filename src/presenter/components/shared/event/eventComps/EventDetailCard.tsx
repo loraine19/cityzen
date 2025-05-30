@@ -75,7 +75,8 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                         size="2xl" />
                                     ajouter a mon agenda
                                 </Link>
-                                <Typography >
+                                <Typography
+                                    className="leading-[1.3rem] break-normal">
                                     {description}
                                 </Typography>
                             </div>

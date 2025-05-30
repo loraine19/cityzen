@@ -3,9 +3,19 @@ import { SortLabel, TabLabel } from "../../../domain/entities/frontEntities";
 import { useEffect } from "react";
 import { SortButton } from "./SortBtn";
 
-export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: string, sortList?: SortLabel[], color?: string, setSelectedSort?: any, selectedSort?: String }) {
-    const { labels, defaultTab, sortList, setSelectedSort, selectedSort } = props
+type TabProps = {
+    labels: TabLabel[];
+    defaultTab?: string;
+    sortList?: SortLabel[];
+    color?: string;
+    setSelectedSort?: any
+    selectedSort?: string;
+    reverse?: boolean;
+    setReverse?: (value: boolean) => void;
 
+}
+
+export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort, selectedSort, reverse, setReverse, color }: TabProps) {
     useEffect(() => {
         const tab = document.querySelector(`[data-value="${defaultTab as string}"]`) as HTMLElement
         tab && tab.click()
@@ -33,9 +43,11 @@ export default function TabsMenu(props: { labels: TabLabel[]; defaultTab?: strin
             {sortList &&
                 <SortButton
                     sortList={sortList}
-                    color={props?.color}
+                    color={color}
                     setSelectedSort={setSelectedSort}
-                    selectedSort={selectedSort as string}
+                    selectedSort={selectedSort ?? ''}
+                    reverse={reverse ?? false}
+                    setReverse={setReverse ?? (value => value)}
                 />
             }
         </div>

@@ -14,8 +14,8 @@ export class EventRepositoryImpl implements EventRepositoryBase {
     private eventData: IData;
     constructor({ eventData }: { eventData: IData }) { this.eventData = eventData }
 
-    public async getEvents(page?: number, filter?: string, category?: string): Promise<EventPage> {
-        return await this.eventData.getEvents(page, filter, category);
+    public async getEvents(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<EventPage> {
+        return await this.eventData.getEvents(page, filter, category, sort, reverse);
     }
 
     public async getEventById(id: number): Promise<Event> {

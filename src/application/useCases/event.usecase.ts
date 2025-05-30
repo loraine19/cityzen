@@ -11,8 +11,8 @@ export class GetEventsUseCase {
         this.eventRepository = eventRepository;
     }
 
-    public async execute(page?: number, filter?: string, category?: string): Promise<EventPage> {
-        return this.eventRepository.getEvents(page, filter, category);
+    public async execute(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<EventPage> {
+        return this.eventRepository.getEvents(page, filter, category, sort, reverse);
     }
 }
 

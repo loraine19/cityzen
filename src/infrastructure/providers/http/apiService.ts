@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { AuthService } from "../../services/authService";
+//import { AuthService } from "../../services/authService";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.meta.env.VITE_FETCH_URL_DEV;
 
@@ -57,12 +57,13 @@ export type ApiServiceI = {
 }
 
 export class ApiService implements ApiServiceI {
+    private count: number = 0;
     private api: AxiosInstance;
-    private authService: AuthService;
-    private _refreshingToken: boolean = false;
+    //  private authService: AuthService;
+    private _refreshingToken: boolean = (this.count > 1) ? true : false;
 
     constructor() {
-        this.authService = new AuthService();
+        //   this.authService = new AuthService();
         this.api = axios.create({ baseURL, withCredentials: true });
         this.api.interceptors.request.use(this.handleRequest);
         this.api.interceptors.response.use(
@@ -71,7 +72,7 @@ export class ApiService implements ApiServiceI {
         );
     }
     getBaseUrl = () => baseURL;
-    count = 0;
+
 
     private logWithTime = (message: string) => {
         const now = new Date().toLocaleTimeString();
@@ -90,77 +91,76 @@ export class ApiService implements ApiServiceI {
     private handleResponseError = async (error: any) => {
         let count = this.count++;
         console.error('handleResponseError count:', count, 'error:', error);
-        if (count < 2) {
-            console.error('complete error:', error);
-            let newError = new ApiError(500, 'Une erreur est survenue');
-            const originalRequest = error.config || {};
-            originalRequest._retry = originalRequest._retry || false;
-            if (!error.response) {
-                this.logWithTime('not api error');
-                return Promise.reject(newError);
-            }
-            const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
-            let message = error.response?.data?.message || error.response?.message || '';
-            message.includes('PRISMA ERROR') && (message = 'Erreur de données');
 
-            newError = new ApiError(status, message);
-            switch (status) {
-                case 400:
-                    newError = new BadRequestError(message);
-                    break;
-                case 401:
-                    this.logWithTime('token expired 401');
-                    if (!this._refreshingToken) {
-                        this._refreshingToken = true;
-                        originalRequest._retry = true;
-                        try {
-                            const refreshSuccess = await this.refreshAccess();
-                            this._refreshingToken = false;
-                            if (refreshSuccess) return this.api(originalRequest);
-                        } catch (error) {
-                            this._refreshingToken = false;
-                            console.error('refreshAccess error:', error);
-                            newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
-                        }
-                    } else {
-                        newError = new UnauthorizedError();
-                    }
-                    break;
-                case 403:
-                    newError = new ForbiddenError(message);
-                    break;
-                case 404:
-                    newError = new NotFoundError();
-                    break;
-                case 409:
-                    newError = new ConflictError(message);
-                    break;
-                case 500:
-                    newError = new ServerError();
-                    break;
-            }
-            count = 0;
-            throw Error(newError.message || 'Une erreur est survenue');
+        console.error('complete error:', error);
+        let newError = new ApiError(500, 'Une erreur est survenue');
+        const originalRequest = error.config || {};
+        originalRequest._retry = originalRequest._retry || false;
+        if (!error.response) {
+            this.logWithTime('not api error');
+            return Promise.reject(newError);
         }
+        const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
+        let message = error.response?.data?.message || error.response?.message || '';
+        message.includes('PRISMA ERROR') && (message = 'Erreur de données');
+
+        newError = new ApiError(status, message);
+        switch (status) {
+            case 400:
+                newError = new BadRequestError(message);
+                break;
+            case 401:
+                this.logWithTime('token expired 401');
+                if (!this._refreshingToken) {
+                    this.count++
+                    try {
+                        const refreshSuccess = await this.refreshAccess();
+                        this._refreshingToken = false;
+                        if (refreshSuccess) return this.count = 0
+                    } catch (error) {
+                        this._refreshingToken = false;
+                        console.error('refreshAccess error:', error);
+                        newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
+                    }
+                } else {
+                    newError = new UnauthorizedError('Vous n\'avez pas pu être re-identifié');
+                }
+                break;
+            case 403:
+                newError = new ForbiddenError(message);
+                break;
+            case 404:
+                newError = new NotFoundError();
+                break;
+            case 409:
+                newError = new ConflictError(message);
+                break;
+            case 500:
+                newError = new ServerError();
+                break;
+        }
+        count = 0;
+        throw Error(newError.message || 'Une erreur est survenue');
     };
 
+    //// REFRESH ACCESS
     refreshAccess = async (): Promise<boolean> => {
-        const errorRedirect = (message?: string) => {
-            this.authService.clearCookies()
-            setTimeout(() => { window.location.replace(`/signin?msg=${message ?? 'Merci de vous re-identifier'}`) }, 2000)
-        }
-        if (window.location.pathname.includes('/sign') || window.location.pathname.includes('/motdepass')) return false;
+        // Placer redirect ailleurs si besoin
+        // const errorRedirect = (message?: string) => {
+        //     this.authService.clearCookies()
+        //     setTimeout(() => { window.location.replace(`/signin?msg=${message ?? 'Merci de vous re-identifier'}`) }, 2000)
+        // }
+        if (window.location.pathname.includes('/sign')) return false;
         try {
             const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
             console.log('refreshAccess', data, new Date().toLocaleTimeString());
-            if (!data) errorRedirect('vous n\'êtes pas connecté');
+            if (data?.message !== 'Token rafraichi') return false
+            return true
         }
         catch (error) {
             console.error('refreshAccess error:', error);
-            errorRedirect('Merci de vous re-identifier');
             return false;
         }
-        return true
     };
 
     public async get(url: string): Promise<any> {

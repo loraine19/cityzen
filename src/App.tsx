@@ -53,9 +53,10 @@ function App() {
     const [retryCount, setRetryCount] = useState(0);
     const handleRetry = () => {
         // TODO : Implement retry logic
-        setTimeout(() => { console.log(retryCount, 'retryCountApp') }, 5000);
         setRetryCount(retryCount + 1);
+        console.log(`Retrying... Attempt from app tsx ${retryCount} +1`);
     }
+
     const { alertValues } = useAlertStore(state => state)
 
     return (

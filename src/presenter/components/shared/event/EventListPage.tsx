@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { EventCategory, EventFilter } from "../../../../domain/entities/Event";
+import { EventCategory, EventFilter, EventSort } from "../../../../domain/entities/Event";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -21,17 +21,17 @@ export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
     const eventViewModelFactory = DI.resolve('eventViewModel');
-    const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(filter, category)
+    const [sort, setSort] = useState<EventSort>(EventSort.CREATED_AT);
+    const [reverse, setReverse] = useState<boolean>(false);
+    const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(filter, category, sort, reverse);
     const [view, setView] = useState("view_agenda");
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
-    const [list, setList] = useState<EventView[]>(events)
 
     const params = { filter: Params.get("filter"), category: Params.get("category") }
 
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
-    useEffect(() => { setList(events) }, [isLoading, refetch, count])
 
     //// FILTER TAB 
     const filterTab = async (value?: EventFilter) => {
@@ -87,43 +87,48 @@ export default function EventListPage() {
     //// HANDLE SCROLL
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = () => {
+    const handleScroll = async () => {
         if (divRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
-                hasNextPage && fetchNextPage()
-                sortList.find((s) => s.label === selectedSort)?.action();
+                hasNextPage && await fetchNextPage()
+                //sortList.find((s: any) => s.label === sort)?.action();
             } else setIsBottom(false)
         }
     }
 
-    const sortList = [
+    const sortList: any = [
         {
-            label: "Commence le",
+            label: 'créé le',
+            key: EventSort.CREATED_AT,
             icon: "event",
-            action: () => setList([...events].sort((a, b) => new Date(b.start).getTime() - new Date(a.start).getTime())),
-            reverse: () => setList([...events].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()))
+            action: () => refetch()
+            , reverse: () => refetch()
         },
         {
-            label: 'Titre', icon: 'sort_by_alpha',
-            action: () => setList([...events].sort((a, b) => a.title.localeCompare(b.title))),
-            reverse: () => setList([...events].sort((a, b) => b.title.localeCompare(a.title)))
+            label: 'titre',
+            key: EventSort.AZ,
+            icon: 'sort_by_alpha',
+            action: () => refetch(),
+            reverse: () => refetch()
         }
         ,
         {
-            label: 'Participants', icon: 'person',
-            action: () => setList([...events].sort((a, b) => b.Participants.length - a.Participants.length)),
-            reverse: () => setList([...events].sort((a, b) => a.Participants.length - b.Participants.length))
+            label: 'participants',
+            key: EventSort.PARTICIPANTS,
+            icon: 'person',
+            action: () => refetch(),
+            reverse: () => refetch()
         },
         {
-            label: 'Durée', icon: 'calendar_month',
-            action: () => setList([...events].sort((a: EventView, b) => (b?.days?.length || 0) - (a?.days?.length || 0))),
-            reverse: () => setList([...events].sort((a, b) => a.days.length - b.days.length))
+            label: 'jours',
+            key: EventSort.INDAYS,
+            icon: 'calendar_month',
+            action: () => refetch(),
+            reverse: () => refetch()
         }
     ]
-
-    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
 
     return (
         <div className="Body cyan">
@@ -131,16 +136,18 @@ export default function EventListPage() {
                 <NavBarTop />
                 <SubHeader
                     qty={count || 0}
-                    type={`évènements  ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
+                    type={`évènements ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
                 {view === "view_agenda" &&
                     <TabsMenu
                         labels={eventTabs}
                         defaultTab={params.filter || ''}
                         sortList={sortList}
-                        selectedSort={selectedSort}
-                        setSelectedSort={setSelectedSort}
+                        selectedSort={sort}
+                        setSelectedSort={setSort}
+                        reverse={reverse}
+                        setReverse={setReverse}
                     />}
-                <div className={`flex items-center justify-center gap-4 lg:px-8`}>
+                <div className={`relative flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect
                         categoriesArray={eventCategoriesS}
                         change={change}
@@ -153,11 +160,12 @@ export default function EventListPage() {
                         style="mt-1"
                         color="gray"
                         title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
+                    {view === "view_agenda" &&
+                        <div className={notif && "top-20 absolute w-full flex justify-center"}>
+                            {notif}
+                        </div>}
                 </div>
-                {view === "view_agenda" &&
-                    <div className={notif && "w-full flex justify-center p-8"}>
-                        {notif}
-                    </div>}
+
             </header>
             {view === "view_agenda" && (
                 <main
@@ -171,10 +179,16 @@ export default function EventListPage() {
                                 count={4} />
                         ))
                         :
-                        list.map((event: EventView, index: number) => (
-                            <div className="SubGrid" key={index}>
+                        events.map((event: EventView, index: number) => (
+                            <div
+                                className="SubGrid "
+                                key={event.id}
+                                style={{
+                                    animationDelay: `${index * 80}ms`,
+                                    animationFillMode: 'both'
+                                }}
+                            >
                                 <EventCard
-                                    key={event.id}
                                     event={event}
                                     change={change}
                                     mines={mines}
@@ -186,7 +200,6 @@ export default function EventListPage() {
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
                         handleScroll={handleScroll} />
-
                 </main>
             )}
             {view === "event" && !isLoading &&

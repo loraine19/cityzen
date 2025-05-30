@@ -31,8 +31,9 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
           className={`relative flex justify-between h-max w-full z-50  items-center cursor-pointer ${open ? '!border-b-[2px] border-blue-gray-900' : '!border-b-[1px] border-blue-gray-200'} py-1`}>
           <div
             className="relative flex justify-between h-max w-full">
-            <div onClick={() => setOpen(!open)}
-              className="flex flex-col gap-2">
+            <div
+              onClick={() => groups.length > 0 && setOpen(!open)}
+              className={"flex flex-col gap-2"}>
               <label className="text-gray-500 text-xs" htmlFor="">
                 {haveAGroup?.length > 1 ? 'Vos groupes' : 'Votre groupe'}
               </label>
@@ -47,8 +48,8 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
                   <span className="italic text-red-600">{notif} </span>}
               </Typography>
             </div>
-            <div onClick={() => setOpen(!open)}
-              className="h-3 w-5 mr-2">
+            <div onClick={() => groups.length > 0 && setOpen(!open)}
+              className={"h-3 w-5 mr-2" + (open ? 'rotate-180' : '')}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="grey">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd">
                 </path>

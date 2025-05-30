@@ -95,7 +95,7 @@ export default function DashboardPage() {
                 <main className="relative flex -top-5 -mb-3 h-[calc(100%-3.5rem)]">
                     <div className={" flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                         <div className={`${userClasse}`}>
-                            <Card className="lg:h-full p-0 flex-1 flex ">
+                            <Card className="lg:h-full p-0 flex-1 flex anim">
                                 <CardHeader className="flex flex-col items-center justify-center  bg-transparent shadow-none">
                                     <Avatar
                                         onError={(e) => e.currentTarget.src = '/image/person.svg'}
@@ -147,7 +147,7 @@ export default function DashboardPage() {
                             </Card>
                         </div>
                         <div className={`hidden lg:${notifClasse} h-full lg:grid`}>
-                            <Card className=" orange100 ">
+                            <Card className=" orange100 anim">
                                 <CardBody className="h-full flex flex-col pt-2.5 pb-0 px-4">
                                     <div className="flex gap-2.5 py-1 items-center">
                                         <div className="relative">
@@ -218,7 +218,7 @@ export default function DashboardPage() {
                             </Card>
                         </div>
                         <div className={mapClasse}>
-                            <Card className="h-full flex-1 cyan">
+                            <Card className="h-full flex-1 cyan anim">
                                 <CardBody className="h-full min-h-[20vh] lg!min-h-[100%] flex flex-col !pt-2 p-4">
                                     <div className="flex items-center gap-2">
                                         <Icon
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                                                 color="blue-gray">
                                                 {isLoadingMap ?
                                                     'Chargement...' :
-                                                    ` ${notifsMap.length} nouveautés à proximité`}
+                                                    ` ${notifsMap?.length} nouveautés à proximité`}
                                             </Typography>
                                         </div>
                                     </div>
@@ -257,7 +257,7 @@ export default function DashboardPage() {
                             </Card>
                         </div>
                         <div className={eventClasse}>
-                            <Card className="h-full flex-1 gray100 ">
+                            <Card className="h-full flex-1 gray100 anim">
                                 <CardBody className="h-full flex flex-col !pt-0 p-4 ">
                                     <CalendarComp logo={true} />
                                 </CardBody>

@@ -9,11 +9,13 @@ export class EventApi {
     private readonly api: ApiServiceI;
     constructor() { this.api = new ApiService(); }
 
-    async getEvents(page?: number, filter?: string, category?: string): Promise<EventPage> {
+    async getEvents(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<EventPage> {
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const categoryR = category ? `&category=${category}` : '';
-        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`);
+        const sortR = sort ? `&sort=${sort}` : '';
+        const reverseR = reverse ? `&reverse=${reverse}` : ''
+        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}${sortR}${reverseR}`);
     }
 
     async getEventById(id: number): Promise<Event> {

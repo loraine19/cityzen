@@ -56,9 +56,9 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                         id={id}
                         CreatedAt={createdAt}
                         type='sondage' />
-                    <div className="CardOverFlow h-full">
+                    <div className="CardOverFlow h-full !py-0 ">
                         <Typography
-                            className="mb-2">
+                            className=" leading-[1.3rem] ">
                             {description}
                         </Typography>
                     </div>

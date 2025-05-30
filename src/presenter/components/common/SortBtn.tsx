@@ -1,11 +1,18 @@
 import { Menu, MenuHandler, MenuList } from "@material-tailwind/react";
 import { Icon } from "./IconComp";
-import { SortLabel } from "../../../domain/entities/frontEntities";
-import { useState } from "react";
+import { SortLabel } from "../../../domain/entities/frontEntities"
 
-export const SortButton = (props: { sortList: SortLabel[], color?: string, setSelectedSort: (value: string) => void, selectedSort: String }) => {
-    const { sortList, color = 'cyan', setSelectedSort, selectedSort } = props
-    const [reverse, setReverse] = useState<boolean>(false)
+type SortButtonProps = {
+    sortList: SortLabel[],
+    color?: string,
+    setSelectedSort: (value: string) => void,
+    selectedSort: string
+    reverse: boolean
+    setReverse: (value: boolean) => void
+}
+
+export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selectedSort, reverse = false, setReverse }: SortButtonProps) => {
+
 
     return (
         <div className="relative flex justify-between items-center ">
@@ -25,11 +32,11 @@ export const SortButton = (props: { sortList: SortLabel[], color?: string, setSe
                                 key={index}
                                 className="rounded-2xl pl-3 py-0 flex items-center font-normal justify-between gap-4 hover:!bg-white hover:!text-underline" >
                                 {item.label}
-                                <div className="flex items-center"> {(selectedSort === item.label) &&
+                                <div className="flex items-center"> {(selectedSort === (item.key ?? item.label)) &&
                                     <Icon
                                         onClick={() => {
                                             reverse ? item.action() : item.reverse();
-                                            setSelectedSort(item.label)
+                                            setSelectedSort(item.key ?? item.label)
                                             setReverse(!reverse)
                                         }}
                                         color={color}
@@ -40,12 +47,12 @@ export const SortButton = (props: { sortList: SortLabel[], color?: string, setSe
                                         style={`!p-1 `}
                                         onClick={() => {
                                             item.action();
-                                            setSelectedSort(item.label)
+                                            setSelectedSort(item.key ?? item.label)
                                             setReverse(false)
                                         }}
                                         title={'Trier par ' + item.label}
-                                        disabled={selectedSort === item.label}
-                                        color={selectedSort === item.label ? color : 'gray'}
+                                        disabled={(selectedSort === (item.key ?? item.label))}
+                                        color={selectedSort === (item.key ?? item.label) ? color : 'gray'}
                                         icon={item.icon} fill />
                                 </div>
                             </div>

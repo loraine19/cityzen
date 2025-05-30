@@ -14,6 +14,24 @@ export enum EventCategory {
     CATEGORY_5 = 'autre',
 }
 
+export enum EventFilter {
+    MINE = 'MINE',
+    IGO = 'IGO',
+    VALIDATED = 'VALIDATE'
+}
+
+export enum EventStatus {
+    PENDING = 'PENDING',
+    VALIDATED = 'VALIDATED',
+    REJECTED = 'REJECTED'
+}
+
+export enum EventSort {
+    CREATED_AT = 'CREATED_AT',
+    INDAYS = 'INDAYS',
+    PARTICIPANTS = 'PARTICIPANTS',
+    AZ = 'AZ',
+}
 
 export class Event {
     Address: Address = {} as Address;
@@ -50,14 +68,6 @@ export type EventPage = { events: Event[], count: number };
 
 export type EventViewPage = { events: EventView[], count: number };
 
-export enum EventFilter {
-    MINE = 'MINE',
-    IGO = 'IGO',
-    VALIDATED = 'VALIDATE'
-}
-
-export enum EventStatus {
-    PENDING = 'PENDING',
-    VALIDATED = 'VALIDATED',
-    REJECTED = 'REJECTED'
+export type EventFethOption = {
+    page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean
 }

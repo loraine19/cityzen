@@ -86,6 +86,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
 
     return (
         <div className={`${onBoard ? ' w-respXl relative pt-4' : ''} gap-4 flex justify-end flex-1 w-full  right-0`}>
+            {/* /// NOTIFICATION POPUP */}
             <div className={` w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
                 <Card className={`${notif ? 'animate-bounce absolute' : ''} z-50 mt-4 h-max px-4 py-2 w-respLarge rounded-2xl shadow-lg transition-all duration-1000 ease-in-out transform
                  ${notif ?
@@ -122,7 +123,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                             </Typography>
                                         </div>)
                                         : (list.notifs.map((notif: NotifView, index2: number) => notif.read === false &&
-                                            <MenuItem className="flex flex-col w-full  max-w-[calc(100vw-2rem)] "
+                                            <MenuItem className="flex flex-col w-full max-w-[calc(100vw-2rem)] "
                                                 key={index2 + list.color}>
                                                 <div className="flex items-center w-full justify-between">
                                                     <Chip

@@ -1,5 +1,3 @@
-import { useState } from "react";
-import parse from "html-react-parser";
 import { Icon } from "./IconComp";
 import { Typography } from "@material-tailwind/react";
 import { GroupLink } from "./GroupLink";
@@ -19,21 +17,18 @@ export function FlagIcon(props: { flagged: boolean, id: number, type: string }) 
             style="hover:!bg-red-500/30 hover:text-red-700 pb-1 pt-1" />
     )
 }
-export function Title(props: { title: string, flagged?: boolean, id?: number, CreatedAt?: string | Date, subTitle?: string, type?: string, group?: Group }) {
-    const { flagged, id, CreatedAt, subTitle, type, group } = props
-    const titleElement = document.getElementById(props.title);
-    const maxLength = titleElement && titleElement.scrollWidth > titleElement.clientWidth ? 90 : 42;
-    const [title, setTitle] = useState<string>(props.title?.length > maxLength ? props.title.slice(0, maxLength - 3) + '...' + (parse('&nbsp;').toString()).repeat(props.title?.length - maxLength) : props.title)
+export function Title(props: { title: string, flagged?: boolean, id?: number, CreatedAt?: string | Date, subTitle?: string, type?: string, group?: Group, }) {
+    const { flagged, id, CreatedAt, subTitle, type, group, title } = props
+
     return (
-        <div className="min-h-max">
+        <div className="min-h-max pt-1">
             <div className="flex items-center w-full justify-between gap-2">
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
                     <Typography
-                        onScroll={() => { setTitle(props.title) }}
-                        id={props.title}
+                        id={title}
                         variant="h6"
-                        className="w-full flex whitespace-nowrap overflow-x-auto pt-1"
-                        title={props.title}>
+                        className="w-full flex !line-clamp-1 py-1"
+                        title={title}>
                         {title}
                     </Typography>
                     {CreatedAt && <span className="text-xs text-gray-500 italic">{new Date(CreatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>}

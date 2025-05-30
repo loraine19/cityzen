@@ -30,6 +30,7 @@ export class ModalValues {
 }
 
 export class SortLabel {
+    key?: string = '';
     label: string = '';
     icon: string = '';
     action: () => void;

@@ -157,8 +157,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                             <AuthHeader />
                         </div>
                         <main
-                            className="flex items-center gap-8 h-full py-12">
-                            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 !bg-[url('public/image/welcom.jpg')] bg-cover relative bg-center" >
+                            className="flex items-center gap-8 h-full p-20">
+                            <Card className="hidden md:flex  FixCardNoImage !p-8 welcome " >
                                 <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
                                 <Typography
                                     color="white"

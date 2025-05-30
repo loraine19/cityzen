@@ -39,7 +39,7 @@
 body,
 #root,
 .Body {
-    @apply flex flex-col w-screen h-screen;
+    @apply flex flex-col w-screen h-screen break-normal;
 }
 
 #root {
@@ -91,6 +91,35 @@ header {
 .orange100 {
     background-image: linear-gradient(#f9fafb, #ffedd5);
 }
+
+.anim {
+    @apply duration-700;
+    animation: up 0.7s forwards;
+}
+
+.fadeIn {
+    @apply duration-700;
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
 .Grid {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
     lg:auto-rows-[minmax(346px,46vh)] auto-rows-[minmax(360px,46vh)];
@@ -119,15 +148,15 @@ header {
 /* CARD */
 
 .FixCard {
-    @apply w-full my-0 mx-auto h-full flex flex-col relative !p-0;
+    @apply w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
 }
 
 .FixCardNoImage {
-    @apply w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0;
+    @apply w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0 anim;
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !min-h-[10.5rem] max-h-[50%] !shadow-md;
+    @apply flex flex-1 !min-h-[10.5rem] max-h-[50%] !shadow-md fadeIn;
 }
 
 .FixCardHeaderNoImage {
@@ -269,6 +298,13 @@ button {
 
 .BgUser {
     background-image: url("image/person.svg");
+    background-size: cover;
+    background-position: center;
+    background-color: #757d82 !important;
+}
+
+.welcome {
+    background-image: url("image/welcome.jpg");
     background-size: cover;
     background-position: center;
     background-color: #757d82 !important;
