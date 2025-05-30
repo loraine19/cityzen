@@ -72,19 +72,21 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                 value={SkillLevel[skill as unknown as keyof typeof SkillLevel]}
                                 className=" GrayChip  px-4 rounded-full h-full flex items-center justify-center"
                                 icon={<Icon
+                                    disabled
                                     size="md"
                                     icon="design_services"
-                                    style="scale-150 "
+                                    style="scale-150 pointer-events-none"
                                     title="Compétence" />}>
                             </Chip>
                             <Chip
                                 value={HardLevel[hard as unknown as keyof typeof HardLevel]}
                                 className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-4"
                                 icon={<Icon
+                                    disabled
                                     size="md"
                                     icon="signal_cellular_alt"
                                     fill
-                                    style="scale-150"
+                                    style="scale-150 pointer-events-none"
                                     title="Difficulté" />}>
                             </Chip>
                         </div>

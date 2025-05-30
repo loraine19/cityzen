@@ -48,8 +48,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     return (
         <div className='flex !min-h-[350px] justify-center items-center h-full gap-8 py-6 w-full'>
-            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 welcome" >
+            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8" >
                 <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
+                <img src="image/welcome.jpg"
+                    alt="connexion"
+                    className="absolute inset-0 object-cover object-center w-full h-full rounded-xl opacity-90 z-0" />
                 <Typography
                     color="white"
                     className="py-6 px-8 !leading-[1] text-[2.5rem] font-bold !text-center font-comfortaa relative z-10"
@@ -119,10 +122,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                         </div>
 
                         <div className={`flex h-full pt-10 px-4  justify-center `}>
-                            <Card className="flex h-full md:hidden !min-h-8 FixCardNoImage  welcome" >
-                                <span></span>
+                            <Card className="flex h-full md:hidden !min-h-8 FixCardNoImage" >
+                                <img src="image/welcome.jpg"
+                                    alt="connexion"
+                                    className="absolute inset-0 object-cover object-center w-full h-full rounded-xl  z-0 filter brightness-95" />
                             </Card>
-
                         </div>
 
                     </CardBody>

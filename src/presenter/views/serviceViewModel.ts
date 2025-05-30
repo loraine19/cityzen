@@ -4,7 +4,7 @@ import { ServiceView } from './viewsEntities/serviceViewEntity';
 import { Service } from '../../domain/entities/Service';
 
 export const serviceViewModel = () => {
-  return (mine: boolean, type: string, step: string, category: string) => {
+  return (mine: boolean, type: string, step: string, category: string, sort: string, reverse: boolean) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -19,7 +19,7 @@ export const serviceViewModel = () => {
       = useInfiniteQuery({
         queryKey: ['services', mine, type, step, category],
         staleTime: 600000,
-        queryFn: async ({ pageParam = 1 }) => await getServices.execute(pageParam, mine, type, step, category) || [],
+        queryFn: async ({ pageParam = 1 }) => await getServices.execute(pageParam, mine, type, step, category, sort, reverse) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });

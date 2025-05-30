@@ -9,13 +9,18 @@ export class ServiceApi {
 
     constructor() { this.api = new ApiService(); }
 
-    async getServices(page?: number, mine?: boolean, type?: string, step?: string, category?: string): Promise<ServicePage> {
+    async getServices(page?: number,
+        mine?: boolean, type?: string, step?: string, category?: string,
+        sort?: string, reverse?: boolean): Promise<ServicePage> {
         const pageR = page ? `?page=${page}` : '';
         const mineR = mine ? `&mine=${mine}` : '';
         const typeR = type ? `&type=${type}` : '';
         const stepR = step ? `&step=${step}` : '';
+        const sortR = sort ? `&sort=${sort}` : '';
+        const reverseR = reverse ? `&reverse=${reverse}` : '';
         const categoryR = category ? `&category=${category}` : '';
-        return this.api.get(`${this.dataType}${pageR}${mineR}${typeR}${stepR}${categoryR}`)
+
+        return this.api.get(`${this.dataType}${pageR}${mineR}${typeR}${stepR}${categoryR}${sortR}${reverseR}`)
     }
 
     async getServiceById(id: number): Promise<Service> {

@@ -34,7 +34,7 @@ export class SortLabel {
     label: string = '';
     icon: string = '';
     action: () => void;
-    reverse: () => void;
+    reverse?: () => void;
 
     constructor(label: string, icon: string, action: () => void, reverse: () => void) {
         this.label = label;

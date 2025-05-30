@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { ServiceCategory, ServiceFilter, ServiceStepFilter } from "../../../../domain/entities/Service";
+import { ServiceCategory, ServiceFilter, ServiceSort, ServiceStepFilter } from "../../../../domain/entities/Service";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -8,7 +8,7 @@ import SelectSearch from "../../common/SelectSearch";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import ServiceComp from "./serviceCards/ServiceCard";
-import { Label, TabLabel } from "../../../../domain/entities/frontEntities";
+import { Label, SortLabel, TabLabel } from "../../../../domain/entities/frontEntities";
 import { SkeletonGrid } from "../../common/Skeleton";
 import DI from '../../../../di/ioc';
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
@@ -26,6 +26,8 @@ export default function ServicesPage() {
     const [category, setCategory] = useState<string>('');
     const [customFilter, setCustomFilter] = useState<boolean>(false);
     const [customList, setCustomList] = useState<ServiceView[]>([])
+    const [sort, setSort] = useState<ServiceSort>(ServiceSort.CREATED_AT);
+    const [reverse, setReverse] = useState<boolean>(false);
 
     //// PARAMS
     const [Params, setParams] = useSearchParams();
@@ -33,7 +35,7 @@ export default function ServicesPage() {
 
     //// VIEW MODEL
     const serviceViewModelFactory = DI.resolve('serviceViewModel');
-    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory(mine, type, step, category);
+    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory(mine, type, step, category, sort, reverse);
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
     //// NAMING
@@ -108,7 +110,7 @@ export default function ServicesPage() {
         }
         else if (label !== 'tous') {
             setCustomFilter(true);
-            setCustomList(services && list.filter((service: ServiceView) =>
+            setCustomList(services && services.filter((service: ServiceView) =>
                 service.category.toString() === (value) ||
                 service.categoryS.includes(label) ||
                 service.typeS.includes(label) ||
@@ -137,30 +139,41 @@ export default function ServicesPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
-                sortList.find((s) => s.label === selectedSort)?.action();
             }
             else setIsBottom(false)
         }
     }
 
     //// SORT LIST
-    const [list, setList] = useState<ServiceView[]>(services);
-    useEffect(() => { setList(services) }, [isLoading, refetch, count])
 
-    const sortList = [
+    const sortList: SortLabel[] = [
         {
             label: "Publié le",
+            key: ServiceSort.CREATED_AT,
             icon: "event",
-            action: () => setList([...services].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())),
-            reverse: () => setList([...services].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+            action: () => refetch(),
         },
         {
+            key: ServiceSort.USER,
+            label: "Utilisateur", icon: "person",
+            action: () => refetch(),
+        },
+        {
+            key: ServiceSort.TITLE,
             label: "Titre", icon: "sort_by_alpha",
-            action: () => setList([...services].sort((a, b) => a.title.localeCompare(b.title))),
-            reverse: () => setList([...services].sort((a, b) => b.title.localeCompare(a.title)))
+            action: () => refetch(),
+        },
+        {
+            key: ServiceSort.SKILL,
+            label: "Compétence", icon: "design_services",
+            action: () => refetch()
+        },
+        {
+            key: ServiceSort.HARD,
+            label: "Difficulté", icon: "signal_cellular_alt",
+            action: () => refetch()
         }
     ]
-    const [selectedSort, setSelectedSort] = useState<string>(sortList[0].label)
 
     //// RENDER
     return (
@@ -173,8 +186,11 @@ export default function ServicesPage() {
                 <TabsMenu
                     labels={serviceTabs}
                     sortList={sortList}
-                    selectedSort={selectedSort}
-                    setSelectedSort={setSelectedSort} />
+                    selectedSort={sort}
+                    setSelectedSort={setSort}
+                    reverse={reverse}
+                    setReverse={setReverse}
+                />
                 {mine ?
                     <CheckCard
                         categoriesArray={boxArray}
@@ -201,7 +217,7 @@ export default function ServicesPage() {
                     ))
                     :
                     !customFilter ?
-                        list.map((service: ServiceView, index: number) => (
+                        services.map((service: ServiceView, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <ServiceComp
                                     key={service.id}

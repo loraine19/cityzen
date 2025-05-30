@@ -103,14 +103,12 @@ export default function EventListPage() {
             key: EventSort.CREATED_AT,
             icon: "event",
             action: () => refetch()
-            , reverse: () => refetch()
         },
         {
             label: 'titre',
             key: EventSort.AZ,
             icon: 'sort_by_alpha',
             action: () => refetch(),
-            reverse: () => refetch()
         }
         ,
         {
@@ -118,14 +116,12 @@ export default function EventListPage() {
             key: EventSort.PARTICIPANTS,
             icon: 'person',
             action: () => refetch(),
-            reverse: () => refetch()
         },
         {
             label: 'jours',
             key: EventSort.INDAYS,
             icon: 'calendar_month',
             action: () => refetch(),
-            reverse: () => refetch()
         }
     ]
 

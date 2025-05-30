@@ -45,6 +45,13 @@ export enum ServiceCategory {
     CATEGORY_5 = 'autre',
 }
 
+export enum ServiceSort {
+    CREATED_AT = 'CREATED_AT',
+    USER = 'USER',
+    TITLE = 'TITLE',
+    SKILL = 'SKILL',
+    HARD = 'HARD',
+}
 
 
 

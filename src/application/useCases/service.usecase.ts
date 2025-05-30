@@ -7,8 +7,11 @@ export class GetServicesUseCase {
     constructor({ serviceRepository }: { serviceRepository: ServiceRepositoryBase }) {
         this.serviceRepository = serviceRepository;
     }
-    public async execute(page?: number, mine?: boolean, type?: string, step?: string, category?: string): Promise<ServicePage> {
-        return await this.serviceRepository.getServices(page, mine, type, step, category);
+    public async execute(page?: number,
+        mine?: boolean, type?: string,
+        step?: string, category?: string,
+        sort?: string, reverse?: boolean): Promise<ServicePage> {
+        return await this.serviceRepository.getServices(page, mine, type, step, category, sort, reverse);
     }
 }
 

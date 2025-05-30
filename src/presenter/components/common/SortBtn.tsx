@@ -35,7 +35,7 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                                 <div className="flex items-center"> {(selectedSort === (item.key ?? item.label)) &&
                                     <Icon
                                         onClick={() => {
-                                            reverse ? item.action() : item.reverse();
+                                            item.action()
                                             setSelectedSort(item.key ?? item.label)
                                             setReverse(!reverse)
                                         }}
