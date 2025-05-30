@@ -114,19 +114,16 @@ export class ApiService implements ApiServiceI {
                 break;
             case 401:
                 this.logWithTime('token expired 401');
-                if (this.count < 1) {
+                if (this.count < 2) {
                     this.count++
                     try {
                         const refreshSuccess = await this.refreshAccess();
                         if (refreshSuccess) return refreshSuccess
                     } catch (error) {
-
                         console.error('refreshAccess error:', error);
                         newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
                     }
-                } else {
-                    newError = new UnauthorizedError('Vous n\'avez pas pu être re-identifié');
-                }
+                } else window.location.replace('/signin?msg=Merci de vous re-identifier');
                 break;
             case 403:
                 newError = new ForbiddenError(message);
@@ -148,24 +145,22 @@ export class ApiService implements ApiServiceI {
 
     //// REFRESH ACCESS
     refreshAccess = async (): Promise<boolean> => {
-        // Placer redirect ailleurs si besoin
-        // const errorRedirect = (message?: string) => {
-        //     this.authService.clearCookies()
-        //     setTimeout(() => { window.location.replace(`/signin?msg=${message ?? 'Merci de vous re-identifier'}`) }, 2000)
-        // }
         if (window.location.pathname.includes('/sign')) return false;
+        const echec = () => { return false; }
+        const good = () => { this.count = 0; return true; }
         try {
             const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
-            console.log('refreshAccess', data, new Date().toLocaleTimeString());
-            if (data?.message !== 'Token rafraichi') return false
-            this.count = 0;
-            return true
+            if (data?.message !== 'Token rafraichi') {
+                const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
+                console.log(`'refreshAccess second attempt in ${this.count} retries`, data, new Date().toLocaleTimeString());
+                if (data?.message !== 'Token rafraichi') return echec()
+                else return good()
+            }
+            else return good();
         }
         catch (error) {
             console.error('refreshAccess error:', error);
-            this.count = 0;
-            // throw new Error('la session a expiré, veuillez vous reconnecter');
-            return false;
+            return false
         }
     };
 

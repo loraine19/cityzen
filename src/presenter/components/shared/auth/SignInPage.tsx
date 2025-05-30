@@ -80,7 +80,7 @@ export default function SignInPage() {
     const terms = "Vous resterez connecté pour 48h ...";
 
     return (
-        <div className="Body gray pb-6">
+        <div className="Body gray py-[1%] ">
             <AuthHeader />
             <main className='items-center gap-4 '>
                 <AuthForm
