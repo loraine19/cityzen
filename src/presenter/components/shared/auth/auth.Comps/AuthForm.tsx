@@ -47,7 +47,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
 
     return (
-        <div className='flex justify-center items-center h-full gap-8  w-full pt-6'>
+        <div className='flex !min-h-[350px] justify-center items-center h-full gap-8 py-6 w-full'>
             <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8 welcome" >
                 <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
                 <Typography
@@ -57,7 +57,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                     Connecter vous à votre Quartier
                 </Typography>
             </Card>
-            <Card className="flex-[50%] !min-w-[400px] !max-h-[500px] flex FixCardNoImage !gap-0 ">
+            <Card className="flex-[50%]   flex FixCardNoImage !gap-0 ">
                 <form
                     onSubmit={formik.handleSubmit}
                     className="flex flex-col h-full gap-2 ">
@@ -117,6 +117,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 onChange={formik.handleChange}
                                 data-cy="password-confirm-input" />
                         </div>
+
+                        <div className={`flex h-full pt-10 px-4  justify-center `}>
+                            <Card className="flex h-full md:hidden !min-h-8 FixCardNoImage  welcome" >
+                                <span></span>
+                            </Card>
+
+                        </div>
+
                     </CardBody>
 
                     <CardFooter className={`flex flex-col !py-4 `}>
