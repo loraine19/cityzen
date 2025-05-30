@@ -122,7 +122,7 @@ export default function ServicesPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (count === 0): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
+            case (count === 0 && !isLoading): setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }

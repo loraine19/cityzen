@@ -72,7 +72,7 @@ export default function EventListPage() {
     useEffect(() => {
         switch (true) {
             case error: setNotif('Erreur de chargement'); break;
-            case count === 0: setNotif(`Aucun événement ${filterName()} trouvé`); break;
+            case (count === 0 && !isLoading): setNotif(`Aucun événement ${filterName()} trouvé`); break;
             default: setNotif('');
         }
     }, [events, isLoading, error, filter, category]);
@@ -93,7 +93,6 @@ export default function EventListPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && await fetchNextPage()
-                //sortList.find((s: any) => s.label === sort)?.action();
             } else setIsBottom(false)
         }
     }

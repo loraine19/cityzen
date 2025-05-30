@@ -102,6 +102,10 @@ header {
     animation: fadeIn 1s forwards;
 }
 
+.notifList {
+    @apply top-20 absolute w-full flex justify-center anim;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

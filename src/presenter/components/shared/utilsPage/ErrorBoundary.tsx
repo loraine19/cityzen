@@ -43,7 +43,18 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     render() {
 
-        const errorMessage = this.state.error?.message;
+        let errorMessage = this.state.error?.message;
+
+        switch (true) {
+            case (errorMessage?.includes('Network Error') || errorMessage?.includes('Failed to fetch')):
+                errorMessage = 'Erreur de connexion au serveur. Veuillez vérifier votre connexion Internet ou réessayer plus tard.';
+                break;
+            case (errorMessage?.includes('401') || errorMessage?.includes('Unauthorized')):
+                errorMessage = 'Vous devez vous connecter pour accéder à cette page';
+                Cookies.remove('user');
+                break;
+        }
+
         if (this.state.hasError) {
             const path = window.location.pathname
             let bodyColor: string;
@@ -104,7 +115,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 button2: {
                     text: 'Déconnexion', onClick: () => {
                         Cookies.remove('user')
-                        Cookies.remove('refreshToken')
                         window.location.replace('/signin')
                     }
                 },

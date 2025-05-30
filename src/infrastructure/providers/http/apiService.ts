@@ -60,7 +60,7 @@ export class ApiService implements ApiServiceI {
     private count: number = 0;
     private api: AxiosInstance;
     //  private authService: AuthService;
-    private _refreshingToken: boolean = (this.count > 1) ? true : false;
+    // private _refreshingToken: boolean = (this.count > 1) ? true : false;
 
     constructor() {
         //   this.authService = new AuthService();
@@ -73,7 +73,6 @@ export class ApiService implements ApiServiceI {
     }
     getBaseUrl = () => baseURL;
 
-
     private logWithTime = (message: string) => {
         const now = new Date().toLocaleTimeString();
         const milliseconds = new Date().getMilliseconds();
@@ -82,17 +81,21 @@ export class ApiService implements ApiServiceI {
 
     private handleRequest = (config: any) => {
         // Remove user cookies from the request headers if present
-        if (config.headers && config.headers['Cookie']) {
+        if (config.headers) {
+            // Remove Cookie header if present
             delete config.headers['Cookie'];
+            delete config.headers['cookie'];
+        }
+        // Remove cookies property if present
+        if (config.cookies) {
+            delete config.cookies;
         }
         return config
     }
 
     private handleResponseError = async (error: any) => {
-        let count = this.count++;
-        console.error('handleResponseError count:', count, 'error:', error);
-
-        console.error('complete error:', error);
+        this.count++;
+        console.error('handleResponseError count:', this.count, 'error:', error);
         let newError = new ApiError(500, 'Une erreur est survenue');
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
@@ -111,14 +114,13 @@ export class ApiService implements ApiServiceI {
                 break;
             case 401:
                 this.logWithTime('token expired 401');
-                if (!this._refreshingToken) {
+                if (this.count < 1) {
                     this.count++
                     try {
                         const refreshSuccess = await this.refreshAccess();
-                        this._refreshingToken = false;
-                        if (refreshSuccess) return this.count = 0
+                        if (refreshSuccess) return refreshSuccess
                     } catch (error) {
-                        this._refreshingToken = false;
+
                         console.error('refreshAccess error:', error);
                         newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
                     }
@@ -139,7 +141,8 @@ export class ApiService implements ApiServiceI {
                 newError = new ServerError();
                 break;
         }
-        count = 0;
+
+        this.count = 0;
         throw Error(newError.message || 'Une erreur est survenue');
     };
 
@@ -161,7 +164,7 @@ export class ApiService implements ApiServiceI {
         catch (error) {
             console.error('refreshAccess error:', error);
             this.count = 0;
-            throw new Error('la session a expiré, veuillez vous reconnecter');
+            // throw new Error('la session a expiré, veuillez vous reconnecter');
             return false;
         }
     };
