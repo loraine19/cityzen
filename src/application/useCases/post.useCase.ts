@@ -10,8 +10,8 @@ export class GetPostsUseCase {
         this.postRepository = postRepository;
     }
 
-    public async execute(page?: number, filter?: string, category?: string): Promise<PostPage> {
-        return this.postRepository.getPosts(page, filter, category);
+    public async execute(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<PostPage> {
+        return this.postRepository.getPosts(page, filter, category, sort, reverse);
     }
 }
 

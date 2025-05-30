@@ -27,7 +27,7 @@ export default function ServicesPage() {
     const [customFilter, setCustomFilter] = useState<boolean>(false);
     const [customList, setCustomList] = useState<ServiceView[]>([])
     const [sort, setSort] = useState<ServiceSort>(ServiceSort.CREATED_AT);
-    const [reverse, setReverse] = useState<boolean>(false);
+    const [reverse, setReverse] = useState<boolean>(true);
 
     //// PARAMS
     const [Params, setParams] = useSearchParams();
@@ -203,7 +203,7 @@ export default function ServicesPage() {
                         category={serviceCategoriesS}
                         search={search} />
                 }
-                <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
+                <div className={notif && "notif"}>{notif}</div>
             </header>
             <main
                 ref={divRef}

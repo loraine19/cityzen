@@ -22,6 +22,15 @@ export enum PostFilter {
     MINE = 'MINE',
     ILIKE = 'ILIKE',
 }
+
+export enum PostSort {
+    CREATED_AT = 'CREATED_AT',
+    USER = 'USER',
+    TITLE = 'TITLE',
+    LIKE = 'LIKE',
+
+}
+
 export class Post {
     error?: string;
     id: number = 0;

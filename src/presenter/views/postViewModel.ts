@@ -3,7 +3,7 @@ import DI from '../../di/ioc';
 import { PostView } from './viewsEntities/postViewEntities';
 
 export const postViewModel = () => {
-  return (filter?: string, category?: string) => {
+  return (filter?: string, category?: string, sort?: string, reverse?: boolean) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -18,7 +18,7 @@ export const postViewModel = () => {
         queryKey: ['Posts', filter, category],
         refetchOnWindowFocus: false,
         staleTime: 600000, // 10 minutes,
-        queryFn: async ({ pageParam = 1 }) => await getPosts.execute(pageParam, filter, category) || { Posts: [], count: 0 },
+        queryFn: async ({ pageParam = 1 }) => await getPosts.execute(pageParam, filter, category, sort, reverse) || { Posts: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.posts?.length ? pages.length + 1 : undefined
       })

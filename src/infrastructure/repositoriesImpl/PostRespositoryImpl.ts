@@ -14,8 +14,8 @@ export class PostRepositoryImpl implements PostRepositoryBase {
     private postData: IData;
     constructor({ postData }: { postData: IData }) { this.postData = postData }
 
-    public async getPosts(page?: number, filter?: string, category?: string): Promise<PostPage> {
-        return await this.postData.getPosts(page, filter, category);
+    public async getPosts(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<PostPage> {
+        return await this.postData.getPosts(page, filter, category, sort, reverse);
     }
 
     public async getPostById(id: number): Promise<Post> {

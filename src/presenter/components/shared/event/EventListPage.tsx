@@ -127,7 +127,7 @@ export default function EventListPage() {
 
     return (
         <div className="Body cyan">
-            <header className="px-4">
+            <header>
                 <NavBarTop />
                 <SubHeader
                     qty={count || 0}

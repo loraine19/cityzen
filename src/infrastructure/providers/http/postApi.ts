@@ -9,11 +9,15 @@ export class PostApi {
     private readonly api: ApiServiceI;
     constructor() { this.api = new ApiService(); }
 
-    async getPosts(page?: number, filter?: string, category?: string): Promise<PostPage> {
+    async getPosts(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<PostPage> {
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const categoryR = category ? `&category=${category}` : '';
-        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}`);
+        const sortR = sort ? `&sort=${sort}` : '';
+        const reverseR = reverse ? `&reverse=${reverse}` : '';
+
+
+        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}${sortR}${reverseR}`);
     }
 
     async getPostById(id: number): Promise<Post> {

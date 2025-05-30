@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { PostCategory, PostFilter } from "../../../../domain/entities/Post";
+import { PostCategory, PostFilter, PostSort } from "../../../../domain/entities/Post";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
 import NavBarTop from "../../common/NavBarTop";
@@ -20,8 +20,11 @@ import { Icon } from "../../common/IconComp";
 export default function PostListPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
+
+    const [sort, setSort] = useState<PostSort>(PostSort.CREATED_AT);
+    const [reverse, setReverse] = useState<boolean>(true);
     const postViewModelFactory = DI.resolve('postViewModel');
-    const { posts, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = postViewModelFactory(filter, category)
+    const { posts, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = postViewModelFactory(filter, category, sort, reverse)
     const [notif, setNotif] = useState<string>('')
     const [mines, setMines] = useState<boolean>(false);
     const [view, setView] = useState(window.innerWidth > 768 ? "list" : "dashboard");
@@ -31,8 +34,6 @@ export default function PostListPage() {
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     useEffect(() => { setCategory(params.category ?? ''); setFilter(params.filter ?? ''); }, []);
 
-    const [list, setList] = useState<PostView[]>(posts);
-    useEffect(() => { posts && setList(posts) }, [isLoading, count, refetch])
 
     //// FILTER TAB
     const filterTab = async (value?: PostFilter) => {
@@ -71,11 +72,11 @@ export default function PostListPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (count === 0): setNotif(`Aucune annonce ${filterName()} ${categoryName()} n'a été trouvé`); break;
+            case (count === 0 && !isLoading): setNotif(`Aucune annonce ${filterName()} ${categoryName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }
-    }, [isLoading, error, filter, category]);
+    }, [isLoading, error, filter, category, sort, reverse, count]);
 
 
     useEffect(() => {
@@ -99,11 +100,10 @@ export default function PostListPage() {
             if (scrollTop + clientHeight + 2 >= scrollHeight) {
                 setIsBottom(true);
                 hasNextPage && fetchNextPage()
-                sortList.find((s) => s.label === selectedSort)?.action();
             } else setIsBottom(false)
         }
     }
-    const announcesToGrid = AnnouncesByFour(list);
+    const announcesToGrid = AnnouncesByFour(posts);
     const switchClick = () => setView(view === "dashboard" ? "list" : "dashboard");
 
     //// SORT LIST
@@ -111,23 +111,24 @@ export default function PostListPage() {
         {
             label: "Nombre de likes",
             icon: "thumb_up",
-            action: () => setList([...posts].sort((a, b) => b?.Likes?.lenght - a?.Likes?.lenght)),
-            reverse: () => setList([...posts].sort((a, b) => a?.Likes?.length - b?.Likes?.length))
+            action: async () => await refetch()
         },
         {
             label: "Créé le",
             icon: "event",
-            action: () => setList([...posts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())),
-            reverse: () => setList([...posts].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+            action: async () => await refetch()
         },
         {
             label: "Titre",
             icon: "sort_by_alpha",
-            action: () => setList([...posts].sort((a, b) => a.title.localeCompare(b.title))),
-            reverse: () => setList([...posts].sort((a, b) => b.title.localeCompare(a.title)))
+            action: async () => await refetch()
+        },
+        {
+            label: "Utilisateur",
+            icon: "person",
+            action: async () => await refetch()
         }
     ]
-    const [selectedSort, setSelectedSort] = useState<string>(sortList[0].label)
 
     return (
         <div className="Body orange">
@@ -139,9 +140,12 @@ export default function PostListPage() {
                 <TabsMenu
                     labels={postTabs}
                     sortList={sortList}
-                    selectedSort={selectedSort}
-                    setSelectedSort={setSelectedSort}
-                    color={'orange'} />
+                    selectedSort={sort}
+                    setSelectedSort={setSort}
+                    color={'orange'}
+                    reverse={reverse}
+                    setReverse={setReverse}
+                />
                 <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
                     <CategoriesSelect
                         categoriesArray={postCategories}
@@ -163,7 +167,7 @@ export default function PostListPage() {
             <main
                 ref={divRef}
                 onScroll={handleScroll}>
-                {isLoading || !list || error ?
+                {isLoading || !posts || error ?
                     <div className="Grid ">
                         {[...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
                             <SkeletonGrid
@@ -182,7 +186,7 @@ export default function PostListPage() {
                                     view={view} />))
                             :
                             <div className="Grid">
-                                {list?.map((post: PostView, index: number) => (
+                                {posts?.map((post: PostView, index: number) => (
                                     <div className="SubGrid" key={index}>
                                         <PostCard
                                             key={post.id}
