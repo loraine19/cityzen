@@ -160,7 +160,7 @@ export default function ServicesPage() {
             reverse: () => setList([...services].sort((a, b) => b.title.localeCompare(a.title)))
         }
     ]
-    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
+    const [selectedSort, setSelectedSort] = useState<string>(sortList[0].label)
 
     //// RENDER
     return (

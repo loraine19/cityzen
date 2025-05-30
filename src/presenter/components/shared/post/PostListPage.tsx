@@ -127,7 +127,7 @@ export default function PostListPage() {
             reverse: () => setList([...posts].sort((a, b) => b.title.localeCompare(a.title)))
         }
     ]
-    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
+    const [selectedSort, setSelectedSort] = useState<string>(sortList[0].label)
 
     return (
         <div className="Body orange">

@@ -108,7 +108,7 @@ export default function VoteListPage() {
             reverse: () => setList([...poolsSurveys].sort((a, b) => b.Group?.name.localeCompare(a.Group?.name)))
         }
     ]
-    const [selectedSort, setSelectedSort] = useState<String>(sortList[0].label)
+    const [selectedSort, setSelectedSort] = useState<string>(sortList[0].label)
 
     //// NOTIFICATION
     useEffect(() => {
