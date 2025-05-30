@@ -28,7 +28,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
         <footer className="pt-0.5 pb-2 px-1 lg:px-4 z-30">
             <Navbar className="flex rounded-full shadow-lg h-[4rem] items-center  p-0 !bg-white ">
                 <div className="w-full h-full relative">
-                    <ul className={` flex flex-row w-full justify-between  h-full `}>
+                    <ul className={` flex flex-row w-full overflow-auto rounded-full justify-between  h-full `}>
                         {navItems.map(({ to, icon, label, color, col }) => (
                             <Typography
                                 key={to}

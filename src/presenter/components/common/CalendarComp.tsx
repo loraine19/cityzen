@@ -39,7 +39,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
     return (
         <div className='flex flex-col flex-1 pt-3 '
             data-cy="calendar">
-            <div className="flex  justify-between  gap-2 items-center p-0">
+            <div className="flex overflow-auto justify-between  gap-2 items-center p-0">
                 {logo && <div className='flex items-center gap-1'>
                     <Icon
                         fill bg
@@ -61,7 +61,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             icon='arrow_back_ios'
                             size='md'
                             onClick={removeWeek} />
-                        <button onClick={resetWeek}>
+                        <button onClick={resetWeek} className='text-sm md:text-md'>
                             {(new Date().toLocaleDateString('fr-FR', { weekday: 'short', month: 'numeric', day: 'numeric' }))}
                         </button>
                         <Icon
@@ -131,7 +131,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                 {week.map((day: any, index: number) =>
                                     <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full    `}
                                         key={index}>
-                                        <p className='w-full sticky top-0 pt-1 text-center bg-blue-gray-50 '>
+                                        <p className='w-full  sticky top-0 pt-1 text-center bg-blue-gray-50 '>
                                             {day.date.toLocaleDateString('fr-FR', { weekday: 'narrow', month: 'numeric', day: 'numeric' })}
                                         </p>
                                         <div className='flex flex-col h-full w-full items-center gap-0.5' key={index}>

@@ -19,7 +19,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
 
     return (
         <>
-            <div className={`realtive z-50 flex items-center px-0 gap-2 truncate mr-4`}>
+            <div className={`realtive z-50 flex items-center px-0 gap-5`}>
                 <Popover placement="bottom-start">
                     <PopoverHandler>
                         <div className={`relative`}>
@@ -30,7 +30,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                 size={size as any}
                                 referrerPolicy="unsafe-url"
                                 alt="avatar"
-                                className="BgUser shadow " />
+                                className="BgUser shadow min-w-max " />
                             <OnlineDot id={profile?.userId} />
                         </div>
                     </PopoverHandler>
@@ -115,7 +115,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         {profile?.firstName} {profile?.lastName}
                     </Typography>
                     <Typography
-                        className={`font-normal text-blue-gray-500 ${texteSize2} line-clamp-1 truncate max-w-full pr-2`}>
+                        className={`font-normal text-blue-gray-500 ${texteSize2} line-clamp-1 truncate max-w-full pr-4`}>
                         {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
                             <span key={index} >
                                 {' ⌖ ' + group.Group?.name + ' '}

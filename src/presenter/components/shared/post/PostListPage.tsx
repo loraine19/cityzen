@@ -164,11 +164,12 @@ export default function PostListPage() {
                 ref={divRef}
                 onScroll={handleScroll}>
                 {isLoading || !list || error ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
-                    ))
+                    <div className="Grid ">
+                        {[...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
+                                key={index}
+                                count={4} />
+                        ))}</div>
                     : <>
                         {view === "list" ?
                             announcesToGrid.map((line, index) => (

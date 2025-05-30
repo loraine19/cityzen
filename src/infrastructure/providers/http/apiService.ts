@@ -155,10 +155,13 @@ export class ApiService implements ApiServiceI {
             const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
             console.log('refreshAccess', data, new Date().toLocaleTimeString());
             if (data?.message !== 'Token rafraichi') return false
+            this.count = 0;
             return true
         }
         catch (error) {
             console.error('refreshAccess error:', error);
+            this.count = 0;
+            throw new Error('la session a expiré, veuillez vous reconnecter');
             return false;
         }
     };
