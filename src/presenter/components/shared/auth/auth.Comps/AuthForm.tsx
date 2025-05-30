@@ -57,10 +57,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                     Connecter vous à votre Quartier
                 </Typography>
             </Card>
-            <Card className="flex-[50%]   flex FixCardNoImage !gap-0 ">
+            <Card className="flex-[50%]  flex FixCardNoImage !gap-0 ">
                 <form
                     onSubmit={formik.handleSubmit}
-                    className="flex flex-col h-full gap-2 ">
+                    className="flex flex-col h-full p-2 gap-2 ">
                     <CardHeader className="FixCardHeaderNoImage flex-col !h-max px-4 !pt-4"
                         floated={false}>
                         <Typography

@@ -111,6 +111,7 @@ export default function SignInPage() {
                         inscrivez-vous
                     </Button>
                 </Link>
+
             </footer>
         </div>
     );

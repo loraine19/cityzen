@@ -308,10 +308,10 @@ button {
 }
 
 .welcome {
-    background-image: url("image/welcome.jpg");
+    background-image: url("public/image/welcome.jpg");
     background-size: cover;
     background-position: center;
-    background-color: #757d82 !important;
+    background-color: #7a9db310 !important;
 }
 
 .Map {
