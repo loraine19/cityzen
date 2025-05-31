@@ -130,7 +130,7 @@ header {
 
 @keyframes slide {
     from {
-        transform: translateX(-100%);
+        transform: translateX(-400%);
     }
     to {
         transform: translateX(0);

@@ -35,12 +35,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                 as="li"
                                 variant="small"
                                 color={col as any}
-                                className={`flex rounded-full items-center py-0.5 ${addBtn ? 'justify-start pl-0' : 'justify-center px-0'} font-medium`}
+                                className={`flex rounded-full items-center  ${addBtn ? 'justify-start pl-0' : 'justify-center px-0'} font-medium`}
                             >
                                 <NavLink
                                     to={to}
                                     className={({ isActive }) =>
-                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full  rounded-full px-2.5 lg:px-3  ${isActive ? `animSlide border-[1px] z-30 ${color} bg-white shadow-[0_2px_8px_0.5px] shadow-blue-gray-200/90 mb-0.5 ` : ''}`
+                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full  rounded-full px-2 lg:px-2.5  ${isActive ? `animSlide border-[1px]  z-30 ${color} bg-white shadow-[0_2px_8px_0.5px] shadow-blue-gray-200/90  ` : ''}`
                                     }
                                 >
                                     {({ isActive }) => (
