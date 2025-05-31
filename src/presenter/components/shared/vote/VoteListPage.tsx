@@ -113,8 +113,7 @@ export default function VoteListPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (isLoading): setNotif('Chargement...'); break;
-            case (count === 0): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
+            case (count === 0 || !poolsSurveys): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement des sondages, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }

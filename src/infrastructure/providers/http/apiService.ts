@@ -101,7 +101,7 @@ export class ApiService implements ApiServiceI {
         originalRequest._retry = originalRequest._retry || false;
         if (!error.response) {
             this.logWithTime('not api error');
-            return Promise.reject(newError);
+            // return Promise.reject(newError);
         }
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
         let message = error.response?.data?.message || error.response?.message || '';
@@ -114,16 +114,13 @@ export class ApiService implements ApiServiceI {
                 break;
             case 401:
                 this.logWithTime('token expired 401');
-                try {
-                    const refreshSuccess = await this.refreshAccess();
-                    if (refreshSuccess) {
-                        this.logWithTime('token refreshed successfully');
-                        return refreshSuccess
-                    }
-                } catch (error) {
-                    console.error('refreshAccess error:', error);
-                    newError = new UnauthorizedError(message ?? 'Erreur lors du rafraîchissement du token');
+
+                const refreshSuccess = await this.refreshAccess();
+                if (refreshSuccess) {
+                    this.logWithTime('token refreshed successfully');
+                    return refreshSuccess
                 }
+                else newError = new UnauthorizedError(message);
                 break;
             case 403:
                 newError = new ForbiddenError(message);
@@ -145,8 +142,21 @@ export class ApiService implements ApiServiceI {
 
     //// REFRESH ACCESS
     refreshAccess = async (): Promise<boolean> => {
-        if (window.location.pathname.includes('/sign')) return false;
+        const echec = () => {
+            this.logWithTime('refreshAccess echec');
+            setTimeout(() => {
+                window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter`;
+            }, 2000);
+            return false
+        }
+        if (window.location.pathname.includes('/sign')) return echec();
+        if (this.count > 2) return echec();
+        if (this.count > 1) {
+            this.logWithTime('refreshAccess already called, count: ' + this.count);
+            return false;
+        }
         this.count++
+
 
         const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
         if (data?.message || data?.status === 201) {
@@ -154,10 +164,7 @@ export class ApiService implements ApiServiceI {
             this.logWithTime('refreshAccess message: ' + data.message);
             return true;
         }
-        else {
-            this.logWithTime('refreshAccess error ');
-            return false;
-        }
+        else return echec();
 
     }
 

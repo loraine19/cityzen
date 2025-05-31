@@ -24,9 +24,10 @@ export const voteViewModel = () => {
       })
 
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
-    const flat = data?.pages.flat().map(page => page.poolsSurveys).flat()
-    const poolsSurveys = userLoading || isLoading || !flat ? [] : flat?.map((base: Pool | Survey) => new PoolSurveyView(base, user))
+    const flat = isLoading ? [] : data?.pages.flat().map(page => page.poolsSurveys).flat()
+    const poolsSurveys = userLoading ? [] : flat?.map((base: Pool | Survey) => new PoolSurveyView(base, user))
 
+    console.log('poolsSurveys', data)
     return {
       count,
       poolsSurveys,
