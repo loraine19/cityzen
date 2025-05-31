@@ -26,7 +26,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
 
     return (
         <footer className="pt-0.5 pb-2 px-1 lg:px-4 z-30">
-            <Navbar className="flex rounded-full shadow-lg h-[4rem] items-center  p-0 !bg-white ">
+            <Navbar className="flex rounded-full shadow-lg h-[4rem]  items-center p-0 !bg-white ">
                 <div className="w-full h-full relative">
                     <ul className={` flex flex-row w-full overflow-auto rounded-full justify-between  h-full `}>
                         {navItems.map(({ to, icon, label, color, col }) => (
@@ -35,12 +35,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                 as="li"
                                 variant="small"
                                 color={col as any}
-                                className={`flex rounded-full items-center ${addBtn ? 'justify-start pl-0' : 'justify-center px-0'} font-medium`}
+                                className={`flex rounded-full items-center py-0.5 ${addBtn ? 'justify-start pl-0' : 'justify-center px-0'} font-medium`}
                             >
                                 <NavLink
                                     to={to}
                                     className={({ isActive }) =>
-                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full  rounded-full px-2.5 lg:px-3  ${isActive ? `border-[1px] ${color} shadow-md` : ''}`
+                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full  rounded-full px-2.5 lg:px-3  ${isActive ? `animSlide border-[1px] z-30 ${color} bg-white shadow-[0_2px_8px_0.5px] shadow-blue-gray-200/90 mb-0.5 ` : ''}`
                                     }
                                 >
                                     {({ isActive }) => (

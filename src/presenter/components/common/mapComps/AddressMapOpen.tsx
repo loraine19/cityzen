@@ -33,22 +33,22 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                 position={[notif?.Address.lat, notif?.Address.lng]}
                 icon={notif.type === ElementNotif.SERVICE ?
                     L.icon({
-                        iconUrl: '/image/marker_cyan.svg',
+                        iconUrl: '/image/marker_l2.svg',
                         iconSize: [50, 50],
                         iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         popupAnchor: [0, -20],
                         shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         shadowSize: [50, 50],
-                        shadowUrl: '/image/marker_shadow.svg',
+                        shadowUrl: '/image/marker_shadow.png',
                         pane: 'markerPane',
                     }) :
                     L.icon({
-                        iconUrl: '/image/marker_cyan_dark.svg',
+                        iconUrl: '/image/marker_l3.svg',
                         iconSize: [50, 50],
                         iconAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
                         popupAnchor: [0, -20],
                         shadowAnchor: [(notif.Address?.id && index > 0 && notif.Address.id === notifsMap[index - 1]?.Address?.id) ? 35 : 25, 50],
-                        shadowUrl: '/image/marker_shadow.svg',
+                        shadowUrl: '/image/marker_shadow.png',
                         shadowSize: [50, 50],
                         pane: 'markerPane',
                     })} >

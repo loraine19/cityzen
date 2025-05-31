@@ -14,6 +14,7 @@ import DI from '../../../../di/ioc';
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { ServiceView } from "../../../views/viewsEntities/serviceViewEntity";
 import { serviceCategoriesS } from "../../../constants";
+import { Icon } from "../../common/IconComp";
 
 export default function ServicesPage() {
     const [notif, setNotif] = useState<string>('l');
@@ -203,7 +204,14 @@ export default function ServicesPage() {
                         category={serviceCategoriesS}
                         search={search} />
                 }
-                <div className={notif ? "notif" : "hidden"}>{notif}nn</div>
+                {notif &&
+                    <div className={'notif'}>
+                        {notif}
+                        <Icon
+                            bg={!isLoading}
+                            icon={isLoading ? '...' : 'reload'}
+                            onClick={() => refetch()} />
+                    </div>}
             </header>
             <main
                 ref={divRef}

@@ -160,8 +160,13 @@ export default function PostListPage() {
                     />
                 </div>
                 {notif &&
-                    <div className="w-full flex justify-center p-8">
+                    <div className={'notif'}>
                         {notif}
+                        <Icon
+                            title="Recharger la liste"
+                            bg={!isLoading}
+                            icon={isLoading ? '...' : 'reload'}
+                            onClick={() => refetch()} />
                     </div>}
             </header>
             <main

@@ -14,6 +14,7 @@ import DI from "../../../../di/ioc";
 import { PoolSurveyFilter, PoolSurveySort, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
 import { VoteTarget } from "../../../../domain/entities/Vote";
+import { Icon } from "../../common/IconComp";
 
 export default function VoteListPage() {
     const pageColor = 'orange'
@@ -156,9 +157,14 @@ export default function VoteListPage() {
                     boxSelected={boxSelected}
                     setBoxSelected={setBoxSelected}
                     color={"orange-500"} />
-                <div className={notif && "w-full flex justify-center p-8"}>
-                    {notif}
-                </div>
+                {notif &&
+                    <div className={'notif'}>
+                        {notif}
+                        <Icon
+                            bg={!isLoading}
+                            icon={isLoading ? '...' : 'reload'}
+                            onClick={() => refetch()} />
+                    </div>}
             </header>
             <main ref={divRef}
                 onScroll={() => handleScroll()}

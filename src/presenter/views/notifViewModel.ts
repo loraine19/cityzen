@@ -47,11 +47,12 @@ export const notifMapViewModel = () => {
 
     const count = isLoading ? 0 : (data?.count)
     const notifsMap = (isLoading || !data || error) ? [] : data?.notifs?.map((notif: Notif) => new NotifView(notif))
+    console.log('notifsMap', data)
 
     return {
-      count,
+      countMap: count,
       notifsMap,
-      refetch,
+      refetchMap: refetch,
       isLoadingMap: isLoading,
       error
     }

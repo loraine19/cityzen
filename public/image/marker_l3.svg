@@ -4,11 +4,11 @@
 		<filter x="-50%" y="-50%" width="200%" height="200%" id="f1" ><feDropShadow dx="-1.8369701987210297e-16" dy="3" stdDeviation="0.4166666666666667" flood-color="#000000" flood-opacity=".1"/></filter>
 	</defs>
 	<style>
-		.s0 { opacity: .5;fill: #0097a7 } 
-		.s1 { opacity: .5;display: none;fill: #c3ebf2 } 
+		.s0 { opacity: .5;display: none;fill: #0097a7 } 
+		.s1 { opacity: .5;fill: #c3ebf2 } 
 		.s2 { opacity: .5;display: none;fill: #faddbc } 
-		.s3 { fill: #8bdae6;stroke: #0097a7;stroke-miterlimit:100;stroke-width: .5 } 
-		.s4 { display: none;fill: #0097a7;stroke: #c3ebf2;stroke-miterlimit:100;stroke-width: .3 } 
+		.s3 { display: none;fill: #8bdae6;stroke: #0097a7;stroke-miterlimit:100;stroke-width: .5 } 
+		.s4 { fill: #0097a7;stroke: #c3ebf2;stroke-miterlimit:100;stroke-width: .3 } 
 		.s5 { display: none;fill: #f69c46;stroke: #fadcbc;stroke-miterlimit:100;stroke-width: .3 } 
 		.s6 { display: none;filter: url(#f1);fill: none } 
 	</style>

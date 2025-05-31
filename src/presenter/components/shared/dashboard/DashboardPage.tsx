@@ -39,7 +39,7 @@ export default function DashboardPage() {
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
     const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
-    const { notifsMap, isLoadingMap } = notifMapViewModelFactory();
+    const { notifsMap, isLoadingMap, refetchMap, countMap } = notifMapViewModelFactory();
 
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
@@ -238,7 +238,7 @@ export default function DashboardPage() {
                                                 color="blue-gray">
                                                 {isLoadingMap ?
                                                     'Chargement...' :
-                                                    ` ${notifsMap ? notifsMap?.length : 0} nouveautés à proximité`}
+                                                    ` ${countMap ?? 0} nouveautés à proximité`}
                                             </Typography>
                                         </div>
                                     </div>
@@ -249,12 +249,31 @@ export default function DashboardPage() {
                                                 address={user?.Profile?.Address}
                                                 notifs={notifsMap} /> : <>
 
-                                                {isLoadingMap || !notifsMap ?
+                                                {isLoadingMap ?
                                                     <Skeleton /> :
                                                     <Card className="FixCard h-full w-full flex-1 justify-center items-center bg-gray-50">
-                                                        <Typography variant="small" className="p-8"> {
-                                                            user.Profile?.Address ? 'Aucun service à proximité' : 'Veuillez renseigner votre adresse pour voir les services à proximité'}
+                                                        <Typography
+                                                            variant="small" className="px-8 py-4">
+                                                            {user.Profile?.Address ? 'pas de nouveautés à proximité , essayer de modifier de rafraichir' : 'Veuillez renseigner votre adresse pour voir les services à proximité'}
                                                         </Typography>
+                                                        {
+                                                            user.Profile?.Address ?
+                                                                <Icon
+                                                                    icon="refresh"
+                                                                    fill bg
+                                                                    size="3xl"
+                                                                    color="cyan"
+                                                                    title="voir les services"
+                                                                    onClick={() => refetchMap()} />
+                                                                : <Icon
+                                                                    icon="edit"
+                                                                    size="4xl"
+                                                                    fill
+                                                                    color="orange"
+                                                                    title="ajouter votre adresse"
+                                                                    onClick={() => navigate('/myprofile#address')} />
+                                                        }
+
                                                     </Card>
                                                 }</>}
                                     </div>

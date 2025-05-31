@@ -14,6 +14,7 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { PathElement } from "../../../constants";
 import { ReadAllButton } from "../../common/ReadAllBtn";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
+import { Icon } from "../../common/IconComp";
 
 export default function NotificationPage() {
     const [notifFind, setNotifFind] = useState<string>('');
@@ -125,9 +126,15 @@ export default function NotificationPage() {
                     <ReadAllButton
                         update={refetch} />
                 </div>
-                <div className={notifFind && "w-full flex justify-center p-8"}>
-                    {notifFind}
-                </div>
+                {notifFind &&
+                    <div className={'notif'}>
+                        {notifFind}
+                        <Icon
+                            title="Recharger la liste"
+                            bg={!isLoading}
+                            icon={isLoading ? '...' : 'reload'}
+                            onClick={() => refetch()} />
+                    </div>}
             </header>
 
             <main

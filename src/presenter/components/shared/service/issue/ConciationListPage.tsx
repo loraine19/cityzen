@@ -13,6 +13,7 @@ import { IssueView } from "../../../../views/viewsEntities/issueViewEntity";
 import { useUserStore } from "../../../../../application/stores/user.store";
 import { Role } from "../../../../../domain/entities/GroupUser";
 import { IssueFilter } from '../../../../../domain/entities/Issue';
+import { Icon } from "../../../common/IconComp";
 
 export default function ConciationListPage() {
     const [notif, setNotif] = useState<string>('');
@@ -98,8 +99,12 @@ export default function ConciationListPage() {
 
                 <TabsMenu labels={serviceTabs} />
                 {notif &&
-                    <div className="w-full flex justify-center p-8">
+                    <div className={'notif'}>
                         {notif}
+                        <Icon
+                            bg={!isLoading}
+                            icon={isLoading ? '...' : 'reload'}
+                            onClick={() => refetch()} />
                     </div>}
             </header>
             <main ref={divRef}

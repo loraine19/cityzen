@@ -155,9 +155,14 @@ export default function EventListPage() {
                         style="mt-1"
                         color="gray"
                         title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
-                    {view === "view_agenda" &&
-                        <div className={notif && "top-20 absolute w-full flex justify-center"}>
+                    {view === "view_agenda" && notif &&
+                        <div className={'notif'}>
                             {notif}
+                            <Icon
+                                title="Recharger la liste"
+                                bg={!isLoading}
+                                icon={isLoading ? '...' : 'reload'}
+                                onClick={() => refetch()} />
                         </div>}
                 </div>
 

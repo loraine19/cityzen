@@ -39,7 +39,7 @@
 body,
 #root,
 .Body {
-    @apply flex flex-col w-screen h-screen break-normal;
+    @apply flex flex-col w-screen h-screen;
 }
 
 #root {
@@ -97,6 +97,11 @@ header {
     animation: up 0.7s forwards;
 }
 
+.animSlide {
+    @apply duration-1000;
+    animation: slide 0.9s forwards;
+}
+
 .fadeIn {
     @apply duration-700;
     animation: fadeIn 1s forwards;
@@ -121,6 +126,15 @@ header {
     }
     to {
         transform: translateY(0);
+    }
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
     }
 }
 
@@ -252,11 +266,11 @@ nav li .icon {
 
 /* CHIP LIGHT COLOR */
 .OrangeChip {
-    @apply bg-[#FED7AA] text-orange-800  px-3 pb-1 rounded-2xl;
+    @apply bg-[#FED7AA] text-orange-800   px-3 pb-1 rounded-2xl;
 }
 
 .GreenChip {
-    @apply bg-green-100 text-green-800 px-3 !pb-1 rounded-2xl;
+    @apply bg-green-100 text-green-800  px-3 !pb-1 rounded-2xl;
 }
 
 .RedChip {
@@ -264,7 +278,7 @@ nav li .icon {
 }
 
 .CyanChip {
-    @apply bg-cyan-200 text-cyan-900  px-3 !pb-1 rounded-2xl;
+    @apply bg-cyan-200 text-cyan-900   px-3 !pb-1 rounded-2xl;
 }
 
 .GrayChip {
