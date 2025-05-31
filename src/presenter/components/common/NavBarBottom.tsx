@@ -52,7 +52,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                                 fill={isActive ? true : false}
                                                 color={col}
                                             />
-                                            <span className={`!text-[0.85rem] font-medium font-comfortaa hidden lg:block  pr-2.5`}>
+                                            <span className={`!text-[0.85rem] font-bold
+                                                 filter brightness-90 font-comfortaa hidden lg:block  pr-2.5`}>
                                                 {label}
                                             </span>
                                         </>
