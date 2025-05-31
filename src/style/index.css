@@ -61,7 +61,7 @@ main {
 }
 
 header {
-    @apply px-4 pb-4;
+    @apply px-4 pb-4 relative;
 }
 
 .w-respXl {
@@ -98,7 +98,6 @@ header {
 }
 
 .animSlide {
-    @apply duration-1000;
     animation: slide 0.9s forwards;
 }
 
@@ -107,8 +106,8 @@ header {
     animation: fadeIn 1s forwards;
 }
 
-.notifList {
-    @apply top-20 absolute w-full flex justify-center anim;
+.notif {
+    @apply -bottom-[100%]  items-center flex-col gap-4  absolute w-full h-full flex justify-center anim;
 }
 
 @keyframes fadeIn {

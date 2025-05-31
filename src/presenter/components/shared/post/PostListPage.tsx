@@ -165,7 +165,7 @@ export default function PostListPage() {
                         <Icon
                             title="Recharger la liste"
                             bg={!isLoading}
-                            icon={isLoading ? '...' : 'reload'}
+                            icon={isLoading ? '...' : 'refresh'}
                             onClick={() => refetch()} />
                     </div>}
             </header>

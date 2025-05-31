@@ -103,7 +103,7 @@ export default function ConciationListPage() {
                         {notif}
                         <Icon
                             bg={!isLoading}
-                            icon={isLoading ? '...' : 'reload'}
+                            icon={isLoading ? '...' : 'refresh'}
                             onClick={() => refetch()} />
                     </div>}
             </header>

@@ -142,7 +142,7 @@ export default function EventListPage() {
                         reverse={reverse}
                         setReverse={setReverse}
                     />}
-                <div className={`relative flex items-center justify-center gap-4 lg:px-8`}>
+                <div className={` flex items-center justify-center gap-4 lg:px-8`}>
                     <CategoriesSelect
                         categoriesArray={eventCategoriesS}
                         change={change}
@@ -155,13 +155,14 @@ export default function EventListPage() {
                         style="mt-1"
                         color="gray"
                         title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
-                    {view === "view_agenda" && notif &&
+                    {(view === "view_agenda" && notif) &&
                         <div className={'notif'}>
                             {notif}
                             <Icon
+                                size='3xl'
                                 title="Recharger la liste"
                                 bg={!isLoading}
-                                icon={isLoading ? '...' : 'reload'}
+                                icon={isLoading ? '...' : 'refresh'}
                                 onClick={() => refetch()} />
                         </div>}
                 </div>

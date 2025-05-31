@@ -6,10 +6,10 @@
 	<style>
 		.s0 { opacity: .5;display: none;fill: #0097a7 } 
 		.s1 { opacity: .5;fill: #c3ebf2 } 
-		.s2 { opacity: .5;display: none;fill: #faddbc } 
+		.s2 { opacity: .7;display: none;fill: #faddbc } 
 		.s3 { display: none;fill: #8bdae6;stroke: #0097a7;stroke-miterlimit:100;stroke-width: .5 } 
-		.s4 { fill: #0097a7;stroke: #c3ebf2;stroke-miterlimit:100;stroke-width: 0 } 
-		.s5 { display: none;fill: #f47d02;stroke: #fadcbc;stroke-miterlimit:100;stroke-width: .3 } 
+		.s4 { fill: #0097a7;stroke: #c3ebf2;paint-order:stroke fill markers;stroke-miterlimit:100;stroke-width: .8 } 
+		.s5 { display: none;fill: #f47d02;stroke: #fadcbc;stroke-miterlimit:100;stroke-width: 0 } 
 		.s6 { display: none;filter: url(#f1);fill: none } 
 	</style>
 	<path fill-rule="evenodd" class="s0" d="m23.7 29.5c-6.1 0-11.1-4.9-11.1-10.9 0-6.1 5-11 11.1-11 6.2 0 11.2 4.9 11.2 11 0 6-5 10.9-11.2 10.9z"/>
