@@ -88,9 +88,6 @@ header {
 .sectionHeader {
     @apply flex flex-col;
 }
-l nav {
-    @apply px-4  relative bg-yellow-300/50;
-}
 
 .w-respXl {
     @apply w-full my-0 mx-auto max-w-[1100px];
@@ -401,4 +398,8 @@ button {
 }
 button span {
     @apply !truncate max-w-full min-h-max;
+}
+
+.shadowMid {
+    @apply shadow-[0_2px_8px_0.5px] shadow-blue-gray-200/90;
 }

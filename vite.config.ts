@@ -27,8 +27,11 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       port: 5173,
-    },
-    test: {
+      hmr: {
+        host: 'localhost',
+        port: 5173,
+      },
+    }, test: {
       globals: true, // Pour ne pas avoir à importer describe, it, expect etc.
       environment: 'jsdom', // IMPORTANT: Pour simuler le DOM
       setupFiles: './src/setupTests.ts', // Optionnel: Fichier de setup pour @testing-library/jest-dom

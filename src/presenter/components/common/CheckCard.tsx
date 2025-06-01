@@ -34,8 +34,8 @@ export default function CheckCard(props: checkCardProps) {
                     {categoriesArray.map((category, index) => (
                         <ListItem className="!pt-0.5 px-0.5 !pb-1  min-w-max hover:!bg-transparent" key={index}>
                             <label htmlFor={category} className="flex flex-1">
-                                <ListItemPrefix className={`!px-0 py-0.5 !m-0 w-full flex items-center justify-center rounded-2xl  border-[1px] border-${color}  ${checkedState[index] ?
-                                    `bg-${color} text-white w-full` : `bg-transparent !text-${color} !min-w-full `}`}>
+                                <ListItemPrefix className={`!px-0 py-0.5 !m-0 w-full flex items-center justify-center rounded-2xl  border-[1px]  border-${color} shadow-sm ${checkedState[index] ?
+                                    `bg-${color} text-white w-full animSlide` : `bg-transparent !text-${color} !min-w-full `}`}>
                                     <Checkbox
                                         labelProps={{ className: `${checkedState[index] ? 'text-white w-full' : `text-${color}`} whitespace-nowrap text-sm font-normal !min-w-max px-3 ` }}
                                         iconProps={{ className: "hidden" }}
@@ -48,6 +48,7 @@ export default function CheckCard(props: checkCardProps) {
                                         onChange={(e: any) => handleCheckboxChange(index, e.target.checked)}
                                     />
                                 </ListItemPrefix>
+
                             </label>
                         </ListItem>
                     ))}
