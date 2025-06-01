@@ -13,7 +13,11 @@ export class GroupView extends Group {
     toogleModo: () => Promise<GroupView | any>;
     constructor(group: Group, userId: number) {
         super(group);
-        if (!group) throw new Error('Impossible de récupérer le groupe');
+        if (!group) {
+            setTimeout(() => {
+                if (!group) throw new Error('Impossible de récupérer le groupe')
+            }, 1000);
+        };
         this.ImIn = group?.GroupUser?.find((gu) => gu.userId === userId) ? true : false
         this.ImModo = group?.GroupUser?.find((gu) => gu.userId === userId && gu.role === Role.MODO) ? true : false
         this.fullAddress = group?.Address?.address + ' ' + group?.Address?.zipcode + ' ' + group?.Address.city

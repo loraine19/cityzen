@@ -129,17 +129,17 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                         handleScroll={handleScroll} />
                 </CardBody >
                 <CardFooter
-                    className={`${imTyping ? '-top-4' : '-top-2'} flex justify-between rounded-[2rem] relative  bg-white p-2 shadow-md m-2 h-14`}>
-                    <div className='flex-0 flex' >
+                    className={`${imTyping ? '-top-4' : '-top-2'} flex justify-between rounded-[2rem] relative bg-white p-2 shadow-md m-2 min-h-min`}>
+                    <div className='flex-0 flex top-0' >
                         <Icon
                             onClick={() => setOpenEmoji(!openEmoji)}
-                            style='relative'
                             color='blue-gray'
                             title='Emoji'
                             size='3xl'
                             icon='mood'
+                            style={`max-h-max relative`}
                         />
-                        <div className='absolute flex overflow-auto items-end w-full  pr-3 -ml-3 z-50 mb-14 bottom-0 '>
+                        <div className='absolute flex overflow-auto items-end w-full pr-3 -ml-3 z-50 mb-14 bottom-0 '>
                             <EmojiPicker
                                 className='bg-cyan-600 !overflow-auto max-h-[85%] z-40 p-1 mr-2 flex flex-1'
                                 previewConfig={{ showPreview: false }}
@@ -154,13 +154,14 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                                 }} />
                         </div>
                     </div>
-                    <input
-                        className='rounded-full w-full pl-4 focus:outline-none '
-                        type="text"
+                    <textarea
+                        className='rounded-full pl-4 min-h-max w-full focus:outline-none resize-none overflow-hidden'
+                        rows={1}
                         value={message}
                         placeholder='Ecrivez un message...'
                         onKeyDown={(e) => {
-                            if (e.key === 'Enter' && message.trim() !== '') {
+                            if (e.key === 'Enter' && !e.shiftKey && message.trim() !== '') {
+                                e.preventDefault();
                                 handleSendMessage();
                                 setNewConv(false);
                                 setImTyping(false);
@@ -168,16 +169,26 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                         }}
                         onChange={(e) => {
                             setMessage(e.target.value);
-                            setImTyping(true)
+                            setImTyping(true);
+
+                            // Auto-resize logic
+                            const target = e.target as HTMLTextAreaElement;
+                            target.style.height = 'auto';
+                            target.style.height = `${target.scrollHeight}px`;
                         }}
                         onInput={(e) => {
-                            if ((e.target as HTMLInputElement).value.trim() === '') {
-                                setImTyping(false)
+                            const target = e.target as HTMLTextAreaElement;
+                            if (target.value.trim() === '') {
+                                setImTyping(false);
                             } else {
                                 setImTyping(true);
-                                setMessage((e.target as HTMLInputElement).value);
+                                setMessage(target.value);
                             }
+                            // Auto-resize logic
+                            target.style.height = 'auto';
+                            target.style.height = `${target.scrollHeight}px`;
                         }}
+                        style={{ maxHeight: '120px' }}
                     />
                     <Icon
                         color='blue-gray'

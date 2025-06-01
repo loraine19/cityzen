@@ -7,9 +7,12 @@ import { LoadingPage } from './LoadingPage';
 export const PrivateRoute = () => {
     const cryptedStorage = new cryptedCookie();
     const { isLoggedIn, user } = useUserStore((state) => state)
-    const userJson = cryptedStorage.getItem('user') || '{state:{isLoggedIn:false}}'; // 
-    const userJsonClean = JSON.parse(userJson)
-    const state = userJsonClean?.state ?? null;
+    const userJson = cryptedStorage.getItem('user')
+    let state: any = false
+    if (userJson) {
+        const userJsonClean = JSON.parse(userJson)
+        state = userJsonClean?.state
+    }
 
     const userName = user?.Profile?.firstName ?? 'Bonjour'
 
