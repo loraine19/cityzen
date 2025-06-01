@@ -213,7 +213,7 @@ export default function PostListPage() {
                 </section>
             </main>
 
-            <NavBarBottom addBtn={true} />
+            <NavBarBottom addBtn={true} color={'orange'} />
         </>
     );
 }

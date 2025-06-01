@@ -44,7 +44,7 @@ export default function DashboardPage() {
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex row-span-5 lg:grid pb-1 ";
     const notifClasse = " row-span-2 grid  lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5rem]")
-    const mapClasse = "flex row-span-6 min-h-[32%] lg:grid pb-1";
+    const mapClasse = "flex row-span-6 min-h-[minmax(360px,48vh)] lg:min-h-[32%] lg:grid pb-1";
 
 
     //// HANDLE SCROLL NOTIFICATIONS

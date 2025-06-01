@@ -50,7 +50,7 @@ body {
 }
 
 main {
-    @apply flex flex-col max-w-[1100px] px-4 flex-1;
+    @apply flex flex-col max-w-[1100px] px-4 gap-1 flex-1;
     min-height: 0;
 }
 
@@ -58,7 +58,7 @@ section,
 .Section {
     @apply flex flex-col overflow-y-auto  flex-1;
     gap: 0.2rem;
-    padding: 0 2.5%;
+    padding: 0 2%;
     min-height: 0;
 }
 
@@ -70,7 +70,7 @@ main {
 }
 
 footer {
-    @apply px-4 relative;
+    @apply relative;
     width: 100%;
     max-width: 1100px;
     margin: 0 auto;

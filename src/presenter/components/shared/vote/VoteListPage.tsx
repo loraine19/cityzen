@@ -208,7 +208,7 @@ export default function VoteListPage() {
                 </section>
             </main>
 
-            <NavBarBottom addBtn={true} />
+            <NavBarBottom addBtn={true} color={pageColor} />
         </>
     );
 }

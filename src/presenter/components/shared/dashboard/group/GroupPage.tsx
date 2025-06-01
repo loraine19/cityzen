@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import DI from '../../../../../di/ioc';
 import { useSearchParams } from 'react-router-dom';
@@ -90,58 +89,59 @@ export default function GroupPage() {
     }, [groups, isLoading, error, filter, category]);
 
     return (
-        <div className="Body cyan">
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader
-                    closeBtn
-                    link={`/`}
-                    qty={count}
-                    type={`Groupes `}
-                    place={`${filterName() ?? 'proche de chez vous'}`}
-                />
+        <>
+            <main>
+                <div className=" sectionHeader">
+                    <SubHeader
+                        closeBtn
+                        link={`/`}
+                        qty={count}
+                        type={`Groupes `}
+                        place={`${filterName() ?? 'proche de chez vous'}`}
+                    />
 
-                <TabsMenu
-                    labels={Tabs}
-                    selectedSort={selectedSort}
-                    setSelectedSort={setSelectedSort} />
-                <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
-                    <CategoriesSelect
-                        categoriesArray={groupCategories}
-                        change={change}
-                        categorySelected={category.toString()} />
+                    <TabsMenu
+                        labels={Tabs}
+                        selectedSort={selectedSort}
+                        setSelectedSort={setSelectedSort} />
+                    <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
+                        <CategoriesSelect
+                            categoriesArray={groupCategories}
+                            change={change}
+                            categorySelected={category.toString()} />
 
 
+                    </div>
+                    <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
                 </div>
-                <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
-            </header>
-            <main
-                ref={divRef}
-                onScroll={() => handleScroll()}
-                className="Grid">
-                {isLoading || error ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
-                    ))
-                    :
-
-                    groups.map((group: GroupView, index: number) => (
-                        <div className="SubGrid" key={index}>
-                            <GroupCard
+                <section
+                    ref={divRef}
+                    onScroll={() => handleScroll()}
+                    className="Grid">
+                    {isLoading || error ?
+                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
                                 key={index}
-                                mines={mines}
-                                group={group}
-                            />
-                        </div>))}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={() => handleScroll()} />
+                                count={4} />
+                        ))
+                        :
+
+                        groups.map((group: GroupView, index: number) => (
+                            <div className="SubGrid" key={index}>
+                                <GroupCard
+                                    key={index}
+                                    mines={mines}
+                                    group={group}
+                                />
+                            </div>))}
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={() => handleScroll()} />
+                </section>
             </main>
             <NavBarBottom addBtn={true} />
-        </div>
+        </>
     )
 }
 

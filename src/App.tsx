@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { PrivateRoute } from "./presenter/components/shared/utilsPage/PrivateRouter";
 import NotFindPage from "./presenter/components/shared/utilsPage/NotFindPage";
@@ -64,7 +64,9 @@ function App() {
     }
 
     const { alertValues } = useAlertStore(state => state)
-    const { color } = useNotificationStore(state => state);
+    const { color, getColor } = useNotificationStore(state => state);
+
+    useEffect(() => { getColor(window.location.pathname) }, [window.location.pathname]);
 
     return (
         <BrowserRouter>

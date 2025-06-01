@@ -22,6 +22,7 @@ interface NotificationStore {
   setUnReadNotMessages: (value: number) => void;
   color: string;
   setColor: (color: string) => void;
+  getColor: (path?: string) => void;
 
 }
 
@@ -51,6 +52,7 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
         set({ notifListMessages: messages.notifs.map((notif: Notif) => new NotifView(notif)) });
         set({ notifListNotMessages: notMsg.notifs.map((notif: Notif) => new NotifView(notif)) });
         set({ notifListMap: notifMap.notifs.map((notif: Notif) => new NotifView(notif)) });
+
         storage.setItem('notifications', notifs);
       }
     }
@@ -84,7 +86,26 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
       fetchNotif,
       color: 'gray',
       setColor: (color: string) => set({ color }),
-    };
+      getColor: (path?: string) => {
+        let color = 'gray';
+        if (path) {
+          const type = new URLSearchParams(path.split("/")[1]).toString().replace("=", '');
+          switch (type) {
+            case 'service':
+            case 'evenement':
+              color = 'cyan';
+              break;
+            case 'annonce':
+            case 'vote':
+              color = 'orange';
+              break;
+            default:
+              color = 'gray';
+          }
+        }
+        set({ color });
+      }
+    }
   },
     {
       name: 'notifications',

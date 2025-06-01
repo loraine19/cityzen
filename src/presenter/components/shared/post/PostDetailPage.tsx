@@ -50,7 +50,7 @@ export default function PostDetailPage() {
                 <div className="sectionHeader px-4">
                     <SubHeader type={`annonce ${post?.categoryS ?? ""}`} closeBtn />
                 </div>
-                <section className='bg-red-100'>
+                <section>
                     {!isLoading && !error && post ?
                         <PostDetailCard
                             post={post}

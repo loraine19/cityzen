@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import CTAMines from '../../../common/CTA';
-import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { Action } from '../../../../../domain/entities/frontEntities';
 import { GenereMyActions, } from '../../../../views/viewsEntities/utilsService';
@@ -50,20 +49,20 @@ export default function GroupDetailPage() {
     ]
 
     return (
-        <div className="Body cyan">
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader
-                    type={`Groupes ${group?.categoryS ?? ""}`} closeBtn />
-            </header>
+        <>
             <main>
-                {!isLoading && !error && group ?
-                    <GroupDetailCard
-                        actions={myActions}
-                        refetch={refetch}
-                        group={group} /> :
-                    <Skeleton />}
-            </main>
+                <div className="sectionHeader px-4">
+                    <SubHeader
+                        type={`Groupes ${group?.categoryS ?? ""}`} closeBtn />
+                </div>
+                <section>
+                    {!isLoading && !error && group ?
+                        <GroupDetailCard
+                            actions={myActions}
+                            refetch={refetch}
+                            group={group} /> :
+                        <Skeleton />}
+                </section></main>
             {(!isLoading && !error && group) ?
                 <>
                     {group?.ImModo ?
@@ -77,7 +76,7 @@ export default function GroupDetailPage() {
                 <footer className={`CTA`}>
                 </footer>}
 
-        </div>
+        </>
     )
 }
 
