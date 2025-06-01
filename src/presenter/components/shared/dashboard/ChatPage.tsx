@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Card, Typography, CardBody, List, ListItem, ListItemPrefix, Avatar } from '@material-tailwind/react';
-import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import { Skeleton } from '../../common/Skeleton';
 import DI from '../../../../di/ioc';
@@ -110,124 +109,125 @@ export default function ChatPage() {
 
 
     return (
-        <div className="Body gray">
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader
-                    qty={open ? messages?.length : countConv}
-                    type={open ? 'messages' : 'conversation'}
-                    place={' avec ' + (userRec?.Profile?.firstName ?? 'des membres')}
-                    closeBtn
-                    link='/' />
-                {notif}
-                {!connected &&
-                    <Icon
-                        fill
-                        color='red'
-                        icon='sync_problem'
-                        title='actualiser'
-                        onClick={() => connexion()} />}
-            </header>
-            <main className='flex pb-4 pt-6'>
-                {isLoadingConv ?
-                    <Skeleton className=' m-auto !h-full !rounded-3xl' /> :
-                    <Card className='FixCardNoImage !pb-0 !px-0 flex '>
-                        <CardBody className='FixCardBody !p-0 !pt-2 !flex overflow-hidden'>
-                            <div className='flex h-full  '>
-                                <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
-                                    <List className='flex-1 '>
-                                        {conversations &&
-                                            conversations.map((message: MessageView, index: number) =>
-                                                <div key={index + 'div'}>
-                                                    <ListItem
-                                                        className={`p-1 ${(userIdRec === message?.isWith.id) ? '!bg-gray-200 border-white border-8 shadow-md hover:pointer-events-none -ml-2' : ''}`}
-                                                        key={index}
-                                                        onClick={() => {
-                                                            setOpen(true)
-                                                            const userRec = message?.IWrite ? message?.UserRec : message?.User
-                                                            setUserRec(userRec)
-                                                            setUserIdRec(userRec.id)
-                                                            setParams({ with: userRec.id.toString() })
-                                                        }} >
-                                                        <ListItemPrefix className='relative flex min-w-max'>
-                                                            <Avatar
-                                                                onError={(e) => e.currentTarget.src = "/images/person.svg"}
-                                                                className={`bg-user border-[3px] p-0.5
+        <>
+            <main>
+                <div className='sectionHeader '>
+                    <SubHeader
+                        qty={open ? messages?.length : countConv}
+                        type={open ? 'messages' : 'conversation'}
+                        place={' avec ' + (userRec?.Profile?.firstName ?? 'des membres')}
+                        closeBtn
+                        link='/' />
+                    {notif}
+                    {!connected &&
+                        <Icon
+                            fill
+                            color='red'
+                            icon='sync_problem'
+                            title='actualiser'
+                            onClick={() => connexion()} />}
+                </div>
+                <section className='flex pb-4 pt-6'>
+                    {isLoadingConv ?
+                        <Skeleton className=' m-auto !h-full !rounded-3xl' /> :
+                        <Card className='FixCardNoImage !pb-0 !px-0 flex '>
+                            <CardBody className='FixCardBody !p-0 !pt-2 !flex overflow-hidden'>
+                                <div className='flex h-full  '>
+                                    <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
+                                        <List className='flex-1 '>
+                                            {conversations &&
+                                                conversations.map((message: MessageView, index: number) =>
+                                                    <div key={index + 'div'}>
+                                                        <ListItem
+                                                            className={`p-1 ${(userIdRec === message?.isWith.id) ? '!bg-gray-200 border-white border-8 shadow-md hover:pointer-events-none -ml-2' : ''}`}
+                                                            key={index}
+                                                            onClick={() => {
+                                                                setOpen(true)
+                                                                const userRec = message?.IWrite ? message?.UserRec : message?.User
+                                                                setUserRec(userRec)
+                                                                setUserIdRec(userRec.id)
+                                                                setParams({ with: userRec.id.toString() })
+                                                            }} >
+                                                            <ListItemPrefix className='relative flex min-w-max'>
+                                                                <Avatar
+                                                                    onError={(e) => e.currentTarget.src = "/images/person.svg"}
+                                                                    className={`bg-user border-[3px] p-0.5
                                                                     ${(userIdRec === message?.isWith.id) && '!border-cyan-300' ||
-                                                                    (message.read || message.IWrite) && 'border-white' || '!border-orange-500'}`}
-                                                                variant="circular"
-                                                                alt="avatar"
-                                                                size='md'
-                                                                src={message?.isWith?.Profile?.image as string} />
-                                                            {(online.length > 0 &&
-                                                                online.includes(message.isWith.id)) &&
-                                                                <span className='absolute top-0 -right-2 bg-green-500 rounded-full
+                                                                        (message.read || message.IWrite) && 'border-white' || '!border-orange-500'}`}
+                                                                    variant="circular"
+                                                                    alt="avatar"
+                                                                    size='md'
+                                                                    src={message?.isWith?.Profile?.image as string} />
+                                                                {(online.length > 0 &&
+                                                                    online.includes(message.isWith.id)) &&
+                                                                    <span className='absolute top-0 -right-2 bg-green-500 rounded-full
                                                                 border-4  p-1.5 border-white'>
-                                                                </span>
-                                                            }
-                                                        </ListItemPrefix>
-                                                        <div className="font-normal w-full flex flex-col">
-                                                            <div className='flex justify-between items-center flex-1 w-full'>
-                                                                <Typography variant="h6" color="blue-gray">
-                                                                    {message.isWith?.Profile?.firstName}
+                                                                    </span>
+                                                                }
+                                                            </ListItemPrefix>
+                                                            <div className="font-normal w-full flex flex-col">
+                                                                <div className='flex justify-between items-center flex-1 w-full'>
+                                                                    <Typography variant="h6" color="blue-gray">
+                                                                        {message.isWith?.Profile?.firstName}
+                                                                    </Typography>
+                                                                    <span
+                                                                        className='px-4 !text-xs text-blue-gray-300'>
+                                                                        {message.formatedDate}
+                                                                    </span>
+                                                                </div>
+                                                                <Typography
+                                                                    variant="small"
+                                                                    color="blue-gray"
+                                                                    className="font-normal !line-clamp-1">
+                                                                    {message.IWrite &&
+                                                                        <span className='text-blue-gray-500'>
+                                                                            {message.read && '🗸'}
+                                                                            {' vous : '}
+                                                                        </span>}
+                                                                    {message?.message ?? '...'}
                                                                 </Typography>
-                                                                <span
-                                                                    className='px-4 !text-xs text-blue-gray-300'>
-                                                                    {message.formatedDate}
-                                                                </span>
                                                             </div>
-                                                            <Typography
-                                                                variant="small"
-                                                                color="blue-gray"
-                                                                className="font-normal !line-clamp-1">
-                                                                {message.IWrite &&
-                                                                    <span className='text-blue-gray-500'>
-                                                                        {message.read && '🗸'}
-                                                                        {' vous : '}
-                                                                    </span>}
-                                                                {message?.message ?? '...'}
-                                                            </Typography>
-                                                        </div>
-                                                    </ListItem>
-                                                    <hr className='h-[0px] mx-3 bg-blue-gray-900'></hr>
-                                                </div>
-                                            )}
-                                    </List>
-                                </div>
-                                {open &&
-                                    <div className='relative !w-[calc(100%-4rem)]'>
-                                        <Chat
-                                            refetch={refetch}
-                                            setNewConv={setNewConv}
-                                            newConv={newConv}
-                                            isLoading={isLoading}
-                                            fetchNextPage={fetchNextPage}
-                                            hasNextPage={hasNextPage}
-                                            messages={messages}
-                                            message={message}
-                                            setMessage={setMessage}
-                                            handleSendMessage={handleSendMessage}
-                                            userRec={userRec}
-                                        />
-                                        <Icon
-                                            style='absolute top-2 right-2'
-                                            color='blue-gray'
-                                            icon='close'
-                                            title='fermer'
-                                            onClick={() => {
-                                                setParams({ with: '0' })
-                                                setUserIdRec(0)
-                                                setUserRec({} as User)
-                                                setOpen(false)
-                                            }}
-                                        />
+                                                        </ListItem>
+                                                        <hr className='h-[0px] mx-3 bg-blue-gray-900'></hr>
+                                                    </div>
+                                                )}
+                                        </List>
                                     </div>
-                                }
-                            </div>
-                        </CardBody>
-                    </Card>}
+                                    {open &&
+                                        <div className='relative !w-[calc(100%-4rem)]'>
+                                            <Chat
+                                                refetch={refetch}
+                                                setNewConv={setNewConv}
+                                                newConv={newConv}
+                                                isLoading={isLoading}
+                                                fetchNextPage={fetchNextPage}
+                                                hasNextPage={hasNextPage}
+                                                messages={messages}
+                                                message={message}
+                                                setMessage={setMessage}
+                                                handleSendMessage={handleSendMessage}
+                                                userRec={userRec}
+                                            />
+                                            <Icon
+                                                style='absolute top-2 right-2'
+                                                color='blue-gray'
+                                                icon='close'
+                                                title='fermer'
+                                                onClick={() => {
+                                                    setParams({ with: '0' })
+                                                    setUserIdRec(0)
+                                                    setUserRec({} as User)
+                                                    setOpen(false)
+                                                }}
+                                            />
+                                        </div>
+                                    }
+                                </div>
+                            </CardBody>
+                        </Card>}
+                </section>
             </main>
-        </div >
+        </ >
     )
 }
 

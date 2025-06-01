@@ -75,11 +75,9 @@ export default function EventCreatePage() {
 
 
     return (
-        <div className="Body cyan">
-            <EventForm
-                formik={formik}
-                Address={Address}
-                setAddress={setAddress} />
-        </div >
+        <EventForm
+            formik={formik}
+            Address={Address}
+            setAddress={setAddress} />
     )
 }

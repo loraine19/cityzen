@@ -44,59 +44,59 @@ export default function ResetPasswordPage() {
 
 
     return (
-        <div className="Body gray gap-8 items-center">
-            <div className=" w-respLarge flex justify-between items-center">
+        <div className=" items-center gap-4">
+            <header className=" w-respLarge flex justify-between items-center">
                 <AuthHeader />
-                <Icon
-                    fill
-                    size='3xl'
-                    icon='cancel'
-                    title='fermer'
-                    link='/' />
-            </div>
-            <form onSubmit={formik.handleSubmit} className='flex flex-col  w-respLarge' >
-                <main className='flex flex-col py-6 gap-4 '>
-                    <Card className='FixCardNoImage flex py-8 w-respLarge'>
-                        <CardHeader className="FixCardHeaderNoImage flex-col !my-0 p-4 " floated={false}>
-                            <Typography variant="h5" color="blue-gray" className="mb-2">
-                                Reinitialisation du mot de passe
-                            </Typography>
-                            <Typography color="gray" className="mb-4">
-                                {notif}
-                            </Typography>
-                        </CardHeader>
-                        <CardBody className='FixCardBody gap-8 mb-4'>
-                            <Input
-                                className='px-4'
-                                label={'email'}
-                                name="email"
-                                variant="static"
-                                value={email as string}
-                                disabled={true} />
-                            <Input
-                                className='px-4'
-                                type={passWordInput.value}
-                                icon={
-                                    <Icon
-                                        onClick={() => {
-                                            passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
-                                        }}
-                                        icon={passWordInput.icon}
-                                        style='!-mt-4 -ml-4' />
-                                }
+                <Icon fill size='3xl' icon='cancel' title='fermer' link='/signin' />
+            </header>
+            <main className=' h-full py-8 '>
+                <form onSubmit={formik.handleSubmit} className='flex flex-col '  >
+                    <section className='flex flex-col py-6  '>
+                        <Card className='FixCardNoImage flex py-8 w-respLarge'>
+                            <CardHeader className="FixCardHeaderNoImage flex-col !my-0 p-8 " floated={false}>
+                                <Typography variant="h5" color="blue-gray" className="mb-2">
+                                    Reinitialisation du mot de passe
+                                </Typography>
+                                <Typography color="gray">
+                                    {notif}
+                                </Typography>
+                            </CardHeader>
+                            <CardBody className='FixCardBody gap-8 !px-10 py-2 mb-4'>
+                                <Input
+                                    className='px-4'
+                                    label={'email'}
+                                    name="email"
+                                    variant="static"
+                                    value={email as string}
+                                    disabled={true} />
+                                <Input
+                                    className='px-4'
+                                    type={passWordInput.value}
+                                    icon={
+                                        <Icon
+                                            onClick={() => {
+                                                passWordInput.value === 'password' ? setPassWordInput(textType) : setPassWordInput(passwordType)
+                                            }}
+                                            icon={passWordInput.icon}
+                                            style='!-mt-4 -ml-4' />
+                                    }
 
-                                label={formik.errors.password ? formik.errors.password : "Mot de passe"}
-                                name="password" variant="static" error={formik?.errors.password ? true : false}
-                                onChange={formik.handleChange} />
-                        </CardBody>
-                        <CardFooter className='FixCardFooter'>
-                            <Button type="submit" className="lgBtn" >
-                                Enregistrer
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                </main>
-            </form>
+                                    label={formik.errors.password ? formik.errors.password : "Mot de passe"}
+                                    name="password" variant="static" error={formik?.errors.password ? true : false}
+                                    onChange={formik.handleChange} />
+                            </CardBody>
+                            <CardFooter className='FixCardFooter'>
+                                <Button
+                                    type="submit"
+                                    className="lgBtn gap-4" >
+                                    <Icon icon="save" color="white" />
+                                    Enregistrer
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </section>
+                </form>
+            </main>
         </div>
     )
 }

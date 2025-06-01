@@ -43,7 +43,7 @@ export default function PostCreatePage() {
 
 
     return (
-        <div className="Body orange">
+        <>
             <ConfirmModal
                 open={open}
                 handleCancel={() => { setOpen(false) }}
@@ -56,6 +56,6 @@ export default function PostCreatePage() {
 
             <PostFormCard
                 formik={formik} />
-        </div >
+        </>
     )
 }

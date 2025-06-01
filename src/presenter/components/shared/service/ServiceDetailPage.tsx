@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServiceStep } from '../../../../domain/entities/Service';
 import CTAMines from '../../common/CTA';
-import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import ServiceDetailComp from './serviceCards/ServiceDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
@@ -158,24 +157,25 @@ export default function ServiceDetailPage() {
 
 
     return (
-        <div
-            data-cy="body-details-service"
-            className="Body cyan">
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader type={`${typeS} de service ${categoryS}`} closeBtn />
-            </header>
+        <>
             <main>
-                {isLoading || error || !service ?
-                    <Skeleton />
-                    :
-                    <ServiceDetailComp
-                        service={service}
-                        mines={mine}
-                    />}
+                <div className="px-4 sectionHeader">
+                    <SubHeader type={`${typeS} de service ${categoryS}`} closeBtn />
+                </div>
+                <section>
+                    {isLoading || error || !service ?
+                        <Skeleton />
+                        :
+                        <ServiceDetailComp
+                            service={service}
+                            mines={mine}
+                        />}
+                </section>
             </main>
-            {!isLoading && !error && service &&
-                <CTAMines actions={ok} disabled1={disabled1} />}
-        </div>
+            <footer>
+                {!isLoading && !error && service &&
+                    <CTAMines actions={ok} disabled1={disabled1} />}
+            </footer>
+        </>
     );
 }

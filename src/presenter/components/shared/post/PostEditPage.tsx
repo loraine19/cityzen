@@ -77,12 +77,12 @@ export default function PostEditPage() {
 
 
     return (
-        <div className="Body orange">
+        <>
 
             {isLoading || error ?
                 <Skeleton /> :
                 <PostFormCard
                     formik={formik} />}
-        </div >
+        </ >
     )
 }

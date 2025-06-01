@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CTAMines from '../../common/CTA';
-import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import SurveyDetailCard from './voteCards/SurveyDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
@@ -38,15 +37,14 @@ export default function SurveyDetailPage() {
                 close={() => setOpenVote(false)}
                 vote={survey}
                 refetch={refetch} />
-            <div className={`Body ${pageColor}`}>
-                <header>
-                    <NavBarTop />
+            <main>
+                <div className='sectionHeader'>
                     <SubHeader
                         type={`sondage ${survey?.categoryS}`}
                         link='/vote'
                         closeBtn />
-                </header>
-                <main>
+                </div>
+                <section>
                     {isLoading || !survey || error ?
                         <Skeleton
                             className='!rounded-2xl flex pt-8 pb-1 h-full' /> :
@@ -54,7 +52,7 @@ export default function SurveyDetailPage() {
                             setOpen={setOpenVote}
                             survey={survey} />
                     }
-                </main>
+                </section>
                 {survey?.mine ?
                     <CTAMines actions={myActions} /> :
                     <footer className={`CTA `}>
@@ -74,7 +72,7 @@ export default function SurveyDetailPage() {
                         </Button>
                     </footer>
                 }
-            </div>
+            </main>
         </>
 
     );

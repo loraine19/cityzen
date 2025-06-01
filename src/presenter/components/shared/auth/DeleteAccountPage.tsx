@@ -43,7 +43,8 @@ export default function DeleteAccountPage() {
 
 
     return (
-        <div className="Body gray gap-8 items-center">
+        <>
+
             <div className=" w-respLarge flex justify-between items-center">
                 <AuthHeader />
                 <Icon
@@ -53,8 +54,7 @@ export default function DeleteAccountPage() {
                     title='fermer'
                     link='/' />
             </div>
-            <form
-                onSubmit={formik.handleSubmit}
+            <form onSubmit={formik.handleSubmit}
                 className='flex flex-col gap-8 w-full  py-[5vh] '>
                 <main className='flex  flex-col items-center gap-4 pb-2'>
                     <Card className='w-respLarge flex py-4 flex-col items-center'>
@@ -94,10 +94,18 @@ export default function DeleteAccountPage() {
                         size="lg"
                         className="lgBtn"
                         color="red" >
+                        <Icon
+                            color="white"
+                            icon="delete"
+                            size='3xl'
+                            title='fermer'
+                        />
                         Confirmer la suppression
                     </Button>
+
                 </footer>
             </form>
-        </div>
+
+        </>
     )
 }

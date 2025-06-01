@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import CTAMines from '../../common/CTA';
-import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import PostDetailCard from './PostComps/PostDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
@@ -46,34 +45,36 @@ export default function PostDetailPage() {
     ]
 
     return (
-        <div className="Body orange">
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader type={`annonce ${post?.categoryS ?? ""}`} closeBtn />
-            </header>
+        <>
             <main>
-                {!isLoading && !error && post ?
-                    <PostDetailCard
-                        post={post}
-                        mines={post?.isMine}
-                        change={() => { }} /> :
-                    <Skeleton />}
+                <div className="sectionHeader px-4">
+                    <SubHeader type={`annonce ${post?.categoryS ?? ""}`} closeBtn />
+                </div>
+                <section className='bg-red-100'>
+                    {!isLoading && !error && post ?
+                        <PostDetailCard
+                            post={post}
+                            mines={post?.isMine}
+                            change={() => { }} /> :
+                        <Skeleton />}
+                </section>
             </main>
-            {(!isLoading && !error && post) ?
-                <>
-                    {post?.isMine ?
-                        <CTAMines
-                            actions={myActions} /> :
-                        <CTAMines
-                            actions={ContactActions}
-                            disabled1={post?.shareA?.find((s: string) => s === "PHONE") ?
-                                false : true}
-                            disabled2={post?.shareA?.find((s: string) => s === "EMAIL") ?
-                                false : true} />
-                    }
-                </> :
-                <footer className={`CTA`}> </footer>}
-        </div>
+            <footer>
+                {(!isLoading && !error && post) &&
+                    <>
+                        {post?.isMine ?
+                            <CTAMines
+                                actions={myActions} /> :
+                            <CTAMines
+                                actions={ContactActions}
+                                disabled1={post?.shareA?.find((s: string) => s === "PHONE") ?
+                                    false : true}
+                                disabled2={post?.shareA?.find((s: string) => s === "EMAIL") ?
+                                    false : true} />
+                        }
+                    </>}
+            </footer>
+        </>
     )
 }
 

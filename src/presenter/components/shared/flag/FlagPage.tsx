@@ -1,5 +1,4 @@
 import NavBarBottom from "../../common/NavBarBottom";
-import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import { FlagCard } from "./flagCards/FlagCard";
 import { SkeletonGrid } from "../../common/Skeleton";
@@ -32,36 +31,35 @@ export default function FlagPage() {
 
     /////FILTER FUNCTIONS
     return (
-        <div className="Body gray">
-            <header className="px-4">
-                <NavBarTop />
-                <div className="flex ">
-                    <SubHeader qty={flags?.length || 'aucun'} type={"Signalement "} closeBtn={true} link="/" /></div>
-            </header>
+        <>
+            <main>
+                <div className="sectionHeader">
+                    <SubHeader qty={flags?.length || 'aucun'} type={"Signalement "} closeBtn={true} link="/" />
+                </div>
 
-            <main className="GridSmall ">
-                {isLoading || error ? [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                    <SkeletonGrid
-                        key={index}
-                        count={4}
-                        small={true} />
-                ))
-                    :
-                    flags.map((element: FlagView, index: number) =>
-                        <div className="SubGrid " key={'div' + index}>
-                            <FlagCard
-                                key={index}
-                                flag={element}
-                                update={refetch} />
-                        </div>)}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={handleScroll} />
+                <section className="GridSmall ">
+                    {isLoading || error ? [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                        <SkeletonGrid
+                            key={index}
+                            count={4}
+                            small={true} />
+                    ))
+                        :
+                        flags.map((element: FlagView, index: number) =>
+                            <div className="SubGrid " key={'div' + index}>
+                                <FlagCard
+                                    key={index}
+                                    flag={element}
+                                    update={refetch} />
+                            </div>)}
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={handleScroll} />
+                </section>
             </main>
             <NavBarBottom />
-
-        </div >
+        </ >
     )
 
 }

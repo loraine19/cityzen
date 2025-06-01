@@ -5,7 +5,6 @@ import { object, string } from 'yup';
 import { ServiceType } from '../../../../../domain/entities/Service';
 import { ModalValues } from '../../../../../domain/entities/frontEntities';
 import { ConfirmModal } from '../../../common/ConfirmModal';
-import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from './IssueDetailCard';
 import { useUserStore } from '../../../../../application/stores/user.store';
@@ -77,36 +76,38 @@ export default function IssueEditPage() {
 
 
     return (
-        <form onSubmit={formik.handleSubmit} className=" Body gray gap-3 pb-2">
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={ModalValues.confirm}
-                title={ModalValues.title}
-                element={ModalValues.element} />
 
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader
-                    type={"Conciliation"}
-                    place={` sur ${issue?.Service?.type === ServiceType.GET ? "une demande" : "une offre"} de service  ${userId === issue?.Service?.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`}
-                    closeBtn />
-            </header>
-            {isLoading || error ?
-                <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
-                <IssueForm
-                    modos={[]}
-                    issue={issue}
-                    formik={formik} />}
-            <Button
-                type="submit"
-                disabled={issue?.status > 1}
-                className="!lngBtn w-respLarge rounded-full" >
-                Mettre à jour la concialtion
-            </Button>
+        <form onSubmit={formik.handleSubmit} className='flex flex-col'>
+            <main>
+                <ConfirmModal
+                    open={open}
+                    handleCancel={() => { setOpen(false) }}
+                    handleConfirm={ModalValues.confirm}
+                    title={ModalValues.title}
+                    element={ModalValues.element} />
+
+                <div className="px-4 sectionHeader">
+                    <SubHeader
+                        type={"Conciliation"}
+                        place={` sur ${issue?.Service?.type === ServiceType.GET ? "une demande" : "une offre"} de service  ${userId === issue?.Service?.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`}
+                        closeBtn />
+                </div>
+                {isLoading || error ?
+                    <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
+                    <IssueForm
+                        modos={[]}
+                        issue={issue}
+                        formik={formik} />}
+            </main>
+            <footer className="CTA">
+                <Button
+                    type="submit"
+                    disabled={issue?.status > 1}
+                    className="!lngBtn w-respLarge rounded-full" >
+                    Mettre à jour la concialtion
+                </Button>
+            </footer>
         </form>
-
-
     )
 }
 

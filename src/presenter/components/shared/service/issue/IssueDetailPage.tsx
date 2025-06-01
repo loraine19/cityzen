@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServiceType } from '../../../../../domain/entities/Service'
 import CTAMines from '../../../common/CTA';
-import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from './IssueDetailCard';
 import { Action } from '../../../../../domain/entities/frontEntities';
@@ -149,20 +148,21 @@ export default function IssueDetailPage() {
 
     return (
         <>
-            <div className="Body gray">
-                <header className="px-4">
-                    <NavBarTop />
+            <main>
+                <div className="px-4 sectionHeader">
                     <SubHeader
                         type={"Conciliation"}
                         place={` sur une ${ServiceType[issue?.Service?.type as unknown as keyof typeof ServiceType]} de service  ${userId === issue?.Service?.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`}
                         closeBtn />
-                </header>
+                </div>
                 {isLoading || !issue || error ?
                     <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
                     <IssueForm
                         modos={modos}
                         issue={issue} />
                 }
+            </main>
+            <footer className="CTA">
                 {issue?.mine &&
                     <CTAMines
                         key={'mine'}
@@ -182,7 +182,7 @@ export default function IssueDetailPage() {
                         disabled2={(issue?.ImModo && issue?.statusS !== IssueStep.STEP_3) || (issue?.ImModoOn && issue?.statusS !== IssueStep.STEP_4)}
                         actions={ModoActions} />
                 }
-            </div >
+            </footer >
         </>
     )
 }

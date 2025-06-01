@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import NavBarBottom from "../../common/NavBarBottom";
-import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import { NotifCard } from "./NotifCard";
@@ -110,62 +109,63 @@ export default function NotificationPage() {
     }
 
     return (
-        <div className="Body gray">
-            <header className=" px-4">
-                <NavBarTop />
-                <div className="flex ">
+        <>
+            <main>
+                <div className="sectionHeader">
                     <SubHeader
                         qty={count}
                         type={"Notifications " + `${PathElement[filter as keyof typeof PathElement] ?? ""} `}
                         closeBtn
                         link={'/'} />
-                </div>
-                <div className="relative max-w-[100vw] overflow-auto flex pl-1 !py-0 pr-10">
-                    <TabsMenu
-                        labels={notifTabs} />
-                    <ReadAllButton
-                        update={refetch} />
-                </div>
-                {notifFind &&
-                    <div className={'notif'}>
-                        {notifFind}
-                        <Icon
-                            title="Recharger la liste"
-                            bg={!isLoading}
-                            icon={isLoading ? '...' : 'reload'}
-                            onClick={() => refetch()} />
-                    </div>}
-            </header>
+                    <div className="relative max-w-[100vw] overflow-auto flex pl-1 !py-0 pr-10">
+                        <TabsMenu
+                            labels={notifTabs} />
+                        <ReadAllButton
+                            update={refetch} />
+                    </div>
 
-            <main
-                ref={divRef}
-                onScroll={handleScroll}
-                className="GridSmall ">
-                {isLoading ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4}
-                            small={true} />
-                    )) :
-                    notifs?.map((notif: NotifView, index: number) => notif.read === false &&
-                        <div className="SubGrid" key={'div' + index}>
-                            <NotifCard
+                    {notifFind &&
+                        <div className={'notif'}>
+                            {notifFind}
+                            <Icon
+                                title="Recharger la liste"
+                                bg={!isLoading}
+                                icon={isLoading ? '...' : 'reload'}
+                                onClick={() => refetch()} />
+                        </div>}
+                </div>
+
+                <section
+                    ref={divRef}
+                    onScroll={handleScroll}
+                    className="GridSmall ">
+                    {isLoading ?
+                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
                                 key={index}
-                                notif={notif}
-                                handleClick={async (notif: NotifView) => {
-                                    readNotif(notif.id)
-                                    setUnReadNotif(count - 1);
-                                    await refetch();
-                                }} />
-                        </div>)}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={handleScroll} />
+                                count={4}
+                                small={true} />
+                        )) :
+                        notifs?.map((notif: NotifView, index: number) => notif.read === false &&
+                            <div className="SubGrid" key={'div' + index}>
+                                <NotifCard
+                                    key={index}
+                                    notif={notif}
+                                    handleClick={async (notif: NotifView) => {
+                                        readNotif(notif.id)
+                                        setUnReadNotif(count - 1);
+                                        await refetch();
+                                    }} />
+                            </div>)}
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={handleScroll} />
+                </section>
             </main>
-            <NavBarBottom />
-        </div >
+
+            <NavBarBottom addBtn={true} />
+        </>
     )
 
 }

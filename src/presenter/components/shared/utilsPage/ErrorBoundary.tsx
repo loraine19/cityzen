@@ -161,14 +161,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             return (
                 <>
                     <AlertModal values={!errorMessage ? alertValues : errorAlertValues} />
-
-
                     <div className={"Body " + bodyColor}>
-                        <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
+                        <header className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
                             <div className="flex items-center justify-center gap-2">
                             </div>
                             <AuthHeader />
-                        </div>
+                        </header>
                         <main
                             className="flex items-center gap-8 h-full p-20">
                             <Card className="hidden md:flex  FixCardNoImage !p-8 welcome " >

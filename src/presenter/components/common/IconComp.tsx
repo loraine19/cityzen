@@ -110,8 +110,8 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     const color = props.color ?? 'gray'
     const textColor = props.color ? `text-${color}-700 hover:!saturate-[1.5] hover:!bg-${color}-500 hover:!bg-opacity-30` : "text-gray-800 hover:!bg-gray-200"
     const bg = props.bg ? (props.color ? `bg-${color}-500 bg-opacity-30` : "!bg-gray-300 ") : ''
-    const classIcon = `!rounded-full max-w-max flex  items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
-    const classActive = ` hover:scale-[1.15] hover:!shadow hover:${pad}  transition-all duration-200 ease-in-out `
+    const classIcon = `!rounded-full flex items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
+    const classActive = `hover:scale-[1.12] hover:!shadow hover:${pad} transition-all duration-200 ease-in-out`
 
     if (onClick) {
         return (
@@ -127,7 +127,6 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     }
     if (link) {
         return <Link
-
             data-cy={icon}
             to={link}
             title={title}

@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
-import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import { PoolCard } from "./voteCards/PoolCard";
@@ -134,81 +133,82 @@ export default function VoteListPage() {
 
 
     return (
-        <div className={`Body ${pageColor}`}>
-            <header>
-                <NavBarTop />
-                <SubHeader
-                    qty={count > 0 ? count : 'aucun'}
-                    type={`${filter === PoolSurveyFilter.SURVEY ? '' :
-                        filter === PoolSurveyFilter.POOL ? '' :
-                            'cagnottes et sondages'} ${filterName()}`} />
-                <TabsMenu
-                    labels={tabs}
-                    sortList={sortList}
-                    color={pageColor}
-                    selectedSort={sort}
-                    setSelectedSort={setSort}
-                    reverse={reverse}
-                    setReverse={setReverse}
-                />
-                <CheckCard
-                    categoriesArray={boxArray}
-                    boxSelected={boxSelected}
-                    setBoxSelected={setBoxSelected}
-                    color={"orange-500"} />
-                {notif &&
-                    <div className={'notif'}>
-                        {notif}
-                        <Icon
-                            bg={!isLoading}
-                            icon={isLoading ? '...' : 'refresh'}
-                            onClick={() => refetch()} />
-                    </div>}
-            </header>
-            <main ref={divRef}
-                onScroll={() => handleScroll()}
-                className="Grid">
-                {isLoading || !poolsSurveys ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
-                    )) :
-                    poolsSurveys.map((element: PoolSurveyView, index: number) =>
-                        element.typeS === VoteTarget.SURVEY ?
-                            <div className="SubGrid" key={'div' + index}>
-                                <SurveyCard
-                                    survey={element}
-                                    key={index}
-                                    change={() => {
-                                        const Tab: HTMLElement | null = document.querySelector(`li[data-value="surveys"]`);
-                                        Tab && Tab.click();
-                                    }}
-                                    mines={mine}
-                                    update={refetch} />
-                            </div> :
-                            <div className="SubGrid "
-                                key={'div' + index}>
-                                <PoolCard
-                                    pool={element}
-                                    key={index}
-                                    change={() => {
-                                        const Tab: HTMLElement | null = document.querySelector(`li[data-value="pools"]`);
-                                        Tab && Tab.click();
-                                    }}
-                                    mines={mine}
-                                    update={refetch} />
-                            </div>
-                    )}
-                <LoadMoreButton
-                    color={pageColor}
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={() => handleScroll()} />
+        <>
+            <main>
+                <div className="sectionHeader">
+                    <SubHeader
+                        qty={count > 0 ? count : 'aucun'}
+                        type={`${filter === PoolSurveyFilter.SURVEY ? '' :
+                            filter === PoolSurveyFilter.POOL ? '' :
+                                'cagnottes et sondages'} ${filterName()}`} />
+                    <TabsMenu
+                        labels={tabs}
+                        sortList={sortList}
+                        color={pageColor}
+                        selectedSort={sort}
+                        setSelectedSort={setSort}
+                        reverse={reverse}
+                        setReverse={setReverse}
+                    />
+                    <CheckCard
+                        categoriesArray={boxArray}
+                        boxSelected={boxSelected}
+                        setBoxSelected={setBoxSelected}
+                        color={"orange-500"} />
+                    {notif &&
+                        <div className={'notif'}>
+                            {notif}
+                            <Icon
+                                bg={!isLoading}
+                                icon={isLoading ? '...' : 'refresh'}
+                                onClick={() => refetch()} />
+                        </div>}
+                </div>
+                <section
+                    ref={divRef}
+                    onScroll={() => handleScroll()}
+                    className="Grid">
+                    {isLoading || !poolsSurveys ?
+                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
+                                key={index}
+                                count={4} />
+                        )) :
+                        poolsSurveys.map((element: PoolSurveyView, index: number) =>
+                            element.typeS === VoteTarget.SURVEY ?
+                                <div className="SubGrid" key={'div' + index}>
+                                    <SurveyCard
+                                        survey={element}
+                                        key={index}
+                                        change={() => {
+                                            const Tab: HTMLElement | null = document.querySelector(`li[data-value="surveys"]`);
+                                            Tab && Tab.click();
+                                        }}
+                                        mines={mine}
+                                        update={refetch} />
+                                </div> :
+                                <div className="SubGrid "
+                                    key={'div' + index}>
+                                    <PoolCard
+                                        pool={element}
+                                        key={index}
+                                        change={() => {
+                                            const Tab: HTMLElement | null = document.querySelector(`li[data-value="pools"]`);
+                                            Tab && Tab.click();
+                                        }}
+                                        mines={mine}
+                                        update={refetch} />
+                                </div>
+                        )}
+                    <LoadMoreButton
+                        color={pageColor}
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={() => handleScroll()} />
+                </section>
             </main>
-            <NavBarBottom
-                addBtn={true}
-                color={pageColor} />
-        </div>
+
+            <NavBarBottom addBtn={true} />
+        </>
     );
 }

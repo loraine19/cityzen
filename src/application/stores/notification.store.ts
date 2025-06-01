@@ -20,6 +20,8 @@ interface NotificationStore {
   setUnReadMsgNotif: (value: number) => void;
   setUnReadNotif: (value: number) => void;
   setUnReadNotMessages: (value: number) => void;
+  color: string;
+  setColor: (color: string) => void;
 
 }
 
@@ -80,6 +82,8 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
         });
       },
       fetchNotif,
+      color: 'gray',
+      setColor: (color: string) => set({ color }),
     };
   },
     {

@@ -26,10 +26,10 @@ export default function NotFindPage() {
 
 
     return (
-        <div className="Body gray">
-            <div className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
+        <>
+            <header className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
                 <AuthHeader />
-            </div>
+            </header>
             <main className="flex items-center justify-evenly h-full py-10">
                 <Typography variant="lead" color="blue-gray" className="flex items-center justify-center mt-2">
                     {`élements ${url} non trouvés désolé`}
@@ -37,6 +37,6 @@ export default function NotFindPage() {
                 <Button onClick={() => navigate('/')} className="rounded-full w-max p-5 text-sm !font-light">retour à l' acceuil</Button>
             </main>
             <NavBarBottom addBtn={false} />
-        </div>
+        </>
     );
 }

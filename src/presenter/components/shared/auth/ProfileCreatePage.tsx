@@ -66,7 +66,7 @@ export default function ProfileCreatePage() {
 
     useEffect(() => { formik.values.Address = address as Address }, [address])
     return (
-        <div className="Body gray flex">
+        <>
             <ConfirmModal
                 open={open}
                 handleCancel={() => { setOpen(false) }}
@@ -75,9 +75,9 @@ export default function ProfileCreatePage() {
                 element={
                     <ProfileDiv
                         size='lg' profile={{ id: user.id, ...formik.values } as Partial<User>} />} />
-            <div className="w-respLarge flex-col flex justify-between ">
+            <header>
                 <AuthHeader />
-                <div className="flex justify-between items-center pb-3">
+                <div className="flex w-respLarge justify-between items-center pb-3">
                     <Typography
                         color="blue-gray"
                         className='w-resp px-4 flex justify-center pb-2'>
@@ -85,14 +85,17 @@ export default function ProfileCreatePage() {
                     </Typography>
                     <LogOutButton />
                 </div>
-            </div>
-            {!user || user.Profile ?
-                <Skeleton /> :
-                <ProfileForm
-                    formik={formik}
-                    setAssistance={setAssistance}
-                    setAddress={setAddress}
-                    setMailSub={setMailSub} />}
-        </div >
+            </header>
+            <main>
+
+                {!user ?
+                    <Skeleton /> :
+                    <ProfileForm
+                        formik={formik}
+                        setAssistance={setAssistance}
+                        setAddress={setAddress}
+                        setMailSub={setMailSub} />}
+            </main>
+        </>
     )
 }

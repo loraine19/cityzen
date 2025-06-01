@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { PostCategory, PostFilter, PostSort } from "../../../../domain/entities/Post";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import NavBarBottom from "../../common/NavBarBottom";
-import NavBarTop from "../../common/NavBarTop";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import PostGridComp from "./PostComps/PostGridComp";
@@ -131,90 +130,90 @@ export default function PostListPage() {
     ]
 
     return (
-        <div className="Body orange">
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader
-                    qty={count}
-                    type={`annonces  ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
-                <TabsMenu
-                    labels={postTabs}
-                    sortList={sortList}
-                    selectedSort={sort}
-                    setSelectedSort={setSort}
-                    color={'orange'}
-                    reverse={reverse}
-                    setReverse={setReverse}
-                />
-                <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
-                    <CategoriesSelect
-                        categoriesArray={postCategories}
-                        change={change}
-                        categorySelected={category.toString()} />
-
-                    <Icon
-                        icon={view === "list" ? "list" : "dashboard"}
-                        onClick={switchClick}
-                        size="3xl"
-                        style="mt-1 hidden md:flex"
+        <>
+            <main>
+                <div className="sectionHeader">
+                    <SubHeader
+                        qty={count}
+                        type={`annonces  ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
+                    <TabsMenu
+                        labels={postTabs}
+                        sortList={sortList}
+                        selectedSort={sort}
+                        setSelectedSort={setSort}
+                        color={'orange'}
+                        reverse={reverse}
+                        setReverse={setReverse}
                     />
-                </div>
-                {notif &&
-                    <div className={'notif'}>
-                        {notif}
-                        <Icon
-                            title="Recharger la liste"
-                            bg={!isLoading}
-                            icon={isLoading ? '...' : 'refresh'}
-                            onClick={() => refetch()} />
-                    </div>}
-            </header>
-            <main
-                ref={divRef}
-                onScroll={handleScroll}>
-                {isLoading || !posts || error ?
-                    <div className="Grid ">
-                        {[...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                            <SkeletonGrid
-                                key={index}
-                                count={4} />
-                        ))}</div>
-                    : <>
-                        {view === "list" ?
-                            announcesToGrid.map((line, index) => (
-                                <PostGridComp
-                                    key={index}
-                                    line={line}
-                                    update={refetch}
-                                    change={change}
-                                    mines={mines}
-                                    view={view} />))
-                            :
-                            <div className="Grid">
-                                {posts?.map((post: PostView, index: number) => (
-                                    <div className="SubGrid" key={index}>
-                                        <PostCard
-                                            key={post.id}
-                                            post={post}
-                                            change={change}
-                                            update={refetch}
-                                            mines={mines} />
-                                    </div>
-                                ))}
-                            </div>
-                        }
-                    </>
-                }
-                <LoadMoreButton
-                    color={'orange'}
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={handleScroll} />
+                    <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
+                        <CategoriesSelect
+                            categoriesArray={postCategories}
+                            change={change}
+                            categorySelected={category.toString()} />
 
+                        <Icon
+                            icon={view === "list" ? "list" : "dashboard"}
+                            onClick={switchClick}
+                            size="3xl"
+                            style="mt-1 hidden md:flex"
+                        />
+                    </div>
+                    {notif &&
+                        <div className={'notif'}>
+                            {notif}
+                            <Icon
+                                title="Recharger la liste"
+                                bg={!isLoading}
+                                icon={isLoading ? '...' : 'refresh'}
+                                onClick={() => refetch()} />
+                        </div>}
+                </div>
+                <section
+                    ref={divRef}
+                    onScroll={handleScroll}>
+                    {isLoading || !posts || error ?
+                        <div className="Grid ">
+                            {[...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                                <SkeletonGrid
+                                    key={index}
+                                    count={4} />
+                            ))}</div>
+                        : <>
+                            {view === "list" ?
+                                announcesToGrid.map((line, index) => (
+                                    <PostGridComp
+                                        key={index}
+                                        line={line}
+                                        update={refetch}
+                                        change={change}
+                                        mines={mines}
+                                        view={view} />))
+                                :
+                                <div className="Grid">
+                                    {posts?.map((post: PostView, index: number) => (
+                                        <div className="SubGrid" key={index}>
+                                            <PostCard
+                                                key={post.id}
+                                                post={post}
+                                                change={change}
+                                                update={refetch}
+                                                mines={mines} />
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                        </>
+                    }
+                    <LoadMoreButton
+                        color={'orange'}
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={handleScroll} />
+
+                </section>
             </main>
-            <NavBarBottom
-                addBtn={true}
-                color="orange" />
-        </div>
+
+            <NavBarBottom addBtn={true} />
+        </>
     );
 }

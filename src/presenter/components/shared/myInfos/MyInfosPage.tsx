@@ -82,9 +82,9 @@ export default function MyInfosPage() {
     useEffect(() => { if (address) formik.values.Address = address }, [address])
 
     return (
-        <div className="Body gray flex">
-            <div className="w-respLarge flex-col flex justify-between pt-1">
-                <div className="flex w-respLarge justify-between items-center gap-4">
+        <>
+            <header className="w-respLarge relative flex-col flex justify-between pt-2">
+                <div className="flex absolute justify-between items-center top-8 gap-4 w-full">
                     <LogOutButton />
                     <Icon
                         fill
@@ -95,7 +95,7 @@ export default function MyInfosPage() {
 
                 </div>
                 <AuthHeader />
-            </div>
+            </header>
             {!user.Profile ?
                 <Skeleton /> :
                 <ProfileForm
@@ -104,6 +104,6 @@ export default function MyInfosPage() {
                     setAddress={setAddress}
                     setMailSub={setMailSub}
                 />}
-        </div >
+        </ >
     )
 }

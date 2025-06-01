@@ -12,6 +12,8 @@ import { LoadingPage } from "./presenter/components/shared/utilsPage/LoadingPage
 import { errorValues } from "./presenter/components/shared/utilsPage/erroValues";
 import { AlertModal } from "./presenter/components/common/AlertModal";
 import { useAlertStore } from "./application/stores/alert.store";
+import { useNotificationStore } from "./application/stores/notification.store";
+import { WithTopNavPages } from "./presenter/components/shared/utilsPage/WithTopNavPages";
 
 // Lazy load components
 const ServiceCreatePage = lazy(() => import("./presenter/components/shared/service/ServiceCreatePage"));
@@ -50,6 +52,10 @@ const GroupDetailPage = lazy(() => import("./presenter/components/shared/dashboa
 
 
 function App() {
+
+
+
+
     const [retryCount, setRetryCount] = useState(0);
     const handleRetry = () => {
         // TODO : Implement retry logic
@@ -58,13 +64,11 @@ function App() {
     }
 
     const { alertValues } = useAlertStore(state => state)
+    const { color } = useNotificationStore(state => state);
 
     return (
-        <>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
-            </style>
-            <BrowserRouter>
+        <BrowserRouter>
+            <div className={"App " + color}>
                 <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
                     <Suspense fallback={<LoadingPage />}>
                         <Routes>
@@ -74,61 +78,61 @@ function App() {
                             <Route path="/motdepasse_oublie" element={<ForgotPasswordPage />} />
                             <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
                             <Route path="/delete_account" element={<DeleteAccountPage />} />
-
+                            <Route path="/*" element={<NotFindPage />} />
+                            {/* PRIVATE ROUTES  */}
                             <Route path="/" element={<PrivateRoute />}>
-                                <Route path="/" element={<DashboardPage />} />
-                                <Route path="/chat" element={<ChatPage />} />
 
-                                <Route path="/groupe" element={<GroupPage />} />
-                                <Route path="/groupe/:id" element={<GroupDetailPage />} />
-                                <Route path="/reglement" element={<RulesPage />} />
-                                <Route path="/msg" element={<DashboardPage />} />
                                 <Route path="/myprofile" element={<MyInfosPage />} />
-                                <Route path="/notification" element={<NotificationPage />} />
+                                <Route element={<WithTopNavPages />}>
+                                    <Route path="/" element={<DashboardPage />} />
+                                    <Route path="/chat" element={<ChatPage />} />
 
-                                <Route path="/service" element={<ServiceListPage />} />
-                                <Route path="/service/:id" element={<ServiceDetailPage />} />
-                                <Route path="/service/create" element={<ServiceCreatePage />} />
-                                <Route path="/service/edit/:id" element={<ServiceEditPage />} />
+                                    <Route path="/groupe" element={<GroupPage />} />
+                                    <Route path="/groupe/:id" element={<GroupDetailPage />} />
+                                    <Route path="/reglement" element={<RulesPage />} />
+                                    <Route path="/msg" element={<DashboardPage />} />
+                                    <Route path="/notification" element={<NotificationPage />} />
 
-                                <Route path="/litige/:id" element={<IssueDetailPage />} />
-                                <Route path="/conciliation/edit/:id" element={<IssueEditPage />} />
-                                <Route path="/conciliation" element={<ConciliationListPage />} />
+                                    <Route path="/service" element={<ServiceListPage />} />
+                                    <Route path="/service/:id" element={<ServiceDetailPage />} />
+                                    <Route path="/service/create" element={<ServiceCreatePage />} />
+                                    <Route path="/service/edit/:id" element={<ServiceEditPage />} />
 
-                                <Route path="/conciliation/:id" element={<IssueDetailPage />} />
-                                <Route path="/conciliation/create/:id" element={<IssueCreatePage />} />
+                                    <Route path="/litige/:id" element={<IssueDetailPage />} />
+                                    <Route path="/conciliation/edit/:id" element={<IssueEditPage />} />
+                                    <Route path="/conciliation" element={<ConciliationListPage />} />
 
-                                <Route path="/evenement" element={<EventListPage />} />
-                                <Route path="/evenement/create" element={<EventCreatePage />} />
-                                <Route path="/evenement/:id" element={<EventDetailPage />} />
-                                <Route path="/evenement/edit/:id" element={<EventEditPage />} />
+                                    <Route path="/conciliation/:id" element={<IssueDetailPage />} />
+                                    <Route path="/conciliation/create/:id" element={<IssueCreatePage />} />
 
-                                <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
-                                <Route path="/flag/edit/:target/:id" element={<FlagEditPage />} />
-                                <Route path="/flag" element={<FlagPage />} />
+                                    <Route path="/evenement" element={<EventListPage />} />
+                                    <Route path="/evenement/create" element={<EventCreatePage />} />
+                                    <Route path="/evenement/:id" element={<EventDetailPage />} />
+                                    <Route path="/evenement/edit/:id" element={<EventEditPage />} />
 
-                                <Route path="/vote" element={<VoteListPage />} />
-                                <Route path="/vote/:target/edit/:id" element={<VoteEditPage />} />
-                                <Route path="/vote/create" element={<VoteCreatePage />} />
-                                <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
-                                <Route path="/sondage/:id" element={<SurveyDetailPage />} />
+                                    <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
+                                    <Route path="/flag/edit/:target/:id" element={<FlagEditPage />} />
+                                    <Route path="/flag" element={<FlagPage />} />
 
-                                <Route path="/annonce" element={<PostListPage />} />
-                                <Route path="/annonce/:id" element={<PostDetailPage />} />
-                                <Route path="/annonce/create" element={<PostCreatePage />} />
-                                <Route path="/annonce/edit/:id" element={<PostEditPage />} />
+                                    <Route path="/vote" element={<VoteListPage />} />
+                                    <Route path="/vote/:target/edit/:id" element={<VoteEditPage />} />
+                                    <Route path="/vote/create" element={<VoteCreatePage />} />
+                                    <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
+                                    <Route path="/sondage/:id" element={<SurveyDetailPage />} />
 
-                                <Route path="/*" element={<NotFindPage />} />
-
+                                    <Route path="/annonce" element={<PostListPage />} />
+                                    <Route path="/annonce/:id" element={<PostDetailPage />} />
+                                    <Route path="/annonce/create" element={<PostCreatePage />} />
+                                    <Route path="/annonce/edit/:id" element={<PostEditPage />} />
+                                </Route>
                             </Route>
                         </Routes>
-
                     </Suspense>
                 </ErrorBoundary>
                 <AlertModal values={alertValues ?? errorValues} />
                 <ReactQueryDevtools />
-            </BrowserRouter>
-        </>
+            </div>
+        </BrowserRouter>
     );
 }
 

@@ -52,7 +52,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             className="-ml-20 " />
                         <Avatar
                             onError={(e) => e.currentTarget.src = "/image/person.svg"}
-                            src={imgBlob as string}
+                            src={imgBlob as string ?? "../../image/person.svg"}
                             alt={formik.values.firstName ?? 'avatar'}
                             className={"shadow-md BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
@@ -83,7 +83,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-1.5 overflow-auto !max-h-[calc(100vh-18rem)]">
+                    <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-1.5 mb-2 overflow-auto !max-h-[calc(100vh-18rem)]">
                         <Input
                             label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"} name="firstName"
                             variant="standard"
@@ -189,11 +189,15 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                     </CardBody>
                 </Card>
             </main>
-            <footer className="w-respLarge pb-2 flex-2">
+            <footer className="CTA w-respLarge pb-2">
+
                 <Button
                     type="submit"
-                    size="md"
-                    className="w-full rounded-full" >
+                    className="gap-4 rounded-full  lgBtn" >
+                    <Icon
+                        color="white"
+                        icon="edit"
+                        size="2xl" />
                     modifier mon profile
                 </Button>
             </footer>

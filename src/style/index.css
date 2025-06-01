@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,8 +25,8 @@
 :root {
     line-height: 1.3;
     font-weight: 400;
-    max-height: 100vh;
-    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -36,32 +38,58 @@
 }
 
 /* MAIN SECTIONS */
-body,
-#root,
-.Body {
+#root {
+    @apply flex flex-col  h-screen w-screen;
+}
+body {
+    @apply gray h-screen w-screen flex flex-col;
+}
+
+.App {
     @apply flex flex-col w-screen h-screen;
 }
 
-#root {
-    @apply bg-gray-100 m-auto;
+main {
+    @apply flex flex-col max-w-[1100px] px-4 flex-1;
+    min-height: 0;
 }
 
-main {
-    @apply flex flex-col w-full overflow-y-auto max-w-[100vw];
+section,
+.Section {
+    @apply flex flex-col overflow-y-auto  flex-1;
     gap: 0.2rem;
-    flex-shrink: 1;
-    flex-grow: 1;
     padding: 0 2.5%;
+    min-height: 0;
 }
 
 footer,
 header,
 main {
-    @apply w-full max-w-[1100px] m-auto;
+    @apply w-full max-w-[1100px] mx-auto;
+    max-height: 100vh;
+}
+
+footer {
+    @apply px-4 relative;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    flex-shrink: 0;
 }
 
 header {
-    @apply px-4 pb-4 relative;
+    @apply px-4  relative;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    flex-shrink: 0;
+}
+
+.sectionHeader {
+    @apply flex flex-col;
+}
+l nav {
+    @apply px-4  relative bg-yellow-300/50;
 }
 
 .w-respXl {
@@ -98,7 +126,7 @@ header {
 }
 
 .animSlide {
-    animation: slide 0.9s forwards;
+    animation: slide 0.8s forwards;
 }
 
 .fadeIn {
@@ -130,7 +158,7 @@ header {
 
 @keyframes slide {
     from {
-        transform: translateX(-400%);
+        transform: translateX(-50%);
     }
     to {
         transform: translateX(0);
@@ -138,7 +166,7 @@ header {
 }
 
 .Grid {
-    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
+    @apply max-h-full grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
     lg:auto-rows-[minmax(348px,46vh)] auto-rows-[minmax(360px,48vh)];
 }
 .Grid2 {
@@ -150,6 +178,7 @@ header {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)]  pt-2;
     grid-auto-rows: max-content;
 }
+
 .SubGrid {
     @apply pt-6 max-w-[calc(100vw-1rem)] mx-2;
 }
@@ -265,19 +294,19 @@ nav li .icon {
 
 /* CHIP LIGHT COLOR */
 .OrangeChip {
-    @apply bg-[#FED7AA] text-orange-800 min-w-[calc(max-0.1rem)]  px-3 pb-1 rounded-2xl;
+    @apply bg-[#FED7AA] text-orange-800 min-w-[calc(max-0.1rem)]  px-3 pb-1 rounded-2xl shadow-sm;
 }
 
 .GreenChip {
-    @apply bg-green-100 text-green-800  min-w-[calc(max-0.1rem)] px-3 !pb-1 rounded-2xl;
+    @apply bg-green-100 text-green-800  min-w-[calc(max-0.1rem)] px-3 !pb-1 rounded-2xl shadow-sm;
 }
 
 .RedChip {
-    @apply bg-red-200 text-red-900 min-w-[calc(max-0.1rem)] px-3 pb-1 rounded-2xl;
+    @apply bg-red-200 text-red-900 min-w-[calc(max-0.1rem)] px-3 pb-1 rounded-2xl shadow-sm;
 }
 
 .CyanChip {
-    @apply bg-cyan-200 text-cyan-900  min-w-[calc(max-1rem)] px-3 !pb-1 rounded-2xl;
+    @apply bg-cyan-200 text-cyan-900  min-w-[calc(max-1rem)] px-3 !pb-1 rounded-2xl shadow-sm;
 }
 
 .GrayChip {

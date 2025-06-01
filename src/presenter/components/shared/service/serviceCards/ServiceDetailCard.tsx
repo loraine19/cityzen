@@ -51,7 +51,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     </div>
                     {image &&
                         <img
-                            onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
+                            onError={(e) => e.currentTarget.src = "/image/placeholder.jpg"}
                             src={image as any}
                             alt={title}
                             className="h-full w-full object-cover"

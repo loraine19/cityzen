@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 //import parse from 'html-react-parser';
 import CTAMines from '../../common/CTA';
-import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import { EventDetailCard } from './eventComps/EventDetailCard';
 import { Action } from '../../../../domain/entities/frontEntities';
@@ -44,37 +43,38 @@ export default function EventDetailPage() {
 
 
     return (
-        <div
-            data-cy="event-details-page"
-            className="Body cyan ">
-            <header className="px-4">
-                <NavBarTop />
+        <> <main data-cy="event-details-page"
+        >
+            <div className="sectionHader px-4">
                 <SubHeader
                     type={`évenement ${event?.label ?? ''}`}
                     place={` ${event?.Address?.address ?? ''} ${event?.Address?.city ?? ''}`}
                     closeBtn />
-            </header>
-            <main>
+            </div>
+            <section>
                 {!isLoading && event ?
                     <EventDetailCard
                         EventLoad={event}
                         refetch={refetch} /> :
                     <Skeleton />}
-            </main>
-            {(!isLoading && event && !error) && <>
-                {event?.mine && !isLoading ?
-                    <CTAMines
-                        actions={myActions}
-                        disabled1={event?.status !== EventStatus.PENDING}
-                        disabled2={event?.status !== EventStatus.PENDING} />
-                    :
-                    <CTAMines
-                        disabled1={false}
-                        disabled2={event?.Igo}
-                        actions={buttons} />
-                }
-            </>}
+            </section>
+        </main>
+            <footer >
 
-        </div>
+                {(!isLoading && event && !error) && <>
+                    {event?.mine && !isLoading ?
+                        <CTAMines
+                            actions={myActions}
+                            disabled1={event?.status !== EventStatus.PENDING}
+                            disabled2={event?.status !== EventStatus.PENDING} />
+                        :
+                        <CTAMines
+                            disabled1={false}
+                            disabled2={event?.Igo}
+                            actions={buttons} />
+                    }
+                </>}
+            </footer>
+        </>
     );
 }

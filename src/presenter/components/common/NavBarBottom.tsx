@@ -2,6 +2,7 @@ import { Button, Navbar, SpeedDial, SpeedDialAction, SpeedDialContent, SpeedDial
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from "./IconComp";
+import { useNotificationStore } from "../../../application/stores/notification.store";
 
 interface NavBarBottomProps {
     handleClick?: () => void;
@@ -10,11 +11,12 @@ interface NavBarBottomProps {
 }
 
 const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cyan" }) => {
-    const navigate = useNavigate();
-    const location = useLocation();
+    const navigate = useNavigate()
+    const location = useLocation()
     const type = new URLSearchParams(location.pathname.split("/")[1]).toString().replace("=", '');
-    const [closeDial, setCloseDial] = useState<boolean>(false);
-    const handleNavigate = () => navigate(`/${type}/create`);
+    const [closeDial, setCloseDial] = useState<boolean>(false)
+    const handleNavigate = () => navigate(`/${type}/create`)
+    const { setColor } = useNotificationStore((state) => state);
 
     const navItems = [
         { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-500/20", col: 'blue-gray' },
@@ -22,15 +24,16 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
         { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-500/20", col: 'cyan' },
         { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-500/20", col: 'orange' },
         { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
-    ];
+    ]
 
     return (
         <footer className="pt-0.5 pb-2 px-1 lg:px-4 z-30">
             <Navbar className="flex rounded-full shadow-lg h-[4rem]  items-center p-0 !bg-white ">
                 <div className="w-full h-full relative">
-                    <ul className={` flex flex-row w-full overflow-auto rounded-full justify-between  h-full `}>
+                    <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full `}>
                         {navItems.map(({ to, icon, label, color, col }) => (
                             <Typography
+                                onClick={() => setColor(col)}
                                 key={to}
                                 as="li"
                                 variant="small"
@@ -40,7 +43,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false, color = "cy
                                 <NavLink
                                     to={to}
                                     className={({ isActive }) =>
-                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full  rounded-full px-2 lg:px-2.5  ${isActive ? `animSlide border-[1px]  z-30 ${color} bg-white shadow-[0_2px_8px_0.5px] shadow-blue-gray-200/90  ` : ''}`
+                                        `flex lg:flex-row gap-3 justify-center lg:justify-end flex-col items-center h-full rounded-full px-2 lg:px-2.5 ${isActive ? `animSlide border-[1px] z-30 ${color} bg-white shadow-[0_2px_8px_0.5px] shadow-blue-gray-200/90 ` : ''}`
                                     }
                                 >
                                     {({ isActive }) => (

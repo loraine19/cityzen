@@ -48,9 +48,9 @@ export default function SignUpPage() {
 
 
     return (
-        <div className="Body gray py-[1%]">
-            <AuthHeader />
-            <main className='items-center gap-3'>
+        <>
+            <header><AuthHeader /></header>
+            <main>
                 <AuthForm
                     lead="Creer votre compte"
                     notif={notif}
@@ -65,7 +65,7 @@ export default function SignUpPage() {
                 />
 
             </main>
-            <footer className="flex flex-col items-center gap-2 mb-8">
+            <footer className="flex flex-col items-center gap-2 py-6">
                 <Typography
                     variant="small"
                     className=" flex justify-center">
@@ -78,6 +78,6 @@ export default function SignUpPage() {
                     </Button>
                 </Link>
             </footer>
-        </div>
+        </>
     )
 }

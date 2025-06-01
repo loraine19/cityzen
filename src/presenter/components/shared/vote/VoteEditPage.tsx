@@ -109,16 +109,15 @@ export default function VoteEditPage() {
 
 
     return (
-        <div className="Body orange">
-            {!isLoading && !error && !isLoadingPool && !errorPool ?
-                <VoteForm
-                    formik={formik}
-                    type={type as VoteTarget}
-                    setType={setType} /> :
-                <Skeleton
-                    className={'w-24'}
-                    key={'S'} />
-            }
-        </div >
+
+        <> {!isLoading && !error && !isLoadingPool && !errorPool ?
+            <VoteForm
+                formik={formik}
+                type={type as VoteTarget}
+                setType={setType} /> :
+            <Skeleton
+                className={'w-24'}
+                key={'S'} />
+        }</>
     )
 }

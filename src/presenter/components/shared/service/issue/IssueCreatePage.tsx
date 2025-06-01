@@ -6,7 +6,6 @@ import { Issue } from '../../../../../domain/entities/Issue';
 import { ServiceType } from '../../../../../domain/entities/Service';
 import { ModalValues } from '../../../../../domain/entities/frontEntities';
 import { ConfirmModal } from '../../../common/ConfirmModal';
-import NavBarTop from '../../../common/NavBarTop';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from './IssueDetailCard';
 import { useUserStore } from '../../../../../application/stores/user.store';
@@ -97,7 +96,7 @@ export default function IssueEditPage() {
 
 
     return (
-        <form onSubmit={formik.handleSubmit} className=" Body gray gap-3 pb-2">
+        <form onSubmit={formik.handleSubmit} className='flex flex-col'>
             <ConfirmModal
                 open={open}
                 handleCancel={() => { setOpen(false) }}
@@ -105,22 +104,26 @@ export default function IssueEditPage() {
                 title={ModalValues.title}
                 element={ModalValues.element} />
 
-            <header className="px-4">
-                <NavBarTop />
-                <SubHeader type={"Conciliation"} place={` sur ${service?.type === ServiceType.GET ? "une demande" : "une offre"} de service  ${userId === service?.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`} closeBtn />
-            </header>
-            {isLoading ?
-                <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
-                <IssueForm
-                    modos={modos}
-                    issue={issue as IssueView}
-                    service={service}
-                    formik={formik} />}
-            <Button
-                type="submit"
-                className="!lngBtn w-respLarge rounded-full" >
-                Enregistrer la demande d'aide
-            </Button>
+            <main>
+                <div className="sectionHeader">
+                    <SubHeader type={"Conciliation"} place={` sur ${service?.type === ServiceType.GET ? "une demande" : "une offre"} de service  ${userId === service?.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`} closeBtn />
+                </div>
+
+                {isLoading ?
+                    <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
+                    <IssueForm
+                        modos={modos}
+                        issue={issue as IssueView}
+                        service={service}
+                        formik={formik} />}
+            </main>
+            <footer className="CTA">
+                <Button
+                    type="submit"
+                    className="!lngBtn w-respLarge rounded-full" >
+                    Enregistrer la demande d'aide
+                </Button>
+            </footer>
         </form>
 
 

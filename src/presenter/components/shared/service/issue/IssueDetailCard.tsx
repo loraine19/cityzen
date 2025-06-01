@@ -17,7 +17,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
 
     return (
         <>
-            <main className={`flex flex-1 pt-3`}>
+            <section className={`flex flex-1 pt-3`}>
                 <Card className=" w-respLarge FixCard z-50  ">
                     <CardHeader
                         className={"FixCardHeaderNoImage px-4 min-h-max py-3 justify-between items-center shadow-none flex"}
@@ -184,6 +184,6 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                         </div>
                     </CardFooter>
                 </Card>
-            </main >
+            </section >
         </>)
 }

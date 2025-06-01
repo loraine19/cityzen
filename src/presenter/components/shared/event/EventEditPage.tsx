@@ -93,7 +93,7 @@ export default function EventDetailPage() {
 
 
     return (
-        <div className="Body cyan">
+        <>
 
             {isLoading || formik.values === null ?
                 <Skeleton /> :
@@ -101,6 +101,6 @@ export default function EventDetailPage() {
                     formik={formik}
                     Address={formik.values.Address}
                     setAddress={setAddress} />}
-        </div >
+        </>
     )
 }

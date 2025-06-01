@@ -84,12 +84,11 @@ export default function VoteCreatePage() {
 
 
     return (
-        <div className="Body orange">
-            <VoteForm
-                formik={formik}
-                type={type}
-                setType={(type: VoteTarget) => setType(type)}
-            />
-        </div >
+
+        <VoteForm
+            formik={formik}
+            type={type}
+            setType={(type: VoteTarget) => setType(type)}
+        />
     )
 }

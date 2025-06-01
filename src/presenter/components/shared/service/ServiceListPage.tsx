@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { ServiceCategory, ServiceFilter, ServiceSort, ServiceStepFilter } from "../../../../domain/entities/Service";
 import CheckCard from "../../common/CheckCard";
 import NavBarBottom from "../../common/NavBarBottom";
-import NavBarTop from "../../common/NavBarTop";
 import SelectSearch from "../../common/SelectSearch";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
@@ -178,79 +177,81 @@ export default function ServicesPage() {
 
     //// RENDER
     return (
-        <div className="Body cyan">
-            <header>
-                <NavBarTop />
-                <SubHeader
-                    qty={count}
-                    type={`services ${filterName()} ${categoryName()}`} />
-                <TabsMenu
-                    labels={serviceTabs}
-                    sortList={sortList}
-                    selectedSort={sort}
-                    setSelectedSort={setSort}
-                    reverse={reverse}
-                    setReverse={setReverse}
-                />
-                {mine ?
-                    <CheckCard
-                        categoriesArray={boxArray}
-                        boxSelected={boxSelected}
-                        setBoxSelected={setBoxSelected} />
-                    :
-                    <SelectSearch
-                        searchCat={searchCat}
-                        setSearchCat={setSearchCat}
-                        category={serviceCategoriesS}
-                        search={search} />
-                }
-                {notif &&
-                    <div className={'notif'}>
-                        {notif}
-                        <Icon
-                            bg={!isLoading}
-                            icon={isLoading ? '...' : 'refresh'}
-                            onClick={() => refetch()} />
-                    </div>}
-            </header>
-            <main
-                ref={divRef}
-                onScroll={() => handleScroll()}
-                className="Grid">
-                {isLoading || error || !services ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
-                    ))
-                    :
-                    !customFilter ?
-                        services.map((service: ServiceView, index: number) => (
-                            <div className="SubGrid" key={index}>
-                                <ServiceComp
-                                    key={service.id}
-                                    service={service}
-                                    change={search as any}
-                                    mines={mine}
-                                    update={refetch} />
-                            </div>)) :
-                        customList.map((service: ServiceView, index: number) => (
-                            <div className="SubGrid" key={index}>
-                                <ServiceComp
-                                    key={service.id}
-                                    service={service}
-                                    change={search as any}
-                                    mines={mine}
-                                    update={refetch} />
+        <>
+            <main>
+                <div className="sectionHeader">
+                    <SubHeader
+                        qty={count}
+                        type={`services ${filterName()} ${categoryName()}`} />
+                    <TabsMenu
+                        labels={serviceTabs}
+                        sortList={sortList}
+                        selectedSort={sort}
+                        setSelectedSort={setSort}
+                        reverse={reverse}
+                        setReverse={setReverse}
+                    />
+                    {mine ?
+                        <CheckCard
+                            categoriesArray={boxArray}
+                            boxSelected={boxSelected}
+                            setBoxSelected={setBoxSelected} />
+                        :
+                        <SelectSearch
+                            searchCat={searchCat}
+                            setSearchCat={setSearchCat}
+                            category={serviceCategoriesS}
+                            search={search} />
+                    }
+                    {notif &&
+                        <div className={'notif'}>
+                            {notif}
+                            <Icon
+                                bg={!isLoading}
+                                icon={isLoading ? '...' : 'refresh'}
+                                onClick={() => refetch()} />
+                        </div>}
+                </div>
+                <section
+                    ref={divRef}
+                    onScroll={() => handleScroll()}
+                    className="Grid">
+                    {isLoading || error || !services ?
+                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
+                                key={index}
+                                count={4} />
+                        ))
+                        :
+                        !customFilter ?
+                            services.map((service: ServiceView, index: number) => (
+                                <div className="SubGrid" key={index}>
+                                    <ServiceComp
+                                        key={service.id}
+                                        service={service}
+                                        change={search as any}
+                                        mines={mine}
+                                        update={refetch} />
+                                </div>)) :
+                            customList.map((service: ServiceView, index: number) => (
+                                <div className="SubGrid" key={index}>
+                                    <ServiceComp
+                                        key={service.id}
+                                        service={service}
+                                        change={search as any}
+                                        mines={mine}
+                                        update={refetch} />
 
-                            </div>
-                        ))}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={() => handleScroll()} />
+                                </div>
+                            ))}
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={() => handleScroll()} />
+                </section>
             </main>
+
             <NavBarBottom addBtn={true} />
-        </div>
+        </>
     );
 }

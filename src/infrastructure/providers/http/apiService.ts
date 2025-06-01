@@ -135,9 +135,10 @@ export class ApiService implements ApiServiceI {
                 newError = new ServerError();
                 break;
         }
-
         this.count = 0;
+        Promise.reject(newError);
         throw Error(newError.message || 'Une erreur est survenue');
+
     };
 
     //// REFRESH ACCESS
@@ -149,6 +150,7 @@ export class ApiService implements ApiServiceI {
             }, 2000);
             return false
         }
+
         if (window.location.pathname.includes('/sign')) return echec();
         if (this.count > 2) return echec();
         if (this.count > 1) {

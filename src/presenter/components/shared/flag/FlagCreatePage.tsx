@@ -6,7 +6,6 @@ import { Option, Button, Select, Switch } from '@material-tailwind/react';
 import { Flag, FlagTarget } from '../../../../domain/entities/Flag';
 import { Label } from '../../../../domain/entities/frontEntities';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import FlagDetailComp from './flagCards/FlagDetailComp';
 import { Skeleton } from '../../common/Skeleton';
@@ -64,7 +63,7 @@ export default function FlagCreatePage() {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="Body gray">
+        <>
             <ConfirmModal
                 open={open}
                 handleCancel={() => { setOpen(false); }}
@@ -77,62 +76,59 @@ export default function FlagCreatePage() {
                 element={` Vous confirmez le signalement </br>
                     sur  <br>${target} ${flag?.element?.title} <br> pour le motif <b>${getLabel(flag.reason, flagReasons)}</b>`} />
 
-            <form
-                onSubmit={formik.handleSubmit}
-                className="flex flex-col h-full gap-2 pb-3">
-                <header className="px-4">
-                    <NavBarTop />
-                    <SubHeader
-                        type={`Signaler `}
-                        place={'un ' + target}
-                        closeBtn />
-                    <div className='w-respLarge h-full flex flex-col gap-2'>
-                        <div className='flex justify-between items-center px-2'>
-                            <Switch
-                                label={flag.reason ? "signalé" : "non signalé"}
-                                className='px-2' color='cyan' name="active"
-                                checked={flag.reason ? true : false} />
+            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full">
+                <main>
+                    <div className="sectionHeader px-4">
+                        <SubHeader
+                            type={`Signaler `}
+                            place={'un ' + target}
+                            closeBtn />
+                        <div className='w-respLarge h-full flex flex-col py-2 gap-2'>
+                            <div className='flex justify-between items-center px-2'>
+                                <Switch
+                                    label={flag.reason ? "signalé" : "non signalé"}
+                                    className='px-2' color='cyan' name="active"
+                                    checked={flag.reason ? true : false} />
+                            </div>
+                            <Select
+                                className={` rounded-full shadow bg-white border-none capitalize`}
+                                label={formik.errors.reason ? formik.errors.reason as string : "Raison du signalement"}
+                                name="reason"
+                                labelProps={{ className: `${formik.errors.reason && "error"} before:border-none after:border-none ` }}
+                                value={flag.reason as unknown as string || ''}
+                                onChange={(val: string | undefined) => { if (val) formik.setFieldValue('reason', val); }}
+                            >
+                                {flagReasons.map((reason: Label, index: number) => {
+                                    return (
+                                        <Option
+                                            className={"rounded-full my-1 capitalize"}
+                                            value={reason.value}
+                                            key={index} >
+                                            {reason.label}
+                                        </Option>)
+                                })}
+                            </Select>
                         </div>
-                        <Select
-                            className={` rounded-full shadow bg-white border-none capitalize`}
-                            label={formik.errors.reason ? formik.errors.reason as string : "Raison du signalement"}
-                            name="reason"
-                            labelProps={{ className: `${formik.errors.reason && "error"} before:border-none after:border-none ` }}
-                            value={flag.reason as unknown as string || ''}
-                            onChange={(val: string | undefined) => { if (val) formik.setFieldValue('reason', val); }}
-                        >
-                            {flagReasons.map((reason: Label, index: number) => {
-                                return (
-                                    <Option
-                                        className={"rounded-full my-1 capitalize"}
-                                        value={reason.value}
-                                        key={index} >
-                                        {reason.label}
-                                    </Option>)
-                            })}
-                        </Select>
                     </div>
-                </header>
 
-                <main className='flex pb-2'>
-                    {loading ?
-                        <Skeleton
-                            className='w-respLarge m-auto !h-full !rounded-3xl' /> :
-                        <FlagDetailComp
-                            flag={new FlagView(flag)}
-                            label={targetKey} />}
+                    <section>
+                        {loading ?
+                            <Skeleton
+                                className='w-respLarge m-auto !h-full !rounded-3xl' /> :
+                            <FlagDetailComp
+                                flag={new FlagView(flag)}
+                                label={targetKey} />}
+                    </section>
                 </main>
-
-                <footer className="w-respLarge">
+                <footer className="CTA w-respLarge">
                     <Button
                         type="submit"
                         size="lg"
-                        className="w-full rounded-full lgBtn"
-                        disabled={false}>
-                        {`Enregistrer`}
+                        className="w-full rounded-full" >
+                        envoyer mon signalement
                     </Button>
                 </footer>
             </form>
-        </div >
+        </>
     );
 }

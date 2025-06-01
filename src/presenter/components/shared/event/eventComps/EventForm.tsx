@@ -3,7 +3,6 @@ import { Select, Card, CardHeader, Button, Typography, CardBody, Input, Textarea
 import { Label } from "../../../../../domain/entities/frontEntities";
 import AddressMapOpen from "../../../common/mapComps/AddressMapOpen";
 import { AddressInputOpen } from "../../../common/mapComps/AddressInputOpen";
-import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
 import { ImageBtn } from "../../../common/ImageBtn";
 import { dayMS, formatDateForDB, getLabel } from "../../../../views/viewsEntities/utilsService";
@@ -35,14 +34,13 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
     const label = category ? getLabel(category, eventCategories) : '';
 
     return (
-        <>
-            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full   ">
-                <header className="px-4">
-                    <NavBarTop />
+        <form onSubmit={formik.handleSubmit} className="flex flex-col h-full overflow-hidden">
+            <main>
+                <div className="sectionHeader gap-2">
                     <SubHeader
                         type={title ? 'Modifier mon évenement ' : 'Créer mon évenement'}
                         place={category ? label : ''} closeBtn />
-                    <div className="w-respLarge flex  gap-2">
+                    <div className="w-respLarge flex gap-2 py-2">
                         <Select className='rounded-full shadow bg-white border-none capitalize'
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                             name={"category"}
@@ -69,9 +67,9 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                             formik={formik}
                             user={user} />
                     </div>
-                </header>
-                <main className='flex flex-1 pb-1 pt-[2rem]'>
-                    <Card className=" w-respLarge FixCard !relative !z-10">
+                </div>
+                <section className="flex flex-1 pb-1 pt-6 relative">
+                    <Card className="w-respLarge FixCard !relative !z-10">
                         <CardHeader className="FixCardHeader lg:max-h-[20vh]">
                             <div className={`${start ? 'ChipDiv !justify-end' : 'hidden'}`}>
                                 <DateChip
@@ -184,23 +182,20 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                             </div>
                         </CardBody>
                     </Card>
-                </main>
-                <footer className="CTA">
-                    <Button
-                        color='cyan'
-                        type="submit"
-                        size="lg"
-                        className="lgBtn w-full rounded-full" >
-                        <Icon
-
-                            color='white'
-                            icon={title ? 'edit' : 'add'}
-                        />
-                        {title ? 'Modifier' : 'Créer'}
-
-                    </Button>
-                </footer>
-            </form>
-        </>
+                </section>
+            </main>
+            <footer className="CTA">
+                <Button
+                    color='cyan'
+                    type="submit"
+                    size="lg"
+                    className="lgBtn w-full rounded-full" >
+                    <Icon
+                        color='white'
+                        icon={title ? 'edit' : 'add'} />
+                    {title ? 'Modifier' : 'Créer'}
+                </Button>
+            </footer>
+        </form>
     );
 }

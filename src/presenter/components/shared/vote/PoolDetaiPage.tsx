@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Action } from '../../../../domain/entities/frontEntities';
 import CTAMines from '../../common/CTA';
-import NavBarTop from '../../common/NavBarTop';
 import SubHeader from '../../common/SubHeader';
 import PoolDetailCard from './voteCards/PoolDetailCard';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
@@ -38,22 +37,21 @@ export default function PoolDetailPage() {
                 close={() => setOpenVote(false)}
                 vote={pool}
                 refetch={refetch} />}
-        <div className={`Body ${pageColor}`}>
-            <header>
-                <NavBarTop />
+        <main>
+            <div className='sectionHeader'>
                 <SubHeader
                     type={`Cagnotte `}
                     link={`/vote`}
                     closeBtn />
-            </header>
-            <main>
+            </div>
+            <section>
                 {isLoading || !pool || error ?
                     <Skeleton /> :
                     <PoolDetailCard
                         pool={pool}
                         setOpen={setOpenVote} />
                 }
-            </main>
+            </section>
             {pool?.mine ?
                 <CTAMines actions={myActions} /> :
                 <footer className={`CTA`}>
@@ -73,7 +71,7 @@ export default function PoolDetailPage() {
                     </Button>
                 </footer>
             }
-        </div>
+        </main>
     </>
     )
 }
