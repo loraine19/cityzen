@@ -43,8 +43,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 setNavBottom(!navBottom);
             }
         }
-            className={"px-1  z-30" + (!navBottom ? ' -top-1  justify-center items-center flex' : 'lg:px-4 pt-0.5 pb-2 ')}>
-            <Navbar className={`${navBottom ? "shadow-lg !" : 'scale-[1]'} flex rounded-full h-full   items-center p-0 !bg-white/90 border border-blue-gray-100/50`}>
+            className={(!navBottom ? 'justify-center items-center flex pb-2' : 'pt-0.5 pb-2 ')}>
+            <Navbar className={`${navBottom ? "shadow-lg" : 'shadow-md'} flex rounded-full h-full   items-center p-0 !bg-white/90 border border-blue-gray-100/50`}>
                 <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full h-full relative"`}>
                     <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full`}>
                         {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
@@ -81,9 +81,11 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                             </Typography>
                         ))}
                         {addBtn && (
-                            <div className="flex-1  max-w-[3.75rem]">
+                            <div className="flex-1 max-w-[3.75rem]">
                                 <div className={`flex z-50 border items-center justify-center right-0 bg-${color}-100 h-full gap-12 w-full rounded-full shadowMid`}>
-                                    <SpeedDial offset={10}>
+                                    <SpeedDial
+                                        placement={navBottom ? 'top' : 'bottom'}
+                                        offset={10}>
                                         <SpeedDialHandler>
                                             <div className={`bg-${color}-500  rounded-full `}>
                                                 <Icon
@@ -93,9 +95,10 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                                     style={`${!closeDial ? 'transition-transform group-hover:rotate-45 hover:scale-[1]' : ''}  !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10`} />
                                             </div>
                                         </SpeedDialHandler>
-                                        <SpeedDialContent className={`${closeDial && "hidden"}`}>
+                                        <SpeedDialContent
+                                            className={`!z-[99999] absolute flex items-center justify-center ${closeDial && "bg-yellow-100"} bg-blue-gray-100`}>
                                             <SpeedDialAction
-                                                className="flex z-50 h-12 gap-8 w-12 shadow-lg"
+                                                className="flex h-12 gap-8 w-12 shadow-lg"
                                                 title={`Ajouter un ${type}`}
                                                 onClick={handleNavigate}>
                                                 <Icon

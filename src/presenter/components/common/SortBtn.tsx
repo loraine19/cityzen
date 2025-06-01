@@ -18,7 +18,7 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
         <div className="relative flex justify-between items-center ">
             <div className="flex items-center  gap-2">
                 <Menu placement="bottom-end">
-                    <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
+                    <MenuHandler className="relative z-auto h-max min-w-max flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Icon
                                 icon="sort"

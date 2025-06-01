@@ -8,6 +8,8 @@ type NotifDivProps = {
 }
 const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch }) => {
     const { color } = useNotificationStore((state) => state);
+
+    setTimeout(() => { notif && setTimeout(() => refetch(), 2000) }, 1000);
     return (
         <div className={'notif'}>
             {notif}
