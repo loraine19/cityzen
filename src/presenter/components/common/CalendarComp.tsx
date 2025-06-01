@@ -103,7 +103,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
             </div>
             <div className='relative max-h-full w-full flex flex-1 '>
                 {loadingEvents || errorEvents ? (
-                    <div className='absolute flex flex-col flex-1 h-full p-2 gap-2 w-full rounded-2xl bg-white shadow'>
+                    <div className='absolute flex flex-col flex-1 h-full p-2 gap-2 w-full rounded-2xl bg-white shadow '>
                         <div className={`grid grid-cols-${num} rounded-lg h-full overflow-auto pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20`}>
                             {[...Array(num)].map((_, index) => (
                                 <div key={index} className='text-xs w-full flex flex-col text-center h-full'>
@@ -122,14 +122,14 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                         </div>
                     </div>
                 ) :
-                    (<div className=' absolute flex flex-col flex-1 h-full p-2 gap-2  w-full rounded-2xl bg-white shadow-md '>
+                    (<div className='border border-blue-gray-100/50 absolute flex flex-col flex-1 h-full p-2 gap-2  w-full rounded-2xl bg-white shadow-md '>
                         {weeks && weeks.map((week: any, key: number) => (
                             <div
                                 key={key}
-                                className={` grid rounded-lg  h-full overflow-auto  pb-3 bg-blue-gray-50 divide-x divide-cyan-500 divide-opacity-20
+                                className={` grid rounded-xl  h-full overflow-auto  pb-3 bg-blue-gray-50 border border-blue-gray-100/50 
                                 ${colClass[col - 1]}`}>
                                 {week.map((day: any, index: number) =>
-                                    <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full    `}
+                                    <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full  border-r border-blue-gray-100/50   `}
                                         key={index}>
                                         <p className='w-full  sticky top-0 pt-1 text-center bg-blue-gray-50 '>
                                             {day.date.toLocaleDateString('fr-FR', { weekday: 'narrow', month: 'numeric', day: 'numeric' })}

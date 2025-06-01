@@ -57,7 +57,7 @@ main {
 
 section,
 .Section {
-    @apply flex flex-col overflow-y-auto flex-1 lg:px-[2%] px-[1.2%];
+    @apply flex flex-col overflow-y-auto flex-1 lg:px-[2%] px-4;
     gap: 0.2rem;
     min-height: 0;
 }
@@ -86,7 +86,7 @@ header {
 }
 
 .sectionHeader {
-    @apply flex flex-col gap-0.5;
+    @apply flex flex-col gap-0.5 relative;
 }
 
 .w-respXl {
@@ -133,7 +133,7 @@ header {
 }
 
 .notif {
-    @apply -top-0 items-center flex-col gap-4  absolute w-full h-full flex justify-center anim;
+    @apply -bottom-[100%] pt-4 items-center flex-col gap-4  absolute w-full h-full flex justify-center anim;
 }
 
 @keyframes fadeIn {

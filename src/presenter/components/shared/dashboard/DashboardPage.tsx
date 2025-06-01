@@ -41,9 +41,9 @@ export default function DashboardPage() {
 
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
-    const eventClasse = "h-full flex row-span-5 lg:grid pb-1 ";
+    const eventClasse = "h-full flex row-span-5 lg:grid  ";
     const notifClasse = " row-span-2 grid  lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5rem]")
-    const mapClasse = "flex row-span-6 min-h-[minmax(360px,48vh)] lg:min-h-[32%] lg:grid pb-1";
+    const mapClasse = "flex row-span-6 min-h-[minmax(360px,48vh)] lg:min-h-[32%] lg:grid";
 
 
     //// HANDLE SCROLL NOTIFICATIONS
@@ -74,9 +74,9 @@ export default function DashboardPage() {
 
 
     return (
-        <main className={` ${navBottom ? "-mt-8" : "mt-1 "} relative flex   h-[calc(100%-3.5rem)]"`}
+        <main className={` ${navBottom ? "-mt-8" : "mt-1 "} relative flex pb-2`}
             data-cy="dashboard-body" >
-            <div className={" px-4 flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
+            <div className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                 <div className={`${userClasse}`}>
                     <Card className="lg:h-full p-0 flex-1 flex anim">
                         <CardHeader className="flex flex-col items-center justify-center  bg-transparent shadow-none">

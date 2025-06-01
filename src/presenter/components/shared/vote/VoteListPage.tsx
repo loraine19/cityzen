@@ -134,7 +134,7 @@ export default function VoteListPage() {
     return (
         <>
             <main>
-                <div className="sectionHeader">
+                <div className="sectionHeader relative">
 
                     <TabsMenu
                         labels={tabs}
@@ -150,16 +150,17 @@ export default function VoteListPage() {
                         boxSelected={boxSelected}
                         setBoxSelected={setBoxSelected}
                         color={"orange-500"} />
-                    {notif &&
-                        <NotifDiv
-                            notif={notif}
-                            isLoading={isLoading}
-                            refetch={refetch} />}
+
                     <SubHeader
                         qty={count > 0 ? count : 'aucun'}
                         type={`${filter === PoolSurveyFilter.SURVEY ? '' :
                             filter === PoolSurveyFilter.POOL ? '' :
                                 'cagnottes et sondages'} ${filterName()}`} />
+                    {notif &&
+                        <NotifDiv
+                            notif={notif}
+                            isLoading={isLoading}
+                            refetch={refetch} />}
                 </div>
                 <section
                     ref={divRef}

@@ -43,7 +43,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 setNavBottom(!navBottom);
             }
         }
-            className={(!navBottom ? 'justify-center items-center flex pb-2' : 'pt-0.5 pb-2 ')}>
+            className={(!navBottom ? 'justify-center items-center flex pb-2 ' : 'pt-1 pb-1.5 ') + 'px-1'}>
             <Navbar className={`${navBottom ? "shadow-lg" : 'shadow-md'} flex rounded-full h-full   items-center p-0 !bg-white/90 border border-blue-gray-100/50`}>
                 <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full h-full relative"`}>
                     <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full`}>
