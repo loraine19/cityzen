@@ -1,18 +1,23 @@
 import { useLocation } from "react-router-dom"
 import { Icon } from "./IconComp"
 import { Typography } from "@material-tailwind/react"
+import { useNotificationStore } from "../../../application/stores/notification.store"
 
 type SubHeaderProps = { type: string, qty?: (number | string), place?: any, closeBtn?: boolean, link?: string }
 export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeaderProps) {
 
     const goBack = link ?? '/' + (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
 
+
+    const { color } = useNotificationStore((state) => state);
+    const colorBorder = `border-b-[1px] border-${color}-500 border-opacity-30`;
     return (
-        <div className="flex  w-full lg:px-[2.5%] px-[1%] border-b border-blue-gray-100/65 pt-1 gap-4 justify-end lg:justify-between ">
-            <Typography className="line-clamp-1 leading-[1.2] lg:text-[1.5rem] text-[1.2rem] pl-2 flex-1 !text-blue-gray-900 !m-0  font-medium">
+        <div className={`flex w-full divider-y lg:px-[2.5%] px-[1%] pt-1.5 gap-4 justify-end lg:justify-between`}>
+            <Typography className={`line-clamp-1 leading-[1] pb-1.5 lg:text-[1.5rem] text-[1.2rem] pl-2 flex-1 !text-blue-gray-900 !m-0 font-medium ${colorBorder}`}>
                 {qty} {type}
-                <span className="lg:inline hidden font-thin ">
-                    {place ?? " dans votre quartier"}
+                <span className="lg:inline font-thin ">
+                    {place ?? " dans prés de chez vous"}
+
                 </span>
             </Typography>
             <Icon
@@ -22,7 +27,8 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
                 bg
                 style={`${closeBtn ? 'flex mb-1 ' : 'hidden'} thin`}
                 link={goBack}
-                title={"retour " + goBack?.replace("/", "")} />
+                title={"retour " + goBack?.replace("/", "")}
+            />
         </div>
     )
 }

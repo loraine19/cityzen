@@ -148,6 +148,8 @@ export class ApiService implements ApiServiceI {
             setTimeout(() => {
                 window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter`;
             }, 2000);
+
+            this.count++
             return false
         }
 
@@ -157,7 +159,6 @@ export class ApiService implements ApiServiceI {
             this.logWithTime('refreshAccess already called, count: ' + this.count);
             return false;
         }
-        this.count++
 
 
         const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });

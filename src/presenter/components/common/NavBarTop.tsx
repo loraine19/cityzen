@@ -12,6 +12,7 @@ export default function NavBarTop() {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => { getColor(location.pathname) }, [location.pathname])
+    const { navBottom, setNavBottom } = useUserStore((state) => state);
 
 
     const menuItems = [
@@ -22,36 +23,36 @@ export default function NavBarTop() {
         { icon: 'diversity_3', text: "Conciliation", onClick: () => navigate('/conciliation'), color: 'orange' },
 
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null, color: 'amber', style: 'hover:!bg-white' },
+        { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => setNavBottom(!navBottom), color: 'blue-gray' },
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t ", color: "red" },
+
     ];
     const onBoard = window.location.pathname === '/'
 
     return (
         <header>
-            <div className="relative flex flex-0 justify-between items-center py-2 border-b border-blue-gray-50 mt-1.5">
-                {onBoard ? <div className="relative w-respXl w-full flex lg:justify-center justify-between items-center">
-                    <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0 py-4 lg:-ml-16 lg:pr-8 ">
-                        <img
-                            className="h-12 w-12 mx-2 lg:h-16 lg:w-16 object-cover object-center drop-shadow-[0_0_1px_rgba(0,0,0,0.1)]"
-                            src="/image/logo.svg"
-                            alt="logo" />
-                        <Typography
-                            color="blue-gray"
-                            className="font-comfortaa text-[1.8rem] lg:text-[2.7rem] font-bold">City'Do
-                        </Typography>
-                    </div>
-                    {/* <div className="z-50 absolute right-3 -top-1.5 w-full h-full items-start flex ">
-                        <NotifBadge onBoard />
-                    </div> */}
-                </div> :
-                    <div className={"flex truncate items-center gap-4 mr-6"}>
+            <div className="relative h-full w-full flex justify-between items-center pb-2 border-b border-blue-gray-50 pt-4">
+                {onBoard ?
+                    <div className="relative w-full flex justify-between items-center">
+                        <div className="flex w-full  flex-1 items-center  pl-2 pb-3">
+                            <img
+                                className="h-12 w-12 mx-2 lg:h-16 lg:w-16 object-cover object-center drop-shadow-[0_0_1px_rgba(0,0,0,0.1)]"
+                                src="/image/logo.svg"
+                                alt="logo" />
+                            <Typography
+                                color="blue-gray"
+                                className="font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold">City'Do
+                            </Typography>
+                        </div>
+                    </div> :
+                    <div className={"flex w-full items-center gap-4 "}>
                         <Menu placement="bottom-start">
                             <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                                 <div className="flex items-center relative">
                                     <Avatar
                                         onError={(e) => e.currentTarget.src = '/image/person.svg'}
                                         referrerPolicy="unsafe-url"
-                                        className="!flex BgUser !shadow cursor-pointer !h-[3.2rem] !w-[3.2rem] hover:!shadow-lg hover:!scale-[1.08] hover:!saturate-[1.1] transition-all duration-200 ease-in-out"
+                                        className="!flex BgUser !shadow cursor-pointer !h-[3.2rem] !w-[3.2rem] hover:!shadow-lg hover:!scale-[1.02] hover:!saturate-[1.1] transition-all duration-200 ease-in-out"
                                         variant="circular"
                                         alt={user?.Profile?.firstName || 'user'}
                                         src={user?.Profile?.image as string ?? '/image/person.svg'}
@@ -89,12 +90,12 @@ export default function NavBarTop() {
                                 {user?.Profile?.firstName}
                             </Typography>
                             <Typography
-                                className="-mt-1 flex text-gray-700 italic text-[0.9rem]">
-                                {user?.GroupUser?.map((group) => group.Group?.name).join(', ')}
+                                className="mt-0 flex text-gray-700 !line-clamp-1 italic text-[0.9rem]">
+                                {user?.GroupUser?.map((group) => (group.Group?.name.split(':')[0])).join(', ')}
                             </Typography>
                         </div>
                     </div>}
-                <div className="relative right-0 flex items-center gap-2"  >
+                <div className="relative right-0 flex h-full w-full "  >
                     <NotifBadge />
                 </div>
             </div >

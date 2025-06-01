@@ -200,14 +200,14 @@ export default function ServicesPage() {
                         category={serviceCategoriesS}
                         search={search} />
                 }
-                <SubHeader
-                    qty={count}
-                    type={`services ${filterName()} ${categoryName()}`} />
+
                 {notif &&
                     <NotifDiv
                         notif={notif}
                         isLoading={isLoading}
-                        refetch={refetch} />}
+                        refetch={refetch} />}  <SubHeader
+                    qty={count}
+                    type={`services ${filterName()} ${categoryName()}`} />
             </div>
             <section
                 ref={divRef}

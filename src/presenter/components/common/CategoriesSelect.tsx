@@ -13,7 +13,7 @@ export function CategoriesSelect(props: categoriesSelectProps) {
         props;
 
     return (
-        <div className="w-full  px-4">
+        <div className="w-full px-4">
             <Select
                 className="rounded-full h-7 shadow bg-white border-t border-blue-gray-50 capitalize "
                 size="md"
