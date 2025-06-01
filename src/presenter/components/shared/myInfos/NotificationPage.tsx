@@ -128,34 +128,29 @@ export default function NotificationPage() {
                         isLoading={isLoading}
                         refetch={refetch} />}
             </div>
-
-            <section
-                ref={divRef}
-                onScroll={handleScroll}
-                className="GridSmall ">
-                {isLoading ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4}
-                            small={true} />
-                    )) :
-                    notifs?.map((notif: NotifView, index: number) => notif.read === false &&
-                        <div className="SubGrid" key={'div' + index}>
-                            <NotifCard
-                                key={index}
-                                notif={notif}
-                                handleClick={async (notif: NotifView) => {
-                                    readNotif(notif.id)
-                                    setUnReadNotif(count - 1);
-                                    await refetch();
-                                }} />
-                        </div>)}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={handleScroll} />
-            </section>
+            {isLoading ?
+                <SkeletonGrid small /> :
+                <section
+                    ref={divRef}
+                    onScroll={handleScroll}
+                    className="GridSmall ">
+                    {
+                        notifs?.map((notif: NotifView, index: number) => notif.read === false &&
+                            <div className="SubGrid" key={'div' + index}>
+                                <NotifCard
+                                    key={index}
+                                    notif={notif}
+                                    handleClick={async (notif: NotifView) => {
+                                        readNotif(notif.id)
+                                        setUnReadNotif(count - 1);
+                                        await refetch();
+                                    }} />
+                            </div>)}
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={handleScroll} />
+                </section>}
         </main>
     )
 

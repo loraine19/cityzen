@@ -163,6 +163,15 @@ header {
     }
 }
 
+.spin {
+    animation: spin 0.7s linear;
+}
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .Grid {
     @apply max-h-full grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
     lg:auto-rows-[minmax(333px,40vh)] auto-rows-[minmax(346px,40vh)];
@@ -193,11 +202,11 @@ header {
 /* CARD */
 
 .FixCard {
-    @apply border border-blue-gray-50 w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
+    @apply border border-blue-gray-50 rounded-2xl w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
 }
 
 .FixCardNoImage {
-    @apply border border-blue-gray-50 w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0 anim;
+    @apply border border-blue-gray-50 rounded-2xl w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0 anim;
 }
 
 .FixCardHeader {

@@ -60,9 +60,6 @@ export default function ServiceCreatePage() {
 
 
     return (
-        <div className="Body cyan">
-
-            <ServiceForm formik={formik} />
-        </div >
+        <ServiceForm formik={formik} />
     )
 }

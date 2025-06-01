@@ -66,10 +66,10 @@ export default function ServiceEditPage() {
 
 
     return (
-        <div className="Body cyan">
+        <>
             {isLoading || error ?
                 <Skeleton className={'w-24'} key={'S'} /> :
                 <ServiceForm formik={formik} />}
-        </div >
+        </ >
     )
 }

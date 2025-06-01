@@ -27,7 +27,8 @@ export default function CheckCard(props: checkCardProps) {
         setBoxSelected(updatedBoxSelected);
     };
     const { color } = useNotificationStore((state) => state);
-    const colorShade = (color: string): string => `${color}-500 opacity-60`;
+    const colorShade = (color: string): string => `${color}-500 `;
+    const colorShadeDark = (color: string): string => `${color}-700 `;
 
     return (
         <div className="flex w-full !p-0">
@@ -36,10 +37,10 @@ export default function CheckCard(props: checkCardProps) {
                     {categoriesArray.map((category, index) => (
                         <ListItem className="!pt-0.5 px-0.5 !pb-1  min-w-max hover:!bg-transparent" key={index}>
                             <label htmlFor={category} className="flex flex-1">
-                                <ListItemPrefix className={`!px-0 py-0.5 !m-0 w-full flex items-center justify-center rounded-2xl  border-[1px] border-${colorShade(color)} shadow-sm ${checkedState[index] ?
-                                    ` bg-${colorShade(color)} text-white w-full animSlide` : `bg-transparent text-${colorShade(color)} !min-w-full `}`}>
+                                <ListItemPrefix className={`!px-0 py-0.5 !m-0 w-full flex items-center justify-center rounded-2xl !shadow-sm  border-[1px] border-${colorShade(color)} shadow-sm ${checkedState[index] ?
+                                    ` bg-${colorShade(color)} border-opacity-20  bg-opacity-30 text-${colorShade(color)}  w-full animSlide` : `bg-transparent text-${colorShade(color)} !min-w-full border-opacity-40  `}`}>
                                     <Checkbox
-                                        labelProps={{ className: `${checkedState[index] ? 'text-white w-full' : `text-${colorShade}`} whitespace-nowrap text-sm font-normal !min-w-max px-3 ` }}
+                                        labelProps={{ className: `${checkedState[index] ? `text-${colorShadeDark(color)} w-full` : `text-${colorShade(color)} text-opacity-90`} whitespace-nowrap text-sm font-normal !min-w-max px-3 ` }}
                                         iconProps={{ className: "hidden" }}
                                         checked={checkedState[index]}
                                         label={category}

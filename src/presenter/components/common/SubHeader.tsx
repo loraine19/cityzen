@@ -10,10 +10,10 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
 
 
     const { color } = useNotificationStore((state) => state);
-    const colorBorder = `border-b-[1px] border-${color}-500 border-opacity-30`;
+    const colorBorder = `border-b-[1px]  ${color !== 'gray' ? `border-${color ?? 'gray'}-500 ` : 'border-gray-500'}  border-opacity-30`;
     return (
-        <div className={`flex w-full divider-y lg:px-[2.5%] px-[1%] pt-1.5 gap-4 justify-end lg:justify-between`}>
-            <Typography className={`line-clamp-1 leading-[1] pb-1.5 lg:text-[1.5rem] text-[1.2rem] pl-2 flex-1 !text-blue-gray-900 !m-0 font-medium ${colorBorder}`}>
+        <div className={`flex w-full divider-y lg:px-[2.5%] px-[1%] pt-2.5 gap-4 justify-end lg:justify-between`}>
+            <Typography className={`line-clamp-1 leading-[1] pb-1.5 lg:text-[1.4rem] text-[1.2rem] pl-2 flex-1 !text-blue-gray-800 !m-0 font-medium ${colorBorder}`}>
                 {qty} {type}
                 <span className="lg:inline font-thin ">
                     {place ?? " dans prés de chez vous"}

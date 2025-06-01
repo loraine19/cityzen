@@ -14,7 +14,7 @@ export default function FlagPage() {
 
     const { flags, isLoading, error, refetch, hasNextPage, fetchNextPage, count } = DI.resolve('flagsViewModel')
 
-    const [notif, setNotif] = useState<string>('');
+    const [notif, setNotif] = useState<string>('hhh');
 
     useEffect(() => {
         switch (true) {
@@ -52,31 +52,27 @@ export default function FlagPage() {
                     qty={count || 'aucun'}
                     type={"Signalement "}
                     closeBtn={true} link="/" />
-                <NotifDiv
-                    notif={notif}
-                    isLoading={isLoading}
-                    refetch={refetch} />
+                {(notif && !isLoading) &&
+                    <NotifDiv
+                        notif={notif}
+                        isLoading={isLoading}
+                        refetch={refetch} />}
             </div>
-            <section className="GridSmall ">
-                {isLoading || error ? [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                    <SkeletonGrid
-                        key={index}
-                        count={4}
-                        small={true} />
-                ))
-                    :
-                    flags.map((element: FlagView, index: number) =>
+            {isLoading ?
+                <SkeletonGrid small count={6} /> :
+                <section className="GridSmall ">
+                    {flags.map((element: FlagView, index: number) =>
                         <div className="SubGrid " key={'div' + index}>
                             <FlagCard
                                 key={index}
                                 flag={element}
                                 update={refetch} />
                         </div>)}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={handleScroll} />
-            </section>
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={handleScroll} />
+                </section>}
         </main>
     )
 

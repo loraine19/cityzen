@@ -127,7 +127,6 @@ export default function EventListPage() {
     return (
         <main>
             <div className="sectionHeader ">
-
                 {view === "view_agenda" &&
                     <TabsMenu
                         labels={eventTabs}
@@ -162,41 +161,41 @@ export default function EventListPage() {
                     qty={count || 0}
                     type={`évènements ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
             </div>
-            {view === "view_agenda" && (
-                <section
-                    ref={divRef}
-                    onScroll={handleScroll}
-                    className="Grid Section">
+            {view === "view_agenda" &&
+                <>
                     {isLoading || error ?
-                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                            <SkeletonGrid
-                                key={index}
-                                count={4} />
-                        ))
+
+                        <SkeletonGrid />
                         :
-                        events.map((event: EventView, index: number) => (
-                            <div
-                                className="SubGrid "
-                                key={event.id}
-                                style={{
-                                    animationDelay: `${index * 80}ms`,
-                                    animationFillMode: 'both'
-                                }}
-                            >
-                                <EventCard
-                                    event={event}
-                                    change={change}
-                                    mines={mines}
-                                    refetch={refetch} />
-                            </div>
-                        ))
-                    }
-                    <LoadMoreButton
-                        isBottom={isBottom}
-                        hasNextPage={hasNextPage}
-                        handleScroll={handleScroll} />
-                </section>
-            )}
+                        <section
+                            ref={divRef}
+                            onScroll={handleScroll}
+                            className="Grid ">
+
+                            {events.map((event: EventView, index: number) => (
+                                <div
+                                    className="SubGrid "
+                                    key={event.id}
+                                    style={{
+                                        animationDelay: `${index * 80}ms`,
+                                        animationFillMode: 'both'
+                                    }}
+                                >
+                                    <EventCard
+                                        event={event}
+                                        change={change}
+                                        mines={mines}
+                                        refetch={refetch} />
+                                </div>
+                            ))}
+                            <LoadMoreButton
+                                isBottom={isBottom}
+                                hasNextPage={hasNextPage}
+                                handleScroll={handleScroll} />
+                        </section>}
+                </>
+
+            }
             {view === "event" && !isLoading &&
                 <section>
                     <CalendarComp />

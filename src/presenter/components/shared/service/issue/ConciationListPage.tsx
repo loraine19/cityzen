@@ -104,29 +104,25 @@ export default function ConciationListPage() {
                             onClick={() => refetch()} />
                     </div>}
             </div>
-            <section
-                ref={divRef}
-                onScroll={() => handleScroll()}
-                className="Grid">
-                {isLoading ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
-                    ))
-                    :
-                    issues.map((issue: IssueView, index: number) => (
-                        <div className="SubGrid" key={index}>
-                            <IssueCard
-                                issue={issue}
-                                change={search}
-                                update={refetch} />
-                        </div>))}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={() => handleScroll()} />
-            </section>
+            {isLoading ?
+                <SkeletonGrid />
+                : <section
+                    ref={divRef}
+                    onScroll={() => handleScroll()}
+                    className="Grid">
+                    {
+                        issues.map((issue: IssueView, index: number) => (
+                            <div className="SubGrid" key={index}>
+                                <IssueCard
+                                    issue={issue}
+                                    change={search}
+                                    update={refetch} />
+                            </div>))}
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={() => handleScroll()} />
+                </section>}
         </main>
     );
 }

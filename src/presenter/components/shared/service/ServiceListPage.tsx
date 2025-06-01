@@ -209,19 +209,15 @@ export default function ServicesPage() {
                     qty={count}
                     type={`services ${filterName()} ${categoryName()}`} />
             </div>
-            <section
-                ref={divRef}
-                onScroll={() => handleScroll()}
-                className="Grid">
-                {isLoading || error || !services ?
-                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                        <SkeletonGrid
-                            key={index}
-                            count={4} />
-                    ))
-                    :
-                    !customFilter ?
-                        services.map((service: ServiceView, index: number) => (
+            {isLoading || error || !services ?
+                <SkeletonGrid />
+                : <section
+                    ref={divRef}
+                    onScroll={() => handleScroll()}
+                    className="Grid">
+
+                    {!customFilter ?
+                        (services.map((service: ServiceView, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <ServiceComp
                                     key={service.id}
@@ -229,7 +225,7 @@ export default function ServicesPage() {
                                     change={search as any}
                                     mines={mine}
                                     update={refetch} />
-                            </div>)) :
+                            </div>))) :
                         customList.map((service: ServiceView, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <ServiceComp
@@ -241,11 +237,11 @@ export default function ServicesPage() {
 
                             </div>
                         ))}
-                <LoadMoreButton
-                    isBottom={isBottom}
-                    hasNextPage={hasNextPage}
-                    handleScroll={() => handleScroll()} />
-            </section>
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={() => handleScroll()} />
+                </section>}
         </main>
     );
 }

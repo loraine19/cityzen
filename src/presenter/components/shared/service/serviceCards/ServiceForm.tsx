@@ -1,7 +1,6 @@
 import { Radio, Select, Card, CardHeader, Button, Typography, Chip, CardBody, Input, Textarea, Option } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { dayMS, Label } from "../../../../../domain/entities/frontEntities";
-import NavBarTop from "../../../common/NavBarTop";
 import SubHeader from "../../../common/SubHeader";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
@@ -34,10 +33,9 @@ export function ServiceForm(props: { formik: any }) {
     const [groupId, setGroupId] = useState<string | undefined>(formik.values.groupId);
 
     return (
-        <>
-            <form onSubmit={formik.handleSubmit} className="flex flex-col h-full ">
-                <header className="px-4">
-                    <NavBarTop />
+        <form onSubmit={formik.handleSubmit} className="flex flex-1 flex-col !h-full ">
+            <main>
+                <div className="sectionHeader px-4">
                     <SubHeader
                         type={formik.values.title ? `Modifier votre service` : "Créer votre service"}
                         place={formik.values.title}
@@ -94,8 +92,8 @@ export function ServiceForm(props: { formik: any }) {
                                 user={user} />
                         </div>
                     </div>
-                </header>
-                <main className={`flex flex-1 pb-1 pt-2 ' ${haveImage && "pt-[2rem]"}`}>
+                </div>
+                <section className={`flex flex-1 pb-1 pt-2 ' ${haveImage && "pt-[2rem]"}`}>
                     <Card className="w-respLarge FixCard">
                         <CardHeader
                             className={formik.values.image ?
@@ -235,23 +233,23 @@ export function ServiceForm(props: { formik: any }) {
                             </div>
                         </CardBody>
                     </Card>
-                </main>
-                <footer className="CTA">
-                    <Button
-                        color='cyan'
-                        size='lg'
-                        type="submit"
-                        disabled={formik.values.statusValue > 0}
-                        className="lgBtn">
-                        <Icon
-                            color="white"
-                            icon={formik.values.statusValue <= 0 ? 'save' : 'block'}
-                        />
-                        {formik.values.statusValue > 0 ? 'Non modifiable : ' + formik.values.statusS : `enregistrer`}
-                    </Button>
+                </section>
+            </main>
+            <footer className="CTA">
+                <Button
+                    color='cyan'
+                    size='lg'
+                    type="submit"
+                    disabled={formik.values.statusValue > 0}
+                    className="lgBtn">
+                    <Icon
+                        color="white"
+                        icon={formik.values.statusValue <= 0 ? 'save' : 'block'}
+                    />
+                    {formik.values.statusValue > 0 ? 'Non modifiable : ' + formik.values.statusS : `enregistrer`}
+                </Button>
 
-                </footer>
-            </form>
-        </>
+            </footer>
+        </form>
     )
 }

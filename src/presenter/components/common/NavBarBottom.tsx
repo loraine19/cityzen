@@ -90,13 +90,13 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                             <div className={`bg-${color}-500  rounded-full `}>
                                                 <Icon
                                                     onClick={() => setCloseDial(!closeDial)}
-                                                    icon="+"
+                                                    icon="add"
                                                     color={'white'}
                                                     style={`${!closeDial ? 'transition-transform group-hover:rotate-45 hover:scale-[1]' : ''}  !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10`} />
                                             </div>
                                         </SpeedDialHandler>
                                         <SpeedDialContent
-                                            className={`!z-[99999] absolute flex items-center justify-center ${closeDial && "bg-yellow-100"} bg-blue-gray-100`}>
+                                            className={`!z-[99999] absolute flex items-center justify-center `}>
                                             <SpeedDialAction
                                                 className="flex h-12 gap-8 w-12 shadow-lg"
                                                 title={`Ajouter un ${type}`}

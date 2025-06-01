@@ -162,17 +162,14 @@ export default function VoteListPage() {
                             isLoading={isLoading}
                             refetch={refetch} />}
                 </div>
-                <section
-                    ref={divRef}
-                    onScroll={() => handleScroll()}
-                    className="Grid">
-                    {isLoading || !poolsSurveys ?
-                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                            <SkeletonGrid
-                                key={index}
-                                count={4} />
-                        )) :
-                        poolsSurveys.map((element: PoolSurveyView, index: number) =>
+                {isLoading || !poolsSurveys ?
+                    <SkeletonGrid /> :
+                    <section
+                        ref={divRef}
+                        onScroll={() => handleScroll()}
+                        className="Grid">
+
+                        {poolsSurveys.map((element: PoolSurveyView, index: number) =>
                             element.typeS === VoteTarget.SURVEY ?
                                 <div className="SubGrid" key={'div' + index}>
                                     <SurveyCard
@@ -196,14 +193,15 @@ export default function VoteListPage() {
                                         }}
                                         mines={mine}
                                         update={refetch} />
-                                </div>
-                        )}
-                    <LoadMoreButton
-                        color={pageColor}
-                        isBottom={isBottom}
-                        hasNextPage={hasNextPage}
-                        handleScroll={() => handleScroll()} />
-                </section>
+                                </div>)}
+
+
+                        <LoadMoreButton
+                            color={pageColor}
+                            isBottom={isBottom}
+                            hasNextPage={hasNextPage}
+                            handleScroll={() => handleScroll()} />
+                    </section>}
             </main>
 
         </>
