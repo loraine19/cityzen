@@ -4,7 +4,6 @@ import NavBarBottom from "../../common/NavBarBottom";
 import { Icon } from "../../common/IconComp";
 import CalendarComp from "../../common/CalendarComp";
 import { useEffect, useRef, useState } from "react";
-import { NotifBadge } from "../../common/NotifBadge";
 import { Skeleton } from "../../common/Skeleton";
 import { useUserStore } from "../../../../application/stores/user.store";
 import { useNavigate, useSearchParams } from "react-router-dom";
