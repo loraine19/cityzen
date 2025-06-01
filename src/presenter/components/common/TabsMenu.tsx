@@ -22,18 +22,18 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
     }, [])
 
     return (
-        <div className="flex items-center justify-between lg:px-4 gap-x-1">
+        <div className="flex items-center justify-between gap-x-1">
             <Tabs value={defaultTab as string || labels[0].value}
                 className=" w-full max-w-100vh overflow-auto">
                 <TabsHeader
-                    className="w-full flex flex-1 !gap-2 !px-0 my-2 bg-transparent"
+                    className="w-full flex flex-1 !gap-2 !px-0 mb-1  bg-transparent"
                     indicatorProps={{ className: "bg-gray-900 rounded-full" }}>
                     {labels.map(({ label, value, result }, index: number) => (
                         <Tab
                             key={index}
                             value={value}
                             activeClassName="text-white"
-                            className="text-sm whitespace-nowrap bg-white rounded-full shadow !px-3"
+                            className="text-[0.9rem] whitespace-nowrap border bg-white rounded-full shadow !px-3"
                             onClick={() => { result() }}>
                             {label}
                         </Tab>

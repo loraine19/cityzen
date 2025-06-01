@@ -1,0 +1,21 @@
+import { Outlet } from "react-router"
+import NavBarBottom from "../../common/NavBarBottom"
+import { useUserStore } from "../../../../application/stores/user.store"
+
+export const WithBottomPages = (props: { addBtn?: boolean }) => {
+    const { navBottom } = useUserStore()
+
+    if (!navBottom)
+        return (<>
+            <NavBarBottom addBtn={props.addBtn} />
+            <Outlet />
+        </>)
+
+    return (
+        <>
+            <Outlet />
+            <NavBarBottom addBtn={props.addBtn} />
+
+        </>)
+}
+

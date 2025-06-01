@@ -11,29 +11,25 @@ type selectSearchProps = {
 export default function SelectSearch(props: selectSearchProps) {
     const { searchCat, setSearchCat, category, search } = props
     return (
-        <div className="flex m-auto !rounded-full h-7 md:w-[90%] items-center bg-white shadow !mb-1.5" >
+        <div className="flex m-auto !rounded-full h-7  w-full items-center bg-white shadow " >
             <Menu placement="bottom-start">
                 <MenuHandler>
-                    <Button
-                        ripple={false}
-                        variant="text"
-                        color="blue-gray"
-                        size="sm"
-                        className="flex items-center bg-none rounded-full py-1 !px-4" >
+                    <div className="flex  pl-2 ">
                         <Icon
+                            color='cyan'
                             data-cy="select"
                             icon="arrow_drop_down"
                             size='2xl' />
-                    </Button>
+                    </div>
                 </MenuHandler>
-                <MenuList className="flex flex-col">
+                <MenuList className="flex  flex-col">
                     {category.map((label: any, index: number) => {
                         return (
                             <MenuItem
                                 data-cy={label.value}
                                 key={index}
                                 value={label.value}
-                                className="flex items-center gap-2 !text-md"
+                                className="flex items-center gap-2 !capitalize font-medium hover:bg-blue-gray-50 px-4 "
                                 onClick={() => { setSearchCat(label); search(label) }} >
                                 {label.label}
                             </MenuItem>
@@ -61,7 +57,7 @@ export default function SelectSearch(props: selectSearchProps) {
                 color="blue-gray"
                 size="sm"
                 onClick={() => search(searchCat)}
-                className="flex items-center  bg-none rounded-full py-1 !px-4"
+                className="flex items-center  bg-none rounded-full py-1 !px-3"
             >
                 <Icon icon="search" />
             </Button>

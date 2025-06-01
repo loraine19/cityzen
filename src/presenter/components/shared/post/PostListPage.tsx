@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PostCategory, PostFilter, PostSort } from "../../../../domain/entities/Post";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
-import NavBarBottom from "../../common/NavBarBottom";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import PostGridComp from "./PostComps/PostGridComp";
@@ -15,6 +14,7 @@ import { postCategories } from "../../../constants";
 import PostCard from "./PostComps/PostCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { Icon } from "../../common/IconComp";
+import NotifDiv from "../../common/NotifDiv";
 
 export default function PostListPage() {
     const [filter, setFilter] = useState<string>('');
@@ -159,14 +159,10 @@ export default function PostListPage() {
                         />
                     </div>
                     {notif &&
-                        <div className={'notif'}>
-                            {notif}
-                            <Icon
-                                title="Recharger la liste"
-                                bg={!isLoading}
-                                icon={isLoading ? '...' : 'refresh'}
-                                onClick={() => refetch()} />
-                        </div>}
+                        <NotifDiv
+                            notif={notif}
+                            isLoading={isLoading}
+                            refetch={refetch} />}
                 </div>
                 <section
                     ref={divRef}
@@ -212,8 +208,6 @@ export default function PostListPage() {
 
                 </section>
             </main>
-
-            <NavBarBottom addBtn={true} color={'orange'} />
         </>
     );
 }

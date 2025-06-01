@@ -14,7 +14,7 @@ export function CategoriesSelect(props: categoriesSelectProps) {
 
     return (
         <Select
-            className="rounded-full shadow bg-white border-none capitalize "
+            className="rounded-full shadow bg-white border-t border-blue-gray-50 capitalize "
             size="md"
             label={label}
             name={"categories"}

@@ -14,8 +14,9 @@ import { AlertModal } from "./presenter/components/common/AlertModal";
 import { useAlertStore } from "./application/stores/alert.store";
 import { useNotificationStore } from "./application/stores/notification.store";
 import { WithTopNavPages } from "./presenter/components/shared/utilsPage/WithTopNavPages";
+import { WithBottomPages } from "./presenter/components/shared/utilsPage/WithBottomPages";
 
-// Lazy load components
+// Lazy loaded pages
 const ServiceCreatePage = lazy(() => import("./presenter/components/shared/service/ServiceCreatePage"));
 const ServiceDetailPage = lazy(() => import("./presenter/components/shared/service/ServiceDetailPage"));
 const ServiceEditPage = lazy(() => import("./presenter/components/shared/service/ServiceEditPage"));
@@ -50,30 +51,22 @@ const RulesPage = lazy(() => import("./presenter/components/shared/dashboard/Rul
 const GroupPage = lazy(() => import("./presenter/components/shared/dashboard/group/GroupPage"));
 const GroupDetailPage = lazy(() => import("./presenter/components/shared/dashboard/group/GroupDetailPage"));
 
-
 function App() {
-
-
-
-
     const [retryCount, setRetryCount] = useState(0);
-    const handleRetry = () => {
-        // TODO : Implement retry logic
-        setRetryCount(retryCount + 1);
-        console.log(`Retrying... Attempt from app tsx ${retryCount} +1`);
-    }
+    const handleRetry = () => setRetryCount(retryCount + 1);
 
-    const { alertValues } = useAlertStore(state => state)
+    const { alertValues } = useAlertStore(state => state);
     const { color, getColor } = useNotificationStore(state => state);
 
     useEffect(() => { getColor(window.location.pathname) }, [window.location.pathname]);
 
     return (
         <BrowserRouter>
-            <div className={"App " + color}>
+            <div className={`App ${color}`}>
                 <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
                     <Suspense fallback={<LoadingPage />}>
                         <Routes>
+                            {/* Public routes */}
                             <Route path="/signin" element={<SignInPage />} />
                             <Route path="/signup" element={<SignUpPage />} />
                             <Route path="/profile/create" element={<ProfileCreatePage />} />
@@ -81,51 +74,57 @@ function App() {
                             <Route path="/motdepasse_oublie/reset" element={<ResetPasswordPage />} />
                             <Route path="/delete_account" element={<DeleteAccountPage />} />
                             <Route path="/*" element={<NotFindPage />} />
-                            {/* PRIVATE ROUTES  */}
+
+                            {/* Private routes */}
                             <Route path="/" element={<PrivateRoute />}>
-
                                 <Route path="/myprofile" element={<MyInfosPage />} />
+
+                                {/* Pages with top navigation */}
                                 <Route element={<WithTopNavPages />}>
-                                    <Route path="/" element={<DashboardPage />} />
-                                    <Route path="/chat" element={<ChatPage />} />
-
-                                    <Route path="/groupe" element={<GroupPage />} />
-                                    <Route path="/groupe/:id" element={<GroupDetailPage />} />
-                                    <Route path="/reglement" element={<RulesPage />} />
                                     <Route path="/msg" element={<DashboardPage />} />
-                                    <Route path="/notification" element={<NotificationPage />} />
-
-                                    <Route path="/service" element={<ServiceListPage />} />
-                                    <Route path="/service/:id" element={<ServiceDetailPage />} />
+                                    <Route path="/chat" element={<ChatPage />} />
                                     <Route path="/service/create" element={<ServiceCreatePage />} />
                                     <Route path="/service/edit/:id" element={<ServiceEditPage />} />
-
-                                    <Route path="/litige/:id" element={<IssueDetailPage />} />
                                     <Route path="/conciliation/edit/:id" element={<IssueEditPage />} />
-                                    <Route path="/conciliation" element={<ConciliationListPage />} />
-
-                                    <Route path="/conciliation/:id" element={<IssueDetailPage />} />
                                     <Route path="/conciliation/create/:id" element={<IssueCreatePage />} />
-
-                                    <Route path="/evenement" element={<EventListPage />} />
+                                    <Route path="/conciliation/:id" element={<IssueDetailPage />} />
                                     <Route path="/evenement/create" element={<EventCreatePage />} />
-                                    <Route path="/evenement/:id" element={<EventDetailPage />} />
                                     <Route path="/evenement/edit/:id" element={<EventEditPage />} />
-
-                                    <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
                                     <Route path="/flag/edit/:target/:id" element={<FlagEditPage />} />
-                                    <Route path="/flag" element={<FlagPage />} />
-
-                                    <Route path="/vote" element={<VoteListPage />} />
                                     <Route path="/vote/:target/edit/:id" element={<VoteEditPage />} />
                                     <Route path="/vote/create" element={<VoteCreatePage />} />
-                                    <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
-                                    <Route path="/sondage/:id" element={<SurveyDetailPage />} />
-
-                                    <Route path="/annonce" element={<PostListPage />} />
-                                    <Route path="/annonce/:id" element={<PostDetailPage />} />
                                     <Route path="/annonce/create" element={<PostCreatePage />} />
                                     <Route path="/annonce/edit/:id" element={<PostEditPage />} />
+                                    <Route path="/cagnotte/:id" element={<PoolDetailPage />} />
+                                    <Route path="/annonce/:id" element={<PostDetailPage />} />
+                                    <Route path="/groupe/:id" element={<GroupDetailPage />} />
+                                    <Route path="/service/:id" element={<ServiceDetailPage />} />
+                                    <Route path="/vote/:target/edit/:id" element={<VoteEditPage />} />
+                                    <Route path="/vote/create" element={<VoteCreatePage />} />
+                                    <Route path="/sondage/:id" element={<SurveyDetailPage />} />
+                                    <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
+                                    <Route path="/evenement/:id" element={<EventDetailPage />} />
+
+
+                                    {/* Pages with bottom navigation */}
+                                    <Route element={<WithBottomPages />}>
+                                        <Route path="/" element={<DashboardPage />} />
+                                        <Route path="/conciliation" element={<ConciliationListPage />} />
+                                        <Route path="/flag" element={<FlagPage />} />
+                                        <Route path="/notification" element={<NotificationPage />} />
+                                        <Route path="/reglement" element={<RulesPage />} />
+                                    </Route>
+
+                                    {/* Pages with bottom navigation and add button */}
+                                    <Route element={<WithBottomPages addBtn />}>
+                                        <Route path="/groupe" element={<GroupPage />} />
+                                        <Route path="/service" element={<ServiceListPage />} />
+                                        <Route path="/evenement" element={<EventListPage />} />
+                                        <Route path="/flag" element={<FlagPage />} />
+                                        <Route path="/vote" element={<VoteListPage />} />
+                                        <Route path="/annonce" element={<PostListPage />} />
+                                        <Route path="/conciliation" element={<ConciliationListPage />} />
+                                    </Route>
                                 </Route>
                             </Route>
                         </Routes>

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import NavBarBottom from "../../../common/NavBarBottom";
 import SubHeader from "../../../common/SubHeader";
 import TabsMenu from "../../../common/TabsMenu";
 import { Label, TabLabel } from "../../../../../domain/entities/frontEntities";
@@ -87,51 +86,47 @@ export default function ConciationListPage() {
     }
 
     return (
-        <>
-            <main>
-                <div className="sectionHeader">
-                    <SubHeader
-                        closeBtn
-                        qty={count}
-                        link="/"
-                        type={`${count > 0 ? 'conciliations' : 'aucune conciliation'} ${filterName()}`} />
+        <main>
+            <div className="sectionHeader">
+                <SubHeader
+                    closeBtn
+                    qty={count}
+                    link="/"
+                    type={`${count > 0 ? 'conciliations' : 'aucune conciliation'} ${filterName()}`} />
 
-                    <TabsMenu labels={serviceTabs} />
-                    {notif &&
-                        <div className={'notif'}>
-                            {notif}
-                            <Icon
-                                bg={!isLoading}
-                                icon={isLoading ? '...' : 'refresh'}
-                                onClick={() => refetch()} />
-                        </div>}
-                </div>
-                <section
-                    ref={divRef}
-                    onScroll={() => handleScroll()}
-                    className="Grid">
-                    {isLoading ?
-                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                            <SkeletonGrid
-                                key={index}
-                                count={4} />
-                        ))
-                        :
-                        issues.map((issue: IssueView, index: number) => (
-                            <div className="SubGrid" key={index}>
-                                <IssueCard
-                                    issue={issue}
-                                    change={search}
-                                    update={refetch} />
-                            </div>))}
-                    <LoadMoreButton
-                        isBottom={isBottom}
-                        hasNextPage={hasNextPage}
-                        handleScroll={() => handleScroll()} />
-                </section>
-            </main>
-
-            <NavBarBottom addBtn={true} />
-        </>
+                <TabsMenu labels={serviceTabs} />
+                {notif &&
+                    <div className={'notif'}>
+                        {notif}
+                        <Icon
+                            bg={!isLoading}
+                            icon={isLoading ? '...' : 'refresh'}
+                            onClick={() => refetch()} />
+                    </div>}
+            </div>
+            <section
+                ref={divRef}
+                onScroll={() => handleScroll()}
+                className="Grid">
+                {isLoading ?
+                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                        <SkeletonGrid
+                            key={index}
+                            count={4} />
+                    ))
+                    :
+                    issues.map((issue: IssueView, index: number) => (
+                        <div className="SubGrid" key={index}>
+                            <IssueCard
+                                issue={issue}
+                                change={search}
+                                update={refetch} />
+                        </div>))}
+                <LoadMoreButton
+                    isBottom={isBottom}
+                    hasNextPage={hasNextPage}
+                    handleScroll={() => handleScroll()} />
+            </section>
+        </main>
     );
 }

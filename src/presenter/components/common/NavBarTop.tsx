@@ -1,14 +1,18 @@
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "./IconComp";
 import { NotifBadge } from "./NotifBadge";
 import { useUserStore } from "../../../application/stores/user.store";
 import { OnlineDot } from "./onlineDot";
 import { useNotificationStore } from "../../../application/stores/notification.store";
+import { useEffect } from "react";
 export default function NavBarTop() {
     const user = useUserStore((state) => state.user);
-    const unReadMsgNotif = useNotificationStore((state) => state.unReadMsgNotif);
+    const { unReadMsgNotif, getColor } = useNotificationStore((state) => state);
     const navigate = useNavigate();
+    const location = useLocation();
+    useEffect(() => { getColor(location.pathname) }, [location.pathname])
+
 
     const menuItems = [
         { icon: "home", text: "Accueil", onClick: () => navigate('/'), color: "blue-gray" },
@@ -24,7 +28,7 @@ export default function NavBarTop() {
 
     return (
         <header>
-            <div className="relative flex flex-0 justify-between items-center py-2 lg:py-2.5 border-b border-blue-gray-50 my-1.5">
+            <div className="relative flex flex-0 justify-between items-center py-2 border-b border-blue-gray-50 mt-1.5">
                 {onBoard ? <div className="relative w-respXl w-full flex lg:justify-center justify-between items-center">
                     <div className="flex w-full lg:justify-center flex-1 items-center lg:gap-4 pl-1 lg:pl-0 py-4 lg:-ml-16 lg:pr-8 ">
                         <img

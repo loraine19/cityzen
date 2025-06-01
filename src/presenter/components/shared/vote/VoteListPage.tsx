@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import CheckCard from "../../common/CheckCard";
-import NavBarBottom from "../../common/NavBarBottom";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import { PoolCard } from "./voteCards/PoolCard";
@@ -13,7 +12,7 @@ import DI from "../../../../di/ioc";
 import { PoolSurveyFilter, PoolSurveySort, PoolSurveyStep } from "../../../../domain/entities/PoolSurvey";
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
 import { VoteTarget } from "../../../../domain/entities/Vote";
-import { Icon } from "../../common/IconComp";
+import NotifDiv from "../../common/NotifDiv";
 
 export default function VoteListPage() {
     const pageColor = 'orange'
@@ -156,13 +155,10 @@ export default function VoteListPage() {
                         setBoxSelected={setBoxSelected}
                         color={"orange-500"} />
                     {notif &&
-                        <div className={'notif'}>
-                            {notif}
-                            <Icon
-                                bg={!isLoading}
-                                icon={isLoading ? '...' : 'refresh'}
-                                onClick={() => refetch()} />
-                        </div>}
+                        <NotifDiv
+                            notif={notif}
+                            isLoading={isLoading}
+                            refetch={refetch} />}
                 </div>
                 <section
                     ref={divRef}
@@ -208,7 +204,6 @@ export default function VoteListPage() {
                 </section>
             </main>
 
-            <NavBarBottom addBtn={true} color={pageColor} />
         </>
     );
 }

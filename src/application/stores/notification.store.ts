@@ -97,6 +97,8 @@ export const useNotificationStore = create<NotificationStore, [['zustand/persist
               break;
             case 'annonce':
             case 'vote':
+            case 'cagnotte':
+            case 'sonadage':
               color = 'orange';
               break;
             default:

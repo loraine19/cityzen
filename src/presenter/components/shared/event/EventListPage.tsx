@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { EventCategory, EventFilter, EventSort } from "../../../../domain/entities/Event";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
-import NavBarBottom from "../../common/NavBarBottom";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import CalendarComp from "../../common/CalendarComp";
@@ -15,6 +14,7 @@ import { getValue } from "../../../views/viewsEntities/utilsService";
 import { eventCategories, eventCategoriesS } from "../../../constants";
 import { EventView } from "../../../views/viewsEntities/eventViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
+import NotifDiv from "../../common/NotifDiv";
 
 export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
@@ -125,89 +125,82 @@ export default function EventListPage() {
     ]
 
     return (
-        <>
-            <main>
-                <div className="sectionHeader">
-                    <SubHeader
-                        qty={count || 0}
-                        type={`évènements ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
-                    {view === "view_agenda" &&
-                        <TabsMenu
-                            labels={eventTabs}
-                            defaultTab={params.filter || ''}
-                            sortList={sortList}
-                            selectedSort={sort}
-                            setSelectedSort={setSort}
-                            reverse={reverse}
-                            setReverse={setReverse}
-                        />}
-                    <div className={` flex items-center justify-center gap-4 lg:px-8`}>
-                        <CategoriesSelect
-                            categoriesArray={eventCategoriesS}
-                            change={change}
-                            categorySelected={category.toString()}
-                            disabled={view === "event"} />
-                        <Icon
-                            onClick={switchClick}
-                            icon={view === "view_agenda" ? "calendar_month" : "list"}
-                            size="3xl"
-                            style="mt-1"
-                            color="gray"
-                            title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
-                        {(view === "view_agenda" && notif) &&
-                            <div className={'notif'}>
-                                {notif}
-                                <Icon
-                                    size='3xl'
-                                    title="Recharger la liste"
-                                    bg={!isLoading}
-                                    icon={isLoading ? '...' : 'refresh'}
-                                    onClick={() => refetch()} />
-                            </div>}
-                    </div>
+        <main>
+            <div className="sectionHeader ">
+                <SubHeader
+                    qty={count || 0}
+                    type={`évènements ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
+                {view === "view_agenda" &&
+                    <TabsMenu
+                        labels={eventTabs}
+                        defaultTab={params.filter || ''}
+                        sortList={sortList}
+                        selectedSort={sort}
+                        setSelectedSort={setSort}
+                        reverse={reverse}
+                        setReverse={setReverse}
+                    />}
+                <div className={` flex items-center justify-center gap-2`}>
+                    <CategoriesSelect
+                        categoriesArray={eventCategoriesS}
+                        change={change}
+                        categorySelected={category.toString()}
+                        disabled={view === "event"} />
+                    <Icon
+                        onClick={switchClick}
+                        icon={view === "view_agenda" ? "calendar_month" : "list"}
+                        size="3xl"
+                        style="mt-1"
+                        color="gray"
+                        title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
+                    {(view === "view_agenda" && notif) &&
+                        <NotifDiv
+                            notif={notif}
+                            isLoading={isLoading}
+                            refetch={refetch} />
+                    }
                 </div>
-                {view === "view_agenda" && (
-                    <section
-                        ref={divRef}
-                        onScroll={handleScroll}
-                        className="Grid Section">
-                        {isLoading || error ?
-                            [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                                <SkeletonGrid
-                                    key={index}
-                                    count={4} />
-                            ))
-                            :
-                            events.map((event: EventView, index: number) => (
-                                <div
-                                    className="SubGrid "
-                                    key={event.id}
-                                    style={{
-                                        animationDelay: `${index * 80}ms`,
-                                        animationFillMode: 'both'
-                                    }}
-                                >
-                                    <EventCard
-                                        event={event}
-                                        change={change}
-                                        mines={mines}
-                                        refetch={refetch} />
-                                </div>
-                            ))
-                        }
-                        <LoadMoreButton
-                            isBottom={isBottom}
-                            hasNextPage={hasNextPage}
-                            handleScroll={handleScroll} />
-                    </section>
-                )}
-                {view === "event" && !isLoading &&
-                    <section>
-                        <CalendarComp />
-                    </section>}
+            </div>
+            {view === "view_agenda" && (
+                <section
+                    ref={divRef}
+                    onScroll={handleScroll}
+                    className="Grid Section">
+                    {isLoading || error ?
+                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                            <SkeletonGrid
+                                key={index}
+                                count={4} />
+                        ))
+                        :
+                        events.map((event: EventView, index: number) => (
+                            <div
+                                className="SubGrid "
+                                key={event.id}
+                                style={{
+                                    animationDelay: `${index * 80}ms`,
+                                    animationFillMode: 'both'
+                                }}
+                            >
+                                <EventCard
+                                    event={event}
+                                    change={change}
+                                    mines={mines}
+                                    refetch={refetch} />
+                            </div>
+                        ))
+                    }
+                    <LoadMoreButton
+                        isBottom={isBottom}
+                        hasNextPage={hasNextPage}
+                        handleScroll={handleScroll} />
+                </section>
+            )}
+            {view === "event" && !isLoading &&
+                <section>
+                    <CalendarComp />
+                </section>}
 
-            </main>
-            <NavBarBottom addBtn={true} />
-        </>
+        </main>
     );
 }

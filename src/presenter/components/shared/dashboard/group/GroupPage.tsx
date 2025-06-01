@@ -4,7 +4,6 @@ import DI from '../../../../../di/ioc';
 import { useSearchParams } from 'react-router-dom';
 import { GroupView } from '../../../../views/viewsEntities/GroupViewEntity';
 import { LoadMoreButton } from '../../../common/LoadMoreBtn';
-import NavBarBottom from '../../../common/NavBarBottom';
 import { SkeletonGrid } from '../../../common/Skeleton';
 import { GroupCard } from "./GroupCard";
 import TabsMenu from "../../../common/TabsMenu";
@@ -89,59 +88,56 @@ export default function GroupPage() {
     }, [groups, isLoading, error, filter, category]);
 
     return (
-        <>
-            <main>
-                <div className=" sectionHeader">
-                    <SubHeader
-                        closeBtn
-                        link={`/`}
-                        qty={count}
-                        type={`Groupes `}
-                        place={`${filterName() ?? 'proche de chez vous'}`}
-                    />
+        <main>
+            <div className=" sectionHeader">
+                <SubHeader
+                    closeBtn
+                    link={`/`}
+                    qty={count}
+                    type={`Groupes `}
+                    place={`${filterName() ?? 'proche de chez vous'}`}
+                />
 
-                    <TabsMenu
-                        labels={Tabs}
-                        selectedSort={selectedSort}
-                        setSelectedSort={setSelectedSort} />
-                    <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
-                        <CategoriesSelect
-                            categoriesArray={groupCategories}
-                            change={change}
-                            categorySelected={category.toString()} />
+                <TabsMenu
+                    labels={Tabs}
+                    selectedSort={selectedSort}
+                    setSelectedSort={setSelectedSort} />
+                <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
+                    <CategoriesSelect
+                        categoriesArray={groupCategories}
+                        change={change}
+                        categorySelected={category.toString()} />
 
 
-                    </div>
-                    <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
                 </div>
-                <section
-                    ref={divRef}
-                    onScroll={() => handleScroll()}
-                    className="Grid">
-                    {isLoading || error ?
-                        [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
-                            <SkeletonGrid
-                                key={index}
-                                count={4} />
-                        ))
-                        :
+                <div className={notif && "w-full flex justify-center p-8"}>{notif}</div>
+            </div>
+            <section
+                ref={divRef}
+                onScroll={() => handleScroll()}
+                className="Grid">
+                {isLoading || error ?
+                    [...Array(window.innerWidth >= 768 ? 2 : 1)].map((_, index) => (
+                        <SkeletonGrid
+                            key={index}
+                            count={4} />
+                    ))
+                    :
 
-                        groups.map((group: GroupView, index: number) => (
-                            <div className="SubGrid" key={index}>
-                                <GroupCard
-                                    key={index}
-                                    mines={mines}
-                                    group={group}
-                                />
-                            </div>))}
-                    <LoadMoreButton
-                        isBottom={isBottom}
-                        hasNextPage={hasNextPage}
-                        handleScroll={() => handleScroll()} />
-                </section>
-            </main>
-            <NavBarBottom addBtn={true} />
-        </>
+                    groups.map((group: GroupView, index: number) => (
+                        <div className="SubGrid" key={index}>
+                            <GroupCard
+                                key={index}
+                                mines={mines}
+                                group={group}
+                            />
+                        </div>))}
+                <LoadMoreButton
+                    isBottom={isBottom}
+                    hasNextPage={hasNextPage}
+                    handleScroll={() => handleScroll()} />
+            </section>
+        </main>
     )
 }
 
