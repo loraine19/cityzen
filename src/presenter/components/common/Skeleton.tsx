@@ -15,11 +15,11 @@ export function SkeletonGrid(props: { small?: boolean, count?: number }) {
     small ? num = 8 : num = num
     return (
         <section>
-            <div className={` ${small ? 'GridSmall  min-h-full' : 'Grid'} gap-4`}>
+            <div className={` ${small ? 'GridSmall  min-h-full' : 'Grid'}`}>
                 {[...Array(num)].map((_, index) => (
                     <div
                         key={index + 'div'}
-                        className={`${small ? 'SubGridSmall flex min-h-44 justify-center items-center -mt-5 pt-1' : ' '} SubGrid `}>
+                        className={`${small ? 'SubGridSmall flex min-h-44 justify-center items-center pt-1' : 'SubGrid   '} -mt-5 `}>
                         <Skeleton
                             key={index} />
                     </div>

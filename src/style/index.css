@@ -57,7 +57,7 @@ main {
 
 section,
 .Section {
-    @apply flex flex-col overflow-y-auto flex-1 lg:px-[2%] px-4;
+    @apply flex flex-col overflow-y-auto flex-1 px-[1%];
     gap: 0.2rem;
     min-height: 0;
 }

@@ -74,7 +74,7 @@ export default function DashboardPage() {
 
 
     return (
-        <main className={` ${navBottom ? "-mt-8" : "mt-1 "} relative flex pb-1`}
+        <main className={` ${navBottom ? "-mt-8" : "mt-1 "} relative flex pb-0.5`}
             data-cy="dashboard-body" >
             <div className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                 <div className={`${userClasse}`}>

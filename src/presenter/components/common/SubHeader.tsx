@@ -16,7 +16,7 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
             <Typography className={`line-clamp-1 leading-[1] pb-1.5 lg:text-[1.4rem] text-[1.2rem] pl-2 flex-1 !text-blue-gray-800 !m-0 font-medium ${colorBorder}`}>
                 {qty} {type}
                 <span className="lg:inline font-thin ">
-                    {place ?? " dans prés de chez vous"}
+                    {place ?? " prés de chez vous"}
 
                 </span>
             </Typography>

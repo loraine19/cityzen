@@ -31,10 +31,10 @@ export default function NavBarTop() {
 
     return (
         <header>
-            <div className="relative h-full w-full flex lg:pl-2 justify-between items-center py-3">
+            <div className="relative h-full w-full flex lg:pl-2  justify-between items-center py-3">
                 {onBoard ?
                     <div className="relative w-full flex justify-between items-center">
-                        <div className="flex w-full  flex-1 items-center  lg:pl-2 pb-3">
+                        <div className="flex w-full  flex-1 items-center  lg:pl-2 pb-4">
                             <img
                                 className="h-16 w-16 mx-2 lg:h-20 lg:w-20 object-cover object-center drop-shadow-[0_0_1px_rgba(0,0,0,0.1)]"
                                 src="/image/logo.svg"
