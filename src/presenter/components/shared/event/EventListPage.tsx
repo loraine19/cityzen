@@ -127,9 +127,7 @@ export default function EventListPage() {
     return (
         <main>
             <div className="sectionHeader ">
-                <SubHeader
-                    qty={count || 0}
-                    type={`évènements ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
+
                 {view === "view_agenda" &&
                     <TabsMenu
                         labels={eventTabs}
@@ -160,6 +158,9 @@ export default function EventListPage() {
                             refetch={refetch} />
                     }
                 </div>
+                <SubHeader
+                    qty={count || 0}
+                    type={`évènements ${filterName()} ${EventCategory[category as keyof typeof EventCategory] ?? ''}`} />
             </div>
             {view === "view_agenda" && (
                 <section

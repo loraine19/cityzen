@@ -29,7 +29,7 @@ export default function CheckCard(props: checkCardProps) {
 
     return (
         <div className="flex w-full !p-0">
-            <div className="w-full !m-0  !max-w-screen pl-4 overflow-auto  !flex items-center rounded-xl">
+            <div className="w-full !m-0  !max-w-screen pl-2 overflow-auto  !flex items-center rounded-xl">
                 <List className="flex-row flex w-full min-w-max justify-evenly items-center !p-0 overflow-auto">
                     {categoriesArray.map((category, index) => (
                         <ListItem className="!pt-0.5 px-0.5 !pb-1  min-w-max hover:!bg-transparent" key={index}>

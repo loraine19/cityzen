@@ -133,9 +133,7 @@ export default function PostListPage() {
         <>
             <main>
                 <div className="sectionHeader">
-                    <SubHeader
-                        qty={count}
-                        type={`annonces  ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
+
                     <TabsMenu
                         labels={postTabs}
                         sortList={sortList}
@@ -145,7 +143,7 @@ export default function PostListPage() {
                         reverse={reverse}
                         setReverse={setReverse}
                     />
-                    <div className="flex items-center justify-center gap-4 pb-1 lg:px-8">
+                    <div className="flex items-center justify-center gap-4  ">
                         <CategoriesSelect
                             categoriesArray={postCategories}
                             change={change}
@@ -163,6 +161,9 @@ export default function PostListPage() {
                             notif={notif}
                             isLoading={isLoading}
                             refetch={refetch} />}
+                    <SubHeader
+                        qty={count}
+                        type={`annonces  ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
                 </div>
                 <section
                     ref={divRef}

@@ -86,7 +86,7 @@ header {
 }
 
 .sectionHeader {
-    @apply flex flex-col;
+    @apply flex flex-col gap-0.5;
 }
 
 .w-respXl {
@@ -165,8 +165,9 @@ header {
 
 .Grid {
     @apply max-h-full grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
-    lg:auto-rows-[minmax(340px,40vh)] auto-rows-[minmax(350px,40vh)];
+    lg:auto-rows-[minmax(333px,40vh)] auto-rows-[minmax(346px,40vh)];
 }
+
 .Grid2 {
     @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
     grid-auto-rows: minmax(320px, 53vh);

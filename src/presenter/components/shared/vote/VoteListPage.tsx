@@ -135,11 +135,7 @@ export default function VoteListPage() {
         <>
             <main>
                 <div className="sectionHeader">
-                    <SubHeader
-                        qty={count > 0 ? count : 'aucun'}
-                        type={`${filter === PoolSurveyFilter.SURVEY ? '' :
-                            filter === PoolSurveyFilter.POOL ? '' :
-                                'cagnottes et sondages'} ${filterName()}`} />
+
                     <TabsMenu
                         labels={tabs}
                         sortList={sortList}
@@ -159,6 +155,11 @@ export default function VoteListPage() {
                             notif={notif}
                             isLoading={isLoading}
                             refetch={refetch} />}
+                    <SubHeader
+                        qty={count > 0 ? count : 'aucun'}
+                        type={`${filter === PoolSurveyFilter.SURVEY ? '' :
+                            filter === PoolSurveyFilter.POOL ? '' :
+                                'cagnottes et sondages'} ${filterName()}`} />
                 </div>
                 <section
                     ref={divRef}

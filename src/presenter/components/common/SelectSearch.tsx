@@ -11,7 +11,7 @@ type selectSearchProps = {
 export default function SelectSearch(props: selectSearchProps) {
     const { searchCat, setSearchCat, category, search } = props
     return (
-        <div className="flex m-auto !rounded-full h-7  w-full items-center bg-white shadow " >
+        <div className="flex !rounded-full h-7 mx-4 w-full items-center bg-white shadow " >
             <Menu placement="bottom-start">
                 <MenuHandler>
                     <div className="flex  pl-2 ">

@@ -179,9 +179,7 @@ export default function ServicesPage() {
 
         <main>
             <div className="sectionHeader">
-                <SubHeader
-                    qty={count}
-                    type={`services ${filterName()} ${categoryName()}`} />
+
                 <TabsMenu
                     labels={serviceTabs}
                     sortList={sortList}
@@ -202,6 +200,9 @@ export default function ServicesPage() {
                         category={serviceCategoriesS}
                         search={search} />
                 }
+                <SubHeader
+                    qty={count}
+                    type={`services ${filterName()} ${categoryName()}`} />
                 {notif &&
                     <NotifDiv
                         notif={notif}
