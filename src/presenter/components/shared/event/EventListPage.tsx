@@ -163,7 +163,7 @@ export default function EventListPage() {
             </div>
             {view === "view_agenda" &&
                 <>
-                    {isLoading || error ?
+                    {isLoading ?
 
                         <SkeletonGrid />
                         :
