@@ -29,7 +29,6 @@ export default function NavBarTop() {
 
     ];
     const onBoard = window.location.pathname === '/'
-    const avatarSize = onBoard ? 'h-16 w-16' : 'h-[3.2rem] w-[3.2rem]';
 
     return (
         <header>
@@ -49,7 +48,7 @@ export default function NavBarTop() {
                     </div> :
                     <div className={"flex w-full items-center gap-4 "}>
                         <Menu placement="bottom-start">
-                            <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
+                            <MenuHandler className="relative h-max min-w-max z-50  flex items-center  cursor-pointer">
                                 <div className="flex items-center relative">
                                     <AvatarUser
                                         avatarSize={'lg'}
@@ -59,11 +58,11 @@ export default function NavBarTop() {
                                         id={user?.id} />
                                 </div>
                             </MenuHandler>
-                            <MenuList className="!rounded-xl !shadow-xl">
+                            <MenuList className="flex flex-1 flex-col !rounded-xl divide-y-2 !shadow-xl  -ml-4 ">
                                 {menuItems.map((item, index) => (
                                     <MenuItem
                                         key={index}
-                                        className={`flex items-center gap-2 px-2 !py-2 ${item.style || ''}`}
+                                        className={`flex !flex-1 !min-w-60 pr-[10vw] items-center gap-2.5 pl-2  ${item.style || ''}`}
                                         onClick={item.onClick || undefined}>
                                         <Icon
                                             fill

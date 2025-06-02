@@ -35,11 +35,12 @@ export const AvatarUser = ({ Profile, avatarSize = '', avatarStyle = '', style =
                     onError={(e) => e.currentTarget.src = '/image/person.svg'}
                     referrerPolicy="unsafe-url"
                     size={avatarSize as any ?? 'sm'}
-                    className={`"!flex !shadow cursor-pointer  hover:!shadow-lg hover:!scale-[1.02] hover:!saturate-[1.1] transition-all duration-200 ease-in-out" ${avatarStyle}`}
+                    className={`min-h-min min-w-min !flex !shadow cursor-pointer  hover:!shadow-lg hover:!scale-[1.02] hover:!saturate-[1.1] transition-all duration-200 ease-in-out" ${avatarStyle}`}
                     variant="circular"
                     alt={Profile?.firstName || 'user'}
                     src={Profile?.image as string}
                 /> :
+
                 <Icon
                     bg
                     fill

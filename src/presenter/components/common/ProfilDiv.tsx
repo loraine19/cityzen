@@ -1,4 +1,4 @@
-import { Popover, PopoverHandler, Avatar, PopoverContent, Typography } from "@material-tailwind/react"
+import { Popover, PopoverHandler, PopoverContent, Typography } from "@material-tailwind/react"
 import { Icon } from "./IconComp"
 import { Profile } from "../../../domain/entities/Profile"
 import { DistanceCalculator } from "./CalculatorDistance"
@@ -28,26 +28,20 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                             <OnlineDot id={profile?.userId} />
                         </div>
                     </PopoverHandler>
-                    <PopoverContent className=" w-72 z-50 ">
-                        <div className=" flex  gap-6 border-b border-blue-gray-50  pb-2 ">
+                    <PopoverContent className=" w-auto !p-6 z-50 ">
+                        <div className="flex gap-6  pb-2 ">
                             <div className="mb-2 gap-4 ">
                                 <Icon
                                     color='orange'
                                     fill
-                                    style="absolute !p-[0.3rem] !bg-orange-100 top-2 left-11  z-50"
-                                    size='lg'
+                                    style="absolute !bg-orange-100 top-2 left-11  z-50"
+                                    size='sm'
                                     link={`/chat?with=${profile?.userId}`}
                                     bg
                                     title="Envoyer un message"
                                     icon="sms"
                                 />
-                                <Avatar
-                                    onError={(e) => e.currentTarget.src = "/image/person.svg"}
-                                    src={profile?.image as string ?? '/image/person.svg'}
-                                    size="sm"
-                                    alt="avatar"
-                                    referrerPolicy="unsafe-url"
-                                    className="BgUser  border-blue-gray-500" />
+                                <AvatarUser Profile={profile} avatarSize={'sm'} />
                             </div>
                             <div className="flex flex-col pl-2">
                                 <Typography
@@ -61,26 +55,27 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                 </Typography>
                                 <div className="font-normal flex flex-col text-blue-gray-500">
                                     {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
-                                        <div key={index}>
+                                        <div
+                                            className="!line-clamp-1 "
+                                            key={index}>
                                             {'⌖ ' + group.Group?.name}
                                         </div>
                                     )}
                                 </div>
                             </div>
                         </div>
-                        <div
-                            className={`${profile?.addressShared ? '' : 'hover:!event-none'} flex gap-4 relative rounded-2xl pt-2 `}>
-                            <div className="relative flex  pl-1 pr-4">
+                        <div className={`${profile?.addressShared ? '' : 'hover:!event-none'} flex gap-7 relative  pt-2 `}>
+                            <div className="relative flex  ">
                                 <Icon
                                     disabled={profile?.addressShared ? false : true}
                                     icon="person_pin_circle"
-                                    fill
-                                    size="4xl"
-                                    style={profile?.addressShared ? '!p-0' : 'hover:!event-none'}
+                                    fill bg
+                                    size='xl'
+                                    style={profile?.addressShared ? '-ml-2' : 'hover:!event-none'}
                                     color={profile?.addressShared ? "cyan" : "gray"} />
                                 {profile?.addressShared && profile?.Address &&
-                                    <div className={`absolute scale-[0.7] -top-5 -right-1  
-                                    ${profile?.addressShared ? 'flex opacity-55' : 'hidden'}`}>
+                                    <div className={`absolute scale-[0.65] -top-7 -right-4  
+                                    ${profile?.addressShared ? 'flex ' : 'hidden'}`}>
                                         <AddressMapOpen
                                             message={<DistanceCalculator
                                                 lat1={profile?.Address?.lat}
@@ -109,7 +104,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         {profile?.firstName} {profile?.lastName}
                     </Typography>
                     <Typography
-                        className={`font-normal text-blue-gray-500 ${texteSize2} line-clamp-1 truncate max-w-full pr-4`}>
+                        className={`font-normal text-blue-gray-500 ${texteSize2} !line-clamp-1  max-w-90% pr-4`}>
                         {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
                             <span key={index} >
                                 {' ⌖ ' + group.Group?.name + ' '}

@@ -99,7 +99,7 @@ export default function SignInPage() {
             <footer className="flex flex-col items-center gap-2 py-5 ">
                 <Link to="/motdepasse_oublie">
                     <Typography
-                        className="text-xs font-medium pb-2 text-center underline underline-offset-8 uppercase">
+                        className="text-md font-medium pb-2 nowraptext-center underline underline-offset-8 uppercase">
                         Mot de pass oublié
                     </Typography>
                 </Link>

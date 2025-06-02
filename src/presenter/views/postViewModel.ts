@@ -28,7 +28,6 @@ export const postViewModel = () => {
     const flat = error || isLoading ? [] : data?.pages.flat().map(page => page.posts).flat()
     const posts = userLoading || isLoading || !flat ? [] : flat?.map(post => !post?.error && new PostView(post, userId))
 
-    console.log('posts', data)
     return {
       count,
       posts,

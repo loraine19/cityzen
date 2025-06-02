@@ -10,7 +10,7 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
 
 
     const { color } = useNotificationStore((state) => state);
-    const colorBorder = `border-b-[1px]  ${color !== 'gray' ? `border-${color ?? 'gray'}-500 ` : 'border-gray-500'}  border-opacity-30`;
+    const colorBorder = `border-b-[2px]  ${color !== 'gray' ? `border-${color ?? 'gray'}-500 ` : 'border-gray-500'}  border-opacity-30`;
     return (
         <div className={`flex w-full divider-y lg:px-[2.5%] px-[1%] pt-2.5 gap-4 justify-end lg:justify-between`}>
             <Typography className={`!line-clamp-1 leading-[1] pb-1.5 lg:text-[1.4rem] text-[1.2rem] pl-2 flex-1 !text-blue-gray-800 !m-0 font-medium ${colorBorder}`}>
@@ -20,15 +20,14 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
 
                 </span>
             </Typography>
-            <Icon
+            {closeBtn && <Icon
                 icon="close"
-                color="gray"
+                color={color ?? 'gray'}
                 size="md"
                 bg
-                style={`${closeBtn ? 'flex mb-1 ' : 'hidden'} `}
                 link={goBack}
                 title={"retour " + goBack?.replace("/", "")}
-            />
+            />}
         </div>
     )
 }

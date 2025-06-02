@@ -45,6 +45,7 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
             </Tabs>
             {sortList &&
                 <SortButton
+
                     sortList={sortList}
                     color={color}
                     setSelectedSort={setSelectedSort}

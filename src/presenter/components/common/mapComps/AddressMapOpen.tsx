@@ -104,7 +104,6 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
             <Icon
                 link={`${googleMapsLink}`}
                 bg
-                style='!bg-cyan-100 hover:!bg-opacity-100'
                 title='Ouvrir dans Google Maps'
                 size='lg'
                 color='cyan'

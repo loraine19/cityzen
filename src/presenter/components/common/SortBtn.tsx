@@ -22,7 +22,7 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                         <div className="flex items-center relative">
                             <Icon
                                 icon="sort"
-                                size="3xl"
+                                size="lg"
                             />
                         </div>
                     </MenuHandler>
@@ -44,11 +44,12 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                                         style="!p-0 -mr-1"
                                         icon={reverse ? 'arrow_drop_up' : 'arrow_drop_down'} />}
                                     <Icon
+                                        size={'lg'}
                                         style={`!p-1 `}
                                         onClick={() => {
                                             item.action();
                                             setSelectedSort(item.key ?? item.label)
-                                            setReverse(false)
+                                            setReverse(!reverse)
                                         }}
                                         title={'Trier par ' + item.label}
                                         disabled={(selectedSort === (item.key ?? item.label))}

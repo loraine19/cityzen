@@ -100,18 +100,16 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                             <div className={`flex p-0 w-full items-start ${msg.userId === messages[index + 1]?.userId ? ' pt-0' : ' pt-4'}`}
                                 key={index}>
 
-                                <div className={`flex flex-1 flex-col px-5 shadow-sm pt-3 pb-6 justify-between relative  ${msg.isDeleted ? 'italic text-blue-gray-400' : ''} ${msg.IWrite ?
+                                <div className={`flex flex-1 break-all flex-col px-5 shadow-sm pt-3 pb-6 justify-between relative  ${msg.isDeleted ? 'italic text-blue-gray-400' : ''} ${msg.IWrite ?
                                     'bg-cyan-100 !text-right justify-end rounded-s-[1.5rem] rounded-tr-[1.5rem] !ml-[30%] ' :
                                     'bg-orange-100 rounded-ss-[1.5rem] rounded-r-[1.5rem] !mr-[30%]'}`}>
                                     <div className='text-xs font-light items-center flex flex-row-reverse justify-between'>
                                         {msg.formatedDate}
                                         {(msg.IWrite && !msg.isDeleted) &&
                                             <Icon
-                                                style='-ml-2'
+                                                style='!-ml-1.5 mb-1'
                                                 key={'remove' + msg.id}
                                                 size='sm'
-                                                fill
-                                                bg
                                                 onClick={() => handleRemoveMessage(msg.id, index)}
                                                 color='cyan'
                                                 title='Supprimer le texte du message'
@@ -170,8 +168,6 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                         onChange={(e) => {
                             setMessage(e.target.value);
                             setImTyping(true);
-
-                            // Auto-resize logic
                             const target = e.target as HTMLTextAreaElement;
                             target.style.height = 'auto';
                             target.style.height = `${target.scrollHeight}px`;
@@ -184,7 +180,6 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                                 setImTyping(true);
                                 setMessage(target.value);
                             }
-                            // Auto-resize logic
                             target.style.height = 'auto';
                             target.style.height = `${target.scrollHeight}px`;
                         }}

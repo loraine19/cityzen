@@ -16,7 +16,7 @@ export class PostView extends Post {
         if (!post) {
             setTimeout(() => {
                 if (!post) throw new Error('Impossible de récupérer les annonces')
-            }, 1000);
+            }, 500);
         }
         this.flagged = post?.Flags?.find((flag: Flag) => flag.userId === userId) ? true : false;
         this.ILike = post?.Likes?.find((like: Like) => like.userId === userId) ? true : false;
