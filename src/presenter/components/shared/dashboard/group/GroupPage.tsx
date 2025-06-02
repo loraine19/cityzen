@@ -12,6 +12,7 @@ import { GroupCategory, GroupFilter } from "../../../../../domain/entities/Group
 import { CategoriesSelect } from "../../../common/CategoriesSelect";
 import { groupCategories } from "../../../../constants";
 import { getValue } from "../../../../views/viewsEntities/utilsService";
+import { Icon } from "../../../common/IconComp";
 
 
 export default function GroupPage() {
@@ -90,6 +91,58 @@ export default function GroupPage() {
     return (
         <main>
             <div className=" sectionHeader">
+                <div className="flex items-center gap-4">
+                    <Icon
+                        color='red'
+                        icon="cancel"
+                        fill
+                        size="sm"
+                    />
+                    <Icon
+                        color='blue'
+                        icon="cancel"
+                        fill
+                        size="md"
+                    />
+                    <Icon
+                        color='red'
+                        icon="cancel"
+                        fill
+                        size="lg"
+                    />
+                    <Icon
+                        color='blue'
+                        icon="cancel"
+                        fill
+                        size="xl"
+                    />
+                    <Icon
+                        color='green'
+                        icon="cancel"
+                        fill
+                        size="2xl"
+                    />
+                    <Icon
+                        color='blue'
+                        icon="cancel"
+                        fill
+                        size="3xl"
+                    />
+                    <Icon
+                        color='red'
+                        icon="cancel"
+                        fill
+                        size="4xl"
+                    />
+                    <Icon
+
+                        color='blue'
+                        icon="cancel"
+                        fill
+                        size="5xl"
+                    />
+                </div>
+
                 <SubHeader
                     closeBtn
                     link={`/`}

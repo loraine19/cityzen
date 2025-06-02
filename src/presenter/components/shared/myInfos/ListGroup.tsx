@@ -73,7 +73,6 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
                     className="rounded-full h-max flex items-center  !min-w-max "
                     icon={
                       <Icon
-                        style='scale-[1.7] ml-2.5 -mr-2.5 '
                         size="sm"
                         icon="diversity_3"
                         fill={group?.ImModo}
@@ -86,7 +85,6 @@ export const ListGroup = ({ groups }: ListGroupProps) => {
                     className="rounded-full h-max  flex items-center  !min-w-max "
                     icon={
                       <Icon
-                        style='scale-[2] ml-2.5 -mr-2.5 '
                         size="sm"
                         icon="groups"
                         fill={group?.ImIn}

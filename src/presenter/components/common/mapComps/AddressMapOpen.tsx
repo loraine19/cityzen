@@ -74,7 +74,7 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
                                 {notif.description}
                             </Typography>
                             <Icon
-                                style='!text-gray-900 max-h-max'
+                                style='!text-gray-900'
                                 icon='arrow_circle_right'
                                 link={notif.link}
                                 title={`voir les details de ${notif.title}`}
@@ -104,9 +104,9 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
             <Icon
                 link={`${googleMapsLink}`}
                 bg
-                style='!bg-cyan-100 hover:!bg-opacity-100 !pb-1'
+                style='!bg-cyan-100 hover:!bg-opacity-100'
                 title='Ouvrir dans Google Maps'
-                size='xl'
+                size='lg'
                 color='cyan'
                 icon='near_me'
                 fill />
@@ -119,8 +119,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 title='Zoomer sur la position'
                 onClick={() => setFly(true)}
                 icon="my_location"
-                style='!pb-1.5 '
-                size="xl"
+                size="lg"
                 fill />
         </div>)
 
@@ -130,9 +129,8 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 bg
                 icon='close'
                 fill
-                size='xl'
+                size='lg'
                 onClick={() => setOpen(false)}
-                style={'!pb-1.5'}
                 title='Fermer la carte' />
         </div>)
 
@@ -142,9 +140,8 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 bg
                 icon='expand_content'
                 fill
-                size='xl'
+                size='lg'
                 onClick={() => setOpen(true)}
-                style={' !pb-1.5 '}
                 title='Ouvrir la carte' />
         </div>)
 

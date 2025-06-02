@@ -66,7 +66,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                         <>
                                             <Icon
                                                 bg
-                                                style={`!pb-[0.4rem] !text-[1.8rem] `}
+                                                style={``}
                                                 icon={icon}
                                                 fill={isActive ? true : false}
                                                 color={col}

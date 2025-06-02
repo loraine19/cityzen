@@ -84,11 +84,12 @@ export default function MyInfosPage() {
     return (
         <>
             <header className="w-respLarge relative flex-col flex justify-between pt-2">
-                <div className="flex absolute justify-between items-center top-8 gap-4 w-full">
+                <div className="flex absolute justify-between items-center top-4  -left-1 w-full">
                     <LogOutButton />
                     <Icon
+                        bg clear
                         fill
-                        size='3xl'
+                        size='2xl'
                         icon='cancel'
                         title='fermer'
                         link='/' />

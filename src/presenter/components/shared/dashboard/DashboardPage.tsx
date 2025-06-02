@@ -1,4 +1,4 @@
-import { Avatar, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
+import { Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import { Icon } from "../../common/IconComp";
 import CalendarComp from "../../common/CalendarComp";
@@ -14,6 +14,7 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { ElementNotif } from "../../../../domain/entities/Notif";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { useAlertStore } from "../../../../application/stores/alert.store";
+import { AvatarUser } from "../../common/AvatarUser";
 
 export default function DashboardPage() {
 
@@ -42,7 +43,7 @@ export default function DashboardPage() {
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex !min-h-[12rem] row-span-5 lg:grid  ";
-    const notifClasse = " row-span-2 grid  lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5rem]")
+    const notifClasse = " row-span-2 grid  lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[6rem]")
     const mapClasse = "flex row-span-6 !min-h-[16rem] 15rem] lg:min-h-[32%] lg:grid";
 
 
@@ -80,12 +81,11 @@ export default function DashboardPage() {
                 <div className={`${userClasse}`}>
                     <Card className="lg:h-full p-0 flex-1 flex anim">
                         <CardHeader className="flex flex-col items-center justify-center  bg-transparent shadow-none">
-                            <Avatar
-                                onError={(e) => e.currentTarget.src = '/image/person.svg'}
-                                src={user?.Profile?.image as string}
-                                alt={user?.Profile?.firstName}
-                                variant="circular"
-                                className="!shadow-md w-16 h-16 lg:w-20 lg:h-20 BgUser" />
+                            <AvatarUser
+                                avatarSize="lg"
+                                avatarStyle="!shadow-md w-16 h-16 lg:w-20 lg:h-20 "
+                                Profile={user?.Profile} />
+
                             <div className="flex flex-col items-center justify-center pt-1">
                                 <Typography
                                     className={'border-b-[1px] px-4 !border-gray-400'}
@@ -102,27 +102,28 @@ export default function DashboardPage() {
                                     icon="person_edit"
                                     color="cyan"
                                     fill bg
-                                    size="lg"
+                                    size="md"
                                     title="ouvrir la page profil" />
                                 <Icon
                                     link="/groupe"
                                     icon="groups"
                                     color='green'
                                     fill bg
-                                    size="lg"
+                                    size="md"
                                     title="ouvrir la page des groupes" />
                                 <Icon
                                     link={modo ? '/conciliation' : ''}
                                     icon="diversity_3"
                                     color={modo ? 'orange' : 'blue-gray'}
                                     fill bg
-                                    size="lg"
+                                    size="md"
                                     title={modo ? "ouvrir la page conciliation" : "vous devez être concialiateur dans un groupe"} />
                                 <Icon
                                     icon={(user?.Profile?.points.toString() ?? '0')}
                                     color="amber"
+                                    size="md"
                                     fill bg
-                                    style="!text-[1rem] !pt-1.5 w-8 h-8 !rounded-full !flex items-center justify-center !font-extrabold"
+                                    style="!text-[1.3rem]  !font-extrabold"
                                     title={` vous avez ${user?.Profile?.points} pts`} />
                                 <LogOutButton />
                             </div>
@@ -138,7 +139,7 @@ export default function DashboardPage() {
                                         fill bg
                                         icon="notifications"
                                         link="/notification"
-                                        size="xl"
+                                        size="md"
                                         color="orange"
                                         title="voir mes notifications" />
                                     <span className={unReadNotMessages < 1 ? "hidden" : " absolute -top-0.5 right-0 w-2.5 h-2.5 rounded-full bg-orange-700 border-2"} />
@@ -148,7 +149,7 @@ export default function DashboardPage() {
                                         fill bg
                                         icon="forum"
                                         link="/chat"
-                                        size="xl"
+                                        size="md"
                                         color="cyan"
                                         title="voir mes messages" />
                                     <span className={unReadMsgNotif < 1 ? "hidden" : " absolute -top-0.5 right-0 w-2.5 h-2.5 rounded-full bg-cyan-700 border-2"} />
@@ -209,7 +210,7 @@ export default function DashboardPage() {
                                     bg
                                     icon="location_on"
                                     link="/service"
-                                    size="xl"
+                                    size="md"
                                     color="cyan"
                                     style="hover:!bg-cyan-100 mb-2"
                                     title="voir mes services" />
@@ -241,13 +242,11 @@ export default function DashboardPage() {
                                                         <Icon
                                                             icon="refresh"
                                                             fill bg
-                                                            size="3xl"
                                                             color="cyan"
                                                             title="voir les services"
                                                             onClick={() => refetchMap()} />
                                                         : <Icon
                                                             icon="edit"
-                                                            size="4xl"
                                                             fill
                                                             color="orange"
                                                             title="ajouter votre adresse"

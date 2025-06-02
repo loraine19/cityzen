@@ -143,7 +143,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                         <ProfileDiv
                             profile={User} />
                     }
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center">
 
                         <Chip
                             size="md"
@@ -155,14 +155,14 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                                 title={`Ce service ${service.typeS === ServiceType.GET ? 'vous fais gagner' : 'coute'} ${points.join(' à ')}pts`}
                                 fill={user.Profile.points > points[0]}
                                 color={service.typeS === ServiceType.GET ? "green" : "orange"}
-                                size="md"
-                                style="scale-[1.6] !pb-2" />}>
+                                size="md" />}>
                         </Chip>
                         <Icon
+                            bg clear
                             icon="arrow_circle_right"
                             link={`/service/${id}`}
                             title={`voir les details de service  ${title}`}
-                            size="4xl"
+
                             fill />
                     </div>
                 </CardFooter>

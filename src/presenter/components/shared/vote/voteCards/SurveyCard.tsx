@@ -126,9 +126,8 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                                     icon="smart_card_reader"
                                     fill={survey?.IVoted}
                                     color={color()}
-                                    size="sm"
-                                    title={`${survey?.Votes?.length} personnes ${survey?.IVoted && `dont vous`} ont voté`}
-                                    style="scale-150  ml-0.5 !-mr-1" />}>
+                                    size="md"
+                                    title={`${survey?.Votes?.length} personnes ${survey?.IVoted && `dont vous`} ont voté`} />}>
                             </Chip>
                         </button>
                         <Icon
@@ -136,7 +135,7 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                             title={`voir les details de ${survey?.title}`}
                             link={`/sondage/${survey?.id}`}
                             fill
-                            size="4xl" />
+                            bg clear />
                     </div>
                 </CardFooter >
             </Card >

@@ -1,4 +1,4 @@
-import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
+import { Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "./IconComp";
 import { NotifBadge } from "./NotifBadge";
@@ -6,6 +6,7 @@ import { useUserStore } from "../../../application/stores/user.store";
 import { OnlineDot } from "./onlineDot";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 import { useEffect } from "react";
+import { AvatarUser } from "./AvatarUser";
 export default function NavBarTop() {
     const user = useUserStore((state) => state.user);
     const { unReadMsgNotif, getColor } = useNotificationStore((state) => state);
@@ -28,6 +29,7 @@ export default function NavBarTop() {
 
     ];
     const onBoard = window.location.pathname === '/'
+    const avatarSize = onBoard ? 'h-16 w-16' : 'h-[3.2rem] w-[3.2rem]';
 
     return (
         <header>
@@ -49,14 +51,9 @@ export default function NavBarTop() {
                         <Menu placement="bottom-start">
                             <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                                 <div className="flex items-center relative">
-                                    <Avatar
-                                        onError={(e) => e.currentTarget.src = '/image/person.svg'}
-                                        referrerPolicy="unsafe-url"
-                                        className="!flex BgUser !shadow cursor-pointer !h-[3.2rem] !w-[3.2rem] hover:!shadow-lg hover:!scale-[1.02] hover:!saturate-[1.1] transition-all duration-200 ease-in-out"
-                                        variant="circular"
-                                        alt={user?.Profile?.firstName || 'user'}
-                                        src={user?.Profile?.image as string ?? '/image/person.svg'}
-                                    />
+                                    <AvatarUser
+                                        avatarSize={'lg'}
+                                        Profile={user?.Profile} />
                                     <OnlineDot
                                         className="!bottom-0 !-right-1"
                                         id={user?.id} />

@@ -24,7 +24,7 @@ export function NotifCard(props: notifCardProps) {
                         onClick={() => handleClick(notif)}
                         color="red"
                         title="fermer la notification"
-                        size="3xl"
+                        size="2xl"
                         style="" />
                 </div>
             </CardHeader>
@@ -53,7 +53,7 @@ export function NotifCard(props: notifCardProps) {
                         icon="arrow_circle_right"
                         link={notif.link}
                         title={`voir les details de ${notif.title}`}
-                        size="4xl"
+                        bg clear
                         fill />}
             </CardFooter>
         </Card>

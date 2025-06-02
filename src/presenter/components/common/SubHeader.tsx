@@ -25,7 +25,7 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
                 color="gray"
                 size="md"
                 bg
-                style={`${closeBtn ? 'flex mb-1 ' : 'hidden'} thin`}
+                style={`${closeBtn ? 'flex mb-1 ' : 'hidden'} `}
                 link={goBack}
                 title={"retour " + goBack?.replace("/", "")}
             />

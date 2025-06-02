@@ -23,7 +23,7 @@ export const GroupLink: React.FC<GroupDivProps> = ({ group }) => {
                         <div className=" flex justify-between items-center border-b border-blue-gray-50  ">
                             <p>groupe {group?.name}</p>
                             <Icon
-                                size='3xl'
+                                bg clear
                                 fill
                                 link={`/groupe/${group?.id}`}
                                 icon="arrow_circle_right" />

@@ -107,10 +107,10 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                 icon={
                                     <Icon
                                         icon="person"
-                                        size="sm"
+                                        size="md"
                                         fill={Igo}
                                         color={Igo ? "cyan" : "gray"}
-                                        style=" hover:text-cyan-800 scale-[1.6] "
+                                        style=" hover:text-cyan-800 "
                                         title={Igo ? "Je n'y vais plus" : "j'y vais"} />}>
 
                             </Chip>

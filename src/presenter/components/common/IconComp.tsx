@@ -92,32 +92,42 @@ type IconProps = {
     title?: string,
     link?: string,
     disabled?: boolean
+    clear?: boolean,
 }
 
-export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size = "2xl", style, link, fill, ...props }) => {
+export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size = "2xl", style, link, fill, clear, ...props }) => {
 
-    const sizeMap: { [key: string]: string } = {
-        'sm': '!text-[0.8rem]',
-        'md': '!text-[1rem]',
-        'lg': '!text-[1.2rem]',
-        'xl': '!text-[1.2rem]',
-        '2xl': '!text-[1.4rem]',
-        '3xl': '!text-[1.6rem]',
-        '4xl': '!text-[2.2rem]',
-        '5xl': '!text-[2.8rem]',
+    const sizeMap: any = {
+        'sm': { text: '14', class: 'iconSm' },
+        'md': { text: '18', class: 'iconMd' },
+        'lg': { text: '22', class: 'iconLg' },
+        'xl': { text: '26', class: 'iconXl' },
+        '2xl': { text: '30', class: 'icon2xl' },
+        '3xl': { text: '34', class: 'icon3xl' },
+        '4xl': { text: '38', class: 'icon4xl' },
+        '5xl': { text: '42', class: 'icon5xl' },
     };
+    const num = sizeMap[size as keyof typeof sizeMap]?.text ?? '30';
+    const classRounded = sizeMap[size as keyof typeof sizeMap]?.class ?? 'icon2xl';
+    const textSize = ` text-[${num}px]  `;
+    console.log('icon', icon, size, textSize,)
 
-    size = sizeMap[size] || sizeMap['2xl'];
-    const pad = props.bg ? 'px-[0.29em] pt-[0.29em] pb-[0.28rem]' : 'px-1 py-1'
+
     const color = props.color ?? 'gray'
-    const textColor = props.color ? `text-${color}-700 hover:!saturate-[1.5] hover:!bg-${color}-500 hover:!bg-opacity-30` : "text-gray-800 hover:!bg-gray-200"
-    const bg = props.bg ? (props.color ? `bg-${color}-500 bg-opacity-30` : "!bg-gray-300 ") : ''
-    const classIcon = `!rounded-full flex items-center justify-center ${size} ${fill} ${style} ${textColor} ${bg} ${pad}`
-    const classActive = `hover:scale-[1.12] hover:!shadow hover:${pad} transition-all duration-200 ease-in-out`
+    const textColor = props.color ?
+        `text-${color}-700 hover:!saturate-[1.5] hover:!bg-${color}-500 hover:!bg-opacity-30` : `text-gray-800 hover:!bg-gray-200`
+    const bg = (props.bg && !clear) ?
+        (props.color ? `bg-${color}-500 bg-opacity-30` : `!bg-gray-300`) : ''
+
+    const classIcon = `!rounded-full  flex items-center justify-center  ${textColor} ${bg} 
+     ${props.bg ? classRounded : textSize}  ${style ?? ''}`
+
+    const classActive = `hover:scale-[1.1] m-0.5 hover:!shadow transition-all duration-200 ease-in-out`
 
     if (onClick) {
         return (
             <button
+                style={{ fontSize: `${num}px` }}
                 data-cy={icon}
                 type="button"
                 onClick={onClick}
@@ -129,21 +139,25 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     }
     if (link) {
         return <Link
+            style={{ fontSize: `${num}px` }}
             data-cy={icon}
             to={link}
             title={title}
             target={link.startsWith('http') ? "_blank" : ""}
             rel="noopener noreferrer"
-            className={`${classIcon} ${classActive}  `}>
+            className={`${classIcon} ${classActive}`}>
             {searchIcon(icon, fill)}
         </Link>
     }
     else {
-        return <span
-            data-cy={icon}
-            title={title}
-            className={`${classIcon} `}>
-            {searchIcon(icon, fill)}
-        </span>;
+        return (<>
+            <span
+                style={{ fontSize: `${num}px` }}
+                data-cy={icon}
+                title={title}
+                className={`${classIcon} `}>
+                {searchIcon(icon, fill)}
+            </span>
+        </>)
     }
 }

@@ -74,11 +74,11 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                         <Chip
                             size="md" value={`${Likes?.length}`}
                             variant="ghost"
-                            className="  rounded-full h-full flex items-center"
+                            className="  rounded-full h-full  flex items-center"
                             icon={<Icon
                                 icon="thumb_up"
-                                style='scale-125 -mt-0.5'
                                 size="md"
+
                                 fill={ILike}
                                 color={ILike ? "cyan" : "gray"}
                                 title={ILike ? "je n'aime plus" : "j'aime"}

@@ -9,10 +9,11 @@ export function FlagIcon(props: { flagged: boolean, id: number, type: string }) 
     const to = `/flag${flagged ? '/edit' : ''}/${type}/${id}`
     return (
         <Icon
+            bg clear
             icon="flag_2"
             link={to}
             color={flagged ? 'red' : 'gray'}
-            fill={flagged} size="xl"
+            fill={flagged} size="md"
             title={"signaler " + type}
             style="hover:!bg-red-500/30 hover:text-red-700 pb-1 pt-1" />
     )

@@ -72,7 +72,7 @@ export function FlagCard(props: { flag: FlagView, update: () => void }) {
                     fill icon="arrow_circle_right"
                     link={`/${targetS}/${targetId}`}
                     title={`voir les details de ${element?.title}`}
-                    size="4xl" />
+                    bg clear />
             </CardFooter>
         </Card>
 

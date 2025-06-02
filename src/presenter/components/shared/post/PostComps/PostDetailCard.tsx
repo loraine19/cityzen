@@ -77,7 +77,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                                         size="md"
                                         fill={ILike}
                                         color={ILike ? "cyan" : "gray"}
-                                        style=" hover:text-cyan-800 scale-150 -mt-0.5"
+                                        style=" hover:text-cyan-800 "
                                         title={ILike ? "Je n'aime plus" : "J'aime ce post"} />}>
                             </Chip>
                         </button>

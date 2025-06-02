@@ -164,8 +164,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                                 className="rounded-full h-max flex items-center  !min-w-max "
                                 icon={
                                     <Icon
-                                        style='scale-[1.6] ml-2.5 -mr-4 '
-                                        size="sm"
+                                        size="md"
                                         icon="diversity_3"
                                         fill={group?.ImModo}
                                         color={group?.ImModo ? "orange" : "gray"}
@@ -183,8 +182,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                                 className="rounded-full h-max flex items-center pl-6 !min-w-max "
                                 icon={
                                     <Icon
-                                        style='scale-[2] ml-2 -mr-2 '
-                                        size="sm"
+                                        size="md"
                                         icon="groups"
                                         fill={group?.ImIn}
                                         color={group?.ImIn ? "cyan" : "gray"}

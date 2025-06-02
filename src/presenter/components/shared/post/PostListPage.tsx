@@ -152,8 +152,8 @@ export default function PostListPage() {
                         <Icon
                             icon={view === "list" ? "list" : "dashboard"}
                             onClick={switchClick}
-                            size="3xl"
-                            style="mt-1 hidden md:flex"
+                            size="xl"
+                            style=" hidden md:flex"
                         />
                     </div>
                     {notif &&

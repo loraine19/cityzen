@@ -49,7 +49,7 @@ export default function FlagDetailComp(props: { flag: FlagView, element?: any, l
                         icon="arrow_circle_right"
                         link={`/${target}/${id}`}
                         title={`voir les details de ${title}`}
-                        size="4xl px-1" />
+                        bg clear />
 
                 </CardFooter>
             </Card>

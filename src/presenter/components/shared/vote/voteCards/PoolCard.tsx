@@ -110,9 +110,9 @@ export function PoolCard({ pool, change, mines, update }: PoolCardProps) {
                                         icon="smart_card_reader"
                                         fill={pool?.IVoted}
                                         color={color()}
-                                        size="sm"
+                                        size="md"
                                         title={`  ${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                        style="scale-150 ml-0.5 -mr-1" />}>
+                                        style="ml-0.5 -mr-1" />}>
                             </Chip>
                         </button>
                         <Icon
@@ -120,7 +120,7 @@ export function PoolCard({ pool, change, mines, update }: PoolCardProps) {
                             title={`voir les details de ${pool.title}`}
                             link={`/cagnotte/${pool.id}`}
                             fill
-                            size="4xl" />
+                            bg clear />
                     </div>
                 </CardFooter >
             </Card >

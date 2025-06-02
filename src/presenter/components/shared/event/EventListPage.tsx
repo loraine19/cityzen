@@ -147,7 +147,6 @@ export default function EventListPage() {
                         onClick={switchClick}
                         icon={view === "view_agenda" ? "calendar_month" : "list"}
                         size="3xl"
-                        style="mt-1"
                         color="gray"
                         title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
                     {(view === "view_agenda" && notif) &&

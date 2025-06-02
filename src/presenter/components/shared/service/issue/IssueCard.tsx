@@ -95,7 +95,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                             icon="arrow_circle_right"
                             link={`/${PathElement.ISSUE}/${serviceId}`}
                             title={`voir les details de concialtion  ${Service.title}`}
-                            size="3xl"
+                            bg clear
                             style="absolute top-1.5 right-0"
                             fill />
                     </div>

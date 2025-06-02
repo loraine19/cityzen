@@ -33,11 +33,11 @@ export function ServiceForm(props: { formik: any }) {
     const [groupId, setGroupId] = useState<string | undefined>(formik.values.groupId);
 
     return (
-        <form onSubmit={formik.handleSubmit} className="flex flex-1 flex-col !h-full ">
+        <form onSubmit={formik.handleSubmit} className="flex flex-col h-full overflow-hidden">
             <main>
-                <div className="sectionHeader px-4">
+                <div className="sectionHeader">
                     <SubHeader
-                        type={formik.values.title ? `Modifier votre service` : "Créer votre service"}
+                        type={formik.values.title ? `Modifier votre service ` : "Créer votre service "}
                         place={formik.values.title}
                         closeBtn
                     />
@@ -224,7 +224,7 @@ export function ServiceForm(props: { formik: any }) {
                                                         "green" : "orange"}
                                                     icon="toll"
                                                     size="md"
-                                                    style="scale-[2] ml-0.5"
+                                                    style=" ml-0.5"
                                                     fill={userProfile.points > parseInt(points[0])}
                                                 />}
                                         />
@@ -243,6 +243,7 @@ export function ServiceForm(props: { formik: any }) {
                     disabled={formik.values.statusValue > 0}
                     className="lgBtn">
                     <Icon
+                        size='md'
                         color="white"
                         icon={formik.values.statusValue <= 0 ? 'save' : 'block'}
                     />

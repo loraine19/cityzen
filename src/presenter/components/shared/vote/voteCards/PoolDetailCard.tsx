@@ -83,8 +83,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                         fill={pool?.IVoted}
                                         color={color()}
                                         size="md"
-                                        title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`}
-                                        style="scale-125 ml-1 -mr-3" />}>
+                                        title={`${pool.Votes?.length} personnes ${pool?.IVoted ? `dont vous ` : ''} ont voté`} />}>
                             </Chip>
                         </button>
                     </div>

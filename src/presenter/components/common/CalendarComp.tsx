@@ -46,7 +46,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                         color='blue-gray'
                         icon='today'
                         link="/evenement"
-                        size="xl"
+                        size="md"
                         style='mb-1 !px-1.5'
                         title='Voir tous les événements' />
                     <div>
@@ -59,14 +59,14 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                     <div className='flex  items-center'>
                         <Icon
                             icon='arrow_back_ios'
-                            size='md'
+                            size='sm'
                             onClick={removeWeek} />
                         <button onClick={resetWeek} className='text-sm md:text-md'>
                             {(new Date().toLocaleDateString('fr-FR', { weekday: 'short', month: 'numeric', day: 'numeric' }))}
                         </button>
                         <Icon
                             icon='arrow_forward_ios'
-                            size='md'
+                            size='sm'
                             onClick={addWeek} />
                     </div>
                     <div className='flex items-center px-5'>
@@ -74,14 +74,14 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             jours
                             <Icon
                                 icon='do_not_disturb_on'
-                                size='md'
+                                size='sm'
                                 onClick={removeCol} />
                             <button onClick={resetCol}>
                                 {col}
                             </button>
                             <Icon
                                 icon='add_circle'
-                                size='md'
+                                size='sm'
                                 onClick={addCol} />
                         </div>
                         {!logo &&

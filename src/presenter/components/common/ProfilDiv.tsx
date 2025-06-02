@@ -8,6 +8,7 @@ import { OnlineDot } from "./onlineDot"
 import { User } from "../../../domain/entities/User"
 import { ProfileView } from "../../views/viewsEntities/profileViewEntity"
 import { GroupUser } from "../../../domain/entities/GroupUser"
+import { AvatarUser } from "./AvatarUser"
 
 type ProfileDivProps = { profile: Partial<User>, size?: string }
 export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props }) => {
@@ -23,14 +24,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                 <Popover placement="bottom-start">
                     <PopoverHandler>
                         <div className={`relative`}>
-                            <Avatar
-                                onError={(e) => e.currentTarget.src = "/image/person.svg"}
-                                data-cy={`big-avatar-${profile?.firstName}`}
-                                src={profile?.image as string ?? '/image/person.svg'}
-                                size={size as any}
-                                referrerPolicy="unsafe-url"
-                                alt="avatar"
-                                className="BgUser shadow min-w-max " />
+                            <AvatarUser Profile={profile} avatarSize={size} />
                             <OnlineDot id={profile?.userId} />
                         </div>
                     </PopoverHandler>

@@ -75,7 +75,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                     disabled
                                     size="md"
                                     icon="design_services"
-                                    style="scale-150 pointer-events-none"
+                                    style=" pointer-events-none"
                                     title="Compétence" />}>
                             </Chip>
                             <Chip

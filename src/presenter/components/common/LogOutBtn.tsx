@@ -6,7 +6,7 @@ export const LogOutButton = () => {
     return <Icon
         bg
         icon="exit_to_app"
-        size="xl"
+        size="lg"
         style=" z-30 hover:!bg-red-100 hover:!text-red-700"
         onClick={
             async () => {
