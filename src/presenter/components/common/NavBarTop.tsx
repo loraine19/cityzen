@@ -51,6 +51,7 @@ export default function NavBarTop() {
                             <MenuHandler className="relative h-max min-w-max z-50  flex items-center  cursor-pointer">
                                 <div className="flex items-center relative">
                                     <AvatarUser
+                                        avatarStyle="!border-2 !border-white  "
                                         avatarSize={'lg'}
                                         Profile={user?.Profile} />
                                     <OnlineDot

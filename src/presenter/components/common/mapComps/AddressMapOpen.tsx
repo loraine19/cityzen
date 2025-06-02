@@ -102,10 +102,11 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     const IntenaryChip = () => (
         <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}>
             <Icon
+                style='!border-opacity-100'
                 link={`${googleMapsLink}`}
                 bg
                 title='Ouvrir dans Google Maps'
-                size='lg'
+                size='md'
                 color='cyan'
                 icon='near_me'
                 fill />
@@ -114,11 +115,12 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     const FlyButton = () => (
         <div style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 1000 }}>
             <Icon
+                style='!border-opacity-100'
                 bg
                 title='Zoomer sur la position'
                 onClick={() => setFly(true)}
                 icon="my_location"
-                size="lg"
+                size="md"
                 fill />
         </div>)
 
@@ -128,7 +130,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                 bg
                 icon='close'
                 fill
-                size='lg'
+                size='md'
                 onClick={() => setOpen(false)}
                 title='Fermer la carte' />
         </div>)
@@ -136,10 +138,11 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     const ExpandButton = () => (
         <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 600 }}>
             <Icon
+                style='!border-opacity-100'
                 bg
                 icon='expand_content'
                 fill
-                size='lg'
+                size='md'
                 onClick={() => setOpen(true)}
                 title='Ouvrir la carte' />
         </div>)

@@ -114,12 +114,12 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     const color = props.color ?? 'gray'
     const textColor = props.color ? props.bg ? `text-${color}-700 ` : `text-${color}-700 ` : `text-gray-800 `;
     const bg = (props.bg && !clear) ?
-        (props.color ? `bg-${color}-500 bg-opacity-30` : `!bg-gray-300 hover:!bg-gray-200`) : ''
+        (props.color ? `bg-${color}-500 bg-opacity-30 border border-${color}-500 border-opacity-20` : `!bg-gray-300 hover:!bg-gray-200 border border-gray-500 border-opacity-20`) : ''
 
     const classIcon = `!rounded-full  flex items-center justify-center  ${textColor} ${bg} 
      ${props.bg ? classRounded : textSize} ${style ?? ''} `
 
-    const classActive = `hover:scale-[1.1] hover:!shadow transition-all duration-200 ease-in-out
+    const classActive = `hover:scale-[1.1] transition-all duration-200 ease-in-out
     hover:!saturate-[1.5] hover:!bg-${color}-500 hover:!bg-opacity-30 `
 
     return (

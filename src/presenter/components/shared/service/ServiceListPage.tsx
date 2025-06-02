@@ -15,7 +15,7 @@ import { serviceCategoriesS } from "../../../constants";
 import NotifDiv from "../../common/NotifDiv";
 
 export default function ServicesPage() {
-    const [notif, setNotif] = useState<string>('l');
+    const [notif, setNotif] = useState<string>('...');
     const [tabSelected] = useState<string>('');
     const [searchCat, setSearchCat] = useState<Label>({ label: 'tous', value: '' });
     const [mine, setMine] = useState<boolean>(false);
@@ -72,6 +72,7 @@ export default function ServicesPage() {
             setStep(steps.join(','));
             setType(types.join(','));
         }
+        refetch();
     }
     useEffect(() => { mine && CheckboxesFilter() }, [boxSelected]);
 
@@ -123,7 +124,7 @@ export default function ServicesPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case (count === 0 && !isLoading): setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
+            case ((services?.lenght || !services) && !isLoading): setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }
@@ -209,7 +210,7 @@ export default function ServicesPage() {
                     qty={count}
                     type={`services ${filterName()} ${categoryName()}`} />
             </div>
-            {isLoading || error || !services ?
+            {isLoading ?
                 <SkeletonGrid />
                 : <section
                     ref={divRef}

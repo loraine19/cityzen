@@ -9,7 +9,6 @@ import { ImageBtn } from "../../../common/ImageBtn";
 import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
 import { ListGroup } from "../../myInfos/ListGroup";
-import { AvatarUser } from "../../../common/AvatarUser";
 
 type ProfileFormProps = {
     formik: any,

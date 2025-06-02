@@ -54,12 +54,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                 as="li"
                                 variant="small"
                                 color={col as any}
-                                className={`flex rounded-full h-full  items-center  font-medium`}
+                                className={`flex rounded-full h-full items-center font-medium`}
                             >
                                 <NavLink
                                     to={to}
                                     className={({ isActive }) =>
-                                        `flex  gap-3 justify-center lg:justify-start px-[0.55rem] items-center w-full !h-[3.7rem]  rounded-full  ${isActive ? `animSlide border-[1px] shadowMid z-30 ${color}  bg-white` : ''}`
+                                        `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px]  rounded-full  ${isActive ? `animSlide border-[1px] shadowMid z-30 ${color}  bg-white` : ''}`
                                     }
                                 >
                                     {({ isActive }) => (
@@ -71,7 +71,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                                 fill={isActive ? true : false}
                                                 color={col}
                                             />
-                                            <span className={`!text-[0.85rem] font-bold
+                                            <span className={`!text-[0.9rem] font-bold
                                                  filter brightness-90 font-comfortaa hidden lg:block  pr-8`}>
                                                 {label}
                                             </span>
@@ -82,7 +82,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                         ))}
                         {addBtn && (
                             <div className="flex-1 max-w-[3.75rem]">
-                                <div className={`flex z-50 border items-center justify-center right-0 bg-${color}-100 h-full gap-12 w-full rounded-full shadowMid`}>
+                                <div className={`flex z-50 items-center justify-center right-0 bg-${color}-100 boder border-${color}-500 border-opacity-30 h-full gap-12 w-full rounded-full shadowMid`}>
                                     <SpeedDial
                                         placement={navBottom ? 'top' : 'bottom'}
                                         offset={10}>
