@@ -43,7 +43,7 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
                 }
             </div>
             {subTitle &&
-                <div className="flex lg:flex-row flex-col justify-between pr-1">
+                <div className="flex  flex-col justify-between pr-1">
                     <Typography
                         variant="small"
                         className="truncate font-normal">

@@ -6,7 +6,7 @@ export const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ handleScroll, ha
         <div className={`absolute !w-full flex items-center justify-center ${revers ? 'lg:top-6 top-4' : 'lg:bottom-6 bottom-4'} left-0 `}>
             <Icon
                 color={color}
-                fill bg clear
+                fill
                 icon={revers ? "keyboard_double_arrow_up" : "keyboard_double_arrow_down"}
                 size={size}
                 title="voir plus"

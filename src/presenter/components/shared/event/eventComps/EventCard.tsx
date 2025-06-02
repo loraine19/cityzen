@@ -84,7 +84,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
             </CardBody>
             <CardFooter className="CardFooter">
                 {!mines ? (
-                    <div className="flex relative pl-4 w-full items-center gap-2">
+                    <div className="flex relative pl-5 w-full items-center gap-2">
                         <Icon
                             icon='calendar_add_on'
                             link={agendaLink}
@@ -113,13 +113,13 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                         <Chip
                             value={participantsMin}
                             variant="ghost"
-                            className="rounded-full h-max flex items-center  "
+                            className="rounded-full GrayChip h-max flex items-center  "
                             icon={
                                 <Icon
                                     size="md"
                                     icon="person"
                                     fill={event?.Igo}
-                                    color={event?.Igo ? "cyan" : "gray"}
+                                    color={(event?.Igo && event?.status === EventStatus.PENDING) ? "cyan" : "gray"}
                                     title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>

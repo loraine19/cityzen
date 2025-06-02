@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 import { Icon } from "../common/IconComp";
 
@@ -9,7 +10,9 @@ type NotifDivProps = {
 const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch }) => {
     const { color } = useNotificationStore((state) => state);
 
-    setTimeout(() => { notif && setTimeout(() => refetch(), 2000) }, 1000);
+
+
+    useEffect(() => { setTimeout(() => { notif && refetch() }, 1000); }, [notif]);
 
     return (
         <div className={'notif'}>

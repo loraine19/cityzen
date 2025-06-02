@@ -43,7 +43,7 @@ export default function DashboardPage() {
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex !min-h-[12rem] row-span-5 lg:grid  ";
-    const notifClasse = " row-span-2 grid  lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[6rem]")
+    const notifClasse = " row-span-2   lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5.5rem]")
     const mapClasse = "flex row-span-6 !min-h-[16rem] 15rem] lg:min-h-[32%] lg:grid";
 
 
@@ -83,7 +83,7 @@ export default function DashboardPage() {
                         <CardHeader className="flex flex-col items-center justify-center  bg-transparent shadow-none">
                             <AvatarUser
                                 avatarSize="lg"
-                                avatarStyle="!shadow-md w-16 h-16 lg:w-20 lg:h-20 "
+                                avatarStyle="!shadow-md w-16 h-16 lg:w-[4.5rem] lg:h-[4.5rem] "
                                 Profile={user?.Profile} />
 
                             <div className="flex flex-col items-center justify-center pt-1">
@@ -125,14 +125,14 @@ export default function DashboardPage() {
                                     fill bg
                                     style="!text-[1.3rem]  !font-extrabold"
                                     title={` vous avez ${user?.Profile?.points} pts`} />
-                                <LogOutButton />
+                                <LogOutButton size="md" />
                             </div>
                         </CardBody>
                     </Card>
                 </div>
-                <div className={`hidden lg:${notifClasse} h-full lg:grid`}>
+                <div className={`hidden lg:${notifClasse} grid-cols-1 h-full  lg:grid`}>
                     <Card className=" orange100 anim">
-                        <CardBody className="h-full flex flex-col pt-2.5 pb-0 px-4">
+                        <CardBody className="h-full flex flex-col pt-2.5 pb-0 px-4 ">
                             <div className="flex gap-2.5 py-1 items-center">
                                 <div className="relative">
                                     <Icon
@@ -155,40 +155,44 @@ export default function DashboardPage() {
                                     <span className={unReadMsgNotif < 1 ? "hidden" : " absolute -top-0.5 right-0 w-2.5 h-2.5 rounded-full bg-cyan-700 border-2"} />
                                 </div>
                                 <Typography> {count > 0 ?
-                                    <>{count} notifications </> :
+                                    <>{count} {count > 1 ? 'notifications' : 'notification'} </> :
                                     'Vous n\'avez pas de notifications'}
                                 </Typography>
                             </div>
-                            <div className="relative flex flex-col max-h-12 overflow-y-auto"
+                            <div className="relative flex flex-col max-h-14 max-w-min  overflow-y-auto"
                                 onScroll={() => handleScroll()}
                                 ref={divRef}>
                                 {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
-                                    <div key={index}
-                                        className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex mr-9 items-center pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5`}
-                                        onClick={async () => {
-                                            await readNotif(notif.id);
-                                            await refetch();
-                                            notif.link && navigate(notif.link)
-                                        }}>
-                                        <p className="line-clamp-1">
-                                            <span
-                                                className={`mr-1 capitalize font-normal ${notif.typeS === 'message' ? 'text-cyan-800' : 'text-orange-800'}`}>
-                                                {notif?.typeS} :&nbsp;
-                                            </span>
-                                            <span className="">
-                                                {notif?.description}
-                                            </span>
-                                        </p>
-                                        {<Icon
+                                    <div className="flex w-full justify-between h-full gap-4 p-0.5">
+
+                                        <div key={index}
+                                            className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex  items-center break-words pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5  flex-0 relative `}
+                                            onClick={async () => {
+                                                await readNotif(notif.id);
+                                                await refetch();
+                                                notif.link && navigate(notif.link)
+                                            }}>
+                                            <p className="!line-clamp-1 ">
+                                                <span
+                                                    className={`mr-1 capitalize font-normal ${notif.typeS === 'message' ? 'text-cyan-800' : 'text-orange-800'}`}>
+                                                    {notif?.typeS} :&nbsp;
+                                                </span>
+                                                <span className="">
+                                                    {notif?.description}
+                                                </span>
+                                            </p>
+
+                                        </div>
+                                        <Icon
+                                            fill
                                             icon={"close"}
                                             onClick={async () => {
                                                 await readNotif(notif.id);
                                                 await refetch();
                                                 notif.link && navigate(notif.link)
                                             }}
-                                            style={'absolute z-40 right-0'}
                                             size="md"
-                                            title={"fermer " + notif?.title} />}
+                                            title={"fermer " + notif?.title} />
                                     </div>))}
                             </div>
                             <LoadMoreButton

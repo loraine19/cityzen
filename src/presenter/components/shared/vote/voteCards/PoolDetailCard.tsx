@@ -76,7 +76,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                 value={pool.Votes?.length}
                                 variant="ghost"
                                 size='lg'
-                                className="rounded-full pl-5"
+                                className="rounded-full pl-5 GrayChip"
                                 icon={
                                     <Icon
                                         icon="smart_card_reader"

@@ -70,7 +70,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                             <Chip
                                 value={`${Likes?.length}`}
                                 variant="ghost"
-                                className="!h-max !px-4 rounded-full  flex items-center "
+                                className="!h-max !px-4 rounded-full GrayChip flex items-center "
                                 icon={
                                     <Icon
                                         icon="thumb_up"

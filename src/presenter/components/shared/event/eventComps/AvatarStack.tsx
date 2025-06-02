@@ -19,24 +19,25 @@ export function AvatarStack(props: AvatarStackProps) {
                         </div>
                     </PopoverHandler>
                     <PopoverContent className="!z-[1000]  !ml-24 !py-2">
-                        <div className="p-2  flex items-center gap-4 ">
+                        <div className="p-2 w-auto flex items-center gap-4 ">
+                            <div className="relative py-3 pr-2">
+                                <Icon
+                                    color='orange'
+                                    fill
+                                    style="absolute  !bg-orange-100 top-0 -right-2.5  z-50  "
+                                    size='sm'
+                                    link={`/chat?with=${Participant?.userId}`}
+                                    bg
+                                    title={`Envoyer un message à ${Participant.User?.Profile?.firstName}`}
+                                    icon="sms"
+                                />
+                                <div className="relative">
 
-                            <Icon
-                                color='orange'
-                                fill
-                                style="absolute  !bg-orange-100 top-3 left-12  z-50  "
-                                size='sm'
-                                link={`/chat?with=${Participant?.userId}`}
-                                bg
-                                title="Envoyer un message"
-                                icon="sms"
-                            />
-                            <div className="relative">
+                                    <AvatarUser Profile={Participant.User?.Profile} avatarSize={'sm'}
 
-                                <AvatarUser Profile={Participant.User?.Profile} avatarSize={'sm'}
-
-                                    avatarStyle="BgUser border-blue-gray-500 " />
-                                <OnlineDot id={Participant?.userId} />
+                                        avatarStyle="BgUser border-blue-gray-500 " />
+                                    <OnlineDot id={Participant?.userId} />
+                                </div>
                             </div>
                             <div className="flex flex-col pl-2">
                                 <Typography
@@ -46,7 +47,8 @@ export function AvatarStack(props: AvatarStackProps) {
                                 <Typography
                                     variant="small"
                                     className="font-normal text-blue-gray-500  border-t border-blue-gray-50 pt-2">
-                                    {Participant.User?.GroupUser?.map((group) => group.Group.name).join(', ')}
+                                    {Participant.User?.GroupUser?.map((group) =>
+                                        <p className="!line-clamp-1">⌖ {group.Group.name.split(':')[0]}</p>)}
                                 </Typography>
                             </div>
                         </div>

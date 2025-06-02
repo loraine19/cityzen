@@ -79,7 +79,7 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                                 value={Votes?.length}
                                 variant="ghost"
                                 size='lg'
-                                className="rounded-full pl-5"
+                                className="rounded-full GrayChip pl-5"
                                 icon={<Icon
                                     icon="smart_card_reader"
                                     fill={IVoted}

@@ -52,7 +52,7 @@ export default function NavBarTop() {
                                 <div className="flex items-center relative">
                                     <AvatarUser
                                         avatarStyle="!border-2 !border-white  "
-                                        avatarSize={'lg'}
+                                        avatarSize={'md'}
                                         Profile={user?.Profile} />
                                     <OnlineDot
                                         className="!bottom-0 !-right-1"

@@ -161,7 +161,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                             <Chip
                                 value={group?.ImModo ? '⠀✓' : '⠀'}
                                 variant="ghost"
-                                className="rounded-full h-max flex items-center  !min-w-max "
+                                className="rounded-full h-max  GrayChip flex items-center  !min-w-max "
                                 icon={
                                     <Icon
                                         size="md"
@@ -179,7 +179,7 @@ export default function GroupDetailCard({ group: initGroup, mines, refetch, acti
                             <Chip
                                 value={group?.GroupUser?.length}
                                 variant="ghost"
-                                className="rounded-full h-max flex items-center pl-6 !min-w-max "
+                                className="rounded-full GrayChip h-max flex items-center pl-6 !min-w-max "
                                 icon={
                                     <Icon
                                         size="md"

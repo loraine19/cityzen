@@ -96,20 +96,23 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         </div>
                     </PopoverContent>
                 </Popover>
-                <div className="flex flex-col truncate">
+                <div className="flex flex-col gap-1 truncate">
                     <Typography
                         variant={textSize}
                         color="blue-gray"
                         className="border-b border-blue-gray-200 pr-4  ">
                         {profile?.firstName} {profile?.lastName}
                     </Typography>
-                    <Typography
-                        className={`font-normal text-blue-gray-500 ${texteSize2} !line-clamp-1  max-w-90% pr-4`}>
+                    <div
+                        className={`!text-small text-blue-gray-500  !line-clamp-2 pr-4`}>
                         {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
-                            <span key={index} >
-                                {' ⌖ ' + group.Group?.name + ' '}
-                            </span>)}
-                    </Typography>
+                            <Typography
+                                variant={textSize}
+                                className={` font-light" ${texteSize2} !line-clamp-1`}
+                                key={index} >
+                                {' ⌖ ' + group.Group?.name.split(':')[0]}
+                            </Typography>)}
+                    </div>
                 </div>
             </div>
         </>

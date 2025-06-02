@@ -429,7 +429,7 @@ button span {
 .iconMd {
     @apply flex items-center justify-center rounded-full;
     font-size: 18px;
-    width: 36px;
+    width: 35px;
     height: 34px;
 }
 .iconLg {

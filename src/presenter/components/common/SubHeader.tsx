@@ -20,14 +20,15 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
 
                 </span>
             </Typography>
-            {closeBtn && <Icon
-                icon="close"
-                color={color ?? 'gray'}
-                size="sm"
-                bg
-                link={goBack}
-                title={"retour " + goBack?.replace("/", "")}
-            />}
+            {closeBtn &&
+                <Icon
+                    icon="close"
+                    color={color ?? 'gray'}
+                    size="sm"
+                    bg
+                    link={goBack}
+                    title={"retour " + goBack?.replace("/", "")}
+                />}
         </div>
     )
 }

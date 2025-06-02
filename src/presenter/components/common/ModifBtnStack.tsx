@@ -39,8 +39,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
                 icon={buttons[0].iconImage as string}
                 color={disabled1 ? 'gray' : 'red'}
                 onClick={() => { setOpen(true), setIndex(0) }}
-                bg size="2xl"
-                style={"shadow rounded-full"}
+                bg size="md"
                 disabled={disabled1}
                 title={buttons[0].title as string} />
 
@@ -48,8 +47,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
                 icon={buttons[1].iconImage as string}
                 color={disabled2 ? 'gray' : 'orange'}
                 onClick={() => { setOpen(true), setIndex(1) }}
-                bg size="2xl"
-                style={"shadow rounded-full "}
+                bg size="md"
                 disabled={disabled2}
                 title={buttons[1].title as string} />
 
@@ -59,8 +57,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
                     icon={buttons[2].iconImage as string}
                     color={'cyan'}
                     onClick={() => { setOpen(true), setIndex(2) }}
-                    bg size="2xl"
-                    style={"shadow rounded-full"}
+                    bg size="md"
                     title={buttons[2].title as string} />
             }
         </div>

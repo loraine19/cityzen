@@ -146,7 +146,7 @@ export default function EventListPage() {
                     <Icon
                         onClick={switchClick}
                         icon={view === "view_agenda" ? "calendar_month" : "list"}
-                        size="3xl"
+                        size="lg"
                         color="gray"
                         title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
                     {(view === "view_agenda" && notif) &&

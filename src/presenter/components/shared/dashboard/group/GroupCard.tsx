@@ -91,7 +91,7 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                         <Chip
                             value={group?.ImModo ? '⠀✓' : '⠀'}
                             variant="ghost"
-                            className="rounded-full h-max flex items-center  !min-w-max "
+                            className="rounded-full GrayChip h-max flex items-center  !min-w-max "
                             icon={
                                 <Icon
                                     size="md"
@@ -110,7 +110,7 @@ export function GroupCard({ group: initialGroup, mines, refetch }: GroupCardProp
                         <Chip
                             value={group?.GroupUser?.length}
                             variant="ghost"
-                            className="rounded-full h-max flex items-center pl-6 !min-w-max "
+                            className="rounded-full GrayChip h-max flex items-center pl-6 !min-w-max "
                             icon={
                                 <Icon
                                     size="md"
