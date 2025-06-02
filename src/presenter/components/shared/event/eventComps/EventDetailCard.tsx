@@ -102,7 +102,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                             <Chip
                                 value={participantsMin}
                                 variant="ghost"
-                                className="rounded-full h-max flex items-center px-4 "
+                                className="rounded-full GrayChip h-max flex items-center px-4 "
                                 icon={
                                     <Icon
                                         icon="person"

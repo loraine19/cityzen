@@ -119,12 +119,11 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     const classIcon = `!rounded-full  flex items-center justify-center  ${textColor} ${bg} 
      ${props.bg ? classRounded : textSize} ${style ?? ''} `
 
-    const classActive = `hover:scale-[1.1] transition-all duration-200 ease-in-out
-    hover:!saturate-[1.5] hover:!bg-${color}-500 hover:!bg-opacity-30 `
+    const classActive = `hover:scale-[1.1] transition-all duration-200 ease-in-out hover:!bg-${color}-500 `
 
     return (
         <div
-            className={`${bg ? 'bg-white ' : ''} rounded-full  `}>
+            className={`${props.bg ? ' bg-white ' : ''} rounded-full  `}>
             {onClick ?
                 <button
                     style={{ fontSize: `${num}px` }}

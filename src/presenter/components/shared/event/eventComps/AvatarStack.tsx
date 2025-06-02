@@ -15,7 +15,7 @@ export function AvatarStack(props: AvatarStackProps) {
                 <Popover key={index} >
                     <PopoverHandler>
                         <div> <AvatarUser Profile={Participant.User?.Profile} avatarSize={'sm'}
-                            avatarStyle="border-2 !h-10 !w-10 border-white hover:z-10 focus:z-10" />
+                            avatarStyle="border-2 !h-11 !w-11 border-white hover:z-10 focus:z-10" />
                         </div>
                     </PopoverHandler>
                     <PopoverContent className="!z-[1000]  !ml-24 !py-2">

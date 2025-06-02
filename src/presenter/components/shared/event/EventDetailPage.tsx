@@ -35,16 +35,24 @@ export default function EventDetailPage() {
             body: event?.Igo ? `Voulez-vous vraiment annuler votre participation à ${event?.title}` :
                 `Confirmer votre participation à ${event?.title}`,
             function: async () => {
-                const data = await event?.toogleParticipate();
-                data && await refetch() && handleOpen()
+                try {
+                    const data = await event?.toogleParticipate();
+                    console.log(data);
+                    if (data) {
+                        await refetch();
+                        handleOpen();
+                    }
+                }
+                catch (e) {
+                    console.error(e);
+                }
             }
         }
     ];
 
 
     return (
-        <> <main data-cy="event-details-page"
-        >
+        <> <main data-cy="event-details-page">
             <div className="sectionHader px-4">
                 <SubHeader
                     type={`évenement ${event?.label ?? ''}`}

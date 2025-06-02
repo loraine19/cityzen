@@ -136,8 +136,11 @@ export class ApiService implements ApiServiceI {
                 break;
         }
         this.count = 0;
-        Promise.reject(newError);
-        throw Error(newError.message || 'Une erreur est survenue');
+        //return Promise.reject(newError);
+        return {
+            error: newError
+        }
+        //  throw Error(newError.message || 'Une erreur est survenue');
 
     };
 

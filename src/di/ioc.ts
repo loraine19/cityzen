@@ -62,7 +62,6 @@ import { MessageApi } from '../infrastructure/providers/http/messageApi';
 import { conversationsViewModel, conversationViewModel } from '../presenter/views/messageViewModel';
 import SocketService from '../infrastructure/providers/http/socketService';
 import { AlertStoreRepositoryImpl } from '../infrastructure/repositoriesImpl/AlertStoreRespositoryImpl';
-import { AlertStoreFunctions } from '../infrastructure/adaptaters/alertStoreFunctions';
 import { ErrorService } from '../infrastructure/services/errorService';
 import { GroupRepositoryImpl } from '../infrastructure/repositoriesImpl/GroupRespositoryImpl';
 import { GroupApi } from '../infrastructure/providers/http/groupApi';
@@ -253,7 +252,6 @@ container.register({
     ///STORE 
     errorService: asClass(ErrorService),
     alertStoreRepository: asClass(AlertStoreRepositoryImpl),
-    alertStoreFunctions: asClass(AlertStoreFunctions),
 
 });
 

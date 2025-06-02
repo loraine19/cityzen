@@ -44,7 +44,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
             }
         }
             className={(!navBottom ? 'justify-center items-center flex pb-2 ' : 'pt-1 pb-1.5 ') + 'px-1'}>
-            <Navbar className={`${navBottom ? "shadow-lg" : 'shadow-md'} flex rounded-full h-full   items-center p-0 !bg-white/90 border border-blue-gray-100/50`}>
+            <Navbar className={`${navBottom ? "shadow-lg" : 'shadow-md'} flex rounded-full h-full   items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                 <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full h-full relative"`}>
                     <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full`}>
                         {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
@@ -81,8 +81,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                             </Typography>
                         ))}
                         {addBtn && (
-                            <div className="flex-1 max-w-[3.75rem]">
-                                <div className={`flex z-50 items-center justify-center right-0 bg-${color}-100 boder border-${color}-500 border-opacity-30 h-full gap-12 w-full rounded-full shadowMid`}>
+                            <div className={`flex-1 border-${color}-500 border-[2px] border-opacity-30 rounded-full max-w-[58px] `}>
+                                <div className={`flex z-50 items-center justify-center right-5 bg-${color}-100  h-full gap-12 w-full rounded-full shadowMid`}>
                                     <SpeedDial
                                         placement={navBottom ? 'top' : 'bottom'}
                                         offset={10}>

@@ -4,6 +4,7 @@ import { dayMS } from "../../../domain/entities/frontEntities";
 import DI from "../../../di/ioc";
 import { EventImage } from "../../constants";
 
+
 export class EventView extends Event {
     actif?: boolean;
     isPast: boolean;
@@ -18,6 +19,10 @@ export class EventView extends Event {
     eventDateInfo: string;
     toogleParticipate: () => Promise<EventView | any>;
     image: string = '';
+
+
+
+    // Example usage: call this.alert.error('message') or this.alert.success('message')
 
     constructor(event: Event, userId: number) {
         super(event)
@@ -40,6 +45,9 @@ export class EventView extends Event {
         this.toogleParticipate = async () => {
             await DI.resolve('toogleParticipantUseCase').execute(event, event.id, userId);
             const updatedEvent = await DI.resolve('getEventByIdUseCase').execute(event.id);
+
+            throw new Error('Événement non trouvé après la mise à jour');
+
             return new EventView(updatedEvent, userId)
         }
     }

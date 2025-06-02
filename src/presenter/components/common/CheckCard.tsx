@@ -58,12 +58,12 @@ export default function CheckCard(props: checkCardProps) {
                 </List>
             </div>
             <div className="flex  opacity-95 items-center px-0.5 rounded-full">
-                <Icon icon="cancel" size="2xl" color="red" style="thin hover:!py-0" onClick={() => {
+                <Icon icon="cancel" size="lg" color="red" style="thin hover:!py-0" onClick={() => {
                     setBoxSelected([]);
                     setCheckedState(new Array(categoriesArray.length).fill(false));
                 }}
                 ></Icon>
-                <Icon icon="check_circle" size="2xl" color="green" style="thin  hover:!py-0" onClick={() => {
+                <Icon icon="check_circle" size="lg" color="green" style="thin hover:!py-0" onClick={() => {
                     setBoxSelected(categoriesArray);
                     setCheckedState(new Array(categoriesArray.length).fill(true));
                 }} />
