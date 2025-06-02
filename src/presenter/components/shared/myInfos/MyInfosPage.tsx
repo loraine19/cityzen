@@ -84,9 +84,10 @@ export default function MyInfosPage() {
     return (
         <>
             <header className="w-respLarge relative flex-col flex justify-between pt-2">
-                <div className="flex absolute justify-between items-center top-4  -left-1 w-full">
+                <div className="flex absolute justify-between items-center top-4 z-50 -left-1 w-full">
                     <LogOutButton />
                     <Icon
+
                         bg clear
                         fill
                         size='2xl'

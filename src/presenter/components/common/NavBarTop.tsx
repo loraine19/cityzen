@@ -37,7 +37,7 @@ export default function NavBarTop() {
                     <div className="relative w-full flex justify-between items-center">
                         <div className="flex w-full  flex-1 items-center  lg:pl-2 pb-4">
                             <img
-                                className="h-16 w-16 mx-2 lg:h-20 lg:w-20 object-cover object-center drop-shadow-[0_0_1px_rgba(0,0,0,0.1)]"
+                                className="h-16 w-16 mx-2 lg:h-[4.5rem] lg:w-[4.5rem] object-cover object-center "
                                 src="/image/logo.svg"
                                 alt="logo" />
                             <Typography

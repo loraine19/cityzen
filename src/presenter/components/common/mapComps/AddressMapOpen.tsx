@@ -31,7 +31,7 @@ const MarkerList = ({ notifsMap }: { notifsMap: NotifView[] }) => {
             <Marker
                 key={notif.id}
                 position={[notif?.Address.lat, notif?.Address.lng]}
-                icon={notif.type === ElementNotif.SERVICE ?
+                icon={notif.type === ElementNotif.EVENT ?
                     L.icon({
                         iconUrl: '/image/marker_l2.svg',
                         iconSize: [50, 50],

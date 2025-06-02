@@ -9,6 +9,7 @@ import { ImageBtn } from "../../../common/ImageBtn";
 import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
 import { ListGroup } from "../../myInfos/ListGroup";
+import { AvatarUser } from "../../../common/AvatarUser";
 
 type ProfileFormProps = {
     formik: any,
@@ -55,6 +56,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             src={imgBlob as string ?? "../../image/person.svg"}
                             alt={formik.values.firstName ?? 'avatar'}
                             className={"shadow-md BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
+
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
                             <Typography
                                 className="!font-light !whitespace-break-spaces max-w-[30vw] !text-xs !text-left">
@@ -197,7 +199,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                     <Icon
                         color="white"
                         icon="edit"
-                        size="2xl" />
+                        size="lg" />
                     modifier mon profile
                 </Button>
             </footer>
