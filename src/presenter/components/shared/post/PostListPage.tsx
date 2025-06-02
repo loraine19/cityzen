@@ -33,7 +33,6 @@ export default function PostListPage() {
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     useEffect(() => { setCategory(params.category ?? ''); setFilter(params.filter ?? ''); }, []);
 
-
     //// FILTER TAB
     const filterTab = async (value?: PostFilter) => {
         setParams({ filter: value as string ?? '', category });
@@ -133,7 +132,6 @@ export default function PostListPage() {
         <>
             <main>
                 <div className="sectionHeader">
-
                     <TabsMenu
                         labels={postTabs}
                         sortList={sortList}
@@ -141,14 +139,12 @@ export default function PostListPage() {
                         setSelectedSort={setSort}
                         color={'orange'}
                         reverse={reverse}
-                        setReverse={setReverse}
-                    />
+                        setReverse={setReverse} />
                     <div className="flex items-center justify-center gap-4  ">
                         <CategoriesSelect
                             categoriesArray={postCategories}
                             change={change}
                             categorySelected={category.toString()} />
-
                         <Icon
                             icon={view === "list" ? "list" : "dashboard"}
                             onClick={switchClick}
@@ -163,7 +159,7 @@ export default function PostListPage() {
                             refetch={refetch} />}
                     <SubHeader
                         qty={count}
-                        type={`annonces  ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
+                        type={`annonces ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
                 </div>
                 <section
                     ref={divRef}

@@ -67,10 +67,10 @@ export function PoolCard({ pool, change, mines, update }: PoolCardProps) {
                     </div>
                 </CardHeader>
                 <CardBody className="FixCardBody ">
-                    <div className="py-1.5"> <ProfileDiv
-
-                        profile={pool?.UserBenef || {} as Partial<User>}
-                        size={'lg'} />
+                    <div className="py-1.5">
+                        <ProfileDiv
+                            profile={pool?.UserBenef || {} as Partial<User>}
+                            size={'xl'} />
                         <Title
                             title={pool.title}
                             group={pool.Group}

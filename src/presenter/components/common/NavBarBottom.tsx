@@ -81,7 +81,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                             </Typography>
                         ))}
                         {addBtn && (
-                            <div className={`flex-1 border-${color}-500 border-[2px] border-opacity-30 rounded-full max-w-[58px] `}>
+                            <div className={`flex-1 border-${color}-500 border-[1px] border-opacity-30 rounded-full max-w-[58px] `}>
                                 <div className={`flex z-50 items-center justify-center right-5 bg-${color}-100  h-full gap-12 w-full rounded-full shadowMid`}>
                                     <SpeedDial
                                         placement={navBottom ? 'top' : 'bottom'}

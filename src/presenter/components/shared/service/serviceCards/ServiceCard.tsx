@@ -144,7 +144,6 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                             profile={User} />
                     }
                     <div className="flex items-center">
-
                         <Chip
                             size="md"
                             value={`${points.join(' à ')}   pts`}

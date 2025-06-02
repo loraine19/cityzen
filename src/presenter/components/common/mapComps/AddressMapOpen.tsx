@@ -167,7 +167,6 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
                         zoom={zoom}
                         scrollWheelZoom={false}
                         className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
-
                         <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
                         {notifs && <MarkerList notifsMap={notifs} />}
                         {!aera ? <Marker

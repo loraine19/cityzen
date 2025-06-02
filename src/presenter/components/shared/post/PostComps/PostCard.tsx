@@ -78,7 +78,6 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                             icon={<Icon
                                 icon="thumb_up"
                                 size="md"
-
                                 fill={ILike}
                                 color={ILike ? "cyan" : "gray"}
                                 title={ILike ? "je n'aime plus" : "j'aime"}

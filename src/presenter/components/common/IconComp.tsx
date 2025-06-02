@@ -123,7 +123,7 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
 
     return (
         <div
-            className={`${(props.bg && !clear) ? 'max-h-max max-w-max ' : ''} rounded-full  `}>
+            className={`${(props.bg && !clear) ? 'max-h-max max-w-max bg-white' : ''} rounded-full  `}>
             {onClick ?
                 <button
                     style={{ fontSize: `${num}px` }}

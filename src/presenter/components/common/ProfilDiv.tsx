@@ -14,18 +14,21 @@ type ProfileDivProps = { profile: Partial<User>, size?: string }
 export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props }) => {
     const profile = new ProfileView(props.profile?.Profile as Profile)
     const userDiv = props.profile as User
-    const textSize = size === "xl" && "h5" || size === "sm" && "h6" || "small"
-    const texteSize2 = size === "xl" && "text-lg" || size === "sm" && "text-sm" || "hidden"
+    const textSize = size === "xl" && "h6" || size === "lg" && "h6" || "h6"
+    const texteSize2 = size === "xl" && "text-sm" || size === "lg" && "text-sm" || "!hidden"
     const user = useUserStore(state => state.user)
 
     return (
         <>
-            <div className={`realtive pl-1 pb-0.5 truncate z-50 flex items-center px-0 gap-7`}>
+            <div className={`realtive pl-1 mb-1 pb-0.5 truncate z-50 flex items-center px-0 gap-7`}>
                 <Popover placement="bottom-start">
                     <PopoverHandler>
-                        <div className={`relative`}>
-                            <AvatarUser Profile={profile} avatarSize={size} />
-                            <OnlineDot id={profile?.userId} />
+                        <div className={`relative mb-1`}>
+                            <AvatarUser
+                                Profile={profile}
+                                avatarSize={size} />
+                            <OnlineDot
+                                id={profile?.userId} />
                         </div>
                     </PopoverHandler>
                     <PopoverContent className=" w-auto !p-6 z-50 ">
@@ -33,15 +36,15 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                             <div className="mb-2 gap-4 ">
                                 <Icon
                                     color='orange'
-                                    fill
+                                    fill bg
                                     style="absolute !bg-orange-100 top-2 left-11  z-50"
                                     size='sm'
                                     link={`/chat?with=${profile?.userId}`}
-                                    bg
                                     title="Envoyer un message"
-                                    icon="sms"
-                                />
-                                <AvatarUser Profile={profile} avatarSize={'sm'} />
+                                    icon="sms" />
+                                <AvatarUser
+                                    Profile={profile}
+                                    avatarSize={'sm'} />
                             </div>
                             <div className="flex flex-col pl-2">
                                 <Typography
@@ -55,8 +58,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                 </Typography>
                                 <div className="font-normal flex flex-col text-blue-gray-500">
                                     {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
-                                        <div
-                                            className="!line-clamp-1 "
+                                        <div className="!line-clamp-1"
                                             key={index}>
                                             {'⌖ ' + group.Group?.name}
                                         </div>
@@ -64,17 +66,17 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                                 </div>
                             </div>
                         </div>
-                        <div className={`${profile?.addressShared ? '' : 'hover:!event-none'} flex gap-7 relative  pt-2 `}>
+                        <div className={`${profile?.addressShared ? '' : 'hover:!event-none'} flex gap-8 relative pt-2 `}>
                             <div className="relative flex  ">
                                 <Icon
                                     disabled={profile?.addressShared ? false : true}
                                     icon="person_pin_circle"
                                     fill bg
-                                    size='xl'
+                                    size='lg'
                                     style={profile?.addressShared ? '-ml-2' : 'hover:!event-none'}
                                     color={profile?.addressShared ? "cyan" : "gray"} />
                                 {profile?.addressShared && profile?.Address &&
-                                    <div className={`absolute scale-[0.65] -top-7 -right-4  
+                                    <div className={`absolute scale-[0.68] -top-7 -right-6  
                                     ${profile?.addressShared ? 'flex ' : 'hidden'}`}>
                                         <AddressMapOpen
                                             message={<DistanceCalculator
@@ -99,16 +101,14 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                 <div className="flex flex-col gap-1 truncate">
                     <Typography
                         variant={textSize}
-                        color="blue-gray"
+                        color="gray"
                         className="border-b border-blue-gray-200 pr-4  ">
                         {profile?.firstName} {profile?.lastName}
                     </Typography>
-                    <div
-                        className={`!text-small text-blue-gray-500  !line-clamp-2 pr-4`}>
+                    <div className={`text-blue-gray-500 !line-clamp-2 pr-4`}>
                         {userDiv?.GroupUser?.map((group: GroupUser, index: number) =>
                             <Typography
-                                variant={textSize}
-                                className={` font-light" ${texteSize2} !line-clamp-1`}
+                                className={`font-light ${texteSize2} !line-clamp-1`}
                                 key={index} >
                                 {' ⌖ ' + group.Group?.name.split(':')[0]}
                             </Typography>)}

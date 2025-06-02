@@ -77,7 +77,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                     group={event.Group}
                 />
                 <Typography
-                    className="leading-[1.3rem] pt-1 !line-clamp-2"
+                    className="leading-[1.3rem] pt-1 !line-clamp-1"
                     color="blue-gray">
                     {description}
                 </Typography>
@@ -91,7 +91,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             title={`ajouter a mon agenda  : ${title}`}
                             bg={true}
                             size='lg'
-                            style={`${Igo ? "bg-cyan-200 saturate-[0.9]" : "!bg-gray-300"} top-1 bg-opacity-90  left-0 absolute hover:z-50`}
+                            style={`${Igo ? "!bg-cyan-200 saturate-[0.7] brightness-[1.1]" : "!bg-gray-300"} top-1 bg-opacity-90  left-0 absolute hover:z-50`}
                             color={Igo ? "cyan" : "gray"} />
                         <AvatarStack avatarDatas={event.Participants} />
                     </div>
