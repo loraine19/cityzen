@@ -105,7 +105,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             <Input
                                 size='md'
                                 icon={
-                                    <Icon onClick={() => toggleInputStyle(passWordInput2, setPassWordInput2)}
+                                    <Icon onClick={() =>
+                                        toggleInputStyle(passWordInput2, setPassWordInput2)}
                                         icon={passWordInput2.icon}
                                         size='2xl'
                                         style='!-mt-2 -ml-4' />

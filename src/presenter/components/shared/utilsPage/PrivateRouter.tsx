@@ -9,7 +9,7 @@ export const PrivateRoute = () => {
     if (typeof isLogged === 'boolean' && (isLoggedIn !== isLogged)) setIsLoggedIn(isLogged);
 
     const userName = user?.Profile?.firstName ?? 'Bonjour'
-    if (!isLoggedIn || !isLogged) {
+    if (!isLoggedIn && !isLogged) {
         return <Navigate to={`/signin?msg=${userName}, vous n'etes pas connecté `} />;
     }
     return <Outlet />;
