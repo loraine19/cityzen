@@ -3,10 +3,10 @@ import { useUserStore } from '../../../../application/stores/user.store';
 import Cookies from 'js-cookie';
 
 export const PrivateRoute = () => {
-    const { isLoggedIn, user, setIsLoggedIn } = useUserStore((state) => state)
+    const { isLoggedIn, user } = useUserStore((state) => state)
     const isLoggedCookie = Cookies.get('isLogged');
     const isLogged = isLoggedCookie === 'true' ? true : false
-    if (typeof isLogged === 'boolean' && (isLoggedIn !== isLogged)) setIsLoggedIn(isLogged);
+    // if (typeof isLogged === 'boolean' && (isLoggedIn !== isLogged)) setIsLoggedIn(isLogged);
 
     const userName = user?.Profile?.firstName ?? 'Bonjour'
     if (!isLoggedIn && !isLogged) {
