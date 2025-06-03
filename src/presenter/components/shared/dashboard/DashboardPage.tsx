@@ -15,7 +15,6 @@ import { ElementNotif } from "../../../../domain/entities/Notif";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { useAlertStore } from "../../../../application/stores/alert.store";
 import { AvatarUser } from "../../common/AvatarUser";
-import { ProfileView } from "../../../views/viewsEntities/profileViewEntity";
 import NotifDiv from "../../common/NotifDiv";
 
 export default function DashboardPage() {
@@ -26,8 +25,7 @@ export default function DashboardPage() {
     useEffect(() => {
         !user ? setIsLoggedIn(false) : setIsLoggedIn(true);
         !user.Profile && fetchUser()
-        const test = new ProfileView(user?.Profile);
-        console.log('test profile', test);
+
     }, [user])
     const navigate = useNavigate();
 
@@ -127,7 +125,7 @@ export default function DashboardPage() {
                                     color="amber"
                                     size="md"
                                     fill bg
-                                    style="!text-[1.3rem]  !font-extrabold"
+                                    style="!text-[1.1rem] pt-[4px] !font-extrabold"
                                     title={` vous avez ${user?.Profile?.points} pts`} />
                                 <LogOutButton size="md" />
                             </div>
@@ -252,8 +250,8 @@ export default function DashboardPage() {
                                                             isLoading={isLoadingMap}
                                                             refetch={refetchMap} />
                                                         : <Icon
-                                                            icon="edit"
-                                                            fill
+                                                            icon="add"
+                                                            fill bg
                                                             color="orange"
                                                             title="ajouter votre adresse"
                                                             onClick={() => navigate('/myprofile#address')} />

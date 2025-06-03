@@ -6,16 +6,13 @@ export const PrivateRoute = () => {
     const { isLoggedIn, user, setIsLoggedIn } = useUserStore((state) => state)
     const isLoggedCookie = Cookies.get('isLogged');
     const isLogged = isLoggedCookie === 'true' ? true : false
-    if (isLoggedIn !== isLogged) setIsLoggedIn(isLogged);
+    if (typeof isLogged === 'boolean' && (isLoggedIn !== isLogged)) setIsLoggedIn(isLogged);
 
     const userName = user?.Profile?.firstName ?? 'Bonjour'
-    if (isLoggedIn || isLogged) {
-        return (
-            <Outlet />
-        )
+    if (!isLoggedIn || !isLogged) {
+        return <Navigate to={`/signin?msg=${userName}, vous n'etes pas connecté `} />;
     }
-
-    else return <Navigate to={`/signin?msg=${userName}, vous n'etes pas connecté `} />;
+    return <Outlet />;
 };
 
 

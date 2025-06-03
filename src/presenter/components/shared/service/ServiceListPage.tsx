@@ -15,7 +15,7 @@ import { serviceCategoriesS } from "../../../constants";
 import NotifDiv from "../../common/NotifDiv";
 
 export default function ServicesPage() {
-    const [notif, setNotif] = useState<string>('...');
+    const [notif, setNotif] = useState<string>('');
     const [tabSelected] = useState<string>('');
     const [searchCat, setSearchCat] = useState<Label>({ label: 'tous', value: '' });
     const [mine, setMine] = useState<boolean>(false);
@@ -124,7 +124,7 @@ export default function ServicesPage() {
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
-            case ((services?.lenght || !services) && !isLoading): setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
+            case (count === 0 || !services): setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
             case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
             default: setNotif('');
         }
@@ -202,13 +202,14 @@ export default function ServicesPage() {
                         search={search} />
                 }
 
+                <SubHeader
+                    qty={count}
+                    type={`services ${filterName()} ${categoryName()}`} />
                 {notif &&
                     <NotifDiv
                         notif={notif}
                         isLoading={isLoading}
-                        refetch={refetch} />}  <SubHeader
-                    qty={count}
-                    type={`services ${filterName()} ${categoryName()}`} />
+                        refetch={refetch} />}
             </div>
             {isLoading ?
                 <SkeletonGrid />
@@ -242,6 +243,8 @@ export default function ServicesPage() {
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
                         handleScroll={() => handleScroll()} />
+
+
                 </section>}
         </main>
     );
