@@ -20,13 +20,9 @@ export class EventView extends Event {
     toogleParticipate: () => Promise<EventView | any>;
     image: string = '';
 
-
-
-    // Example usage: call this.alert.error('message') or this.alert.success('message')
-
     constructor(event: Event, userId: number) {
         super(event)
-        if (!event) {
+        if (!event || !event.id) {
             setTimeout(() => {
                 throw new Error('Impossible de récupérer l\'événement')
             }, 1000);
@@ -45,10 +41,8 @@ export class EventView extends Event {
         this.toogleParticipate = async () => {
             await DI.resolve('toogleParticipantUseCase').execute(event, event.id, userId);
             const updatedEvent = await DI.resolve('getEventByIdUseCase').execute(event.id);
-
-            throw new Error('Événement non trouvé après la mise à jour');
-
-            return new EventView(updatedEvent, userId)
+            if (!updatedEvent) throw new Error('Impossible de mettre à jour la participation à l\'événement');
+            return new EventView(updatedEvent, userId);
         }
     }
 

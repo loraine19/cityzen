@@ -1,40 +1,21 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useUserStore } from '../../../../application/stores/user.store';
-import { cryptedCookie } from '../../../../infrastructure/services/cookiService';
-import { useEffect, useState } from 'react';
-import { LoadingPage } from './LoadingPage';
+import Cookies from 'js-cookie';
 
 export const PrivateRoute = () => {
-    const cryptedStorage = new cryptedCookie();
-    const { isLoggedIn, user } = useUserStore((state) => state)
-    const userJson = cryptedStorage.getItem('user')
-    let state: any = false
-    if (userJson) {
-        const userJsonClean = JSON.parse(userJson)
-        state = userJsonClean?.state
-    }
+    const { isLoggedIn, user, setIsLoggedIn } = useUserStore((state) => state)
+    const isLoggedCookie = Cookies.get('isLogged');
+    const isLogged = isLoggedCookie === 'true' ? true : false
+    if (isLoggedIn !== isLogged) setIsLoggedIn(isLogged);
 
     const userName = user?.Profile?.firstName ?? 'Bonjour'
-
-    if (isLoggedIn || state?.isLoggedIn || window.location.pathname.includes('/sign')) {
+    if (isLoggedIn || isLogged) {
         return (
-
             <Outlet />
         )
     }
 
-    const [shouldRedirect, setShouldRedirect] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setShouldRedirect(true), 3000); // 3s delay
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (!shouldRedirect) {
-        return <LoadingPage />;
-    }
-
-    return <Navigate to={`/signin?msg=${userName}, vous n'etes pas connecté `} />;
+    else return <Navigate to={`/signin?msg=${userName}, vous n'etes pas connecté `} />;
 };
 
 

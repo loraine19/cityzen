@@ -25,6 +25,8 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                     <PopoverHandler>
                         <div className={`relative mb-1`}>
                             <AvatarUser
+                                style="scale-[0.9] -mb-1 "
+                                avatarStyle=""
                                 Profile={profile}
                                 avatarSize={size} />
                             <OnlineDot

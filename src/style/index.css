@@ -57,7 +57,7 @@ main {
 
 section,
 .Section {
-    @apply flex flex-col overflow-y-auto flex-1 px-[1%];
+    @apply flex flex-col overflow-y-auto flex-1 px-[1%] md:px-[5%] lg:px-[2%];
     gap: 0.2rem;
     min-height: 0;
 }
@@ -196,7 +196,7 @@ header {
 }
 
 .w-respLarge {
-    @apply w-full my-0 mx-auto lg:max-w-[52rem] max-w-[calc(100vw-2rem)];
+    @apply w-full my-0 mx-auto lg:max-w-[60rem] max-w-[calc(100vw-2rem)];
 }
 
 /* CARD */
@@ -210,7 +210,11 @@ header {
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !min-h-[10.5rem] max-h-[50%] !shadow-md fadeIn;
+    @apply flex flex-1 !min-h-[10.5rem]  !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
+}
+
+.FixCardHeaderSmall {
+    @apply flex flex-1 !min-h-[10.5rem]  !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
 }
 
 .FixCardHeaderNoImage {
@@ -258,6 +262,7 @@ header {
     background-position: center;
     background-color: #a5f3fc;
 }
+
 .icon .thin {
     font-variation-settings: "wght" 100 !important;
 }

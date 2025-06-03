@@ -163,23 +163,18 @@ export default function EventListPage() {
             {view === "view_agenda" &&
                 <>
                     {isLoading ?
-
-                        <SkeletonGrid />
-                        :
+                        <SkeletonGrid /> :
                         <section
                             ref={divRef}
                             onScroll={handleScroll}
                             className="Grid ">
-
                             {events.map((event: EventView, index: number) => (
-                                <div
-                                    className="SubGrid "
+                                <div className="SubGrid "
                                     key={event.id}
                                     style={{
                                         animationDelay: `${index * 80}ms`,
                                         animationFillMode: 'both'
-                                    }}
-                                >
+                                    }}  >
                                     <EventCard
                                         event={event}
                                         change={change}
@@ -193,7 +188,6 @@ export default function EventListPage() {
                                 handleScroll={handleScroll} />
                         </section>}
                 </>
-
             }
             {view === "event" && !isLoading &&
                 <section>

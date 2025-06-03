@@ -61,9 +61,9 @@ function App() {
     useEffect(() => { getColor(window.location.pathname) }, [window.location.pathname]);
 
     return (
-        <BrowserRouter>
-            <div className={`App ${color}`}>
-                <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
+        <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
+            <BrowserRouter>
+                <div className={`App ${color}`}>
                     <Suspense fallback={<LoadingPage />}>
                         <Routes>
                             {/* Public routes */}
@@ -130,11 +130,11 @@ function App() {
                             </Route>
                         </Routes>
                     </Suspense>
-                </ErrorBoundary>
-                <AlertModal values={alertValues ?? errorValues} />
-                <ReactQueryDevtools />
-            </div>
-        </BrowserRouter>
+                    <AlertModal values={alertValues ?? errorValues} />
+                    <ReactQueryDevtools />
+                </div>
+            </BrowserRouter>
+        </ErrorBoundary>
     );
 }
 

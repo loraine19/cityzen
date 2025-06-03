@@ -7,7 +7,7 @@ export class NotifView extends Notif {
     update: string;
     typeS: string = ''
     constructor(notif: Notif) {
-        if (!notif) throw new Error('Impossible de récupérer les éléments');
+        if (!notif) throw new Error('Impossible de récupérer les notifications');
         super(notif);
         this.link = (notif?.link ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         this.typeS = PathElement[notif?.type as unknown as keyof typeof PathElement]

@@ -14,8 +14,11 @@ export function AvatarStack(props: AvatarStackProps) {
             {avatarDatas?.map((Participant: Participant, index) =>
                 <Popover key={index} >
                     <PopoverHandler>
-                        <div> <AvatarUser Profile={Participant.User?.Profile} avatarSize={'sm'}
-                            avatarStyle="border-2 !h-11 !w-11 border-white hover:z-10 focus:z-10" />
+                        <div className="relative hover:!z-10">
+                            <AvatarUser
+                                Profile={Participant.User?.Profile}
+                                avatarSize={'sm'}
+                                avatarStyle="border-2 !h-[2.7rem] !w-[2.7rem] !border-white !hover:z-10 !focus:z-10" />
                         </div>
                     </PopoverHandler>
                     <PopoverContent className="!z-[1000]  !ml-24 !py-2">
@@ -33,9 +36,9 @@ export function AvatarStack(props: AvatarStackProps) {
                                 />
                                 <div className="relative">
 
-                                    <AvatarUser Profile={Participant.User?.Profile} avatarSize={'sm'}
-
-                                        avatarStyle="BgUser border-blue-gray-500 " />
+                                    <AvatarUser
+                                        Profile={Participant.User?.Profile} avatarSize={'sm'}
+                                        avatarStyle="border-2 border-white scale-90" />
                                     <OnlineDot id={Participant?.userId} />
                                 </div>
                             </div>
@@ -47,8 +50,9 @@ export function AvatarStack(props: AvatarStackProps) {
                                 <Typography
                                     variant="small"
                                     className="font-normal text-blue-gray-500  border-t border-blue-gray-50 pt-2">
-                                    {Participant.User?.GroupUser?.map((group) =>
-                                        <p className="!line-clamp-1">⌖ {group.Group.name.split(':')[0]}</p>)}
+                                    {Participant.User?.GroupUser?.map((group, index) =>
+                                        <p key={index}
+                                            className="!line-clamp-1">⌖ {group.Group.name.split(':')[0]}</p>)}
                                 </Typography>
                             </div>
                         </div>

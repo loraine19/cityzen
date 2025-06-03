@@ -18,7 +18,7 @@ export const errorValues: AlertValues = {
         <Icon
             bg
             fill
-            style='flex-0 !pb-2 shadow-orange shadow-md '
+            style='flex-0  shadow-orange shadow-md '
             icon="sync_problem"
             size="4xl"
             color="orange"

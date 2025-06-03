@@ -1,4 +1,4 @@
-import { Card, CardHeader, Avatar, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
+import { Card, CardHeader, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
@@ -9,6 +9,7 @@ import { ImageBtn } from "../../../common/ImageBtn";
 import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
 import { ListGroup } from "../../myInfos/ListGroup";
+import { AvatarUser } from "../../../common/AvatarUser";
 
 type ProfileFormProps = {
     formik: any,
@@ -18,7 +19,7 @@ type ProfileFormProps = {
 }
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance, setMailSub, setAddress }) => {
-    const [imgBlob, setImgBlob] = useState<string | Blob>(formik?.values?.image ?? '../../image/person.svg');
+    const [imgBlob, setImgBlob] = useState<string | Blob>(formik?.values?.image ?? '');
     const { user } = useUserStore()
     const [newSkill, setNewSkill] = useState<string | undefined>()
     const [skillList, setSkillList] = useState<string[]>(formik.values?.skills?.split(',') || [])
@@ -48,13 +49,15 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                         <ImageBtn
                             setImgBlob={setImgBlob}
                             formik={formik}
-                            imgDef="../../image/person.svg"
                             className="-ml-20 " />
-                        <Avatar
-                            onError={(e) => e.currentTarget.src = "/image/person.svg"}
-                            src={imgBlob as string ?? "../../image/person.svg"}
-                            alt={formik.values.firstName ?? 'avatar'}
-                            className={"shadow-md BgUser  !rounded-full !h-[5rem] !w-[5rem] mb-1"} />
+
+                        <AvatarUser
+                            Profile={{
+                                firstName: formik.values.firstName, image: imgBlob as string,
+                                userId: user?.id || 0
+                            } as any}
+                            avatarSize={'lg'}
+                            avatarStyle="shadow-md   !rounded-full !h-[5rem] !w-[5rem] mb-1" />
 
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
                             <Typography
@@ -86,13 +89,17 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                     </CardHeader>
                     <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-1.5 mb-2 overflow-auto !max-h-[calc(100vh-18rem)]">
                         <Input
-                            label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"} name="firstName"
+                            label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"}
+                            name="firstName"
                             variant="standard"
-                            onChange={formik.handleChange} value={formik.values.firstName}
+                            onChange={formik.handleChange}
+                            value={formik.values.firstName}
                             error={formik.errors.firstName} />
                         <Input
                             label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"}
-                            name="lastName" variant="standard" onChange={formik.handleChange} value={formik.values.lastName}
+                            name="lastName" variant="standard"
+                            onChange={formik.handleChange}
+                            value={formik.values.lastName}
                             error={formik.errors.lastName} />
                         <Input
                             label={formik.errors.phone ? formik.errors.phone as string : "Télephone"}

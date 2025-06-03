@@ -32,7 +32,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         if (this.props.retryCount < 3) {
             this.setState({ error });
             console.error('retrying...' + this.props.retryCount, error.message);
-
             this.props.onRetry();
         }
         else {
@@ -45,8 +44,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     render() {
 
         let errorMessage = this.state.error?.message;
-
-
 
         switch (true) {
             case (errorMessage?.includes('Network Error') || errorMessage?.includes('Failed to fetch')):
@@ -121,7 +118,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 element: <div className="items-center text-center pb-8 flex flex-col gap-4">
                     <Typography
                         variant="lead">
-                        {errorMessage ?? 'Une erreur inconnue s\'est produite'},
+                        {errorMessage ?? 'Une erreur inconnue s\'est produite'}
                     </Typography>
                     {pathBack && <>
                         <Icon

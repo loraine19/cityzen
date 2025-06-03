@@ -42,14 +42,14 @@ export const formatDateForDB = (date: any) => (new Date(date).toISOString().slic
 export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | GroupView | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
-    const { setOpen, open } = useAlertStore(state => state)
+    const { setOpen, open, } = useAlertStore(state => state)
     const navigate = useNavigate()
+    const [notifAlert, setNotifAlert] = useState<string>('');
 
     'title' in element ? title = element.title ?? 'litige' : 'litige';
     'serviceId' in element && (id = element.serviceId);
     'targetId' in element && (id = element.targetId);
     'id' in element && (id = element.id);
-    const [notif, setNotif] = useState<string>('');
 
     const actions = [
         {
@@ -60,13 +60,18 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
             body: "Voulez-vous vraiment supprimer " + title + " ?",
             function: async () => {
                 const data = await deleteRoute(id);
-                if (!data) setNotif('Erreur lors de la suppression');
+                if (!data) {
+                    setOpen(true);
+                    setNotifAlert('Impossible de supprimer ' + title);
+                }
+
                 else {
-                    setOpen(!open);
+                    setNotifAlert(title + ' supprimé avec succès');
+                    setTimeout(() => setOpen(!open), 2000);
                     (navigate(`/${type}`))
                 }
             },
-            notif: notif,
+            notif: notifAlert,
         },
         {
             iconImage: 'edit',

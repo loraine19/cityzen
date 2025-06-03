@@ -15,6 +15,8 @@ import { ElementNotif } from "../../../../domain/entities/Notif";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { useAlertStore } from "../../../../application/stores/alert.store";
 import { AvatarUser } from "../../common/AvatarUser";
+import { ProfileView } from "../../../views/viewsEntities/profileViewEntity";
+import NotifDiv from "../../common/NotifDiv";
 
 export default function DashboardPage() {
 
@@ -24,6 +26,8 @@ export default function DashboardPage() {
     useEffect(() => {
         !user ? setIsLoggedIn(false) : setIsLoggedIn(true);
         !user.Profile && fetchUser()
+        const test = new ProfileView(user?.Profile);
+        console.log('test profile', test);
     }, [user])
     const navigate = useNavigate();
 
@@ -243,12 +247,10 @@ export default function DashboardPage() {
                                                 </Typography>
                                                 {
                                                     user.Profile?.Address ?
-                                                        <Icon
-                                                            icon="refresh"
-                                                            fill bg
-                                                            color="cyan"
-                                                            title="voir les services"
-                                                            onClick={() => refetchMap()} />
+                                                        <NotifDiv
+                                                            notif={'impossible de charger la carte, veuillez réessayer'}
+                                                            isLoading={isLoadingMap}
+                                                            refetch={refetchMap} />
                                                         : <Icon
                                                             icon="edit"
                                                             fill

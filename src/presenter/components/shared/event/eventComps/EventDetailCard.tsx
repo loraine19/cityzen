@@ -22,7 +22,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
     return (
         <div className="DetailCardDiv">
             <Card className="w-respLarge FixCard !h-full">
-                <CardHeader className="FixCardHeader">
+                <CardHeader className="FixCardHeader  ">
                     <div className="ChipDiv flex-col justify-between !h-full">
                         <div className="flex w-full items-center justify-between gap-2">
                             <Chip
@@ -60,9 +60,9 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                         type='evenement'
                         group={Group}
                     />
-                    <div className="flex flex-1 gap-x-3 py-1.5 md:flex-row">
-                        <div className="relative flex flex-col flex-auto overflow-auto">
-                            <div className="h-max break-all absolute ">
+                    <div className="flex  flex-1 gap-x-3 py-1.5 flex-col !justify-evenly sm:flex-row">
+                        <div className="relative flex  flex-col h-full sm:min-w-[50%] lg:min-w-[60%] overflow-auto">
+                            <div className="min-h-max  break-all absolute ">
                                 <Link
                                     to={agendaLink as string}
                                     target="_blank" rel="noopener noreferrer"
@@ -75,12 +75,12 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                     ajouter a mon agenda
                                 </Link>
                                 <Typography
-                                    className="leading-[1.3rem] break-normal">
+                                    className="leading-[1.3rem] h-full min-h-max  break-normal">
                                     {description}
                                 </Typography>
                             </div>
                         </div>
-                        <div className=" !w-full !mt-1 flex-1 rounded-full">
+                        <div className="  min-h-[60%] lg:-mt-12 !w-full lg:h-[calc(100%+3rem)] flex-1 rounded-full">
                             {Address ?
                                 <AddressMapOpen
                                     address={Address}

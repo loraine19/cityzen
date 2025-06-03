@@ -150,7 +150,7 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
                         data-cy={icon}
                         title={title}
                         className={`${classIcon} `}>
-                        {searchIcon(icon, fill)}
+                        <span>{searchIcon(icon, fill)}</span>
                     </span>
             }
         </div>)

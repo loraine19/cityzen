@@ -13,7 +13,5 @@ export class ProfileView extends Profile {
         this.addressString = `${this.Address.address} ${this.Address.zipcode} ${this.Address.city}`
         this.fullName = `${this.firstName} ${this.lastName}`;
         //this.image = this.image.toString().split('=')[0];
-
-
     }
 }

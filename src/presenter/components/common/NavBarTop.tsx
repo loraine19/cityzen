@@ -22,7 +22,6 @@ export default function NavBarTop() {
         { icon: "person_edit", text: "Modifier mon profil", onClick: () => navigate('/myprofile'), color: "teal" },
         { icon: 'groups', text: "Groupes", onClick: () => navigate('/groupe'), color: "green" },
         { icon: 'diversity_3', text: "Conciliation", onClick: () => navigate('/conciliation'), color: 'orange' },
-
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null, color: 'amber', style: 'hover:!bg-white' },
         { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => setNavBottom(!navBottom), color: 'blue-gray' },
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t ", color: "red" },
@@ -51,8 +50,9 @@ export default function NavBarTop() {
                             <MenuHandler className="relative h-max min-w-max z-50  flex items-center  cursor-pointer">
                                 <div className="flex items-center relative">
                                     <AvatarUser
-                                        avatarStyle="!border-2 !border-white  "
-                                        avatarSize={'md'}
+                                        style=" "
+                                        avatarStyle="!w-12 !h-12 !text-[1.7rem] "
+                                        avatarSize={'sm'}
                                         Profile={user?.Profile} />
                                     <OnlineDot
                                         className="!bottom-0 !-right-1"

@@ -30,7 +30,7 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAProps) {
     }
 
 
-    const { setAlertValues, setOpen } = useAlertStore(state => state)
+    const { setAlertValues, setOpen, } = useAlertStore(state => state)
 
     useEffect(() => {
         setAlertValues({
@@ -42,6 +42,7 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAProps) {
             element: buttons[index]?.body as string,
             disableConfirm: false,
             confirmString: 'Confirmer',
+            notif: '',
         })
     }, [index]);
 

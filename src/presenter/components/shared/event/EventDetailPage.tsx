@@ -9,6 +9,9 @@ import { Skeleton } from '../../common/Skeleton';
 import { GenereMyActions } from '../../../views/viewsEntities/utilsService';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 import { EventStatus } from '../../../../domain/entities/Event';
+import { EventView } from '../../../views/viewsEntities/eventViewEntities';
+import { useEffect, useState } from 'react';
+import NotifDiv from '../../common/NotifDiv';
 
 
 export default function EventDetailPage() {
@@ -21,10 +24,24 @@ export default function EventDetailPage() {
     const { event, isLoading, refetch, error } = eventIdViewModelFactory(idS);
     const deleteEvent = async (id: number) => await DI.resolve('deleteEventUseCase').execute(id);
     const myActions = event && GenereMyActions(event, "evenement", deleteEvent)
+    const [eventInit, setEventInit] = useState<EventView>(event)
 
     //// HANDLE API ERROR
-    const { setOpen, open, } = useAlertStore(state => state);
+    const { setOpen, open } = useAlertStore(state => state);
     const handleOpen = () => setOpen(!open)
+    const [notif, setNotif] = useState<string>('');
+    const [notifAlert, setNotifAlert] = useState<string>('');
+
+
+    useEffect(() => {
+        if (!isLoading && event && !eventInit) {
+            setEventInit(event);
+        }
+        if (error) {
+            setNotif(error.message);
+        }
+
+    }, [isLoading, error, eventInit]);
 
     const buttons: Action[] = [
         {
@@ -35,17 +52,20 @@ export default function EventDetailPage() {
             body: event?.Igo ? `Voulez-vous vraiment annuler votre participation à ${event?.title}` :
                 `Confirmer votre participation à ${event?.title}`,
             function: async () => {
-                try {
-                    const data = await event?.toogleParticipate();
-                    console.log(data);
-                    if (data) {
-                        await refetch();
-                        handleOpen();
-                    }
+                const data = await event?.toogleParticipate();
+                console.log(data);
+                if (data) {
+                    setNotifAlert(data.Igo ? 'Vous avez annulé votre participation à l\'événement' : 'Vous participez à l\'événement');
+                    setTimeout(() => { setNotifAlert('') }, 5000);
+                    setEventInit(data);
+                    await refetch();
+                    handleOpen();
+                    console.log("event", notifAlert)
                 }
-                catch (e) {
-                    console.error(e);
+                else {
+                    setNotifAlert('Impossible de mettre à jour votre participation à l\'événement');
                 }
+
             }
         }
     ];
@@ -58,6 +78,7 @@ export default function EventDetailPage() {
                     type={`évenement ${event?.label ?? ''}`}
                     place={` ${event?.Address?.address ?? ''} ${event?.Address?.city ?? ''}`}
                     closeBtn />
+
             </div>
             <section>
                 {!isLoading && event ?
@@ -65,10 +86,14 @@ export default function EventDetailPage() {
                         EventLoad={event}
                         refetch={refetch} /> :
                     <Skeleton />}
+                {notif && <NotifDiv
+                    isLoading={isLoading}
+                    refetch={refetch}
+                    notif={notif}
+                />}
             </section>
         </main>
             <footer >
-
                 {(!isLoading && event && !error) && <>
                     {event?.mine && !isLoading ?
                         <CTAMines

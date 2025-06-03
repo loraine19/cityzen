@@ -91,7 +91,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                             title={`ajouter a mon agenda  : ${title}`}
                             bg={true}
                             size='lg'
-                            style={`${Igo ? "!bg-cyan-200 saturate-[0.7] brightness-[1.1]" : "!bg-gray-300"} top-1 bg-opacity-90  left-0 absolute hover:z-50`}
+                            style={`${Igo ? "!bg-cyan-200 saturate-[0.7] brightness-[1.05]" : "!bg-gray-300"} !scale-[0.97] top-1 bg-opacity-90 !outline outline-white  left-0 absolute hover:z-50`}
                             color={Igo ? "cyan" : "gray"} />
                         <AvatarStack avatarDatas={event.Participants} />
                     </div>

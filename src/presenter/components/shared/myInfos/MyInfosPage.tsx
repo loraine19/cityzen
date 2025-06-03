@@ -38,9 +38,10 @@ export default function MyInfosPage() {
         const { blob, ...rest } = formik.values;
         const updateData = new ProfileDTO({ assistance, ...rest })
         const updated = await updateProfile(updateData, address)
-        if (updated.error) {
+        console.log("updated", updated)
+        if (!updated || updated?.error) {
             setOpen(false)
-            setAlertValues({ ...updated.error })
+            throw new Error(updated?.error || "Une erreur est survenue lors de la mise à jour du profil");
         }
         else {
             navigate("/");

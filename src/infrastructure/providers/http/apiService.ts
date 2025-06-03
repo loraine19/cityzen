@@ -114,6 +114,7 @@ export class ApiService implements ApiServiceI {
                 break;
             case 401:
                 this.logWithTime('token expired 401');
+                //  throw new Error('Token expired, please refresh the page');
 
                 const refreshSuccess = await this.refreshAccess();
                 if (refreshSuccess) {
