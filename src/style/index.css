@@ -210,11 +210,11 @@ header {
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !min-h-[10.5rem]  !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
+    @apply flex flex-1 !min-h-[10rem]  !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
 }
 
 .FixCardHeaderSmall {
-    @apply flex flex-1 !min-h-[10.5rem]  !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
+    @apply flex flex-1 !min-h-[9rem] !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[30%]  !shadow-md fadeIn;
 }
 
 .FixCardHeaderNoImage {

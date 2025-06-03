@@ -55,7 +55,8 @@ export default function VoteEditPage() {
     //// HANDLE ERROR
     useEffect(() => {
         if (survey && pool) target === "sondage" ? setInitialValues(survey) : setInitialValues(pool)
-        if (initialValues?.userId !== user.id) throw new Error("Vous n'avez pas le droit de modifier ce sondage/cagnotte");
+
+        if (!isLoading && !isLoadingPool && pool?.userId !== user.id && survey?.userId !== user.id) throw new Error("Vous n'avez pas le droit de modifier ce sondage/cagnotte");
     }, [isLoading, isLoadingPool])
 
     const updateFunction = async () => {

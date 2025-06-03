@@ -36,7 +36,7 @@ export class PoolSurveyView {
 
     constructor
         (base: Pool | Survey, user: User) {
-        if (!base) throw new Error('Impossible de récupérer le sondage ou le vote');
+        if (!base) throw new Error('Impossible de récupérer le sondage ou la cagnotte')
         if ('userIdBenef' in base) {
             Object.assign(this, base);
             this.flagged = false;

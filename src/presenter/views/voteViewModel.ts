@@ -57,7 +57,8 @@ export const poolIdViewModel = () => {
       queryFn: async () => await getPoolById.execute(id),
     })
 
-    const pool = userLoading || data ? new PoolSurveyView(data, user) : {} as PoolSurveyView;
+    console.log('voteview', data, isLoading, error, userLoading)
+    const pool = (!userLoading && data && !error && !isLoading) ? new PoolSurveyView(data, user) : {} as PoolSurveyView;
     return { pool, isLoading, error, refetch }
   }
 }
@@ -79,7 +80,7 @@ export const surveyIdViewModel = () => {
       queryFn: async () => await getSurveyById.execute(id),
     })
 
-    const survey = userLoading || data ? new PoolSurveyView(data, user) : {} as PoolSurveyView;
+    const survey = (!userLoading && !error && !isLoading && data) ? new PoolSurveyView(data, user) : {} as PoolSurveyView;
     return { survey, isLoading, error, refetch }
   }
 }

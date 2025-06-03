@@ -75,7 +75,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 }}
                             />
                         </div>
-                        <div className="flex  gap-4">
+                        <div className="w-respLarge flex flex-col lg:flex-row gap-2 py-2">
                             {(type === VoteTarget.POOL) ?
                                 <Select
                                     className="rounded-full shadow bg-white border-none capitalize"

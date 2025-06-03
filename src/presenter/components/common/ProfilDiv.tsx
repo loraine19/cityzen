@@ -20,12 +20,11 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
 
     return (
         <>
-            <div className={`realtive pl-1 mb-1 pb-0.5 truncate z-50 flex items-center px-0 gap-7`}>
+            <div className={`realtive pl-1  pb-0.5 truncate z-50 flex items-center px-0 gap-3`}>
                 <Popover placement="bottom-start">
                     <PopoverHandler>
-                        <div className={`relative mb-1`}>
+                        <div className={`relative mt-0.5 mb-0.5`}>
                             <AvatarUser
-                                style="scale-[0.9] -mb-1 "
                                 avatarStyle=""
                                 Profile={profile}
                                 avatarSize={size} />
@@ -35,11 +34,11 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                     </PopoverHandler>
                     <PopoverContent className=" w-auto !p-6 z-50 ">
                         <div className="flex gap-6  pb-2 ">
-                            <div className="mb-2 gap-4 ">
+                            <div className="relative gap-4 ">
                                 <Icon
                                     color='orange'
                                     fill bg
-                                    style="absolute !bg-orange-100 top-2 left-11  z-50"
+                                    style="absolute !bg-orange-100 -top-3 -right-4 z-50"
                                     size='sm'
                                     link={`/chat?with=${profile?.userId}`}
                                     title="Envoyer un message"

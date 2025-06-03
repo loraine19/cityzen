@@ -58,7 +58,7 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                     </Typography>
                 </div>
             </CardBody>
-            <CardFooter className="CardFooter   ">
+            <CardFooter className="CardFooter  ">
                 {!mines ?
                     <div className=" w-full truncate pl-2 -ml-2 ">
                         <ProfileDiv

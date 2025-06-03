@@ -28,7 +28,7 @@ export const AvatarUser = ({ Profile, avatarSize = '', avatarStyle = '', style =
             case 'md':
                 return '2xl';
             case 'sm':
-                return 'lg';
+                return 'md';
             default:
                 return 'md';
         }

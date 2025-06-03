@@ -23,24 +23,24 @@ export function AvatarStack(props: AvatarStackProps) {
                     </PopoverHandler>
                     <PopoverContent className="!z-[1000]  !ml-24 !py-2">
                         <div className="p-2 w-auto flex items-center gap-4 ">
-                            <div className="relative py-3 pr-2">
+                            <div className=" relative pt-2  pr-2">
                                 <Icon
                                     color='orange'
                                     fill
-                                    style="absolute  !bg-orange-100 top-0 -right-2.5  z-50  "
+                                    style="absolute !bg-orange-100 top-1 -right-1  z-50  "
                                     size='sm'
                                     link={`/chat?with=${Participant?.userId}`}
                                     bg
                                     title={`Envoyer un message à ${Participant.User?.Profile?.firstName}`}
                                     icon="sms"
                                 />
-                                <div className="relative">
-
+                                <div className="relative -ml-1 -mb-1 ">
                                     <AvatarUser
-                                        Profile={Participant.User?.Profile} avatarSize={'sm'}
+                                        Profile={Participant.User?.Profile}
+                                        avatarSize={'md'}
                                         avatarStyle="border-2 border-white scale-90" />
-                                    <OnlineDot id={Participant?.userId} />
-                                </div>
+
+                                </div><OnlineDot id={Participant?.userId} />
                             </div>
                             <div className="flex flex-col pl-2">
                                 <Typography

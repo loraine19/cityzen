@@ -33,7 +33,7 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                         place={PostCategory[formik.values.category as keyof typeof PostCategory] || ''}
                         closeBtn
                     />
-                    <div className="w-respLarge flex  gap-2">
+                    <div className="w-respLarge flex flex-col lg:flex-row gap-2 py-2">
                         <Select
                             className="rounded-full shadow bg-white border-none capitalize"
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
