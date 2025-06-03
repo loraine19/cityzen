@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ServiceCategory, ServiceFilter, ServiceSort, ServiceStepFilter } from "../../../../domain/entities/Service";
 import CheckCard from "../../common/CheckCard";
@@ -13,6 +13,8 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { ServiceView } from "../../../views/viewsEntities/serviceViewEntity";
 import { serviceCategoriesS } from "../../../constants";
 import NotifDiv from "../../common/NotifDiv";
+import { useUxStore } from "../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function ServicesPage() {
     const [notif, setNotif] = useState<string>('');
@@ -130,22 +132,34 @@ export default function ServicesPage() {
         }
     }, [isLoading, error, filter, step]);
 
+
     //// HANDLE SCROLL
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                hasNextPage && fetchNextPage()
-            }
-            else setIsBottom(false)
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
         }
-    }
+        handleScroll(params)
+    }, [divRef]);
+
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
 
     //// SORT LIST
-
     const sortList: SortLabel[] = [
         {
             label: "Publié le",
@@ -215,9 +229,8 @@ export default function ServicesPage() {
                 <SkeletonGrid />
                 : <section
                     ref={divRef}
-                    onScroll={() => handleScroll()}
+                    onScroll={() => { onScroll(); handleHide() }}
                     className="Grid">
-
                     {!customFilter ?
                         (services.map((service: ServiceView, index: number) => (
                             <div className="SubGrid" key={index}>
@@ -242,7 +255,7 @@ export default function ServicesPage() {
                     <LoadMoreButton
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
-                        handleScroll={() => handleScroll()} />
+                        handleScroll={() => onScroll()} />
 
 
                 </section>}

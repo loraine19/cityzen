@@ -155,3 +155,18 @@ export const generateDivObject = (element: any) => {
 }
 
 
+
+export const handleScroll = async (divRef: any, hasNextPage: boolean, fetchNextPage: any, setIsBottom: any, setHideNavBottom: any,) => {
+
+    const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+    console.log('scrollTop', scrollTop + clientHeight + 2 >= scrollHeight)
+    if (scrollTop + clientHeight + 2 >= scrollHeight) {
+        setIsBottom(true);
+        console.log('fetchNextPage', hasNextPage)
+        hasNextPage && await fetchNextPage()
+    } else setIsBottom(false)
+    // if (scrollTop > 100) setHideNavBottom(true)
+    ///  else setHideNavBottom(false);
+
+}
+

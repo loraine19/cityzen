@@ -1,15 +1,25 @@
 import { useLocation } from "react-router-dom"
 import { Icon } from "./IconComp"
 import { Typography } from "@material-tailwind/react"
-import { useNotificationStore } from "../../../application/stores/notification.store"
+import { useUxStore } from "../../../application/stores/ux.store"
 
 type SubHeaderProps = { type: string, qty?: (number | string), place?: any, closeBtn?: boolean, link?: string }
 export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeaderProps) {
 
-    const goBack = link ?? '/' + (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
+
+    const { color, hideNavBottom, setHideNavBottom } = useUxStore((state) => state);
+    let goBack = link ?? '/' + (new URLSearchParams(useLocation().pathname.split("/")[1])).toString().replace("=", '')
+
+    const parentDiv = (document.querySelector('#root > div > main > section') as HTMLElement) ?? undefined
+
+    const scrollToTop = () => {
+        if (parentDiv) {
+            parentDiv.scrollTo({ top: 0, behavior: 'smooth' });
+            setHideNavBottom(false);
+        }
+    }
 
 
-    const { color } = useNotificationStore((state) => state);
     const colorBorder = `border-b-[1px]  ${color !== 'gray' ? `border-${color ?? 'gray'}-500 ` : 'border-gray-500'}  border-opacity-40`;
     return (
         <div className={`flex w-full divider-y lg:px-[2.5%] px-[1%] pt-2.5 gap-4 justify-end lg:justify-between`}>
@@ -20,6 +30,14 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
 
                 </span>
             </Typography>
+            {hideNavBottom &&
+                <Icon
+                    icon="arrow_upward"
+                    color={color ?? 'gray'}
+                    size="sm"
+                    bg
+                    onClick={() => scrollToTop()}
+                    title="retour" />}
             {closeBtn &&
                 <Icon
                     icon="close"

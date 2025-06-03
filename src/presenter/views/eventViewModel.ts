@@ -7,6 +7,8 @@ import { EventView } from './viewsEntities/eventViewEntities';
 export const eventViewModel = () => {
   return (filter?: string, category?: string, sort?: string, reverse?: boolean) => {
 
+    console.log('eventViewModel called', { caller: (new Error().stack?.split('\n')[2] || '').trim() });
+
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
       refetchOnWindowFocus: false,
@@ -28,6 +30,8 @@ export const eventViewModel = () => {
     const userId = user?.id || 0
     const flat = data?.pages.flat().map(page => page.events).flat()
     const events = (userLoading || isLoading || !data) ? [] : flat?.map(event => new EventView(event, userId))
+
+    console.log('events', events)
 
     return {
       count,

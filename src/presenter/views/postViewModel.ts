@@ -4,6 +4,7 @@ import { PostView } from './viewsEntities/postViewEntities';
 
 export const postViewModel = () => {
   return (filter?: string, category?: string, sort?: string, reverse?: boolean) => {
+    console.log('eventViewModel called', { caller: (new Error()) });
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -28,6 +29,7 @@ export const postViewModel = () => {
     const flat = error || isLoading ? [] : data?.pages.flat().map(page => page.posts).flat()
     const posts = userLoading || isLoading || !flat ? [] : flat?.map(post => !post?.error && new PostView(post, userId))
 
+    console.log('postsViewModel', { count, posts, isLoading, error, hasNextPage })
     return {
       count,
       posts,
@@ -62,7 +64,7 @@ export const postIdViewModel = () => {
       queryFn: async () => await getPostById.execute(id),
     })
 
-    const post = (!error && !userLoading && !isLoading && data) ? new PostView(data, userId) : {} as PostView
+    const post = (!data || userLoading || isLoading || error) ? {} as PostView : new PostView(data, userId)
     return { post, isLoading, error, refetch }
   }
 

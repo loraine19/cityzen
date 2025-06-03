@@ -16,15 +16,18 @@ import { useNotificationStore } from "../../../../application/stores/notificatio
 import { useAlertStore } from "../../../../application/stores/alert.store";
 import { AvatarUser } from "../../common/AvatarUser";
 import NotifDiv from "../../common/NotifDiv";
+import { useUxStore } from "../../../../application/stores/ux.store";
 
 export default function DashboardPage() {
 
     //// USER & AUTORISATION
     const { user, fetchUser, setIsLoggedIn, navBottom } = useUserStore((state) => state);
+    const { setHideNavBottom } = useUxStore((state) => state);
     const modo = user?.GroupUser?.map(g => g.role).includes(Role.MODO) || false;
     useEffect(() => {
         !user ? setIsLoggedIn(false) : setIsLoggedIn(true);
         !user.Profile && fetchUser()
+        setHideNavBottom(false)
     }, [user])
     const navigate = useNavigate();
 
@@ -60,6 +63,8 @@ export default function DashboardPage() {
             } else setIsBottom(false)
         }
     }
+
+
 
     //// HANDLE NOTIFICATIONS ALERT
     const { setAlertValues, setOpen } = useAlertStore(state => state)

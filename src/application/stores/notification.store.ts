@@ -24,6 +24,7 @@ interface NotificationStore {
   setColor: (color: string) => void;
   getColor: (path?: string) => void;
 
+
 }
 
 const storage = new cryptedStorage();

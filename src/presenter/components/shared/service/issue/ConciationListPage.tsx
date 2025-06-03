@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import SubHeader from "../../../common/SubHeader";
 import TabsMenu from "../../../common/TabsMenu";
@@ -12,6 +12,8 @@ import { useUserStore } from "../../../../../application/stores/user.store";
 import { Role } from "../../../../../domain/entities/GroupUser";
 import { IssueFilter } from '../../../../../domain/entities/Issue';
 import { Icon } from "../../../common/IconComp";
+import { useUxStore } from "../../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../../application/useCases/utils.useCase";
 
 export default function ConciationListPage() {
     const [notif, setNotif] = useState<string>('');
@@ -73,17 +75,30 @@ export default function ConciationListPage() {
     }, [issues, isLoading, error, filter, category, count, ImModo]);
 
     //// HANDLE SCROLL
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                hasNextPage && fetchNextPage()
-            } else setIsBottom(false)
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
         }
-    }
+        handleScroll(params)
+    }, [divRef]);
+
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
 
     return (
         <main>
@@ -108,7 +123,7 @@ export default function ConciationListPage() {
                 <SkeletonGrid />
                 : <section
                     ref={divRef}
-                    onScroll={() => handleScroll()}
+                    onScroll={() => { onScroll(); handleHide() }}
                     className="Grid">
                     {
                         issues.map((issue: IssueView, index: number) => (
@@ -121,7 +136,7 @@ export default function ConciationListPage() {
                     <LoadMoreButton
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
-                        handleScroll={() => handleScroll()} />
+                        handleScroll={onScroll} />
                 </section>}
         </main>
     );

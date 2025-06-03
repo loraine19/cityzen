@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { EventCategory, EventFilter, EventSort } from "../../../../domain/entities/Event";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
 import SubHeader from "../../common/SubHeader";
@@ -15,6 +15,8 @@ import { eventCategories, eventCategoriesS } from "../../../constants";
 import { EventView } from "../../../views/viewsEntities/eventViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import NotifDiv from "../../common/NotifDiv";
+import { useUxStore } from "../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
@@ -30,11 +32,15 @@ export default function EventListPage() {
 
     const params = { filter: Params.get("filter"), category: Params.get("category") }
 
-    useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
+    useEffect(() => {
+        setCategory(params.category || ''); setFilter(params.filter || '')
+    }, []);
+
 
     //// FILTER TAB 
     const filterTab = async (value?: EventFilter) => {
         setParams({ filter: value as string || '', category: category });
+        console.log('filterTab called with value:', value);
         value !== filter && setCategory('')
         setFilter(value || '');
         value === EventFilter.MINE ? setMines(true) : setMines(false);
@@ -49,15 +55,6 @@ export default function EventListPage() {
         { label: "j'organise", value: EventFilter.MINE, result: () => filterTab(EventFilter.MINE) },
     ]
 
-    const change = async (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
-        const selectedCategory = typeof e !== "object" ?
-            e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), eventCategories).toLowerCase();
-        setCategory(selectedCategory);
-        setParams({ filter: filter as string || '', category: selectedCategory });
-        await refetch();
-    }
-
-
     const filterName = (): string => {
         switch (filter) {
             case EventFilter.MINE: return 'que j\'organise';
@@ -67,6 +64,15 @@ export default function EventListPage() {
         }
     }
 
+    //// HANDLE CATEGORY CHANGE
+    const change = async (e: string | React.ChangeEvent<HTMLSelectElement> | any) => {
+        const selectedCategory = typeof e !== "object" ?
+            e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), eventCategories).toLowerCase();
+        setCategory(selectedCategory);
+        setParams({ filter: filter as string || '', category: selectedCategory });
+        await refetch();
+    }
+
     //// NOTIFICATION
     useEffect(() => {
         switch (true) {
@@ -74,28 +80,45 @@ export default function EventListPage() {
             case (count === 0 && !isLoading): setNotif(`Aucun événement ${filterName()} trouvé`); break;
             default: setNotif('');
         }
-    }, [events, isLoading, error, filter, category]);
+    }, [isLoading, error, filter, category]);
 
     //// HANDLE VIEW CHANGE
     const switchClick = () => {
         setView(view === "view_agenda" ? "event" : "view_agenda");
         setCategory('');
         filterTab("" as EventFilter)
+        setHideNavBottom(view !== "event");
     }
+
 
     //// HANDLE SCROLL
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = async () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                hasNextPage && await fetchNextPage()
-            } else setIsBottom(false)
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
         }
-    }
+        handleScroll(params)
+    }, [divRef]);
 
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+
+
+    //// SORT LIST
     const sortList: any = [
         {
             label: 'créé le',
@@ -166,8 +189,12 @@ export default function EventListPage() {
                         <SkeletonGrid /> :
                         <section
                             ref={divRef}
-                            onScroll={handleScroll}
-                            className="Grid ">
+                            onScroll={() => {
+                                onScroll()
+                                handleHide()
+
+                            }}
+                            className="Grid">
                             {events.map((event: EventView, index: number) => (
                                 <div className="SubGrid "
                                     key={event.id}
@@ -185,7 +212,7 @@ export default function EventListPage() {
                             <LoadMoreButton
                                 isBottom={isBottom}
                                 hasNextPage={hasNextPage}
-                                handleScroll={handleScroll} />
+                                handleScroll={onScroll} />
                         </section>}
                 </>
             }

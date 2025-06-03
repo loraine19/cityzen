@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PostCategory, PostFilter, PostSort } from "../../../../domain/entities/Post";
 import { CategoriesSelect } from "../../common/CategoriesSelect";
@@ -15,15 +15,18 @@ import PostCard from "./PostComps/PostCard";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import { Icon } from "../../common/IconComp";
 import NotifDiv from "../../common/NotifDiv";
+import { useUxStore } from "../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function PostListPage() {
+
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
-
     const [sort, setSort] = useState<PostSort>(PostSort.CREATED_AT);
     const [reverse, setReverse] = useState<boolean>(true);
     const postViewModelFactory = DI.resolve('postViewModel');
-    const { posts, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = postViewModelFactory(filter, category, sort, reverse)
+    const { posts, isLoading, error, refetch, count, fetchNextPage, hasNextPage } = postViewModelFactory(filter, category, sort, reverse)
+
     const [notif, setNotif] = useState<string>('')
     const [mines, setMines] = useState<boolean>(false);
     const [view, setView] = useState(window.innerWidth > 768 ? "list" : "dashboard");
@@ -33,11 +36,12 @@ export default function PostListPage() {
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     useEffect(() => { setCategory(params.category ?? ''); setFilter(params.filter ?? ''); }, []);
 
+
     //// FILTER TAB
     const filterTab = async (value?: PostFilter) => {
         setParams({ filter: value as string ?? '', category });
         value !== filter && setCategory('')
-        setFilter(value || '');
+        setFilter(value || '')
         value === PostFilter.MINE ? setMines(true) : setMines(false);
         setParams({ filter: value as string ?? '', category })
         await refetch();
@@ -54,7 +58,7 @@ export default function PostListPage() {
             e.toUpperCase() : getValue(e.target.innerText.toLowerCase(), postCategories).toLowerCase();
         setCategory(selectedCategory);
         setParams({ filter: filter as string || '', category: selectedCategory });
-        await refetch();
+        await refetch()
     }
 
     //// NAMING
@@ -77,6 +81,7 @@ export default function PostListPage() {
     }, [isLoading, error, filter, category, sort, reverse, count]);
 
 
+    //// HANDLE VIEW
     useEffect(() => {
         const handleResize = () => setView(window.innerWidth > 768 ? "list" : "dashboard");
         window.addEventListener("resize", handleResize);
@@ -88,21 +93,35 @@ export default function PostListPage() {
         for (let i = 0; i < array?.length; i += 4)  arrayTotal.push(array.slice(i, i + 4))
         return arrayTotal;
     }
-
-    //// HANDLE SCROLL
-    const divRef = useRef(null);
-    const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                hasNextPage && fetchNextPage()
-            } else setIsBottom(false)
-        }
-    }
     const announcesToGrid = AnnouncesByFour(posts);
     const switchClick = () => setView(view === "dashboard" ? "list" : "dashboard");
+
+    //// HANDLE SCROLL
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
+    const divRef = useRef(null);
+    const [isBottom, setIsBottom] = useState(false);
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
+        }
+        handleScroll(params)
+    }, [divRef]);
+
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+
 
     //// SORT LIST
     const sortList = [
@@ -163,7 +182,12 @@ export default function PostListPage() {
                 </div>
                 <section
                     ref={divRef}
-                    onScroll={handleScroll}>
+                    onScroll={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onScroll();
+                        handleHide();
+                    }}>
                     {isLoading || !posts || error ?
                         <SkeletonGrid />
                         : <>
@@ -179,7 +203,9 @@ export default function PostListPage() {
                                 :
                                 <div className="Grid">
                                     {posts?.map((post: PostView, index: number) => (
-                                        <div className="SubGrid" key={index}>
+                                        <div
+                                            className="SubGrid"
+                                            key={index}>
                                             <PostCard
                                                 key={post.id}
                                                 post={post}
@@ -195,9 +221,8 @@ export default function PostListPage() {
                     <LoadMoreButton
                         color={'orange'}
                         isBottom={isBottom}
-                        hasNextPage={hasNextPage}
-                        handleScroll={handleScroll} />
-
+                        hasNextPage={true}
+                        handleScroll={onScroll} />
                 </section>
             </main>
         </>

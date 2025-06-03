@@ -120,18 +120,20 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                         variant="lead">
                         {errorMessage ?? 'Une erreur inconnue s\'est produite'}
                     </Typography>
-                    {pathBack && <>
-                        <Icon
-                            bg
-                            fill
-                            style='flex-0 !pb-2 shadow-orange shadow-md '
-                            icon="undo"
-                            size="4xl"
-                            color="orange"
-                            onClick={() => window.location.replace(`/${pathBack}`)} />
-                        <Typography>
-                            Vous pouvez retourner à la page précédente {pathBack}
-                        </Typography></>}
+                    {pathBack &&
+                        <>
+                            <Icon
+                                bg
+                                fill
+                                style='flex-0 !pb-2 shadow-orange shadow-md '
+                                icon="undo"
+                                size="4xl"
+                                color="orange"
+                                onClick={() => window.location.replace(`/${pathBack}`)} />
+                            <Typography>
+                                Vous pouvez retourner à la page précédente {pathBack}
+                            </Typography>
+                        </>}
                 </div>,
                 confirmString: 'Retour à l\'accueil',
                 disableConfirm: true,

@@ -67,6 +67,7 @@ import { GroupRepositoryImpl } from '../infrastructure/repositoriesImpl/GroupRes
 import { GroupApi } from '../infrastructure/providers/http/groupApi';
 import { DeleteGroupUserUseCase, GetGroupByIdUseCase, GetNearestGroupsUseCase, PostGroupUserUseCase, UpdateGroupUserUseCase } from '../application/useCases/group.usecase';
 import { groupIdViewModel, groupViewModel } from '../presenter/views/groupViewModel';
+import { UtilsUseCase } from '../application/useCases/utils.useCase';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -252,6 +253,11 @@ container.register({
     ///STORE 
     errorService: asClass(ErrorService),
     alertStoreRepository: asClass(AlertStoreRepositoryImpl),
+
+
+
+    ///UTILS
+    utils: asClass(UtilsUseCase),
 
 });
 

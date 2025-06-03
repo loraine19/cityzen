@@ -5,8 +5,10 @@ import { SkeletonGrid } from "../../common/Skeleton";
 import DI from "../../../../di/ioc";
 import { FlagView } from "../../../views/viewsEntities/flagViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import NotifDiv from "../../common/NotifDiv";
+import { useUxStore } from "../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 
 
@@ -28,21 +30,33 @@ export default function FlagPage() {
                 setNotif('')
         }
     }, [isLoading, error, count]);
+
+    //// HANDLE SCROLL
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            } else {
-                setIsBottom(false);
-            }
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
         }
-    }
+        handleScroll(params)
+    }, [divRef]);
+
+
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
 
     /////FILTER FUNCTIONS
     return (
@@ -60,7 +74,9 @@ export default function FlagPage() {
             </div>
             {isLoading ?
                 <SkeletonGrid small count={6} /> :
-                <section className="GridSmall ">
+                <section
+                    onScroll={() => { onScroll(); handleHide() }}
+                    className="GridSmall ">
                     {flags.map((element: FlagView, index: number) =>
                         <div className="SubGrid " key={'div' + index}>
                             <FlagCard
@@ -71,7 +87,7 @@ export default function FlagPage() {
                     <LoadMoreButton
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
-                        handleScroll={handleScroll} />
+                        handleScroll={onScroll} />
                 </section>}
         </main>
     )

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TabLabel } from "../../../../domain/entities/frontEntities";
 import CheckCard from "../../common/CheckCard";
@@ -13,6 +13,8 @@ import { PoolSurveyFilter, PoolSurveySort, PoolSurveyStep } from "../../../../do
 import { PoolSurveyView } from "../../../views/viewsEntities/poolSurveyViewEntity";
 import { VoteTarget } from "../../../../domain/entities/Vote";
 import NotifDiv from "../../common/NotifDiv";
+import { useUxStore } from "../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function VoteListPage() {
     const pageColor = 'orange'
@@ -118,18 +120,31 @@ export default function VoteListPage() {
     }, [isLoading, error, filter, step]);
 
     //// HANDLE SCROLL
-    const divRef = useRef(null)
-    const [isBottom, setIsBottom] = useState<boolean>(false);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                hasNextPage && fetchNextPage()
-            } else setIsBottom(false)
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
+    const divRef = useRef(null);
+    const [isBottom, setIsBottom] = useState(false);
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
         }
-    }
+        handleScroll(params)
+    }, [divRef]);
 
+
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
 
     return (
         <>
@@ -166,7 +181,7 @@ export default function VoteListPage() {
                     <SkeletonGrid /> :
                     <section
                         ref={divRef}
-                        onScroll={() => handleScroll()}
+                        onScroll={() => { onScroll(); handleHide() }}
                         className="Grid">
 
                         {poolsSurveys.map((element: PoolSurveyView, index: number) =>
@@ -200,7 +215,7 @@ export default function VoteListPage() {
                             color={pageColor}
                             isBottom={isBottom}
                             hasNextPage={hasNextPage}
-                            handleScroll={() => handleScroll()} />
+                            handleScroll={onScroll} />
                     </section>}
             </main>
 

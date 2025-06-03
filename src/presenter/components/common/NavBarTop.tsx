@@ -31,12 +31,12 @@ export default function NavBarTop() {
 
     return (
         <header>
-            <div className="relative h-full w-full flex lg:pl-2  justify-between items-center py-3">
+            <div className="relative  h-full w-full flex mb-1 justify-between  pb-6">
                 {onBoard ?
                     <div className="relative w-full flex justify-between items-center">
-                        <div className="flex w-full  flex-1 items-center  lg:pl-2 pb-4">
+                        <div className="flex w-full  flex-1 items-center ">
                             <img
-                                className="h-16 w-16 mx-2 lg:h-[4.5rem] lg:w-[4.5rem] object-cover object-center "
+                                className="h-12 w-12 mx-2 lg:h-[4rem] lg:w-[4rem] object-cover object-center "
                                 src="/image/logo.svg"
                                 alt="logo" />
                             <Typography
@@ -92,7 +92,7 @@ export default function NavBarTop() {
                             </Typography>
                         </div>
                     </div>}
-                <div className={` ${onBoard ? 'lg:pr-6 lg:pt-4 pt-2' : 'pr-0'} relative right-0 flex h-full w-full " `} >
+                <div className={` ${onBoard ? 'lg:pr-4' : 'pr-0'} relative lg:pt-2 flex h-full w-full " `} >
                     <NotifBadge />
                 </div>
             </div >

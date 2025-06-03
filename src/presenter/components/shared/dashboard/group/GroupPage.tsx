@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import SubHeader from '../../../common/SubHeader';
 import DI from '../../../../../di/ioc';
 import { useSearchParams } from 'react-router-dom';
@@ -12,6 +12,8 @@ import { GroupCategory, GroupFilter } from "../../../../../domain/entities/Group
 import { CategoriesSelect } from "../../../common/CategoriesSelect";
 import { groupCategories } from "../../../../constants";
 import { getValue } from "../../../../views/viewsEntities/utilsService";
+import { useUxStore } from "../../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../../application/useCases/utils.useCase";
 
 export default function GroupPage() {
     const [notif, setNotif] = useState<string>('');
@@ -54,18 +56,31 @@ export default function GroupPage() {
     }
 
 
-    /// HANDLE SCROLL
+    //// HANDLE SCROLL
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                hasNextPage && fetchNextPage()
-            } else setIsBottom(false)
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
         }
-    }
+        handleScroll(params)
+    }, [divRef]);
+
+
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
 
     //// SETNOTIF
     const filterName = (): string => {
@@ -117,7 +132,7 @@ export default function GroupPage() {
                 <SkeletonGrid />
                 : <section
                     ref={divRef}
-                    onScroll={() => handleScroll()}
+                    onScroll={() => { onScroll(); handleHide() }}
                     className="Grid">
 
 
@@ -132,7 +147,7 @@ export default function GroupPage() {
                     <LoadMoreButton
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
-                        handleScroll={() => handleScroll()} />
+                        handleScroll={onScroll} />
                 </section>}
         </main>
     )

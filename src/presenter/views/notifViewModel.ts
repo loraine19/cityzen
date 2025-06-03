@@ -19,7 +19,7 @@ export const notifViewModel = () => {
       })
 
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
-    const flat = data?.pages.flat().map(page => page.notifs).flat()
+    const flat = isLoading || !data || error ? [] : data?.pages.flat().map(page => page.notifs).flat()
     const notifs = isLoading || !flat ? [] : flat?.map((notif: Notif) => new NotifView(notif))
 
     return {

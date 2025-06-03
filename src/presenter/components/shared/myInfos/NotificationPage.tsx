@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import { NotifCard } from "./NotifCard";
@@ -13,6 +13,8 @@ import { PathElement } from "../../../constants";
 import { ReadAllButton } from "../../common/ReadAllBtn";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import NotifDiv from "../../common/NotifDiv";
+import { useUxStore } from "../../../../application/stores/ux.store";
+import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function NotificationPage() {
     const [notifFind, setNotifFind] = useState<string>('');
@@ -93,19 +95,32 @@ export default function NotificationPage() {
             setNotifFind(`Aucun Notification ${PathElement[filter as keyof typeof PathElement] ?? ""} na été trouvé`);
     }, [notifs, count, isLoading, filter])
 
-
     //// HANDLE SCROLL
+    const utils = DI.resolve('utils')
+    const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
-    const [isBottom, setIsBottom] = useState(true);
-    const handleScroll = () => {
-        if (divRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
-                setIsBottom(true);
-                if (hasNextPage) fetchNextPage()
-            } else setIsBottom(false)
+    const [isBottom, setIsBottom] = useState(false);
+    const { setHideNavBottom } = useUxStore((state) => state);
+    const onScroll = useCallback(() => {
+        const params: HandleScrollParams = {
+            divRef,
+            hasNextPage,
+            fetchNextPage,
+            setIsBottom,
         }
-    }
+        handleScroll(params)
+    }, [divRef]);
+
+
+    const handleHide = useCallback(() => {
+        if (!divRef.current) return;
+        const { scrollTop } = divRef.current;
+        let shouldHide = (scrollTop >= 100);
+        setHide(shouldHide);
+    }, [divRef]);
+
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { setHideNavBottom(hide) }, [hide]);
 
     return (
         <main>
@@ -132,7 +147,7 @@ export default function NotificationPage() {
                 <SkeletonGrid small /> :
                 <section
                     ref={divRef}
-                    onScroll={handleScroll}
+                    onScroll={() => { onScroll(); handleHide() }}
                     className="GridSmall ">
                     {
                         notifs?.map((notif: NotifView, index: number) => notif.read === false &&
@@ -149,7 +164,7 @@ export default function NotificationPage() {
                     <LoadMoreButton
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
-                        handleScroll={handleScroll} />
+                        handleScroll={onScroll} />
                 </section>}
         </main>
     )
