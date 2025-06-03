@@ -25,8 +25,7 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
             if (!window.location.pathname.includes('/sign')) {
                 const userUpdated = await DI.resolve('getUserMeUseCase').execute() as User;
                 const loggedIn = userUpdated ? true : false;
-                console.log('fetchUser', userUpdated);
-                if (!userUpdated) { window.location.replace('/signin') };
+                if (!userUpdated) { window.location.replace('/signin?msg=impossible de recuperer vos informations') };
                 //  if (!userUpdated?.Profile) { window.location.replace('/profile/create') };
                 set({ user: userUpdated });
                 set({ profile: new ProfileView(userUpdated.Profile) });

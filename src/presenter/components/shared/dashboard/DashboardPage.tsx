@@ -25,7 +25,6 @@ export default function DashboardPage() {
     useEffect(() => {
         !user ? setIsLoggedIn(false) : setIsLoggedIn(true);
         !user.Profile && fetchUser()
-
     }, [user])
     const navigate = useNavigate();
 
