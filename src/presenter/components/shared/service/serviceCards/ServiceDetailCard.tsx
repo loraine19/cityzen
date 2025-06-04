@@ -1,4 +1,4 @@
-import { Card, CardHeader, Typography, CardBody, CardFooter, Chip, Avatar } from "@material-tailwind/react";
+import { Card, CardHeader, Typography, CardBody, CardFooter, Chip } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { HardLevel, SkillLevel, ServiceStep } from "../../../../../domain/entities/Service";
 import { Icon } from "../../../common/IconComp";
@@ -7,19 +7,30 @@ import { useUserStore } from "../../../../../application/stores/user.store";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import { Title } from "../../../common/CardTitle";
 import { ProfileDiv } from "../../../common/ProfilDiv";
+import { Profile } from "../../../../../domain/entities/Profile";
 
 export default function ServiceDetailComp(props: { service: ServiceView, mines?: boolean }) {
     const { service } = props
     const { user } = useUserStore()
     const userId: number = user.id
     const navigate = useNavigate();
-    const { id, title, description, IResp, image, createdAt, User, UserResp, mine, categoryS, statusS, hard, skill, flagged, points, typeS } = props.service
+    const { id, title, description, IResp, image, createdAt, User, UserResp, categoryS, statusS, hard, skill, flagged, points, typeS } = props.service
     const haveImage = service.image ? true : false
     const isResp = statusS === ServiceStep.STEP_1 ? true : false;
     const isValidated = statusS === ServiceStep.STEP_2 ? true : false;
     const isFinish = statusS === ServiceStep.STEP_3 ? true : false;
     const inIssue = statusS === ServiceStep.STEP_4 ? true : false;
 
+    let tone = '';
+    if (statusS === ServiceStep.STEP_1) {
+        tone = IResp ? "Vous avez répondu à ce service" : 'à eté répondu par'
+    } else if (statusS === ServiceStep.STEP_2) {
+        tone = `Le service est en cours par ${IResp ? '(vous)' : ':'} `
+    } else if (statusS === ServiceStep.STEP_3) {
+        tone = `A été réalisé par ${IResp ? '(vous)' : ':'} `
+    } else {
+        tone = "Ce service est en attente de réponse";
+    }
     return (
         <div className="DetailCardDiv">
             <Card className="FixCard w-respLarge !h-full" >
@@ -90,53 +101,41 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                     title="Difficulté" />}>
                             </Chip>
                         </div>
-                        {UserResp && !IResp &&
-                            <Typography
-                                variant="h6"
-                                color="blue-gray"
-                                className="text-right">
-                                {mine && !isValidated && !isFinish && "Réponse " || isValidated && 'en cours par ' || isFinish && 'effectué par ' || IResp && "Vous :" || '  '}
-                            </Typography>
-                        }
-                        {UserResp && IResp &&
-                            <Typography
-                                variant="h6"
-                                color="blue-gray"
-                                className="text-right">
-                                vous
-                                {isFinish && 'avez fait ' || !isValidated && !isFinish && " avez repondu " || isValidated && !isFinish && ' faite'}
-                            </Typography>
-                        }
+
+
                     </div>
                     <div className="CardOverFlow h-full flex flex-col gap-4 !pt-1 ">
-                        <div className="flex h-full">
+                        <div className="flex h-full flex-col lg:flex-row gap-4">
                             <Typography
                                 color="blue-gray"
                                 className="flex-1 pr-4 max-h-20 overflow-y-auto">
                                 {description}
                             </Typography>
-                            {UserResp &&
-                                <div className="flex flex-col items-end ">
-                                    <Typography
-                                        variant="small"
-                                        className="font-normal !p-0">
-                                        {UserResp.Profile?.firstName} {UserResp.Profile?.lastName}
-                                    </Typography>
-                                    <Typography
-                                        variant="small"
-                                        color="gray" >
-                                        {UserResp.Profile?.skills} ◦
-                                    </Typography>
-                                    <Avatar
 
-                                        onError={(e) => e.currentTarget.src = "/image/person.svg"}
-                                        src={UserResp.Profile?.image as string}
-                                        size="sm"
-                                        alt="avatar"
-                                        withBorder={true}
-                                        color="blue-gray" />
+                            <div className="flex border min-w-[33%] border-blue-gray-200 p-3 bg-blue-gray-50 rounded-2xl  flex-col gap-2 lg:items-end">
+                                <Typography
+                                    className="text-left lg:text-right"
+                                    variant="h6"
+                                    color="blue-gray">
+                                    {tone}
+                                </Typography>
+
+                                <div className="flex  lg:flex-col flex-row-reverse lg:items-end self-start lg:self-end">
+                                    {UserResp ?
+                                        <ProfileDiv profile={UserResp} size="md" /> :
+                                        <ProfileDiv profile={new Profile({
+                                            firstName: "Mr",
+                                            lastName: "?",
+                                            userId: 0,
+                                            userIdSp: 0,
+                                            addressId: 0,
+                                        } as Partial<Profile>)} size="md" />
+
+                                    }
+
                                 </div>
-                            }
+                            </div>
+
                         </div>
                     </div>
                 </CardBody>
@@ -147,11 +146,11 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     <div className="flex items-center gap-2">
                         <Typography
                             variant="h3"
-                            className={`text-end ${points[1] && "w-full"}`} >
-                            {points[1] && <span className="!text-[1rem] font-light">de </span>}
+                            className={`text-end ${points.length > 0 && "w-full"}`} >
+                            {points.length > 0 && points[1] && <span className="!text-[1.2rem] font-light">de </span>}
                             {points[0]}
-                            {points[1] && <>
-                                <span className="!text-[1rem] font-light">à </span>
+                            {points.length > 0 && <>
+                                <span className="!text-[1.2rem] font-light"> à </span>
                                 {points[1]}</>}
                             <span className="!text-[1.2rem] font-light"> points</span>
                         </Typography>

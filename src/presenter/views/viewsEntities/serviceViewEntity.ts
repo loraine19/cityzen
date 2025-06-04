@@ -18,11 +18,7 @@ export class ServiceView extends Service {
     statusValue: number
     constructor(service: Service, user: User) {
         super(service);
-        if (!service) {
-            setTimeout(() => {
-                if (!service) throw new Error('Impossible de récupérer le service')
-            }, 1000)
-        }
+        if (!service) throw new Error('Impossible de récupérer le service')
         this.IResp = service?.userIdResp ? service.userIdResp === user.id : false;
         this.flagged = service?.Flags ? service?.Flags?.some((flag: Flag) => flag.userId === user.id) : false;
         this.mine = service?.userId === user?.id;
@@ -41,8 +37,8 @@ export class ServiceView extends Service {
         const userP = user ?? service?.User?.Profile
         const hard = parseInt(HardLevel[service?.hard as unknown as keyof typeof HardLevel]) || parseInt(HardLevel.LEVEL_0)
         const skill = parseInt(SkillLevel[service?.skill as unknown as keyof typeof SkillLevel]) || parseInt(SkillLevel.LEVEL_0)
-        const userPoints = parseInt(AssistanceLevel[userP.assistance as keyof typeof AssistanceLevel]) || 0
-        const userRespPoints: number = userResp ? parseInt(AssistanceLevel[userResp.assistance as keyof typeof AssistanceLevel]) : 0
+        const userPoints = parseInt(AssistanceLevel[userP?.assistance as keyof typeof AssistanceLevel]) || 0
+        const userRespPoints: number = userResp ? parseInt(AssistanceLevel[userResp?.assistance as keyof typeof AssistanceLevel]) : 0
         const base = Number(((hard / 2 + skill / 2) + 1).toFixed(1))
         const points =
             userResp ?

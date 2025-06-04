@@ -125,20 +125,32 @@ header {
 
 .anim {
     @apply duration-700;
-    animation: up 0.8s forwards;
-}
-.animRev {
-    @apply duration-700;
-    animation: down 0.8s forwards;
+    animation: up 2s forwards;
 }
 
+.animRev {
+    @apply duration-700;
+    animation: down 2s forwards;
+}
+
+/* Animates slide-in for the first child, slide-out for the last child */
 .animSlide {
-    animation: slide 0.8s forwards;
+    @apply duration-700;
+    animation: slide 2s forwards;
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(90%);
+    }
 }
 
 .fadeIn {
     @apply duration-700;
-    animation: fadeIn 5s forwards;
+    animation: fadeIn 2s forwards;
 }
 
 .notif {
@@ -174,7 +186,7 @@ header {
 
 @keyframes slide {
     from {
-        transform: translateX(-50%);
+        transform: translateX(-90%);
     }
     to {
         transform: translateX(0);

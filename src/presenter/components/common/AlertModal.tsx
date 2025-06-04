@@ -38,6 +38,7 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                 <CardFooter className="justify-end FixCardFooter max-w-full flex gap-8 pt-0">
                     {button2 &&
                         <Button
+                            type="button"
                             size='lg'
                             color="red"
                             className="rounded-full lgBtn max-w-max"
@@ -45,6 +46,7 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                             {button2.text}
                         </Button>}
                     {<Button
+                        type="button"
                         disabled={notif ? true : false}
                         size='lg'
                         color="cyan"

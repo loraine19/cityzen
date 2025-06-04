@@ -134,7 +134,7 @@ export default function ServiceDetailPage() {
                 actions = [
                     {
                         color: 'red',
-                        iconImage: 'expand_more',
+                        iconImage: 'expand_content',
                         icon: 'Voir le litige',
                         title: 'Voir le litige',
                         body: 'Voir le litige',
@@ -160,7 +160,7 @@ export default function ServiceDetailPage() {
         <>
             <main>
                 <div className="px-4 sectionHeader">
-                    <SubHeader type={`${typeS} de service ${categoryS}`} closeBtn />
+                    <SubHeader type={`${typeS ?? ''} de service ${categoryS ?? ''}`} closeBtn />
                 </div>
                 <section>
                     {isLoading || error || !service ?

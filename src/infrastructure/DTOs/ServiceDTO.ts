@@ -7,10 +7,11 @@ export class ServiceDTO implements Partial<Service> {
     category?: ServiceCategory;
     userIdResp?: number;
     type?: ServiceType;
-    skill?: SkillLevel;
-    hard?: HardLevel;
-    status?: ServiceStep;
+    skill?: SkillLevel = SkillLevel.LEVEL_0;
+    hard?: HardLevel = HardLevel.LEVEL_0;
+    status?: ServiceStep = ServiceStep.STEP_0;
     groupId?: number;
+    blob?: string;
     constructor(init?: Partial<ServiceDTO>) {
         if (init) {
             Object.keys(init).forEach(key => {

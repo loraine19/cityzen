@@ -15,6 +15,7 @@ import GroupSelect from "../../../common/GroupSelect";
 export function ServiceForm(props: { formik: any }) {
     const { formik } = props;
     const { user } = useUserStore();
+
     // DEBUT LOGIQUE CALCUL POUR CHAMPS POINTS ds form
     const [points, setPoints] = useState<string>(formik.values.points?.join(' à ') || '0 à 1');
 
@@ -33,11 +34,13 @@ export function ServiceForm(props: { formik: any }) {
     const [groupId, setGroupId] = useState<string | undefined>(formik.values.groupId);
 
     return (
-        <form onSubmit={formik.handleSubmit} className="flex flex-col h-full overflow-hidden">
+        <form
+            onSubmit={formik.handleSubmit}
+            className="flex flex-col h-full overflow-hidden">
             <main>
                 <div className="sectionHeader">
                     <SubHeader
-                        type={formik.values.title ? `Modifier votre service ` : "Créer votre service "}
+                        type={formik.values.id ? `Modifier votre service ` : "Créer votre service "}
                         place={formik.values.title}
                         closeBtn
                     />
@@ -244,6 +247,7 @@ export function ServiceForm(props: { formik: any }) {
                     disabled={formik.values.statusValue > 0}
                     className="lgBtn">
                     <Icon
+                        disabled
                         size='xl'
                         color="white"
                         icon={formik.values.statusValue <= 0 ? 'save' : 'block'}

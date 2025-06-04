@@ -55,7 +55,7 @@ export const serviceIdViewModel = () => {
       staleTime: 600000,
       queryFn: async () => await getServiceById.execute(id),
     })
-    const service = userLoading ? {} : data ? new ServiceView(data, user) : {} as ServiceView;
+    const service = userLoading || isLoading ? {} : data ? new ServiceView(data, user) : {} as ServiceView;
     return { service, isLoading, error, refetch }
   }
 }
