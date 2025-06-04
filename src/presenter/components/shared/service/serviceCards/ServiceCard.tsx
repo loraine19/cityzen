@@ -69,7 +69,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
-                        <div className="flex items-start gap-2 ">
+                        <div className="ChipSubDiv ">
                             <button
                                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                     const cat = e.currentTarget.innerText.toLowerCase();

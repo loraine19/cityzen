@@ -122,7 +122,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                 Aucune nouveau message
                                             </Typography>
                                         </div>)
-                                        : (list.notifs.map((notif: NotifView, index2: number) => notif.read === false &&
+                                        : (list.notifs.map((notif: NotifView, index2: number) => notif?.read === false &&
                                             <MenuItem className="flex flex-col w-full max-w-[calc(100vw-2rem)] "
                                                 key={index2 + list.color}>
                                                 <div className="flex items-center w-full justify-between">

@@ -125,18 +125,18 @@ header {
 
 .anim {
     @apply duration-700;
-    animation: up 2s forwards;
+    animation: up 1.5s forwards;
 }
 
 .animRev {
     @apply duration-700;
-    animation: down 2s forwards;
+    animation: down 1.5s forwards;
 }
 
 /* Animates slide-in for the first child, slide-out for the last child */
 .animSlide {
     @apply duration-700;
-    animation: slide 2s forwards;
+    animation: slide 1.5s forwards;
 }
 
 @keyframes slideOut {
@@ -150,7 +150,7 @@ header {
 
 .fadeIn {
     @apply duration-700;
-    animation: fadeIn 2s forwards;
+    animation: fadeIn 1.5s forwards;
 }
 
 .notif {
@@ -252,13 +252,16 @@ header {
 }
 
 .ChipDiv {
-    @apply h-max w-full flex items-center gap-2 justify-between overflow-auto absolute p-2;
+    @apply w-full flex  gap-2 justify-between overflow-auto absolute p-2 h-max;
 }
 
 .ChipDivNoImage {
-    @apply h-max w-full flex items-center gap-2 justify-between overflow-auto !p-4;
+    @apply h-max w-full flex  gap-2 justify-between overflow-auto !p-4;
 }
 
+.ChipSubDiv {
+    @apply w-full flex flex-wrap gap-2 items-start;
+}
 .FixCardBody {
     @apply relative flex flex-1 overflow-auto flex-col py-3 px-5 -mt-2;
 }
@@ -338,26 +341,26 @@ nav li .icon {
 /* CHIP LIGHT COLOR */
 .OrangeChip {
     @apply bg-[#FED7AA] text-orange-800 min-w-[calc(max-0.1rem)]  px-3 pb-1 rounded-2xl shadow-sm
-    border border-orange-500 border-opacity-20;
+    border border-orange-500 border-opacity-20 max-w-max;
 }
 
 .GreenChip {
     @apply bg-green-100 text-green-800  min-w-[calc(max-0.1rem)] px-3 !pb-1 rounded-2xl 
-    border border-green-500 border-opacity-20 shadow-sm;
+    border border-green-500 border-opacity-20 shadow-sm max-w-max;
 }
 
 .RedChip {
     @apply bg-red-200 text-red-900 min-w-[calc(max-0.1rem)] px-3 pb-1 rounded-2xl shadow-sm
-    border border-red-500 border-opacity-20;
+    border border-red-500 border-opacity-20 max-w-max;
 }
 
 .CyanChip {
-    @apply bg-cyan-200 text-cyan-900  min-w-[calc(max-1rem)] px-3 !pb-1 rounded-2xl shadow-sm border border-cyan-500 border-opacity-20;
+    @apply bg-cyan-200 text-cyan-900  min-w-[calc(max-1rem)] px-3 !pb-1 rounded-2xl shadow-sm border border-cyan-500 border-opacity-20 max-w-max;
 }
 
 .GrayChip {
     @apply bg-gray-300 text-gray-600 px-3.5 !h-max !w-max !pb-1 !min-w-max rounded-full
-    border border-gray-500 border-opacity-20 !shadow-sm;
+    border border-gray-500 border-opacity-20 !shadow-sm max-w-max;
 }
 
 .lgBtn:disabled {

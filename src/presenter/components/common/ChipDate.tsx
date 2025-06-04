@@ -37,10 +37,10 @@ export function DateChip(props: { start: Date | string, end?: Date | string, end
         }
     })();
     return (
-        <Chip
+        <div className=""> <Chip
             size="sm"
             value={value}
             className={`${dateClass} rounded-full w-max h-max lowercase shadow`}>
-        </Chip>
+        </Chip></div>
     )
 }

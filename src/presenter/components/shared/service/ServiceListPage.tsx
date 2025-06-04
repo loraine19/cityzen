@@ -239,7 +239,7 @@ export default function ServicesPage() {
                         (services.map((service: ServiceView, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <ServiceComp
-                                    key={service.id}
+                                    key={service?.id}
                                     service={service}
                                     change={search as any}
                                     mines={mine}
