@@ -30,7 +30,7 @@ export default function SurveyDetailCard({ survey, setOpen }: Props) {
                 <CardHeader
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
-                    <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
+                    <div className={haveImage ? "ChipDiv flex-wrap" : "ChipDivNoImage flex-wrap"}>
                         <Chip
                             size='sm'
                             value={categoryS}

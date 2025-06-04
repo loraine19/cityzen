@@ -28,7 +28,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
             <Card className="FixCardNoImage w-respLarge" >
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
-                    <div className={`ChipDivNoImage`}>
+                    <div className={`ChipDivNoImage flex-wrap`}>
                         <Chip
                             value={'Cagnotte'}
                             size='sm'

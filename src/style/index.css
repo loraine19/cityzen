@@ -252,11 +252,11 @@ header {
 }
 
 .ChipDiv {
-    @apply w-full flex  gap-2 justify-between overflow-auto absolute p-2 h-max;
+    @apply flex w-full gap-2 justify-between overflow-auto absolute p-2 h-max;
 }
 
 .ChipDivNoImage {
-    @apply h-max w-full flex  gap-2 justify-between overflow-auto !p-4;
+    @apply h-max w-full flex gap-2 justify-between overflow-auto !p-4;
 }
 
 .ChipSubDiv {

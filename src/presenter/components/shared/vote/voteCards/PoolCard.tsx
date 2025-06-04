@@ -51,7 +51,7 @@ export function PoolCard({ pool, change, mines, update }: PoolCardProps) {
             <Card className={`FixCardNoImage `}>
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
-                    <div className={`ChipDivNoImage`}>
+                    <div className={`ChipDivNoImage flex-wrap`}>
                         <button onClick={(e: any) => change(e)}>
                             <Chip
                                 size='sm'

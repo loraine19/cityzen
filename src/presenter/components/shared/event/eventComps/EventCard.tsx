@@ -34,7 +34,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                 floated={haveImage}>
                 <div
                     className={`${haveImage ? "ChipDiv flex-col justify-between !h-full " : "ChipDivNoImage"}`}>
-                    <div className="ChipSubDiv">
+                    <div className="flex w-full flex-wrap justify-between items-center gap-2">
                         <button
                             onClick={change}>
                             <Chip

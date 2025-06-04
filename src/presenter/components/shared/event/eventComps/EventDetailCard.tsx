@@ -23,8 +23,8 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
         <div className="DetailCardDiv">
             <Card className="w-respLarge FixCard !h-full">
                 <CardHeader className="FixCardHeader  ">
-                    <div className="ChipDiv flex-col justify-between !h-full">
-                        <div className="flex w-full items-center justify-between gap-2">
+                    <div className="ChipDiv  flex-col justify-between !h-full">
+                        <div className="flex w-full flex-wrap items-center justify-between gap-2">
                             <Chip
                                 value={label}
                                 className="CyanChip rounded-full h-max shadow"
