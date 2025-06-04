@@ -121,7 +121,7 @@ export default function IssueEditPage() {
             <footer className="CTA">
                 <Button
                     type="submit"
-                    className="!lngBtn w-respLarge rounded-full" >
+                    className="!lgBtn w-respLarge rounded-full" >
                     <Icon
                         size='xl'
                         color="white"

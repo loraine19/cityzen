@@ -29,9 +29,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
         { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-500/20", col: 'blue-gray' },
         { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-cyan-500/20", col: 'cyan' },
         { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-500/20", col: 'cyan' },
-        {
-            to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-500/20", col: 'orange'
-        },
+        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-500/20", col: 'orange' },
         { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
     ]
 
@@ -75,26 +73,24 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
 
 
     return (
-        <>    <div className={`${closeDial ? 'hidden' : ''} fixed bottom-[70px] h-[calc(100vh-70px)] w-full backdropBlur`}></div>
+        <>
+            <div className={`${closeDial ? 'hidden' : ''} fixed bottom-[70px] h-[calc(100vh-70px)] w-full backdropBlur`}></div>
             {!hideNavBottom &&
                 <div className="rounded-full">
                     <div className=" min-h-1 backdrop-blur-[0.5px]"></div >
                     <div className="min-h-1 backdrop-blur-[1px]"></div>
                 </div >}
             <footer
-                onDrag={
-                    (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setNavBottom(!navBottom);
-                    }
-                }
+                onDrag={() => setNavBottom(!navBottom)}
+                onDragStart={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    setNavBottom(!navBottom)
+                }}
 
                 className={(!navBottom ? 'pb-2 ' : 'pb-2 ') + ((hideNavBottom && navBottom) ? ' transform-y[-100%] opacity-0 anim' : '!my-0  ') + ((hideNavBottom && !navBottom) ? 'hidden' : '') + ((navBottom && !hideNavBottom) ? 'transform-y-0 opacity-100 anim' : '') +
-                    ' w-respXl backdropBlur justify-center items-center flex gap-4'}>
-
+                    ' w-respXl backdropBlur justify-center items-center flex gap-4 overflow-auto'}>
                 <Navbar className={`
-              
                 ${navBottom ? "shadow-lg" : 'shadow-md'} w-[calc(80%)] anim overflow-autoflex rounded-full h-full  min-w-max  lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
                         <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full gap-auto md:divide-x-4 divide-white/95 `}>
@@ -121,8 +117,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                                     fill={isActive ? true : false}
                                                     color={col}
                                                 />
-                                                <span className={`!text-[0.9rem] font-bold
-                                                 filter brightness-90 font-comfortaa hidden md:!text-[0.65rem] md:block lg:pr-8 pr-3`}>
+                                                <span className={`!text-[0.95rem] font-bold
+                                                 filter brightness-90 font-comfortaa hidden md:!text-[0.8rem] md:block lg:pr-8 pr-3`}>
                                                     {label}
                                                 </span>
                                             </>
@@ -181,7 +177,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                         </SpeedDial>
                     </div>
                 </div>
-            </footer></>
+            </footer ></>
     );
 };
 

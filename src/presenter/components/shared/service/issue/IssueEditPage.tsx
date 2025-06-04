@@ -104,7 +104,7 @@ export default function IssueEditPage() {
                 <Button
                     type="submit"
                     disabled={issue?.status > 1}
-                    className="!lngBtn w-respLarge rounded-full" >
+                    className="!lgBtn w-respLarge rounded-full" >
                     <Icon
                         size='xl'
                         color="white"

@@ -87,7 +87,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     return (
         <div className={` gap-4 flex justify-end flex-1 w-full  right-0  h-max  `}>
             {/* /// NOTIFICATION POPUP */}
-            <div className={` w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
+            <div className={`w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
                 <Card className={`${notif ? 'animate-bounce absolute' : ''} z-50 mt-4 h-max px-4 py-2 w-respLarge rounded-2xl shadow-lg transition-all duration-1000 ease-in-out transform
                  ${notif ?
                         'scale-100 opacity-100 top-4' :
@@ -95,7 +95,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                     {notif}
                 </Card>
             </div>
-            {!isLoading && [{ count: messages.count, notifs: messages.notifs, color: 'cyan', icon: 'forum', link: '/chat' },
+            {!isLoading && [{ count: messages.count, notifs: messages.notifs, color: 'cyan', icon: 'chat', link: '/chat' },
             { count, notifs, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) =>
                 <div
                     key={index}

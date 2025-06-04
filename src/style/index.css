@@ -359,7 +359,7 @@ button {
 }
 
 .lgBtn {
-    @apply flex min-h-max items-center justify-center rounded-full w-full !shadow-md truncate px-4 py-1.5 lg:py-2;
+    @apply flex min-h-max min-w-max items-center justify-center rounded-full w-full !shadow-md truncate px-4 py-1.5 lg:py-2;
 }
 
 /* COMP */
@@ -445,7 +445,7 @@ button span {
 .iconMd {
     @apply flex items-center justify-center rounded-full;
     font-size: 18px;
-    width: 35px;
+    width: 34.5px;
     height: 34px;
 }
 .iconLg {
@@ -457,13 +457,13 @@ button span {
 .iconXl {
     @apply flex items-center justify-center rounded-full;
     font-size: 26px;
-    width: 44px;
+    width: 43px;
     height: 42px;
 }
 .icon2xl {
     @apply flex items-center justify-center rounded-full;
     font-size: 30px;
-    width: 46px;
+    width: 45.5px;
     height: 44px;
 }
 .icon3xl {

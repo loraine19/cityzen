@@ -132,7 +132,7 @@ function App() {
                         </Routes>
                     </Suspense>
                     <AlertModal values={alertValues ?? errorValues} />
-                    <ReactQueryDevtools />
+                    <div className="scale-95"><ReactQueryDevtools /></div>
                 </div>
             </BrowserRouter>
         </ErrorBoundary>

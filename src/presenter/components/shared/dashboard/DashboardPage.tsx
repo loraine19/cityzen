@@ -47,7 +47,7 @@ export default function DashboardPage() {
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
     const eventClasse = "h-full flex !min-h-[12rem] row-span-5 lg:grid overflow-auto";
-    const notifClasse = " row-span-2   lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5.5rem]")
+    const notifClasse = " row-span-2 lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5.5rem]")
     const mapClasse = "flex row-span-6 !min-h-[16rem] 15rem] lg:min-h-[32%] lg:grid";
 
 
@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
 
     return (
-        <main className={` ${navBottom ? "-mt-8" : "mt-1 "} ${window.innerWidth < 505 ? "-mb-[4.5rem] lg:mb-1 " : ""} relative flex pb-0.5 !overflow-hidden `}
+        <main className={` ${navBottom ? "-mt-7" : "mt-1 "} ${window.innerWidth < 505 ? "-mb-[5rem] lg:mb-1 " : ""} relative flex pb-0.5 !overflow-hidden`}
             data-cy="dashboard-body" >
             <div className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                 <div className={`${userClasse}`}>
