@@ -43,11 +43,11 @@
     @apply flex flex-col  h-screen w-screen;
 }
 body {
-    @apply gray h-screen w-screen flex flex-col;
+    @apply gray h-screen w-screen flex flex-col py-[1vh];
 }
 
 .App {
-    @apply flex flex-col w-screen h-screen px-[0.5vw] pt-[2vh];
+    @apply flex flex-col w-screen h-screen px-[0.5vw];
 }
 
 main {
@@ -183,12 +183,12 @@ header {
 }
 
 .Grid2 {
-    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 pb-4  gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
+    @apply !max-h-full grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 pb-4  gap-x-1 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
     grid-auto-rows: minmax(320px, 53vh);
 }
 
 .GridSmall {
-    @apply grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 pb-4 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
+    @apply !max-h-full grid grid-cols-[minmax(calc(50%-1rem),_1fr)] gap-y-3 gap-x-1 pb-4  lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)];
     grid-auto-rows: max-content;
 }
 

@@ -31,14 +31,10 @@ export default function NavBarTop() {
     const onBoard = window.location.pathname === '/'
 
     return (
-        <header>
-            <div
-                className={`
-                    ${hideNavBottom ? 'min-h-1 -mt-4 !shadow-md lg:flex anim' : 'anim pb-4 mb-1'}
-                    relative h-full w-full flex justify-between
-                    
-                `}
-            >
+        <header className="mb-2">
+            <div className={`${hideNavBottom ? 'min-h-1.5  !shadow-md lg:flex anim' : 'anim pb-2 mb-1'}
+                    relative h-full w-full flex justify-between`} >
+
                 {onBoard ?
                     <div className="relative w-full flex justify-between items-center">
                         <div className="flex w-full  flex-1 items-center ">

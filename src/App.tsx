@@ -106,14 +106,15 @@ function App() {
                                     <Route path="/flag/:target/:id" element={<FlagCreatePage />} />
                                     <Route path="/evenement/:id" element={<EventDetailPage />} />
 
+                                    <Route path="/notification" element={<NotificationPage />} />
+                                    <Route path="/reglement" element={<RulesPage />} />
+
 
                                     {/* Pages with bottom navigation */}
                                     <Route element={<WithBottomPages />}>
                                         <Route path="/" element={<DashboardPage />} />
                                         <Route path="/conciliation" element={<ConciliationListPage />} />
                                         <Route path="/flag" element={<FlagPage />} />
-                                        <Route path="/notification" element={<NotificationPage />} />
-                                        <Route path="/reglement" element={<RulesPage />} />
                                     </Route>
 
                                     {/* Pages with bottom navigation and add button */}

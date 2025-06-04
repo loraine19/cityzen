@@ -37,7 +37,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
 
     const addBtnItem = addBtn ? [{
         to: `/${type}/create`,
-        icon: "add",
+        icon: { service: "partner_exchange", evenement: "event", annonce: "dashboard", vote: "ballot", groupe: "groups" }[type] || "add",
         label: `Ajouter un ${type}`,
         color: "!border-blue-gray-500/20",
         col: 'blue-gray'
@@ -138,9 +138,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                     onMouseLeave={() => setCloseDial(true)}
                     onMouseEnter={() => setCloseDial(false)}
                     className="flex justify-center items-center  h-full">
-                    <div
-
-                        className={`flex-1 shadowMid border-${color}-500 border-[1px] border-opacity-30 rounded-full max-w-[58px] `}>
+                    <div className={`flex-1 shadowMid border-${color}-500 border-[1px] border-opacity-30 rounded-full max-w-[58px] `}>
 
                         <SpeedDial
                             placement={navBottom ? 'top' : 'bottom'}
@@ -148,28 +146,27 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                             <SpeedDialHandler >
                                 <div
                                     onClick={() => setCloseDial(!closeDial)}
-                                    className={`rounded-full text-white`}>
+                                    className={`rounded-full text-white `}>
                                     <Icon
                                         icon="add"
                                         color='white'
                                         bg clear
                                         size='5xl'
-                                        style={`${!closeDial ? ' !text-white transition-transform group-hover:rotate-45 hover:scale-[1]' : ''}  !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10`} />
+                                        style={`${!closeDial ? ' !text-white transition-transform group-hover:rotate-45 hover:scale-[1]' : 'hidden'}  !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10`} />
                                 </div>
                             </SpeedDialHandler>
                             <SpeedDialContent
                                 className="flex relative flex-col h-max-max w-max">
                                 {addBtnItem.map(({ to, icon, label, col }: NavItem, index) => <SpeedDialAction
                                     key={index}
-                                    className="flex !h-12 gap-6 w-12 shadow-lg"
+                                    className="flex !h-[58px] gap-6 w-[58px] shadow-lg"
                                     title={label}>
                                     <div>
-                                        {!addBtn &&
-                                            <Icon
-                                                size='md'
-                                                style='absolute !bg-white top-1 -left-1'
-                                                icon="add"
-                                                color={col} />}
+                                        <Icon
+                                            size='md'
+                                            style='absolute !bg-white top-1 -left-1'
+                                            icon="add"
+                                            color={col} />
                                         <Icon
                                             link={to}
                                             size='3xl'

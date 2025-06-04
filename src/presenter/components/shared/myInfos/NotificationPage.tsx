@@ -121,17 +121,16 @@ export default function NotificationPage() {
     const [hide, setHide] = useState<boolean>(false);
     useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
-    const { navBottom } = useUxStore((state) => state);
     return (
 
-        <main className={navBottom ? "withBottom" : ""}>
+        <main>
             <div className="sectionHeader">
                 <SubHeader
                     qty={count}
                     type={"Notifications " + `${PathElement[filter as keyof typeof PathElement] ?? ""} `}
                     closeBtn
                     link={'/'} />
-                <div className="relative max-w-[100vw] overflow-auto flex pl-1 !py-0 pr-10">
+                <div className="relative max-w-[100vw] justify-center overflow-auto flex pr-4">
                     <TabsMenu
                         labels={notifTabs} />
                     <ReadAllButton
