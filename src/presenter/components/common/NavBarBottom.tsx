@@ -74,24 +74,25 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
 
     return (
         <>
-            <div className={`${closeDial ? 'hidden' : ''} fixed ${navBottom ? 'bottom-[70px] h-[calc(100vh-70px)] max-h-[calc(100vh-70px)]' : ''}    w-full backdropBlur `}></div>
+            <div className={`${closeDial ? 'hidden' : ''} ${navBottom ? 'bottom-[70px] h-[calc(100vh-70px)] max-h-[calc(100vh-70px)] w-full backdropBlur fixed' : 'hidden'}    `}>
+            </div>
             {!hideNavBottom &&
                 <div className="rounded-full">
                     <div className=" min-h-1 backdrop-blur-[0.5px]"></div >
                     <div className="min-h-1 backdrop-blur-[1px]"></div>
                 </div >}
             <footer
-                onDrag={() => setNavBottom(!navBottom)}
-                onDragStart={(e) => {
+                onDoubleClick={() => setNavBottom(!navBottom)}
+                onDoubleClickCapture={(e) => {
                     e.stopPropagation()
                     e.preventDefault()
                     setNavBottom(!navBottom)
                 }}
 
                 className={(!navBottom ? 'pb-2 ' : 'pb-2 ') + ((hideNavBottom && navBottom) ? ' transform-y[-100%] opacity-0 anim' : '!my-0  ') + ((hideNavBottom && !navBottom) ? 'hidden' : '') + ((navBottom && !hideNavBottom) ? 'transform-y-0 opacity-100 anim' : '') +
-                    ' w-respXl backdropBlur justify-center items-center flex gap-4'}>
+                    ' w-respXl backdropBlur justify-center items-center flex gap-4  '}>
                 <Navbar className={`
-                ${navBottom ? "shadow-lg" : 'shadow-md'} w-[calc(80%)] anim overflow-auto flex rounded-full h-full  min-w-max  lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
+               shadow-md w-[calc(80%)] anim flex rounded-full h-full  min-w-max  lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
                         <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full gap-auto md:divide-x-4 divide-white/95 `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
@@ -130,12 +131,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                         </ul>
                     </div>
                 </Navbar>
+
                 <div
                     onMouseLeave={() => setCloseDial(true)}
                     onMouseEnter={() => setCloseDial(false)}
-                    className="flex justify-center items-center z-[999]  h-full">
-                    <div className={`flex-1 shadowMid border-${color}-500 border-[1px] border-opacity-30 rounded-full max-w-[58px] b `}>
-
+                    className="flex justify-center z-[22] items-center h-full">
+                    <div className={`rounded-full `}>
                         <SpeedDial
                             placement={navBottom ? 'top' : 'bottom'}
                             offset={10}>
@@ -148,28 +149,29 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                         color='white'
                                         bg clear
                                         size='5xl'
-                                        style={`${!closeDial ? ' !text-white transition-transform group-hover:rotate-45 hover:scale-[1]' : 'hidden'}  !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10`} />
+                                        style={`${!closeDial ? '!text-white transition-transform group-hover:rotate-45 hover:scale-[1]' : 'hidden'} !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10 !shadow-md`} />
                                 </div>
                             </SpeedDialHandler>
                             <SpeedDialContent
                                 className="flex relative flex-col h-max-max w-max">
                                 {addBtnItem.map(({ to, icon, label, col }: NavItem, index) => <SpeedDialAction
                                     key={index}
-                                    className="flex !h-[58px] gap-6 w-[58px] shadow-lg"
+                                    className="flex over:scale-[1.1] !h-[58px] gap-6 w-[58px] shadow-lg"
                                     title={label}>
                                     <div>
                                         <Icon
                                             size='md'
-                                            style='absolute !bg-white top-1 -left-1'
+                                            style={`absolute ${col ? ` bg-${col}-100 ` : 'bg-white'} top-1 -left-1`}
                                             icon="add"
                                             color={col} />
                                         <Icon
+                                            bg
                                             link={to}
-                                            size='3xl'
+                                            size='2xl'
                                             icon={icon}
                                             color={addBtn ? color : col} />
                                     </div>
-                                    <div className="py-2 px-4 mr-90 font-light rounded-full text-gray-900 absolute top-2/4 -left-3/4 -translate-y-2/4 -translate-x-3/4 bg-white text-xs shadow-xl lowercase border border-gray-100">
+                                    <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-900 absolute bg-white text-sm shadow-xl  !border !border-gray-300`}>
                                         {label}
                                     </div>
                                 </SpeedDialAction>)}
@@ -177,7 +179,10 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                         </SpeedDial>
                     </div>
                 </div>
-            </footer ></>
+            </footer >
+            <div className={`${closeDial ? 'hidden' : ''} ${!navBottom ? 'z-[9] top-[70px] h-[calc(100vh-70px)] max-h-[calc(100vh-70px)] w-full backdropBlur fixed' : 'hidden'}`}>
+            </div>
+        </>
     );
 };
 

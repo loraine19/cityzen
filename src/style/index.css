@@ -40,10 +40,10 @@
 
 /* MAIN SECTIONS */
 #root {
-    @apply flex flex-col  h-screen w-screen;
+    @apply flex flex-col  h-screen w-screen pt-1;
 }
 body {
-    @apply gray h-screen w-screen flex flex-col py-[1vh];
+    @apply gray h-screen w-screen flex flex-col;
 }
 
 .App {
@@ -125,7 +125,11 @@ header {
 
 .anim {
     @apply duration-700;
-    animation: up 0.7s forwards;
+    animation: up 0.8s forwards;
+}
+.animRev {
+    @apply duration-700;
+    animation: down 0.8s forwards;
 }
 
 .animSlide {
@@ -134,7 +138,7 @@ header {
 
 .fadeIn {
     @apply duration-700;
-    animation: fadeIn 1s forwards;
+    animation: fadeIn 5s forwards;
 }
 
 .notif {
@@ -153,6 +157,15 @@ header {
 @keyframes up {
     from {
         transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes down {
+    from {
+        transform: translateY(-100%);
     }
     to {
         transform: translateY(0);
@@ -359,7 +372,7 @@ button {
 }
 
 .lgBtn {
-    @apply flex min-h-max min-w-max items-center justify-center rounded-full w-full !shadow-md truncate px-4 py-1.5 lg:py-2;
+    @apply flex min-h-max min-w-max items-center justify-center rounded-full w-full !shadow-md px-4 py-1.5 lg:py-2 !break-words;
 }
 
 /* COMP */
@@ -439,7 +452,7 @@ button span {
 .iconSm {
     @apply flex items-center justify-center rounded-full;
     font-size: 14px;
-    width: 28px;
+    width: 26px;
     height: 26px;
 }
 .iconMd {

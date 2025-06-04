@@ -21,8 +21,8 @@ import { useUxStore } from "../../../../application/stores/ux.store";
 export default function DashboardPage() {
 
     //// USER & AUTORISATION
-    const { user, fetchUser, setIsLoggedIn, navBottom } = useUserStore((state) => state);
-    const { setHideNavBottom } = useUxStore((state) => state);
+    const { user, fetchUser, setIsLoggedIn, } = useUserStore((state) => state);
+    const { setHideNavBottom, navBottom } = useUxStore((state) => state);
     const modo = user?.GroupUser?.map(g => g.role).includes(Role.MODO) || false;
     useEffect(() => {
         !user ? setIsLoggedIn(false) : setIsLoggedIn(true);
@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
 
     return (
-        <main className={` ${navBottom ? "-mt-7" : "mt-1 "} ${window.innerWidth < 505 ? "-mb-[5rem] lg:mb-1 " : ""} relative flex pb-0.5 !overflow-hidden`}
+        <main className={` ${navBottom ? "-mt-4" : "-mt-0 mb-2"} ${window.innerWidth < 505 ? "-mb-[5rem] lg:mb-2 " : ""} relative flex pb-0.5 !overflow-hidden`}
             data-cy="dashboard-body" >
             <div className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                 <div className={`${userClasse}`}>

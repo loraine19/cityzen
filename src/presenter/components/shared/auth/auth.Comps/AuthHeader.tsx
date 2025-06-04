@@ -6,7 +6,7 @@ export function AuthHeader() {
             <div className="flex items-center justify-center gap-4 py-2 mr-16">
                 <img
                     onError={(e) => { (e.target as HTMLImageElement).src = 'https://citydo.fr/image/logo.svg' }}
-                    className="h-20 w-20 object-cover object-center "
+                    className="h-[5rem] w-[5rem] object-cover object-center "
                     src="image/logo.svg"
                     alt="logo" />
                 <Typography

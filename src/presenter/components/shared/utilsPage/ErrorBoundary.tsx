@@ -85,11 +85,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                         variant="lead">
                         Vous pouvez essayer de recharger la page
                     </Typography>
-
                     <Icon
-                        bg
-                        fill
-                        style='flex-0 !pb-2 shadow-orange shadow-md '
+                        bg fill
+                        style=' shadow-md '
                         icon="sync_problem"
                         size="4xl"
                         color="orange"
@@ -123,9 +121,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     {pathBack &&
                         <>
                             <Icon
-                                bg
-                                fill
-                                style='flex-0 !pb-2 shadow-orange shadow-md '
+                                bg fill
+                                style='shadow-md '
                                 icon="undo"
                                 size="4xl"
                                 color="orange"

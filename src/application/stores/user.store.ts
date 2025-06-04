@@ -15,8 +15,6 @@ interface UserStore {
     fetchUser: () => Promise<void>;
     setIsLoggedIn: (value: boolean) => void;
     isLoggedIn: boolean;
-    navBottom: boolean;
-    setNavBottom: (value: boolean) => void;
 }
 
 export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
@@ -42,8 +40,6 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
             fetchUser,
             isLoggedIn: false,
             setIsLoggedIn: (value: boolean) => set(() => ({ isLoggedIn: value })),
-            navBottom: true,
-            setNavBottom: (value: boolean) => set(() => ({ navBottom: value })),
         }
     },
         {

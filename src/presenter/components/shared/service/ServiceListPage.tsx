@@ -157,7 +157,10 @@ export default function ServicesPage() {
         handleHide(params)
     }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
+    useEffect(() => {
+        (hide !== hideNavBottom) && setHideNavBottom(hide),
+            console.log('r', useUxStore.getState())
+    }, [hide]);
 
     //// SORT LIST
     const sortList: SortLabel[] = [
@@ -193,7 +196,7 @@ export default function ServicesPage() {
     const { navBottom } = useUxStore((state) => state);
     return (
 
-        <main className={navBottom ? "withBottom" : ""}>
+        <main className={navBottom ? " withBottom " : ""}>
             <div className="sectionHeader">
 
                 <TabsMenu

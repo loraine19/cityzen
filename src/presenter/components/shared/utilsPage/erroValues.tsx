@@ -20,7 +20,7 @@ export const errorValues: AlertValues = {
             fill
             style='flex-0  shadow-orange shadow-md '
             icon="sync_problem"
-            size="4xl"
+            size="3xl"
             color="orange"
             onClick={() => window.location.reload()} />
         <Typography

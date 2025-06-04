@@ -13,8 +13,8 @@ export default function NavBarTop() {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => { getColor(location.pathname) }, [location.pathname])
-    const { navBottom, setNavBottom, user } = useUserStore((state) => state);
-    const { hideNavBottom } = useUxStore((state) => state);
+    const { user } = useUserStore((state) => state);
+    const { hideNavBottom, navBottom, setNavBottom } = useUxStore((state) => state);
 
 
     const menuItems = [
@@ -24,34 +24,27 @@ export default function NavBarTop() {
         { icon: 'groups', text: "Groupes", onClick: () => navigate('/groupe'), color: "green" },
         { icon: 'diversity_3', text: "Conciliation", onClick: () => navigate('/conciliation'), color: 'orange' },
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null, color: 'amber', style: 'hover:!bg-white' },
-        { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => setNavBottom(!navBottom), color: 'blue-gray' },
+        { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => { setNavBottom(!navBottom) }, color: 'blue-gray' },
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t ", color: "red" },
 
     ];
     const onBoard = window.location.pathname === '/'
 
     return (
-        <header className="mb-2">
-            <div className={`${hideNavBottom ? 'min-h-1.5  !shadow-md lg:flex anim' : 'anim pb-2 mb-1'}
-                    relative h-full w-full flex justify-between`} >
+        <header className={`${hideNavBottom ? 'shadowMid mb-2 ' : ''}`}>
+            <div className={`${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev pb-2 mb-1'}
+                    relative h-full w-full flex justify-between pt-2`} >
+                <div className={`flex w-full items-center  ${hideNavBottom ? 'hidden' : ''} `}>
+                    <Menu placement="bottom-start">
+                        <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
+                            {onBoard ?
+                                <div className="flex  w-full flex-1 items-center ">
+                                    <img className="h-12 w-12 mx-2 lg:h-[4rem] lg:w-[4rem] object-cover object-center -ml-0.5  "
+                                        src="/image/logo.svg"
+                                        alt="logo" />
 
-                {onBoard ?
-                    <div className="relative w-full flex justify-between items-center">
-                        <div className="flex w-full  flex-1 items-center ">
-                            <img
-                                className="h-12 w-12 mx-2 lg:h-[4rem] lg:w-[4rem] object-cover object-center "
-                                src="/image/logo.svg"
-                                alt="logo" />
-                            <Typography
-                                color="blue-gray"
-                                className="font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold">City'Do
-                            </Typography>
-                        </div>
-                    </div> :
-                    <div className={`flex w-full items-center gap-4 ${hideNavBottom ? 'hidden' : ''} `}>
-                        <Menu placement="bottom-start">
-                            <MenuHandler className="relative h-max min-w-max z-50  flex items-center  cursor-pointer">
-                                <div className="flex items-center relative">
+                                </div> :
+                                <div className="flex  items-center relative">
                                     <AvatarUser
                                         style=" "
                                         avatarStyle="!w-12 !h-12 !text-[1.7rem] "
@@ -60,30 +53,35 @@ export default function NavBarTop() {
                                     <OnlineDot
                                         className="!bottom-0 !-right-1"
                                         id={user?.id} />
-                                </div>
-                            </MenuHandler>
-                            <MenuList className="flex flex-1 flex-col !rounded-xl divide-y-2 !shadow-xl  -ml-4 ">
-                                {menuItems.map((item, index) => (
-                                    <MenuItem
-                                        key={index}
-                                        className={`flex !flex-1 !min-w-60 pr-[10vw] items-center gap-2.5 pl-2  ${item.style || ''}`}
-                                        onClick={item.onClick || undefined}>
-                                        <Icon
-                                            fill
-                                            size="lg"
-                                            bg
-                                            color={item.color ?? 'blue-gray'}
-                                            icon={item.icon} />
-                                        <Typography
-                                            variant="small"
-                                            className="font-medium">
-                                            {item.text}
-                                        </Typography>
-                                    </MenuItem>
-                                ))}
-                            </MenuList>
-                        </Menu>
-                        <div className="flex flex-col  items-start">
+                                </div>}
+                        </MenuHandler>
+                        <MenuList className="flex flex-1 flex-col !rounded-xl divide-y-2 !shadow-xl -ml-2 ">
+                            {menuItems.map((item, index) => (
+                                <MenuItem
+                                    key={index}
+                                    className={`flex !flex-1 !min-w-60 pr-[10vw] items-center gap-2.5 pl-2  ${item.style || ''}`}
+                                    onClick={item.onClick || undefined}>
+                                    <Icon
+                                        fill bg
+                                        size="lg"
+                                        color={item.color ?? 'blue-gray'}
+                                        icon={item.icon} />
+                                    <Typography
+                                        variant="small"
+                                        className="font-medium">
+                                        {item.text}
+                                    </Typography>
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+                    </Menu>
+                    {onBoard ?
+                        <Typography
+                            color="blue-gray"
+                            className="font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold">
+                            City'Do
+                        </Typography> :
+                        <div className="flex flex-col items-start px-4">
                             <Typography
                                 variant="h5"
                                 color="blue-gray">
@@ -93,12 +91,12 @@ export default function NavBarTop() {
                                 className="mt-0 flex text-gray-700 !line-clamp-1 italic text-[0.9rem]">
                                 {user?.GroupUser?.map((group) => (group.Group?.name.split(':')[0])).join(', ')}
                             </Typography>
-                        </div>
-                    </div>}
-                <div className={` ${onBoard ? 'lg:pr-4' : 'pr-0'} ${hideNavBottom ? 'hidden' : ''} lg:pt-2 flex h-full w-full " `} >
+                        </div>}
+                </div>
+                <div className={` ${onBoard ? 'lg:pr-4' : 'pr-0'} ${hideNavBottom ? 'hidden' : ''} lg:pt-3 flex h-full w-full " `} >
                     <NotifBadge />
                 </div>
             </div >
-        </header>
+        </header >
     );
 }
