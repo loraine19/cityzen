@@ -60,7 +60,9 @@ export default function SelectSearch(props: selectSearchProps) {
                     onClick={() => search(searchCat)}
                     className="flex items-center  bg-none rounded-full py-1 !px-3"
                 >
-                    <Icon icon="search" />
+                    <Icon
+                        size="lg"
+                        icon="search" />
                 </Button>
 
             </div>
