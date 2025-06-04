@@ -38,7 +38,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="ChipSubDiv ">
                             <Chip
                                 size="sm"
                                 value={`${categoryS}`}

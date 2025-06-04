@@ -56,7 +56,7 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                     className={haveImage ? "FixCardHeader" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
-                        <div className="flex items-center gap-2">
+                        <div className="ChipSubDiv ">
                             <button
                                 onClick={() => { change() }}>
                                 <Chip
