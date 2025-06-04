@@ -87,7 +87,7 @@ export default function EventListPage() {
         setView(view === "view_agenda" ? "event" : "view_agenda");
         setCategory('');
         filterTab("" as EventFilter)
-        setHideNavBottom(view !== "event");
+        setHideNavBottom(false)
     }
 
 
@@ -109,7 +109,7 @@ export default function EventListPage() {
 
     //// HANDLE HIDE  
     const handleHide = (params: HandleHideParams) => utils.handleHide(params)
-    const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
+    const { setHideNavBottom, hideNavBottom, navBottom } = useUxStore((state) => state);
     const handleHideCallback = useCallback(() => {
         const params: HandleHideParams = { divRef, setHide }
         handleHide(params)
@@ -147,10 +147,9 @@ export default function EventListPage() {
         }
     ]
 
-    const { navBottom } = useUxStore((state) => state);
     return (
 
-        <main className={navBottom ? "withBottom" : ""}>
+        <main className={(navBottom && view === "view_agenda") ? "withBottom" : ""}>
             <div className="sectionHeader ">
                 {view === "view_agenda" &&
                     <TabsMenu
