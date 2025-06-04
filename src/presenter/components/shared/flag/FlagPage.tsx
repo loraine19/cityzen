@@ -8,7 +8,7 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
-import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
+import { HandleHideParams, HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 
 
@@ -16,7 +16,7 @@ export default function FlagPage() {
 
     const { flags, isLoading, error, refetch, hasNextPage, fetchNextPage, count } = DI.resolve('flagsViewModel')
 
-    const [notif, setNotif] = useState<string>('hhh');
+    const [notif, setNotif] = useState<string>('...');
 
     useEffect(() => {
         switch (true) {
@@ -36,7 +36,6 @@ export default function FlagPage() {
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const { setHideNavBottom } = useUxStore((state) => state);
     const onScroll = useCallback(() => {
         const params: HandleScrollParams = {
             divRef,
@@ -48,15 +47,16 @@ export default function FlagPage() {
     }, [divRef]);
 
 
-    const handleHide = useCallback(() => {
-        if (!divRef.current) return;
-        const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 60);
-        setHide(shouldHide);
+    //// HANDLE HIDE  
+    const handleHide = (params: HandleHideParams) => utils.handleHide(params)
+    const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
+    const handleHideCallback = useCallback(() => {
+        const params: HandleHideParams = { divRef, setHide }
+        handleHide(params)
     }, [divRef]);
-
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
+
 
     /////FILTER FUNCTIONS
     const { navBottom } = useUxStore((state) => state);
@@ -77,20 +77,30 @@ export default function FlagPage() {
             {isLoading ?
                 <SkeletonGrid small count={6} /> :
                 <section
-                    onScroll={() => { onScroll(); handleHide() }}
-                    className="GridSmall ">
+                    ref={divRef}
+                    onScroll={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        onScroll();
+                        handleHideCallback();
+
+                    }}
+                    className="GridSmall "
+                >
                     {flags.map((element: FlagView, index: number) =>
                         <div className="SubGrid " key={'div' + index}>
                             <FlagCard
                                 key={index}
                                 flag={element}
                                 update={refetch} />
-                        </div>)}
+                        </div>
+                    )}
                     <LoadMoreButton
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
                         handleScroll={onScroll} />
                 </section>}
+
         </main>
     )
 

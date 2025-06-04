@@ -171,7 +171,8 @@ export default function DashboardPage() {
                                 onScroll={() => handleScroll()}
                                 ref={divRef}>
                                 {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
-                                    <div className="flex w-full justify-between h-full gap-4 p-0.5">
+                                    <div key={index + 'div'}
+                                        className="flex w-full justify-between h-full gap-4 p-0.5">
 
                                         <div key={index}
                                             className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex  items-center break-words pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5  flex-0 relative `}

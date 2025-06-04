@@ -14,7 +14,7 @@ import { ServiceView } from "../../../views/viewsEntities/serviceViewEntity";
 import { serviceCategoriesS } from "../../../constants";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
-import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
+import { HandleHideParams, HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function ServicesPage() {
     const [notif, setNotif] = useState<string>('');
@@ -138,7 +138,6 @@ export default function ServicesPage() {
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const { setHideNavBottom } = useUxStore((state) => state);
     const onScroll = useCallback(() => {
         const params: HandleScrollParams = {
             divRef,
@@ -149,15 +148,16 @@ export default function ServicesPage() {
         handleScroll(params)
     }, [divRef]);
 
-    const handleHide = useCallback(() => {
-        if (!divRef.current) return;
-        const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 60);
-        setHide(shouldHide);
-    }, [divRef]);
 
+    //// HANDLE HIDE  
+    const handleHide = (params: HandleHideParams) => utils.handleHide(params)
+    const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
+    const handleHideCallback = useCallback(() => {
+        const params: HandleHideParams = { divRef, setHide }
+        handleHide(params)
+    }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
     //// SORT LIST
     const sortList: SortLabel[] = [
@@ -230,7 +230,7 @@ export default function ServicesPage() {
                 <SkeletonGrid />
                 : <section
                     ref={divRef}
-                    onScroll={() => { onScroll(); handleHide() }}
+                    onScroll={() => { onScroll(); handleHideCallback() }}
                     className="Grid">
                     {!customFilter ?
                         (services.map((service: ServiceView, index: number) => (

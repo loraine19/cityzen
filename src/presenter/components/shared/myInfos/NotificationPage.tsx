@@ -14,7 +14,7 @@ import { ReadAllButton } from "../../common/ReadAllBtn";
 import { useNotificationStore } from "../../../../application/stores/notification.store";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
-import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
+import { HandleHideParams, HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function NotificationPage() {
     const [notifFind, setNotifFind] = useState<string>('');
@@ -100,7 +100,6 @@ export default function NotificationPage() {
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const { setHideNavBottom } = useUxStore((state) => state);
     const onScroll = useCallback(() => {
         const params: HandleScrollParams = {
             divRef,
@@ -112,15 +111,15 @@ export default function NotificationPage() {
     }, [divRef]);
 
 
-    const handleHide = useCallback(() => {
-        if (!divRef.current) return;
-        const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 60);
-        setHide(shouldHide);
+    //// HANDLE HIDE  
+    const handleHide = (params: HandleHideParams) => utils.handleHide(params)
+    const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
+    const handleHideCallback = useCallback(() => {
+        const params: HandleHideParams = { divRef, setHide }
+        handleHide(params)
     }, [divRef]);
-
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
     const { navBottom } = useUxStore((state) => state);
     return (
@@ -138,7 +137,6 @@ export default function NotificationPage() {
                     <ReadAllButton
                         update={refetch} />
                 </div>
-
                 {notifFind &&
                     <NotifDiv
                         notif={notifFind}
@@ -149,7 +147,7 @@ export default function NotificationPage() {
                 <SkeletonGrid small /> :
                 <section
                     ref={divRef}
-                    onScroll={() => { onScroll(); handleHide() }}
+                    onScroll={() => { onScroll(); handleHideCallback() }}
                     className="GridSmall ">
                     {
                         notifs?.map((notif: NotifView, index: number) => notif.read === false &&

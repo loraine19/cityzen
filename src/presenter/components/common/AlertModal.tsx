@@ -14,7 +14,7 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
 
 
     if (isOpen || open) return (
-        <div className={`!absolute top-0 left-0 h-screen px-[2rem]  w-screen  z-[1500] !flex flex-1 justify-center items-center backdrop-filter backdrop-blur-sm `} >
+        <div className={`!absolute top-0 left-0 h-screen px-[2rem]  w-screen  z-[1500] !flex flex-1 justify-center items-center backdropBlur `} >
             <Card
                 className="relative  h-min w-resp m-auto flex ">
                 <CardHeader

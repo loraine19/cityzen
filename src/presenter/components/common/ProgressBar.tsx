@@ -79,7 +79,7 @@ export function ProgressBarBlur({ value, label, needed, status, size = 'md', isP
 
 
     return (
-        <div className={` h-max w-full !rounded-full backdrop-blur flex items-center gap-2 shadow p-2`}>
+        <div className={` h-max w-full !rounded-full backdropBlur flex items-center gap-2 shadow p-2`}>
             {(value === 0 && status === EventStatus.PENDING || status === EventStatus.REJECTED || status === EventStatus.VALIDATED) &&
                 (
                     <div className={`"flex flex-1 ${color} !line-clamp-1 px-2  rounded-full h-max items-center justify-center"`}>

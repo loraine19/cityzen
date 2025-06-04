@@ -13,7 +13,7 @@ export type ConfirmModalProps = {
 }
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, handleConfirm, handleCancel, disableConfirm, title, element, confirmString = 'Confirmer' }) => {
     if (open) return (
-        <div className="!absolute top-0 h-full w-full z-50 !flex flex-1 justify-center items-center backdrop-filter backdrop-blur-sm">
+        <div className="!absolute top-0 h-full w-full z-50 !flex flex-1 justify-center items-center backdropBlur">
 
             <Card
                 className="relative h-min w-respLarge m-auto flex ">

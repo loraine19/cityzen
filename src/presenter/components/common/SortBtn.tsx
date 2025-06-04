@@ -27,7 +27,7 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                             />
                         </div>
                     </MenuHandler>
-                    <MenuList className="backdrop-blur backdrop-opacity-90 overflow-hidden bg-transparent m-auto !border-none shadow-none  flex rounded-2xl justify-end h-[calc(100%-110px)] w-respXl ">
+                    <MenuList className="backdropBlur overflow-hidden bg-transparent m-auto !border-none shadow-none  flex rounded-2xl justify-end h-[calc(100%-110px)] w-respXl ">
                         <div className="p-4 h-max bg-white shadow-lg rounded-2xl border relative right-0 flex flex-col justify-start">
                             {sortList.map((item: SortLabel, index: number) =>
                                 <div

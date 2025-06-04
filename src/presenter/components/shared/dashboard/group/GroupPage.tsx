@@ -13,7 +13,7 @@ import { CategoriesSelect } from "../../../common/CategoriesSelect";
 import { groupCategories } from "../../../../constants";
 import { getValue } from "../../../../views/viewsEntities/utilsService";
 import { useUxStore } from "../../../../../application/stores/ux.store";
-import { HandleScrollParams } from "../../../../../application/useCases/utils.useCase";
+import { HandleHideParams, HandleScrollParams } from "../../../../../application/useCases/utils.useCase";
 
 export default function GroupPage() {
     const [notif, setNotif] = useState<string>('');
@@ -61,7 +61,6 @@ export default function GroupPage() {
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const { setHideNavBottom } = useUxStore((state) => state);
     const onScroll = useCallback(() => {
         const params: HandleScrollParams = {
             divRef,
@@ -73,14 +72,15 @@ export default function GroupPage() {
     }, [divRef]);
 
 
-    const handleHide = useCallback(() => {
-        if (!divRef.current) return;
-        const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 60);
-        setHide(shouldHide);
+    //// HANDLE HIDE  
+    const handleHide = (params: HandleHideParams) => utils.handleHide(params)
+    const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
+    const handleHideCallback = useCallback(() => {
+        const params: HandleHideParams = { divRef, setHide }
+        handleHide(params)
     }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide])
 
     //// SETNOTIF
     const filterName = (): string => {
@@ -132,7 +132,7 @@ export default function GroupPage() {
                 <SkeletonGrid />
                 : <section
                     ref={divRef}
-                    onScroll={() => { onScroll(); handleHide() }}
+                    onScroll={() => { onScroll(); handleHideCallback() }}
                     className="Grid">
 
 

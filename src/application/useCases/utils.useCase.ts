@@ -6,12 +6,20 @@ export interface HandleScrollParams {
     fetchNextPage: () => any;
     setIsBottom: (isBottom: boolean) => void;
 }
+export interface HandleHideParams {
+    divRef: MutableRefObject<any>,
+    setHide: (hide: boolean) => void,
+}
+
 
 interface UtilsInterface {
     handleScroll: (params: HandleScrollParams) => Promise<void>;
+    handleHide: (params: HandleHideParams) => void;
 }
 
 export class UtilsUseCase implements UtilsInterface {
+
+    //// Handle scroll
     async handleScroll({
         divRef,
         fetchNextPage,
@@ -32,4 +40,22 @@ export class UtilsUseCase implements UtilsInterface {
             }
         }
     }
+
+
+    //// handle hide 
+    private init = 0
+    handleHide = (params: HandleHideParams) => {
+        let { divRef, setHide } = params;
+
+        if (!divRef.current) return;
+        if (divRef.current && (divRef.current as HTMLElement).scrollTop >= 10) {
+            const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+            if (scrollTop + clientHeight + 8 >= scrollHeight) return
+            console.log('scrollTop', scrollTop, this.init, 'scrollHeight', scrollHeight, 'clientHeight', clientHeight);
+            let shouldHide = (scrollTop >= 50 && (this.init <= scrollTop));
+            this.init = scrollTop
+            setTimeout(() => setHide(shouldHide), 500)
+        }
+    }
+
 }

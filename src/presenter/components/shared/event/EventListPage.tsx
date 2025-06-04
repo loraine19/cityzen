@@ -16,7 +16,7 @@ import { EventView } from "../../../views/viewsEntities/eventViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
-import { HandleScrollParams } from "../../../../application/useCases/utils.useCase";
+import { HandleHideParams, HandleScrollParams } from "../../../../application/useCases/utils.useCase";
 
 export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
@@ -96,7 +96,6 @@ export default function EventListPage() {
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const { setHideNavBottom } = useUxStore((state) => state);
     const onScroll = useCallback(() => {
         const params: HandleScrollParams = {
             divRef,
@@ -107,15 +106,16 @@ export default function EventListPage() {
         handleScroll(params)
     }, [divRef]);
 
-    const handleHide = useCallback(() => {
-        if (!divRef.current) return;
-        const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 60);
-        setHide(shouldHide);
-    }, [divRef]);
 
+    //// HANDLE HIDE  
+    const handleHide = (params: HandleHideParams) => utils.handleHide(params)
+    const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
+    const handleHideCallback = useCallback(() => {
+        const params: HandleHideParams = { divRef, setHide }
+        handleHide(params)
+    }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
 
     //// SORT LIST
@@ -193,7 +193,7 @@ export default function EventListPage() {
                             ref={divRef}
                             onScroll={() => {
                                 onScroll()
-                                handleHide()
+                                handleHideCallback()
 
                             }}
                             className="Grid">

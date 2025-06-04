@@ -110,7 +110,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                         (list.count ? list.count.toString() : '0')}
                                 </span>
                             </MenuHandler>
-                            <MenuList className="flex flex-col max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3 rounded-2xl backdrop-blur-2xl ">
+                            <MenuList className="flex flex-col max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3 rounded-2xl backdropBlur ">
                                 <div onScroll={handleScroll}
                                     className="relative overflow-auto !border-none hover:!border-none flex flex-col gap-1">
                                     {list.count === 0 ? (

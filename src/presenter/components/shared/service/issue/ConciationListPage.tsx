@@ -13,7 +13,7 @@ import { Role } from "../../../../../domain/entities/GroupUser";
 import { IssueFilter } from '../../../../../domain/entities/Issue';
 import { Icon } from "../../../common/IconComp";
 import { useUxStore } from "../../../../../application/stores/ux.store";
-import { HandleScrollParams } from "../../../../../application/useCases/utils.useCase";
+import { HandleHideParams, HandleScrollParams } from "../../../../../application/useCases/utils.useCase";
 
 export default function ConciationListPage() {
     const [notif, setNotif] = useState<string>('');
@@ -79,7 +79,6 @@ export default function ConciationListPage() {
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
     const divRef = useRef(null);
     const [isBottom, setIsBottom] = useState(false);
-    const { setHideNavBottom } = useUxStore((state) => state);
     const onScroll = useCallback(() => {
         const params: HandleScrollParams = {
             divRef,
@@ -90,15 +89,16 @@ export default function ConciationListPage() {
         handleScroll(params)
     }, [divRef]);
 
-    const handleHide = useCallback(() => {
-        if (!divRef.current) return;
-        const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 60);
-        setHide(shouldHide);
-    }, [divRef]);
 
+    //// HANDLE HIDE  
+    const handleHide = (params: HandleHideParams) => utils.handleHide(params)
+    const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
+    const handleHideCallback = useCallback(() => {
+        const params: HandleHideParams = { divRef, setHide }
+        handleHide(params)
+    }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { setHideNavBottom(hide) }, [hide]);
+    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
     //// RENDER
     const { navBottom } = useUxStore((state) => state);
@@ -126,7 +126,7 @@ export default function ConciationListPage() {
                 <SkeletonGrid />
                 : <section
                     ref={divRef}
-                    onScroll={() => { onScroll(); handleHide() }}
+                    onScroll={() => { onScroll(); handleHideCallback() }}
                     className="Grid">
                     {
                         issues.map((issue: IssueView, index: number) => (

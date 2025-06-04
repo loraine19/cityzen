@@ -1,12 +1,21 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useUserStore } from '../../../../application/stores/user.store';
 import Cookies from 'js-cookie';
+import { useEffect } from 'react';
 
 export const PrivateRoute = () => {
-    const { isLoggedIn, user, setIsLoggedIn } = useUserStore((state) => state)
+    const { isLoggedIn, user, setIsLoggedIn, fetchUser } = useUserStore((state) => state)
     const isLoggedCookie = Cookies.get('isLogged');
     const isLogged = isLoggedCookie === 'true' ? true : false
     if (typeof isLogged === 'boolean' && (isLoggedIn !== isLogged)) setIsLoggedIn(isLogged);
+
+
+    useEffect(() => {
+        if (!user)
+            fetchUser().catch((error) => {
+                console.error('Error fetching user:', error);
+            });
+    }, [user]);
 
     const userName = user?.Profile?.firstName ?? 'Bonjour'
     if (!isLoggedIn && !isLogged) {

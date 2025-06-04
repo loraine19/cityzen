@@ -8,9 +8,9 @@ export const ReadAllButton = ({ update }: { update?: any }) => {
     return <Icon
         bg
         color='red'
-        icon="clear_all"
-        size="xl"
-        style="absolute !shadow-md right-1 top-3 z-30 bg-opacity-90 !bg-red-100 hover:!bg-red-200 hover:!bg-opacity-90"
+        icon="delete"
+        size="sm"
+        style="absolute !shadow-md right-1 top-1 z-30 bg-opacity-90 !bg-red-100 hover:!bg-red-200 hover:!bg-opacity-90"
         onClick={
             async () => {
                 const notifs = await readAll();
