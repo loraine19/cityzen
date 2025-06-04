@@ -130,9 +130,11 @@ export default function NotificationPage() {
                     type={"Notifications " + `${PathElement[filter as keyof typeof PathElement] ?? ""} `}
                     closeBtn
                     link={'/'} />
-                <div className="relative max-w-[100vw] justify-center overflow-auto flex pr-4">
-                    <TabsMenu
-                        labels={notifTabs} />
+                <div className="relative justify-center  flex pr-4 ">
+                    <div className="justify-center overflow-auto flex pr-6 rounded-full">
+                        <TabsMenu
+                            labels={notifTabs} />
+                    </div>
                     <ReadAllButton
                         update={refetch} />
                 </div>

@@ -75,7 +75,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 }}
                             />
                         </div>
-                        <div className="w-respLarge flex flex-col lg:flex-row gap-2 py-2">
+                        <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
                             {(type === VoteTarget.POOL) ?
                                 <Select
                                     className="rounded-full shadow bg-white border-none capitalize"
@@ -211,6 +211,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                     disabled={formik.values.pourcent > 1}
                     className="lgBtn ">
                     <Icon
+                        size='xl'
                         color="white"
                         icon="add" />
                     {formik.values.pourcent > 1 ?

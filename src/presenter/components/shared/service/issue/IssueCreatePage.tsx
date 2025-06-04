@@ -15,6 +15,7 @@ import { IssueView } from '../../../../views/viewsEntities/issueViewEntity';
 import DI from '../../../../../di/ioc';
 import { IssueDTO } from '../../../../../infrastructure/DTOs/IssueDTO';
 import { User } from '../../../../../domain/entities/User';
+import { Icon } from '../../../common/IconComp';
 
 
 
@@ -121,6 +122,10 @@ export default function IssueEditPage() {
                 <Button
                     type="submit"
                     className="!lngBtn w-respLarge rounded-full" >
+                    <Icon
+                        size='xl'
+                        color="white"
+                        icon="add" />
                     Enregistrer la demande d'aide
                 </Button>
             </footer>

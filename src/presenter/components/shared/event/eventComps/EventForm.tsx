@@ -40,7 +40,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                     <SubHeader
                         type={title ? 'Modifier mon évenement ' : 'Créer mon évenement'}
                         place={category ? label : ''} closeBtn />
-                    <div className="w-respLarge flex flex-col lg:flex-row gap-2 py-2">
+                    <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
                         <Select className='rounded-full shadow bg-white border-none capitalize'
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                             name={"category"}
@@ -191,6 +191,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                     size="lg"
                     className="lgBtn w-full rounded-full" >
                     <Icon
+                        size='xl'
                         color='white'
                         icon={title ? 'edit' : 'add'} />
                     {title ? 'Modifier' : 'Créer'}

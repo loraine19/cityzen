@@ -13,6 +13,7 @@ import { IssueView } from '../../../../views/viewsEntities/issueViewEntity';
 import DI from '../../../../../di/ioc';
 import { IssueDTO } from '../../../../../infrastructure/DTOs/IssueDTO';
 import { Button } from '@material-tailwind/react';
+import { Icon } from '../../../common/IconComp';
 
 export default function IssueEditPage() {
     const { id } = useParams();
@@ -104,6 +105,10 @@ export default function IssueEditPage() {
                     type="submit"
                     disabled={issue?.status > 1}
                     className="!lngBtn w-respLarge rounded-full" >
+                    <Icon
+                        size='xl'
+                        color="white"
+                        icon="edit" />
                     Mettre à jour la concialtion
                 </Button>
             </footer>
