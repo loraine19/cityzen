@@ -29,7 +29,7 @@ export const eventViewModel = () => {
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const userId = user?.id || 0
     const flat = !data || error || isLoading ? [] : data?.pages.flat().map(page => page.events).flat()
-    const events = (userLoading || isLoading || !data) ? [] : flat?.map(event => new EventView(event, userId))
+    const events = (userLoading || isLoading || !data) ? [] : flat?.map(event => event && new EventView(event, userId))
 
 
     return {

@@ -92,7 +92,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 className={(!navBottom ? 'pb-2 ' : 'pb-2 ') + ((hideNavBottom && navBottom) ? ' transform-y[-100%] opacity-0 anim' : '!my-0  ') + ((hideNavBottom && !navBottom) ? 'hidden' : '') + ((navBottom && !hideNavBottom) ? 'transform-y-0 opacity-100 anim' : '') +
                     ' w-respXl backdropBlur justify-center items-center flex gap-4  '}>
                 <Navbar className={`
-               shadow-md w-[calc(80%)] anim flex rounded-full h-full  min-w-max  lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
+               shadow-md w-[calc(80%)]  flex rounded-full h-full  min-w-max  lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
                         <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full gap-auto md:divide-x-4 divide-white/95 `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (

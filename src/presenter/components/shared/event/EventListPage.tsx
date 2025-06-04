@@ -80,7 +80,7 @@ export default function EventListPage() {
             case (count === 0 && !isLoading): setNotif(`Aucun événement ${filterName()} trouvé`); break;
             default: setNotif('');
         }
-    }, [isLoading, error, filter, category]);
+    }, [isLoading, error, filter, category, count]);
 
     //// HANDLE VIEW CHANGE
     const switchClick = () => {
@@ -199,11 +199,7 @@ export default function EventListPage() {
                             className="Grid">
                             {events.map((event: EventView, index: number) => (
                                 <div className="SubGrid "
-                                    key={event.id}
-                                    style={{
-                                        animationDelay: `${index * 80}ms`,
-                                        animationFillMode: 'both'
-                                    }}  >
+                                    key={index} >
                                     <EventCard
                                         event={event}
                                         change={change}

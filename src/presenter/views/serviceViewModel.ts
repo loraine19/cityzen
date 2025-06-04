@@ -25,8 +25,7 @@ export const serviceViewModel = () => {
       });
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const flat = data?.pages.flat().map(page => page.services).flat()
-    const services = userLoading || isLoading || !flat ? [] : flat?.map((service: Service) => new ServiceView(service, user))
-    console.log('services', services, data)
+    const services = userLoading || isLoading || !flat ? [] : flat?.map((service: Service) => service && new ServiceView(service, user))
 
     return {
       count,
