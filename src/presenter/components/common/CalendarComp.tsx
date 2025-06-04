@@ -40,21 +40,21 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
         <div className='flex flex-col flex-1 pt-3 '
             data-cy="calendar">
             <div className="flex overflow-auto justify-between  gap-2 items-center p-0">
-                {logo && <div className='flex items-center gap-1'>
-                    <Icon
-                        fill bg
-                        color='blue-gray'
-                        icon='today'
-                        link="/evenement"
-                        size="md"
-                        style='mb-1 !px-1.5'
-                        title='Voir tous les événements' />
-                    <div>
-                        <Typography color="blue-gray" className="hidden lg:flex">
-                            Évenements
-                        </Typography>
-                    </div>
-                </div>}
+                {logo &&
+                    <div className='flex items-center pb-2'>
+                        <Icon
+                            fill bg
+                            color='blue-gray'
+                            icon='today'
+                            link="/evenement"
+                            size="md"
+                            title='Voir tous les événements' />
+                        <div>
+                            <Typography color="blue-gray" className="hidden lg:flex pl-2">
+                                Évenements
+                            </Typography>
+                        </div>
+                    </div>}
                 <div className='flex  w-full justify-between items-center flex-row-reverse'>
                     <div className='flex  items-center'>
                         <Icon
@@ -69,7 +69,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                             size='sm'
                             onClick={addWeek} />
                     </div>
-                    <div className='flex items-center px-5'>
+                    <div className='flex items-center pl-8 pb-2'>
                         <div className={`flex gap-1 items-center font-light`}>
                             jours
                             <Icon

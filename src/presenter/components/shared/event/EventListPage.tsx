@@ -147,8 +147,10 @@ export default function EventListPage() {
         }
     ]
 
+    const { navBottom } = useUxStore((state) => state);
     return (
-        <main>
+
+        <main className={navBottom ? "withBottom" : ""}>
             <div className="sectionHeader ">
                 {view === "view_agenda" &&
                     <TabsMenu

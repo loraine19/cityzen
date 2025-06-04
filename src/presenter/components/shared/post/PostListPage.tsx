@@ -147,84 +147,84 @@ export default function PostListPage() {
         }
     ]
 
+    const { navBottom } = useUxStore((state) => state);
     return (
-        <>
-            <main>
-                <div className="sectionHeader">
-                    <TabsMenu
-                        labels={postTabs}
-                        sortList={sortList}
-                        selectedSort={sort}
-                        setSelectedSort={setSort}
-                        color={'orange'}
-                        reverse={reverse}
-                        setReverse={setReverse} />
-                    <div className="flex items-center justify-center gap-4  ">
-                        <CategoriesSelect
-                            categoriesArray={postCategories}
-                            change={change}
-                            categorySelected={category.toString()} />
-                        <Icon
-                            icon={view === "list" ? "list" : "dashboard"}
-                            onClick={switchClick}
-                            size="xl"
-                            style=" hidden md:flex"
-                        />
-                    </div>
-                    {notif &&
-                        <NotifDiv
-                            notif={notif}
-                            isLoading={isLoading}
-                            refetch={refetch} />}
-                    <SubHeader
-                        qty={count}
-                        type={`annonces ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
+
+        <main className={navBottom ? "withBottom" : ""}>
+            <div className="sectionHeader">
+                <TabsMenu
+                    labels={postTabs}
+                    sortList={sortList}
+                    selectedSort={sort}
+                    setSelectedSort={setSort}
+                    color={'orange'}
+                    reverse={reverse}
+                    setReverse={setReverse} />
+                <div className="flex items-center justify-center gap-4  ">
+                    <CategoriesSelect
+                        categoriesArray={postCategories}
+                        change={change}
+                        categorySelected={category.toString()} />
+                    <Icon
+                        icon={view === "list" ? "list" : "dashboard"}
+                        onClick={switchClick}
+                        size="xl"
+                        style=" hidden md:flex"
+                    />
                 </div>
-                <section
-                    ref={divRef}
-                    onScroll={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onScroll();
-                        handleHide();
-                    }}>
-                    {isLoading || !posts || error ?
-                        <SkeletonGrid />
-                        : <>
-                            {view === "list" ?
-                                announcesToGrid.map((line, index) => (
-                                    <PostGridComp
-                                        key={index}
-                                        line={line}
-                                        update={refetch}
-                                        change={change}
-                                        mines={mines}
-                                        view={view} />))
-                                :
-                                <div className="Grid">
-                                    {posts?.map((post: PostView, index: number) => (
-                                        <div
-                                            className="SubGrid"
-                                            key={index}>
-                                            <PostCard
-                                                key={post.id}
-                                                post={post}
-                                                change={change}
-                                                update={refetch}
-                                                mines={mines} />
-                                        </div>
-                                    ))}
-                                </div>
-                            }
-                        </>
-                    }
-                    <LoadMoreButton
-                        color={'orange'}
-                        isBottom={isBottom}
-                        hasNextPage={true}
-                        handleScroll={onScroll} />
-                </section>
-            </main>
-        </>
+                {notif &&
+                    <NotifDiv
+                        notif={notif}
+                        isLoading={isLoading}
+                        refetch={refetch} />}
+                <SubHeader
+                    qty={count}
+                    type={`annonces ${filterName()} ${PostCategory[category as keyof typeof PostCategory] ?? ''}`} />
+            </div>
+            <section
+                ref={divRef}
+                onScroll={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onScroll();
+                    handleHide();
+                }}>
+                {isLoading || !posts || error ?
+                    <SkeletonGrid />
+                    : <>
+                        {view === "list" ?
+                            announcesToGrid.map((line, index) => (
+                                <PostGridComp
+                                    key={index}
+                                    line={line}
+                                    update={refetch}
+                                    change={change}
+                                    mines={mines}
+                                    view={view} />))
+                            :
+                            <div className="Grid">
+                                {posts?.map((post: PostView, index: number) => (
+                                    <div
+                                        className="SubGrid"
+                                        key={index}>
+                                        <PostCard
+                                            key={post.id}
+                                            post={post}
+                                            change={change}
+                                            update={refetch}
+                                            mines={mines} />
+                                    </div>
+                                ))}
+                            </div>
+                        }
+                    </>
+                }
+                <LoadMoreButton
+                    color={'orange'}
+                    isBottom={isBottom}
+                    hasNextPage={true}
+                    handleScroll={onScroll} />
+            </section>
+        </main>
     );
 }

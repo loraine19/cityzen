@@ -46,7 +46,7 @@ export default function DashboardPage() {
 
     //// CLASSES
     const userClasse = "flex row-span-3 lg:grid pt-6 ";
-    const eventClasse = "h-full flex !min-h-[12rem] row-span-5 lg:grid  ";
+    const eventClasse = "h-full flex !min-h-[12rem] row-span-5 lg:grid overflow-auto";
     const notifClasse = " row-span-2   lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5.5rem]")
     const mapClasse = "flex row-span-6 !min-h-[16rem] 15rem] lg:min-h-[32%] lg:grid";
 
@@ -80,8 +80,10 @@ export default function DashboardPage() {
     }, [msg]);
 
 
+
+
     return (
-        <main className={` ${navBottom ? "-mt-8" : "mt-1 "} relative flex pb-0.5`}
+        <main className={` ${navBottom ? "-mt-8" : "mt-1 "} ${window.innerWidth < 505 ? "-mb-[4.5rem] lg:mb-1 " : ""} relative flex pb-0.5 !overflow-hidden `}
             data-cy="dashboard-body" >
             <div className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
                 <div className={`${userClasse}`}>
@@ -165,7 +167,7 @@ export default function DashboardPage() {
                                     'Vous n\'avez pas de notifications'}
                                 </Typography>
                             </div>
-                            <div className="relative flex flex-col max-h-14 max-w-min  overflow-y-auto"
+                            <div className="relative flex flex-col max-h-14 mb-1 w-full  overflow-y-auto"
                                 onScroll={() => handleScroll()}
                                 ref={divRef}>
                                 {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
@@ -183,7 +185,7 @@ export default function DashboardPage() {
                                                     className={`mr-1 capitalize font-normal ${notif.typeS === 'message' ? 'text-cyan-800' : 'text-orange-800'}`}>
                                                     {notif?.typeS} :&nbsp;
                                                 </span>
-                                                <span className="">
+                                                <span className="w-full">
                                                     {notif?.description}
                                                 </span>
                                             </p>
@@ -213,18 +215,19 @@ export default function DashboardPage() {
                 </div>
                 <div className={mapClasse}>
                     <Card className="h-full flex-1 cyan anim">
-                        <CardBody className="h-full min-h-[20vh] lg!min-h-[100%] flex flex-col !pt-2 p-4">
+                        <CardBody className="h-full min-h-[20vh] lg!min-h-[100%] flex flex-col !pt-3 p-4">
                             <div className="flex items-center gap-2">
-                                <Icon
-                                    fill
-                                    bg
-                                    icon="location_on"
-                                    link="/service"
-                                    size="md"
-                                    color="cyan"
-                                    style="hover:!bg-cyan-100 mb-2"
-                                    title="voir mes services" />
-                                <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Icon
+                                        fill
+                                        bg
+                                        icon="location_on"
+                                        link="/service"
+                                        size="md"
+                                        color="cyan"
+                                        style="hover:!bg-cyan-100"
+                                        title="voir mes services" />
+
                                     <Typography
                                         color="blue-gray">
                                         {isLoadingMap ?
@@ -274,7 +277,9 @@ export default function DashboardPage() {
                         </CardBody>
                     </Card>
                 </div>
+                {window.innerWidth < 505 && <div className="min-h-[4.5rem] lg:hidden">&nbsp;</div>}
             </div>
+
         </main>
     );
 }

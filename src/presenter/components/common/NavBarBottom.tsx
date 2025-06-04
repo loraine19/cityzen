@@ -48,11 +48,11 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 }
             }
 
-            className={(!navBottom ? 'pb-2 ' : 'pb-2 ') + (hideNavBottom ? 'invisible' : 'backdrop-blur-sm') +
-                ' w-respXl px-[0.5%] justify-center items-center flex gap-4 '}>
-            <Navbar className={`${navBottom ? "shadow-lg" : 'shadow-md'} flex rounded-full h-full   items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
-                <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full h-full relative"`}>
-                    <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full gap-[3%]`}>
+            className={(!navBottom ? 'pb-2 ' : 'pb-2 ') + ((hideNavBottom && navBottom) ? 'invisible' : '!my-0 backdrop-blur-sm backdrop-opacity-75 ') + ((hideNavBottom && !navBottom) ? 'hidden' : '') +
+                ' w-respXl  justify-center items-center flex gap-4 '}>
+            <Navbar className={`${navBottom ? "shadow-lg" : 'shadow-md'} w-max overflow-autoflex rounded-full h-full  sm:w-[26rem] md:w-[36rem] min-w-max  lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
+                <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
+                    <ul className={`flex flex-row w-full overflow-auto rounded-full justify-between  h-full gap-auto`}>
                         {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
                             <Typography
                                 onClick={() => { setColor(col) }}
@@ -77,7 +77,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                                 color={col}
                                             />
                                             <span className={`!text-[0.9rem] font-bold
-                                                 filter brightness-90 font-comfortaa hidden md:block  pr-8`}>
+                                                 filter brightness-90 font-comfortaa hidden lg:block  pr-8`}>
                                                 {label}
                                             </span>
                                         </>
@@ -91,7 +91,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
             </Navbar>
             {addBtn && (
                 <div className={`flex-1 border-${color}-500 border-[1px] border-opacity-30 rounded-full max-w-[58px] `}>
-                    <div className={`flex z-50 items-center justify-center right-5 bg-${color}-100  h-full gap-12 w-full rounded-full shadowMid`}>
+                    <div className={`flex z-50 items-center justify-center right-5  h-full gap-12 w-full rounded-full shadowMid`}>
                         <SpeedDial
                             placement={navBottom ? 'top' : 'bottom'}
                             offset={10}>
@@ -102,7 +102,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                         icon="add"
                                         color='white'
                                         bg clear
-                                        size='4xl'
+                                        size='5xl'
                                         style={`${!closeDial ? ' !text-white transition-transform group-hover:rotate-45 hover:scale-[1]' : ''}  !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10`} />
                                 </div>
                             </SpeedDialHandler>

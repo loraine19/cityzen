@@ -122,8 +122,10 @@ export default function NotificationPage() {
     const [hide, setHide] = useState<boolean>(false);
     useEffect(() => { setHideNavBottom(hide) }, [hide]);
 
+    const { navBottom } = useUxStore((state) => state);
     return (
-        <main>
+
+        <main className={navBottom ? "withBottom" : ""}>
             <div className="sectionHeader">
                 <SubHeader
                     qty={count}

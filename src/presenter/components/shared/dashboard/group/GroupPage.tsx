@@ -101,11 +101,11 @@ export default function GroupPage() {
         }
     }, [groups, isLoading, error, filter, category]);
 
+    const { navBottom } = useUxStore((state) => state);
     return (
-        <main>
+
+        <main className={navBottom ? "withBottom" : ""}>
             <div className=" sectionHeader">
-
-
                 <SubHeader
                     closeBtn
                     link={`/`}

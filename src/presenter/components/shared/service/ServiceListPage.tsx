@@ -190,9 +190,10 @@ export default function ServicesPage() {
     ]
 
     //// RENDER
+    const { navBottom } = useUxStore((state) => state);
     return (
 
-        <main>
+        <main className={navBottom ? "withBottom" : ""}>
             <div className="sectionHeader">
 
                 <TabsMenu

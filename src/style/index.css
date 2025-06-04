@@ -47,12 +47,16 @@ body {
 }
 
 .App {
-    @apply flex flex-col w-screen h-screen px-[0.5vw] pt-[2vh] pb-[1vh];
+    @apply flex flex-col w-screen h-screen px-[0.5vw] pt-[2vh];
 }
 
 main {
-    @apply flex flex-col max-w-[1100px] h-[calc(100%+5rem)] -mb-[70px] px-4 gap-1 flex-1;
+    @apply flex flex-col max-w-[1100px] h-[calc(100%+5rem)] px-4 gap-1 flex-1;
     min-height: 0;
+}
+
+.withBottom {
+    @apply !-mb-[70px];
 }
 
 section,
@@ -70,7 +74,7 @@ main {
 }
 
 footer {
-    @apply relative !px-[1%] md:px-[5%] lg:px-[2%];
+    @apply relative !pb-[2vh] !px-[1%] md:px-[5%] lg:px-[2%];
     width: 100%;
     max-width: 1100px;
     margin: 0 auto;
