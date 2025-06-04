@@ -34,9 +34,9 @@ export default function NavBarTop() {
         <header>
             <div
                 className={`
-                    ${hideNavBottom ? 'min-h-1 -mt-4 !shadow-md lg:flex' : 'pb-4 mb-1'}
+                    ${hideNavBottom ? 'min-h-1 -mt-4 !shadow-md lg:flex anim' : 'anim pb-4 mb-1'}
                     relative h-full w-full flex justify-between
-                    anim
+                    
                 `}
             >
                 {onBoard ?

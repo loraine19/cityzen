@@ -15,9 +15,10 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
 
 
     return (
-        <div className="relative flex justify-between items-center ">
-            <div className="flex items-center  gap-2">
-                <Menu placement="bottom-end">
+        <div className="relative flex justify-between items-center  ">
+            <div className="flex items-center w-full h-full  gap-2">
+                <Menu
+                    placement="bottom-end">
                     <MenuHandler className="relative z-auto h-max min-w-max flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Icon
@@ -26,38 +27,41 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                             />
                         </div>
                     </MenuHandler>
-                    <MenuList className="!rounded-2xl !shadow-l py-3 px-2">
-                        {sortList.map((item: SortLabel, index: number) =>
-                            <div
-                                key={index}
-                                className="rounded-2xl pl-3 py-0 flex items-center font-normal justify-between gap-4 hover:!bg-white hover:!text-underline" >
-                                {item.label}
-                                <div className="flex items-center"> {(selectedSort === (item.key ?? item.label)) &&
-                                    <Icon
-                                        onClick={() => {
-                                            item.action()
-                                            setSelectedSort(item.key ?? item.label)
-                                            setReverse(!reverse)
-                                        }}
-                                        color={color}
-                                        title={'Trier par inverse ' + item.label}
-                                        style="!p-0 -mr-1"
-                                        icon={reverse ? 'arrow_drop_up' : 'arrow_drop_down'} />}
-                                    <Icon
-                                        size={'lg'}
-                                        style={`!p-1 `}
-                                        onClick={() => {
-                                            item.action();
-                                            setSelectedSort(item.key ?? item.label)
-                                            setReverse(!reverse)
-                                        }}
-                                        title={'Trier par ' + item.label}
-                                        disabled={(selectedSort === (item.key ?? item.label))}
-                                        color={selectedSort === (item.key ?? item.label) ? color : 'gray'}
-                                        icon={item.icon} fill />
+                    <MenuList className="backdrop-blur backdrop-opacity-90 overflow-hidden bg-transparent m-auto !border-none shadow-none  flex rounded-2xl justify-end h-[calc(100%-110px)] w-respXl ">
+                        <div className="p-4 h-max bg-white shadow-lg rounded-2xl border relative right-0 flex flex-col justify-start">
+                            {sortList.map((item: SortLabel, index: number) =>
+                                <div
+                                    key={index}
+                                    className="rounded-2xl pl-3 py-0 flex items-center font-normal justify-between gap-4 hover:!bg-white hover:!text-underline" >
+                                    {item.label}
+                                    <div className="flex items-center">
+                                        {(selectedSort === (item.key ?? item.label)) &&
+                                            <Icon
+                                                onClick={() => {
+                                                    item.action()
+                                                    setSelectedSort(item.key ?? item.label)
+                                                    setReverse(!reverse)
+                                                }}
+                                                color={color}
+                                                title={'Trier par inverse ' + item.label}
+                                                style="!p-0 -mr-1"
+                                                icon={reverse ? 'arrow_drop_up' : 'arrow_drop_down'} />}
+                                        <Icon
+                                            size={'lg'}
+                                            style={`!p-1 `}
+                                            onClick={() => {
+                                                item.action();
+                                                setSelectedSort(item.key ?? item.label)
+                                                setReverse(!reverse)
+                                            }}
+                                            title={'Trier par ' + item.label}
+                                            disabled={(selectedSort === (item.key ?? item.label))}
+                                            color={selectedSort === (item.key ?? item.label) ? color : 'gray'}
+                                            icon={item.icon} fill />
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </MenuList>
                 </Menu>
             </div>
