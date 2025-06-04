@@ -141,9 +141,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                             placement={navBottom ? 'top' : 'bottom'}
                             offset={10}>
                             <SpeedDialHandler >
-                                <div
-                                    onClick={() => setCloseDial(!closeDial)}
-                                    className={`rounded-full text-white `}>
+                                <div className={`rounded-full text-white `}>
                                     <Icon
                                         icon="add"
                                         color='white'
@@ -166,6 +164,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                             color={col} />
                                         <Icon
                                             bg
+                                            fill={addBtn ? true : false}
                                             link={to}
                                             size='2xl'
                                             icon={icon}
