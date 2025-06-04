@@ -51,7 +51,7 @@ export default function FlagPage() {
     const handleHide = useCallback(() => {
         if (!divRef.current) return;
         const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 100);
+        let shouldHide = (scrollTop >= 60);
         setHide(shouldHide);
     }, [divRef]);
 

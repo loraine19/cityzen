@@ -7,13 +7,14 @@ import { OnlineDot } from "./onlineDot";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 import { useEffect } from "react";
 import { AvatarUser } from "./AvatarUser";
+import { useUxStore } from "../../../application/stores/ux.store";
 export default function NavBarTop() {
-    const user = useUserStore((state) => state.user);
     const { unReadMsgNotif, getColor } = useNotificationStore((state) => state);
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => { getColor(location.pathname) }, [location.pathname])
-    const { navBottom, setNavBottom } = useUserStore((state) => state);
+    const { navBottom, setNavBottom, user } = useUserStore((state) => state);
+    const { hideNavBottom } = useUxStore((state) => state);
 
 
     const menuItems = [
@@ -31,7 +32,13 @@ export default function NavBarTop() {
 
     return (
         <header>
-            <div className="relative  h-full w-full flex mb-1 justify-between  pb-6">
+            <div
+                className={`
+                    ${hideNavBottom ? 'min-h-1 -mt-4 !shadow-md lg:flex' : 'pb-4 mb-1'}
+                    relative h-full w-full flex justify-between
+                    anim
+                `}
+            >
                 {onBoard ?
                     <div className="relative w-full flex justify-between items-center">
                         <div className="flex w-full  flex-1 items-center ">
@@ -45,7 +52,7 @@ export default function NavBarTop() {
                             </Typography>
                         </div>
                     </div> :
-                    <div className={"flex w-full items-center gap-4 "}>
+                    <div className={`flex w-full items-center gap-4 ${hideNavBottom ? 'hidden' : ''} `}>
                         <Menu placement="bottom-start">
                             <MenuHandler className="relative h-max min-w-max z-50  flex items-center  cursor-pointer">
                                 <div className="flex items-center relative">
@@ -92,7 +99,7 @@ export default function NavBarTop() {
                             </Typography>
                         </div>
                     </div>}
-                <div className={` ${onBoard ? 'lg:pr-4' : 'pr-0'} relative lg:pt-2 flex h-full w-full " `} >
+                <div className={` ${onBoard ? 'lg:pr-4' : 'pr-0'} ${hideNavBottom ? 'hidden' : ''} lg:pt-2 flex h-full w-full " `} >
                     <NotifBadge />
                 </div>
             </div >

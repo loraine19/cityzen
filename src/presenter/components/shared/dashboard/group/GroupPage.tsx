@@ -76,7 +76,7 @@ export default function GroupPage() {
     const handleHide = useCallback(() => {
         if (!divRef.current) return;
         const { scrollTop } = divRef.current;
-        let shouldHide = (scrollTop >= 100);
+        let shouldHide = (scrollTop >= 60);
         setHide(shouldHide);
     }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
