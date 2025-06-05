@@ -88,13 +88,15 @@ export default function DashboardPage() {
     const [hide, setHide] = useState<boolean>(false);
     useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
-    const [smallScreen, setSmallScreen] = useState<boolean>(window.innerHeight < 600);
-    window.addEventListener('resize', () => { setSmallScreen(window.innerHeight < 600) })
+    const [smallScreen, setSmallScreen] = useState<boolean>(window.innerHeight < 705);
+    window.addEventListener('resize', () => {
 
+        setSmallScreen(window.innerHeight < 705)
+    })
+    // ${(smallScreen) ? "bg-yellow-200 " : "lg:!pb-20 pb-[4rem]"} 
     return (
         <main className={`
             ${navBottom ? "withBottom" : ""} 
-            ${(smallScreen) ? "" : "lg:!pb-20 pb-8"} 
             relative flex pb-0.5 !overflow-hidden anim -mt-4`}
             data-cy="dashboard-body" >
             <div ref={divRef}
@@ -184,20 +186,20 @@ export default function DashboardPage() {
                             <div className="relative flex flex-col max-h-14 mb-1 w-full  overflow-y-auto"
                                 onScroll={() => handleScroll()}
                                 ref={divRef}>
-                                {!isLoading && (notifs.map((notif: NotifView, index: number) => notif.read === false &&
+                                {!isLoading && (notifs.map((notif: NotifView, index: number) => notif?.read === false &&
                                     <div key={index + 'div'}
                                         className="flex w-full justify-between h-full gap-4 p-0.5">
 
                                         <div key={index}
-                                            className={`${notif.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex  items-center break-words pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5  flex-0 relative `}
+                                            className={`${notif?.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex  items-center break-words pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5  flex-0 relative `}
                                             onClick={async () => {
-                                                await readNotif(notif.id);
+                                                await readNotif(notif?.id);
                                                 await refetch();
-                                                notif.link && navigate(notif.link)
+                                                notif?.link && navigate(notif?.link)
                                             }}>
                                             <p className="!line-clamp-1 ">
                                                 <span
-                                                    className={`mr-1 capitalize font-normal ${notif.typeS === 'message' ? 'text-cyan-800' : 'text-orange-800'}`}>
+                                                    className={`mr-1 capitalize font-normal ${notif?.typeS === 'message' ? 'text-cyan-800' : 'text-orange-800'}`}>
                                                     {notif?.typeS} :&nbsp;
                                                 </span>
                                                 <span className="w-full">
@@ -210,9 +212,9 @@ export default function DashboardPage() {
                                             fill
                                             icon={"close"}
                                             onClick={async () => {
-                                                await readNotif(notif.id);
+                                                await readNotif(notif?.id);
                                                 await refetch();
-                                                notif.link && navigate(notif.link)
+                                                notif?.link && navigate(notif?.link)
                                             }}
                                             size="md"
                                             title={"fermer " + notif?.title} />
@@ -292,10 +294,11 @@ export default function DashboardPage() {
                         </CardBody>
                     </Card>
                 </div>
-            </div>
-            {<div className={`${(!hideNavBottom && smallScreen) ? 'min-h-[3rem]' : ''} lg:hidden `}>
+                {<div className={`${(smallScreen) ? 'min-h-1 -mb-4 pt-8' : 'pt-4 min-h-[4rem] '} lg:hidden `}>
 
-            </div>}
+                </div>}
+            </div>
+
         </main>
     );
 }
