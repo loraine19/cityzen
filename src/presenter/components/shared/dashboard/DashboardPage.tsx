@@ -96,7 +96,7 @@ export default function DashboardPage() {
     // ${(smallScreen) ? "bg-yellow-200 " : "lg:!pb-20 pb-[4rem]"} 
     return (
         <main className={`
-            ${navBottom ? "withBottom" : ""} 
+            ${navBottom ? "withBottom lg:!mb-2 " : ""} 
             relative flex pb-0.5 !overflow-hidden anim -mt-4`}
             data-cy="dashboard-body" >
             <div ref={divRef}

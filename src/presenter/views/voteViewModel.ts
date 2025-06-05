@@ -53,7 +53,7 @@ export const poolIdViewModel = () => {
     const getPoolById = DI.resolve('getPoolByIdUseCase')
     const { data, isLoading, error, refetch } = useQuery({
       queryKey: ['poolById', id],
-      staleTime: 600000,
+      staleTime: 60000,
       queryFn: async () => await getPoolById.execute(id),
     })
 
