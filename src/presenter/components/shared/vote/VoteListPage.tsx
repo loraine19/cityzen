@@ -40,7 +40,7 @@ export default function VoteListPage() {
         step: step as PoolSurveyStep,
         sort,
         reverse,
-        search: searchString,
+        search: searchString ?? category,
     });
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), step: Params.get("step") }
