@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { SortLabel, TabLabel } from "../../../../domain/entities/frontEntities";
 import CheckCard from "../../common/CheckCard";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
@@ -83,30 +83,26 @@ export default function VoteListPage() {
 
 
     //// SORT LIST
-    const sortList = [
+    const sortList: SortLabel[] = [
         {
             label: "Créé le",
             icon: "event",
             key: PoolSurveySort.CREATED_AT,
-            action: async () => await refetch(),
         },
         {
             label: "Titre",
             icon: "sort_by_alpha",
             key: PoolSurveySort.TITLE,
-            action: async () => await refetch(),
         },
         {
             label: "Nombre de votes",
             icon: "smart_card_reader",
             key: PoolSurveySort.VOTES,
-            action: async () => await refetch(),
         },
         {
             label: "Utilisateur",
             icon: "person",
             key: PoolSurveySort.USER,
-            action: async () => await refetch(),
         }
     ]
 
@@ -161,6 +157,7 @@ export default function VoteListPage() {
                     setSelectedSort={setSort}
                     reverse={reverse}
                     setReverse={setReverse}
+                    action={refetch}
                 />
                 <CheckCard
                     categoriesArray={boxArray}

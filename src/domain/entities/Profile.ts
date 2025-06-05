@@ -25,7 +25,7 @@ export class Profile {
     points: number = 0;
     skills?: string = '';
     createdAt?: Date = new Date();
-    updatedAt?: Date = new Date();
+    updatedAt: Date = new Date();
     mailSub: MailSubscriptions | string = MailSubscriptions.SUB_1;
     constructor(data?: Partial<Profile>) {
         if (data) {

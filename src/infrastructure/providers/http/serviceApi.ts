@@ -1,4 +1,4 @@
-import { Service, ServicePage, ServiceUpdate } from "../../../domain/entities/Service";
+import { Service, ServiceFindParams, ServicePage, ServiceUpdate } from "../../../domain/entities/Service";
 import { ServiceDTO } from "../../DTOs/ServiceDTO";
 import { ApiService } from "./apiService";
 
@@ -9,9 +9,9 @@ export class ServiceApi {
 
     constructor() { this.api = new ApiService(); }
 
-    async getServices(page?: number,
-        mine?: boolean, type?: string, step?: string, category?: string,
-        sort?: string, reverse?: boolean): Promise<ServicePage> {
+    async getServices(page?: number, params?: ServiceFindParams): Promise<ServicePage> {
+        let paramss: ServiceFindParams = params ?? {};
+        const { mine, type, step, category, sort, reverse, search } = paramss;
         const pageR = page ? `?page=${page}` : '';
         const mineR = mine ? `&mine=${mine}` : '';
         const typeR = type ? `&type=${type}` : '';
@@ -19,8 +19,8 @@ export class ServiceApi {
         const sortR = sort ? `&sort=${sort}` : '';
         const reverseR = reverse ? `&reverse=${reverse}` : '';
         const categoryR = category ? `&category=${category}` : '';
-
-        return this.api.get(`${this.dataType}${pageR}${mineR}${typeR}${stepR}${categoryR}${sortR}${reverseR}`)
+        const searchR = search ? `&search=${search}` : '';
+        return this.api.get(`${this.dataType}${pageR}${mineR}${typeR}${stepR}${categoryR}${sortR}${reverseR}${searchR}`)
     }
 
     async getServiceById(id: number): Promise<Service> {

@@ -33,6 +33,16 @@ export enum EventSort {
     AZ = 'AZ',
 }
 
+export interface EventFindParams {
+    mine?: boolean;
+    filter?: EventFilter;
+    step?: EventStatus
+    category?: EventCategory
+    sort?: EventSort;
+    reverse?: boolean;
+    search?: string;
+}
+
 export class Event {
     Address: Address = {} as Address;
     Flags?: Flag[] = [];

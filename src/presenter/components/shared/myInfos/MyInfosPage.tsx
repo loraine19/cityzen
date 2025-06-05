@@ -7,7 +7,6 @@ import { ProfileForm } from '../auth/auth.Comps/ProfileForm';
 import { ProfileDTO, } from '../../../../domain/entities/Profile';
 import DI from '../../../../di/ioc';
 import { useUserStore } from '../../../../application/stores/user.store';
-import { User } from '../../../../domain/entities/User';
 import { Skeleton } from '../../common/Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { LogOutButton } from '../../common/LogOutBtn';
@@ -16,13 +15,15 @@ import { useAlertStore } from '../../../../application/stores/alert.store';
 import { ProfileDiv } from '../../common/ProfilDiv';
 
 export default function MyInfosPage() {
-    const { setUser } = useUserStore()
+    const { setUser, user } = useUserStore()
+
+    const { Profile, isLoading, error, user: userUpdated, refetch } = DI.resolve('meViewModel')();
     const navigate = useNavigate();
-    const user: User = useUserStore((state) => state.user);
-    const [assistance, setAssistance] = useState<string | undefined>(user.Profile?.assistance)
-    const [mailSub, setMailSub] = useState<string | undefined>(user.Profile?.mailSub)
-    const [address, setAddress] = useState<AddressDTO>(user.Profile?.Address)
+    const [assistance, setAssistance] = useState<string | undefined>(Profile?.assistance)
+    const [mailSub, setMailSub] = useState<string | undefined>(Profile?.mailSub)
+    const [address, setAddress] = useState<AddressDTO>(Profile?.Address)
     const updateProfile = async (data: ProfileDTO, Address: AddressDTO) => await DI.resolve('updateProfileUseCase').execute(data, Address)
+
 
     const formSchema = object({
         firstName: string().required("Le prémon est obligatoire").min(2, "minmum 2 lettres"),
@@ -32,16 +33,22 @@ export default function MyInfosPage() {
         mailSub: string()
     })
 
-    const { setOpen, setAlertValues } = useAlertStore(state => state)
+    const { setOpen, setAlertValues, handleApiError } = useAlertStore(state => state)
+    useEffect(() => {
+        if ((new Date(Profile?.updatedAt).getTime()) > (new Date(user?.Profile?.updatedAt).getTime())) {
+            setUser({ ...user, Profile: Profile })
+
+        }
+    }, [userUpdated])
 
     const updateFunction = async () => {
         const { blob, ...rest } = formik.values;
         const updateData = new ProfileDTO({ assistance, ...rest })
         const updated = await updateProfile(updateData, address)
-        console.log("updated", updated)
         if (!updated || updated?.error) {
-            setOpen(false)
-            throw new Error(updated?.error || "Une erreur est survenue lors de la mise à jour du profil");
+            handleApiError(new Error(updated?.error) ??
+                "Une erreur est survenue lors de la mise à jour du profil",
+                refetch)
         }
         else {
             navigate("/");
@@ -50,16 +57,14 @@ export default function MyInfosPage() {
         }
     }
 
-
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: user.Profile as any,
+        initialValues: Profile as any,
         validationSchema: formSchema,
         onSubmit: async values => {
-            formik.values = values;
-            formik.values.assistance = assistance;
-            formik.values.mailSub = mailSub;
-            const image = formik.values.blob ?? formik.values.image
+            values.assistance = assistance;
+            values.mailSub = mailSub;
+            const image = values.blob ?? values.image
             setOpen(true)
             setAlertValues({
                 close: () => setOpen(false),
@@ -70,7 +75,7 @@ export default function MyInfosPage() {
                 element: (
                     <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
                         <ProfileDiv
-                            profile={{ ...user, Profile: { ...formik.values, image } }}
+                            profile={{ ...user, Profile: { ...values, image } }}
                         />
                     </div>
                 )
@@ -99,8 +104,8 @@ export default function MyInfosPage() {
                 </div>
                 <AuthHeader />
             </header>
-            {!user.Profile ?
-                <Skeleton /> :
+            {!Profile || isLoading || error ?
+                <main><Skeleton /></main> :
                 <ProfileForm
                     formik={formik}
                     setAssistance={setAssistance}

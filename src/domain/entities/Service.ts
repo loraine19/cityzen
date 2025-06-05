@@ -18,6 +18,7 @@ export enum ServiceStep {
     STEP_3 = "terminé",
     STEP_4 = "litige"
 }
+
 export const serviceSteps: Label[] = getEnumLabel(ServiceStep);
 
 
@@ -115,4 +116,16 @@ export enum ServiceStepFilter {
 export type ServicePage = {
     services: Service[],
     count: number
+}
+
+export interface ServiceFindParams {
+    page?: number;
+    mine?: boolean;
+    type?: ServiceType;
+    step?: ServiceStep;
+    filter?: ServiceFilter;
+    category?: ServiceCategory;
+    sort?: ServiceSort;
+    reverse?: boolean;
+    search?: string;
 }

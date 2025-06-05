@@ -12,7 +12,7 @@ import { AuthRepositoryImpl } from '../infrastructure/repositoriesImpl/AuthRespo
 import { ResetPasswordApi } from '../infrastructure/providers/http/resetPassword.api';
 import { ResetPasswordRepositoryImpl } from '../infrastructure/repositoriesImpl/ResetPasswordRespositoryImpl';
 import { ProfileRepositoryImpl } from '../infrastructure/repositoriesImpl/ProfileRespositoryImpl';
-import { profileMeViewModel } from '../presenter/views/profileViewModel';
+import { meViewModel } from '../presenter/views/profileViewModel';
 import { ProfileApi } from '../infrastructure/providers/http/profileApi';
 import { AddressRepositoryImpl } from '../infrastructure/repositoriesImpl/AddressRespositoryImpl';
 import { AddressApi } from '../infrastructure/providers/http/addressApi';
@@ -104,6 +104,8 @@ container.register({
     resetPasswordService: asClass(ResetPasswordService),
 
     ////USER
+
+    meViewModel: asFunction(meViewModel),
     getUserMeUseCase: asClass(GetUserMeUseCase),
     getUserByIdUseCase: asClass(GetUserByIdUseCase),
     getUserCountUseCase: asClass(GetUserCountUseCase),
@@ -116,7 +118,6 @@ container.register({
     postProfileUseCase: asClass(PostProfileUseCase),
     updateProfileUseCase: asClass(UpdateProfileUseCase),
     profileRepository: asClass(ProfileRepositoryImpl),
-    profileMeViewModel: asFunction(profileMeViewModel),
     profileData: asClass(ProfileApi),
     updateRoleUseCase: asClass(UpdateRoleUseCase),
     updateAllRoleUseCase: asClass(UpdateAllRoleUseCase),

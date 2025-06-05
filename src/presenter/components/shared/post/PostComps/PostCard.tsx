@@ -43,7 +43,7 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                         className="h-full  w-full object-cover"
                     />}
             </CardHeader>
-            <CardBody className={` FixCardBody !flex-1`}>
+            <CardBody className={` FixCardBody !flex-1 ${short ? '' : 'gap-2'}`}>
                 <Title
                     title={title}
                     flagged={flagged} id={id}

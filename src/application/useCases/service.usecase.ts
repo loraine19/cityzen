@@ -1,4 +1,4 @@
-import { Service, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
+import { Service, ServiceFindParams, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
 import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
 import { ServiceDTO } from "../../infrastructure/DTOs/ServiceDTO";
 
@@ -7,11 +7,8 @@ export class GetServicesUseCase {
     constructor({ serviceRepository }: { serviceRepository: ServiceRepositoryBase }) {
         this.serviceRepository = serviceRepository;
     }
-    public async execute(page?: number,
-        mine?: boolean, type?: string,
-        step?: string, category?: string,
-        sort?: string, reverse?: boolean): Promise<ServicePage> {
-        return await this.serviceRepository.getServices(page, mine, type, step, category, sort, reverse);
+    public async execute(page?: number, params?: ServiceFindParams): Promise<ServicePage> {
+        return await this.serviceRepository.getServices(page, params);
     }
 }
 

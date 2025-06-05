@@ -50,7 +50,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             setImgBlob={setImgBlob}
                             formik={formik}
                             className="-ml-20 " />
-
                         <AvatarUser
                             Profile={{
                                 firstName: formik.values.firstName, image: imgBlob as string,
@@ -204,7 +203,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                     className="gap-4 rounded-full  lgBtn" >
                     <Icon
                         color="white"
-                        icon="edit"
+                        icon="save_as"
                         size="lg" />
                     modifier mon profile
                 </Button>

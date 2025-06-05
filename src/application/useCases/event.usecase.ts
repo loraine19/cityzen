@@ -1,4 +1,4 @@
-import { Event } from "../../domain/entities/Event"
+import { Event, EventFindParams } from "../../domain/entities/Event"
 import { EventPage } from "../../domain/entities/Event";
 import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
 import { AddressDTO } from "../../infrastructure/DTOs/AddressDTO";
@@ -11,8 +11,8 @@ export class GetEventsUseCase {
         this.eventRepository = eventRepository;
     }
 
-    public async execute(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<EventPage> {
-        return this.eventRepository.getEvents(page, filter, category, sort, reverse);
+    public async execute(page?: number, params?: EventFindParams): Promise<EventPage> {
+        return this.eventRepository.getEvents(page, params);
     }
 }
 

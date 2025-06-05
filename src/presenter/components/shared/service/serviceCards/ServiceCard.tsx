@@ -19,14 +19,21 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
     const { id, title, description, image, createdAt, User, flagged, mine, IResp, points, typeS, categoryS, statusS, Group } = service
     const haveImage = service.image ? true : false
     const navigate = useNavigate();
-    const isResp = service.statusS === ServiceStep.STEP_1 ? true : false;
-    const isValidated = service.statusS === ServiceStep.STEP_2 ? true : false;
-    const isFinish = service.statusS === ServiceStep.STEP_3 ? true : false;
-    const inIssue = service.statusS === ServiceStep.STEP_4 ? true : false;
     const statusSInt = getEnumVal(service.statusS, ServiceStep)
     const isLateValue = isLate(createdAt, 15) && statusSInt < 3
     const deleteService = async (id: number) => await DI.resolve('serviceUseCase').deleteService(id);
     const updateServiceStep = async (id: number, update: ServiceUpdate) => await DI.resolve('serviceUseCase').updateServiceStep(id, update);
+
+
+    const statusColor = (step: ServiceStep): { color: string } => {
+        switch (step) {
+            case ServiceStep.STEP_1: return { color: "OrangeChip" };
+            case ServiceStep.STEP_2: return { color: "GreenChip" };
+            case ServiceStep.STEP_3: return { color: "GrayChip" };
+            case ServiceStep.STEP_4: return { color: "RedChip" };
+            default: return { color: "Chip" };
+        }
+    }
 
     const myActions = [
         ...GenereMyActions(service, "service", deleteService, isLateValue),
@@ -89,13 +96,13 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                                 <Chip
                                     size="sm"
                                     value={typeS}
-                                    className={`${typeS === "demande" ? "OrangeChip" : "GreenChip"}`}>
+                                    className={`${typeS === ServiceType.GET ? "OrangeChip" : "GreenChip"}`}>
                                 </Chip>
                             </button>
                             <Chip
                                 size="sm"
                                 value={statusS}
-                                className={`rounded-full !px-3 ${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} `}>
+                                className={statusColor(statusS as ServiceStep).color}>
                             </Chip>
                         </div>
                         <DateChip
@@ -147,12 +154,12 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                         <Chip
                             size="md"
                             value={`${points.join(' à ')}   pts`}
-                            className={` GrayChip  lowercase !font-medium px-3.5 rounded-full ${mines && 'hidden md:flex'}`}
+                            className={` GrayChip lowercase !font-medium px-3.5 rounded-full ${mines && 'hidden md:flex'}`}
                             icon=
                             {<Icon
                                 icon="toll"
                                 title={`Ce service ${service.typeS === ServiceType.GET ? 'vous fais gagner' : 'coute'} ${points.join(' à ')}pts`}
-                                fill={user.Profile.points > points[0]}
+                                fill={user.Profile?.points > points[0]}
                                 color={service.typeS === ServiceType.GET ? "green" : "orange"}
                                 size="md" />}>
                         </Chip>
@@ -161,7 +168,6 @@ const ServiceCard: React.FC<ServiceProps> = ({ service, mines, change, update })
                             icon="arrow_circle_right"
                             link={`/service/${id}`}
                             title={`voir les details de service  ${title}`}
-
                             fill />
                     </div>
                 </CardFooter>

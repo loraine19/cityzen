@@ -22,3 +22,38 @@ export const TextLength = {
     DESCRIPTION: 2000,
     COMMENT: 1000,
 } as const;
+
+
+export enum Colors {
+    CYAN = 'cyan',
+    RED = 'red',
+    GREEN = 'green',
+    AMBER = 'amber',
+    PURPLE = 'purple',
+    PINK = 'pink',
+
+    TEAL = 'teal',
+    ORANGE = 'orange',
+    BLUE = 'blue',
+    INDIGO = 'indigo',
+    LIME = 'lime',
+    YELLOW = 'yellow',
+
+    EMERAD = 'emerald',
+    SKY = 'sky',
+    ROSE = 'rose',
+    FUCHSIA = 'fuchsia',
+    VIOLET = 'violet',
+
+    BLUE_GRAY = 'blue-gray',
+    STONE = 'stone',
+    ZINC = 'zinc',
+    NEUTRAL = 'neutral',
+    BLACK = 'black',
+    WHITE = 'white',
+    SLATE = 'slate',
+    GRAY = 'gray',
+
+}
+
+export const getTone = (color: string, pref?: string): string => `${pref ?? 'bg'}-${color}-${pref ? '100' : '100'}`;

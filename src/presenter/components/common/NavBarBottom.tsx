@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Icon } from "./IconComp";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 import { useUxStore } from "../../../application/stores/ux.store";
+import { getTone } from "../../../domain/entities/utilsEntity";
 
 interface NavBarBottomProps {
     handleClick?: () => void;
@@ -70,11 +71,11 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
         }
     ]
 
-
+    const from = `${getTone(color, 'from')} `;
 
     return (
         <>
-            <div className={`${closeDial ? 'hidden' : ''} ${navBottom ? 'bottom-[70px] h-[calc(100vh-70px)] max-h-[calc(100vh-70px)] w-full backdropBlur fixed' : 'hidden'}    `}>
+            <div className={`${closeDial ? 'hidden' : ''} ${navBottom ? `bottom-[70px] h-[calc(100vh-70px)] max-h-[calc(100vh-70px)] w-full backdropBlur bg fixed ` : 'hidden'}  bg-cyan-500  `}>
             </div>
             {!hideNavBottom &&
                 <div className="rounded-full">
@@ -89,8 +90,13 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                     setNavBottom(!navBottom)
                 }}
 
-                className={(!navBottom ? 'pb-2 ' : 'pb-2 ') + ((hideNavBottom && navBottom) ? ' transform-y[-100%] opacity-0 anim' : '!my-0  ') + ((hideNavBottom && !navBottom) ? 'hidden' : '') + ((navBottom && !hideNavBottom) ? 'transform-y-0 opacity-100 anim' : '') +
-                    ' w-respXl backdropBlur justify-center items-center flex gap-4  '}>
+                className={
+                    (!navBottom ? 'pb-2 ' : 'pb-2 ') +
+                    ((hideNavBottom && navBottom) ? ' transform-y[-100%] opacity-0 anim' : '!my-0  ') +
+                    ((hideNavBottom && !navBottom) ? 'hidden' : '') +
+                    ((navBottom && !hideNavBottom) ? 'transform-y-0 opacity-100 anim' : '') +
+                    `w-respXl backdropBlur bg justify-center items-center flex gap-4 bg-gradient-to-t ${from} from-10%  via-transparent to-transparent rounded-full`
+                }>
                 <Navbar className={`
                shadow-md w-[calc(80%)] !max-w-[calc(100vw-8rem)] overflow-auto flex rounded-full h-full min-w-max lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative `}>
@@ -127,7 +133,6 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                     </NavLink>
                                 </Typography>
                             ))}
-
                         </ul>
                     </div>
                 </Navbar>

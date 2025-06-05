@@ -2,10 +2,11 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import DI from '../../di/ioc';
 import { dayMS, shortDateString } from './viewsEntities/utilsService';
 import { EventView } from './viewsEntities/eventViewEntities';
+import { EventFindParams } from '../../domain/entities/Event';
 
 
 export const eventViewModel = () => {
-  return (filter?: string, category?: string, sort?: string, reverse?: boolean) => {
+  return (params: EventFindParams) => {
 
     console.log('eventViewModel called', { caller: (new Error().stack?.split('\n')[2] || '').trim() });
 
@@ -19,9 +20,9 @@ export const eventViewModel = () => {
     const getEvents = DI.resolve('getEventsUseCase')
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
-        queryKey: ['events', filter, category, sort, reverse],
+        queryKey: ['events', params],
         staleTime: 600000,
-        queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam, filter, category, sort, reverse) || { events: [], count: 0 },
+        queryFn: async ({ pageParam = 1 }) => await getEvents.execute(pageParam, params) || { events: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.events?.length ? pages.length + 1 : undefined
       })

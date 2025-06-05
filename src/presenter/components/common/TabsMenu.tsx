@@ -13,10 +13,10 @@ type TabProps = {
     selectedSort?: string;
     reverse?: boolean;
     setReverse?: (value: boolean) => void;
-
+    action?: () => void;
 }
 
-export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort, selectedSort, reverse, setReverse }: TabProps) {
+export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort, selectedSort, reverse, setReverse, action }: TabProps) {
     useEffect(() => {
         const tab = document.querySelector(`[data-value="${defaultTab as string}"]`) as HTMLElement
         tab && tab.click()
@@ -45,7 +45,7 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
             </Tabs>
             {sortList &&
                 <SortButton
-
+                    action={action ?? (() => { })}
                     sortList={sortList}
                     color={color}
                     setSelectedSort={setSelectedSort}

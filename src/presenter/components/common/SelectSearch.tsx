@@ -8,10 +8,11 @@ type selectSearchProps = {
     category: Label[]
     search: (label: Label) => void
 };
+
 export default function SelectSearch(props: selectSearchProps) {
     const { searchCat, setSearchCat, category, search } = props
     return (
-        <div className="px-4 py-1" >
+        <div className="px-4 w-full py-1" >
             <div className="flex !rounded-full h-7  w-full items-center bg-white shadow " >
                 <Menu placement="bottom-start">
                     <MenuHandler>
@@ -31,7 +32,10 @@ export default function SelectSearch(props: selectSearchProps) {
                                     key={index}
                                     value={label.value}
                                     className="flex items-center gap-2 !capitalize font-medium hover:bg-blue-gray-50 px-4 "
-                                    onClick={() => { setSearchCat(label); search(label) }} >
+                                    onClick={() => {
+                                        setSearchCat(label);
+                                        search(label)
+                                    }} >
                                     {label.label}
                                 </MenuItem>
                             );
@@ -39,7 +43,10 @@ export default function SelectSearch(props: selectSearchProps) {
                     </MenuList>
                 </Menu>
                 <Input
-                    onClick={(e) => { e.stopPropagation(); setSearchCat({ label: '', value: null }) }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setSearchCat({ label: '', value: null })
+                    }}
                     data-cy="input-search"
                     type="search"
                     placeholder="Rechercher"
@@ -48,8 +55,15 @@ export default function SelectSearch(props: selectSearchProps) {
                     containerProps={{ className: "min-w-0 border-none ", }}
                     key={searchCat.value}
                     value={searchCat.label}
-                    onChange={(e) => setSearchCat({ label: e.target.value, value: null })}
+                    onChange={(e) => {
+                        setSearchCat({ label: e.target.value, value: null })
+
+
+                    }}
                     onKeyDown={(e) => e.key === 'Enter' && search(searchCat)}
+                    autoComplete="on"
+                    crossOrigin={undefined}
+
                 />
                 <Button
                     data-cy="btn-search"

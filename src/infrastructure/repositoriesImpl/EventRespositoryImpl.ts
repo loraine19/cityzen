@@ -1,6 +1,6 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { EventRepositoryBase } from "../../domain/repositoriesBase/EventRepositoryBase";
-import { Event, EventPage } from "../../domain/entities/Event";
+import { Event, EventFindParams, EventPage } from "../../domain/entities/Event";
 import { ApiServiceI } from "../providers/http/apiService";
 import { AddressDTO } from "../DTOs/AddressDTO";
 import { EventDTO } from "../DTOs/EventDTO";
@@ -14,8 +14,8 @@ export class EventRepositoryImpl implements EventRepositoryBase {
     private eventData: IData;
     constructor({ eventData }: { eventData: IData }) { this.eventData = eventData }
 
-    public async getEvents(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<EventPage> {
-        return await this.eventData.getEvents(page, filter, category, sort, reverse);
+    public async getEvents(page?: number, params?: EventFindParams): Promise<EventPage> {
+        return await this.eventData.getEvents(page, params);
     }
 
     public async getEventById(id: number): Promise<Event> {

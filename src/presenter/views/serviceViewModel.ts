@@ -1,10 +1,10 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import DI from '../../di/ioc'
 import { ServiceView } from './viewsEntities/serviceViewEntity';
-import { Service } from '../../domain/entities/Service';
+import { Service, ServiceFindParams } from '../../domain/entities/Service';
 
 export const serviceViewModel = () => {
-  return (mine: boolean, type: string, step: string, category: string, sort: string, reverse: boolean) => {
+  return (params: ServiceFindParams) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -17,9 +17,9 @@ export const serviceViewModel = () => {
 
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
-        queryKey: ['services', mine, type, step, category],
+        queryKey: ['services', params],
         staleTime: 600000,
-        queryFn: async ({ pageParam = 1 }) => await getServices.execute(pageParam, mine, type, step, category, sort, reverse) || [],
+        queryFn: async ({ pageParam = 1 }) => await getServices.execute(pageParam, params) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });

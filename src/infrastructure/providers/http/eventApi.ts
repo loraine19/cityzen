@@ -1,4 +1,4 @@
-import { Event, EventPage } from "../../../domain/entities/Event";
+import { Event, EventFindParams, EventPage } from "../../../domain/entities/Event";
 import { EventDTO } from "../../DTOs/EventDTO";
 
 import { ApiServiceI, ApiService } from "./apiService";
@@ -9,13 +9,16 @@ export class EventApi {
     private readonly api: ApiServiceI;
     constructor() { this.api = new ApiService(); }
 
-    async getEvents(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<EventPage> {
+    async getEvents(page?: number, params?: EventFindParams): Promise<EventPage> {
+        let paramss: EventFindParams = params ?? {};
+        const { filter, category, sort, reverse, search } = paramss;
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const categoryR = category ? `&category=${category}` : '';
         const sortR = sort ? `&sort=${sort}` : '';
         const reverseR = reverse ? `&reverse=${reverse}` : ''
-        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}${sortR}${reverseR}`);
+        const searchR = search ? `&search=${search}` : '';
+        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}${sortR}${reverseR}${searchR}`);
     }
 
     async getEventById(id: number): Promise<Event> {

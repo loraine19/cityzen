@@ -30,7 +30,7 @@ export const ImageBtn = (props: { formik: any; setImgBlob: any; imgDef?: string;
                         bg clear
                         icon={formik?.values?.image !== "" ? "edit" : "add_a_photo"}
                         color="white"
-                        size="xl"
+                        size="md"
                         style="rounded-full shadow"
                     />
                     <input

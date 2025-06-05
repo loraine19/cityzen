@@ -4,6 +4,7 @@ import { SortLabel } from "../../../domain/entities/frontEntities"
 
 type SortButtonProps = {
     sortList: SortLabel[],
+    action: () => void,
     color?: string,
     setSelectedSort: (value: string) => void,
     selectedSort: string
@@ -11,7 +12,7 @@ type SortButtonProps = {
     setReverse: (value: boolean) => void
 }
 
-export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selectedSort, reverse = false, setReverse }: SortButtonProps) => {
+export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selectedSort, reverse = false, setReverse, action }: SortButtonProps) => {
 
 
     return (
@@ -38,7 +39,7 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                                         {(selectedSort === (item.key ?? item.label)) &&
                                             <Icon
                                                 onClick={() => {
-                                                    item.action()
+                                                    action()
                                                     setSelectedSort(item.key ?? item.label)
                                                     setReverse(!reverse)
                                                 }}
@@ -50,7 +51,7 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                                             size={'lg'}
                                             style={`!p-1 `}
                                             onClick={() => {
-                                                item.action();
+                                                action();
                                                 setSelectedSort(item.key ?? item.label)
                                                 setReverse(!reverse)
                                             }}

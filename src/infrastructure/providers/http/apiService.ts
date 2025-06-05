@@ -57,17 +57,14 @@ export type ApiServiceI = {
 }
 
 export class ApiService implements ApiServiceI {
-    private count: number = 0;
+    private countRefresh: number = 0;
     private api: AxiosInstance;
-    //  private authService: AuthService;
-    // private _refreshingToken: boolean = (this.count > 1) ? true : false;
 
     constructor() {
-        //   this.authService = new AuthService();
         this.api = axios.create({ baseURL, withCredentials: true });
         this.api.interceptors.request.use(this.handleRequest);
         this.api.interceptors.response.use(
-            response => response,
+            response => this.handleResponse(response),
             error => this.handleResponseError(error)
         );
     }
@@ -79,23 +76,40 @@ export class ApiService implements ApiServiceI {
         console.error(`[${now}+${milliseconds}] ${message}`);
     };
 
+    private requestPending: { config: any, status: boolean, error: boolean, count: number } = {
+        config: {},
+        status: false,
+        error: false,
+        count: 0
+    }
+
     private handleRequest = (config: any) => {
-        // Remove user cookies from the request headers if present
-        if (config.headers) {
-            // Remove Cookie header if present
-            delete config.headers['Cookie'];
-            delete config.headers['cookie'];
-        }
-        // Remove cookies property if present
-        if (config.cookies) {
-            delete config.cookies;
+        document.cookie = "user=; path=/; max-age=0";
+        this.logWithTime('handleRequest: ' + config);
+        this.requestPending = {
+            config: config,
+            status: true,
+            error: false,
+            count: this.requestPending.count + 1
         }
         return config
     }
 
+    private handleResponse = async (response: any): Promise<any> => {
+        if (response && response.data) {
+            this.requestPending.status = false;
+            this.requestPending.error = false;
+            this.requestPending.config = {};
+        }
+        return response
+    }
+
     private handleResponseError = async (error: any) => {
-        this.count++;
-        console.error('handleResponseError count:', this.count, 'error:', error);
+        if (this.requestPending.status) {
+            this.requestPending.status = true;
+            this.requestPending.error = true
+        }
+        console.error('handleResponseError countRefresh:', this.countRefresh, 'error:', error);
         let newError = new ApiError(500, 'Une erreur est survenue');
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
@@ -114,8 +128,7 @@ export class ApiService implements ApiServiceI {
                 break;
             case 401:
                 this.logWithTime('token expired 401');
-                //  throw new Error('Token expired, please refresh the page');
-
+                this.countRefresh++;
                 const refreshSuccess = await this.refreshAccess();
                 if (refreshSuccess) {
                     this.logWithTime('token refreshed successfully');
@@ -136,11 +149,17 @@ export class ApiService implements ApiServiceI {
                 newError = new ServerError();
                 break;
         }
-        this.count = 0;
-        //return Promise.reject(newError);
-        return {
-            error: newError
+
+        if (this.requestPending.count < 2 && status !== 401) {
+            // Set request as pending and retry the request
+            this.requestPending.status = true;
+            this.requestPending.error = false;
+            this.requestPending.count += 1;
+            // Retry the original request
+            return this.api.request(this.requestPending.config);
+
         }
+        else return { error: newError }
         //  throw Error(newError.message || 'Une erreur est survenue');
 
     };
@@ -152,32 +171,28 @@ export class ApiService implements ApiServiceI {
             setTimeout(() => {
                 window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter`;
             }, 2000);
-
-            this.count++
+            this.countRefresh++
             return false
         }
-
         if (window.location.pathname.includes('/sign')) return echec();
-        if (this.count > 2) return echec();
-        if (this.count > 1) {
-            this.logWithTime('refreshAccess already called, count: ' + this.count);
+        if (this.countRefresh > 2) return echec();
+        if (this.countRefresh > 1) {
+            this.logWithTime('refreshAccess already called, countRefresh: ' + this.countRefresh);
             return false;
         }
-
-
         const { data } = await axios.post(`${baseURL}/auth/refresh`, {}, { withCredentials: true });
         if (data?.message || data?.status === 201) {
-            this.count = 0;
+            this.countRefresh = 0;
             this.logWithTime('refreshAccess message: ' + data.message);
             return true;
         }
         else return echec();
-
     }
 
     public async get(url: string): Promise<any> {
         try {
             const response = await this.api.get(url, { withCredentials: true });
+            this.handleResponse(response)
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -187,6 +202,7 @@ export class ApiService implements ApiServiceI {
     public async delete(url: string): Promise<any> {
         try {
             const response = await this.api.delete(url, { withCredentials: true });
+            this.handleResponse(response)
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -196,6 +212,7 @@ export class ApiService implements ApiServiceI {
     public async put(url: string, data?: any): Promise<any> {
         try {
             const response = await this.api.put(url, data, { withCredentials: true });
+            this.handleResponse(response)
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -205,6 +222,7 @@ export class ApiService implements ApiServiceI {
     public async post(url: string, data: any, config?: any): Promise<any> {
         try {
             const response = await this.api.post(url, data, { ...config, withCredentials: true });
+            this.handleResponse(response)
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);
@@ -214,6 +232,7 @@ export class ApiService implements ApiServiceI {
     public async patch(url: string, data: any, config?: any): Promise<any> {
         try {
             const response = await this.api.patch(url, data, { ...config, withCredentials: true });
+            this.handleResponse(response)
             return response.data;
         } catch (error) {
             return this.handleResponseError(error);

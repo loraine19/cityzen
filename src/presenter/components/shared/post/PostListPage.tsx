@@ -12,7 +12,7 @@ import { PostView } from "../../../views/viewsEntities/postViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { postCategories } from "../../../constants";
 import PostCard from "./PostComps/PostCard";
-import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { SortLabel, TabLabel } from "../../../../domain/entities/frontEntities";
 import { Icon } from "../../common/IconComp";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
@@ -124,26 +124,26 @@ export default function PostListPage() {
 
 
     //// SORT LIST
-    const sortList = [
+    const sortList: SortLabel[] = [
         {
+            key: PostSort.LIKE,
             label: "Nombre de likes",
             icon: "thumb_up",
-            action: async () => await refetch()
         },
         {
+            key: PostSort.CREATED_AT,
             label: "Créé le",
             icon: "event",
-            action: async () => await refetch()
         },
         {
+            key: PostSort.TITLE,
             label: "Titre",
             icon: "sort_by_alpha",
-            action: async () => await refetch()
         },
         {
+            key: PostSort.USER,
             label: "Utilisateur",
             icon: "person",
-            action: async () => await refetch()
         }
     ]
 
@@ -159,7 +159,9 @@ export default function PostListPage() {
                     setSelectedSort={setSort}
                     color={'orange'}
                     reverse={reverse}
-                    setReverse={setReverse} />
+                    setReverse={setReverse}
+                    action={refetch}
+                />
                 <div className="flex items-center justify-center gap-4  ">
                     <CategoriesSelect
                         categoriesArray={postCategories}

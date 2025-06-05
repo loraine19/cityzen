@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { EventCategory, EventFilter, EventSort } from "../../../../domain/entities/Event";
-import { CategoriesSelect } from "../../common/CategoriesSelect";
+import { EventCategory, EventFilter, EventFindParams, EventSort } from "../../../../domain/entities/Event";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import CalendarComp from "../../common/CalendarComp";
@@ -9,7 +8,7 @@ import DI from "../../../../di/ioc";
 import { Icon } from "../../common/IconComp";
 import { SkeletonGrid } from "../../common/Skeleton";
 import { useSearchParams } from "react-router-dom";
-import { TabLabel } from "../../../../domain/entities/frontEntities";
+import { Label, SortLabel, TabLabel } from "../../../../domain/entities/frontEntities";
 import { getValue } from "../../../views/viewsEntities/utilsService";
 import { eventCategories, eventCategoriesS } from "../../../constants";
 import { EventView } from "../../../views/viewsEntities/eventViewEntities";
@@ -17,18 +16,18 @@ import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
 import { HandleHideParams, HandleScrollParams } from "../../../../application/useCases/utils.useCase";
+import SelectSearch from "../../common/SelectSearch";
 
 export default function EventListPage() {
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
-    const eventViewModelFactory = DI.resolve('eventViewModel');
     const [sort, setSort] = useState<EventSort>(EventSort.CREATED_AT);
     const [reverse, setReverse] = useState<boolean>(false);
-    const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(filter, category, sort, reverse);
     const [view, setView] = useState("view_agenda");
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
     const [Params, setParams] = useSearchParams();
+    const [searchString, setSearchString] = useState<string>('');
 
     const params = { filter: Params.get("filter"), category: Params.get("category") }
 
@@ -36,6 +35,15 @@ export default function EventListPage() {
         setCategory(params.category || ''); setFilter(params.filter || '')
     }, []);
 
+    const eventViewModelFactory = (params: EventFindParams) => DI.resolve('eventViewModel')(params);
+    const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(
+        {
+            filter: filter as EventFilter,
+            category: category as EventCategory,
+            sort: sort as EventSort,
+            reverse,
+            search: searchString
+        });
 
     //// FILTER TAB 
     const filterTab = async (value?: EventFilter) => {
@@ -55,6 +63,23 @@ export default function EventListPage() {
         { label: "j'organise", value: EventFilter.MINE, result: () => filterTab(EventFilter.MINE) },
     ]
 
+
+    //// SEARCH
+    const [searchCat, setSearchCat] = useState<Label>({ label: 'tous', value: '' });
+    const [tabSelected] = useState<string>('');
+    const search = (searchLabel: Label) => {
+        const value = searchLabel.value;
+        const label = searchLabel.label;
+        if (value) {
+            setCategory(value);
+            setParams({ search: tabSelected, category: value });
+        }
+        else if (label !== 'tous') {
+            setSearchString(label)
+        }
+    };
+
+    //// NAMING
     const filterName = (): string => {
         switch (filter) {
             case EventFilter.MINE: return 'que j\'organise';
@@ -119,31 +144,27 @@ export default function EventListPage() {
 
 
     //// SORT LIST
-    const sortList: any = [
+    const sortList: SortLabel[] = [
         {
             label: 'créé le',
             key: EventSort.CREATED_AT,
-            icon: "event",
-            action: () => refetch()
+            icon: "event"
         },
         {
             label: 'titre',
             key: EventSort.AZ,
             icon: 'sort_by_alpha',
-            action: () => refetch(),
         }
         ,
         {
             label: 'participants',
             key: EventSort.PARTICIPANTS,
             icon: 'person',
-            action: () => refetch(),
         },
         {
             label: 'jours',
             key: EventSort.INDAYS,
             icon: 'calendar_month',
-            action: () => refetch(),
         }
     ]
 
@@ -160,13 +181,15 @@ export default function EventListPage() {
                         setSelectedSort={setSort}
                         reverse={reverse}
                         setReverse={setReverse}
+                        action={refetch}
                     />}
                 <div className={` flex items-center justify-center gap-2`}>
-                    <CategoriesSelect
-                        categoriesArray={eventCategoriesS}
-                        change={change}
-                        categorySelected={category.toString()}
-                        disabled={view === "event"} />
+
+                    <SelectSearch
+                        searchCat={searchCat}
+                        setSearchCat={setSearchCat}
+                        category={eventCategoriesS}
+                        search={search} />
                     <Icon
                         onClick={switchClick}
                         icon={view === "view_agenda" ? "calendar_month" : "list"}

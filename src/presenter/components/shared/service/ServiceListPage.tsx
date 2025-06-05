@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { ServiceCategory, ServiceFilter, ServiceSort, ServiceStepFilter } from "../../../../domain/entities/Service";
+import { ServiceCategory, ServiceFilter, ServiceFindParams, ServiceSort, ServiceStep, ServiceStepFilter, ServiceType } from "../../../../domain/entities/Service";
 import CheckCard from "../../common/CheckCard";
 import SelectSearch from "../../common/SelectSearch";
 import SubHeader from "../../common/SubHeader";
@@ -25,18 +25,26 @@ export default function ServicesPage() {
     const [step, setStep] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
-    const [customFilter, setCustomFilter] = useState<boolean>(false);
-    const [customList, setCustomList] = useState<ServiceView[]>([])
     const [sort, setSort] = useState<ServiceSort>(ServiceSort.CREATED_AT);
     const [reverse, setReverse] = useState<boolean>(true);
+    const [searchString, setSearchString] = useState<string>('');
 
     //// PARAMS
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
 
     //// VIEW MODEL
-    const serviceViewModelFactory = DI.resolve('serviceViewModel');
-    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory(mine, type, step, category, sort, reverse);
+    const serviceViewModelFactory = (params: ServiceFindParams) => DI.resolve('serviceViewModel')(params);
+    const { services, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = serviceViewModelFactory({
+        mine,
+        type: type as ServiceType,
+        step: step as ServiceStep,
+        filter: filter as ServiceFilter,
+        category: category as ServiceCategory,
+        sort,
+        reverse,
+        search: searchString,
+    });
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
     //// NAMING
@@ -56,7 +64,6 @@ export default function ServicesPage() {
     const [boxSelected, setBoxSelected] = useState<string[]>(boxArray)
 
     const CheckboxesFilter = () => {
-        setCustomFilter(false);
         let steps = [];
         let types = [];
         boxSelected.includes(boxArray[0]) && types.push(ServiceFilter.DO);
@@ -80,7 +87,6 @@ export default function ServicesPage() {
 
     //// FILTER TAB
     const filterTab = async (value?: ServiceFilter) => {
-        setCustomFilter(false);
         setParams({ filter: value as string || '', category });
         value !== filter && setCategory('')
         setFilter(value || '');
@@ -103,7 +109,6 @@ export default function ServicesPage() {
 
     //// SEARCH
     const search = (searchLabel: Label) => {
-        setCustomFilter(false);
         const value = searchLabel.value;
         const label = searchLabel.label;
         if (value) {
@@ -111,15 +116,7 @@ export default function ServicesPage() {
             setParams({ search: tabSelected, category: value });
         }
         else if (label !== 'tous') {
-            setCustomFilter(true);
-            setCustomList(services && services.filter((service: ServiceView) =>
-                service.category.toString() === (value) ||
-                service.categoryS.includes(label) ||
-                service.typeS.includes(label) ||
-                service.title.toLowerCase().includes(label.toLowerCase()) ||
-                service.description.toLowerCase().includes(label.toLowerCase()) ||
-                service.User.Profile.firstName.toLowerCase().includes(label.toLowerCase())
-            ))
+            setSearchString(label)
         }
     };
 
@@ -166,29 +163,23 @@ export default function ServicesPage() {
     const sortList: SortLabel[] = [
         {
             label: "Publié le",
-            key: ServiceSort.CREATED_AT,
-            icon: "event",
-            action: () => refetch(),
+            key: ServiceSort.CREATED_AT, icon: "event",
         },
         {
             key: ServiceSort.USER,
             label: "Utilisateur", icon: "person",
-            action: () => refetch(),
         },
         {
             key: ServiceSort.TITLE,
             label: "Titre", icon: "sort_by_alpha",
-            action: () => refetch(),
         },
         {
             key: ServiceSort.SKILL,
             label: "Compétence", icon: "design_services",
-            action: () => refetch()
         },
         {
             key: ServiceSort.HARD,
             label: "Difficulté", icon: "signal_cellular_alt",
-            action: () => refetch()
         }
     ]
 
@@ -223,7 +214,7 @@ export default function ServicesPage() {
                 <SubHeader
                     qty={count}
                     type={`services ${filterName()} ${categoryName()}`} />
-                {notif &&
+                {notif && !isLoading &&
                     <NotifDiv
                         notif={notif}
                         isLoading={isLoading}
@@ -235,27 +226,17 @@ export default function ServicesPage() {
                     ref={divRef}
                     onScroll={() => { onScroll(); handleHideCallback() }}
                     className="Grid">
-                    {!customFilter ?
-                        (services.map((service: ServiceView, index: number) => (
-                            <div className="SubGrid" key={index}>
-                                <ServiceComp
-                                    key={service?.id}
-                                    service={service}
-                                    change={search as any}
-                                    mines={mine}
-                                    update={refetch} />
-                            </div>))) :
-                        customList.map((service: ServiceView, index: number) => (
-                            <div className="SubGrid" key={index}>
-                                <ServiceComp
-                                    key={service.id}
-                                    service={service}
-                                    change={search as any}
-                                    mines={mine}
-                                    update={refetch} />
 
-                            </div>
-                        ))}
+                    {services.map((service: ServiceView, index: number) => (
+                        <div className="SubGrid" key={index}>
+                            <ServiceComp
+                                key={service?.id}
+                                service={service}
+                                change={search as any}
+                                mines={mine}
+                                update={refetch} />
+                        </div>))
+                    }
                     <LoadMoreButton
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}

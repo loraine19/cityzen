@@ -33,14 +33,10 @@ export class SortLabel {
     key?: string = '';
     label: string = '';
     icon: string = '';
-    action: () => void;
-    reverse?: () => void;
 
-    constructor(label: string, icon: string, action: () => void, reverse: () => void) {
+    constructor(label: string, icon: string) {
         this.label = label;
         this.icon = icon;
-        this.action = action;
-        this.reverse = reverse
     }
 
 

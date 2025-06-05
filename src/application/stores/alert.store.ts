@@ -7,6 +7,7 @@ interface alertStore {
     alertValues: AlertValues;
     setAlertValues: (alertValues: Partial<AlertValues>) => void;
     handleApiError: (error: any, returnFunction?: () => void) => void;
+    handleError: (error: any, returnFunction?: () => void) => void;
 }
 
 
@@ -32,6 +33,24 @@ export const useAlertStore = create<alertStore>((set) => {
                     }
                 })
             })
+        },
+        handleError: (error: any) => {
+            if (error instanceof Error) {
+                set({
+                    open: true,
+                    alertValues: new AlertValues({
+                        title: 'Erreur',
+                        element: error.message ?? 'Une erreur est survenue, veuillez réessayer plus tard.',
+                        disableConfirm: false,
+                        confirmString: 'Ok',
+                        handleConfirm: () => set({ open: false })
+                    })
+                });
+
+                throw new Error(error.message ?? 'Une erreur est survenue, veuillez réessayer plus tard.')
+            }
+            else throw new Error('test error')
+
         }
     };
 });

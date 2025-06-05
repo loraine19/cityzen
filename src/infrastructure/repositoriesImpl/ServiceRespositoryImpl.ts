@@ -1,6 +1,6 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { ServiceRepositoryBase } from "../../domain/repositoriesBase/ServiceRepositoryBase";
-import { Service, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
+import { Service, ServiceFindParams, ServicePage, ServiceUpdate } from "../../domain/entities/Service";
 import { ApiServiceI } from "../providers/http/apiService";
 import { ServiceDTO } from "../DTOs/ServiceDTO";
 
@@ -14,8 +14,8 @@ export class ServiceRepositoryImpl implements ServiceRepositoryBase {
     private serviceData: IData;
     constructor({ serviceData }: { serviceData: IData }) { this.serviceData = serviceData }
 
-    public async getServices(page?: number, mine?: boolean, type?: string, step?: string, category?: string, sort?: string, reverse?: boolean): Promise<ServicePage> {
-        return await this.serviceData.getServices(page, mine, type, step, category, sort, reverse);
+    public async getServices(page?: number, params?: ServiceFindParams): Promise<ServicePage> {
+        return await this.serviceData.getServices(page, params);
     }
 
     public async getServiceById(id: number): Promise<Service> {

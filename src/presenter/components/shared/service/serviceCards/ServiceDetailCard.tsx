@@ -16,20 +16,31 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
     const navigate = useNavigate();
     const { id, title, description, IResp, image, createdAt, User, UserResp, categoryS, statusS, hard, skill, flagged, points, typeS } = props.service
     const haveImage = service.image ? true : false
-    const isResp = statusS === ServiceStep.STEP_1 ? true : false;
-    const isValidated = statusS === ServiceStep.STEP_2 ? true : false;
-    const isFinish = statusS === ServiceStep.STEP_3 ? true : false;
-    const inIssue = statusS === ServiceStep.STEP_4 ? true : false;
 
-    let tone = '';
-    if (statusS === ServiceStep.STEP_1) {
-        tone = IResp ? "Vous avez répondu à ce service" : 'à eté répondu par'
-    } else if (statusS === ServiceStep.STEP_2) {
-        tone = `Le service est en cours par ${IResp ? '(vous)' : ':'} `
-    } else if (statusS === ServiceStep.STEP_3) {
-        tone = `A été réalisé par ${IResp ? '(vous)' : ':'} `
-    } else {
-        tone = "Ce service est en attente de réponse";
+
+    const statusValues = (step: ServiceStep): { color: string, text: string } => {
+        switch (step) {
+            case ServiceStep.STEP_1: return {
+                color: "OrangeChip",
+                text: IResp ? "Vous avez répondu à ce service" : 'à eté répondu par'
+            };
+            case ServiceStep.STEP_2: return {
+                color: "GreenChip",
+                text: `Le service est en cours par ${IResp ? '(vous)' : ':'} `
+            }; break
+            case ServiceStep.STEP_3: return {
+                color: "GrayChip",
+                text: `A été réalisé par ${IResp ? '(vous)' : ':'} `
+            };
+            case ServiceStep.STEP_4: return {
+                color: "RedChip",
+                text: "Ce service est en litige"
+            };
+            default: return {
+                color: "Chip",
+                text: "Ce service est en attente de réponse"
+            };
+        }
     }
     return (
         <div className="DetailCardDiv">
@@ -49,10 +60,10 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                 value={typeS}
                                 className={`${typeS === "demande" ? "OrangeChip" : "GreenChip"} shadow rounded-full  h-max flex items-center gap-2 font-medium `}>
                             </Chip>
-                            <button onClick={() => { inIssue && navigate(`/conciliation/${id}`) }}>
+                            <button onClick={() => { statusS === ServiceStep.STEP_4 && navigate(`/conciliation/${id}`) }}>
                                 <Chip
                                     size="sm" value={statusS}
-                                    className={`${isResp && "OrangeChip" || isValidated && "GreenChip" || isFinish && "GrayChip" || inIssue && "RedChip"} shadow rounded-full h-max flex items-center gap-2 font-medium `}>
+                                    className={`${statusValues(statusS as ServiceStep).color} shadow rounded-full h-max flex items-center gap-2 font-medium `}>
                                 </Chip>
                             </button>
                         </div>
@@ -91,36 +102,32 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                             </Chip>
                             <Chip
                                 value={HardLevel[hard as unknown as keyof typeof HardLevel]}
-                                className=" GrayChip px-4 rounded-full h-full flex items-center justify-center gap-4"
+                                className="GrayChip px-4 rounded-full h-full flex items-center justify-center gap-4"
                                 icon={<Icon
                                     disabled
                                     size="md"
                                     icon="signal_cellular_alt"
-                                    fill
-                                    style="scale-150 pointer-events-none"
+                                    style="pointer-events-none"
                                     title="Difficulté" />}>
                             </Chip>
                         </div>
-
-
                     </div>
                     <div className="CardOverFlow h-full flex flex-col gap-4 !pt-1 ">
-                        <div className="flex h-full flex-col lg:flex-row gap-4">
+                        <div className="flex flex-1 flex-col lg:flex-row gap-4">
                             <Typography
                                 color="blue-gray"
-                                className="flex-1 pr-4 max-h-20 overflow-y-auto">
+                                className="flex-1 min-h-[33%]  pr-4 max-h-20 overflow-y-auto">
                                 {description}
                             </Typography>
 
-                            <div className="flex border min-w-[33%] border-blue-gray-200 p-3 bg-blue-gray-50 rounded-2xl  flex-col gap-2 lg:items-end">
+                            <div className="flex border min-w-[33%] border-blue-gray-200 mx-2 p-3 bg-blue-gray-50 rounded-2xl h-full flex-col gap-2 lg:items-end">
                                 <Typography
                                     className="text-left lg:text-right"
                                     variant="h6"
                                     color="blue-gray">
-                                    {tone}
+                                    {statusValues(statusS as ServiceStep).text}
                                 </Typography>
-
-                                <div className="flex  lg:flex-col flex-row-reverse lg:items-end self-start lg:self-end">
+                                <div className="flex lg:flex-col flex-row-reverse lg:items-end self-start lg:self-end">
                                     {UserResp ?
                                         <ProfileDiv profile={UserResp} size="md" /> :
                                         <ProfileDiv profile={new Profile({
@@ -129,9 +136,7 @@ export default function ServiceDetailComp(props: { service: ServiceView, mines?:
                                             userId: 0,
                                             userIdSp: 0,
                                             addressId: 0,
-                                        } as Partial<Profile>)} size="md" />
-
-                                    }
+                                        } as Partial<Profile>)} size="md" />}
 
                                 </div>
                             </div>
