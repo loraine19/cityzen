@@ -1,6 +1,7 @@
 import { Button, Input, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 import { Label } from "../../../domain/entities/frontEntities";
 import { Icon } from "./IconComp";
+import { useUxStore } from "../../../application/stores/ux.store";
 
 type selectSearchProps = {
     searchCat: Label;
@@ -10,6 +11,7 @@ type selectSearchProps = {
 };
 
 export default function SelectSearch(props: selectSearchProps) {
+    const { color } = useUxStore((state) => state);
     const { searchCat, setSearchCat, category, search } = props
     return (
         <div className="px-4 w-full py-1" >
@@ -18,7 +20,7 @@ export default function SelectSearch(props: selectSearchProps) {
                     <MenuHandler>
                         <div className="flex  pl-2 ">
                             <Icon
-                                color='cyan'
+                                color={color ?? 'blue-gray'}
                                 data-cy="select"
                                 icon="arrow_drop_down"
                                 size='2xl' />

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { PostCategory, PostFilter, PostSort } from "../../../../domain/entities/Post";
-import { CategoriesSelect } from "../../common/CategoriesSelect";
+import { PostCategory, PostFilter, PostFindParams, PostSort } from "../../../../domain/entities/Post";
 import SubHeader from "../../common/SubHeader";
 import TabsMenu from "../../common/TabsMenu";
 import PostGridComp from "./PostComps/PostGridComp";
@@ -12,30 +11,44 @@ import { PostView } from "../../../views/viewsEntities/postViewEntities";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { postCategories } from "../../../constants";
 import PostCard from "./PostComps/PostCard";
-import { SortLabel, TabLabel } from "../../../../domain/entities/frontEntities";
+import { Label, SortLabel, TabLabel } from "../../../../domain/entities/frontEntities";
 import { Icon } from "../../common/IconComp";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
 import { HandleHideParams, HandleScrollParams } from "../../../../application/useCases/utils.useCase";
+import SelectSearch from "../../common/SelectSearch";
 
 export default function PostListPage() {
 
+    //// STATE
+    const { navBottom } = useUxStore((state) => state);
+
+    //// INITIAL STATE
     const [filter, setFilter] = useState<string>('');
     const [category, setCategory] = useState<string>('');
     const [sort, setSort] = useState<PostSort>(PostSort.CREATED_AT);
     const [reverse, setReverse] = useState<boolean>(true);
-    const postViewModelFactory = DI.resolve('postViewModel');
-    const { posts, isLoading, error, refetch, count, fetchNextPage, hasNextPage } = postViewModelFactory(filter, category, sort, reverse)
-
     const [notif, setNotif] = useState<string>('')
     const [mines, setMines] = useState<boolean>(false);
     const [view, setView] = useState(window.innerWidth > 768 ? "list" : "dashboard");
+    const [searchString, setSearchString] = useState<string>('');
 
     //// PARAMS
     const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
     useEffect(() => { setCategory(params.category ?? ''); setFilter(params.filter ?? ''); }, []);
 
+    //// VIEW MODEL
+    const postViewModelFactory = (paramsFind: PostFindParams) => DI.resolve('postViewModel')(paramsFind);
+    const { posts, isLoading, error, refetch, count, fetchNextPage, hasNextPage } = postViewModelFactory(
+        {
+            filter: filter as PostFilter,
+            category: category as PostCategory,
+            sort: sort as PostSort,
+            reverse,
+            search: searchString
+        }
+    )
 
     //// FILTER TAB
     const filterTab = async (value?: PostFilter) => {
@@ -60,6 +73,20 @@ export default function PostListPage() {
         setParams({ filter: filter as string || '', category: selectedCategory });
         await refetch()
     }
+
+
+    //// SEARCH
+    const [searchCat, setSearchCat] = useState<Label>({ label: 'tous', value: '' });
+    const [tabSelected] = useState<string>('');
+    const search = (searchLabel: Label) => {
+        const value = searchLabel.value;
+        const label = searchLabel.label;
+        if (value) {
+            setCategory(value);
+            setParams({ search: tabSelected, category: value });
+        }
+        else if (label !== 'tous') setSearchString(label)
+    };
 
     //// NAMING
     const filterName = (): string => {
@@ -96,6 +123,7 @@ export default function PostListPage() {
     const announcesToGrid = AnnouncesByFour(posts);
     const switchClick = () => setView(view === "dashboard" ? "list" : "dashboard");
 
+
     //// HANDLE SCROLL
     const utils = DI.resolve('utils')
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
@@ -111,7 +139,6 @@ export default function PostListPage() {
         handleScroll(params)
     }, [divRef]);
 
-
     //// HANDLE HIDE  
     const handleHide = (params: HandleHideParams) => utils.handleHide(params)
     const { setHideNavBottom, hideNavBottom } = useUxStore((state) => state);
@@ -126,30 +153,21 @@ export default function PostListPage() {
     //// SORT LIST
     const sortList: SortLabel[] = [
         {
-            key: PostSort.LIKE,
-            label: "Nombre de likes",
-            icon: "thumb_up",
+            key: PostSort.LIKE, label: "Nombre de likes", icon: "thumb_up",
         },
         {
-            key: PostSort.CREATED_AT,
-            label: "Créé le",
-            icon: "event",
+            key: PostSort.CREATED_AT, label: "Créé le", icon: "event",
         },
         {
-            key: PostSort.TITLE,
-            label: "Titre",
-            icon: "sort_by_alpha",
+            key: PostSort.TITLE, label: "Titre", icon: "sort_by_alpha",
         },
         {
-            key: PostSort.USER,
-            label: "Utilisateur",
-            icon: "person",
+            key: PostSort.USER, label: "Utilisateur", icon: "person",
         }
     ]
 
-    const { navBottom } = useUxStore((state) => state);
-    return (
 
+    return (
         <main className={navBottom ? "withBottom" : ""}>
             <div className="sectionHeader">
                 <TabsMenu
@@ -163,10 +181,11 @@ export default function PostListPage() {
                     action={refetch}
                 />
                 <div className="flex items-center justify-center gap-4  ">
-                    <CategoriesSelect
-                        categoriesArray={postCategories}
-                        change={change}
-                        categorySelected={category.toString()} />
+                    <SelectSearch
+                        searchCat={searchCat}
+                        setSearchCat={setSearchCat}
+                        category={postCategories}
+                        search={search} />
                     <Icon
                         icon={view === "list" ? "list" : "dashboard"}
                         onClick={switchClick}

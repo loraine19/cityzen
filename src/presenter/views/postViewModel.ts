@@ -1,9 +1,10 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import DI from '../../di/ioc';
 import { PostView } from './viewsEntities/postViewEntities';
+import { PostFindParams } from '../../domain/entities/Post';
 
 export const postViewModel = () => {
-  return (filter?: string, category?: string, sort?: string, reverse?: boolean) => {
+  return (params: PostFindParams) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -15,10 +16,10 @@ export const postViewModel = () => {
     const getPosts = DI.resolve('getPostsUseCase')
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
-        queryKey: ['Posts', filter, category],
+        queryKey: ['Posts', params],
         refetchOnWindowFocus: false,
         staleTime: 600000, // 10 minutes,
-        queryFn: async ({ pageParam = 1 }) => await getPosts.execute(pageParam, filter, category, sort, reverse) || { Posts: [], count: 0 },
+        queryFn: async ({ pageParam = 1 }) => await getPosts.execute(pageParam, params) || { Posts: [], count: 0 },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage.posts?.length ? pages.length + 1 : undefined
       })

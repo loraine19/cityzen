@@ -27,10 +27,10 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
     return (
         <div className="flex relative items-center justify-between gap-x-1" style={{ zIndex: 0 }}>
             <Tabs value={defaultTab as string || labels[0].value}
-                className="!z-10 w-full max-w-100vh overflow-auto">
+                className="!z-10 w-full max-w-100vh  overflow-auto">
                 <TabsHeader
-                    className="w-full flex flex-1 !gap-2 !px-0 mb-1 bg-transparent"
-                    indicatorProps={{ className: ` rounded-full bg-${color ?? 'gray'}-600` }}>
+                    className="w-full flex flex-1 !gap-4 !px-0 mb-1 bg-transparent"
+                    indicatorProps={{ className: `rounded-full bg-${color ?? 'gray'}-600` }}>
                     {labels.map(({ label, value, result }, index: number) => (
                         <Tab
                             key={index}

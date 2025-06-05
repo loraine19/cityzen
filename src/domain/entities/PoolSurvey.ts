@@ -71,6 +71,14 @@ export enum PoolSurveySort {
     TITLE = 'TITLE',
     VOTES = 'VOTES',
 }
+export interface PoolSurveysFindParams {
+    filter?: PoolSurveyFilter;
+    category?: SurveyCategory;
+    step?: PoolSurveyStep;
+    sort?: PoolSurveySort
+    reverse?: boolean;
+    search?: string;
+}
 
 export class SurveyDTO {
     name?: string;

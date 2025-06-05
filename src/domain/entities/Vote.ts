@@ -12,6 +12,8 @@ export enum VoteOpinion {
     WO = 'WO'
 }
 
+
+
 export class Vote {
     id: number = 0;
     pool: Pool = new Pool();

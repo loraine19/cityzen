@@ -1,6 +1,6 @@
 import { ApiServiceI } from "../providers/http/apiService";
 import { PoolSurveyRepositoryBase } from "../../domain/repositoriesBase/PoolSurveyRepositoryBase";
-import { Pool, PoolSurveyPage, Survey } from "../../domain/entities/PoolSurvey";
+import { Pool, PoolSurveyPage, PoolSurveysFindParams, Survey } from "../../domain/entities/PoolSurvey";
 import { PoolDTO, SurveyDTO } from "../DTOs/PoolSurveyDTO";
 
 interface IData extends PoolSurveyRepositoryBase {
@@ -12,8 +12,8 @@ export class PoolSurveyRepositoryImpl implements PoolSurveyRepositoryBase {
     private poolSurveyData: IData;
     constructor({ poolSurveyData }: { poolSurveyData: IData }) { this.poolSurveyData = poolSurveyData }
 
-    public async getPoolsSurveys(page?: number, filter?: string, subFilter?: string, sort?: string, reverse?: boolean): Promise<PoolSurveyPage> {
-        return await this.poolSurveyData.getPoolsSurveys(page, filter, subFilter, sort, reverse);
+    public async getPoolsSurveys(page?: number, params?: PoolSurveysFindParams): Promise<PoolSurveyPage> {
+        return await this.poolSurveyData.getPoolsSurveys(page, params);
     }
 
     public async getPoolById(id: number): Promise<Pool> {

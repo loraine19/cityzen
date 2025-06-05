@@ -31,6 +31,14 @@ export enum PostSort {
 
 }
 
+export interface PostFindParams {
+    filter?: PostFilter;
+    category?: PostCategory;
+    sort?: PostSort;
+    reverse?: boolean;
+    search?: string;
+}
+
 export class Post {
     error?: string;
     id: number = 0;

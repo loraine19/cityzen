@@ -1,4 +1,4 @@
-import { Post, PostPage } from "../../../domain/entities/Post";
+import { Post, PostFindParams, PostPage } from "../../../domain/entities/Post";
 import { PostDTO } from "../../DTOs/PostDTO";
 
 import { ApiServiceI, ApiService } from "./apiService";
@@ -9,15 +9,16 @@ export class PostApi {
     private readonly api: ApiServiceI;
     constructor() { this.api = new ApiService(); }
 
-    async getPosts(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<PostPage> {
+    async getPosts(page?: number, params?: PostFindParams): Promise<PostPage> {
+        let paramss: PostFindParams = params ?? {};
+        const { filter, category, sort, reverse, search } = paramss;
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const categoryR = category ? `&category=${category}` : '';
         const sortR = sort ? `&sort=${sort}` : '';
         const reverseR = reverse ? `&reverse=${reverse}` : '';
-
-
-        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}${sortR}${reverseR}`);
+        const searchR = search ? `&search=${search}` : '';
+        return this.api.get(`${this.dataType}${pageR}${filterR}${categoryR}${sortR}${reverseR}${searchR}`);
     }
 
     async getPostById(id: number): Promise<Post> {

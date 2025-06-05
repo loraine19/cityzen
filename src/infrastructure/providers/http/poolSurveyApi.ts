@@ -1,4 +1,4 @@
-import { Pool, PoolDTO, PoolSurveyPage } from "../../../domain/entities/PoolSurvey";
+import { Pool, PoolDTO, PoolSurveyPage, PoolSurveysFindParams } from "../../../domain/entities/PoolSurvey";
 import { SurveyDTO } from "../../DTOs/PoolSurveyDTO";
 import { ApiServiceI, ApiService } from "./apiService";
 
@@ -11,13 +11,15 @@ export class PoolSurveyApi {
         this.getPoolsSurveys = this.getPoolsSurveys.bind(this);
     }
 
-    async getPoolsSurveys(page?: number, filter?: string, step?: string, sort?: string, reverse?: boolean): Promise<PoolSurveyPage> {
+    async getPoolsSurveys(page?: number, params?: PoolSurveysFindParams): Promise<PoolSurveyPage> {
+        const { filter, step, sort, reverse, search } = params || {};
         const pageR = page ? `?page=${page}` : '';
         const filterR = filter ? `&filter=${filter}` : '';
         const stepR = step ? `&step=${step}` : '';
         const sortR = sort ? `&sort=${sort}` : '';
         const reverseR = reverse ? `&reverse=${reverse}` : '';
-        return this.api.get(`${this.dataType}${pageR}${filterR}${stepR}${sortR}${reverseR}`);
+        const searchR = search ? `&search=${search}` : '';
+        return this.api.get(`${this.dataType}${pageR}${filterR}${stepR}${sortR}${reverseR}${searchR}`);
 
     }
 

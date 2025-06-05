@@ -41,12 +41,12 @@ export const AvatarUser = ({ Profile, avatarSize = '', avatarStyle = '', style =
     const classicStyle = '!flex !shadow cursor-pointer min-w-max hover:!shadow-lg hover:!scale-[1.02] hover:!saturate-[1.1] transition-all duration-200 ease-in-out'
 
     const [inError, setInError] = useState<boolean>(false);
-
     return (
         <>
             {Profile?.image && !inError ?
                 <Avatar
-                    onError={() => setInError(true)}
+                    onError={() => setTimeout(() => { setInError(true) }, 1000)}
+                    onLoad={() => setInError(false)}
                     referrerPolicy="unsafe-url"
                     size={avatarSize as any ?? 'sm'}
                     className={`${classicStyle} ${avatarStyle}`}

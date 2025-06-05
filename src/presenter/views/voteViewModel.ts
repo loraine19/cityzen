@@ -2,9 +2,10 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import DI from '../../di/ioc'
 import { Pool, Survey } from '../../domain/entities/PoolSurvey';
 import { PoolSurveyView } from './viewsEntities/poolSurveyViewEntity';
+import { PoolSurveysFindParams } from '../../domain/entities/PoolSurvey';
 
 export const voteViewModel = () => {
-  return (filter: string, step: string, sort?: string, reverse?: boolean) => {
+  return (params: PoolSurveysFindParams) => {
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],
@@ -17,17 +18,16 @@ export const voteViewModel = () => {
     const getPoolsSurveys = DI.resolve('getPoolsSurveysUseCase')
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
-        queryKey: ['poolsSurveys', filter, step],
-        queryFn: async ({ pageParam = 1 }) => await getPoolsSurveys.execute(pageParam, filter, step, sort, reverse) || [],
+        queryKey: ['poolsSurveys', params],
+        queryFn: async ({ pageParam = 1 }) => await getPoolsSurveys.execute(pageParam, params) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.poolsSurveys?.length ? pages.length + 1 : undefined
       })
 
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
-    const flat = isLoading ? [] : data?.pages.flat().map(page => page.poolsSurveys).flat()
+    const flat = isLoading || !data || error ? [] : data?.pages.flat().map(page => page.poolsSurveys).flat()
     const poolsSurveys = userLoading ? [] : flat?.map((base: Pool | Survey) => base && new PoolSurveyView(base, user))
 
-    console.log('poolsSurveys', data)
     return {
       count,
       poolsSurveys,

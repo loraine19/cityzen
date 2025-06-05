@@ -1,4 +1,4 @@
-import { Pool, PoolSurveyPage, Survey } from "../../domain/entities/PoolSurvey";
+import { Pool, PoolSurveyPage, PoolSurveysFindParams, Survey } from "../../domain/entities/PoolSurvey";
 import { PoolSurveyRepositoryBase } from "../../domain/repositoriesBase/PoolSurveyRepositoryBase";
 import { PoolDTO } from "../../infrastructure/DTOs/PoolSurveyDTO";
 
@@ -7,8 +7,8 @@ export class GetPoolsSurveysUseCase {
     constructor({ poolSurveyRepository }: { poolSurveyRepository: PoolSurveyRepositoryBase }) {
         this.poolSurveyRepository = poolSurveyRepository;
     }
-    public async execute(page?: number, filter?: string, step?: string, sort?: string, reverse?: boolean): Promise<PoolSurveyPage> {
-        return await this.poolSurveyRepository.getPoolsSurveys(page, filter, step, sort, reverse);
+    public async execute(page?: number, params?: PoolSurveysFindParams): Promise<PoolSurveyPage> {
+        return await this.poolSurveyRepository.getPoolsSurveys(page, params);
     }
 }
 

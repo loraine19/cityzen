@@ -1,4 +1,4 @@
-import { Post } from "../../domain/entities/Post"
+import { Post, PostFindParams } from "../../domain/entities/Post"
 import { PostPage } from "../../domain/entities/Post";
 import { PostRepositoryBase } from "../../domain/repositoriesBase/PostRepositoryBase";
 import { PostDTO } from "../../infrastructure/DTOs/PostDTO";
@@ -10,8 +10,8 @@ export class GetPostsUseCase {
         this.postRepository = postRepository;
     }
 
-    public async execute(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<PostPage> {
-        return this.postRepository.getPosts(page, filter, category, sort, reverse);
+    public async execute(page?: number, params?: PostFindParams): Promise<PostPage> {
+        return this.postRepository.getPosts(page, params);
     }
 }
 

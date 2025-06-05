@@ -1,6 +1,6 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
 import { PostRepositoryBase } from "../../domain/repositoriesBase/PostRepositoryBase";
-import { Post, PostPage } from "../../domain/entities/Post";
+import { Post, PostFindParams, PostPage } from "../../domain/entities/Post";
 import { ApiServiceI } from "../providers/http/apiService";
 import { AddressDTO } from "../DTOs/AddressDTO";
 import { PostDTO } from "../DTOs/PostDTO";
@@ -14,8 +14,8 @@ export class PostRepositoryImpl implements PostRepositoryBase {
     private postData: IData;
     constructor({ postData }: { postData: IData }) { this.postData = postData }
 
-    public async getPosts(page?: number, filter?: string, category?: string, sort?: string, reverse?: boolean): Promise<PostPage> {
-        return await this.postData.getPosts(page, filter, category, sort, reverse);
+    public async getPosts(page?: number, params?: PostFindParams): Promise<PostPage> {
+        return await this.postData.getPosts(page, params);
     }
 
     public async getPostById(id: number): Promise<Post> {

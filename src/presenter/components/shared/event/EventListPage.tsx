@@ -74,9 +74,7 @@ export default function EventListPage() {
             setCategory(value);
             setParams({ search: tabSelected, category: value });
         }
-        else if (label !== 'tous') {
-            setSearchString(label)
-        }
+        else if (label !== 'tous') setSearchString(label)
     };
 
     //// NAMING
