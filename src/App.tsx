@@ -12,7 +12,6 @@ import { LoadingPage } from "./presenter/components/shared/utilsPage/LoadingPage
 import { errorValues } from "./presenter/components/shared/utilsPage/erroValues";
 import { AlertModal } from "./presenter/components/common/AlertModal";
 import { useAlertStore } from "./application/stores/alert.store";
-import { useNotificationStore } from "./application/stores/notification.store";
 import { WithTopNavPages } from "./presenter/components/shared/utilsPage/WithTopNavPages";
 import { WithBottomPages } from "./presenter/components/shared/utilsPage/WithBottomPages";
 import { useUxStore } from "./application/stores/ux.store";
@@ -57,14 +56,13 @@ function App() {
     const handleRetry = () => setRetryCount(retryCount + 1);
 
     const { alertValues } = useAlertStore(state => state);
-    const { color, getColor, hideNavBottom } = useUxStore(state => state);
-
+    const { color, getColor } = useUxStore(state => state);
     useEffect(() => { getColor(window.location.pathname) }, [window.location.pathname]);
 
     return (
         <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
             <BrowserRouter>
-                <div className={`App ${color} ${hideNavBottom ? 'pt-0' : 'pt-0'}`}>
+                <div className={`App ${color}`}>
                     <Suspense fallback={<LoadingPage />}>
                         <Routes>
                             {/* Public routes */}
