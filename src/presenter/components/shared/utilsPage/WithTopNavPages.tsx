@@ -5,6 +5,7 @@ export const WithTopNavPages = () => {
 
     return (
         <>
+
             <NavBarTop />
             <Outlet />
         </>)

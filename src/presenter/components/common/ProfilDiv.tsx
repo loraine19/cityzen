@@ -99,6 +99,7 @@ export const ProfileDiv: React.FC<ProfileDivProps> = ({ size = 'sm', ...props })
                         </div>
                     </PopoverContent>
                 </Popover>
+
                 <div className="flex flex-col gap-1 truncate">
                     <Typography
                         variant={textSize}

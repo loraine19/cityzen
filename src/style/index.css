@@ -47,7 +47,7 @@ body {
 }
 
 .App {
-    @apply flex flex-col w-screen h-screen px-[0.5vw];
+    @apply flex flex-col w-screen h-screen px-[0.5vw] overflow-auto min-h-[500px];
 }
 
 main {
@@ -57,7 +57,7 @@ main {
 }
 
 .withBottom {
-    @apply !-mb-[75px];
+    @apply !-mb-[65px];
 }
 
 section,
@@ -70,12 +70,12 @@ section,
 footer,
 header,
 main {
-    @apply w-full max-w-[1100px] mx-auto;
+    @apply w-full  mx-auto;
     max-height: 100vh;
 }
 
 footer {
-    @apply relative !pb-[2vh] !px-[1%] md:px-[5%] lg:px-[2%];
+    @apply relative pb-[2vh] !px-[1%] md:px-[5%] lg:px-[2%] w-respXl;
     width: 100%;
     margin: 0 auto;
     flex-shrink: 0;
@@ -85,7 +85,6 @@ footer {
 header {
     @apply px-4  relative;
     width: 100%;
-    max-width: 1100px;
     margin: 0 auto;
     flex-shrink: 0;
 }

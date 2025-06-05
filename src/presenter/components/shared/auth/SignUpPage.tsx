@@ -48,8 +48,7 @@ export default function SignUpPage() {
 
 
     return (
-        <>
-            <header><AuthHeader /></header>
+        <><AuthHeader />
             <main>
                 <AuthForm
                     lead="Creer votre compte"
@@ -65,7 +64,7 @@ export default function SignUpPage() {
                 />
 
             </main>
-            <footer className="flex flex-col items-center gap-2 py-6">
+            <footer className="flex flex-col items-center gap-2 pt-4 !pb-16">
                 <Typography
                     variant="small"
                     className=" flex justify-center">

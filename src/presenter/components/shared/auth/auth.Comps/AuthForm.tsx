@@ -5,6 +5,7 @@ import { Icon } from '../../../common/IconComp';
 import { FormikProps } from 'formik';
 import { useUserStore } from '../../../../../application/stores/user.store'
 import DI from '../../../../../di/ioc';
+import { useUxStore } from '../../../../../application/stores/ux.store';
 
 type AuthFormProps = {
     lead: string;
@@ -39,16 +40,22 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     const [passWordInput2, setPassWordInput2] = useState<{ value: string, icon: string }>(passwordType)
     useEffect(() => { hidden && formik.resetForm() && (formik.values = {}) }, [hidden])
     const { setIsLoggedIn } = useUserStore()
+    const { setColor } = useUxStore((state) => state);
     const toggleInputStyle = (inputState: { value: string, icon: string }, setInputState: React.Dispatch<React.SetStateAction<{ value: string, icon: string }>>) => {
         setInputState(inputState.value === 'password' ? textType : passwordType);
     }
 
     const googleAuth = async () => await DI.resolve('googleAuthUseCase').execute()
+    const hiddeImage = (): string => { if (window.innerHeight < 780) return "hidden"; else return "" }
+    window.addEventListener('resize', () => {
+        hiddeImage()
+        setColor('blue-gray')
+    })
 
 
     return (
-        <div className='flex justify-center items-center h-full gap-8 py-3 w-full'>
-            <Card className="hidden md:flex flex-[50%] FixCardNoImage !p-8" >
+        <main className='flex md:flex-row  flex-1  items-center h-full gap-8 pt-8 pb-2 w-full'>
+            <Card className={` hidden md:flex flex-[50%] FixCardNoImage !p-8`} >
                 <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
                 <img src="image/welcome.jpg"
                     alt="connexion"
@@ -60,11 +67,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                     Connecter vous à votre Quartier
                 </Typography>
             </Card>
-            <Card className="flex-[50%]  flex FixCardNoImage !gap-0 ">
+            <Card className="md:flex-[50%] overflow-auto min-h-40 h-full  flex-1 flex relative FixCardNoImage ">
                 <form
                     onSubmit={formik.handleSubmit}
-                    className="flex flex-col h-full p-2 gap-2 ">
-                    <CardHeader className="FixCardHeaderNoImage flex-col !h-max px-4 !pt-4"
+                    className="flex flex-col h-full ">
+                    <CardHeader className="FixCardHeaderNoImage flex-col !h-max !gap-4  !p-6"
                         floated={false}>
                         <Typography
                             variant="h5">
@@ -76,7 +83,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             {notif}
                         </Typography>
                     </CardHeader>
-                    <CardBody className='FixCardBody gap-3 min-h-24'>
+                    <CardBody className='FixCardBody gap-[8%] !min-h-max overflow-auto'>
                         <Input
                             size='md'
                             error={!!formik?.errors.email}
@@ -122,17 +129,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 data-cy="password-confirm-input" />
                         </div>
 
-                        <div className={`flex h-full pt-10 px-4  justify-center `}>
-                            <Card className="flex h-full md:hidden !min-h-8 FixCardNoImage" >
+                        <div className={`flex h-full pt-10 px-4 ${hiddeImage()} justify-center `}>
+                            <Card className={`flex h-full md:hidden !min-h-8 FixCardNoImage`} >
                                 <img src="image/welcome.jpg"
                                     alt="connexion"
-                                    className="absolute inset-0 object-cover object-center w-full h-full rounded-xl  z-0 filter brightness-95" />
+                                    className="absolute inset-0 object-cover w-full h-full rounded-xl  z-0   object-center" />
                             </Card>
                         </div>
 
                     </CardBody>
-
-                    <CardFooter className={`flex flex-col !py-4 `}>
+                    <CardFooter className={`flex  flex-col !py-4 `}>
                         <Typography className={`${!checkbox ? "hidden" : 'text-xs error'}`} >
                             {typeof formik.errors.checkbox === 'string' && formik.errors.checkbox}
                         </Typography>
@@ -171,13 +177,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                                 }}>
                                 <img
                                     src="image/google.svg"
-                                    alt="metamask" className="h-6 w-6 !absolute left-2" />
+                                    alt="metamask"
+                                    className="h-6 w-6 !absolute left-2" />
                                 {submitText} avec Google
                             </Button>
                         </div>
                     </CardFooter>
                 </form>
             </Card>
-        </div>
+        </main>
     )
 }

@@ -81,25 +81,22 @@ export default function SignInPage() {
 
     return (
         <>
-            <header> <AuthHeader /></header>
-            <main>
-                <AuthForm
-                    formik={formik}
-                    lead="Acceder à votre compte"
-                    notif={notif}
-                    popOverContent={terms}
-                    popOverButtonText="Rester connecté"
-                    popOverClass="font-light text-start"
-                    submitText="Se connecter"
-                    confirm={false}
-                    inError={inError}
-                />
-
-            </main>
-            <footer className="flex flex-col items-center gap-2 py-5 ">
+            <AuthHeader />
+            <AuthForm
+                formik={formik}
+                lead="Acceder à votre compte"
+                notif={notif}
+                popOverContent={terms}
+                popOverButtonText="Rester connecté"
+                popOverClass="font-light text-start"
+                submitText="Se connecter"
+                confirm={false}
+                inError={inError}
+            />
+            <footer className="flex flex-col items-center gap-2 py-[4vh] justify-center !static">
                 <Link to="/motdepasse_oublie">
                     <Typography
-                        className="text-md font-medium pb-2 nowraptext-center underline underline-offset-8 uppercase">
+                        className="text font-medium pb-2 nowraptext-center underline underline-offset-8 uppercase">
                         Mot de pass oublié
                     </Typography>
                 </Link>
@@ -111,7 +108,6 @@ export default function SignInPage() {
                         inscrivez-vous
                     </Button>
                 </Link>
-
             </footer>
         </>
     );

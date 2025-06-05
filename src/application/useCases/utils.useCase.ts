@@ -9,6 +9,7 @@ export interface HandleScrollParams {
 export interface HandleHideParams {
     divRef: MutableRefObject<any>,
     setHide: (hide: boolean) => void,
+    max?: number,
 }
 
 
@@ -45,15 +46,15 @@ export class UtilsUseCase implements UtilsInterface {
     //// handle hide 
     private init = 0
     handleHide = (params: HandleHideParams) => {
-        let { divRef, setHide } = params;
+        let { divRef, setHide, max = 50 } = params;
 
         if (!divRef.current) return;
         if (divRef.current && (divRef.current as HTMLElement).scrollTop >= 10) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 8 >= scrollHeight) return
-            let shouldHide = (scrollTop >= 50 && (this.init <= scrollTop));
+            if (scrollTop + clientHeight + max / 2 >= scrollHeight) return
+            let shouldHide = (scrollTop >= max && (this.init <= scrollTop));
             this.init = scrollTop
-            setTimeout(() => setHide(shouldHide), 500)
+            setTimeout(() => setHide(shouldHide), max * 10)
         }
     }
 

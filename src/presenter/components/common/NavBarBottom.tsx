@@ -75,13 +75,9 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
 
     return (
         <>
-            <div className={`${closeDial ? 'hidden' : ''} ${navBottom ? `bottom-[70px] h-[calc(100vh-70px)] max-h-[calc(100vh-70px)] w-full backdropBlur bg fixed ` : 'hidden'}  bg-cyan-500  `}>
+            <div className={`${closeDial ? 'hidden' : ''} ${navBottom ? `bottom-[65px] h-[calc(100vh-70px)] max-h-[calc(100vh-70px)] w-full backdropBlur bg fixed ` : 'hidden'}    `}>
             </div>
-            {!hideNavBottom &&
-                <div className="rounded-full">
-                    <div className=" min-h-1 backdrop-blur-[0.5px]"></div >
-                    <div className="min-h-1 backdrop-blur-[1px]"></div>
-                </div >}
+
             <footer
                 onDoubleClick={() => setNavBottom(!navBottom)}
                 onDoubleClickCapture={(e) => {
@@ -95,12 +91,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                     ((hideNavBottom && navBottom) ? ' transform-y[-100%] opacity-0 anim' : '!my-0  ') +
                     ((hideNavBottom && !navBottom) ? 'hidden' : '') +
                     ((navBottom && !hideNavBottom) ? 'transform-y-0 opacity-100 anim' : '') +
-                    `w-respXl backdropBlur bg justify-center items-center flex gap-4 bg-gradient-to-t ${from} from-10%  via-transparent to-transparent rounded-full`
+                    `w-respXl backdropBlur bg justify-center items-center flex gap-4 bg-gradient-to-t ${from} from-10%  via-transparent to-transparent rounded-full `
                 }>
                 <Navbar className={`
                shadow-md w-[calc(80%)] !max-w-[calc(100vw-8rem)] overflow-auto flex rounded-full h-full min-w-max lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative `}>
-                        <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between  h-full gap-auto md:divide-x-4 divide-white/95 `}>
+                        <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between  h-full gap-auto `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
                                 <Typography
                                     onClick={() => { setColor(col) }}
@@ -140,7 +136,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 <div
                     onMouseLeave={() => setCloseDial(true)}
                     onMouseEnter={() => setCloseDial(false)}
-                    className="flex justify-center z-[22] items-center h-full">
+                    className="flex justify-center z-[22] items-center h-full -mr-4">
                     <div className={`rounded-full `}>
                         <SpeedDial
                             placement={navBottom ? 'top' : 'bottom'}
@@ -175,7 +171,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                             icon={icon}
                                             color={addBtn ? color : col} />
                                     </div>
-                                    <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-900 absolute bg-white text-sm shadow-xl  !border !border-gray-300`}>
+                                    <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-900 absolute bg-white text-sm shadow-xl !border !border-gray-300`}>
                                         {label}
                                     </div>
                                 </SpeedDialAction>)}

@@ -15,6 +15,7 @@ import { useAlertStore } from "./application/stores/alert.store";
 import { useNotificationStore } from "./application/stores/notification.store";
 import { WithTopNavPages } from "./presenter/components/shared/utilsPage/WithTopNavPages";
 import { WithBottomPages } from "./presenter/components/shared/utilsPage/WithBottomPages";
+import { useUxStore } from "./application/stores/ux.store";
 
 // Lazy loaded pages
 const ServiceCreatePage = lazy(() => import("./presenter/components/shared/service/ServiceCreatePage"));
@@ -56,14 +57,14 @@ function App() {
     const handleRetry = () => setRetryCount(retryCount + 1);
 
     const { alertValues } = useAlertStore(state => state);
-    const { color, getColor } = useNotificationStore(state => state);
+    const { color, getColor, hideNavBottom } = useUxStore(state => state);
 
     useEffect(() => { getColor(window.location.pathname) }, [window.location.pathname]);
 
     return (
         <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
             <BrowserRouter>
-                <div className={`App ${color}`}>
+                <div className={`App ${color} ${hideNavBottom ? 'pt-0' : 'pt-0'}`}>
                     <Suspense fallback={<LoadingPage />}>
                         <Routes>
                             {/* Public routes */}

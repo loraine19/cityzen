@@ -102,34 +102,32 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     const IntenaryChip = () => (
         <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}>
             <Icon
-                style='!border-opacity-100'
+                style='!border-opacity-50 shadow-md'
                 link={`${googleMapsLink}`}
-                bg
+                bg fill
                 title='Ouvrir dans Google Maps'
                 size='md'
                 color='cyan'
-                icon='near_me'
-                fill />
+                icon='near_me' />
         </div>)
 
     const FlyButton = () => (
         <div style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 1000 }}>
             <Icon
-                style='!border-opacity-100'
-                bg
+                style='!border-opacity-50 !shadow-md'
+                bg fill
                 title='Zoomer sur la position'
                 onClick={() => setFly(true)}
                 icon="my_location"
-                size="md"
-                fill />
+                size="md" />
         </div>)
 
     const CloseButton = () => (
         <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 900 }}>
             <Icon
-                bg
+                style='!border-opacity-50 shadow-md'
+                bg fill
                 icon='close'
-                fill
                 size='md'
                 onClick={() => setOpen(false)}
                 title='Fermer la carte' />
@@ -138,7 +136,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     const ExpandButton = () => (
         <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 600 }}>
             <Icon
-                style='!border-opacity-100'
+                style='!border-opacity-50 shadow-md'
                 bg
                 icon='expand_content'
                 fill

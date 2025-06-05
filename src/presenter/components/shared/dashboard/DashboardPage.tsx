@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, Typography } from "@material-tailwind/react
 import AddressMapOpen from "../../common/mapComps/AddressMapOpen";
 import { Icon } from "../../common/IconComp";
 import CalendarComp from "../../common/CalendarComp";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Skeleton } from "../../common/Skeleton";
 import { useUserStore } from "../../../../application/stores/user.store";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -17,12 +17,13 @@ import { useAlertStore } from "../../../../application/stores/alert.store";
 import { AvatarUser } from "../../common/AvatarUser";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
+import { HandleHideParams } from "../../../../application/useCases/utils.useCase";
 
 export default function DashboardPage() {
 
     //// USER & AUTORISATION
     const { user, fetchUser, setIsLoggedIn, } = useUserStore((state) => state);
-    const { setHideNavBottom, navBottom } = useUxStore((state) => state);
+    const { setHideNavBottom, navBottom, hideNavBottom } = useUxStore((state) => state);
     const modo = user?.GroupUser?.map(g => g.role).includes(Role.MODO) || false;
     useEffect(() => {
         !user ? setIsLoggedIn(false) : setIsLoggedIn(true);
@@ -45,7 +46,7 @@ export default function DashboardPage() {
     const { notifsMap, isLoadingMap, refetchMap, countMap } = notifMapViewModelFactory();
 
     //// CLASSES
-    const userClasse = "flex row-span-3 lg:grid pt-6  animRev";
+    const userClasse = "flex row-span-3 lg:grid pt-6 animRev z-50";
     const eventClasse = "h-full flex !min-h-[12rem] row-span-5 lg:grid overflow-auto";
     const notifClasse = " row-span-2 lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5.5rem]")
     const mapClasse = "flex row-span-6 !min-h-[16rem] 15rem] lg:min-h-[32%] lg:grid";
@@ -57,14 +58,12 @@ export default function DashboardPage() {
     const handleScroll = () => {
         if (divRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = divRef.current;
-            if (scrollTop + clientHeight + 2 >= scrollHeight) {
+            if (scrollTop + clientHeight + 5 >= scrollHeight) {
                 setIsBottom(true)
                 if (hasNextPage) fetchNextPage()
             } else setIsBottom(false)
         }
     }
-
-
 
     //// HANDLE NOTIFICATIONS ALERT
     const { setAlertValues, setOpen } = useAlertStore(state => state)
@@ -79,19 +78,34 @@ export default function DashboardPage() {
         });
     }, [msg]);
 
+    //// HANDLE HIDE  
+    const utils = DI.resolve('utils')
+    const handleHide = (params: HandleHideParams) => utils.handleHide(params)
+    const handleHideCallback = useCallback(() => {
+        const params: HandleHideParams = { divRef, setHide, max: 6 }
+        handleHide(params)
+    }, [divRef]);
+    const [hide, setHide] = useState<boolean>(false);
+    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
-
+    const [smallScreen, setSmallScreen] = useState<boolean>(window.innerHeight < 600);
+    window.addEventListener('resize', () => { setSmallScreen(window.innerHeight < 600) })
 
     return (
-        <main className={` ${navBottom ? "-mb-2" : "-mt-0 mb-2"} ${window.innerWidth < 505 ? "-mb-[5rem] lg:mb-2 " : ""} relative flex pb-0.5 !overflow-hidden`}
+        <main className={`
+            ${navBottom ? "withBottom" : ""} 
+            ${(smallScreen) ? "" : "lg:!pb-20 pb-8"} 
+            relative flex pb-0.5 !overflow-hidden anim -mt-4`}
             data-cy="dashboard-body" >
-            <div className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto"}>
+            <div ref={divRef}
+                onScroll={() => handleHideCallback()}
+                className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto "}>
                 <div className={`${userClasse}`}>
                     <Card className="lg:h-full p-0 flex-1 flex anim">
                         <CardHeader className="flex flex-col items-center justify-center  bg-transparent shadow-none">
                             <AvatarUser
                                 avatarSize="lg"
-                                avatarStyle="!shadow-md w-16 h-16 lg:w-[4.5rem] lg:h-[4.5rem] "
+                                avatarStyle="!shadow-md  w-16 h-16 lg:w-[4.5rem] lg:h-[4.5rem] "
                                 Profile={user?.Profile} />
 
                             <div className="flex flex-col items-center justify-center pt-1">
@@ -278,9 +292,10 @@ export default function DashboardPage() {
                         </CardBody>
                     </Card>
                 </div>
-                {window.innerWidth < 505 && <div className="min-h-[4.5rem] lg:hidden">&nbsp;</div>}
             </div>
+            {<div className={`${(!hideNavBottom && smallScreen) ? 'min-h-[3rem]' : ''} lg:hidden `}>
 
+            </div>}
         </main>
     );
 }

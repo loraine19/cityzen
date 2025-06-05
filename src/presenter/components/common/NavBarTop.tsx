@@ -14,7 +14,7 @@ export default function NavBarTop() {
     const location = useLocation();
     useEffect(() => { getColor(location.pathname) }, [location.pathname])
     const { user } = useUserStore((state) => state);
-    const { hideNavBottom, navBottom, setNavBottom } = useUxStore((state) => state);
+    const { hideNavBottom, navBottom, setNavBottom, setHideNavBottom } = useUxStore((state) => state);
 
 
     const menuItems = [
@@ -31,15 +31,18 @@ export default function NavBarTop() {
     const onBoard = window.location.pathname === '/'
 
     return (
-        <header className={`${hideNavBottom ? 'shadowMid mb-2 ' : ''}`}>
+        <header
+            onClick={() => { hideNavBottom && setHideNavBottom(false) }}
+            className={`${hideNavBottom ? 'shadow-md shadow-gray-700/20 mb-4 pt-0.5' : ''}  z-0 `}>
             <div className={`${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev pb-2 mb-1'}
-                    relative h-full w-full flex justify-between pt-2`} >
+                    relative h-full w-full flex justify-between pt-1 w-respXl`} >
                 <div className={`flex w-full items-center  ${hideNavBottom ? 'hidden' : ''} `}>
                     <Menu placement="bottom-start">
                         <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
                             {onBoard ?
                                 <div className="flex  w-full flex-1 items-center ">
-                                    <img className="h-12 w-12 mx-2 lg:h-[4rem] lg:w-[4rem] object-cover object-center -ml-0.5  "
+                                    <img
+                                        className="h-12 w-12 mx-2 lg:h-[4rem] lg:w-[4rem] object-cover object-center "
                                         src="/image/logo.svg"
                                         alt="logo" />
 
