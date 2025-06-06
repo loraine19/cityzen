@@ -30,7 +30,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
         Address && (formik.values.Address = Address)
     }, [Address]);
 
-    const { image, title, category, description, start, end, participantsMin, Participants } = formik.values;
+    const { image, title, category, description, start, end, participantsMin, Participants, id } = formik.values;
     const label = category ? getLabel(category, eventCategories) : '';
 
     return (
@@ -38,7 +38,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
             <main>
                 <div className="sectionHeader gap-2">
                     <SubHeader
-                        type={title ? 'Modifier mon évenement ' : 'Créer mon évenement'}
+                        type={id ? 'Modifier mon évenement ' : 'Créer mon évenement'}
                         place={category ? label : ''} closeBtn />
                     <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
                         <Select className='rounded-full shadow bg-white border-none capitalize'
@@ -193,8 +193,8 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                     <Icon
                         size='xl'
                         color='white'
-                        icon={title ? 'edit' : 'add'} />
-                    {title ? 'Modifier' : 'Créer'}
+                        icon={id ? 'edit' : 'add'} />
+                    {id ? 'Modifier' : 'Créer'}
                 </Button>
             </footer>
         </form>
