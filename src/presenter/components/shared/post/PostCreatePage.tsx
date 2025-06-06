@@ -1,19 +1,21 @@
 import { useFormik } from 'formik';
 import { object, string, array } from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { Share } from '../../../../domain/entities/Post';
-import { ConfirmModal } from '../../common/ConfirmModal';
+import { Share } from '../../../../domain/entities/Post';;
 import { PostFormCard } from './PostComps/PostFormCard';
 import { PostDTO } from '../../../../infrastructure/DTOs/PostDTO';
 import { PostView } from '../../../views/viewsEntities/postViewEntities';
 import DI from '../../../../di/ioc';
 import { TextLength } from '../../../../domain/entities/utilsEntity';
+import { useAlertStore } from '../../../../application/stores/alert.store';
+import { Typography } from '@material-tailwind/react';
+import PostCard from './PostComps/PostCard';
 
 
 export default function PostCreatePage() {
     const navigate = useNavigate();
     const postPost = async (data: PostDTO) => DI.resolve('postPostUseCase').execute(data);
+    const { setOpen, setAlertValues, handleApiError } = useAlertStore(state => state);
 
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -23,7 +25,6 @@ export default function PostCreatePage() {
         groupId: string().required("Groupe est obligatoire"),
     })
 
-    const [open, setOpen] = useState(false);
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {} as PostView,
@@ -31,6 +32,22 @@ export default function PostCreatePage() {
         onSubmit: values => {
             formik.values = values
             setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await updateFunction(),
+                confirmString: "Enregistrer les modifications",
+                title: "Confimrer la modification",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
+                        <Typography variant='h6'>
+                            annonce : {formik.values?.title}
+                        </Typography>
+                        <PostCard
+                            post={new PostView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, 0)}
+                            change={() => { }}
+                        />
+                    </div>
+                )
+            })
         }
     });
 
@@ -38,24 +55,18 @@ export default function PostCreatePage() {
         const shareArray = formik.values.shareA as string[];
         const share = shareArray.sort().join('_').toUpperCase() as unknown as Share;
         const updateData = new PostDTO({ ...formik.values as PostDTO, share });
-        return await postPost(updateData)
+        const data = await postPost(updateData)
+        if (data) {
+            setOpen(false);
+            navigate(`/annonce/${data?.id}`);
+        }
+        else handleApiError("Erreur lors de la création de l'annonce");
     }
 
 
     return (
-        <>
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={async () => {
-                    const ok = await updateFunction()
-                    if (ok) { navigate(`/annonce`); setOpen(false) }
-                }}
-                title={"Confimrer la modification"}
-                element={(JSON.stringify(formik.values as PostDTO, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")} />
 
-            <PostFormCard
-                formik={formik} />
-        </>
+        <PostFormCard
+            formik={formik} />
     )
 }

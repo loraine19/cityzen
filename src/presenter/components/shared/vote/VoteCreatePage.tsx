@@ -18,7 +18,7 @@ export default function VoteCreatePage() {
     const postSurvey = async (data: SurveyDTO) => await DI.resolve('postSurveyUseCase').execute(data)
     const postPool = async (data: PoolDTO) => await DI.resolve('postPoolUseCase').execute(data)
     const [type, setType] = useState<VoteTarget>(VoteTarget.SURVEY)
-    const { setOpen, setAlertValues } = useAlertStore()
+    const { setOpen, setAlertValues, handleApiError } = useAlertStore()
 
     const navigate = useNavigate();
     const formSchemaSurvey = object({
@@ -42,12 +42,12 @@ export default function VoteCreatePage() {
         if (type === VoteTarget.SURVEY) {
             const updateData = new SurveyDTO(formik.values as SurveyDTO)
             const data = await postSurvey(updateData)
-            data && navigate(`/sondage/${data?.id}`)
+            data ? navigate(`/sondage/${data?.id}`) : handleApiError("Erreur lors de la création du sondage")
         }
         else if (type === VoteTarget.POOL) {
             const updateData = new PoolDTO(formik.values as PoolDTO)
             const data = await postPool(updateData)
-            data && navigate(`/cagnotte/${data?.id}`)
+            data ? navigate(`/cagnotte/${data?.id}`) : handleApiError("Erreur lors de la création de la cagnotte")
         }
     }
 

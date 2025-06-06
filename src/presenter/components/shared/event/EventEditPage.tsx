@@ -27,7 +27,7 @@ export default function EventDetailPage() {
     const updateEvent = async (id: number, data: EventUpdateDTO, address: AddressDTO) => await DI.resolve('updateEventUseCase').execute(id, data, address)
 
     //// HANDLE API ERROR
-    const { setAlertValues, setOpen } = useAlertStore()
+    const { setAlertValues, setOpen, handleApiError } = useAlertStore()
     const navigate = useNavigate()
     useEffect(() => {
         if (event && !event?.mine && !isLoading) navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
@@ -88,6 +88,8 @@ export default function EventDetailPage() {
             location.reload()
             setOpen(false)
         }
+        else handleApiError("Erreur lors de la modification de l'événement");
+
     }
 
 

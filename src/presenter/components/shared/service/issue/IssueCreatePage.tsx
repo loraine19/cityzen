@@ -4,18 +4,18 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { Issue } from '../../../../../domain/entities/Issue';
 import { ServiceType } from '../../../../../domain/entities/Service';
-import { ModalValues } from '../../../../../domain/entities/frontEntities';
-import { ConfirmModal } from '../../../common/ConfirmModal';
 import SubHeader from '../../../common/SubHeader';
 import { IssueForm } from './IssueDetailCard';
 import { useUserStore } from '../../../../../application/stores/user.store';
 import { Skeleton } from '../../../common/Skeleton';
-import { Button } from '@material-tailwind/react';
+import { Button, Typography } from '@material-tailwind/react';
 import { IssueView } from '../../../../views/viewsEntities/issueViewEntity';
 import DI from '../../../../../di/ioc';
 import { IssueDTO } from '../../../../../infrastructure/DTOs/IssueDTO';
 import { User } from '../../../../../domain/entities/User';
 import { Icon } from '../../../common/IconComp';
+import { useAlertStore } from '../../../../../application/stores/alert.store';
+import IssueCard from './IssueCard';
 
 
 
@@ -25,13 +25,13 @@ export default function IssueEditPage() {
     const { user } = useUserStore()
     const userId = user.id
     const [issue, setIssue] = useState<Issue>({} as Issue);
-    const [open, setOpen] = useState(false);
     const idS = id ? parseInt(id) : 0;
     const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const { service, isLoading } = serviceIdViewModelFactory(idS);
     const postIssue = async (data: IssueDTO) => await DI.resolve('postIssueUseCase').execute(data)
     const getModos = async () => await DI.resolve('getUsersModosUseCase').execute()
     const [modos, setModos] = useState<User[]>([])
+    const { handleApiError, setAlertValues, setOpen } = useAlertStore(state => state)
 
     useEffect(() => {
         if (modos.length === 0) {
@@ -43,18 +43,6 @@ export default function IssueEditPage() {
         }
     }, [issue]);
 
-    const redirectModal: ModalValues = {
-        confirm: async () => { navigate(`/conciliation/${id}`); setOpen(false) },
-        title: "Confirmer la redirection",
-        element: "ce litige existe deja, Vous allez être redirigé vers la page de conciliation"
-    }
-    // const redirectServiceModal: ModalValues = {
-    //     confirm: async () => { navigate(`/service/${id}`); setOpen(false) },
-    //     title: "Confirmer la redirection",
-    //     element: "Il n'y a aucun modérateur disponible pour le moment, Vous allez être redirigé vers la page de service"
-    // }
-    const [ModalValues, setModalValues] = useState<ModalValues>(redirectModal);
-
 
 
 
@@ -65,51 +53,54 @@ export default function IssueEditPage() {
     })
 
     const formik = useFormik({
-        initialValues: issue as Issue,
+        initialValues: issue as any,
         validationSchema: formSchema,
         onSubmit: values => {
-            setModalValues(confirmPost)
             setOpen(true)
             setIssue(values)
-            formik.values = values
+            setOpen(true)
+            setAlertValues({
+                handleConfirm: async () => await postFunction(),
+                confirmString: "Enregistrer les modifications",
+                title: "Confimrer la modification",
+                element: (
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
+                        <Typography variant='h6'>
+                            litige
+                        </Typography>
+                        <IssueCard
+                            issue={new IssueView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, 0)}
+                            change={() => { }}
+                        />
+                    </div>
+                )
+            })
         }
     })
 
     const postFunction = async () => {
         formik.values.date = new Date(formik.values.date).toISOString()
         formik.values.serviceId = typeof service.id === 'string' ? parseInt(service.id) : service.id
-        const data = new IssueDTO({ ...formik.values })
-        return await postIssue(data)
+        const dto = new IssueDTO({ ...formik.values })
+        const data = await postIssue(dto)
+        if (data) {
+            setOpen(false);
+            navigate(`/conciliation/${data?.id}`);
+        }
+        else handleApiError("Erreur lors de la création du litige");
+
     }
 
-    const confirmPost: { confirm: () => Promise<void>, title: string, element: string } = {
-        confirm: async () => {
-            const ok = await postFunction()
-            if (ok) {
-                navigate(`/conciliation/${ok.serviceId}`);
-                setOpen(false)
-            }
-        }
-        , title: "Confirmer la demande de conciliation",
-        element: (JSON.stringify(formik.values, null, 2).replace(/,/g, "<br>").replace(/"/g, "").replace(/{/g, " : ")).replace(/}/g, "")
-    }
+
 
 
 
     return (
         <form onSubmit={formik.handleSubmit} className='flex flex-col'>
-            <ConfirmModal
-                open={open}
-                handleCancel={() => { setOpen(false) }}
-                handleConfirm={ModalValues.confirm}
-                title={ModalValues.title}
-                element={ModalValues.element} />
-
             <main>
                 <div className="sectionHeader">
                     <SubHeader type={"Conciliation"} place={` sur ${service?.type === ServiceType.GET ? "une demande" : "une offre"} de service  ${userId === service?.userId ? "que j'ai créé" : "à laquelle j'ai repondu"}`} closeBtn />
                 </div>
-
                 {isLoading ?
                     <Skeleton className="w-respLarge !rounded-2xl !h-[calc(100vh-16rem)] shadow m-auto" /> :
                     <IssueForm

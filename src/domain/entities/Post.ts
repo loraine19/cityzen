@@ -46,7 +46,7 @@ export class Post {
     userId: number = 0;
     Group: Group = {} as Group;
     groupId: number = 0;
-    image: string | File = '';
+    image: string | File | Blob = '';
     title: string = '';
     description: string = '';
     category: PostCategory = PostCategory.CATEGORY_1;

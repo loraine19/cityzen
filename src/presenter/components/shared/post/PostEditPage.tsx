@@ -13,14 +13,19 @@ import PostCard from './PostComps/PostCard';
 import { TextLength } from '../../../../domain/entities/utilsEntity';
 
 export default function PostEditPage() {
+    //// PARAMS
     const { id } = useParams()
     const navigate = useNavigate();
+
+    //// VIEW MODEL
     const updatePost = (id: number, data: PostDTO) => DI.resolve('updatePostUseCase').execute(id, data);
     const idS = id ? parseInt(id) : 0;
     const postIdViewModelFactory = DI.resolve('postIdViewModel');
     const { post, error, isLoading, refetch } = postIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<PostView>({} as PostView);
-    const { setOpen, setAlertValues } = useAlertStore()
+
+    //// STORES
+    const { setOpen, setAlertValues, handleApiError } = useAlertStore()
 
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -45,6 +50,7 @@ export default function PostEditPage() {
             await refetch();
             navigate(`/annonce/${data?.id}`)
         }
+        else handleApiError("Erreur lors de la modification de l'annonce");
     }
 
 
@@ -53,7 +59,6 @@ export default function PostEditPage() {
         initialValues: initialValues as any,
         validationSchema: formSchema,
         onSubmit: values => {
-            formik.values = values
             formik.values = values
             setOpen(true)
             setAlertValues({

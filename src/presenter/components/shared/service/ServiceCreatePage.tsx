@@ -39,7 +39,7 @@ export default function ServiceCreatePage() {
         else {
             setOpen(false);
             setTimeout(() => {
-                throw new Error("Erreur lors de la création du service")
+                throw new Error("Erreur lors de la création du service throw error")
             }, 100);
             handleApiError({ message: "Erreur lors de la création du service" })
         }
@@ -68,8 +68,6 @@ export default function ServiceCreatePage() {
                     </div>
                 )
             }
-            console.log("valuesAlert", valuesAlert)
-
             setAlertValues({ ...valuesAlert });
             setOpen(true)
         }

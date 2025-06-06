@@ -32,7 +32,7 @@ export default function EventCreatePage() {
         groupId: string().required("Groupe est obligatoire"),
     })
 
-    const { setAlertValues, setOpen } = useAlertStore(state => state)
+    const { setAlertValues, setOpen, handleApiError } = useAlertStore(state => state)
 
     const postFunction = async () => {
         formik.values.start = new Date(formik.values.start).toISOString()
@@ -43,6 +43,7 @@ export default function EventCreatePage() {
             setOpen(false);
             navigate("/evenement/" + data.id);
         }
+        else handleApiError("Erreur lors de la création de l'événement");
     }
 
     const formik = useFormik({

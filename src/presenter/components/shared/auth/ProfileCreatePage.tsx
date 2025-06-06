@@ -16,6 +16,7 @@ import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { Address } from '../../../../domain/entities/Address';
 import { LogOutButton } from '../../common/LogOutBtn';
 import { ProfileDiv } from '../../common/ProfilDiv';
+import { useAlertStore } from '../../../../application/stores/alert.store';
 
 export default function ProfileCreatePage() {
     const { setUser } = useUserStore()
@@ -26,6 +27,9 @@ export default function ProfileCreatePage() {
     const [mailSub, setMailSub] = useState<string>(MailSubscriptions.SUB_1 as string)
     const [open, setOpen] = useState(false);
     const postProfile = async (data: ProfileDTO) => await DI.resolve('postProfileUseCase').execute(data, address)
+
+    const { handleApiError } = useAlertStore(state => state)
+
 
     useEffect(() => {
         if (!user) navigate("/signup?msg=Vous devez avoir un compte pour accéder à cette page")
@@ -61,6 +65,7 @@ export default function ProfileCreatePage() {
             navigate("/");
             setOpen(false)
         }
+        else handleApiError("Erreur lors de la création de votre profil")
     }
 
 

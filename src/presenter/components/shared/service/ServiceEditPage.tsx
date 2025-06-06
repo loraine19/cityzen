@@ -14,13 +14,19 @@ import { User } from '../../../../domain/entities/User';
 
 export default function ServiceEditPage() {
     const { id } = useParams()
-    const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const idS = id ? parseInt(id) : 0;
-    const user = useUserStore((state) => state.user);
+
+    /// VIEW MODEL
+    const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
     const { service, isLoading, error, refetch } = serviceIdViewModelFactory(idS);
     const [initialValues, setInitialValues] = useState<ServiceView>({} as ServiceView);
     const updateService = async (id: number, data: ServiceDTO) => await DI.resolve('updateServiceUseCase').execute(id, data)
-    const { setAlertValues, setOpen } = useAlertStore(state => state)
+
+    //// STORES
+    const user = useUserStore((state) => state.user);
+    const { setAlertValues, setOpen, handleApiError } = useAlertStore(state => state)
+
+    //// FORMIK
     const navigate = useNavigate();
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
@@ -62,6 +68,7 @@ export default function ServiceEditPage() {
         const updateData = new ServiceDTO(formik.values as ServiceDTO)
         const data = await updateService(service.id, updateData)
         if (data) { await refetch(); setOpen(false); navigate(`/service/${data?.id}`) }
+        else handleApiError("Erreur lors de la modification du service")
     }
 
 

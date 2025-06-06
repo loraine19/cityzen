@@ -9,6 +9,7 @@ export class PostView extends Post {
     categoryS: string = 'error';
     isMine: boolean = false;
     shareA: string[] = [];
+    blob?: Blob;
     toogleLike: () => Promise<PostView>;
 
     constructor(post: Post, userId: number) {

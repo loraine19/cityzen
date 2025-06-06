@@ -12,11 +12,12 @@ export class Issue {
     userIdModoOn: number = 0;
     UserModoOn: User = new User();
     description: string = '';
-    image: string | File = '';
+    image: string | File | Blob = '';
     date: Date | string = new Date();
     status: IssueStep | string = IssueStep.STEP_0;
     createdAt: Date = new Date();
     updatedAt: Date = new Date();
+
     constructor(data?: Partial<Issue>) {
         if (data) {
             Object.assign(this, data);

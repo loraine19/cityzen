@@ -5,7 +5,7 @@ export class IssueDTO {
     serviceId?: number;
     userId?: number;
     description?: string;
-    image?: string | File;
+    image?: string | File | Blob;
     status?: IssueStep | string;
     userIdModo?: number;
     userIdModoResp?: number;
