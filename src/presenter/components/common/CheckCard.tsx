@@ -38,7 +38,7 @@ export default function CheckCard(props: checkCardProps) {
                         <ListItem className="!pt-0.5 px-0.5 !pb-1  min-w-max hover:!bg-transparent" key={index}>
                             <label htmlFor={category} className="flex flex-1">
                                 <ListItemPrefix className={`!px-0 py-0.5 !m-0 w-full flex items-center justify-center rounded-2xl !shadow-sm  border-[1px] border-${colorShade(color)} shadow-sm ${checkedState[index] ?
-                                    ` bg-${colorShade(color)} border-opacity-20  bg-opacity-30 text-${colorShade(color)}  w-full animSlide` : `bg-transparent text-${colorShade(color)} !min-w-full border-opacity-40  `}`}>
+                                    ` bg-${colorShade(color)} border-opacity-20  bg-opacity-30 text-${colorShade(color)}  w-full ` : `bg-transparent text-${colorShade(color)} !min-w-full border-opacity-40  `}`}>
                                     <Checkbox
                                         labelProps={{ className: `${checkedState[index] ? `text-${colorShadeDark(color)} w-full` : `text-${colorShade(color)} text-opacity-90`} whitespace-nowrap text-sm font-normal !min-w-max px-3 ` }}
                                         iconProps={{ className: "hidden" }}

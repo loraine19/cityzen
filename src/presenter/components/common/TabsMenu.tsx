@@ -36,7 +36,7 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
                             key={index}
                             value={value}
                             activeClassName="text-white"
-                            className={`text-[0.9rem] whitespace-nowrap rounded-full shadow anim !px-3 ${index !== indexSelected ? `bg-white text-${color}-800` : ` !text-white bg-${color}-500`}`}
+                            className={`text-[0.9rem] whitespace-nowrap rounded-full shadow !px-3 ${index !== indexSelected ? `bg-white text-${color}-800 ` : ` !text-white bg-${color}-500 animSlide`} `}
                             onClick={() => { setIndex(index); result() }}>
                             {label}
                         </Tab>

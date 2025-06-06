@@ -124,7 +124,7 @@ header {
 
 .anim {
     @apply duration-700 fadeIn;
-    animation: up 1.2s forwards;
+    animation: up 2s forwards;
 }
 
 .animRev {
@@ -134,8 +134,8 @@ header {
 
 /* Animates slide-in for the first child, slide-out for the last child */
 .animSlide {
-    @apply duration-700;
-    animation: slide 1.5s forwards;
+    @apply duration-700 fadeIn;
+    animation: slide 1.2s forwards;
 }
 
 @keyframes slideOut {

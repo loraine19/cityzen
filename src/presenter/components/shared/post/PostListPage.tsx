@@ -229,7 +229,7 @@ export default function PostListPage() {
                                         className="SubGrid"
                                         key={index}>
                                         <PostCard
-                                            key={post.id}
+                                            key={post?.id}
                                             post={post}
                                             change={change}
                                             update={refetch}

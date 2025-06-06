@@ -108,14 +108,13 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                     <NavLink
                                         to={to}
                                         className={({ isActive }) =>
-                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full  !h-[57px]  rounded-full  ${isActive ? `animSlide border-[1px] shadowMid z-30 ${color} !bg-white  ` : ''}`
+                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full  !h-[57px]  rounded-full  ${isActive ? ` animSlide border-[1px] shadowMid z-30 ${color} !bg-white  ` : ''}`
                                         }
                                     >
                                         {({ isActive }) => (
                                             <>
                                                 <Icon
                                                     bg
-                                                    style={``}
                                                     icon={icon}
                                                     fill={isActive ? true : false}
                                                     color={col}

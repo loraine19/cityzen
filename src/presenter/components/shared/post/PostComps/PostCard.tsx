@@ -14,8 +14,8 @@ type PostCardProps = { post: PostView, mines?: boolean, change: (e: any) => void
 
 export default function PostCard({ post: initialPost, mines, change, update, short }: PostCardProps) {
     const [post, setPost] = useState<PostView>(initialPost);
-    const { id, title, description, image, categoryS, createdAt, Likes, User, flagged, ILike, toogleLike, Group } = post
-    const haveImage: boolean = post.image ? true : false
+    const { id, title, description, image, categoryS, createdAt, Likes, User, flagged, ILike, toogleLike, Group } = post ?? {} as PostView;
+    const haveImage: boolean = post?.image ? true : false
     const deletePost = async (id: number) => await DI.resolve('deletePostUseCase').execute(id)
     const myActions: Action[] = GenereMyActions(post, "annonce", deletePost)
 
@@ -38,15 +38,16 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                 {image &&
                     <img
                         onError={(e) => e.currentTarget.src = "/image/placeholder2.png"}
-                        src={image as any}
+                        src={image as any ?? ''}
                         alt={title}
                         className="h-full  w-full object-cover"
                     />}
             </CardHeader>
             <CardBody className={` FixCardBody !flex-1 ${short ? '' : 'gap-2'}`}>
                 <Title
-                    title={title}
-                    flagged={flagged} id={id}
+                    title={post?.title}
+                    flagged={flagged}
+                    id={id}
                     type='service'
                     group={Group}
                 />

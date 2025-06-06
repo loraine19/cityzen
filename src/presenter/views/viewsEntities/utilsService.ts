@@ -46,10 +46,10 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
     const navigate = useNavigate()
     const [notifAlert, setNotifAlert] = useState<string>('');
 
-    'title' in element ? title = element.title ?? 'litige' : 'litige';
-    'serviceId' in element && (id = element.serviceId);
-    'targetId' in element && (id = element.targetId);
-    'id' in element && (id = element.id);
+    'title' in element ? title = element?.title ?? 'litige' : 'litige';
+    'serviceId' in element && (id = element?.serviceId);
+    'targetId' in element && (id = element?.targetId);
+    'id' in element && (id = element?.id);
 
     const actions = [
         {
