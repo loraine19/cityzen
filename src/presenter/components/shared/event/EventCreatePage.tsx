@@ -50,7 +50,6 @@ export default function EventCreatePage() {
         initialValues: {} as any,
         validationSchema: formSchema,
         onSubmit: async values => {
-            formik.values = values
             setOpen(true)
             setAlertValues({
                 handleConfirm: async () => await postFunction(),
@@ -59,10 +58,10 @@ export default function EventCreatePage() {
                 element: (
                     <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
                         <Typography variant='h6'>
-                            Évenement au : {formik.values?.Address?.address} le {new Date(formik.values?.start).toLocaleDateString('fr-FR')}
+                            Évenement au : {values?.Address?.address} le {new Date(values?.start).toLocaleDateString('fr-FR')}
                         </Typography>
                         <EventCard
-                            event={new EventView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, 0)}
+                            event={new EventView({ ...values, image: values?.blob || values?.image }, 0)}
                             refetch={() => { }}
                             change={() => { }}
                         />
