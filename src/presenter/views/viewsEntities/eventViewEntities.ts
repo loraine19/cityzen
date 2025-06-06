@@ -22,7 +22,7 @@ export class EventView extends Event {
 
     constructor(event: Event, userId: number) {
         super(event)
-        if (!event || !event.id) {
+        if (!event) {
             throw new Error('Impossible de récupérer l\'événement')
         }
         this.isPast = new Date(event?.end) < new Date(Date.now());

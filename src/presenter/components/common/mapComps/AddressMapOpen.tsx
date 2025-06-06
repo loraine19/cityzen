@@ -158,7 +158,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     return (
         <Popover open={open} >
             <PopoverHandler>
-                <div className='border border-blue-gray-100 relative flex flex-1 min-h-[5.5rem] !h-[100%] !rounded-[0.8rem]  shadow-md mb-2'>
+                <div className='border border-blue-gray-100 relative flex flex-1 min-h-[6.5rem] !h-[100%] !rounded-[0.8rem]  shadow-md mb-2'>
                     <ExpandButton />
                     <MapContainer
                         center={position}

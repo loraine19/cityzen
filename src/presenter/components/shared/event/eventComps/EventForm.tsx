@@ -38,7 +38,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
             <main>
                 <div className="sectionHeader gap-2">
                     <SubHeader
-                        type={id ? 'Modifier mon évenement ' : 'Créer mon évenement'}
+                        type={id ? 'Modifier mon évenement ' : 'Créer mon évenement '}
                         place={category ? label : ''} closeBtn />
                     <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
                         <Select className='rounded-full shadow bg-white border-none capitalize'

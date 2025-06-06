@@ -9,7 +9,7 @@ export default function GroupSelect({ formik, user, setGroupId, groupId }: { for
             label={formik.errors.groupId ? formik.errors.groupId as string : "Choisir le groupe"}
             name={"groupId"}
             labelProps={{ className: `${formik.errors.groupId && "error"} before:border-none after:border-none ` }}
-            value={groupId || formik.values.groupId?.toString() || user.GroupUser[0]?.Group.id.toString()}
+            value={groupId || formik.values.groupId?.toString() || user.GroupUser[0]?.Group.id.toString() || 0}
             onChange={(val: string | undefined) => {
                 formik.setFieldValue('groupId', val)
                 formik.groupId = val
