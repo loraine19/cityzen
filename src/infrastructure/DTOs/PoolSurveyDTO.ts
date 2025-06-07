@@ -24,6 +24,7 @@ export class PoolDTO {
     title?: string;
     userId?: number;
     userIdBenef: number;
+    groupId?: number;
 
     constructor(init: Partial<PoolDTO>) {
         this.userIdBenef = parseInt(init.userIdBenef?.toString() || '0');

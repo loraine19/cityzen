@@ -23,7 +23,10 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
             if (!window.location.pathname.includes('/sign')) {
                 const userUpdated = await DI.resolve('getUserMeUseCase').execute() as User;
                 const loggedIn = userUpdated ? true : false;
-                if (!userUpdated) { window.location.replace('/signin?msg=impossible de recuperer vos informations') };
+                if (!userUpdated) {
+                    setTimeout(() =>
+                        window.location.replace('/signin?msg=impossible de recuperer vos informations'), 2000);
+                };
                 //  if (!userUpdated?.Profile) { window.location.replace('/profile/create') };
                 set({ user: userUpdated });
                 set({ profile: new ProfileView(userUpdated.Profile) });

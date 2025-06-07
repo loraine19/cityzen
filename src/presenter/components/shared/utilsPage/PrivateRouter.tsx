@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../../../application/stores/user.store';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
@@ -8,6 +8,7 @@ export const PrivateRoute = () => {
     const isLoggedCookie = Cookies.get('isLogged');
     const isLogged = isLoggedCookie === 'true' ? true : false
     if (typeof isLogged === 'boolean' && (isLoggedIn !== isLogged)) setIsLoggedIn(isLogged);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -16,7 +17,12 @@ export const PrivateRoute = () => {
             fetchUser().catch((error) => {
                 console.error('Error fetching user:', error);
             });
-    }, [user]);
+        if (isLoggedIn || user.id) {
+            if (window.location.pathname === '/signin' || window.location.pathname === '/signup') {
+                navigate('/');
+            }
+        }
+    }, [user, isLoggedCookie]);
 
     const userName = user?.Profile?.firstName ?? 'Bonjour'
     if (!isLoggedIn && !isLogged) {

@@ -9,9 +9,9 @@ import { PoolSurveyView } from '../../../views/viewsEntities/poolSurveyViewEntit
 import { VoteTarget } from '../../../../domain/entities/Vote';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 import { SurveyCard } from './voteCards/SurveyCard';
-import { User } from '../../../../domain/entities/User';
 import { PoolCard } from './voteCards/PoolCard';
 import { TextLength } from '../../../../domain/entities/utilsEntity';
+import { useUserStore } from '../../../../application/stores/user.store';
 
 export default function VoteCreatePage() {
     const [initialValues] = useState<PoolSurveyView>({} as PoolSurveyView);
@@ -19,6 +19,7 @@ export default function VoteCreatePage() {
     const postPool = async (data: PoolDTO) => await DI.resolve('postPoolUseCase').execute(data)
     const [type, setType] = useState<VoteTarget>(VoteTarget.SURVEY)
     const { setOpen, setAlertValues, handleApiError } = useAlertStore()
+    const { user } = useUserStore(state => state)
 
     const navigate = useNavigate();
     const formSchemaSurvey = object({
@@ -38,43 +39,55 @@ export default function VoteCreatePage() {
     })
 
 
-    const createFunction = async () => {
+    const createFunction = async (values?: any) => {
         if (type === VoteTarget.SURVEY) {
-            const updateData = new SurveyDTO(formik.values as SurveyDTO)
-            const data = await postSurvey(updateData)
-            data ? navigate(`/sondage/${data?.id}`) : handleApiError("Erreur lors de la création du sondage")
+            try {
+                const updateData = new SurveyDTO(values as SurveyDTO)
+                const data = await postSurvey(updateData)
+                if (data?.id) { navigate(`/sondage/${data?.id}`); setOpen(false) }
+                else handleApiError("Erreur lors de la création du sondage")
+            }
+            catch (error) {
+                handleApiError(error ?? "Erreur lors de la création du sondage")
+            }
         }
         else if (type === VoteTarget.POOL) {
-            const updateData = new PoolDTO(formik.values as PoolDTO)
-            const data = await postPool(updateData)
-            data ? navigate(`/cagnotte/${data?.id}`) : handleApiError("Erreur lors de la création de la cagnotte")
+            try {
+                const updateData = new PoolDTO(values as PoolDTO)
+                const data = await postPool(updateData)
+                if (data?.id) { navigate(`/cagnotte/${data?.id}`); setOpen(false) }
+                else handleApiError("Erreur lors de la création de la cagnotte")
+            }
+            catch (error) {
+                handleApiError(error ?? "Erreur lors de la création de la cagnotte")
+            }
         }
     }
+
 
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: initialValues as any,
         validationSchema: type === VoteTarget.SURVEY ? formSchemaSurvey : formSchemaPool,
         onSubmit: values => {
-            formik.values = values
+            values.groupId = parseInt(formik.values.groupId)
             setOpen(true)
             setAlertValues({
-                handleConfirm: async () => await createFunction(),
+                disableConfirm: false,
+                handleConfirm: async () => await createFunction(values),
                 confirmString: "Enregistrer ",
                 title: "Confimrer la création",
                 element: (
                     <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl pt-12 p-5'>
                         {type === VoteTarget.SURVEY ?
                             <SurveyCard
-                                survey={new PoolSurveyView({ ...formik.values, Votes: [], image: formik.values?.blob || formik.values?.image }, {} as User)}
+                                survey={new PoolSurveyView({ ...values, Votes: [], image: values?.blob || values?.image }, user)}
                                 change={() => { }}
-                                update={() => { }}
-                            /> :
+                                update={() => { }} /> :
                             <PoolCard
-                                pool={new PoolSurveyView({ ...formik.values, Votes: [] }, {} as User)}
+                                pool={new PoolSurveyView({ ...values, Votes: [] }, user)}
                                 change={() => { }}
-                                update={() => { }}
-                            />}
+                                update={() => { }} />}
                     </div>
                 )
             })

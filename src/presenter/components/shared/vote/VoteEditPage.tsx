@@ -10,7 +10,6 @@ import { PoolDTO, SurveyDTO } from '../../../../infrastructure/DTOs/PoolSurveyDT
 import { PoolSurveyView } from '../../../views/viewsEntities/poolSurveyViewEntity';
 import { VoteTarget } from '../../../../domain/entities/Vote';
 import { Typography } from '@material-tailwind/react';
-import { User } from '../../../../domain/entities/User';
 import { PoolCard } from './voteCards/PoolCard';
 import { SurveyCard } from './voteCards/SurveyCard';
 import { useAlertStore } from '../../../../application/stores/alert.store';
@@ -23,12 +22,13 @@ export default function VoteEditPage() {
 
     //// STORES
     const user = useUserStore((state) => state.user)
-    const { setOpen, setAlertValues } = useAlertStore()
+    const { setOpen, setAlertValues, handleApiError } = useAlertStore()
 
     //// VIEW MODEL SURVEY
     const surveyIdViewModelFactory = DI.resolve('surveyIdViewModel');
     const { survey, isLoading, error, refetch } = surveyIdViewModelFactory(idS)
     const updateSurvey = async (id: number, data: SurveyDTO) => await DI.resolve('updateSurveyUseCase').execute(id, data)
+
     //// VIEW MODEL POOL
     const poolIdViewModelFactory = DI.resolve('poolIdViewModel');
     const { pool, isLoading: isLoadingPool, error: errorPool, refetch: refetchPool } = poolIdViewModelFactory(idS)
@@ -44,31 +44,42 @@ export default function VoteEditPage() {
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
+        groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
     })
     const formSchemaPool = object({
         typeS: string().required("Type est obligatoire"),
         userIdBenef: string().required("Le beneficiaire est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres").max(TextLength.MAX_LONGTEXT, "le texte est trop long"),
+        groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
     })
 
     //// HANDLE ERROR
     useEffect(() => {
         if (survey && pool) target === "sondage" ? setInitialValues(survey) : setInitialValues(pool)
-
         if (!isLoading && !isLoadingPool && pool?.userId !== user.id && survey?.userId !== user.id) throw new Error("Vous n'avez pas le droit de modifier ce sondage/cagnotte");
     }, [isLoading, isLoadingPool])
 
-    const updateFunction = async () => {
+    const updateFunction = async (values?: any) => {
         if (target === "sondage") {
-            const updateData = new SurveyDTO(formik.values as SurveyDTO)
-            const data = await updateSurvey(survey.id, updateData)
-            if (data) { await refetch(); setOpen(false); navigate(`/sondage/${data?.id}`) }
+            try {
+                const updateData = new SurveyDTO(values as SurveyDTO)
+                const data = await updateSurvey(survey.id, updateData)
+                if (data.id) { await refetch(); setOpen(false); navigate(`/sondage/${data?.id}`) }
+                else handleApiError("Erreur lors de la modification du sondage")
+            } catch (error) {
+                handleApiError(error ?? "Erreur lors de la modification du sondage");
+            }
         }
         else if (target === "cagnotte") {
-            const updateData = new PoolDTO(formik.values as PoolDTO)
-            const data = await updatePool(pool.id, updateData)
-            if (data) { await refetchPool(); setOpen(false); navigate(`/sondage/${data?.id}`) }
+            try {
+                const updateData = new PoolDTO(values as PoolDTO)
+                const data = await updatePool(pool.id, updateData)
+                if (data.id) { await refetchPool(); setOpen(false); navigate(`/sondage/${data?.id}`) }
+                else handleApiError("Erreur lors de la modification de la cagnotte")
+            } catch (error) {
+                handleApiError(error ?? "Erreur lors de la modification de la cagnotte");
+            }
         }
     }
 
@@ -78,25 +89,24 @@ export default function VoteEditPage() {
         validationSchema: target === "sondage" ? formSchemaSurvey : formSchemaPool,
         onSubmit: values => {
             formik.values.UserBenef = values?.UserBenef
-            formik.values = values
             setOpen(true)
             setAlertValues({
-                handleConfirm: async () => await updateFunction(),
+                handleConfirm: async () => await updateFunction(values),
                 confirmString: "Enregistrer ",
                 title: "Confimrer la modification",
                 element: (
-                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
+                    <div className='flex flex-col gap-8 max-h-[70vh] bg-gray-200 rounded-2xl p-5'>
                         <Typography variant='h6'>
                             {type === VoteTarget.SURVEY ? 'Sondage' : 'Cagnotte'}
                         </Typography>
                         {type === VoteTarget.SURVEY ?
                             <SurveyCard
-                                survey={new PoolSurveyView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, {} as User)}
+                                survey={new PoolSurveyView({ ...values, image: values?.blob || values?.image }, user)}
                                 change={() => { }}
                                 update={() => { }}
                             /> :
                             <PoolCard
-                                pool={new PoolSurveyView({ ...formik.values }, {} as User)}
+                                pool={new PoolSurveyView({ ...values }, user)}
                                 change={() => { }}
                                 update={() => { }}
                             />}

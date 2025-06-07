@@ -26,7 +26,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
 
     const { user } = useUserStore(state => state)
     const [groupId, setGroupId] = useState<string>(formik.values.groupId ?? '0');
-    const { users, isLoading } = DI.resolve('getUsersUseCase').execute(groupId);
+    const { users, isLoading, refetch } = DI.resolve('userViewModel')(groupId);
 
 
 
@@ -64,6 +64,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                 onChange={() => {
                                     setType(VoteTarget.POOL)
                                     formik.setFieldValue('typeS', VoteTarget.POOL)
+                                    refetch()
                                 }}
                             />
                         </div>
@@ -81,17 +82,17 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                         formik.setFieldValue('userIdBenef', val)
                                         formik.setFieldValue('category', '')
                                     }} >
-                                    {users && !isLoading ? users.map((user: any, index: number) =>
+                                    {users && users.length && !isLoading ? users?.map((user: any, index: number) =>
                                         <Option
-                                            // className={`${user.id?.toString() === formik.values?.UserBenef?.id && "bg-orange-100 shadow-md"} rounded-full my-1 capitalize`}
-                                            // value={user?.id?.toString()}
+                                            className={`${user.id?.toString() === formik.values?.UserBenef?.id && "bg-orange-100 shadow-md"} rounded-full my-1 capitalize`}
+                                            value={user?.id?.toString()}
                                             key={index}
                                         >
                                             {user?.Profile?.firstName} {user?.id}
                                         </Option>
 
                                     ) :
-                                        <Option>Aucun utilisateur</Option>
+                                        <Option>Choissisez un groupe, pour voir les utilisateurs</Option>
                                     }
                                 </Select> :
                                 <Select
