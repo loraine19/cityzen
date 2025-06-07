@@ -12,9 +12,7 @@ export const serviceViewModel = () => {
       staleTime: 600000, // 10 minutes,
       queryFn: async () => await DI.resolve('getUserMeUseCase').execute(),
     })
-
     const getServices = DI.resolve('getServicesUseCase')
-
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['services', params],
@@ -23,9 +21,14 @@ export const serviceViewModel = () => {
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.services?.length ? pages.length + 1 : undefined
       });
+
+
+    console.log('useInfiniteQuery services', error)
+
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const flat = data?.pages.flat().map(page => page.services).flat()
-    const services = userLoading || isLoading || !flat ? [] : flat?.map((service: Service) => service && new ServiceView(service, user))
+    const services = userLoading || isLoading || !flat || error ? [] : flat?.map((service: Service) => service && new ServiceView(service, user))
+
 
     return {
       count,

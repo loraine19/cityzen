@@ -6,19 +6,21 @@ type NotifDivProps = {
     notif: string;
     isLoading: boolean;
     refetch: () => void;
+    error?: any;
 }
-const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch }) => {
+const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch, error }) => {
     const { color } = useNotificationStore((state) => state);
     const [attempt, setAttempt] = useState<number>(0);
 
     useEffect(() => {
-        setTimeout(() => {
+        if (attempt < 1 && !isLoading && !error) setTimeout(() => {
             notif && refetch()
         }, 1000);
-    }, [notif]);
+    }, [notif, error]);
 
     return (
         <div className={`notif `}>
+            {error ? 'Une erreur est survenue : ' : ''}
             {notif}
             <span
                 style={{ display: 'inline-block', transition: 'transform 0.5s' }}
@@ -32,7 +34,7 @@ const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch }) => {
                 }}
             >
                 <Icon
-                    style={attempt > 1 ? '!hidden' : ''}
+                    style={(attempt > 2 || isLoading || error) ? '!hidden' : ''}
                     color={color}
                     size='3xl'
                     title="Recharger la liste"

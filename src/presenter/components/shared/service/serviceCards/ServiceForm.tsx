@@ -22,7 +22,7 @@ export function ServiceForm(props: { formik: any }) {
     useEffect(() => {
         const updatedValues = new ServiceView(formik.values as ServiceView, user)
         formik.setValues(updatedValues);
-        setPoints(updatedValues.points?.join(' à ') || '0 à 1');
+        setPoints(updatedValues?.points?.join(' à ') || '0 à 1');
     }, [formik.values.hard, formik.values.skill, formik.values.type]);
     // FIN LOGIQUE
 
@@ -229,7 +229,7 @@ export function ServiceForm(props: { formik: any }) {
                                                     icon="toll"
                                                     size="md"
                                                     style=" ml-0.5"
-                                                    fill={userProfile.points > parseInt(points[0])}
+                                                    fill={userProfile?.points > parseInt(points[0])}
                                                 />}
                                         />
                                     </div>

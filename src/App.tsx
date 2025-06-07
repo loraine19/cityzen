@@ -60,7 +60,8 @@ function App() {
     useEffect(() => { getColor(window.location.pathname) }, [window.location.pathname]);
 
     return (
-        <ErrorBoundary onRetry={handleRetry} retryCount={retryCount}>
+        <ErrorBoundary
+            color={color} onRetry={handleRetry} retryCount={retryCount}>
             <BrowserRouter>
                 <div className={`App ${color}`}>
                     <Suspense fallback={<LoadingPage />}>

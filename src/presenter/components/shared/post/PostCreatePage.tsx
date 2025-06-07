@@ -22,7 +22,7 @@ export default function PostCreatePage() {
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres").max(TextLength.MAX_LONGTEXT, "le texte est trop long"),
         shareA: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
-        groupId: string().required("Groupe est obligatoire"),
+        groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
     })
 
     const formik = useFormik({
@@ -33,7 +33,7 @@ export default function PostCreatePage() {
             formik.values = values
             setOpen(true)
             setAlertValues({
-                handleConfirm: async () => await updateFunction(),
+                handleConfirm: async () => await postFunction(),
                 confirmString: "Enregistrer les modifications",
                 title: "Confimrer la modification",
                 element: (
@@ -51,22 +51,21 @@ export default function PostCreatePage() {
         }
     });
 
-    const updateFunction = async () => {
+    const postFunction = async () => {
         const shareArray = formik.values.shareA as string[];
         const share = shareArray.sort().join('_').toUpperCase() as unknown as Share;
-        const updateData = new PostDTO({ ...formik.values as PostDTO, share });
-        const data = await postPost(updateData)
-        if (data) {
-            setOpen(false);
-            navigate(`/annonce/${data?.id}`);
+        const dto = new PostDTO({ ...formik.values as PostDTO, share });
+        try {
+            const data = await postPost(dto)
+            if (data?.id) navigate(`/annonce/${data?.id}`)
+            else handleApiError("Erreur lors de la création de l'annonce");
+        } catch (error) {
+            handleApiError(error ?? "Erreur lors de la création de l'annonce");
         }
-        else handleApiError("Erreur lors de la création de l'annonce");
     }
 
 
     return (
-
-        <PostFormCard
-            formik={formik} />
+        <PostFormCard formik={formik} />
     )
 }

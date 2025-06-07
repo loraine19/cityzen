@@ -32,6 +32,7 @@ export default function PostEditPage() {
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres").max(TextLength.MAX_LONGTEXT, "le texte est trop long"),
         shareA: array().required("Partager est obligatoire").min(1, "minmum 1 contact"),
+        groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
     })
 
     useEffect(() => {
@@ -44,13 +45,13 @@ export default function PostEditPage() {
         const shareArray = formik.values.shareA as string[];
         const share = shareArray.sort().join('_').toUpperCase() as unknown as Share;
         const updateData = new PostDTO({ ...formik.values as PostDTO, share });
-        const data = await updatePost(post.id, updateData);
-        if (data) {
-            setOpen(false);
-            await refetch();
-            navigate(`/annonce/${data?.id}`)
+        try {
+            const data = await updatePost(post.id, updateData)
+            if (data?.id) { navigate(`/annonce/${data?.id}`); refetch(); setOpen(false); }
+            else handleApiError("Erreur lors de la modification de l'annonce");
+        } catch (error) {
+            handleApiError(error ?? "Erreur lors de la modification de l'annonce");
         }
-        else handleApiError("Erreur lors de la modification de l'annonce");
     }
 
 
@@ -66,10 +67,9 @@ export default function PostEditPage() {
                 confirmString: "Enregistrer ",
                 title: "Confimrer la modification",
                 element: (
-                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl pt-12 p-5'>
-
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-200 rounded-2xl pt-10 p-5'>
                         <PostCard
-                            post={new PostView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, 0)}
+                            post={new PostView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, post.userId ?? 0)}
                             change={() => { }}
                             update={() => { }}
                         />

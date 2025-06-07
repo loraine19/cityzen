@@ -11,7 +11,8 @@ export const PrivateRoute = () => {
 
 
     useEffect(() => {
-        if (!user)
+        console.log('PrivateRoute user:', user);
+        if (!user || !user.id)
             fetchUser().catch((error) => {
                 console.error('Error fetching user:', error);
             });

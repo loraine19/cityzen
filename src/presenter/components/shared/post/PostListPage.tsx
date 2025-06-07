@@ -100,9 +100,12 @@ export default function PostListPage() {
 
     //// NOTIFICATION
     useEffect(() => {
+        if (error) {
+            setNotif(error.message || "Erreur inconnue");
+            return;
+        }
         switch (true) {
-            case (count === 0 && !isLoading): setNotif(`Aucune annonce ${filterName()} ${categoryName()} n'a été trouvé`); break;
-            case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
+            case (count === 0 && !isLoading && !error): setNotif(`Aucune annonce ${filterName()} ${categoryName()} n'a été trouvé`); break;
             default: setNotif('');
         }
     }, [isLoading, error, filter, category, sort, reverse, count]);
@@ -152,18 +155,10 @@ export default function PostListPage() {
 
     //// SORT LIST
     const sortList: SortLabel[] = [
-        {
-            key: PostSort.LIKE, label: "Nombre de likes", icon: "thumb_up",
-        },
-        {
-            key: PostSort.CREATED_AT, label: "Créé le", icon: "event",
-        },
-        {
-            key: PostSort.TITLE, label: "Titre", icon: "sort_by_alpha",
-        },
-        {
-            key: PostSort.USER, label: "Utilisateur", icon: "person",
-        }
+        { key: PostSort.LIKE, label: "Nombre de likes", icon: "thumb_up" },
+        { key: PostSort.CREATED_AT, label: "Créé le", icon: "event" },
+        { key: PostSort.TITLE, label: "Titre", icon: "sort_by_alpha" },
+        { key: PostSort.USER, label: "Utilisateur", icon: "person" }
     ]
 
 
@@ -195,6 +190,7 @@ export default function PostListPage() {
                 </div>
                 {notif &&
                     <NotifDiv
+                        error={error}
                         notif={notif}
                         isLoading={isLoading}
                         refetch={refetch} />}
@@ -210,7 +206,7 @@ export default function PostListPage() {
                     onScroll();
                     handleHideCallback();
                 }}>
-                {isLoading || !posts || error ?
+                {isLoading ?
                     <SkeletonGrid />
                     : <>
                         {view === "list" ?

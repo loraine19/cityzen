@@ -16,13 +16,11 @@ interface PostFormCardProps {
 }
 
 export function PostFormCard({ formik }: PostFormCardProps) {
-
     const [imgBlob, setImgBlob] = useState<string>(formik.values.image || '');
     const checkShare = (word: string) => formik.values?.shareA?.toString().toLowerCase().includes(word);
     const start = formik.values.createdAt ? new Date(formik.values.createdAt) : new Date();
     const [groupId, setGroupId] = useState<number | String | undefined>(formik.values.Group?.id);
     const user = useUserStore((state) => state.user);
-
 
     return (
         <form onSubmit={formik.handleSubmit} className="flex flex-col h-full">
@@ -79,7 +77,7 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                                 setImgBlob={setImgBlob} />
                             <img
                                 onError={(e) => e.currentTarget.src = "/images/placeholder.jpg"}
-                                src={(imgBlob || formik.values.image) || ""}
+                                src={(imgBlob || formik.values.image) ?? null}
                                 alt={formik.values.title || 'image'}
                                 width={100}
                                 height={100}
@@ -152,9 +150,9 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                     className="lgBtn">
                     <Icon
                         size='xl'
-                        icon="add"
+                        icon={formik.values?.id ? "save_as" : "save"}
                         color="white" />
-                    enregistrer
+                    {formik.values?.id ? "Modifier l'annonce" : "Créer l'annonce"}
                 </Button>
             </footer>
         </form>

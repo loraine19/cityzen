@@ -13,7 +13,6 @@ interface AvatarUserProps {
 
 export const AvatarUser = ({ Profile, avatarSize = '', avatarStyle = '', style = '' }: AvatarUserProps) => {
     const colors = Object.values(Colors).slice(0, 8) as string[]
-    console.log('Profile', colors)
     const userColor = colors[
         Math.floor(
             Math.abs(

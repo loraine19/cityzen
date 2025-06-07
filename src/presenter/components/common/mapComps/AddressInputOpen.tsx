@@ -4,6 +4,7 @@ import { Input, List, ListItem } from '@material-tailwind/react';
 import { Address } from '../../../../domain/entities/Address';
 import { Skeleton } from '../Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
+import DI from '../../../../di/ioc';
 
 interface AddressSuggestion { label: string; value: Address }
 
@@ -16,6 +17,8 @@ export const AddressInputOpen = (props: {
     const [inputLoading, setInputLoading] = useState(false)
     const [inputValue, setInputValue] = useState(`${address?.address || ''} ${address?.zipcode || ''} ${address?.city || ''}`.trim() || '');
     const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
+
+    const groupList = async (): Promise<Address[]> => await DI.resolve('getAddressUseCase').execute()
 
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +37,8 @@ export const AddressInputOpen = (props: {
                         addressdetails: 2,
                     }
                 })
+                console.log("response", response)
+                //  const reponse = (url: string, params: any) => DI.resolve('getAddressOpenUseCase').execute(url, params);
                 if (response.data.length > 0) {
                     response.data.sort((a: any, b: any) => b.importance - a.importance)
                     const suggestions: AddressSuggestion[] = response.data.map((result: any) => {
@@ -60,12 +65,31 @@ export const AddressInputOpen = (props: {
                             },
                         };
                     });
+                    console.log("suggestions", suggestions)
                     setSuggestions([...new Set(suggestions)])
                 }
+                else {
+                    const secondResponse = await groupList();
+                    const suggestions: AddressSuggestion[] = secondResponse.map((result: Address) => {
+                        return {
+                            label: `${result.address} ${result.zipcode} ${result.city}`.trim(),
+                            value: result as Address
+                        }
+                    })
+                    setSuggestions([...new Set(suggestions)])
+                }
+
             } catch (error) {
                 console.error('Error fetching suggestions:', error);
                 setInputLoading(true)
-                setSuggestions([]);
+                const secondResponse = await groupList();
+                const suggestions: AddressSuggestion[] = secondResponse.map((result: Address) => {
+                    return {
+                        label: `${result.address} ${result.zipcode} ${result.city}`.trim(),
+                        value: result as Address
+                    }
+                })
+                setSuggestions([...new Set(suggestions)])
             }
         }
     };

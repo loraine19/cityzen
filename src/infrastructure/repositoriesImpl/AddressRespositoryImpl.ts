@@ -24,4 +24,8 @@ export class AddressRepositoryImpl implements AddressRepositoryBase {
         return this.addressData.postAddress(address);
     }
 
+    public async getAddressesOpen(url: string, params: any): Promise<any> {
+        return this.addressData.getAddressesOpen(url, params);
+    }
+
 }

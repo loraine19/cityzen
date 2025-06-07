@@ -1,5 +1,5 @@
 import { Radio, Select, Card, CardHeader, Button, CardBody, Input, Textarea, Option } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { dayMS, Label } from "../../../../../domain/entities/frontEntities";
 import SubHeader from "../../../common/SubHeader";
 import { ImageBtn } from "../../../common/ImageBtn";
@@ -24,19 +24,11 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
     const haveImage = (formik.values.image && formik.values.typeS === VoteTarget.SURVEY) ? true : false;
     const [imgBlob, setImgBlob] = useState<string | undefined>(formik.values.image);
 
-    const [users, setUsers] = useState<User[]>([])
     const { user } = useUserStore(state => state)
-    const [groupId, setGroupId] = useState<string>(formik.values.groupId || user.GroupUser[0].groupId.toString());
-    const getUsers = async () => await DI.resolve('getUsersUseCase').execute(groupId);
+    const [groupId, setGroupId] = useState<string>(formik.values.groupId ?? '0');
+    const { users, isLoading } = DI.resolve('getUsersUseCase').execute(groupId);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const data = await getUsers()
-            if (data) setUsers([...data])
-        }
-        if (type === VoteTarget.POOL && users.length === 0) fetchUsers()
-        formik.setFieldValue('typeS', type)
-    }, [type])
+
 
 
     return (
@@ -89,17 +81,18 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                         formik.setFieldValue('userIdBenef', val)
                                         formik.setFieldValue('category', '')
                                     }} >
-                                    {users.map((user: any, index: number) => {
-                                        return (
-                                            <Option
-                                                // className={`${user.id?.toString() === formik.values?.UserBenef?.id && "bg-orange-100 shadow-md"} rounded-full my-1 capitalize`}
-                                                // value={user?.id?.toString()}
-                                                key={index}
-                                            >
-                                                {user?.Profile?.firstName} {user?.id}
-                                            </Option>
-                                        )
-                                    })}
+                                    {users && !isLoading ? users.map((user: any, index: number) =>
+                                        <Option
+                                            // className={`${user.id?.toString() === formik.values?.UserBenef?.id && "bg-orange-100 shadow-md"} rounded-full my-1 capitalize`}
+                                            // value={user?.id?.toString()}
+                                            key={index}
+                                        >
+                                            {user?.Profile?.firstName} {user?.id}
+                                        </Option>
+
+                                    ) :
+                                        <Option>Aucun utilisateur</Option>
+                                    }
                                 </Select> :
                                 <Select
                                     className="rounded-full shadow bg-white border-none capitalize"

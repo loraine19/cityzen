@@ -6,46 +6,9 @@ const baseURL = import.meta.env.PROD ? import.meta.env.VITE_FETCH_URL : import.m
 class ApiError extends Error {
     constructor(public status: number | string, message: string) {
         super(message);
-        this.name = this.constructor.name;
+        this.status = status;
     }
 }
-
-class BadRequestError extends ApiError {
-    constructor(message = "Mauvaise requête") {
-        super(400, message);
-    }
-}
-
-class UnauthorizedError extends ApiError {
-    constructor(message = "Non autorisé") {
-        super(401, message);
-    }
-}
-
-class ForbiddenError extends ApiError {
-    constructor(message = "Accès refusé") {
-        super(403, message);
-    }
-}
-
-class NotFoundError extends ApiError {
-    constructor(message = "La ressource demandée n'existe pas ou plus") {
-        super(404, message);
-    }
-}
-
-class ConflictError extends ApiError {
-    constructor(message = "Conflit de ressources") {
-        super(409, message);
-    }
-}
-
-class ServerError extends ApiError {
-    constructor(message = "Erreur serveur") {
-        super(500, message);
-    }
-}
-
 export type ApiServiceI = {
     get(url: string): Promise<any>;
     delete(url: string): Promise<any>;
@@ -76,21 +39,26 @@ export class ApiService implements ApiServiceI {
         console.error(`[${now}+${milliseconds}] ${message}`);
     };
 
-    private requestPending: { config: any, status: boolean, error: boolean, count: number } = {
+    private requestPending: { config: any, status: boolean, inError: boolean, error: ApiError, count: number } = {
         config: {},
         status: false,
-        error: false,
+        inError: false,
+        error: new ApiError(0, ''),
         count: 0
     }
 
     private handleRequest = (config: any) => {
         document.cookie = "user=; path=/; max-age=0";
         this.logWithTime('handleRequest: ' + config);
-        this.requestPending = {
-            config: config,
-            status: true,
-            error: false,
-            count: this.requestPending.count + 1
+        console.log('handleRequest config:', config,)
+        if (config.url !== '/auth/refresh') {
+            this.requestPending = {
+                config: config,
+                status: true,
+                inError: false,
+                error: new ApiError(0, ''),
+                count: this.requestPending.count + 1
+            }
         }
         return config
     }
@@ -98,7 +66,8 @@ export class ApiService implements ApiServiceI {
     private handleResponse = async (response: any): Promise<any> => {
         if (response && response.data) {
             this.requestPending.status = false;
-            this.requestPending.error = false;
+            this.requestPending.inError = false;
+            this.requestPending.error = new ApiError(0, '');
             this.requestPending.config = {};
         }
         return response
@@ -107,25 +76,17 @@ export class ApiService implements ApiServiceI {
     private handleResponseError = async (error: any) => {
         if (this.requestPending.status) {
             this.requestPending.status = true;
-            this.requestPending.error = true
+            this.requestPending.inError = true;
         }
-        console.error('handleResponseError countRefresh:', this.countRefresh, 'error:', error);
-        let newError = new ApiError(500, 'Une erreur est survenue');
         const originalRequest = error.config || {};
         originalRequest._retry = originalRequest._retry || false;
-        if (!error.response) {
-            this.logWithTime('not api error');
-            // return Promise.reject(newError);
-        }
+        console.log('IS API ERROR??? ', error.response ?? typeof error)
         const status = error.status || error.response?.status || error.response?.data?.statuscode || 500
-        let message = error.response?.data?.message || error.response?.message || '';
-        message.includes('PRISMA ERROR') && (message = 'Erreur de données');
-
-        newError = new ApiError(status, message);
+        let message = error.response?.data?.message || error.message || ''
+        if (message.includes('msg')) message = message.split('msg:')[1] || ''
+        if (message.includes('PRISMA ERROR')) message = ''
+        let newError = new ApiError(status, error);
         switch (status) {
-            case 400:
-                newError = new BadRequestError(message);
-                break;
             case 401:
                 this.logWithTime('token expired 401');
                 this.countRefresh++;
@@ -134,33 +95,45 @@ export class ApiService implements ApiServiceI {
                     this.logWithTime('token refreshed successfully');
                     return refreshSuccess
                 }
-                else newError = new UnauthorizedError(message);
-                break;
-            case 403:
-                newError = new ForbiddenError(message);
-                break;
-            case 404:
-                newError = new NotFoundError();
-                break;
-            case 409:
-                newError = new ConflictError(message);
-                break;
-            case 500:
-                newError = new ServerError();
+                else newError = new ApiError(status, 'Session expirée, veuillez vous reconnecter');
                 break;
         }
+        if (newError.message) {
+            switch (status) {
+                case 400:
+                    newError = new ApiError(status, message || 'mauvaise requête');
+                    break;
+                case 403:
+                    newError = new ApiError(status, message || 'Accès interdit');
+                    break;
+                case 404:
+                    newError = new ApiError(status, message || 'Ressource non trouvée');
+                    break;
+                case 409:
+                    newError = new ApiError(status, message || 'Conflit de ressources');
+                    break;
+                case 500:
+                    newError = new ApiError(status, message || 'Erreur interne du serveur');
+                    break;
+            }
+        }
 
-        if (this.requestPending.count < 2 && status !== 401) {
+        if (
+            this.requestPending.count < 1 &&
+            this.requestPending.config &&
+            this.requestPending.config.method !== 'get'
+        ) {
             // Set request as pending and retry the request
             this.requestPending.status = true;
-            this.requestPending.error = false;
-            this.requestPending.count += 1;
+            this.requestPending.error = newError;
+            this.requestPending.inError = false;
+            this.requestPending.count = this.requestPending.count + 1;
             // Retry the original request
+            console.error('RETRY', this.requestPending.config,
+                'count:', this.requestPending.count);
             return this.api.request(this.requestPending.config);
-
         }
-        else return { error: newError }
-        //  throw Error(newError.message || 'Une erreur est survenue');
+        else return Promise.reject(newError);
 
     };
 
@@ -195,7 +168,10 @@ export class ApiService implements ApiServiceI {
             this.handleResponse(response)
             return response.data;
         } catch (error) {
-            return this.handleResponseError(error);
+            let data = await this.handleResponseError(error);
+            console.error('Error in get:', data);
+            // throw new Error('test');
+            return data
         }
     }
 

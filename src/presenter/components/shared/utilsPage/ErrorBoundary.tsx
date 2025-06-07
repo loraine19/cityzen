@@ -10,11 +10,13 @@ interface ErrorBoundaryProps {
     children: ReactNode;
     retryCount: number;
     onRetry: () => void;
+    color?: string;
 }
 
 interface ErrorBoundaryState {
     hasError: boolean;
     error?: Error;
+
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -44,6 +46,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     render() {
 
         let errorMessage = this.state.error?.message;
+        if (this.state.error) {
+            console.error('ErrorBoundary caught an error:', this.state.error, this.state.error.stack);
+        }
 
         switch (true) {
             case (errorMessage?.includes('Network Error') || errorMessage?.includes('Failed to fetch')):
@@ -135,16 +140,17 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 confirmString: 'Retour à l\'accueil',
                 disableConfirm: true,
                 button2: {
-                    text: 'Déconnexion', onClick: () => {
+                    text: 'Déconnexion',
+                    onClick: () => {
                         Cookies.remove('user')
                         Cookies.remove('refreshToken')
-                        window.location.replace('/signin')
+                        window.location.replace('/signin?msg=Vous avez été déconnecté')
                     }
                 },
             }
 
             return (
-                <>
+                <body className={`app ${this.props.color || 'bg-gray-100'}`}>
                     <AlertModal values={!errorMessage ? alertValues : errorAlertValues} />
                     <header className="h-[7rem] flex-col flex items-center justify-center pt-6 relative">
                         <div className="flex items-center justify-center gap-2">
@@ -163,7 +169,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                             </Typography>
                         </Card>
                     </main>
-                </>
+                </body>
 
             )
         }

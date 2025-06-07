@@ -113,25 +113,20 @@ export default function VoteListPage() {
 
     //// SORT LIST
     const sortList: SortLabel[] = [
-        {
-            label: "Créé le", icon: "event", key: PoolSurveySort.CREATED_AT,
-        },
-        {
-            label: "Titre", icon: "sort_by_alpha", key: PoolSurveySort.TITLE,
-        },
-        {
-            label: "Nombre de votes", icon: "smart_card_reader", key: PoolSurveySort.VOTES,
-        },
-        {
-            label: "Utilisateur", icon: "person", key: PoolSurveySort.USER,
-        }
+        { label: "Créé le", icon: "event", key: PoolSurveySort.CREATED_AT },
+        { label: "Titre", icon: "sort_by_alpha", key: PoolSurveySort.TITLE },
+        { label: "Nombre de votes", icon: "smart_card_reader", key: PoolSurveySort.VOTES },
+        { label: "Utilisateur", icon: "person", key: PoolSurveySort.USER }
     ]
 
     //// NOTIFICATION
     useEffect(() => {
+        if (error) {
+            setNotif(error.message || "Erreur inconnue");
+            return;
+        }
         switch (true) {
-            case (count === 0 || !poolsSurveys): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
-            case (error): setNotif("Erreur lors du chargement des sondages, veuillez réessayer plus tard"); break;
+            case ((count === 0 || !poolsSurveys) && !isLoading): setNotif(`Aucun ${filterName()} ${stepName()} n'a été trouvé`); break;
             default: setNotif('');
         }
     }, [isLoading, error, filter, step]);
@@ -188,7 +183,7 @@ export default function VoteListPage() {
                 <SelectSearch
                     searchCat={searchCat}
                     setSearchCat={setSearchCat}
-                    category={surveyCategories}
+                    category={filter === PoolSurveyFilter.SURVEY ? surveyCategories : []}
                     search={search} />
                 <SubHeader
                     qty={count > 0 ? count : 'aucun'}
@@ -197,6 +192,7 @@ export default function VoteListPage() {
                             'cagnottes et sondages'} ${filterName()}`} />
                 {notif &&
                     <NotifDiv
+                        error={error}
                         notif={notif}
                         isLoading={isLoading}
                         refetch={refetch} />}

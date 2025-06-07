@@ -2,7 +2,6 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate, } from 'react-router-dom';
 import { ServiceForm } from './serviceCards/ServiceForm';
-import { useUserStore } from '../../../../application/stores/user.store';
 import DI from '../../../../di/ioc';
 import { ServiceView } from '../../../views/viewsEntities/serviceViewEntity';
 import { ServiceDTO } from '../../../../infrastructure/DTOs/ServiceDTO';
@@ -15,45 +14,34 @@ import { ServiceStep } from '../../../../domain/entities/Service';
 
 
 export default function ServiceCreatePage() {
-    const { user } = useUserStore()
     const postService = async (data: ServiceDTO) => await DI.resolve('postServiceUseCase').execute(data)
     const navigate = useNavigate();
     const formSchema = object({
         category: string().required("Catégorie est obligatoire"),
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
-        groupId: string().required("Groupe est obligatoire"),
+        groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
     })
 
     const { setOpen, setAlertValues, handleApiError } = useAlertStore(state => state)
 
     const postFunction = async () => {
-        const { ...rest } = new ServiceDTO(formik.values as ServiceDTO);
-        const postData = { ...rest, userId: user.id, groupId: formik.values.groupId, }
-        console.log("postData", postData)
-        const data = await postService(postData);
-        if (data) {
-            setOpen(false);
-            navigate(`/service/${data?.id}`)
-        }
-        else {
-            setOpen(false);
-            setTimeout(() => {
-                throw new Error("Erreur lors de la création du service throw error")
-            }, 100);
-            handleApiError({ message: "Erreur lors de la création du service" })
+        const postData: ServiceDTO = new ServiceDTO(formik.values as ServiceDTO);
+        try {
+            const data = await postService(postData)
+            if (data?.id) navigate(`/service/${data?.id}`)
+            else handleApiError("Erreur lors de la création du service");
+        } catch (error) {
+            handleApiError(error ?? "Erreur lors de la création du service");
         }
     }
-
-
-
 
 
     const formik = useFormik({
         initialValues: {} as ServiceDTO,
         validationSchema: formSchema,
         onSubmit: values => {
-            formik.values.status = 'STEP_0' as ServiceStep;
+            values.status = 'STEP_0' as ServiceStep;
             const valuesAlert: AlertValues = {
                 handleConfirm: async () => await postFunction(),
                 confirmString: "Enregistrer ",

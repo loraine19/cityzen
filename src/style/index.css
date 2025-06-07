@@ -98,7 +98,7 @@ header {
 }
 
 .CTA {
-    @apply flex gap-2 gap-x-4 w-respLarge justify-around pb-3 pt-2 h-max;
+    @apply flex gap-2 gap-x-4 w-respLarge justify-around !px-0 pt-4  h-max;
 }
 
 /* COLORS */
@@ -239,7 +239,8 @@ header {
 }
 
 .FixCardHeader {
-    @apply flex flex-1 !min-h-[10rem]  !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
+    @apply flex !max-h-[calc(60vh-2rem)] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
+    /*!min-h-[10rem] */
 }
 
 .FixCardHeaderSmall {
@@ -274,7 +275,7 @@ header {
 }
 
 .CardImage {
-    @apply object-cover !shadow-lg bg-transparent w-full max-h-full !bg-blue-gray-400;
+    @apply object-cover !shadow-lg !max-h-[40vh]  w-full  !bg-white;
 }
 
 .DetailCardDiv {

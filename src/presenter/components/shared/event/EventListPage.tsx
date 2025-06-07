@@ -26,15 +26,14 @@ export default function EventListPage() {
     const [view, setView] = useState("view_agenda");
     const [notif, setNotif] = useState<string>("");
     const [mines, setMines] = useState<boolean>(false);
-    const [Params, setParams] = useSearchParams();
     const [searchString, setSearchString] = useState<string>('');
 
+    //// PARAMS
+    const [Params, setParams] = useSearchParams();
     const params = { filter: Params.get("filter"), category: Params.get("category") }
+    useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
-    useEffect(() => {
-        setCategory(params.category || ''); setFilter(params.filter || '')
-    }, []);
-
+    //// VIEW MODEL
     const eventViewModelFactory = (params: EventFindParams) => DI.resolve('eventViewModel')(params);
     const { events, isLoading, error, fetchNextPage, hasNextPage, refetch, count } = eventViewModelFactory(
         {
@@ -48,7 +47,6 @@ export default function EventListPage() {
     //// FILTER TAB 
     const filterTab = async (value?: EventFilter) => {
         setParams({ filter: value as string || '', category: category });
-        console.log('filterTab called with value:', value);
         value !== filter && setCategory('')
         setFilter(value || '');
         value === EventFilter.MINE ? setMines(true) : setMines(false);
@@ -62,7 +60,6 @@ export default function EventListPage() {
         { label: "j'y vais", value: EventFilter.IGO, result: () => filterTab(EventFilter.IGO) },
         { label: "j'organise", value: EventFilter.MINE, result: () => filterTab(EventFilter.MINE) },
     ]
-
 
     //// SEARCH
     const [searchCat, setSearchCat] = useState<Label>({ label: 'tous', value: '' });
@@ -113,7 +110,6 @@ export default function EventListPage() {
         setHideNavBottom(false)
     }
 
-
     //// HANDLE SCROLL
     const utils = DI.resolve('utils')
     const handleScroll = (params: HandleScrollParams) => utils.handleScroll(params)
@@ -124,7 +120,7 @@ export default function EventListPage() {
             divRef,
             hasNextPage,
             fetchNextPage,
-            setIsBottom,
+            setIsBottom
         }
         handleScroll(params)
     }, [divRef]);
@@ -143,31 +139,13 @@ export default function EventListPage() {
 
     //// SORT LIST
     const sortList: SortLabel[] = [
-        {
-            label: 'créé le',
-            key: EventSort.CREATED_AT,
-            icon: "event"
-        },
-        {
-            label: 'titre',
-            key: EventSort.AZ,
-            icon: 'sort_by_alpha',
-        }
-        ,
-        {
-            label: 'participants',
-            key: EventSort.PARTICIPANTS,
-            icon: 'person',
-        },
-        {
-            label: 'jours',
-            key: EventSort.INDAYS,
-            icon: 'calendar_month',
-        }
+        { label: 'créé le', key: EventSort.CREATED_AT, icon: "event" },
+        { label: 'titre', key: EventSort.AZ, icon: 'sort_by_alpha' },
+        { label: 'participants', key: EventSort.PARTICIPANTS, icon: 'person' },
+        { label: 'jours', key: EventSort.INDAYS, icon: 'calendar_month' }
     ]
 
     return (
-
         <main className={(navBottom && view === "view_agenda") ? "withBottom" : ""}>
             <div className="sectionHeader ">
                 {view === "view_agenda" &&
@@ -196,6 +174,7 @@ export default function EventListPage() {
                         title={view === "view_agenda" ? "voir en mode calendrier" : "voir en mode liste"} />
                     {(view === "view_agenda" && notif) &&
                         <NotifDiv
+                            error={error}
                             notif={notif}
                             isLoading={isLoading}
                             refetch={refetch} />

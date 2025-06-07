@@ -22,7 +22,7 @@ export default function NotificationPage() {
 
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
-    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory(filter)
+    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage, error } = notifViewModelFactory(filter)
 
     const { setUnReadNotif } = useNotificationStore()
 
@@ -33,52 +33,19 @@ export default function NotificationPage() {
 
 
     //// FILTER TAB
-    const notifTabs: TabLabel[] = [{
-        label: "tous", value: "", result: () => filterTab()
-    },
-    {
-        label: "message",
-        value: ElementNotif.MESSAGE, result: () => filterTab(ElementNotif.MESSAGE)
-    },
-    {
-        label: "service",
-        value: ElementNotif.SERVICE, result: () => filterTab(ElementNotif.SERVICE)
-    },
-    {
-        label: 'Conciliation',
-        value: ElementNotif.ISSUE, result: () => filterTab(ElementNotif.ISSUE)
-    },
-    {
-        label: "évenement",
-        value: ElementNotif.EVENT, result: () => filterTab(ElementNotif.EVENT)
-    },
-    {
-        label: 'Participation',
-        value: ElementNotif.PARTICIPANT, result: () => filterTab(ElementNotif.PARTICIPANT)
-    },
-    {
-        label: "annonce",
-        value: ElementNotif.POST, result: () => filterTab(ElementNotif.POST)
-    },
-    {
-        label: "like",
-        value: ElementNotif.LIKE, result: () => filterTab(ElementNotif.LIKE)
-    },
-    {
-        label: "sondage",
-        value: ElementNotif.SURVEY, result: () => filterTab(ElementNotif.SURVEY)
-    }, {
-        label: "cagnotte",
-        value: ElementNotif.POOL, result: () => filterTab(ElementNotif.POOL)
-    },
-    {
-        label: "vote",
-        value: ElementNotif.VOTE, result: () => filterTab(ElementNotif.VOTE)
-    },
-    {
-        label: "signalement",
-        value: ElementNotif.FLAG, result: () => filterTab(ElementNotif.FLAG)
-    }]
+    const notifTabs: TabLabel[] = [
+        { label: "tous", value: "", result: () => filterTab() },
+        { label: "message", value: ElementNotif.MESSAGE, result: () => filterTab(ElementNotif.MESSAGE) },
+        { label: "service", value: ElementNotif.SERVICE, result: () => filterTab(ElementNotif.SERVICE) },
+        { label: 'Conciliation', value: ElementNotif.ISSUE, result: () => filterTab(ElementNotif.ISSUE) },
+        { label: "évenement", value: ElementNotif.EVENT, result: () => filterTab(ElementNotif.EVENT) },
+        { label: 'Participation', value: ElementNotif.PARTICIPANT, result: () => filterTab(ElementNotif.PARTICIPANT) },
+        { label: "annonce", value: ElementNotif.POST, result: () => filterTab(ElementNotif.POST) },
+        { label: "like", value: ElementNotif.LIKE, result: () => filterTab(ElementNotif.LIKE) },
+        { label: "sondage", value: ElementNotif.SURVEY, result: () => filterTab(ElementNotif.SURVEY) }, { label: "cagnotte", value: ElementNotif.POOL, result: () => filterTab(ElementNotif.POOL) },
+        { label: "vote", value: ElementNotif.VOTE, result: () => filterTab(ElementNotif.VOTE) },
+        { label: "signalement", value: ElementNotif.FLAG, result: () => filterTab(ElementNotif.FLAG) }
+    ]
 
     const filterTab = async (value?: ElementNotif) => {
         setParams({ filter: String(value) || '' });
@@ -90,6 +57,10 @@ export default function NotificationPage() {
 
     //// NOTIFICATION
     useEffect(() => {
+        if (error) {
+            setNotifFind(error.message || "Erreur inconnue");
+            return;
+        }
         count > 0 ?
             setNotifFind('') :
             setNotifFind(`Aucun Notification ${PathElement[filter as keyof typeof PathElement] ?? ""} na été trouvé`);
@@ -140,6 +111,7 @@ export default function NotificationPage() {
                 </div>
                 {notifFind &&
                     <NotifDiv
+
                         notif={notifFind}
                         isLoading={isLoading}
                         refetch={refetch} />}

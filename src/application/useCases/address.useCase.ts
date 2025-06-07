@@ -19,4 +19,27 @@ export class UpdateAddressUseCase {
     }
 }
 
+export class GetAddressOpenUseCase {
+    private addressRepository: AddressRepositoryBase;
+
+    constructor({ addressRepository }: { addressRepository: AddressRepositoryBase }) {
+        this.addressRepository = addressRepository;
+    }
+    public async execute(url: string, params: any): Promise<any> {
+        return await this.addressRepository.getAddressesOpen(url, params)
+
+    }
+}
+
+export class GetAddressUseCase {
+    private addressRepository: AddressRepositoryBase;
+
+    constructor({ addressRepository }: { addressRepository: AddressRepositoryBase }) {
+        this.addressRepository = addressRepository;
+    }
+    public async execute(): Promise<any> {
+        return await this.addressRepository.getAddresses()
+
+    }
+}
 

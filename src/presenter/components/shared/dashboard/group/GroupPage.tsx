@@ -14,6 +14,7 @@ import { groupCategories } from "../../../../constants";
 import { getValue } from "../../../../views/viewsEntities/utilsService";
 import { useUxStore } from "../../../../../application/stores/ux.store";
 import { HandleHideParams, HandleScrollParams } from "../../../../../application/useCases/utils.useCase";
+import NotifDiv from "../../../common/NotifDiv";
 
 export default function GroupPage() {
     const [notif, setNotif] = useState<string>('');
@@ -94,8 +95,11 @@ export default function GroupPage() {
     const categorieName = (category: string): string => GroupCategory[category as keyof typeof GroupCategory] ?? '';
 
     useEffect(() => {
+        if (error) {
+            setNotif(error.message || "Erreur inconnue");
+            return;
+        }
         switch (true) {
-            case error: setNotif('Erreur de chargement'); break;
             case count === 0: setNotif(`Aucun groupe ${filterName()} ${categorieName(category)} trouvé`); break;
             default: setNotif('');
         }
@@ -106,6 +110,12 @@ export default function GroupPage() {
 
         <main className={navBottom ? "withBottom" : ""}>
             <div className=" sectionHeader">
+                {notif &&
+                    <NotifDiv
+                        error={error}
+                        notif={notif}
+                        isLoading={isLoading}
+                        refetch={refetch} />}
                 <SubHeader
                     closeBtn
                     link={`/`}

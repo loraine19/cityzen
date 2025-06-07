@@ -29,7 +29,7 @@ export default function EventCreatePage() {
             city: string().required("Ville est obligatoire"),
             zipcode: string().required("Code postal est obligatoire"),
         }),
-        groupId: string().required("Groupe est obligatoire"),
+        groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
     })
 
     const { setAlertValues, setOpen, handleApiError } = useAlertStore(state => state)
@@ -38,12 +38,19 @@ export default function EventCreatePage() {
         formik.values.start = new Date(formik.values.start).toISOString()
         formik.values.end = new Date(formik.values.end).toISOString()
         const dataDTO = new EventDTO(formik.values)
-        const data = await postEvent(dataDTO);
-        if (data) {
-            setOpen(false);
-            navigate("/evenement/" + data.id);
+        let data: any
+        try {
+            data = await postEvent(dataDTO);
+            if (data?.id) {
+                setOpen(false);
+                navigate("/evenement/" + data.id);
+            }
         }
-        else handleApiError("Erreur lors de la création de l'événement");
+        catch (error: any) {
+            console.error("Error creating event:", error);
+            handleApiError(error ?? "Erreur lors de la création de l'événement");
+        }
+
     }
 
     const formik = useFormik({
@@ -53,10 +60,10 @@ export default function EventCreatePage() {
             setOpen(true)
             setAlertValues({
                 handleConfirm: async () => await postFunction(),
-                confirmString: "Enregistrer les modifications",
-                title: "Confimrer la modification",
+                confirmString: "Enregistrer la création de l'événement",
+                title: "Confimrer la création de l'événement",
                 element: (
-                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl p-5'>
+                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl px-5 py-4'>
                         <Typography variant='h6'>
                             Évenement au : {values?.Address?.address} le {new Date(values?.start).toLocaleDateString('fr-FR')}
                         </Typography>

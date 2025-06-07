@@ -13,8 +13,13 @@ import { Icon } from "../../../common/IconComp";
 import GroupSelect from "../../../common/GroupSelect";
 import { useUserStore } from "../../../../../application/stores/user.store";
 
-export function EventForm(props: { formik: any, Address: AddressDTO, setAddress: any }) {
-    const { formik, Address, setAddress } = props;
+interface EventFormProps {
+    formik: any;
+    Address: AddressDTO;
+    setAddress: (address: AddressDTO) => void;
+
+}
+export function EventForm({ formik, Address, setAddress }: EventFormProps) {
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100) || 0;
     const today = new Date(new Date().getTime() + (1 * dayMS)).toISOString().slice(0, 16).replace('Z', '');
     const [groupId, setGroupId] = useState<number | String | undefined>(formik.values.Group?.id);
@@ -42,7 +47,7 @@ export function EventForm(props: { formik: any, Address: AddressDTO, setAddress:
                         place={category ? label : ''} closeBtn />
                     <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
                         <Select className='rounded-full shadow bg-white border-none capitalize'
-                            label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
+                            label={formik?.errors?.category ? formik?.errors?.category as string : "Choisir la catégorie"}
                             name={"category"}
                             error={formik.errors.category ? true : false}
                             labelProps={{ className: `before:border-none after:border-none` }}

@@ -1,4 +1,5 @@
 ///src/infrastructure/providers/http/authApi.ts
+import axios from "axios";
 import { Address } from "../../../domain/entities/Address";
 import { AddressDTO } from "../../DTOs/AddressDTO";
 import { ApiServiceI, ApiService } from "./apiService";
@@ -21,6 +22,10 @@ export class AddressApi {
 
     async postAddress(address: AddressDTO): Promise<Address> {
         return this.api.post(this.dataType, address)
+    }
+
+    async getAddressesOpen(url: string, params: any): Promise<any> {
+        return axios.get(url, params)
     }
 
 }

@@ -47,6 +47,9 @@ export default function ServicesPage() {
     });
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
+
+
+
     //// NAMING
     const filterName = (): string => {
         switch (filter) {
@@ -120,12 +123,13 @@ export default function ServicesPage() {
         }
     };
 
-    //// NOTIFICATION
+    //// NOTIFICATION & ERROR
     useEffect(() => {
         switch (true) {
-            case (count === 0 || !services): setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
-            case (error): setNotif("Erreur lors du chargement, veuillez réessayer plus tard"); break;
-            default: setNotif('');
+            case ((count === 0 || !services) && !isLoading && !error):
+                setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
+
+            //  default: setNotif('');
         }
     }, [isLoading, error, filter, step]);
 
@@ -155,8 +159,7 @@ export default function ServicesPage() {
     }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
     useEffect(() => {
-        (hide !== hideNavBottom) && setHideNavBottom(hide),
-            console.log('r', useUxStore.getState())
+        (hide !== hideNavBottom) && setHideNavBottom(hide)
     }, [hide]);
 
     //// SORT LIST
@@ -217,6 +220,7 @@ export default function ServicesPage() {
                 {notif && !isLoading &&
                     <NotifDiv
                         notif={notif}
+                        error={error}
                         isLoading={isLoading}
                         refetch={refetch} />}
             </div>

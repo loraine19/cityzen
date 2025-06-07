@@ -7,6 +7,7 @@ export class PostDTO implements Partial<Post> {
     title?: string;
     description?: string;
     category?: PostCategory;
+    groupId?: number;
 
     constructor(init?: Partial<PostDTO>) {
         if (init) {

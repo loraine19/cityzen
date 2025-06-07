@@ -25,7 +25,7 @@ import { serviceIdViewModel, serviceViewModel } from '../presenter/views/service
 import { GetUserByIdUseCase, GetUserCountUseCase, GetUserMeUseCase, GetUsersModosUseCase, GetUsersUseCase } from '../application/useCases/user.usecase';
 import { DeleteEventUseCase, GetEventByIdUseCase, GetEventsUseCase, PostEventUseCase, UpdateEventUseCase } from '../application/useCases/event.usecase';
 import { DeleteAccountConfirmUseCase, DeleteAccountUseCase, GoogleAuthUseCase, LogOutUseCase, SignInUseCase, SignInVerifyUseCase, SignUpUseCase } from '../application/useCases/auth.useCase';
-import { UpdateAddressUseCase } from '../application/useCases/address.useCase';
+import { GetAddressOpenUseCase, GetAddressUseCase, UpdateAddressUseCase } from '../application/useCases/address.useCase';
 import { ResetPasswordUpdateUseCase, ResetPasswordUseCase } from '../application/useCases/resetPassword.useCase';
 import { GetServicesUseCase, GetServiceByIdUseCase, UpdateServiceUseCase, DeleteServiceUseCase, PostServiceUseCase, CancelRespServiceUseCase, FinishServiceUseCase, ValidRespServiceUseCase, RespServiceUseCase } from '../application/useCases/service.usecase';
 import { GetNotifUseCase, ReadAllNotifUseCase, ReadNotifUseCase } from '../application/useCases/notif.usecase';
@@ -68,6 +68,7 @@ import { GroupApi } from '../infrastructure/providers/http/groupApi';
 import { DeleteGroupUserUseCase, GetGroupByIdUseCase, GetNearestGroupsUseCase, PostGroupUserUseCase, UpdateGroupUserUseCase } from '../application/useCases/group.usecase';
 import { groupIdViewModel, groupViewModel } from '../presenter/views/groupViewModel';
 import { UtilsUseCase } from '../application/useCases/utils.useCase';
+import { userViewModel } from '../presenter/views/userViewModel';
 
 
 // Extend the BuildResolverOptions type to include 'deps'
@@ -95,6 +96,8 @@ container.register({
     updateAddressUseCase: asClass(UpdateAddressUseCase),
     addressRepository: asClass(AddressRepositoryImpl),
     addressData: asClass(AddressApi),
+    getAddressUseCase: asClass(GetAddressUseCase),
+    getAddressOpenUseCase: asClass(GetAddressOpenUseCase),
 
     ////RESET PASSWORD
     resetPasswordUseCase: asClass(ResetPasswordUseCase),
@@ -113,6 +116,7 @@ container.register({
     getUsersModosUseCase: asClass(GetUsersModosUseCase),
     userRepository: asClass(UserRepositoryImpl),
     userData: asClass(UserApi),
+    userViewModel: asFunction(userViewModel),
 
     ////PROFILE
     postProfileUseCase: asClass(PostProfileUseCase),

@@ -13,7 +13,6 @@ import { PostApi } from "../../../infrastructure/providers/http/postApi";
 import { EventView } from "./eventViewEntities";
 import { PoolSurveyView } from "./poolSurveyViewEntity";
 import { GroupView } from "./GroupViewEntity";
-import { useState } from "react";
 
 
 export const dayMS = 24 * 60 * 60 * 1000
@@ -42,9 +41,9 @@ export const formatDateForDB = (date: any) => (new Date(date).toISOString().slic
 export const GenereMyActions = (element: Post | EventView | Service | Survey | Issue | Pool | Flag | GroupView | PoolSurveyView, type: string, deleteRoute: (id: number) => Promise<any>, icon3?: boolean): Action[] => {
     let title = ''
     let id = 0;
-    const { setOpen, open, } = useAlertStore(state => state)
+    const { setOpen, handleApiError } = useAlertStore(state => state)
     const navigate = useNavigate()
-    const [notifAlert, setNotifAlert] = useState<string>('');
+    if (!element) return [];
 
     'title' in element ? title = element?.title ?? 'litige' : 'litige';
     'serviceId' in element && (id = element?.serviceId);
@@ -59,19 +58,13 @@ export const GenereMyActions = (element: Post | EventView | Service | Survey | I
             title: "Confirmer la suppression",
             body: "Voulez-vous vraiment supprimer " + title + " ?",
             function: async () => {
-                const data = await deleteRoute(id);
-                if (!data) {
-                    setOpen(true);
-                    setNotifAlert('Impossible de supprimer ' + title);
+                try {
+                    const data = await deleteRoute(id);
+                    data && (navigate(`/${type}`))
+                } catch (error) {
+                    handleApiError(error ?? "Erreur lors de la suppression de " + title)
                 }
-
-                else {
-                    setNotifAlert(title + ' supprimé avec succès');
-                    setTimeout(() => setOpen(!open), 2000);
-                    (navigate(`/${type}`))
-                }
-            },
-            notif: notifAlert,
+            }
         },
         {
             iconImage: 'edit',

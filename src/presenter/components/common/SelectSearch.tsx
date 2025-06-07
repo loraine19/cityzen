@@ -17,7 +17,8 @@ export default function SelectSearch(props: selectSearchProps) {
         <div className="px-4 w-full py-1" >
             <div className="flex !rounded-full h-7  w-full items-center bg-white shadow " >
                 <Menu placement="bottom-start">
-                    <MenuHandler>
+                    <MenuHandler
+                        className={category.length > 0 ? '' : 'invisible'}>
                         <div className="flex  pl-2 ">
                             <Icon
                                 color={color ?? 'blue-gray'}

@@ -23,7 +23,7 @@ export default function ServiceEditPage() {
     const updateService = async (id: number, data: ServiceDTO) => await DI.resolve('updateServiceUseCase').execute(id, data)
 
     //// STORES
-    const user = useUserStore((state) => state.user);
+    const { user } = useUserStore(state => state)
     const { setAlertValues, setOpen, handleApiError } = useAlertStore(state => state)
 
     //// FORMIK
@@ -35,8 +35,9 @@ export default function ServiceEditPage() {
     })
 
     useEffect(() => {
-        if (!isLoading && service && service.userId !== user.id) throw new Error("Vous n'avez pas le droit de modifier ce service");
         setInitialValues(service)
+        if (!isLoading && service?.userId && user?.id && service.userId !== user.id)
+            throw new Error(`"Vous n'avez pas le droit de modifier ce service (${service.id} ${service.userId, user.id})"`);
     }, [isLoading]);
 
 
@@ -48,11 +49,11 @@ export default function ServiceEditPage() {
             formik.values = values
             setOpen(true)
             setAlertValues({
-                handleConfirm: async () => await updateFunction(),
+                handleConfirm: async () => await postFunction(),
                 confirmString: "Enregistrer ",
                 title: "Confimrer la modification",
                 element: (
-                    <div className='flex flex-col gap-8 max-h-[80vh] bg-gray-100 rounded-2xl pt-12 p-5'>
+                    <div className=' !pt-10 max-h-[70vh]   bg-gray-200 border px-4 rounded-2xl pb-4'>
                         <ServiceCard
                             service={new ServiceView({ ...formik.values, image: formik.values?.blob || formik.values?.image }, {} as User)}
                             change={() => { }}
@@ -63,12 +64,15 @@ export default function ServiceEditPage() {
             })
         }
     })
-
-    const updateFunction = async () => {
-        const updateData = new ServiceDTO(formik.values as ServiceDTO)
-        const data = await updateService(service.id, updateData)
-        if (data) { await refetch(); setOpen(false); navigate(`/service/${data?.id}`) }
-        else handleApiError("Erreur lors de la modification du service")
+    const postFunction = async () => {
+        const postData: ServiceDTO = new ServiceDTO(formik.values as ServiceDTO);
+        try {
+            const data = await updateService(idS, postData)
+            if (data?.id) { refetch(); navigate(`/service/${data?.id}`); setOpen(false); }
+            else handleApiError("Erreur lors de la modification du service");
+        } catch (error) {
+            handleApiError(error ?? "Erreur lors de la modification du service");
+        }
     }
 
 

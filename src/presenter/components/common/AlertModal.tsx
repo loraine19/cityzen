@@ -6,11 +6,11 @@ import { AlertValues } from "../../../domain/entities/Error";
 
 
 export const AlertModal = ({ values }: { values: AlertValues }) => {
-    const { title, element, disableConfirm, confirmString, button2, isOpen, close, notif } = values;
+    const { title, element, disableConfirm = false, confirmString, button2, isOpen, close, notif } = values;
     const { open, setOpen } = useAlertStore(state => state)
 
     if (isOpen || open) return (
-        <div className={`!absolute top-0 left-0 h-screen px-[2rem]  w-screen  z-[1500] !flex flex-1 justify-center items-center backdropBlur `} >
+        <div className={`!absolute top-0 left-0 h-screen px-[3rem]  w-screen  z-[1500] !flex flex-1 justify-center items-center backdropBlur `} >
             <Card
                 className="relative  h-min w-resp m-auto flex ">
                 <CardHeader
@@ -22,13 +22,13 @@ export const AlertModal = ({ values }: { values: AlertValues }) => {
                         <Icon
                             onClick={() => { close && close() || setOpen(false) }}
                             icon="cancel"
-                            size="3xl"
+                            size="xl"
                             color="red" />}
                 </CardHeader>
                 <CardBody className="
                 FixCardBody min-h-[18vh]  max-h-[80vh] flex flex-col overflow-auto gap-6">
                     <hr></hr>
-                    <p className="text-center italic text-red-800">{notif}</p>
+                    {notif && <p className="text-center italic text-red-800">{notif}</p>}
                     {element && typeof element === 'string' ? parse(element as string) : element}
                 </CardBody>
                 <CardFooter className="justify-end FixCardFooter max-w-full flex gap-8 pt-0">
