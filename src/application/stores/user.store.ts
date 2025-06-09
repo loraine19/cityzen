@@ -20,13 +20,17 @@ interface UserStore {
 export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
     persist((set) => {
         const fetchUser = async () => {
+            let userUpdated: User = {} as User;
+            let loggedIn = true
             if (!window.location.pathname.includes('/sign')) {
-                const userUpdated = await DI.resolve('getUserMeUseCase').execute() as User;
-                const loggedIn = userUpdated ? true : false;
-                if (!userUpdated) {
-                    setTimeout(() =>
-                        window.location.replace('/signin?msg=impossible de recuperer vos informations'), 2000);
-                };
+                try {
+                    userUpdated = await DI.resolve('getUserMeUseCase').execute() as User;
+                    loggedIn = userUpdated ? true : false;
+                }
+                catch (error) {
+                    console.error('Error fetching user:', error);
+                    throw new Error(error as string ?? 'Failed to fetch user');
+                }
                 //  if (!userUpdated?.Profile) { window.location.replace('/profile/create') };
                 set({ user: userUpdated });
                 set({ profile: new ProfileView(userUpdated.Profile) });

@@ -129,7 +129,7 @@ export default function ConciationListPage() {
                     onScroll={() => { onScroll(); handleHideCallback() }}
                     className="Grid">
                     {
-                        issues.map((issue: IssueView, index: number) => (
+                        issues && issues?.map((issue: IssueView, index: number) => (
                             <div className="SubGrid" key={index}>
                                 <IssueCard
                                     issue={issue}

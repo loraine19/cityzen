@@ -93,7 +93,7 @@ export default function SignInPage() {
                 confirm={false}
                 inError={inError}
             />
-            <footer className="flex flex-col items-center gap-2 py-[4vh] justify-center !static">
+            <footer className="flex flex-col items-center gap-2 pt-8 py-auto justify-center !static">
                 <Link to="/motdepasse_oublie">
                     <Typography
                         className="text font-medium pb-2 nowraptext-center underline underline-offset-8 uppercase">
