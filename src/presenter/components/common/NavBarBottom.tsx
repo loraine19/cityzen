@@ -156,7 +156,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                     <div>
                                         <Icon
                                             size='md'
-                                            style={`absolute ${col ? ` bg-${col}-100 ` : 'bg-white'} top-1 -left-1`}
+                                            style={`absolute ${col ? ` bg-white shadow` : 'bg-white'} top-1 -left-1`}
                                             icon="add"
                                             color={col} />
                                         <Icon
@@ -167,7 +167,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                             icon={icon}
                                             color={addBtn ? color : col} />
                                     </div>
-                                    <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-700 absolute bg-white text-sm shadow-xl !border !border-gray-300`}>
+                                    <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-500 absolute bg-white text-sm shadow-xl !border !border-gray-300`}>
                                         {label}
                                     </div>
                                 </SpeedDialAction>)}

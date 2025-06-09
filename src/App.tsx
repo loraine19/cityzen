@@ -109,12 +109,13 @@ function App() {
                                     <Route path="/notification" element={<NotificationPage />} />
                                     <Route path="/reglement" element={<RulesPage />} />
 
+                                    <Route path="/conciliation" element={<ConciliationListPage />} />
+                                    <Route path="/flag" element={<FlagPage />} />
+
 
                                     {/* Pages with bottom navigation */}
                                     <Route element={<WithBottomPages />}>
                                         <Route path="/" element={<DashboardPage />} />
-                                        <Route path="/conciliation" element={<ConciliationListPage />} />
-                                        <Route path="/flag" element={<FlagPage />} />
                                     </Route>
 
                                     {/* Pages with bottom navigation and add button */}

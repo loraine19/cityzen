@@ -49,7 +49,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
 
     return (
         <>
-            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-orange-400 !border-[1px]" : ""}`}>
+            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-orange-400 !border-[1px]" : ""} !flex`}>
                 <CardHeader
                     className={haveImage ? "h-full lg:!max-h-[16vh] !max-h-[14vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
@@ -84,7 +84,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                 </CardHeader>
                 <CardBody className={` FixCardBody !flex-1 max-h-max -mt-2.5 mb-0`}>
                     <div className="relative flex items-center justify-between">
-                        <div className="flex gap-4 justify-between w-full mr-12">
+                        <div className="flex gap-4 justify-between w-full mr-8">
                             <Typography
                                 variant="h6">
                                 Probleme :
@@ -96,18 +96,18 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                             link={`/${PathElement.ISSUE}/${serviceId}`}
                             title={`voir les details de concialtion  ${Service.title}`}
                             bg clear
-                            style="absolute top-1.5 right-0"
+                            style="absolute -top-2 -right-3"
                             fill />
                     </div>
 
                     <Typography
-                        className="leading-[1.35rem] py-1 !line-clamp-2 pr-6"
+                        className="leading-[1rem] pt-1 text-[0.9rem] !line-clamp-2 pr-6"
                         color="blue-gray">
                         {description}
                     </Typography>
                 </CardBody>
 
-                <CardFooter className="CardFooter  flex-col flex-1 !-mt-1.5 pb-2 ">
+                <CardFooter className="CardFooter  flex-col flex-1  pb-4 ">
                     <ServiceIssueCard service={Service} />
                     <div
                         className="flex items-center justify-between">

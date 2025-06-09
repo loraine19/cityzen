@@ -11,9 +11,9 @@ export function NotifCard(props: notifCardProps) {
 
 
     return (
-        <Card className={`${!read ? 'FixCardNoImage w-resp  !justify-start' : 'hidden'}`}>
-            <CardHeader className={"FixCardHeaderNoImage !my-0 "} floated={false}>
-                <div className="ChipDivNoImage ">
+        <Card className={`${!read ? 'FixCardNoImage w-resp w-full !flex  !justify-start' : 'hidden'}`}>
+            <CardHeader className={"FixCardHeaderNoImage !flex !w-full  !my-0 "} floated={false}>
+                <div className="ChipDivNoImage w-full ">
                     <Chip
                         size='sm'
                         value={typeS}

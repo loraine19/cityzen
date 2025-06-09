@@ -143,12 +143,12 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                 <div className="flex items-center w-full justify-between">
                                                     <Chip
                                                         value={notif.typeS}
-                                                        className="rounded-full w-max h-max text-ellipsis pt-1.5  "
+                                                        className="rounded-full scale-90 !opacity-80 w-max h-max text-ellipsis pt-1 "
                                                         size='sm'
                                                         color={list.color as any}>
                                                     </Chip>
                                                     <Typography
-                                                        className="flex items-center gap-1 text-xs font-normal text-blue-gray-500">
+                                                        className="flex items-center gap-1 px-4 text-xs font-normal text-blue-gray-500">
                                                         {notif.update}
                                                     </Typography></div>
                                                 <div className="flex items-center justify-between gap-1">
@@ -169,7 +169,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                                     setUnReadNotif(list.notifs.length - 1);
                                                                     notif.link && navigate(notif.link)
                                                                 }}
-                                                            size="2xl"
+                                                            size="xl"
                                                             style="bg-white"
                                                         />}
                                                 </div>

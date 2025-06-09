@@ -32,7 +32,7 @@ export function FlagCard(props: { flag: FlagView, update: () => void }) {
     ];
 
     return (
-        <Card className="FixCardNoImage w-resp !justify-start">
+        <Card className="FixCardNoImage w-resp !flex  !justify-start">
             <CardHeader
                 className="FixCardHeaderNoImage "
                 floated={false}>
@@ -55,7 +55,7 @@ export function FlagCard(props: { flag: FlagView, update: () => void }) {
                     </div>
                 </div>
             </CardHeader>
-            <CardBody className="FixCardBody max-h-max !py-0">
+            <CardBody className="FixCardBody max-h-max !py-2">
                 <Typography
                     color="gray"
                     className="font-normal truncate ">

@@ -213,7 +213,7 @@ header {
 
 .Grid {
     @apply max-h-full w-respXl grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 pb-4 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
-    lg:auto-rows-[minmax(333px,40vh)] auto-rows-[minmax(346px,40vh)];
+    lg:auto-rows-[minmax(300px,40vh)] auto-rows-[minmax(346px,40vh)];
 }
 
 .Grid2 {
@@ -422,8 +422,8 @@ button {
 
 /* BACKDROP BLUR */
 .backdropBlur {
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
 }
 
 .Map {

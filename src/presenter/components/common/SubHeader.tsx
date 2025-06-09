@@ -21,7 +21,7 @@ export default function SubHeader({ type, qty, place, closeBtn, link }: SubHeade
     const colorBorder = `border-b-[1px]  ${color !== 'gray' ? `border-${color ?? 'gray'}-500 ` : 'border-gray-500'}  border-opacity-40`;
 
     return (
-        <div className={`flex w-full divider-y pt-1 gap-2 justify-end lg:justify-between`}>
+        <div className={`flex w-full divider-y py-1 gap-2 justify-end lg:justify-between`}>
             <Typography
                 className={`!line-clamp-1 leading-[1.2] pb-1 lg:text-[1.3rem] text-[1.1rem] pl-2 flex-1 !text-blue-gray-800 font-medium ${colorBorder}`}>
                 {qty} {type}

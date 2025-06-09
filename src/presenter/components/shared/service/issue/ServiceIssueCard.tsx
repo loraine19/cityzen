@@ -1,8 +1,10 @@
-import { Card, CardHeader, Typography, CardBody, Chip, Avatar } from "@material-tailwind/react";
+import { Card, CardHeader, Typography, CardBody, Chip } from "@material-tailwind/react";
 import { Service, ServiceType } from "../../../../../domain/entities/Service";
 import { Icon } from "../../../common/IconComp";
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import { AvatarUser } from "../../../common/AvatarUser";
+import { Profile } from "../../../../../domain/entities/Profile";
 
 
 export default function ServiceIssueCard(props: { service: Service }) {
@@ -11,9 +13,9 @@ export default function ServiceIssueCard(props: { service: Service }) {
 
 
     return (
-        <Card className={`CardFix !h-full shadow-none !flex !gap-0 bg-blue-gray-50 !py-0`}>
+        <Card className={`CardFix !h-full shadow-none !flex !gap-2 border border-gray-200  bg-blue-gray-50 opacity-95 !py-0 mb-1`}>
             <CardHeader
-                className="fixCardHeaderNoImage mx-2 mt-1 py-1 shadow-none bg-transparent"
+                className="fixCardHeaderNoImage mx-2 mt-1 py-1.5 shadow-none bg-transparent"
                 floated={false}>
                 <div className="flex justify-between items-center ">
                     <div className="flex items-center gap-2 ">
@@ -44,22 +46,19 @@ export default function ServiceIssueCard(props: { service: Service }) {
                             <Typography
                                 variant="small"
                                 color="blue-gray"
-                                className="truncate max-w-[40vw] lg:max-w-[20vw] pr-2 font-medium">
+                                className="truncate max-w-[40vw] pt-2 lg:max-w-[20vw] pr-2 font-medium">
                                 {title}
                             </Typography>
                             <Icon
+                                bg
                                 icon="more_up"
                                 link={`/service/${id}`}
                                 title={`voir les details de service  ${title}`}
-                                size="xl"
+                                size="sm"
                                 fill />
                         </div>
                         <div className="flex gap-2 ">
-                            <Avatar
-                                onError={(e) => e.currentTarget.src = "/image/person.svg"}
-                                src={User.Profile?.image as string}
-                                size="sm"
-                                alt="avatar" />
+                            <AvatarUser Profile={User.Profile} avatarSize="sm" />
                             <div className="flex flex-col">
                                 <Typography
                                     className="max-h-4"
@@ -75,7 +74,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         <Typography
                             color="blue-gray"
                             variant="small"
-                            className="flex-0 pr-2 !line-clamp-2 leading-[1.2] ">
+                            className="flex-0 pr-2 !line-clamp-2 leading-[1.1rem] ">
                             {description}
                         </Typography>
                     </div>
@@ -87,11 +86,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                             à réaliser le service
                         </Typography>
                         <div className="flex flex-row-reverse gap-2 ">
-                            <Avatar
-                                onError={(e) => e.currentTarget.src = "/image/person.svg"}
-                                src={UserResp?.Profile?.image as string}
-                                size="sm"
-                                alt="avatar" />
+                            <AvatarUser Profile={UserResp?.Profile ?? {} as Profile} avatarSize="sm" />
                             <div className="flex flex-col items-end">
                                 <Typography
                                     className="max-h-4"
