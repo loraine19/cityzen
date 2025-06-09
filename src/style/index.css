@@ -23,6 +23,7 @@
 }
 
 :root {
+    background-color: #f9fafb;
     font-size: 15px;
     line-height: 1.3;
     font-weight: 400;
@@ -43,7 +44,7 @@
     @apply flex flex-col  h-screen w-screen pt-1;
 }
 body {
-    @apply grayBG h-screen w-screen flex flex-col;
+    @apply h-screen w-screen flex flex-col;
 }
 
 .App {
@@ -51,7 +52,7 @@ body {
 }
 
 main {
-    @apply flex flex-col max-w-[1100px] h-[calc(100%+5rem)] px-4 gap-1 flex-1;
+    @apply flex flex-col w-respXl h-[calc(100%+5rem)] px-4 gap-1 flex-1;
     min-height: 0;
     z-index: 0;
 }
@@ -75,7 +76,7 @@ main {
 }
 
 footer {
-    @apply relative pb-[2vh] !px-[1%] md:px-[5%] lg:px-[2%] w-respXl;
+    @apply pb-[2vh] !px-[1%] md:px-[5%] lg:px-[2%] w-respXl sticky;
     width: 100%;
     margin: 0 auto;
     flex-shrink: 0;
@@ -94,7 +95,7 @@ header {
 }
 
 .w-respXl {
-    @apply w-full my-0 mx-auto max-w-[1100px];
+    @apply w-full my-0 mx-auto max-w-[1000px];
 }
 
 .CTA {
@@ -103,20 +104,20 @@ header {
 
 /* COLORS */
 .cyanBG {
-    background-image: linear-gradient(#f9fafb, #a5f3fc);
+    background-image: linear-gradient(#f9fafb00, #a5f3fc);
 }
 
 .skyBG,
 .light-blueBG {
-    background-image: linear-gradient(#f9fafb, #bae6fd);
+    background-image: linear-gradient(#f9fafb00, #bae6fd);
 }
 
-.grayBG {
-    background-image: linear-gradient(#f9fafb, #90a1b9);
+.blue-grayBG {
+    background-image: linear-gradient(#f9fafb00, #90a1b9);
 }
 
 .roseBG {
-    background-image: linear-gradient(#f9fafb, #fecdd3);
+    background-image: linear-gradient(#f9fafb00, #fecdd3);
 }
 
 .text-rose-500 {
@@ -124,11 +125,11 @@ header {
 }
 
 .gray100 {
-    background-image: linear-gradient(#f9fafb, #e2e8f0);
+    background-image: linear-gradient(#f9fafb00, #e2e8f0);
 }
 
 .orangeBG {
-    background-image: linear-gradient(#f9fafb, #ffedd5);
+    background-image: linear-gradient(#f9fafb00, #ffedd5);
 }
 
 .anim {
@@ -211,7 +212,7 @@ header {
 }
 
 .Grid {
-    @apply max-h-full grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 pb-4 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
+    @apply max-h-full w-respXl grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 pb-4 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
     lg:auto-rows-[minmax(333px,40vh)] auto-rows-[minmax(346px,40vh)];
 }
 
@@ -234,13 +235,13 @@ header {
 }
 
 .w-respLarge {
-    @apply w-full my-0 mx-auto lg:max-w-[60rem] max-w-[calc(100vw-2rem)];
+    @apply w-full my-0 mx-auto  lg:max-w-[54rem] md:max-w-[calc(100vw-2rem)];
 }
 
 /* CARD */
 
 .FixCard {
-    @apply border rounded-xl w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
+    @apply border w-respLarge rounded-xl w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
 }
 
 .FixCardNoImage {

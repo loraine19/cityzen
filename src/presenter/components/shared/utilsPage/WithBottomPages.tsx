@@ -6,10 +6,11 @@ export const WithBottomPages = (props: { addBtn?: boolean }) => {
     const { navBottom } = useUxStore((state) => state)
 
     if (!navBottom)
-        return (<>
-            <NavBarBottom addBtn={props.addBtn} />
-            <Outlet />
-        </>)
+        return (
+            <>
+                <NavBarBottom addBtn={props.addBtn} />
+                <Outlet />
+            </>)
 
     return (
         <>
