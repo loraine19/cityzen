@@ -131,7 +131,7 @@ export class SocketService implements SocketServiceI {
     };
 
     onNewMessage = (callback: (message: any) => void): void => {
-        console.log('[SocketService] onNewMessage() registered callback');
+        console.log('[SocketService] onNewMessage() registered callback',);
         this.newMessageCallbacks.push(callback);
     };
 

@@ -22,7 +22,7 @@ export function Title(props: { title: string, flagged?: boolean, id?: number, Cr
     const { flagged, id, CreatedAt, subTitle, type, group, title } = props
 
     return (
-        <div className="min-h-max pt-0.5">
+        <div className="min-h-max pt-1.5">
             <div className="flex items-center w-full justify-between gap-2">
                 <div className="flex items-center gap-4 !max-w-[calc(100%-1.5rem)] w-full">
                     <Typography

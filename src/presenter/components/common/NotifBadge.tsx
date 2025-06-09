@@ -31,7 +31,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
 
     const up = async () => await socketService.sendMessage({ message: 'connexion au notif' }, nameSpace);
     useEffect(() => {
-        console.warn('mounted NOTIF')
+        console.warn('mounted CHAT')
         if (!connected) {
             connexion();
             up();
@@ -40,31 +40,46 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
             console.error("Connection Error:", error);
         })
 
-        socketService.onNewMessage(async (newMessage: Notif | { users: number[] }) => {
-            if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
-                const notifMessage = newMessage as Notif;
-                setNotif(notifMessage.description);
-                setTimeout(() => { setNotif('') }, 1000);
-                if (newMessage.type === 'MESSAGE') {
-                    messages.refetch()
-                    setUnReadMsgNotif(messages?.count)
-                }
-                else {
-                    await refetch()
-                    setUnReadNotMessages(count)
-                }
-            } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
-                setConnectedUsers(newMessage.users);
-            }
-        })
-
-        setUnReadMsgNotif(messages?.count)
-        setUnReadNotMessages(count)
-        // return () => {
-        //     console.warn('unmounted NOTIF')
-        //     socketService.disconnect(nameSpace);
-        // }
+        return () => {
+            console.warn('unmounted CHAT')
+            socketService.disconnect(nameSpace);
+        }
     }, [])
+
+
+
+
+
+    useEffect(() => {
+        const handleNewMessage = async (newMessage: any) => {
+            console.log(newMessage)
+            socketService.onNewMessage(async (newMessage: Notif | { users: number[] }) => {
+                if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
+                    const notifMessage = newMessage as Notif;
+                    setNotif(notifMessage.description);
+                    setTimeout(() => { setNotif('') }, 1000);
+                    if (notifMessage.type === 'MESSAGE') {
+                        await messages.refetch();
+                        setUnReadMsgNotif(messages?.count ?? 0);
+                    } else {
+                        await refetch();
+                        setUnReadNotMessages(count ?? 0);
+                    }
+                } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
+                    setConnectedUsers((newMessage as { users: number[] }).users);
+                }
+            });
+
+            setUnReadMsgNotif(messages?.count)
+            setUnReadNotMessages(count)
+        };
+
+        socketService.onNewMessage(handleNewMessage);
+
+
+    }, [refetch, setUnReadMsgNotif, socketService]);
+
+
 
 
 

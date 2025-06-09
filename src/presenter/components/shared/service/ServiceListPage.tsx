@@ -218,6 +218,7 @@ export default function ServicesPage() {
                     className="Grid">
 
                     {services.map((service: ServiceView, index: number) => (
+                        service &&
                         <div className="SubGrid" key={index}>
                             <ServiceComp
                                 key={service?.id}

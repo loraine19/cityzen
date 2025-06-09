@@ -94,7 +94,7 @@ export class ApiService implements ApiServiceI {
                     this.logWithTime('token refreshed successfully');
                     return refreshSuccess
                 }
-                else newError = new ApiError(status, 'Session expirée, veuillez vous reconnecter');
+                else newError = new ApiError(status, 'Session expirée');
                 break;
         }
         if (newError.message) {
@@ -140,7 +140,7 @@ export class ApiService implements ApiServiceI {
     refreshAccess = async (): Promise<boolean | any> => {
         const echec = () => {
             this.logWithTime('refreshAccess echec');
-            setTimeout(() => {
+            if (this.countRefresh > 2) setTimeout(() => {
                 window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter ${this.countRefresh}`;
             }, 2000);
             this.countRefresh++

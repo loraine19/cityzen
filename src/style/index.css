@@ -90,7 +90,7 @@ header {
 }
 
 .sectionHeader {
-    @apply flex flex-col gap-0.5 relative;
+    @apply flex flex-col gap-0 relative;
 }
 
 .w-respXl {
@@ -98,7 +98,7 @@ header {
 }
 
 .CTA {
-    @apply flex gap-2 gap-x-4 w-respLarge justify-around !px-0 pt-4  h-max;
+    @apply flex gap-2 gap-x-4 w-respLarge justify-around !px-0 pt-2  h-max;
 }
 
 /* COLORS */
@@ -235,24 +235,26 @@ header {
 /* CARD */
 
 .FixCard {
-    @apply border  rounded-xl w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
+    @apply border rounded-xl w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
 }
 
 .FixCardNoImage {
-    @apply border  rounded-2xl w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0 anim;
+    @apply w-full border !grid rounded-xl my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0 anim
+    grid-rows-[auto,1fr,auto];
 }
 
 .FixCardHeader {
-    @apply flex !max-h-[calc(60vh-2rem)] sm:!max-h-[55vw] md:!max-h-[45%] !shadow-md fadeIn border;
+    @apply flex flex-1 z-50 !shadow-md fadeIn border;
+    /*!max-h-[50vw] sm:!max-h-[55vw] md:!max-h-[45%] 
     /*!min-h-[10rem] */
 }
 
 .FixCardHeaderSmall {
-    @apply flex flex-1 !min-h-[9rem] !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[30%]  !shadow-md fadeIn;
+    @apply flex flex-1 !min-h-[9rem]  !max-h-[60vw] sm:!max-h-[45vw] md:!max-h-[30%]  !shadow-md fadeIn;
 }
 
 .FixCardHeaderNoImage {
-    @apply !shadow-none flex m-auto top-0 w-full !left-0;
+    @apply !shadow-none max-h-[11rem]  !min-h-max flex m-auto top-0 w-full !left-0;
 }
 
 .ChipDiv {
@@ -267,7 +269,7 @@ header {
     @apply w-full flex flex-wrap gap-2 items-start;
 }
 .FixCardBody {
-    @apply relative flex flex-1 overflow-auto flex-col py-3 px-5 -mt-2;
+    @apply relative flex flex-1 max-h-max overflow-auto flex-col px-5 py-3 -mt-5;
 }
 
 .CardOverFlow {
@@ -279,7 +281,8 @@ header {
 }
 
 .CardImage {
-    @apply object-cover !shadow-lg !max-h-[70vw] lg:!max-h-[40vh]  w-full  !bg-white;
+    @apply object-cover !shadow-lg   w-full  !bg-white
+    !max-h-[50vw] lg:!max-h-[33vh] min-h-full;
 }
 
 .DetailCardDiv {

@@ -56,7 +56,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                         </div>
                     </div>}
                 <div className='flex  w-full justify-between items-center flex-row-reverse'>
-                    <div className='flex  items-center'>
+                    <div className='flex items-center'>
                         <Icon
                             icon='arrow_back_ios'
                             size='sm'
@@ -85,17 +85,17 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                 onClick={addCol} />
                         </div>
                         {!logo &&
-                            <div className='flex gap-2 px-2 items-center'>
+                            <div className='flex gap-2 px-4 items-center font-light'>
                                 semaine
                                 <Icon
                                     icon='do_not_disturb_on'
-                                    size='md'
+                                    size='sm'
                                     onClick={() => setNumberOfwweks(numberOfwweks > 1 ? numberOfwweks - 1 : 1)} />
                                 <button
                                     onClick={() => setNumberOfwweks(2)}>{numberOfwweks}</button>
                                 <Icon
                                     icon='add_circle'
-                                    size='md'
+                                    size='sm'
                                     onClick={() => setNumberOfwweks(numberOfwweks < 4 ? numberOfwweks + 1 : 4)} />
                             </div>}
                     </div>
@@ -129,7 +129,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                 className={` grid rounded-xl  h-full overflow-auto  pb-3 bg-blue-gray-50 border border-blue-gray-100/50 
                                 ${colClass[col - 1]}`}>
                                 {week.map((day: any, index: number) =>
-                                    <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-700 text-font-bold'} text-xs flex flex-col text-center h-full  border-r border-blue-gray-100/50   `}
+                                    <div className={`${new Date(day.date).toDateString() === new Date().toDateString() && 'text-orange-500  underline text-font-bold'} text-xs flex flex-col text-center h-full  border-r border-blue-gray-100/50   `}
                                         key={index}>
                                         <p className='w-full  sticky top-0 pt-1 text-center bg-blue-gray-50 '>
                                             {day.date.toLocaleDateString('fr-FR', { weekday: 'narrow', month: 'numeric', day: 'numeric' })}
@@ -151,7 +151,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                                                                     <div
                                                                         className=
                                                                         {`${!event.actif && 'invisible'} 
-                                                                             ${event.status !== EventStatus.VALIDATED ? `!bg-cyan-300` : `bg-cyan-600`} shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-6 truncate flex items-center justify-center font-normal z-50
+                                                                             ${event.status !== EventStatus.VALIDATED ? `!bg-blue-gray-400/80` : `bg-cyan-500`} shadow-md  px-[0.5rem] mb-[0.2rem]  text-white h-6 truncate flex items-center justify-center font-normal z-50
                                                         ${(eventDays[0] === currentDay || new Date(day.date).getDay() === 1) && 'rounded-l-2xl !justify-start !z-50 pl-4 !font-medium'}
                                                         ${(eventDays[eventDays.length - 1] === currentDay || new Date(day.date).getDay() === 0) && 'rounded-r-2xl '}
                                                     `}>

@@ -40,7 +40,7 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                         onError={(e) => e.currentTarget.src = "/image/placeholder2.png"}
                         src={image as any ?? null}
                         alt={title}
-                        className="h-full  w-full object-cover"
+                        className={haveImage ? "CardImage" : "hidden"}
                     />}
             </CardHeader>
             <CardBody className={` FixCardBody !flex-1 ${short ? '' : 'gap-2'}`}>

@@ -3,6 +3,8 @@ import { Flag } from "../../../domain/entities/Flag";
 import DI from "../../../di/ioc";
 import { Like } from "../../../domain/entities/Like";
 
+
+
 export class PostView extends Post {
     flagged: boolean = false;
     ILike: boolean = false;
@@ -23,6 +25,7 @@ export class PostView extends Post {
         this.toogleLike = async () => {
             await DI.resolve('toogleLikeUseCase').execute(post, post.id, userId);
             const updatedPost = await DI.resolve('getPostByIdUseCase').execute(post.id);
+            if (!updatedPost) throw new Error('Impossible de récupérer l\'annonce mise à jour');
             return new PostView(updatedPost, userId)
         }
     }

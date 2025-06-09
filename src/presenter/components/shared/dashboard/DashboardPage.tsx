@@ -27,7 +27,7 @@ export default function DashboardPage() {
     const modo = user?.GroupUser?.map(g => g.role).includes(Role.MODO) || false;
     useEffect(() => {
         !user ? setIsLoggedIn(false) : setIsLoggedIn(true);
-        !user.Profile && fetchUser()
+        !user?.Profile && fetchUser()
         setHideNavBottom(false)
     }, [user])
     const navigate = useNavigate();
@@ -155,7 +155,7 @@ export default function DashboardPage() {
                     </Card>
                 </div>
                 <div className={`hidden lg:${notifClasse} grid-cols-1 h-full  lg:grid`}>
-                    <Card className=" orange anim">
+                    <Card className=" orangeBG anim">
                         <CardBody className="h-full flex flex-col pt-2.5 pb-0 px-4 ">
                             <div className="flex gap-2.5 py-1 items-center">
                                 <div className="relative">
@@ -166,7 +166,7 @@ export default function DashboardPage() {
                                         size="md"
                                         color="orange"
                                         title="voir mes notifications" />
-                                    <span className={unReadNotMessages < 1 ? "hidden" : " absolute -top-0.5 right-0 w-2.5 h-2.5 rounded-full bg-orange-700 border-2"} />
+                                    <span className={unReadNotMessages < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-orange-500 border-[2px] border-white"} />
                                 </div>
                                 <div className="relative">
                                     < Icon
@@ -176,14 +176,14 @@ export default function DashboardPage() {
                                         size="md"
                                         color="cyan"
                                         title="voir mes messages" />
-                                    <span className={unReadMsgNotif < 1 ? "hidden" : " absolute -top-0.5 right-0 w-2.5 h-2.5 rounded-full bg-cyan-700 border-2"} />
+                                    <span className={unReadMsgNotif < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-cyan-500 border-[2px] border-white"} />
                                 </div>
                                 <Typography> {count > 0 ?
                                     <>{count} {count > 1 ? 'notifications' : 'notification'} </> :
                                     'Vous n\'avez pas de notifications'}
                                 </Typography>
                             </div>
-                            <div className="relative flex flex-col max-h-14 mb-1 w-full  overflow-y-auto"
+                            <div className="relative flex flex-col max-h-14 mb-1 w-full overflow-y-auto"
                                 onScroll={() => handleScroll()}
                                 ref={divRef}>
                                 {!isLoading && (notifs.map((notif: NotifView, index: number) => notif?.read === false &&
@@ -264,10 +264,10 @@ export default function DashboardPage() {
                                             <Card className="FixCard h-full w-full flex-1 justify-center items-center bg-gray-50">
                                                 <Typography
                                                     variant="small" className="px-8 py-4">
-                                                    {user.Profile?.Address ? 'pas de nouveautés à proximité , essayer de modifier de rafraichir' : 'Veuillez renseigner votre adresse pour voir les services à proximité'}
+                                                    {user?.Profile?.Address ? 'pas de nouveautés à proximité , essayer de modifier de rafraichir' : 'Veuillez renseigner votre adresse pour voir les services à proximité'}
                                                 </Typography>
                                                 {
-                                                    user.Profile?.Address ?
+                                                    user?.Profile?.Address ?
                                                         <NotifDiv
                                                             notif={'impossible de charger la carte, veuillez réessayer'}
                                                             isLoading={isLoadingMap}
@@ -287,7 +287,7 @@ export default function DashboardPage() {
                     </Card>
                 </div>
                 <div className={eventClasse}>
-                    <Card className="h-full flex-1 cyan anim">
+                    <Card className="h-full flex-1 cyanBG anim">
                         <CardBody className="h-full flex flex-col !pt-0 p-4 ">
                             <CalendarComp logo={true} />
                         </CardBody>

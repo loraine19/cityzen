@@ -41,7 +41,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                         closeBtn
                         place={formik.values.id ? formik.values.title : ''} />
                     <div className="w-respLarge flex flex-col lg:flex-row !gap-4 pt-4">
-                        <div className="flex flex-[150%] gap-4 w-full ">
+                        <div className="flex lg:flex-[150%] gap-4 w-full ">
                             <div className="flex bg-white rounded-full pr-6 shadow-sm shadow-blue-gray-500/25 border h-10 gap-4">
                                 <Radio
                                     labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
@@ -126,13 +126,16 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                             user={user} />
                     </div>
                 </div>
-                <section className={`flex flex-1 pb-1 pt-2  ${haveImage && "pt-[2rem]"}`}>
-                    <Card className="w-respLarge FixCard">
+                <section className={`flex pb-1 flex-1 relative pt-6`}>
+                    <Card className={`${(imgBlob || formik.values.image) ?
+                        "FixCard" :
+                        "FixCardNoImage"} w-respLarge`}>
                         <CardHeader
-                            className={haveImage ?
-                                "FixCardHeader" : `FixCardHeaderNoImage !flex-col  !p-4 !-mb-8 min-h-16`}
-                            floated={haveImage ? true : false}
-                        >
+                            className={(imgBlob || formik.values.image) ?
+                                "FixCardHeader" :
+                                "FixCardHeaderNoImage  pt-16"}
+                            floated={imgBlob || formik.values.image ?
+                                true : false} >
                             <div className={`${start ? 'ChipDiv !justify-end right-4' : 'invisible'}`}>
                                 <DateChip
                                     prefix="publié le"
@@ -148,11 +151,12 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                             {haveImage &&
                                 <img
                                     onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
-                                    src={imgBlob || formik.values.image || './image/load.gif'}
+                                    src={imgBlob || formik.values.image || null}
                                     alt={formik.values.title || 'image'}
                                     width={100}
                                     height={100}
-                                    className={"h-full w-full object-cover"}
+                                    className={(imgBlob || formik.values.image) ?
+                                        "CardImage" : "hidden"}
                                 />
                             }
                             {formik.values?.UserBenef && formik.values?.typeS === VoteTarget.POOL &&

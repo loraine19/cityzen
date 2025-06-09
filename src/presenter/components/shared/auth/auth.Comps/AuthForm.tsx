@@ -59,7 +59,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                 <div className="absolute rounded-xl inset-0 bg-black/10   z-0" />
                 <img src="image/welcome.jpg"
                     alt="connexion"
-                    className="absolute inset-0 object-cover object-center w-full h-full rounded-2xl opacity-90 z-0" />
+                    className="absolute inset-0 object-cover object-center w-full h-full rounded-xl opacity-90 z-0" />
                 <Typography
                     color="white"
                     className="py-6 px-8 !leading-[1] text-[2.5rem] font-bold !text-center font-comfortaa relative z-10"

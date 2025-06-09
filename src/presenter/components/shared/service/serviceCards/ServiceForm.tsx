@@ -45,26 +45,41 @@ export function ServiceForm(props: { formik: any }) {
                         closeBtn
                     />
                     <div className="w-respLarge flex flex-col lg:flex-row !gap-4 pt-4">
-                        <div className="flex flex-[150%]  gap-4 w-full">
+                        <div className="flex lg:flex-[150%]  gap-4 w-full">
                             <div className="flex  bg-white rounded-full pr-6 shadow-sm shadow-blue-gray-500/25 border h-10 gap-6">
                                 <Radio
+                                    icon={
+                                        <Icon
+                                            fill
+                                            size="lg"
+                                            color='sky'
+                                            icon='check_circle'
+                                        />
+                                    }
+                                    className="checked:!border-sky-500 checked:border-2"
                                     labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
                                     disabled={formik.values.statusValue > 0}
                                     name="type"
                                     label="Demande"
                                     value="GET"
-                                    color='orange'
                                     checked={formik.values.typeS === ServiceType.GET}
                                     onChange={(e) => { formik.handleChange(e) }}
                                 />
                                 <Radio
-
+                                    icon={
+                                        <Icon
+                                            fill
+                                            size="lg"
+                                            color='sky'
+                                            icon='check_circle'
+                                        />
+                                    }
+                                    className="checked:!border-sky-500 checked:border-2"
                                     labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
                                     disabled={formik.values.statusValue > 0}
                                     name="type"
                                     label="Offre"
                                     value="DO"
-                                    color='cyan'
                                     checked={formik.values.typeS === ServiceType.DO}
                                     onChange={(e) => { formik.handleChange(e) }}
                                 />
@@ -92,7 +107,6 @@ export function ServiceForm(props: { formik: any }) {
                                 })}
                             </Select>
                         </div>
-
                         <GroupSelect
                             groupId={groupId}
                             setGroupId={setGroupId}
@@ -100,37 +114,31 @@ export function ServiceForm(props: { formik: any }) {
                             user={user} />
                     </div>
                 </div>
-                <section className={`flex flex-1 pb-1 pt-2 ' ${haveImage && "pt-[2rem]"}`}>
-                    <Card className="w-respLarge FixCard">
-                        <CardHeader
-                            className={formik.values.image ?
-                                "FixCardHeader" : "FixCardHeaderNoImage !pt-16 !-mb-8 "}
-                            floated={formik.values.image ?
-                                true : false}
-                        >
+                <section className={`flex pb-1 flex-1 relative pt-8`}>
+                    <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} w-respLarge`}>
+                        <CardHeader className={haveImage ?
+                            "FixCardHeader" :
+                            "FixCardHeaderNoImage pt-16 pb-0"} >
                             <div className={`${start ? 'ChipDiv !justify-end' : 'invisible'}`}>
                                 <DateChip
                                     prefix="publié le"
                                     start={start} />
                             </div>
                             <ImageBtn
-                                className="!absolute z-40 !h-max !left-3 mb-2 top-3"
+                                className="!absolute z-40 !h-max !left-3  top-3"
                                 formik={formik}
                                 setImgBlob={setImgBlob} />
                             <img
                                 onError={(e) => e.currentTarget.src = '/images/placeholder.jpg'}
-                                src={imgBlob || formik.values.image || './image/load.gif'}
+                                src={imgBlob || formik.values.image || null}
                                 alt={formik.values.title || 'image'}
                                 width={100}
                                 height={100}
-                                className={formik.values.image || imgBlob ?
-                                    "CardImage" : "hidden"}
+                                className={haveImage ? "CardImage" : "hidden"}
                             />
-
                         </CardHeader>
-
-                        <CardBody className='FixCardBody '>
-                            <div className='CardOverFlow h-full justify-between !mt-1.5 gap-4'>
+                        <CardBody className='FixCardBody'>
+                            <div className='CardOverFlow h-full justify-between gap-4'>
                                 <Input
                                     error={formik.errors.title}
                                     label={formik.errors.title ?
@@ -241,11 +249,10 @@ export function ServiceForm(props: { formik: any }) {
             </main>
             <footer className="CTA">
                 <Button
-                    color='cyan'
                     size='lg'
                     type="submit"
                     disabled={formik.values.statusValue > 0}
-                    className="lgBtn">
+                    className="lgBtn bg-sky-500">
                     <Icon
                         disabled
                         size='xl'

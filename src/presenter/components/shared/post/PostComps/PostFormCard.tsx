@@ -22,6 +22,7 @@ export function PostFormCard({ formik }: PostFormCardProps) {
     const [groupId, setGroupId] = useState<number | String | undefined>(formik.values.Group?.id);
     const user = useUserStore((state) => state.user);
 
+
     return (
         <form onSubmit={formik.handleSubmit} className="flex flex-col h-full overflow-hidden">
             <main>
@@ -38,8 +39,7 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                             name="category"
                             labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none` }}
                             value={formik.values.category || ""}
-                            onChange={(val: any) => { formik.setFieldValue('category', val); }}
-                        >
+                            onChange={(val: any) => { formik.setFieldValue('category', val) }} >
                             {postCategories.map((category: Label, index: number) => (
                                 <Option
                                     className="rounded-full my-1 capitalize"
@@ -57,15 +57,16 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                             user={user} />
                     </div>
                 </div>
-                <section className={`flex pb-1 flex-1 relative ' ${(imgBlob || formik.values.image) && "pt-6"}`}>
-                    <Card className="w-respLarge FixCard">
+                <section className={`flex pb-1 flex-1 relative pt-6`}>
+                    <Card className={`${(imgBlob || formik.values.image) ?
+                        "FixCard" :
+                        "FixCardNoImage"} w-respLarge`}>
                         <CardHeader
                             className={(imgBlob || formik.values.image) ?
                                 "FixCardHeader" :
-                                "FixCardHeaderNoImage !pt-16 !-mb-4 "}
+                                "FixCardHeaderNoImage  pt-16"}
                             floated={imgBlob || formik.values.image ?
-                                true : false}
-                        >
+                                true : false} >
                             <div className={`${start ? 'ChipDiv !justify-end' : 'invisible'}`}>
                                 <DateChip
                                     prefix="publié le"
@@ -118,17 +119,17 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                                     </Typography>
                                     <div className="flex items-center gap-[10%]">
                                         <Checkbox
+                                            className="checked:bg-rose-500 border-rose-500 checked:border-rose-700"
                                             type="checkbox"
                                             name="shareA"
                                             value="PHONE"
-                                            color="orange"
                                             label="telephone"
                                             onChange={formik.handleChange}
                                             checked={checkShare("phone")}
                                         />
                                         <Checkbox
+                                            className="checked:bg-rose-500 border-rose-500 checked:border-rose-700"
                                             type="checkbox"
-                                            color="orange"
                                             name="shareA"
                                             value="EMAIL"
                                             label="email"
@@ -144,12 +145,11 @@ export function PostFormCard({ formik }: PostFormCardProps) {
             </main>
             <footer className="CTA">
                 <Button
-                    color="orange"
                     size='lg'
                     type="submit"
-                    className="lgBtn">
+                    className="lgBtn bg-rose-500">
                     <Icon
-                        size='xl'
+                        size='lg'
                         icon={formik.values?.id ? "save_as" : "save"}
                         color="white" />
                     {formik.values?.id ? "Modifier l'annonce" : "Créer l'annonce"}

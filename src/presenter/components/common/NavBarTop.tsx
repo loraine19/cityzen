@@ -35,7 +35,7 @@ export default function NavBarTop() {
         <header
             onClick={() => { hideNavBottom && setHideNavBottom(false) }}
             className={`${hideNavBottom ? 'shadow-md shadow-gray-700/20 mb-4 pt-0.5' : ''}  z-0 `}>
-            <div className={`${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev pb-2 mb-1'}
+            <div className={`${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev pb-1 mb-1'}
                     relative h-full w-full flex justify-between pt-1 w-respXl`} >
                 <div className={`flex w-full items-center  ${hideNavBottom ? 'hidden' : ''} `}>
                     <Menu placement="bottom-start">

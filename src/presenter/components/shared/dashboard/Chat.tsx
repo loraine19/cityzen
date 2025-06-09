@@ -8,6 +8,7 @@ import { ProfileDiv } from '../../common/ProfilDiv';
 import EmojiPicker, { EmojiStyle } from 'emoji-picker-react';
 import DI from '../../../../di/ioc';
 import { useAlertStore } from '../../../../application/stores/alert.store';
+import NotifDiv from '../../common/NotifDiv';
 
 
 type ChatProps = {
@@ -18,10 +19,11 @@ type ChatProps = {
     messages: MessageView[], fetchNextPage: any, hasNextPage: boolean, isLoading: boolean,
     newConv?: boolean,
     setNewConv?: any,
-    refetch?: () => void
+    refetch: () => void
+    error: string | null
 }
 
-const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, message, setMessage, messages, fetchNextPage, hasNextPage, isLoading, newConv, setNewConv, refetch }) => {
+const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, message, setMessage, messages, fetchNextPage, hasNextPage, isLoading, newConv, setNewConv, refetch, error }) => {
 
     const [imTyping, setImTyping] = useState(message ? true : false);
     const readConversationUseCase = async (id: number) => DI.resolve('readConversationUseCase').execute(id);
@@ -36,6 +38,14 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
             read();
         }
     }, [userRec])
+
+    useEffect(() => {
+        if (error) setNotif(error);
+        else if (messages.length > 0) {
+            setNotif(userRec?.Profile?.firstName ? `Conversation avec ${userRec?.Profile?.firstName}` : 'Chargement...');
+        }
+        else setNotif('aucun message');
+    }, [messages])
 
 
     const removeMessage = async (id: number) => await DI.resolve('removeMessageUseCase').execute(id)
@@ -80,8 +90,8 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
     const [openEmoji, setOpenEmoji] = useState(false);
 
     return (
-        <div className={' pt-6 flex h-full flex-1 '}>
-            <Card className='FixCardNoImage flex bg-blue-gray-50  border-white border-8'>
+        <div className={' rounded-lg flex h-full flex-1 '}>
+            <Card className='FixCardNoImage flex bg-blue-gray-50 h-full  !border-white !border-8'>
                 <CardHeader className='FixCardHeaderNoImage min-h-max  !bg-transparent px-3 pt-2'
                     floated={false}>
                     {newConv ?
@@ -90,19 +100,22 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                             variant="h6">
                             {notif}
                         </Typography>}
+                    {notif && <NotifDiv notif={notif} error={error} isLoading={isLoading} refetch={refetch} />}
                 </CardHeader>
                 <CardBody
                     ref={divRef}
                     onScroll={() => handleScroll()}
                     className='overflow-auto flex-1 flex flex-col-reverse pt-4'>
+
                     <div className='gap-4 p-3 justify-end items-end flex flex-col-reverse' >
                         {!isLoading && messages && messages.map((msg: MessageView, index: number) => (
                             <div className={`flex p-0 w-full items-start ${msg.userId === messages[index + 1]?.userId ? ' pt-0' : ' pt-4'}`}
                                 key={index}>
 
-                                <div className={`flex flex-1 break-all flex-col px-5 shadow-sm pt-3 pb-6 justify-between relative  ${msg.isDeleted ? 'italic text-blue-gray-400' : ''} ${msg.IWrite ?
-                                    'bg-cyan-100 !text-right justify-end rounded-s-[1.5rem] rounded-tr-[1.5rem] !ml-[30%] ' :
-                                    'bg-orange-100 rounded-ss-[1.5rem] rounded-r-[1.5rem] !mr-[30%]'}`}>
+                                <div
+                                    className={`flex flex-1 [overflow-wrap:anywhere] flex-col px-5 shadow-sm pt-3 pb-6 justify-between relative  ${msg.isDeleted ? 'italic text-blue-gray-400' : ''} ${msg.IWrite ?
+                                        'bg-cyan-100 !text-right justify-end rounded-s-[1.5rem] rounded-tr-[1.5rem] !ml-[30%] ' :
+                                        'bg-orange-100 rounded-ss-[1.5rem] rounded-r-[1.5rem] !mr-[30%]'}`}>
                                     <div className='text-xs font-light items-center flex flex-row-reverse justify-between'>
                                         {msg.formatedDate}
                                         {(msg.IWrite && !msg.isDeleted) &&
@@ -119,15 +132,20 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                                 </div>
                             </div>
                         ))}
+
+
                     </div>
                     <LoadMoreButton
                         revers
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
                         handleScroll={handleScroll} />
+
                 </CardBody >
                 <CardFooter
-                    className={`${imTyping ? '-top-4' : '-top-2'} flex justify-between rounded-[2rem] relative bg-white p-2 shadow-md m-2 min-h-min`}>
+                    onMouseLeave={() => { setImTyping(false) }}
+                    onMouseEnter={() => { setImTyping(true) }}
+                    className={`${imTyping ? '-top-4' : 'top-0'}  flex justify-between rounded-[2rem] relative bg-white p-2 shadow-md m-2 min-h-min`}>
                     <div className='flex-0 flex top-0' >
                         <Icon
                             onClick={() => setOpenEmoji(!openEmoji)}
@@ -153,7 +171,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                         </div>
                     </div>
                     <textarea
-                        className='rounded-full pl-4 min-h-max w-full focus:outline-none resize-none overflow-hidden'
+                        className='rounded-xl pt-1 pl-4 w-full focus:outline-none resize-none overflow-hidden'
                         rows={1}
                         value={message}
                         placeholder='Ecrivez un message...'
