@@ -82,7 +82,6 @@ export default function SelectSearch(props: selectSearchProps) {
                         style='shadow'
                         color={color ?? 'blue-gray'}
                         size="md"
-                        bg
                         icon="search" />
                 </Button>
 

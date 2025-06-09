@@ -44,11 +44,10 @@ export const AvatarUser = ({ Profile, avatarSize = '', avatarStyle = '', style =
         <>
             {Profile?.image && !inError ?
                 <Avatar
-                    onError={() => setTimeout(() => { setInError(true) }, 1000)}
-                    onLoad={() => setInError(false)}
+                    onError={() => setInError(true)}
                     referrerPolicy="unsafe-url"
                     size={avatarSize as any ?? 'sm'}
-                    className={`${classicStyle} ${avatarStyle}`}
+                    className={`${classicStyle} ${avatarStyle} bg-${userColor}-100 text-white text-xs !max-w-4 fadeIn`}
                     variant="circular"
                     alt={Profile?.firstName || 'user'}
                     src={Profile?.image as string}

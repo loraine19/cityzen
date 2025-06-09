@@ -196,7 +196,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                     size="lg"
                     className="lgBtn w-full rounded-full" >
                     <Icon
-                        size='xl'
+                        size='lg'
                         color='white'
                         icon={id ? 'edit' : 'add'} />
                     {id ? 'Modifier' : 'Créer'}

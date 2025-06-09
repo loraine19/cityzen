@@ -140,11 +140,14 @@ export class ApiService implements ApiServiceI {
     refreshAccess = async (): Promise<boolean | any> => {
         const echec = () => {
             this.logWithTime('refreshAccess echec');
-            if (this.countRefresh > 2) setTimeout(() => {
-                window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter ${this.countRefresh}`;
-            }, 2000);
-            this.countRefresh++
-            return false
+            if (this.countRefresh > 2) {
+                setTimeout(() => {
+                    //   window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter ${this.countRefresh}`;
+                    this.countRefresh++
+                    return false
+                }, 5000);
+            }
+
         }
         if (window.location.pathname.includes('/sign')) return echec();
         if (this.countRefresh > 2) return echec();

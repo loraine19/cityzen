@@ -52,12 +52,12 @@ export function ServiceForm(props: { formik: any }) {
                                         <Icon
                                             fill
                                             size="lg"
-                                            color='sky'
+                                            color='light-blue'
                                             icon='check_circle'
                                         />
                                     }
-                                    className="checked:!border-sky-500 checked:border-2"
-                                    labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
+                                    className="checked:!border-light-blue-500 checked:border-2"
+                                    labelProps={{ className: "text-sm font-normal text-blue-gray-600" }}
                                     disabled={formik.values.statusValue > 0}
                                     name="type"
                                     label="Demande"
@@ -70,11 +70,11 @@ export function ServiceForm(props: { formik: any }) {
                                         <Icon
                                             fill
                                             size="lg"
-                                            color='sky'
+                                            color='light-blue'
                                             icon='check_circle'
                                         />
                                     }
-                                    className="checked:!border-sky-500 checked:border-2"
+                                    className="checked:!border-light-blue-500 checked:border-2"
                                     labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
                                     disabled={formik.values.statusValue > 0}
                                     name="type"
@@ -252,10 +252,10 @@ export function ServiceForm(props: { formik: any }) {
                     size='lg'
                     type="submit"
                     disabled={formik.values.statusValue > 0}
-                    className="lgBtn bg-sky-500">
+                    className="lgBtn bg-light-blue-500">
                     <Icon
                         disabled
-                        size='xl'
+                        size='lg'
                         color="white"
                         icon={formik.values.statusValue <= 0 ? 'save' : 'block'}
                     />

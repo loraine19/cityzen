@@ -211,7 +211,7 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                     disabled={formik.values.pourcent > 1}
                     className="lgBtn ">
                     <Icon
-                        size='xl'
+                        size='lg'
                         color="white"
                         icon="add" />
                     {formik.values.pourcent > 1 ?

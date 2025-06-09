@@ -10,6 +10,7 @@ import { Icon } from '../../common/IconComp';
 import { useSearchParams } from 'react-router-dom';
 import { useNotificationStore } from '../../../../application/stores/notification.store';
 import { AvatarUser } from '../../common/AvatarUser';
+import NotifDiv from '../../common/NotifDiv';
 
 
 export default function ChatPage() {
@@ -23,7 +24,7 @@ export default function ChatPage() {
     const [userRec, setUserRec] = useState<User>({} as User);
 
     //// VIEW MODEL
-    const { conversations, countConv, isLoadingConv, refetchConv } = DI.resolve('conversationsViewModel')()
+    const { conversations, countConv, isLoadingConv, refetchConv, errorConv } = DI.resolve('conversationsViewModel')()
     const [notif, setNotif] = useState<string>('');
     const conversationViewModelFactory = DI.resolve('conversationViewModel')
     const { messages, isLoading, refetch, fetchNextPage, hasNextPage, error } = conversationViewModelFactory(userIdRec)
@@ -98,7 +99,6 @@ export default function ChatPage() {
         if (message.trim() !== '') {
             const messageData = { userIdRec, message };
             const ret = await socketService.sendMessage(messageData, nameSpace);
-            console.log('message sent', ret, messageData);
             if (ret) {
                 await refetch();
                 setMessage('')
@@ -114,6 +114,19 @@ export default function ChatPage() {
     }
 
 
+    const [notifConv, setNotifConv] = useState<string>('');
+    useEffect(() => {
+        if (errorConv) {
+            setNotifConv(error ?? 'Erreur lors du chargement des conversations');
+            console.error('Error loading conversations:', errorConv);
+        } else if (isLoadingConv) {
+            setNotifConv('Chargement des conversations...');
+        } else if (conversations && conversations.length === 0) {
+            setNotifConv('Aucune conversation trouvée');
+        } else {
+            setNotifConv('');
+        }
+    }, [conversations, countConv, isLoadingConv, errorConv])
 
 
     return (
@@ -134,12 +147,20 @@ export default function ChatPage() {
                             icon='sync_problem'
                             title='actualiser'
                             onClick={() => connexion()} />}
+
                 </div>
                 <section className='flex pb-4 pt-8'>
+                    {notifConv &&
+                        <NotifDiv
+                            notif={notifConv}
+                            error={errorConv}
+                            isLoading={isLoadingConv}
+                            refetch={refetchConv}
+                        />}
                     {isLoadingConv ?
                         <Skeleton className=' m-auto !h-full !rounded-3xl' /> :
                         <Card className='FixCardNoImage !pb-0 !px-0 flex '>
-                            <CardBody className='FixCardBody !p-0 !pt-2 !flex overflow-hidden'>
+                            <CardBody className='FixCardBody !p-0 !pt-3 !flex overflow-hidden'>
                                 <div className='flex flex-1 h-full  '>
                                     <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
                                         <List className='flex-1 '>
@@ -157,7 +178,9 @@ export default function ChatPage() {
                                                                 setParams({ with: userRec.id.toString() })
                                                             }} >
                                                             <ListItemPrefix className='relative flex min-w-max'>
-                                                                <AvatarUser Profile={message?.isWith?.Profile}
+                                                                <AvatarUser
+                                                                    avatarSize='md'
+                                                                    Profile={message?.isWith?.Profile}
                                                                 />
                                                                 {(online.length > 0 &&
                                                                     online.includes(message.isWith.id)) &&

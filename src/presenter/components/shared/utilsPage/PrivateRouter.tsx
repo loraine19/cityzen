@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 export const PrivateRoute = () => {
     const { isLoggedIn, user, setIsLoggedIn, fetchUser } = useUserStore((state) => state)
     const isLoggedCookie = Cookies.get('isLogged');
+    console.log('isLoggedCookie:', isLoggedCookie);
     const isLogged = isLoggedCookie === 'true' ? true : false
     if (typeof isLogged === 'boolean' && (isLoggedIn !== isLogged)) setIsLoggedIn(isLogged);
     const navigate = useNavigate();

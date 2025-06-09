@@ -28,7 +28,7 @@ export const ImageBtn = (props: { formik: any; setImgBlob: any; imgDef?: string;
                 <label htmlFor="image" className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
                     <Icon
                         bg clear
-                        icon={formik?.values?.image !== "" ? "edit" : "add_a_photo"}
+                        icon={formik?.values?.image ? "edit" : "add_a_photo"}
                         color="white"
                         size="md"
                         style="rounded-full shadow"

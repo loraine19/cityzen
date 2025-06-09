@@ -25,7 +25,7 @@ export default function NavBarTop() {
         { icon: 'diversity_3', text: "Conciliation", onClick: () => navigate('/conciliation'), color: 'orange' },
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null, color: 'amber', style: 'hover:!bg-white' },
         { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => { setNavBottom(!navBottom) }, color: 'blue-gray' },
-        { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t ", color: "red" },
+        { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t border-blue-gray-100", color: "red" },
 
     ];
     const onBoard = window.location.pathname === '/'
@@ -43,7 +43,7 @@ export default function NavBarTop() {
                             {onBoard ?
                                 <div className="flex  w-full flex-1 items-center ">
                                     <img
-                                        className="h-12 w-12 mx-2 lg:h-[4rem] lg:w-[4rem] object-cover object-center "
+                                        className="h-11 w-11 mx-2 lg:h-[3.5rem] lg:w-[3.5rem] object-cover object-center ml-2"
                                         src="/image/logo.svg"
                                         alt="logo" />
 
@@ -59,11 +59,11 @@ export default function NavBarTop() {
                                         id={user?.id} />
                                 </div>}
                         </MenuHandler>
-                        <MenuList className="flex flex-1 flex-col !rounded-xl divide-y-2 !shadow-xl -ml-2 ">
+                        <MenuList className="flex flex-1 flex-col !rounded-xl !shadow-xl -ml-2  ">
                             {menuItems.map((item, index) => (
                                 <MenuItem
                                     key={index}
-                                    className={`flex !flex-1 !min-w-60 pr-[10vw] items-center gap-2.5 pl-2  ${item.style || ''}`}
+                                    className={`flex !flex-1 !min-w-60 pr-[10vw] rounded-none items-center gap-2.5 pl-2  ${item.style || ''}`}
                                     onClick={item.onClick || undefined}>
                                     <Icon
                                         fill bg

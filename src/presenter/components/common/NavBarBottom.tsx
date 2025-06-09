@@ -28,7 +28,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
     }
     const navItems: NavItem[] = [
         { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-500/20", col: 'blue-gray' },
-        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-sky-500/20", col: 'sky' },
+        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-light-blue-500/20", col: 'light-blue' },
         { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-500/20", col: 'cyan' },
         { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-rose-500/20", col: 'rose' },
         { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
@@ -45,8 +45,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
             to: `/service/create`,
             icon: "partner_exchange",
             label: `Ajouter un Service`,
-            color: "!border-sky-500/20",
-            col: 'sky'
+            color: "!border-light-blue-500/20",
+            col: 'light-blue'
         }, {
             to: `/evenement/create`,
             icon: "event",
@@ -94,7 +94,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                     `w-respXl backdropBlur bg justify-center items-center flex gap-4 bg-gradient-to-t ${from} from-10%  via-transparent to-transparent rounded-full `
                 }>
                 <Navbar className={`
-               shadow-md w-[calc(80%)] !max-w-[calc(100vw-8rem)] overflow-auto flex rounded-full h-full min-w-max lg:w-full  items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
+               shadow-md w-[calc(80%)] !max-w-[calc(100vw-8rem)] overflow-auto flex rounded-full h-full min-w-max lg:w-full items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative `}>
                         <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between  h-full gap-auto `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
@@ -107,7 +107,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                     <NavLink
                                         to={to}
                                         className={({ isActive }) =>
-                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full  !h-[57px]  rounded-full  ${isActive ? ` animSlide border-[1px] shadowMid z-30 ${color}  !bg-white  ` : ''}`
+                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full  !h-[57px]  rounded-full  ${isActive ? ` animSlide border-[1px] shadowMid z-30 ${color} !bg-white  ` : ''}`
                                         }
                                     >
                                         {({ isActive }) => (

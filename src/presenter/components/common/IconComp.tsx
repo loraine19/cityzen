@@ -120,7 +120,7 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     const bg = (color: string) => (props.bg && !clear) ?
         (props.color ? `bg-${color}-500 bg-opacity-30 border border-${color}-500 border-opacity-20` : `!bg-gray-300 hover:!bg-gray-200 border border-gray-500 border-opacity-20`) : ''
 
-    const classIcon = `forced-color-adjust-auto !rounded-full  flex items-center justify-center  ${textColor(color)} ${bg(color)} 
+    const classIcon = (color: string) => `!rounded-full flex items-center justify-center ${textColor(color) as string} ${bg(color)} 
      ${props.bg ? classRounded : textSize} ${style ?? ''} `
 
     const classActive = `hover:scale-[1.05] transition-all duration-200 ease-in-out hover:!bg-${color}-500 `
@@ -135,7 +135,7 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
                     type="button"
                     onClick={onClick}
                     title={!disabled ? title : title + ' est desactivée'}
-                    className={`${classIcon} ${!disabled && classActive} `}
+                    className={`${classIcon(color)} ${!disabled && classActive} `}
                     disabled={disabled}>
                     {searchIcon(icon, fill)}
                 </button>
@@ -146,14 +146,14 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
                     title={title}
                     target={link.startsWith('http') ? "_blank" : ""}
                     rel="noopener noreferrer"
-                    className={`${classIcon} ${classActive}`}>
+                    className={`${classIcon(color)} ${classActive}`}>
                     {searchIcon(icon, fill)}
                 </Link> :
                     <span
                         style={{ fontSize: `${num}px` }}
                         data-cy={icon}
                         title={title}
-                        className={`${classIcon} `}>
+                        className={`${classIcon(color)} `}>
                         <span>{searchIcon(icon, fill)}</span>
                     </span>
             }
