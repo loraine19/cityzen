@@ -9,12 +9,12 @@ import { useEffect } from "react";
 import { AvatarUser } from "./AvatarUser";
 import { useUxStore } from "../../../application/stores/ux.store";
 export default function NavBarTop() {
-    const { unReadMsgNotif, getColor } = useNotificationStore((state) => state);
+    const { unReadMsgNotif } = useNotificationStore((state) => state);
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => { getColor(location.pathname) }, [location.pathname])
     const { user } = useUserStore((state) => state);
-    const { hideNavBottom, navBottom, setNavBottom, setHideNavBottom } = useUxStore((state) => state);
+    const { hideNavBottom, navBottom, setNavBottom, setHideNavBottom, getColor } = useUxStore((state) => state);
 
 
     const menuItems = [
@@ -29,6 +29,7 @@ export default function NavBarTop() {
 
     ];
     const onBoard = window.location.pathname === '/'
+
 
     return (
         <header

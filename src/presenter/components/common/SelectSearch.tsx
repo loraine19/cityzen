@@ -8,18 +8,19 @@ type selectSearchProps = {
     setSearchCat: any;
     category: Label[]
     search: (label: Label) => void
+    style?: string;
 };
 
 export default function SelectSearch(props: selectSearchProps) {
     const { color } = useUxStore((state) => state);
-    const { searchCat, setSearchCat, category, search } = props
+    const { searchCat, setSearchCat, category, search, style = '' } = props
     return (
-        <div className="px-4 w-full py-1" >
-            <div className="flex !rounded-full h-7  w-full items-center bg-white shadow " >
+        <div className={` w-full py-1 ${style}`} >
+            <div className="flex !rounded-full h-7 border w-full items-center bg-white shadow " >
                 <Menu placement="bottom-start">
                     <MenuHandler
-                        className={category.length > 0 ? '' : 'invisible'}>
-                        <div className="flex  pl-2 ">
+                        className={category.length > 0 ? 'px-2' : 'invisible'}>
+                        <div className="flex">
                             <Icon
                                 color={color ?? 'blue-gray'}
                                 data-cy="select"
@@ -78,7 +79,10 @@ export default function SelectSearch(props: selectSearchProps) {
                     className="flex items-center  bg-none rounded-full py-1 !px-3"
                 >
                     <Icon
-                        size="lg"
+                        style='shadow'
+                        color={color ?? 'blue-gray'}
+                        size="md"
+                        bg
                         icon="search" />
                 </Button>
 

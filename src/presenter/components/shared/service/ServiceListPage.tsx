@@ -53,7 +53,7 @@ export default function ServicesPage() {
     //// NAMING
     const filterName = (): string => {
         switch (filter) {
-            case ServiceFilter.MINE: return 'les miens';
+            case ServiceFilter.MINE: return 'que j\'ai publié';
             case ServiceFilter.DO: return 'offres';
             case ServiceFilter.GET: return 'demandes';
             default: return '';
@@ -125,13 +125,14 @@ export default function ServicesPage() {
 
     //// NOTIFICATION & ERROR
     useEffect(() => {
+        if (error) setNotif(error ?? 'Une erreur est survenue');
         switch (true) {
             case ((count === 0 || !services) && !isLoading && !error):
                 setNotif(`Aucun service ${filterName()} ${stepName()} n'a été trouvé`); break;
 
-            //  default: setNotif('');
+            default: setNotif('');
         }
-    }, [isLoading, error, filter, step]);
+    }, [isLoading, error, filter, step, category, count, services, type]);
 
 
     //// HANDLE SCROLL
@@ -164,26 +165,11 @@ export default function ServicesPage() {
 
     //// SORT LIST
     const sortList: SortLabel[] = [
-        {
-            label: "Publié le",
-            key: ServiceSort.CREATED_AT, icon: "event",
-        },
-        {
-            key: ServiceSort.USER,
-            label: "Utilisateur", icon: "person",
-        },
-        {
-            key: ServiceSort.TITLE,
-            label: "Titre", icon: "sort_by_alpha",
-        },
-        {
-            key: ServiceSort.SKILL,
-            label: "Compétence", icon: "design_services",
-        },
-        {
-            key: ServiceSort.HARD,
-            label: "Difficulté", icon: "signal_cellular_alt",
-        }
+        { key: ServiceSort.CREATED_AT, label: "Publié le", icon: "event" },
+        { key: ServiceSort.USER, label: "Utilisateur", icon: "person" },
+        { key: ServiceSort.TITLE, label: "Titre", icon: "sort_by_alpha" },
+        { key: ServiceSort.SKILL, label: "Compétence", icon: "design_services" },
+        { key: ServiceSort.HARD, label: "Difficulté", icon: "signal_cellular_alt" }
     ]
 
     //// RENDER

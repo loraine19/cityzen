@@ -1,17 +1,17 @@
 import { Checkbox, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { Icon } from "./IconComp";
-import { useNotificationStore } from "../../../application/stores/notification.store";
+import { useUxStore } from "../../../application/stores/ux.store";
 
 type checkCardProps = {
     categoriesArray: string[];
     setBoxSelected: (selected: string[]) => void;
     boxSelected: string[];
-    color?: string;
+    style?: string;
 };
 
 export default function CheckCard(props: checkCardProps) {
-    const { categoriesArray, boxSelected, setBoxSelected } = props;
+    const { categoriesArray, boxSelected, setBoxSelected, style = '' } = props;
 
     useEffect(() => {
         setCheckedState(categoriesArray.map(category => boxSelected.includes(category)));
@@ -26,12 +26,12 @@ export default function CheckCard(props: checkCardProps) {
         const updatedBoxSelected = categoriesArray.filter((_, idx) => updatedCheckedState[idx]);
         setBoxSelected(updatedBoxSelected);
     };
-    const { color } = useNotificationStore((state) => state);
+    const { color } = useUxStore((state) => state);
     const colorShade = (color: string): string => `${color}-500 `;
     const colorShadeDark = (color: string): string => `${color}-700 `;
 
     return (
-        <div className="flex w-full !p-0">
+        <div className={`flex w-full !p-0 ${style} `}>
             <div className="w-full !m-0  !max-w-screen pl-2 overflow-auto  !flex items-center rounded-xl">
                 <List className="flex-row flex w-full min-w-max justify-evenly items-center !p-0 overflow-auto">
                     {categoriesArray.map((category, index) => (
@@ -58,15 +58,27 @@ export default function CheckCard(props: checkCardProps) {
                 </List>
             </div>
             <div className="flex  opacity-95 items-center px-0.5 rounded-full">
-                <Icon icon="cancel" size="lg" color="red" style="thin hover:!py-0" onClick={() => {
-                    setBoxSelected([]);
-                    setCheckedState(new Array(categoriesArray.length).fill(false));
-                }}
+                <Icon
+                    icon="cancel"
+                    size="lg"
+                    fill={checkedState.some(Boolean)}
+                    style='opacity-70'
+                    color={color ?? 'blue-gray'}
+                    onClick={() => {
+                        setBoxSelected([]);
+                        setCheckedState(new Array(categoriesArray.length).fill(false));
+                    }}
                 ></Icon>
-                <Icon icon="check_circle" size="lg" color="green" style="thin hover:!py-0" onClick={() => {
-                    setBoxSelected(categoriesArray);
-                    setCheckedState(new Array(categoriesArray.length).fill(true));
-                }} />
+                <Icon
+                    fill={!checkedState.every(Boolean)}
+                    style='opacity-70'
+                    icon="check_circle"
+                    size="lg"
+                    color={color ?? 'blue-gray'}
+                    onClick={() => {
+                        setBoxSelected(categoriesArray);
+                        setCheckedState(new Array(categoriesArray.length).fill(true));
+                    }} />
             </div>
 
         </div>

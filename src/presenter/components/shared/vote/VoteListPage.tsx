@@ -168,23 +168,27 @@ export default function VoteListPage() {
                 <TabsMenu
                     labels={tabs}
                     sortList={sortList}
-                    color={pageColor}
                     selectedSort={sort}
                     setSelectedSort={setSort}
                     reverse={reverse}
                     setReverse={setReverse}
                     action={refetch}
                 />
-                <CheckCard
-                    categoriesArray={boxArray}
-                    boxSelected={boxSelected}
-                    setBoxSelected={setBoxSelected}
-                    color={"orange-500"} />
-                <SelectSearch
-                    searchCat={searchCat}
-                    setSearchCat={setSearchCat}
-                    category={filter === PoolSurveyFilter.SURVEY ? surveyCategories : []}
-                    search={search} />
+                <div className="flex items-center flex-col-reverse lg:flex-row justify-between gap-4 " >
+
+                    <CheckCard
+                        categoriesArray={boxArray}
+                        boxSelected={boxSelected}
+                        setBoxSelected={setBoxSelected}
+                        style={'flex-1'} />
+                    <SelectSearch
+                        searchCat={searchCat}
+                        setSearchCat={setSearchCat}
+                        category={filter === PoolSurveyFilter.SURVEY ? surveyCategories : []}
+                        search={search}
+                        style={' lg:w-1/3'} />
+
+                </div>
                 <SubHeader
                     qty={count > 0 ? count : 'aucun'}
                     type={`${filter === PoolSurveyFilter.SURVEY ? '' :

@@ -45,7 +45,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                     <SubHeader
                         type={id ? 'Modifier mon évenement ' : 'Créer mon évenement '}
                         place={category ? label : ''} closeBtn />
-                    <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
+                    <div className="w-respLarge flex flex-col lg:flex-row !gap-4 pt-3 pb-2">
                         <Select className='rounded-full shadow bg-white border-none capitalize'
                             label={formik?.errors?.category ? formik?.errors?.category as string : "Choisir la catégorie"}
                             name={"category"}
@@ -75,7 +75,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                 </div>
                 <section className="flex flex-1 pb-1 pt-6 relative">
                     <Card className="w-respLarge FixCard !relative !z-10">
-                        <CardHeader className="FixCardHeaderSmall">
+                        <CardHeader className="FixCardHeader">
                             <div className={`${start ? 'ChipDiv !justify-end' : 'hidden'}`}>
                                 <DateChip
                                     start={start}

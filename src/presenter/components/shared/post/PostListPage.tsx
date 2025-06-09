@@ -164,13 +164,13 @@ export default function PostListPage() {
 
     return (
         <main className={navBottom ? "withBottom" : ""}>
+            <p className="rose bg-pink-200 hidden">test</p>
             <div className="sectionHeader">
                 <TabsMenu
                     labels={postTabs}
                     sortList={sortList}
                     selectedSort={sort}
                     setSelectedSort={setSort}
-                    color={'orange'}
                     reverse={reverse}
                     setReverse={setReverse}
                     action={refetch}
@@ -184,7 +184,9 @@ export default function PostListPage() {
                     <Icon
                         icon={view === "list" ? "list" : "dashboard"}
                         onClick={switchClick}
-                        size="xl"
+                        size="lg"
+                        fill
+                        color="orange"
                         style=" hidden md:flex"
                     />
                 </div>

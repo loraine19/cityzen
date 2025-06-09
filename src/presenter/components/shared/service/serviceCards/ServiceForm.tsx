@@ -1,6 +1,6 @@
 import { Radio, Select, Card, CardHeader, Button, Typography, Chip, CardBody, Input, Textarea, Option } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { dayMS, Label } from "../../../../../domain/entities/frontEntities";
+import { Label } from "../../../../../domain/entities/frontEntities";
 import SubHeader from "../../../common/SubHeader";
 import { Profile } from "../../../../../domain/entities/Profile";
 import { useUserStore } from "../../../../../application/stores/user.store";
@@ -24,11 +24,11 @@ export function ServiceForm(props: { formik: any }) {
         formik.setValues(updatedValues);
         setPoints(updatedValues?.points?.join(' à ') || '0 à 1');
     }, [formik.values.hard, formik.values.skill, formik.values.type]);
-    // FIN LOGIQUE
+
 
     const userProfile: Profile = user.Profile;
     const start = formik.values.createdAt || new Date()
-    const end = new Date(new Date().getTime() + (1 * dayMS)).toLocaleDateString('fr-FR')
+    //const end = new Date(new Date().getTime() + (1 * dayMS)).toLocaleDateString('fr-FR')
     const haveImage = formik.values.image ? true : false;
     const [imgBlob, setImgBlob] = useState<string | undefined>(formik.values.image);
     const [groupId, setGroupId] = useState<string | undefined>(formik.values.groupId);
@@ -44,31 +44,33 @@ export function ServiceForm(props: { formik: any }) {
                         place={formik.values.title}
                         closeBtn
                     />
-                    <div className="w-respLarge">
-                        <div className="flex gap-10">
-                            <Radio
-                                disabled={formik.values.statusValue > 0}
-                                name="type"
-                                label="Demande"
-                                value="GET"
-                                color='orange'
-                                checked={formik.values.typeS === ServiceType.GET}
-                                onChange={(e) => { formik.handleChange(e) }}
-                            />
-                            <Radio
-                                disabled={formik.values.statusValue > 0}
-                                name="type"
-                                label="Offre"
-                                value="DO"
-                                color='cyan'
-                                checked={formik.values.typeS === ServiceType.DO}
-                                onChange={(e) => { formik.handleChange(e) }}
-                            />
-                        </div>
+                    <div className="w-respLarge flex flex-col lg:flex-row !gap-4 pt-4">
+                        <div className="flex flex-[150%]  gap-4 w-full">
+                            <div className="flex  bg-white rounded-full pr-6 shadow-sm shadow-blue-gray-500/25 border h-10 gap-6">
+                                <Radio
+                                    labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
+                                    disabled={formik.values.statusValue > 0}
+                                    name="type"
+                                    label="Demande"
+                                    value="GET"
+                                    color='orange'
+                                    checked={formik.values.typeS === ServiceType.GET}
+                                    onChange={(e) => { formik.handleChange(e) }}
+                                />
+                                <Radio
 
-                        <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
+                                    labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
+                                    disabled={formik.values.statusValue > 0}
+                                    name="type"
+                                    label="Offre"
+                                    value="DO"
+                                    color='cyan'
+                                    checked={formik.values.typeS === ServiceType.DO}
+                                    onChange={(e) => { formik.handleChange(e) }}
+                                />
+                            </div>
                             <Select
-                                className="rounded-full shadow bg-white border-none capitalize"
+                                className="rounded-full  shadow bg-white border-none capitalize"
                                 label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                                 name={"category"}
                                 labelProps={{ className: `${formik.errors.category && "error"} before:border-none after:border-none ` }}
@@ -89,12 +91,13 @@ export function ServiceForm(props: { formik: any }) {
                                     )
                                 })}
                             </Select>
-                            <GroupSelect
-                                groupId={groupId}
-                                setGroupId={setGroupId}
-                                formik={formik}
-                                user={user} />
                         </div>
+
+                        <GroupSelect
+                            groupId={groupId}
+                            setGroupId={setGroupId}
+                            formik={formik}
+                            user={user} />
                     </div>
                 </div>
                 <section className={`flex flex-1 pb-1 pt-2 ' ${haveImage && "pt-[2rem]"}`}>
@@ -108,11 +111,10 @@ export function ServiceForm(props: { formik: any }) {
                             <div className={`${start ? 'ChipDiv !justify-end' : 'invisible'}`}>
                                 <DateChip
                                     prefix="publié le"
-                                    start={start}
-                                    end={end} />
+                                    start={start} />
                             </div>
                             <ImageBtn
-                                className="!absolute z-40 !h-max bottom-0 !left-3 mb-1"
+                                className="!absolute z-40 !h-max !left-3 mb-2 top-3"
                                 formik={formik}
                                 setImgBlob={setImgBlob} />
                             <img
@@ -122,13 +124,13 @@ export function ServiceForm(props: { formik: any }) {
                                 width={100}
                                 height={100}
                                 className={formik.values.image || imgBlob ?
-                                    "h-full w-full object-cover" : "hidden"}
+                                    "CardImage" : "hidden"}
                             />
 
                         </CardHeader>
 
                         <CardBody className='FixCardBody '>
-                            <div className='CardOverFlow h-full justify-between gap-4'>
+                            <div className='CardOverFlow h-full justify-between !mt-1.5 gap-4'>
                                 <Input
                                     error={formik.errors.title}
                                     label={formik.errors.title ?
@@ -162,10 +164,9 @@ export function ServiceForm(props: { formik: any }) {
                                 </div>
                                 <div className="flex flex-col justify-center pt-4 h-full">
                                     <Typography className='text-xs pb-3'>Difficulté du service: </Typography>
-                                    <div className="flex gap-9">
+                                    <div className="flex gap-[20%]">
                                         <div className="flex flex-1 items-center">
                                             <Select
-                                                className="shadowborder-none capitalize max-w-20"
                                                 variant="standard"
                                                 label={"Compétence"}
                                                 name={"skill"}
@@ -192,7 +193,6 @@ export function ServiceForm(props: { formik: any }) {
                                         </div>
                                         <div className="flex flex-1 items-center">
                                             <Select
-                                                className="shadowborder-none capitalize max-w-20"
                                                 variant="standard"
                                                 label="Pénibilité"
                                                 name={"hard"}

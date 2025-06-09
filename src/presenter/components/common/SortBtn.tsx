@@ -1,20 +1,20 @@
 import { Menu, MenuHandler, MenuList } from "@material-tailwind/react";
 import { Icon } from "./IconComp";
 import { SortLabel } from "../../../domain/entities/frontEntities"
+import { useUxStore } from "../../../application/stores/ux.store";
 
 type SortButtonProps = {
     sortList: SortLabel[],
     action: () => void,
-    color?: string,
     setSelectedSort: (value: string) => void,
     selectedSort: string
     reverse: boolean
     setReverse: (value: boolean) => void
 }
 
-export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selectedSort, reverse = false, setReverse, action }: SortButtonProps) => {
+export const SortButton = ({ sortList, setSelectedSort, selectedSort, reverse = false, setReverse, action }: SortButtonProps) => {
 
-
+    const { color } = useUxStore((state) => state);
     return (
         <div className="relative flex justify-between items-center  ">
             <div className="flex items-center w-full h-full  gap-2">
@@ -23,6 +23,8 @@ export const SortButton = ({ sortList, color = 'cyan', setSelectedSort, selected
                     <MenuHandler className="relative z-auto h-max min-w-max flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Icon
+
+                                color={color ?? 'blue-gray'}
                                 icon="sort"
                                 size="lg"
                             />

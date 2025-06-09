@@ -2,13 +2,12 @@ import { Tabs, TabsHeader, Tab } from "@material-tailwind/react";
 import { SortLabel, TabLabel } from "../../../domain/entities/frontEntities";
 import { useEffect, useState } from "react";
 import { SortButton } from "./SortBtn";
-import { useNotificationStore } from "../../../application/stores/notification.store";
+import { useUxStore } from "../../../application/stores/ux.store";
 
 type TabProps = {
     labels: TabLabel[];
     defaultTab?: string;
     sortList?: SortLabel[];
-    color?: string;
     setSelectedSort?: any
     selectedSort?: string;
     reverse?: boolean;
@@ -22,7 +21,7 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
         tab && tab.click()
     }, [])
 
-    const { color } = useNotificationStore((state) => state);
+    const { color } = useUxStore((state) => state);
     const [indexSelected, setIndex] = useState<number>(0);
     return (
         <div className="flex relative items-center justify-between gap-x-1" style={{ zIndex: 0 }}>
@@ -47,7 +46,6 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
                 <SortButton
                     action={action ?? (() => { })}
                     sortList={sortList}
-                    color={color}
                     setSelectedSort={setSelectedSort}
                     selectedSort={selectedSort ?? ''}
                     reverse={reverse ?? false}

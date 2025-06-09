@@ -105,13 +105,20 @@ header {
 .cyan {
     background-image: linear-gradient(#f9fafb, #a5f3fc);
 }
+.teal,
+.green {
+    background-image: linear-gradient(#f9fafb, #bcebcc);
+}
 
 .gray {
-    background-image: linear-gradient(#f9fafb, #9ca3af);
+    background-image: linear-gradient(#f9fafb, #90a1b9);
+}
+.pink {
+    background-image: linear-gradient(#f9fafb, #efcce0);
 }
 
 .gray100 {
-    background-image: linear-gradient(#f9fafb, #9ca3af50);
+    background-image: linear-gradient(#f9fafb, #e2e8f0);
 }
 
 .orange {
@@ -231,15 +238,15 @@ header {
 /* CARD */
 
 .FixCard {
-    @apply border border-blue-gray-50 rounded-2xl w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
+    @apply border  rounded-xl w-full my-0 mx-auto h-full flex flex-col relative !p-0 anim;
 }
 
 .FixCardNoImage {
-    @apply border border-blue-gray-50 rounded-2xl w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0 anim;
+    @apply border  rounded-2xl w-full my-0 mx-auto !h-[calc(100%+1.5rem)] !-mt-6 !p-0 anim;
 }
 
 .FixCardHeader {
-    @apply flex !max-h-[calc(60vh-2rem)] sm:!max-h-[45vw] md:!max-h-[40%] !shadow-md fadeIn;
+    @apply flex !max-h-[calc(60vh-2rem)] sm:!max-h-[55vw] md:!max-h-[45%] !shadow-md fadeIn border;
     /*!min-h-[10rem] */
 }
 
@@ -275,7 +282,7 @@ header {
 }
 
 .CardImage {
-    @apply object-cover !shadow-lg !max-h-[40vh]  w-full  !bg-white;
+    @apply object-cover !shadow-lg !max-h-[70vw] lg:!max-h-[40vh]  w-full  !bg-white;
 }
 
 .DetailCardDiv {

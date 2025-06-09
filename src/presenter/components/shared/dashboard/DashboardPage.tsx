@@ -49,7 +49,7 @@ export default function DashboardPage() {
     const userClasse = "flex row-span-3 lg:grid pt-6 animRev z-50";
     const eventClasse = "h-full flex !min-h-[12rem] row-span-5 lg:grid overflow-auto";
     const notifClasse = " row-span-2 lg:pt-6" + (notifs.length > 0 ? " min-h-[8rem]" : " min-h-[5.5rem]")
-    const mapClasse = "flex row-span-6 !min-h-[16rem] 15rem] lg:min-h-[32%] lg:grid";
+    const mapClasse = "flex row-span-6 !min-h-[16rem] 15rem] lg:min-h-[32%] lg:grid ";
 
 
     //// HANDLE SCROLL NOTIFICATIONS
@@ -155,7 +155,7 @@ export default function DashboardPage() {
                     </Card>
                 </div>
                 <div className={`hidden lg:${notifClasse} grid-cols-1 h-full  lg:grid`}>
-                    <Card className=" orange100 anim">
+                    <Card className=" orange anim">
                         <CardBody className="h-full flex flex-col pt-2.5 pb-0 px-4 ">
                             <div className="flex gap-2.5 py-1 items-center">
                                 <div className="relative">
@@ -231,7 +231,7 @@ export default function DashboardPage() {
                     </Card>
                 </div>
                 <div className={mapClasse}>
-                    <Card className="h-full flex-1 cyan anim">
+                    <Card className="h-full flex-1 gray100 anim">
                         <CardBody className="h-full min-h-[20vh] lg!min-h-[100%] flex flex-col !pt-3 p-4">
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-2 mb-2">
@@ -241,8 +241,7 @@ export default function DashboardPage() {
                                         icon="location_on"
                                         link="/service"
                                         size="md"
-                                        color="cyan"
-                                        style="hover:!bg-cyan-100"
+                                        color="blue-gray"
                                         title="voir mes services" />
 
                                     <Typography
@@ -288,7 +287,7 @@ export default function DashboardPage() {
                     </Card>
                 </div>
                 <div className={eventClasse}>
-                    <Card className="h-full flex-1 gray100 anim">
+                    <Card className="h-full flex-1 cyan anim">
                         <CardBody className="h-full flex flex-col !pt-0 p-4 ">
                             <CalendarComp logo={true} />
                         </CardBody>

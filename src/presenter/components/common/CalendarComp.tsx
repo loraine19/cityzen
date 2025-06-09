@@ -44,7 +44,7 @@ export default function CalendarCompLarge(props: { logo?: boolean }) {
                     <div className='flex items-center pb-2'>
                         <Icon
                             fill bg
-                            color='blue-gray'
+                            color='cyan'
                             icon='today'
                             link="/evenement"
                             size="md"

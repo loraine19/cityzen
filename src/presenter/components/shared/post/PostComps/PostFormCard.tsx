@@ -23,15 +23,15 @@ export function PostFormCard({ formik }: PostFormCardProps) {
     const user = useUserStore((state) => state.user);
 
     return (
-        <form onSubmit={formik.handleSubmit} className="flex flex-col h-full">
+        <form onSubmit={formik.handleSubmit} className="flex flex-col h-full overflow-hidden">
             <main>
-                <div className="sectionHeader">
+                <div className="sectionHeader gap-2">
                     <SubHeader
                         type={formik.values.title ? `Modifier mon annonce ` : "Créer mon annonce "}
                         place={PostCategory[formik.values.category as keyof typeof PostCategory] || ''}
                         closeBtn
                     />
-                    <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
+                    <div className="w-respLarge flex flex-col lg:flex-row !gap-4 pb-2 pt-4">
                         <Select
                             className="rounded-full shadow bg-white border-none capitalize"
                             label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
@@ -57,7 +57,7 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                             user={user} />
                     </div>
                 </div>
-                <section className={`flex flex-1 pb-1 pt-4 ' ${(imgBlob || formik.values.image) && "pt-[2.2rem]"}`}>
+                <section className={`flex pb-1 flex-1 relative ' ${(imgBlob || formik.values.image) && "pt-6"}`}>
                     <Card className="w-respLarge FixCard">
                         <CardHeader
                             className={(imgBlob || formik.values.image) ?
@@ -82,11 +82,11 @@ export function PostFormCard({ formik }: PostFormCardProps) {
                                 width={100}
                                 height={100}
                                 className={(imgBlob || formik.values.image) ?
-                                    "h-full w-full object-cover" : "hidden"}
+                                    "CardImage" : "hidden"}
                             />
                         </CardHeader>
                         <CardBody className="FixCardBody">
-                            <div className="CardOverFlow h-full justify-between gap-4">
+                            <div className="CardOverFlow  justify-between gap-4">
                                 <Input
                                     label={formik.errors.title ? formik.errors.title as string : "titre"}
                                     name="title"

@@ -31,11 +31,15 @@ export const useUxStore = create<UxStore, [['zustand/persist', UxStore]]>(
           const type = new URLSearchParams(path.split("/")[1]).toString().replace("=", '');
           switch (type) {
             case 'service':
+              color = 'green';
+              break;
             case 'evenement':
             case 'groupe':
               color = 'cyan';
               break;
             case 'annonce':
+              color = 'pink';
+              break;
             case 'vote':
             case 'cagnotte':
             case 'sondage':

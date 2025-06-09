@@ -20,7 +20,7 @@ type PoolSurveyFormProps = {
 }
 export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
     const start = formik.values.createdAt || new Date()
-    const end = new Date(new Date().getTime() + (1 * dayMS)).toLocaleDateString('fr-FR')
+    const end = new Date(new Date().getTime() + (15 * dayMS)).toLocaleDateString('fr-FR')
     const haveImage = (formik.values.image && formik.values.typeS === VoteTarget.SURVEY) ? true : false;
     const [imgBlob, setImgBlob] = useState<string | undefined>(formik.values.image);
 
@@ -38,37 +38,39 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                     <SubHeader
                         type={formik.values.id ?
                             `Modifier votre ${formik.values.typeS}` : `Créer votre ${formik.values.typeS || 'vote'}`}
-                        place={formik.values.id ? formik.values.title : ''}
-                        closeBtn />
-                    <div className="w-respLarge">
-                        <div className="flex pb-0.5 gap-10">
-                            <Radio
-                                disabled={formik.values.pourcent > 1}
-                                name="typeS"
-                                label="Sondage"
-                                value={VoteTarget.SURVEY}
-                                color='orange'
-                                checked={type === VoteTarget.SURVEY}
-                                onChange={() => {
-                                    formik.setFieldValue('typeS', VoteTarget.SURVEY)
-                                    setType(VoteTarget.SURVEY)
-                                }}
-                            />
-                            <Radio
-                                disabled={formik.values.pourcent > 1}
-                                name="typeS"
-                                label="Cagnotte"
-                                value={VoteTarget.POOL}
-                                color='orange'
-                                checked={type === VoteTarget.POOL}
-                                onChange={() => {
-                                    setType(VoteTarget.POOL)
-                                    formik.setFieldValue('typeS', VoteTarget.POOL)
-                                    refetch()
-                                }}
-                            />
-                        </div>
-                        <div className="w-respLarge flex flex-col lg:flex-row !gap-4 py-2">
+                        closeBtn
+                        place={formik.values.id ? formik.values.title : ''} />
+                    <div className="w-respLarge flex flex-col lg:flex-row !gap-4 pt-4">
+                        <div className="flex flex-[150%] gap-4 w-full ">
+                            <div className="flex bg-white rounded-full pr-6 shadow-sm shadow-blue-gray-500/25 border h-10 gap-4">
+                                <Radio
+                                    labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
+                                    disabled={formik.values.pourcent > 1}
+                                    name="typeS"
+                                    label="Sondage"
+                                    value={VoteTarget.SURVEY}
+                                    color='orange'
+                                    checked={type === VoteTarget.SURVEY}
+                                    onChange={() => {
+                                        formik.setFieldValue('typeS', VoteTarget.SURVEY)
+                                        setType(VoteTarget.SURVEY)
+                                    }}
+                                />
+                                <Radio
+                                    labelProps={{ className: "text-sm font-normal text-blue-gray-600 -ml-1" }}
+                                    disabled={formik.values.pourcent > 1}
+                                    name="typeS"
+                                    label="Cagnotte"
+                                    value={VoteTarget.POOL}
+                                    color='orange'
+                                    checked={type === VoteTarget.POOL}
+                                    onChange={() => {
+                                        setType(VoteTarget.POOL)
+                                        formik.setFieldValue('typeS', VoteTarget.POOL)
+                                        refetch()
+                                    }}
+                                />
+                            </div>
                             {(type === VoteTarget.POOL) ?
                                 <Select
                                     className="rounded-full shadow bg-white border-none capitalize"
@@ -117,11 +119,11 @@ export function VoteForm({ formik, type, setType }: PoolSurveyFormProps) {
                                     })}
                                 </Select>
                             }
-                            <GroupSelect
-                                setGroupId={setGroupId}
-                                formik={formik}
-                                user={user} />
                         </div>
+                        <GroupSelect
+                            setGroupId={setGroupId}
+                            formik={formik}
+                            user={user} />
                     </div>
                 </div>
                 <section className={`flex flex-1 pb-1 pt-2  ${haveImage && "pt-[2rem]"}`}>

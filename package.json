@@ -58,7 +58,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.5",
     "@types/react": "^18.2.19",
-    "@types/react-dom": "^18.3.5",
+    "@types/react-dom": "^18.2.7",
     "@types/sjcl": "^1.0.34",
     "@vitejs/plugin-basic-ssl": "^2.0.0",
     "@vitejs/plugin-react": "^4.3.4",

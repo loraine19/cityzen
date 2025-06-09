@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNotificationStore } from "../../../application/stores/notification.store";
 import { Icon } from "../common/IconComp";
+import { useUxStore } from "../../../application/stores/ux.store";
 
 type NotifDivProps = {
     notif: string;
@@ -9,7 +9,7 @@ type NotifDivProps = {
     error?: any;
 }
 const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch, error }) => {
-    const { color } = useNotificationStore((state) => state);
+    const { color } = useUxStore((state) => state);
     const [attempt, setAttempt] = useState<number>(0);
 
     useEffect(() => {

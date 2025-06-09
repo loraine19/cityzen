@@ -28,9 +28,9 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
     }
     const navItems: NavItem[] = [
         { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-500/20", col: 'blue-gray' },
-        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-cyan-500/20", col: 'cyan' },
+        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-green-500/20", col: 'green' },
         { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-500/20", col: 'cyan' },
-        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-orange-500/20", col: 'orange' },
+        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-pink-500/20", col: 'pink' },
         { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
     ]
 
@@ -46,7 +46,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
             icon: "partner_exchange",
             label: `Ajouter un Service`,
             color: "!border-cyan-500/20",
-            col: 'cyan'
+            col: 'green'
         }, {
             to: `/evenement/create`,
             icon: "event",
@@ -60,7 +60,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
             icon: "dashboard",
             label: `Ajouter une Annonce`,
             color: "!border-orange-500/20",
-            col: 'orange'
+            col: 'pink'
         },
         {
             to: `/vote/create`,
@@ -170,7 +170,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                             icon={icon}
                                             color={addBtn ? color : col} />
                                     </div>
-                                    <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-900 absolute bg-white text-sm shadow-xl !border !border-gray-300`}>
+                                    <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-700 absolute bg-white text-sm shadow-xl !border !border-gray-300`}>
                                         {label}
                                     </div>
                                 </SpeedDialAction>)}
