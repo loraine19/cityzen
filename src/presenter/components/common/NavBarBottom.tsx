@@ -85,11 +85,11 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 }}
 
                 className={
-                    (!navBottom ? 'pb-2 ' : 'pb-2 ') +
+                    (!navBottom ? 'pb-2 ' : 'pb-2 bottom-0') +
                     ((hideNavBottom && navBottom) ? ' transform-y[-100%] hidden opacity-0 anim z-0' : '!my-0  ') +
-                    ((hideNavBottom && !navBottom) ? 'hidden' : '') +
-                    ((navBottom && !hideNavBottom) ? 'transform-y-0 opacity-100 anim' : '') +
-                    `w-respXl backdropBlur bg justify-center items-center flex gap-4 ${color}BG rounded-full `
+                    ((hideNavBottom && !navBottom) ? 'hidden ' : '') +
+                    ((navBottom && !hideNavBottom) ? `transform-y-0 opacity-100 anim ${color}BG backdropBlur ` : ' ') +
+                    `w-respXl justify-center items-center flex gap-4 rounded-full `
                 }>
                 <Navbar className={`
                shadow-md w-[calc(80%)] !max-w-[calc(100vw-8rem)] overflow-auto flex rounded-full h-full min-w-max lg:w-full items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
