@@ -80,7 +80,7 @@ export default function PostCard({ post: initialPost, mines, change, update, sho
                                 icon="thumb_up"
                                 size="md"
                                 fill={ILike}
-                                color={ILike ? "cyan" : "gray"}
+                                color={ILike ? "rose" : "gray"}
                                 title={ILike ? "je n'aime plus" : "j'aime"}
                             />}>
                         </Chip>

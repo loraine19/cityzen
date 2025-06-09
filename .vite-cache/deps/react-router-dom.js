@@ -62,13 +62,13 @@ import {
   useRoutes,
   useRoutesImpl,
   warning
-} from "./chunk-W7SF6SYA.js";
+} from "./chunk-YV2JUI5A.js";
 import {
   require_react_dom
-} from "./chunk-M7J7YBEX.js";
+} from "./chunk-P5JXV5NI.js";
 import {
   require_react
-} from "./chunk-W5UAQKRE.js";
+} from "./chunk-MC2JJCLE.js";
 import {
   __toESM
 } from "./chunk-OL46QLBJ.js";
@@ -1307,7 +1307,7 @@ export {
 
 react-router-dom/dist/index.js:
   (**
-   * React Router DOM v6.30.0
+   * React Router DOM v6.30.1
    *
    * Copyright (c) Remix Software Inc.
    *

@@ -3,7 +3,7 @@ import {
 } from "./chunk-PZE7CTFH.js";
 import {
   require_react
-} from "./chunk-W5UAQKRE.js";
+} from "./chunk-MC2JJCLE.js";
 import {
   __commonJS,
   __toESM

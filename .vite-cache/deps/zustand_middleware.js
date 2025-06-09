@@ -7,7 +7,7 @@ var reduxImpl = (reducer, initial) => (set, _get, api) => {
     return action;
   };
   api.dispatchFromDevtools = true;
-  return { dispatch: (...a) => api.dispatch(...a), ...initial };
+  return { dispatch: (...args) => api.dispatch(...args), ...initial };
 };
 var redux = reduxImpl;
 var trackedConnections = /* @__PURE__ */ new Map();
@@ -36,6 +36,26 @@ var extractConnectionInformation = (store, extensionConnector, options) => {
   trackedConnections.set(options.name, newConnection);
   return { type: "tracked", store, ...newConnection };
 };
+var removeStoreFromTrackedConnections = (name, store) => {
+  if (store === void 0) return;
+  const connectionInfo = trackedConnections.get(name);
+  if (!connectionInfo) return;
+  delete connectionInfo.stores[store];
+  if (Object.keys(connectionInfo.stores).length === 0) {
+    trackedConnections.delete(name);
+  }
+};
+var findCallerName = (stack) => {
+  var _a, _b;
+  if (!stack) return void 0;
+  const traceLines = stack.split("\n");
+  const apiSetStateLineIndex = traceLines.findIndex(
+    (traceLine) => traceLine.includes("api.setState")
+  );
+  if (apiSetStateLineIndex < 0) return void 0;
+  const callerLine = ((_a = traceLines[apiSetStateLineIndex + 1]) == null ? void 0 : _a.trim()) || "";
+  return (_b = /.+ (.+) .+/.exec(callerLine)) == null ? void 0 : _b[1];
+};
 var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
   const { enabled, anonymousActionType, store, ...options } = devtoolsOptions;
   let extensionConnector;
@@ -51,7 +71,8 @@ var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
   api.setState = (state, replace, nameOrAction) => {
     const r = set(state, replace);
     if (!isRecording) return r;
-    const action = nameOrAction === void 0 ? { type: anonymousActionType || "anonymous" } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
+    const inferredActionType = findCallerName(new Error().stack);
+    const action = nameOrAction === void 0 ? { type: anonymousActionType || inferredActionType || "anonymous" } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
     if (store === void 0) {
       connection == null ? void 0 : connection.send(action, get());
       return r;
@@ -67,6 +88,14 @@ var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
       }
     );
     return r;
+  };
+  api.devtools = {
+    cleanup: () => {
+      if (connection && typeof connection.unsubscribe === "function") {
+        connection.unsubscribe();
+      }
+      removeStoreFromTrackedConnections(options.name, store);
+    }
   };
   const setStateFromDevtools = (...a) => {
     const originalIsRecording = isRecording;
@@ -91,14 +120,14 @@ var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
   if (api.dispatchFromDevtools && typeof api.dispatch === "function") {
     let didWarnAboutReservedActionType = false;
     const originalDispatch = api.dispatch;
-    api.dispatch = (...a) => {
-      if ((import.meta.env ? import.meta.env.MODE : void 0) !== "production" && a[0].type === "__setState" && !didWarnAboutReservedActionType) {
+    api.dispatch = (...args) => {
+      if ((import.meta.env ? import.meta.env.MODE : void 0) !== "production" && args[0].type === "__setState" && !didWarnAboutReservedActionType) {
         console.warn(
           '[zustand devtools middleware] "__setState" action type is reserved to set state from the devtools. Avoid using it.'
         );
         didWarnAboutReservedActionType = true;
       }
-      originalDispatch(...a);
+      originalDispatch(...args);
     };
   }
   connection.subscribe((message) => {
@@ -202,7 +231,7 @@ var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
   return initialState;
 };
 var devtools = devtoolsImpl;
-var parseJsonThen = (stringified, f) => {
+var parseJsonThen = (stringified, fn) => {
   let parsed;
   try {
     parsed = JSON.parse(stringified);
@@ -212,7 +241,7 @@ var parseJsonThen = (stringified, f) => {
       e
     );
   }
-  if (parsed !== void 0) f(parsed);
+  if (parsed !== void 0) fn(parsed);
 };
 var subscribeWithSelectorImpl = (fn) => (set, get, api) => {
   const origSubscribe = api.subscribe;
@@ -238,7 +267,9 @@ var subscribeWithSelectorImpl = (fn) => (set, get, api) => {
   return initialState;
 };
 var subscribeWithSelector = subscribeWithSelectorImpl;
-var combine = (initialState, create) => (...a) => Object.assign({}, initialState, create(...a));
+function combine(initialState, create) {
+  return (...args) => Object.assign({}, initialState, create(...args));
+}
 function createJSONStorage(getStorage, options) {
   let storage;
   try {
@@ -261,10 +292,7 @@ function createJSONStorage(getStorage, options) {
       }
       return parse(str);
     },
-    setItem: (name, newValue) => storage.setItem(
-      name,
-      JSON.stringify(newValue, options == null ? void 0 : options.replacer)
-    ),
+    setItem: (name, newValue) => storage.setItem(name, JSON.stringify(newValue, options == null ? void 0 : options.replacer)),
     removeItem: (name) => storage.removeItem(name)
   };
   return persistStorage;

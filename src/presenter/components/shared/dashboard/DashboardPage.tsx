@@ -191,7 +191,7 @@ export default function DashboardPage() {
                                         className="flex w-full justify-between h-full gap-4 p-0.5">
 
                                         <div key={index}
-                                            className={`${notif?.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} font-light text-sm flex  items-center break-words pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5  flex-0 relative `}
+                                            className={`${notif?.type !== ElementNotif.MESSAGE ? 'hover:bg-orange-500' : 'hover:bg-cyan-500'} px-4 font-light text-sm flex  items-center break-words pl-2 justify-between hover:cursor-pointer hover:bg-opacity-20 rounded-full py-0.5  flex-0 relative `}
                                             onClick={async () => {
                                                 await readNotif(notif?.id);
                                                 await refetch();
@@ -199,7 +199,7 @@ export default function DashboardPage() {
                                             }}>
                                             <p className="!line-clamp-1 ">
                                                 <span
-                                                    className={`mr-1 capitalize font-normal ${notif?.typeS === 'message' ? 'text-cyan-800' : 'text-orange-800'}`}>
+                                                    className={`mr-1 capitalize font-normal ${notif?.typeS === 'message' ? 'text-cyan-600' : 'text-orange-600'}`}>
                                                     {notif?.typeS} :&nbsp;
                                                 </span>
                                                 <span className="w-full">

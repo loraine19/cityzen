@@ -137,11 +137,11 @@ export class ApiService implements ApiServiceI {
     };
 
     //// REFRESH ACCESS
-    refreshAccess = async (): Promise<boolean> => {
+    refreshAccess = async (): Promise<boolean | any> => {
         const echec = () => {
             this.logWithTime('refreshAccess echec');
             setTimeout(() => {
-                window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter`;
+                window.location.href = `/signin?msg=Session expirée, veuillez vous reconnecter ${this.countRefresh}`;
             }, 2000);
             this.countRefresh++
             return false
@@ -158,7 +158,7 @@ export class ApiService implements ApiServiceI {
             this.logWithTime('refreshAccess message: ' + data.message);
             return true;
         }
-        else return echec();
+        else if (data?.status === 401) return echec();
     }
 
     public async get(url: string): Promise<any> {

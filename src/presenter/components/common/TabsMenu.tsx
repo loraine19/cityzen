@@ -29,13 +29,13 @@ export default function TabsMenu({ labels, defaultTab, sortList, setSelectedSort
                 className="!z-10 w-full max-w-100vh  overflow-auto">
                 <TabsHeader
                     className="w-full flex flex-1 !gap-4 !px-0 mb-1 bg-transparent"
-                    indicatorProps={{ className: `rounded-full bg-${color ?? 'gray'}-600` }}>
+                    indicatorProps={{ className: `rounded-full bg-${color ?? 'gray'}-500` }}>
                     {labels.map(({ label, value, result }, index: number) => (
                         <Tab
                             key={index}
                             value={value}
                             activeClassName="text-white"
-                            className={`text-[0.9rem] whitespace-nowrap rounded-full shadow !px-3 ${index !== indexSelected ? `bg-white text-${color}-800 ` : ` !text-white bg-${color}-500 animSlide`} `}
+                            className={`text-[0.9rem] whitespace-nowrap rounded-full shadow !px-3 ${index !== indexSelected ? `bg-white text-${color}-700 ` : ` !text-white bg-${color}-500 animSlide`} `}
                             onClick={() => { setIndex(index); result() }}>
                             {label}
                         </Tab>

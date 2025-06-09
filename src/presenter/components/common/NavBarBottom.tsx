@@ -28,9 +28,9 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
     }
     const navItems: NavItem[] = [
         { to: "/", icon: "home", label: "Home", color: "!border-blue-gray-500/20", col: 'blue-gray' },
-        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-green-500/20", col: 'green' },
+        { to: "/service", icon: "partner_exchange", label: "Service", color: "!border-sky-500/20", col: 'sky' },
         { to: "/evenement", icon: "event", label: "Évenement", color: "!border-cyan-500/20", col: 'cyan' },
-        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-pink-500/20", col: 'pink' },
+        { to: "/annonce", icon: "dashboard", label: "Annonce", color: "!border-rose-500/20", col: 'rose' },
         { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
     ]
 
@@ -45,8 +45,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
             to: `/service/create`,
             icon: "partner_exchange",
             label: `Ajouter un Service`,
-            color: "!border-cyan-500/20",
-            col: 'green'
+            color: "!border-sky-500/20",
+            col: 'sky'
         }, {
             to: `/evenement/create`,
             icon: "event",
@@ -59,8 +59,8 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
             to: `/annonce/create`,
             icon: "dashboard",
             label: `Ajouter une Annonce`,
-            color: "!border-orange-500/20",
-            col: 'pink'
+            color: "!border-rose-500/20",
+            col: 'rose'
         },
         {
             to: `/vote/create`,
@@ -102,13 +102,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                     onClick={() => { setColor(col) }}
                                     key={index}
                                     as="li"
-                                    color={col as any}
-                                    className={` flex rounded-full h-full items-center font-medium`}
+                                    className={` text-${col}-500 flex rounded-full h-full items-center font-medium`}
                                 >
                                     <NavLink
                                         to={to}
                                         className={({ isActive }) =>
-                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full  !h-[57px]  rounded-full  ${isActive ? ` animSlide border-[1px] shadowMid z-30 ${color} !bg-white  ` : ''}`
+                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full  !h-[57px]  rounded-full  ${isActive ? ` animSlide border-[1px] shadowMid z-30 ${color}  !bg-white  ` : ''}`
                                         }
                                     >
                                         {({ isActive }) => (

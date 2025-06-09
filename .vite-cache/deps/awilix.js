@@ -218,7 +218,7 @@ function createTokenizer(source) {
             }, true);
             pos++;
           }
-          continue;
+          break;
         }
         default:
           if (isIdentifierStart(ch)) {
@@ -332,7 +332,7 @@ function isStringQuote(ch) {
   return false;
 }
 var IDENT_START_EXPR = /^[_$a-zA-Z\xA0-\uFFFF]$/;
-var IDENT_PART_EXPR = /^[._$a-zA-Z0-9\xA0-\uFFFF]$/;
+var IDENT_PART_EXPR = /^[?._$a-zA-Z0-9\xA0-\uFFFF]$/;
 function isIdentifierStart(ch) {
   return IDENT_START_EXPR.test(ch);
 }
@@ -379,13 +379,13 @@ function parseParameterList(source) {
   nextToken();
   while (!done()) {
     switch (t.type) {
-      case "class":
-        skipUntilConstructor();
-        if (!isConstructorToken()) {
+      case "class": {
+        const foundConstructor = advanceToConstructor();
+        if (!foundConstructor) {
           return null;
         }
-        nextToken();
         break;
+      }
       case "function": {
         const next = nextToken();
         if (next.type === "ident" || next.type === "*") {
@@ -398,6 +398,10 @@ function parseParameterList(source) {
         break;
       case ")":
         return params;
+      // When we're encountering an identifier token
+      // at this level, it could be because it's an arrow function
+      // with a single parameter, e.g. `foo => ...`.
+      // This path won't be hit if we've already identified the `(` token.
       case "ident": {
         const param = { name: t.value, optional: false };
         if (t.value === "async") {
@@ -441,13 +445,24 @@ function parseParameterList(source) {
       }
     }
   }
-  function skipUntilConstructor() {
-    while (!isConstructorToken() && !done()) {
+  function advanceToConstructor() {
+    while (!done()) {
+      if (isConstructorToken()) {
+        nextToken(
+          1
+          /* TokenizerFlags.Dumb */
+        );
+        if (t.type !== "(") {
+          continue;
+        }
+        return true;
+      }
       nextToken(
         1
         /* TokenizerFlags.Dumb */
       );
     }
+    return false;
   }
   function isConstructorToken() {
     return t.type === "ident" && t.value === "constructor";

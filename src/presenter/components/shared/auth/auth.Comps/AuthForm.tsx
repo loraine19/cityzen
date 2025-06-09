@@ -55,11 +55,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     return (
         <main className='flex md:flex-row  flex-1  items-center h-full gap-8 pt-8 pb-2 w-full'>
-            <Card className={` hidden md:flex flex-[50%] FixCardNoImage !p-8`} >
-                <div className="absolute rounded-xl inset-0 bg-black/10  z-0" />
+            <Card className={`border-blue-gray-200 hidden md:flex flex-[50%] FixCardNoImage !p-8`} >
+                <div className="absolute rounded-xl inset-0 bg-black/10   z-0" />
                 <img src="image/welcome.jpg"
                     alt="connexion"
-                    className="absolute inset-0 object-cover object-center w-full h-full rounded-xl opacity-90 z-0" />
+                    className="absolute inset-0 object-cover object-center w-full h-full rounded-2xl opacity-90 z-0" />
                 <Typography
                     color="white"
                     className="py-6 px-8 !leading-[1] text-[2.5rem] font-bold !text-center font-comfortaa relative z-10"

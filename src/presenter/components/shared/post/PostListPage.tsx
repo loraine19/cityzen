@@ -164,7 +164,6 @@ export default function PostListPage() {
 
     return (
         <main className={navBottom ? "withBottom" : ""}>
-            <p className="rose bg-pink-200 hidden">test</p>
             <div className="sectionHeader">
                 <TabsMenu
                     labels={postTabs}

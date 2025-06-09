@@ -16,6 +16,7 @@ import {
   QueryObserver,
   dataTagErrorSymbol,
   dataTagSymbol,
+  defaultScheduler,
   defaultShouldDehydrateMutation,
   defaultShouldDehydrateQuery,
   dehydrate,
@@ -28,11 +29,15 @@ import {
   keepPreviousData,
   matchMutation,
   matchQuery,
+  noop,
   notifyManager,
   onlineManager,
+  partialMatchKey,
   queryOptions,
   replaceEqualDeep,
+  shouldThrowError,
   skipToken,
+  streamedQuery,
   unsetMarker,
   useInfiniteQuery,
   useIsFetching,
@@ -49,9 +54,9 @@ import {
   useSuspenseInfiniteQuery,
   useSuspenseQueries,
   useSuspenseQuery
-} from "./chunk-NRRNZCTZ.js";
-import "./chunk-YWYMGJCA.js";
-import "./chunk-W5UAQKRE.js";
+} from "./chunk-Q2DUW2OO.js";
+import "./chunk-7RBSQVB5.js";
+import "./chunk-MC2JJCLE.js";
 import "./chunk-OL46QLBJ.js";
 export {
   CancelledError,
@@ -71,9 +76,11 @@ export {
   QueryObserver,
   dataTagErrorSymbol,
   dataTagSymbol,
+  defaultScheduler,
   defaultShouldDehydrateMutation,
   defaultShouldDehydrateQuery,
   dehydrate,
+  streamedQuery as experimental_streamedQuery,
   focusManager,
   hashKey,
   hydrate,
@@ -83,10 +90,13 @@ export {
   keepPreviousData,
   matchMutation,
   matchQuery,
+  noop,
   notifyManager,
   onlineManager,
+  partialMatchKey,
   queryOptions,
   replaceEqualDeep,
+  shouldThrowError,
   skipToken,
   unsetMarker,
   useInfiniteQuery,

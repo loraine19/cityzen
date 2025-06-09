@@ -115,7 +115,7 @@ export const Icon: React.FC<IconProps> = ({ title, disabled, onClick, icon, size
     const textSize = ` text-[${num}px]  `;
 
     const color = props.color ?? 'gray'
-    const textColor = props.color ? props.bg ? `text-${color}-500 ` : `text-${color}-700 ` : `text-gray-800 `;
+    const textColor = props.color ? props.bg ? `text-${color}-500 ` : `text-${color}-500 ` : `text-gray-800 `;
     const bg = (props.bg && !clear) ?
         (props.color ? `bg-${color}-500 bg-opacity-30 border border-${color}-500 border-opacity-20` : `!bg-gray-300 hover:!bg-gray-200 border border-gray-500 border-opacity-20`) : ''
 

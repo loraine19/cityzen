@@ -63,7 +63,7 @@ function App() {
         <ErrorBoundary
             color={color} onRetry={handleRetry} retryCount={retryCount}>
             <BrowserRouter>
-                <div className={`App ${color}`}>
+                <div className={`App ${color}BG`}>
                     <Suspense fallback={<LoadingPage />}>
                         <Routes>
                             {/* Public routes */}

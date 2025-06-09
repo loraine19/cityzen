@@ -43,7 +43,7 @@
     @apply flex flex-col  h-screen w-screen pt-1;
 }
 body {
-    @apply gray h-screen w-screen flex flex-col;
+    @apply grayBG h-screen w-screen flex flex-col;
 }
 
 .App {
@@ -102,30 +102,27 @@ header {
 }
 
 /* COLORS */
-.cyan {
+.cyanBG {
     background-image: linear-gradient(#f9fafb, #a5f3fc);
 }
-.teal,
-.green {
-    background-image: linear-gradient(#f9fafb, #bcebcc);
+
+.skyBG {
+    background-image: linear-gradient(#f9fafb, #bae6fd);
 }
 
-.gray {
+.grayBG {
     background-image: linear-gradient(#f9fafb, #90a1b9);
 }
-.pink {
-    background-image: linear-gradient(#f9fafb, #efcce0);
+
+.roseBG {
+    background-image: linear-gradient(#f9fafb, #fecdd3);
 }
 
 .gray100 {
     background-image: linear-gradient(#f9fafb, #e2e8f0);
 }
 
-.orange {
-    background-image: linear-gradient(#f9fafb, #ffedd5);
-}
-
-.orange100 {
+.orangeBG {
     background-image: linear-gradient(#f9fafb, #ffedd5);
 }
 
@@ -352,19 +349,19 @@ nav li .icon {
 }
 
 .OrangeChip {
-    @apply Chip bg-[#FED7AA] text-orange-800  border-orange-500 border-opacity-20 border;
+    @apply Chip bg-[#FED7AA] text-orange-700  border-orange-500 border-opacity-20 border;
 }
 
 .GreenChip {
-    @apply Chip bg-green-100 text-green-800  border-green-500 border-opacity-20 border;
+    @apply Chip bg-green-100 text-green-600  border-green-500 border-opacity-20 border;
 }
 
 .RedChip {
-    @apply Chip bg-red-200 text-red-900 border-red-500 border-opacity-20 border;
+    @apply Chip bg-red-200 text-red-600 border-red-500 border-opacity-20 border;
 }
 
 .CyanChip {
-    @apply Chip bg-cyan-200 text-cyan-900  border-cyan-500 border-opacity-20 border;
+    @apply Chip bg-cyan-200 text-cyan-600  border-cyan-500 border-opacity-20 border;
 }
 
 .GrayChip {
