@@ -357,7 +357,7 @@ nav li .icon {
 }
 
 .OrangeChip {
-    @apply Chip bg-[#FED7AA] text-orange-700  border-orange-500 border-opacity-20 border;
+    @apply Chip bg-[#FED7AA] text-orange-600  border-orange-500 border-opacity-20 border;
 }
 
 .GreenChip {

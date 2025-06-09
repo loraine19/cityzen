@@ -169,7 +169,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                                                     setUnReadNotif(list.notifs.length - 1);
                                                                     notif.link && navigate(notif.link)
                                                                 }}
-                                                            size="3xl"
+                                                            size="2xl"
                                                             style="bg-white"
                                                         />}
                                                 </div>
@@ -191,7 +191,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         icon={list.icon}
                         color={list.color}
                         fill bg
-                        size="xl"
+                        size="lg"
                         title={'ouvrir la page'}
                         style={`" rounded-full z-40 relative " 
                             ${list.count > 0 ? 'opacity-100' : 'opacity-90'}`
