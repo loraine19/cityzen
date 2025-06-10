@@ -191,7 +191,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                         icon={list.icon}
                         color={list.color}
                         fill bg
-                        size="lg"
+                        size="xl"
                         title={'ouvrir la page'}
                         style={`" rounded-full z-40 relative " 
                             ${list.count > 0 ? 'opacity-100' : 'opacity-90'}`

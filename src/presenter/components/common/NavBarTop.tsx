@@ -34,28 +34,32 @@ export default function NavBarTop() {
     return (
         <header
             onClick={() => { hideNavBottom && setHideNavBottom(false) }}
-            className={`${hideNavBottom ? 'shadow-md shadow-gray-700/20 mb-4 pt-0.5' : ''}  z-0 `}>
-            <div className={`${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev pb-1 mb-1'}
-                    relative h-full w-full flex justify-between pt-1 w-respXl`} >
-                <div className={`flex w-full items-center  ${hideNavBottom ? 'hidden' : ''} `}>
+            className={`${hideNavBottom ? 'shadow-md shadow-gray-700/20 pt-0.5' : ''} sticky top-1 z-0 mb-2 `}>
+            <div className={`
+            ${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev '}
+            ${navBottom ? ' w-respXl' : 'gap-4'}
+                    relative h-full w-full flex justify-between pt-1 `} >
+                <div className={`flex   w-full h-full
+                    ${navBottom ? '' : 'items-end '}
+                    ${hideNavBottom ? 'hidden' : ''} `}>
                     <Menu placement="bottom-start">
-                        <MenuHandler className="relative h-max min-w-max z-50 flex items-center  cursor-pointer">
+                        <MenuHandler className="relative h-max min-w-max ml-4  p-1.5 z-50 flex items-center  cursor-pointer">
                             {onBoard ?
-                                <div className="flex  w-full flex-1 items-center ">
+                                <div className="flex w-full flex-1 items-center ">
                                     <img
-                                        className="h-11 w-11 mx-2 lg:h-[3.5rem] lg:w-[3.5rem] object-cover object-center ml-2"
+                                        className="!w-[48px] !h-[48px] object-cover object-center"
                                         src="/image/logo.svg"
                                         alt="logo" />
 
                                 </div> :
                                 <div className="flex  items-center relative">
                                     <AvatarUser
-                                        style=" "
-                                        avatarStyle="!w-12 !h-12 !text-[1.7rem] "
+                                        style="!shadow-none "
+                                        avatarStyle="!w-[42px] !h-[42px] !text-[26px] "
                                         avatarSize={'sm'}
                                         Profile={user?.Profile} />
                                     <OnlineDot
-                                        className="!bottom-0 !-right-1"
+                                        className="!bottom-1 !right-1"
                                         id={user?.id} />
                                 </div>}
                         </MenuHandler>
@@ -79,25 +83,32 @@ export default function NavBarTop() {
                             ))}
                         </MenuList>
                     </Menu>
-                    {onBoard ?
-                        <Typography
-                            color="blue-gray"
-                            className="font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold">
-                            City'Do
-                        </Typography> :
-                        <div className="flex flex-col items-start px-4">
-                            <Typography
-                                variant="h5"
-                                color="blue-gray">
-                                {user?.Profile?.firstName}
-                            </Typography>
-                            <Typography
-                                className="mt-0 flex text-gray-700 !line-clamp-1 italic text-[0.9rem]">
-                                {user?.GroupUser?.map((group) => (group.Group?.name.split(':')[0])).join(', ')}
-                            </Typography>
+                    {navBottom &&
+                        <div className="flex items-center h-full w-full">
+                            {onBoard ?
+                                <Typography
+                                    color="blue-gray"
+                                    className="font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold">
+                                    City'Do
+                                </Typography> :
+                                <div className="flex flex-col items-start px-4">
+                                    <Typography
+                                        variant="h5"
+                                        color="blue-gray">
+                                        {user?.Profile?.firstName}
+                                    </Typography>
+                                    <Typography
+                                        className="mt-0 flex text-gray-700 !line-clamp-1 italic text-[0.9rem]">
+                                        {user?.GroupUser?.map((group) => (group.Group?.name.split(':')[0])).join(', ')}
+                                    </Typography>
+                                </div>}
                         </div>}
                 </div>
-                <div className={` ${onBoard ? 'lg:pr-4' : 'pr-0'} ${hideNavBottom ? 'hidden' : ''} lg:pt-3 flex h-full w-full " `} >
+                <div className={`
+                ${onBoard ? 'lg:pr-4' : 'pr-0'} 
+                    ${hideNavBottom ? 'hidden' : ''} 
+                    ${navBottom ? ' w-full' : ''}
+                    justify-center items-center flex h-full  " `} >
                     <NotifBadge />
                 </div>
             </div >

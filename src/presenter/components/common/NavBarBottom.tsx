@@ -85,13 +85,12 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 }}
 
                 className={
-                    (!navBottom ? 'pb-2 ' : 'pb-2 bottom-0') +
-                    ((hideNavBottom && navBottom) ? ' transform-y[-100%] hidden opacity-0 anim z-0' : '!my-0  ') +
+                    ((hideNavBottom && navBottom) ? 'transform-y[-100%] hidden opacity-0 anim z-0' : '!my-0  ') +
                     ((hideNavBottom && !navBottom) ? 'hidden ' : '') +
-                    ((navBottom && !hideNavBottom) ? `transform-y-0 opacity-100 anim ${color}BG backdropBlur ` : ' ') +
-                    `w-respXl justify-center items-center flex gap-4 rounded-full `
+                    ((navBottom && !hideNavBottom) ? ` pb-2 bottom-0 transform-y-0 opacity-100 anim ${color}BG backdropBlur w-respXl rounded-full ` : 'pt-3 mb-3 absolute !w-[calc(100vw-4rem)] mx-auto top-0 left-[50%] translate-x-[-50%] ') +
+                    ` justify-center items-center flex gap-6  `
                 }>
-                <Navbar className={`
+                <Navbar className={`-ml-2
                shadow-md w-[calc(80%)] !max-w-[calc(100vw-8rem)] overflow-auto flex rounded-full h-full min-w-max lg:w-full items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative `}>
                         <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between  h-full gap-auto `}>

@@ -55,7 +55,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     return (
         <form onSubmit={formik.handleSubmit} className='main'>
-            <div className='flex md:flex-row  flex-1 items-center h-full gap-8 px-[2%] pt-8 pb-2 w-full'>
+            <div className='flex md:flex-row  flex-1 items-center h-full gap-8 w-respXl px-[2%] pt-8 pb-2 w-full'>
 
                 <Card className={`border-blue-gray-200 !hidden md:!flex flex-[50%] FixCardNoImage !p-8`} >
                     <div className="absolute rounded-xl inset-0 bg-black/10   z-0" />
@@ -83,8 +83,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             {notif}
                         </Typography>
                     </CardHeader>
-                    <CardBody className='FixCardBody gap-4 !flex overflow-auto'>
-                        <div className='flex flex-col gap-4 w-full px-4 pt-4'>
+                    <CardBody className='FixCardBody !flex overflow-auto'>
+                        <div className='flex flex-col gap-[1.5vh] w-full px-4 pt-4'>
                             <Input
                                 size='md'
                                 error={!!formik?.errors.email}
@@ -138,7 +138,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             </Card>
                         </div>
                     </CardBody>
-                    <CardFooter className={`flex flex-col !py-6`}>
+                    <CardFooter className={`flex flex-col !py-[4vh]`}>
                         <Typography className={`${!checkbox ? "hidden" : 'text-xs error'}`} >
                             {typeof formik.errors.checkbox === 'string' && formik.errors.checkbox}
                         </Typography>

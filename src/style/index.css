@@ -71,7 +71,7 @@ section,
 footer,
 header,
 main {
-    @apply w-full  mx-auto;
+    @apply w-full  mx-auto py-1 mb-1;
     max-height: 100vh;
 }
 
@@ -499,7 +499,7 @@ button span {
 .iconXl {
     @apply flex items-center justify-center rounded-full;
     font-size: 26px;
-    width: 43px;
+    width: 42px;
     height: 42px;
 }
 .icon2xl {
