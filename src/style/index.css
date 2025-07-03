@@ -98,6 +98,10 @@ header {
     @apply w-full my-0 mx-auto max-w-[1000px];
 }
 
+.w-respTopNav {
+    @apply w-full my-0 mx-auto max-w-[calc(1000px+4rem)] lg:pl-4;
+}
+
 .CTA {
     @apply flex gap-2 gap-x-4 w-respLarge justify-around !px-0 pt-2  h-max;
 }

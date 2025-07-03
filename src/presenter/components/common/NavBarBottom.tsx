@@ -85,14 +85,14 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                 }}
 
                 className={
-                    ((hideNavBottom && navBottom) ? 'transform-y[-100%] hidden opacity-0 anim z-0' : '!my-0  ') +
+                    ((hideNavBottom && navBottom) ? 'transform-y[-100%] hidden opacity-0 anim z-0' : '!my-0 ') +
                     ((hideNavBottom && !navBottom) ? 'hidden ' : '') +
-                    ((navBottom && !hideNavBottom) ? ` pb-2 bottom-0 transform-y-0 opacity-100 anim ${color}BG backdropBlur w-respXl rounded-full ` : 'pt-3 mb-3 absolute !w-[calc(100vw-4rem)] mx-auto top-0 left-[50%] translate-x-[-50%] ') +
-                    ` justify-center items-center flex gap-6  `
+                    ((navBottom) ? `items-center pb-2 bottom-0 transform-y-0 opacity-100 anim ${color}BG backdropBlur w-respXl rounded-full justify-center` : 'pt-2 fixed left-1/2 -translate-x-1/2 -top-1 z-0 scale-90  w-[calc(100%-10rem)] lg:!max-w-[calc(1000px-8rem)] -ml-2 items-start !justify-start') +
+                    ` flex gap-6`
                 }>
-                <Navbar className={`-ml-2
-               shadow-md w-[calc(80%)] !max-w-[calc(100vw-8rem)] overflow-auto flex rounded-full h-full min-w-max lg:w-full items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
-                    <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative `}>
+
+                <Navbar className={`${navBottom ? 'min-w-max !max-w-[calc(100vw-8rem)] w-full' : ' overflow-x-auto lg:overflow-hidden !max-w-[calc(100%-6rem)]'} -ml-4  shadow-md overflow-auto flex rounded-full h-full items-center p-0 !bg-white/95 border border-blue-gray-100/50`}>
+                    <div className={`${navBottom ? "flex-row" : 'flex-row-reverse '} w-full min-w-max h-full relative `}>
                         <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between  h-full gap-auto `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
                                 <Typography
@@ -115,8 +115,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                                     fill={isActive ? true : false}
                                                     color={col}
                                                 />
-                                                <span className={`!text-[0.95rem] font-bold
-                                                 filter brightness-90 font-comfortaa hidden md:!text-[0.8rem] md:block lg:pr-8 pr-3`}>
+                                                <span className={`${navBottom ? 'md:block' : 'lg:block'} !text-[0.95rem] font-bold filter brightness-90 font-comfortaa hidden md:!text-[0.8rem] lg:pr-8 pr-3`}>
                                                     {label}
                                                 </span>
                                             </>

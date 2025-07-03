@@ -34,16 +34,14 @@ export default function NavBarTop() {
     return (
         <header
             onClick={() => { hideNavBottom && setHideNavBottom(false) }}
-            className={`${hideNavBottom ? 'shadow-md shadow-gray-700/20 pt-0.5' : ''} sticky top-1 z-0 mb-2 `}>
-            <div className={`
+            className={`${hideNavBottom ? ' ' : ''} sticky top-1 z-0 mb-1 `}>
+            <div className={`relative h-full w-full flex justify-between  
             ${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev '}
-            ${navBottom ? ' w-respXl' : 'gap-4'}
-                    relative h-full w-full flex justify-between pt-1 `} >
+            ${navBottom ? 'w-respXl' : 'w-respTopNav !pb-3 !-mt-1.5'} `} >
                 <div className={`flex   w-full h-full
-                    ${navBottom ? '' : 'items-end '}
                     ${hideNavBottom ? 'hidden' : ''} `}>
                     <Menu placement="bottom-start">
-                        <MenuHandler className="relative h-max min-w-max ml-4  p-1.5 z-50 flex items-center  cursor-pointer">
+                        <MenuHandler className="relative h-max min-w-max p-1.5 z-50 flex items-center  cursor-pointer">
                             {onBoard ?
                                 <div className="flex w-full flex-1 items-center ">
                                     <img
