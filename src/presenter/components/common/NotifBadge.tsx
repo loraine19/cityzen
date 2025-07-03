@@ -114,7 +114,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
             { count, notifs, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) =>
                 <div
                     key={index}
-                    className={`relative w-max ${onBoard ? 'lg:hidden' : ''}`}>
+                    className={`relative w-max  ${onBoard ? 'lg:hidden' : ''}`}>
                     <div id='notifList'
                         key={index + '1'}
                         ref={divRef}>

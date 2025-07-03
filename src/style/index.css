@@ -69,7 +69,6 @@ section,
 }
 
 footer,
-header,
 main {
     @apply w-full  mx-auto py-1 mb-1;
     max-height: 100vh;
@@ -84,7 +83,7 @@ footer {
 }
 
 header {
-    @apply px-4  relative;
+    @apply w-full  mx-auto  px-4  relative;
     width: 100%;
     margin: 0 auto;
     flex-shrink: 0;
@@ -99,7 +98,7 @@ header {
 }
 
 .w-respTopNav {
-    @apply w-full my-0 mx-auto max-w-[calc(1000px+4rem)] lg:pl-4;
+    @apply w-full my-0 mx-auto max-w-[calc(1000px+2rem)] lg:pl-4;
 }
 
 .CTA {
