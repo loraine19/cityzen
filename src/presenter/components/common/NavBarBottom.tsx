@@ -91,7 +91,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                     ` flex gap-6`
                 }>
 
-                <Navbar className={`${navBottom ? 'min-w-max !max-w-[calc(100vw-8rem)] w-full shadow-md !bg-white/95 border border-blue-gray-100/50' : ' overflow-x-auto  lg:!pt-0 lg:overflow-hidden !max-w-[calc(100%-5rem)]'} -ml-4 flex rounded-full h-full items-center p-0 `}>
+                <Navbar className={`${navBottom ? 'min-w-max !max-w-[calc(100vw-8rem)] w-full shadow-md !bg-white/95 border border-blue-gray-100/50' : 'bg-transparent border-transparent shadow-none overflow-x-auto  lg:!pt-0 lg:overflow-hidden !max-w-[calc(100%-5rem)]'} -ml-4 flex rounded-full h-full items-center p-0 `}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
                         <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between h-full gap-auto`}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
@@ -102,7 +102,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                                     className={` text-${col}-500 flex rounded-full h-full items-center font-medium`}>
                                     <NavLink to={to} className={({ isActive }) =>
                                         `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full 
-                                    ${isActive ? `animSlide border-[1px] shadowMid z-30 ${color} !bg-white` : ''}`
+                                    ${(isActive && navBottom) ? `border-[1px] shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 z-30 ${color} ` : ''}`
                                     }
                                     >
                                         {({ isActive }) => (
