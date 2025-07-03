@@ -91,7 +91,7 @@ const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn = false }) => {
                     ` flex gap-6`
                 }>
 
-                <Navbar className={`${navBottom ? 'min-w-max !max-w-[calc(100vw-8.5rem)] w-full shadow-md !bg-white/95 border border-blue-gray-100/50' : ' overflow-x-auto  lg:!pt-0 lg:overflow-hidden !max-w-[calc(100%-4rem)]'} -ml-4   flex rounded-full h-full items-center p-0 `}>
+                <Navbar className={`${navBottom ? 'min-w-max !max-w-[calc(100vw-8rem)] w-full shadow-md !bg-white/95 border border-blue-gray-100/50' : ' overflow-x-auto  lg:!pt-0 lg:overflow-hidden !max-w-[calc(100%-5rem)]'} -ml-4 flex rounded-full h-full items-center p-0 `}>
                     <div className={`${navBottom ? "flex-row" : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
                         <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between h-full gap-auto`}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
