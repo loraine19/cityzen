@@ -54,7 +54,7 @@ import {
   useSuspenseInfiniteQuery,
   useSuspenseQueries,
   useSuspenseQuery
-} from "./chunk-Q2DUW2OO.js";
+} from "./chunk-A4QCZLFE.js";
 import "./chunk-7RBSQVB5.js";
 import "./chunk-MC2JJCLE.js";
 import "./chunk-OL46QLBJ.js";

@@ -90,14 +90,14 @@ export default function DashboardPage() {
 
     const [smallScreen, setSmallScreen] = useState<boolean>(window.innerHeight < 705);
     window.addEventListener('resize', () => {
-
         setSmallScreen(window.innerHeight < 705)
     })
     // ${(smallScreen) ? "bg-yellow-200 " : "lg:!pb-20 pb-[4rem]"} 
+
     return (
         <main className={`
             ${navBottom ? "withBottom lg:!mb-2 " : ""} 
-            relative flex pb-0.5 !overflow-hidden anim -mt-4`}
+            relative flex pb-0.5 !overflow-hidden anim`}
             data-cy="dashboard-body" >
             <div ref={divRef}
                 onScroll={() => handleHideCallback()}

@@ -1,164 +1,158 @@
 {
-  "hash": "6aedfabe",
+  "hash": "54c9799b",
   "configHash": "cb918c26",
-  "lockfileHash": "c03e9d6e",
-  "browserHash": "95558839",
+  "lockfileHash": "94fd96b4",
+  "browserHash": "ab75b4cd",
   "optimized": {
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "c4c9eef8",
+      "fileHash": "15b712ab",
       "needsInterop": true
     },
     "react-dom": {
       "src": "../../node_modules/react-dom/index.js",
       "file": "react-dom.js",
-      "fileHash": "6918a9ee",
+      "fileHash": "b8b63c96",
       "needsInterop": true
     },
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "108cf0a3",
+      "fileHash": "50c99e4f",
       "needsInterop": true
     },
     "react/jsx-runtime": {
       "src": "../../node_modules/react/jsx-runtime.js",
       "file": "react_jsx-runtime.js",
-      "fileHash": "4743619b",
-      "needsInterop": true
-    },
-    "@material-tailwind/react": {
-      "src": "../../node_modules/@material-tailwind/react/index.js",
-      "file": "@material-tailwind_react.js",
-      "fileHash": "d3377097",
-      "needsInterop": true
-    },
-    "@material-tailwind/react/components/Popover": {
-      "src": "../../node_modules/@material-tailwind/react/components/Popover/index.js",
-      "file": "@material-tailwind_react_components_Popover.js",
-      "fileHash": "94fe44b7",
-      "needsInterop": true
-    },
-    "@project-lary/react-material-symbols-300-rounded": {
-      "src": "../../node_modules/@project-lary/react-material-symbols-300-rounded/dist/index.js",
-      "file": "@project-lary_react-material-symbols-300-rounded.js",
-      "fileHash": "fd34ec6a",
-      "needsInterop": false
-    },
-    "@tanstack/react-query": {
-      "src": "../../node_modules/@tanstack/react-query/build/modern/index.js",
-      "file": "@tanstack_react-query.js",
-      "fileHash": "43e66d7f",
-      "needsInterop": false
-    },
-    "@tanstack/react-query-devtools": {
-      "src": "../../node_modules/@tanstack/react-query-devtools/build/modern/index.js",
-      "file": "@tanstack_react-query-devtools.js",
-      "fileHash": "cb7f7d6d",
-      "needsInterop": false
-    },
-    "awilix": {
-      "src": "../../node_modules/awilix/lib/awilix.browser.mjs",
-      "file": "awilix.js",
-      "fileHash": "8092b5be",
-      "needsInterop": false
-    },
-    "axios": {
-      "src": "../../node_modules/axios/index.js",
-      "file": "axios.js",
-      "fileHash": "96f9c9ae",
-      "needsInterop": false
-    },
-    "crypto-js": {
-      "src": "../../node_modules/crypto-js/index.js",
-      "file": "crypto-js.js",
-      "fileHash": "1cedd46e",
-      "needsInterop": true
-    },
-    "emoji-picker-react": {
-      "src": "../../node_modules/emoji-picker-react/dist/emoji-picker-react.esm.js",
-      "file": "emoji-picker-react.js",
-      "fileHash": "37e9be62",
-      "needsInterop": false
-    },
-    "formik": {
-      "src": "../../node_modules/formik/dist/formik.esm.js",
-      "file": "formik.js",
-      "fileHash": "0b8012fb",
-      "needsInterop": false
-    },
-    "html-react-parser": {
-      "src": "../../node_modules/html-react-parser/esm/index.mjs",
-      "file": "html-react-parser.js",
-      "fileHash": "c850f4d5",
-      "needsInterop": false
-    },
-    "js-cookie": {
-      "src": "../../node_modules/js-cookie/dist/js.cookie.mjs",
-      "file": "js-cookie.js",
-      "fileHash": "e737df3b",
-      "needsInterop": false
-    },
-    "jwt-decode": {
-      "src": "../../node_modules/jwt-decode/build/esm/index.js",
-      "file": "jwt-decode.js",
-      "fileHash": "5cd8f150",
-      "needsInterop": false
-    },
-    "leaflet": {
-      "src": "../../node_modules/leaflet/dist/leaflet-src.js",
-      "file": "leaflet.js",
-      "fileHash": "d82cd7c9",
+      "fileHash": "6eafacd6",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "d7112c97",
+      "fileHash": "cdf9c4b3",
       "needsInterop": true
     },
-    "react-leaflet": {
-      "src": "../../node_modules/react-leaflet/lib/index.js",
-      "file": "react-leaflet.js",
-      "fileHash": "b1e3b7bf",
-      "needsInterop": false
-    },
-    "react-router": {
-      "src": "../../node_modules/react-router/dist/index.js",
-      "file": "react-router.js",
-      "fileHash": "93ea812a",
+    "@tanstack/react-query": {
+      "src": "../../node_modules/@tanstack/react-query/build/modern/index.js",
+      "file": "@tanstack_react-query.js",
+      "fileHash": "83d4580e",
       "needsInterop": false
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "1afd4fa7",
+      "fileHash": "06800dc3",
       "needsInterop": false
     },
-    "socket.io-client": {
-      "src": "../../node_modules/socket.io-client/build/esm/index.js",
-      "file": "socket__io-client.js",
-      "fileHash": "1e334949",
-      "needsInterop": false
-    },
-    "yup": {
-      "src": "../../node_modules/yup/index.esm.js",
-      "file": "yup.js",
-      "fileHash": "cb99affb",
+    "@tanstack/react-query-devtools": {
+      "src": "../../node_modules/@tanstack/react-query-devtools/build/modern/index.js",
+      "file": "@tanstack_react-query-devtools.js",
+      "fileHash": "10dfd325",
       "needsInterop": false
     },
     "zustand": {
       "src": "../../node_modules/zustand/esm/index.mjs",
       "file": "zustand.js",
-      "fileHash": "7a949249",
+      "fileHash": "3f015615",
       "needsInterop": false
     },
     "zustand/middleware": {
       "src": "../../node_modules/zustand/esm/middleware.mjs",
       "file": "zustand_middleware.js",
-      "fileHash": "883b79c7",
+      "fileHash": "eaec9d19",
       "needsInterop": false
+    },
+    "@material-tailwind/react": {
+      "src": "../../node_modules/@material-tailwind/react/index.js",
+      "file": "@material-tailwind_react.js",
+      "fileHash": "aacfa47b",
+      "needsInterop": true
+    },
+    "html-react-parser": {
+      "src": "../../node_modules/html-react-parser/esm/index.mjs",
+      "file": "html-react-parser.js",
+      "fileHash": "1fa8e4ee",
+      "needsInterop": false
+    },
+    "js-cookie": {
+      "src": "../../node_modules/js-cookie/dist/js.cookie.mjs",
+      "file": "js-cookie.js",
+      "fileHash": "7e596d76",
+      "needsInterop": false
+    },
+    "formik": {
+      "src": "../../node_modules/formik/dist/formik.esm.js",
+      "file": "formik.js",
+      "fileHash": "593df3b3",
+      "needsInterop": false
+    },
+    "yup": {
+      "src": "../../node_modules/yup/index.esm.js",
+      "file": "yup.js",
+      "fileHash": "dadcbcea",
+      "needsInterop": false
+    },
+    "react-router": {
+      "src": "../../node_modules/react-router/dist/index.js",
+      "file": "react-router.js",
+      "fileHash": "f1059352",
+      "needsInterop": false
+    },
+    "@project-lary/react-material-symbols-300-rounded": {
+      "src": "../../node_modules/@project-lary/react-material-symbols-300-rounded/dist/index.js",
+      "file": "@project-lary_react-material-symbols-300-rounded.js",
+      "fileHash": "15562685",
+      "needsInterop": false
+    },
+    "crypto-js": {
+      "src": "../../node_modules/crypto-js/index.js",
+      "file": "crypto-js.js",
+      "fileHash": "b234b1f8",
+      "needsInterop": true
+    },
+    "awilix": {
+      "src": "../../node_modules/awilix/lib/awilix.browser.mjs",
+      "file": "awilix.js",
+      "fileHash": "14559ace",
+      "needsInterop": false
+    },
+    "react-leaflet": {
+      "src": "../../node_modules/react-leaflet/lib/index.js",
+      "file": "react-leaflet.js",
+      "fileHash": "7cb2c961",
+      "needsInterop": false
+    },
+    "leaflet": {
+      "src": "../../node_modules/leaflet/dist/leaflet-src.js",
+      "file": "leaflet.js",
+      "fileHash": "32e8905f",
+      "needsInterop": true
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "4a689e0a",
+      "needsInterop": false
+    },
+    "jwt-decode": {
+      "src": "../../node_modules/jwt-decode/build/esm/index.js",
+      "file": "jwt-decode.js",
+      "fileHash": "6b716883",
+      "needsInterop": false
+    },
+    "socket.io-client": {
+      "src": "../../node_modules/socket.io-client/build/esm/index.js",
+      "file": "socket__io-client.js",
+      "fileHash": "2fd6d5c2",
+      "needsInterop": false
+    },
+    "@material-tailwind/react/components/Popover": {
+      "src": "../../node_modules/@material-tailwind/react/components/Popover/index.js",
+      "file": "@material-tailwind_react_components_Popover.js",
+      "fileHash": "8753df89",
+      "needsInterop": true
     }
   },
   "chunks": {
@@ -171,29 +165,29 @@
     "chunk-LKM33DI4": {
       "file": "chunk-LKM33DI4.js"
     },
-    "chunk-YV2JUI5A": {
-      "file": "chunk-YV2JUI5A.js"
-    },
     "chunk-SCJLB2PF": {
       "file": "chunk-SCJLB2PF.js"
     },
-    "chunk-5DNAJRTA": {
-      "file": "chunk-5DNAJRTA.js"
+    "chunk-YV2JUI5A": {
+      "file": "chunk-YV2JUI5A.js"
+    },
+    "chunk-TYCJHKIY": {
+      "file": "chunk-TYCJHKIY.js"
+    },
+    "chunk-A4QCZLFE": {
+      "file": "chunk-A4QCZLFE.js"
+    },
+    "chunk-7RBSQVB5": {
+      "file": "chunk-7RBSQVB5.js"
+    },
+    "chunk-TZ75UR4B": {
+      "file": "chunk-TZ75UR4B.js"
     },
     "chunk-PZE7CTFH": {
       "file": "chunk-PZE7CTFH.js"
     },
     "chunk-P5JXV5NI": {
       "file": "chunk-P5JXV5NI.js"
-    },
-    "chunk-TYCJHKIY": {
-      "file": "chunk-TYCJHKIY.js"
-    },
-    "chunk-Q2DUW2OO": {
-      "file": "chunk-Q2DUW2OO.js"
-    },
-    "chunk-7RBSQVB5": {
-      "file": "chunk-7RBSQVB5.js"
     },
     "chunk-MC2JJCLE": {
       "file": "chunk-MC2JJCLE.js"

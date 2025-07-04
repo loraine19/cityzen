@@ -7,6 +7,7 @@ import { OnlineDot } from "./onlineDot";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 import { AvatarUser } from "./AvatarUser";
 import { useUxStore } from "../../../application/stores/ux.store";
+import { NavBarSection } from "./NavBar";
 
 export default function NavBarTop() {
     const { unReadMsgNotif } = useNotificationStore((state) => state);
@@ -23,19 +24,15 @@ export default function NavBarTop() {
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null, color: 'amber', style: 'hover:!bg-white' },
         { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => { setNavBottom(!navBottom) }, color: 'blue-gray' },
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t border-blue-gray-100", color: "red" },
-
     ]
 
     const onBoard = window.location.pathname === '/'
 
     return (
-        <header
-            onClick={() => { hideNavBottom && setHideNavBottom(false) }}
-            className={`sticky top-0.5 z-0`}>
-            <div className={`relative h-full w-full flex justify-between
-                ${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev'}
-                ${navBottom ? 'w-respXl' : 'w-respTopNav !pb-3 !-mt-1.5'}`} >
-                <div className={`flex w-full h-full ${hideNavBottom ? 'hidden' : ''}`}>
+        <header onClick={() => { hideNavBottom && setHideNavBottom(false) }}>
+            <div className={`w-respXl relative pt-1  h-full w-full flex justify-between
+                ${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev'}`} >
+                <div className={`flex w-full max-w-max  h-full ${hideNavBottom ? 'hidden' : ''}`}>
                     <Menu placement="bottom-start">
                         <MenuHandler className="relative h-max min-w-max p-1.5 z-50 flex items-center  cursor-pointer">
                             {onBoard ?
@@ -79,8 +76,7 @@ export default function NavBarTop() {
                         <div className='flex items-center h-full w-full'>
                             {onBoard ?
                                 <Typography
-                                    color='blue-gray'
-                                    className='font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold'>
+                                    className='text-blue-gray-700 font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold'>
                                     City'Do
                                 </Typography> :
                                 <div className='flex flex-col items-start px-4'>
@@ -96,8 +92,13 @@ export default function NavBarTop() {
                                 </div>}
                         </div>}
                 </div>
+                {!navBottom &&
+                    <div className="w-[75%] lg:w-max max-w-[calc(100vw-12rem)]">
+                        <NavBarSection />
+                    </div>
+                }
                 <div
-                    className={`justify-center items-center flex h-full pt-1
+                    className={`justify-center items-center flex h-full
                     ${onBoard ? 'lg:pr-0' : 'pr-0'} 
                     ${hideNavBottom ? 'hidden' : ''} 
                     ${navBottom ? ' w-full' : ''}`} >

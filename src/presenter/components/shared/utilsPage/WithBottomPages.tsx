@@ -1,6 +1,6 @@
 import { Outlet } from "react-router"
-import NavBarBottom from "../../common/NavBarBottom"
 import { useUxStore } from "../../../../application/stores/ux.store"
+import { NavBarBottom } from "../../common/NavBarBottom"
 
 export const WithBottomPages = (props: { addBtn?: boolean }) => {
     const { navBottom } = useUxStore((state) => state)

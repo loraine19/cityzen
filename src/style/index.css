@@ -33,6 +33,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
 }
 
 ::first-letter {
@@ -41,7 +42,7 @@
 
 /* MAIN SECTIONS */
 #root {
-    @apply flex flex-col h-screen w-screen pt-1;
+    @apply flex flex-col h-screen w-screen;
 }
 body {
     @apply h-screen w-screen flex flex-col;
@@ -52,13 +53,14 @@ body {
 }
 
 main {
-    @apply flex flex-col w-respXl h-[calc(100%+5rem)] px-4 gap-1 flex-1;
+    @apply flex flex-col w-respXl h-[calc(100%+0rem)] px-4 gap-1 flex-1 w-full mx-auto py-1;
     min-height: 0;
     z-index: 0;
+    max-height: 100vh;
 }
 
 .withBottom {
-    @apply !-mb-[65px];
+    @apply !-mb-[60px];
 }
 
 section,
@@ -68,14 +70,8 @@ section,
     min-height: 0;
 }
 
-footer,
-main {
-    @apply w-full mx-auto py-1 mb-1;
-    max-height: 100vh;
-}
-
 footer {
-    @apply pb-[2vh] !px-[1%] md:px-[5%] lg:px-[2%] w-respXl sticky;
+    @apply !px-[1%] md:px-[5%] lg:px-[2%] mx-auto flex justify-center items-center pb-1;
     width: 100%;
     margin: 0 auto;
     flex-shrink: 0;
@@ -87,6 +83,7 @@ header {
     width: 100%;
     margin: 0 auto;
     flex-shrink: 0;
+    z-index: 40 !important;
 }
 
 .sectionHeader {
@@ -105,7 +102,7 @@ header {
     @apply flex gap-2 gap-x-4 w-respLarge justify-around !px-0 pt-2 h-max;
 }
 
-/* COLORS */
+/*** COLORS ***/
 .cyanBG {
     background-image: linear-gradient(#f9fafb00, #a5f3fc);
 }
@@ -134,6 +131,8 @@ header {
 .orangeBG {
     background-image: linear-gradient(#f9fafb00, #ffedd5);
 }
+
+/*** ANIMATIONS ***/
 
 .anim {
     @apply duration-700 fadeIn;

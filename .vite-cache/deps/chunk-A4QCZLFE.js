@@ -994,6 +994,7 @@ var Query = (_a4 = class extends Removable {
           fetchMeta: action.meta ?? null
         };
       case "success":
+        __privateSet(this, _revertState, void 0);
         return {
           ...state,
           data: action.data,
@@ -3486,4 +3487,4 @@ export {
   useMutation,
   useInfiniteQuery
 };
-//# sourceMappingURL=chunk-Q2DUW2OO.js.map
+//# sourceMappingURL=chunk-A4QCZLFE.js.map

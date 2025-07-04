@@ -1073,7 +1073,7 @@ function getAxisLength(axis) {
   return axis === "y" ? "height" : "width";
 }
 function getSideAxis(placement) {
-  return ["top", "bottom"].includes(getSide(placement)) ? "y" : "x";
+  return yAxisSides.has(getSide(placement)) ? "y" : "x";
 }
 function getAlignmentAxis(placement) {
   return getOppositeAxis(getSideAxis(placement));
@@ -1099,18 +1099,14 @@ function getOppositeAlignmentPlacement(placement) {
   return placement.replace(/start|end/g, (alignment) => oppositeAlignmentMap[alignment]);
 }
 function getSideList(side, isStart, rtl) {
-  const lr = ["left", "right"];
-  const rl = ["right", "left"];
-  const tb = ["top", "bottom"];
-  const bt = ["bottom", "top"];
   switch (side) {
     case "top":
     case "bottom":
-      if (rtl) return isStart ? rl : lr;
-      return isStart ? lr : rl;
+      if (rtl) return isStart ? rlPlacement : lrPlacement;
+      return isStart ? lrPlacement : rlPlacement;
     case "left":
     case "right":
-      return isStart ? tb : bt;
+      return isStart ? tbPlacement : btPlacement;
     default:
       return [];
   }
@@ -1164,7 +1160,7 @@ function rectToClientRect(rect) {
     y
   };
 }
-var sides, alignments, placements, min, max, round, floor, createCoords, oppositeSideMap, oppositeAlignmentMap;
+var sides, alignments, placements, min, max, round, floor, createCoords, oppositeSideMap, oppositeAlignmentMap, yAxisSides, lrPlacement, rlPlacement, tbPlacement, btPlacement;
 var init_floating_ui_utils = __esm({
   "node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs"() {
     sides = ["top", "right", "bottom", "left"];
@@ -1188,6 +1184,11 @@ var init_floating_ui_utils = __esm({
       start: "end",
       end: "start"
     };
+    yAxisSides = /* @__PURE__ */ new Set(["top", "bottom"]);
+    lrPlacement = ["left", "right"];
+    rlPlacement = ["right", "left"];
+    tbPlacement = ["top", "bottom"];
+    btPlacement = ["bottom", "top"];
   }
 });
 
@@ -1360,7 +1361,7 @@ async function convertValueToCoords(state, options) {
   const side = getSide(placement);
   const alignment = getAlignment(placement);
   const isVertical = getSideAxis(placement) === "y";
-  const mainAxisMulti = ["left", "top"].includes(side) ? -1 : 1;
+  const mainAxisMulti = originSides.has(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);
   let {
@@ -1387,7 +1388,7 @@ async function convertValueToCoords(state, options) {
     y: crossAxis * crossAxisMulti
   };
 }
-var computePosition, arrow, autoPlacement, flip, hide, inline, offset, shift, limitShift, size;
+var computePosition, arrow, autoPlacement, flip, hide, inline, originSides, offset, shift, limitShift, size;
 var init_floating_ui_core = __esm({
   "node_modules/@floating-ui/core/dist/floating-ui.core.mjs"() {
     init_floating_ui_utils();
@@ -1873,6 +1874,7 @@ var init_floating_ui_core = __esm({
         }
       };
     };
+    originSides = /* @__PURE__ */ new Set(["left", "top"]);
     offset = function(options) {
       if (options === void 0) {
         options = 0;
@@ -2024,7 +2026,7 @@ var init_floating_ui_core = __esm({
           if (checkCrossAxis) {
             var _middlewareData$offse, _middlewareData$offse2;
             const len = mainAxis === "y" ? "width" : "height";
-            const isOriginSide = ["top", "left"].includes(getSide(placement));
+            const isOriginSide = originSides.has(getSide(placement));
             const limitMin = rects.reference[crossAxis] - rects.floating[len] + (isOriginSide ? ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse[crossAxis]) || 0 : 0) + (isOriginSide ? 0 : computedOffset.crossAxis);
             const limitMax = rects.reference[crossAxis] + rects.reference[len] + (isOriginSide ? 0 : ((_middlewareData$offse2 = middlewareData.offset) == null ? void 0 : _middlewareData$offse2[crossAxis]) || 0) - (isOriginSide ? computedOffset.crossAxis : 0);
             if (crossAxisCoord < limitMin) {
@@ -2170,16 +2172,16 @@ function isOverflowElement(element) {
     overflowY,
     display
   } = getComputedStyle2(element);
-  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !["inline", "contents"].includes(display);
+  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !invalidOverflowDisplayValues.has(display);
 }
 function isTableElement(element) {
-  return ["table", "td", "th"].includes(getNodeName(element));
+  return tableElements.has(getNodeName(element));
 }
 function isTopLayer(element) {
-  return [":popover-open", ":modal"].some((selector) => {
+  return topLayerSelectors.some((selector) => {
     try {
       return element.matches(selector);
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
   });
@@ -2187,7 +2189,7 @@ function isTopLayer(element) {
 function isContainingBlock(elementOrCss) {
   const webkit = isWebKit();
   const css = isElement(elementOrCss) ? getComputedStyle2(elementOrCss) : elementOrCss;
-  return ["transform", "translate", "scale", "rotate", "perspective"].some((value) => css[value] ? css[value] !== "none" : false) || (css.containerType ? css.containerType !== "normal" : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== "none" : false) || !webkit && (css.filter ? css.filter !== "none" : false) || ["transform", "translate", "scale", "rotate", "perspective", "filter"].some((value) => (css.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css.contain || "").includes(value));
+  return transformProperties.some((value) => css[value] ? css[value] !== "none" : false) || (css.containerType ? css.containerType !== "normal" : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== "none" : false) || !webkit && (css.filter ? css.filter !== "none" : false) || willChangeValues.some((value) => (css.willChange || "").includes(value)) || containValues.some((value) => (css.contain || "").includes(value));
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
@@ -2206,7 +2208,7 @@ function isWebKit() {
   return CSS.supports("-webkit-backdrop-filter", "none");
 }
 function isLastTraversableNode(node) {
-  return ["html", "body", "#document"].includes(getNodeName(node));
+  return lastTraversableNodeNames.has(getNodeName(node));
 }
 function getComputedStyle2(element) {
   return getWindow(element).getComputedStyle(element);
@@ -2266,8 +2268,16 @@ function getOverflowAncestors(node, list, traverseIframes) {
 function getFrameElement(win) {
   return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
 }
+var invalidOverflowDisplayValues, tableElements, topLayerSelectors, transformProperties, willChangeValues, containValues, lastTraversableNodeNames;
 var init_floating_ui_utils_dom = __esm({
   "node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs"() {
+    invalidOverflowDisplayValues = /* @__PURE__ */ new Set(["inline", "contents"]);
+    tableElements = /* @__PURE__ */ new Set(["table", "td", "th"]);
+    topLayerSelectors = [":popover-open", ":modal"];
+    transformProperties = ["transform", "translate", "scale", "rotate", "perspective"];
+    willChangeValues = ["transform", "translate", "scale", "rotate", "perspective", "filter"];
+    containValues = ["paint", "layout", "strict", "content"];
+    lastTraversableNodeNames = /* @__PURE__ */ new Set(["html", "body", "#document"]);
   }
 });
 
@@ -2551,7 +2561,7 @@ function getClippingElementAncestors(element, cache) {
     if (!currentNodeIsContaining && computedStyle.position === "fixed") {
       currentContainingBlockComputedStyle = null;
     }
-    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && ["absolute", "fixed"].includes(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && absoluteOrFixed.has(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
     if (shouldDropCurrentNode) {
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
@@ -2823,7 +2833,7 @@ function autoUpdate(reference, floating, update, options) {
     }
   };
 }
-var noOffsets, getElementRects, platform, detectOverflow2, offset2, autoPlacement2, shift2, flip2, size2, hide2, arrow2, inline2, limitShift2, computePosition2;
+var noOffsets, absoluteOrFixed, getElementRects, platform, detectOverflow2, offset2, autoPlacement2, shift2, flip2, size2, hide2, arrow2, inline2, limitShift2, computePosition2;
 var init_floating_ui_dom = __esm({
   "node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs"() {
     init_floating_ui_core();
@@ -2831,6 +2841,7 @@ var init_floating_ui_dom = __esm({
     init_floating_ui_utils_dom();
     init_floating_ui_utils_dom();
     noOffsets = createCoords(0);
+    absoluteOrFixed = /* @__PURE__ */ new Set(["absolute", "fixed"]);
     getElementRects = async function(data2) {
       const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
       const getDimensionsFn = this.getDimensions;
@@ -22654,9 +22665,10 @@ var require_Popover = __commonJS({
 });
 
 export {
+  require_classnames,
+  require_dist,
+  require_objectsToString,
   require_prop_types,
-  floating_ui_react_esm_exports,
-  init_floating_ui_react_esm,
   require_cjs,
   require_generic,
   require_alert,
@@ -22678,11 +22690,10 @@ export {
   require_timeline2 as require_timeline,
   require_theme,
   require_theme2,
-  require_popover2 as require_popover,
   require_cjs2,
-  require_classnames,
-  require_dist,
-  require_objectsToString,
+  floating_ui_react_esm_exports,
+  init_floating_ui_react_esm,
+  require_popover2 as require_popover,
   require_Popover
 };
 /*! Bundled license information:
@@ -22707,4 +22718,4 @@ classnames/index.js:
   	http://jedwatson.github.io/classnames
   *)
 */
-//# sourceMappingURL=chunk-5DNAJRTA.js.map
+//# sourceMappingURL=chunk-TZ75UR4B.js.map
