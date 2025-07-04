@@ -111,8 +111,9 @@ function App() {
 
                                     <Route path="/conciliation" element={<ConciliationListPage />} />
                                     <Route path="/flag" element={<FlagPage />} />
+                                </Route>
 
-
+                                <Route element={<WithTopNavPages addBtn />}>
                                     {/* Pages with bottom navigation */}
                                     <Route element={<WithBottomPages />}>
                                         <Route path="/" element={<DashboardPage />} />
@@ -129,6 +130,8 @@ function App() {
                                         <Route path="/conciliation" element={<ConciliationListPage />} />
                                     </Route>
                                 </Route>
+
+
                             </Route>
                         </Routes>
                     </Suspense>

@@ -11,7 +11,7 @@ interface NavBarProps {
     color?: string;
 }
 
-export const NavBarSection: React.FC<NavBarProps> = ({ addBtn = false, }) => {
+export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
     const location = useLocation()
     const type = new URLSearchParams(location.pathname.split("/")[1]).toString().replace("=", '');
     const [closeDial, setCloseDial] = useState<boolean>(true)
@@ -75,14 +75,13 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn = false, }) => {
         <>
             <div className={`
             ${(closeDial) ? 'hidden' : ''} 
-            ${navBottom ? `bottom-[5px] ` : 'top-[0px]'}
-                  left-0 h-screen w-full z-0 backdropBlur absolute`}>
+            ${navBottom ? `bottom-[65px] ` : 'top-[0px]'}
+                  left-0 h-screen w-full backdropBlur absolute`}>
             </div>
-
             <div className={
                 (navBottom ?
                     `items-center opacity-100 anim ${color}BG backdropBlur w-respXl rounded-full justify-center relative bottom-0 gap-6` :
-                    'z-0 md:scale-[0.80] scale-[0.73] -ml-[12%] -mr-[8%] max-w-[calc(100vw-9rem)] pt-0.5  mx-0 gap-2') +
+                    'z-0 md:scale-[0.75] scale-[0.73] -ml-[12%] -mr-[8%] lg:mx-auto  md:max-w-[calc(100vw-9rem)] pt-0.5 lg:-mt-1 lg:px-auto lg:gap-8 lg:justify-between gap-3 ') +
                 ` flex z-30`
             }>
 
@@ -128,8 +127,8 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn = false, }) => {
                 <div
                     onMouseLeave={() => setCloseDial(true)}
                     onMouseEnter={() => setCloseDial(false)}
-                    className="flex justify-center z-[22] items-center h-full  -mr-4">
-                    <div className={`rounded-full `}>
+                    className={`${(!navBottom && !addBtn) ? 'hidden' : ''} "flex justify-center z-[22] items-center h-full  -mr-4"`}>
+                    <div className={`rounded-full`}>
                         <SpeedDial
                             placement={navBottom ? 'top' : 'bottom'}
                             offset={10}>

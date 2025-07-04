@@ -10,30 +10,18 @@ interface NavBarBottomProps {
 
 export const NavBarBottom: React.FC<NavBarBottomProps> = ({ addBtn }) => {
     const { } = useNotificationStore((state) => state);
-    const { setNavBottom, navBottom, hideNavBottom, color } = useUxStore((state) => state);
-
+    const { setNavBottom, navBottom, hideNavBottom } = useUxStore((state) => state)
 
     if (navBottom && !hideNavBottom) return (
-        <footer>
-            <div onDoubleClick={() => setNavBottom(!navBottom)}
-                onDoubleClickCapture={(e) => {
-                    e.stopPropagation(); e.preventDefault()
-                    setNavBottom(!navBottom)
-                }}
+        <footer className="flex items-center justify-center w-respXl pb-2"
 
-                className={
-                    (hideNavBottom ?
-                        'transform-y-[-100%] hidden opacity-0 anim z-0 ' :
-                        `anim ${color}BG backdropBlur w-respXl justify-center flex pb-2`)
-                }>
+            onDoubleClick={() => setNavBottom(!navBottom)}
+            onDoubleClickCapture={(e) => {
+                e.stopPropagation(); e.preventDefault()
+                setNavBottom(!navBottom)
+            }}>
 
-                <NavBarSection addBtn={addBtn} />
-
-            </div >
-            {/* <div className={`
-            ${navBottom ? 'bottom-[65px]' : 'top-[60px]'}
-                   h-[calc(100vh-65px)] max-h-[calc(100vh-65px)] w-full backdropBlur absolute`}>
-                </div> */}
+            <NavBarSection addBtn={addBtn} />
         </footer>
     );
 

@@ -9,7 +9,7 @@ import { AvatarUser } from "./AvatarUser";
 import { useUxStore } from "../../../application/stores/ux.store";
 import { NavBarSection } from "./NavBar";
 
-export default function NavBarTop() {
+export default function NavBarTop({ addBtn }: { addBtn?: boolean }) {
     const { unReadMsgNotif } = useNotificationStore((state) => state);
     const navigate = useNavigate();
     const { user } = useUserStore((state) => state);
@@ -94,7 +94,7 @@ export default function NavBarTop() {
                 </div>
                 {!navBottom &&
                     <div className="w-[75%] lg:w-max max-w-[calc(100vw-12rem)]">
-                        <NavBarSection />
+                        <NavBarSection addBtn={addBtn} />
                     </div>
                 }
                 <div
