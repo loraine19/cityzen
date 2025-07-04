@@ -22,8 +22,8 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
     return (
         <div className="DetailCardDiv">
             <Card className="w-respLarge FixCard !h-full">
-                <CardHeader className="FixCardHeader  ">
-                    <div className="ChipDiv  flex-col justify-between !h-full">
+                <CardHeader className="FixCardHeader ">
+                    <div className="ChipDiv flex-col justify-between !h-full">
                         <div className="flex w-full flex-wrap items-center justify-between gap-2">
                             <Chip
                                 value={label}
@@ -48,7 +48,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                         onError={(e) => e.currentTarget.src = '/image/placeholder.jpg'}
                         src={image as string}
                         alt={title}
-                        className="h-full w-full object-cover" />
+                        className='CardImage' />
                 </CardHeader>
                 <CardBody className="FixCardBody">
                     <Title
@@ -60,13 +60,13 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                         type='evenement'
                         group={Group}
                     />
-                    <div className="flex  flex-1 gap-x-3 py-1.5 flex-col !justify-evenly sm:flex-row">
-                        <div className="relative flex  flex-col h-full sm:min-w-[50%] lg:min-w-[60%] overflow-auto">
-                            <div className="min-h-max  break-all absolute ">
+                    <div className="flex flex-1 gap-x-3 py-1.5 flex-col !justify-evenly sm:flex-row">
+                        <div className="relative flex flex-col h-full sm:min-w-[50%] lg:min-w-[60%]">
+                            <div className="min-h-max break-all absolute ">
                                 <Link
                                     to={agendaLink as string}
                                     target="_blank" rel="noopener noreferrer"
-                                    className={`${Igo ? 'GreenChip' : 'GrayChip px-3 '} w-max !rounded-full mb-1 py-1  text-xs font-medium flex items-center gap-1`}
+                                    className={`${Igo ? 'GreenChip' : 'GrayChip px-3 '} w-max !rounded-full mb-1 py-1 text-xs font-medium flex items-center gap-1`}
                                     title="ajouter a mon agenda">
                                     <Icon
                                         color={Igo ? "green" : "gray"}
@@ -75,12 +75,12 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                                     ajouter a mon agenda
                                 </Link>
                                 <Typography
-                                    className="leading-[1.3rem] h-full min-h-max  break-normal">
+                                    className="leading-[1.3rem] h-full min-h-max break-normal">
                                     {description}
                                 </Typography>
                             </div>
                         </div>
-                        <div className="  min-h-[60%] lg:-mt-12 !w-full lg:h-[calc(100%+3rem)] flex-1 rounded-full">
+                        <div className=" min-h-[60%] lg:-mt-12 !w-full lg:h-[calc(100%+3rem)] flex-1 rounded-full">
                             {Address ?
                                 <AddressMapOpen
                                     address={Address}

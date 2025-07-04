@@ -1,21 +1,18 @@
 import { Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "./IconComp";
 import { NotifBadge } from "./NotifBadge";
 import { useUserStore } from "../../../application/stores/user.store";
 import { OnlineDot } from "./onlineDot";
 import { useNotificationStore } from "../../../application/stores/notification.store";
-import { useEffect } from "react";
 import { AvatarUser } from "./AvatarUser";
 import { useUxStore } from "../../../application/stores/ux.store";
 
 export default function NavBarTop() {
     const { unReadMsgNotif } = useNotificationStore((state) => state);
     const navigate = useNavigate();
-    const location = useLocation();
-    useEffect(() => { getColor(location.pathname) }, [location.pathname])
     const { user } = useUserStore((state) => state);
-    const { hideNavBottom, navBottom, setNavBottom, setHideNavBottom, getColor } = useUxStore((state) => state);
+    const { hideNavBottom, navBottom, setNavBottom, setHideNavBottom } = useUxStore((state) => state);
 
     const menuItems = [
         { icon: "home", text: "Accueil", onClick: () => navigate('/'), color: "blue-gray" },
