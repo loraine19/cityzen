@@ -96,12 +96,11 @@ export default function EventDetailPage() {
 
     return (
         <>
-
             {isLoading || formik.values === null ?
                 <Skeleton /> :
                 <EventForm
                     formik={formik}
-                    Address={formik.values.Address}
+                    Address={Address || formik.values.Address}
                     setAddress={setAddress} />}
         </>
     )

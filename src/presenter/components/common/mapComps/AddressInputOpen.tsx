@@ -15,7 +15,7 @@ export const AddressInputOpen = (props: {
 }) => {
     const { address, setAddress, error } = props;
     const [inputLoading, setInputLoading] = useState(false)
-    const [inputValue, setInputValue] = useState(`${address?.address || ''} ${address?.zipcode || ''} ${address?.city || ''}`.trim() || '');
+    const [inputValue, setInputValue] = useState(`${address?.address || ''} ${address?.zipcode || ''} ${address?.city || ''}`.trim());
     const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
 
     const groupList = async (): Promise<Address[]> => await DI.resolve('getAddressUseCase').execute()
@@ -65,7 +65,6 @@ export const AddressInputOpen = (props: {
                             },
                         };
                     });
-                    console.log("suggestions", suggestions)
                     setSuggestions([...new Set(suggestions)])
                 }
                 else {
@@ -107,7 +106,7 @@ export const AddressInputOpen = (props: {
                 variant='standard'
                 type="text"
                 name='address'
-                value={inputValue || ''}
+                value={inputValue}
                 onChange={(event) => {
                     if (event.target.value.trim() !== '' || event.target.value === '') { handleInputChange(event) }
                 }}
@@ -126,9 +125,8 @@ export const AddressInputOpen = (props: {
                                     key={index}
                                     onClick={() => {
                                         handleSuggestionSelect(suggestion);
-
-                                        setAddress({ ...suggestion.value } as Address);
-                                        setInputLoading(false)
+                                        setInputLoading(false);
+                                        setAddress({ ...suggestion.value } as Address)
                                     }}>
                                     {suggestion.label}
                                 </ListItem>

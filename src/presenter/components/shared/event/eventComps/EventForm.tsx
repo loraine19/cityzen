@@ -16,9 +16,9 @@ import { useUserStore } from "../../../../../application/stores/user.store";
 interface EventFormProps {
     formik: any;
     Address: AddressDTO;
-    setAddress: (address: AddressDTO) => void;
-
+    setAddress: any
 }
+
 export function EventForm({ formik, Address, setAddress }: EventFormProps) {
     const pourcentParticipants = Math.floor((formik.values.Participants?.length) / formik.values.participantsMin * 100) || 0;
     const today = new Date(new Date().getTime() + (1 * dayMS)).toISOString().slice(0, 16).replace('Z', '');
@@ -42,6 +42,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
         <form onSubmit={formik.handleSubmit} className="flex flex-col h-full overflow-hidden">
             <main>
                 <div className="sectionHeader gap-2">
+
                     <SubHeader
                         type={id ? 'Modifier mon évenement ' : 'Créer mon évenement '}
                         place={category ? label : ''} closeBtn />
@@ -118,7 +119,6 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             labelProps={{ className: "before:content-none after:content-none" }} />
                                     </div>
                                     <div className="flex flex-1 flex-col lg:pt-3 ">
-
                                         {(Address?.lat && Address?.lng) ?
                                             <AddressMapOpen address={Address} /> : ''}
 
@@ -139,7 +139,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             name="start" variant="standard"
                                             onChange={formik.handleChange}
                                             min={today}
-                                            defaultValue={`${start && formatDateForDB(start)}`} />
+                                            defaultValue={start && formatDateForDB(start)} />
                                     </div>
                                     <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
                                         <Input
@@ -179,6 +179,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             </Typography>
                                         </div>
                                         <Progress
+                                            label={`${participantsMin > 0 ? ` ,  soit ${Participants?.length} personnes` : 'Aucun participant'}`}
                                             value={pourcentParticipants}
                                             size="md"
                                             color={pourcentParticipants === 100 ? "green" : "cyan"} />
