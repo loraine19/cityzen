@@ -1,6 +1,6 @@
 import {
   require_react
-} from "./chunk-MC2JJCLE.js";
+} from "./chunk-ZHUB4BJD.js";
 import {
   __toESM
 } from "./chunk-OL46QLBJ.js";
@@ -27,7 +27,7 @@ var createStoreImpl = (createState) => {
   const initialState = state = createState(setState, getState, api);
   return api;
 };
-var createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
+var createStore = ((createState) => createState ? createStoreImpl(createState) : createStoreImpl);
 
 // node_modules/zustand/esm/react.mjs
 var import_react = __toESM(require_react(), 1);
@@ -35,8 +35,8 @@ var identity = (arg) => arg;
 function useStore(api, selector = identity) {
   const slice = import_react.default.useSyncExternalStore(
     api.subscribe,
-    () => selector(api.getState()),
-    () => selector(api.getInitialState())
+    import_react.default.useCallback(() => selector(api.getState()), [api, selector]),
+    import_react.default.useCallback(() => selector(api.getInitialState()), [api, selector])
   );
   import_react.default.useDebugValue(slice);
   return slice;
@@ -47,7 +47,7 @@ var createImpl = (createState) => {
   Object.assign(useBoundStore, api);
   return useBoundStore;
 };
-var create = (createState) => createState ? createImpl(createState) : createImpl;
+var create = ((createState) => createState ? createImpl(createState) : createImpl);
 export {
   create,
   createStore,

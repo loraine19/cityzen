@@ -1,5 +1,4 @@
-import { Typography } from "@material-tailwind/react";
-import Popover, { PopoverContent, PopoverHandler } from "@material-tailwind/react/components/Popover";
+import { Popover, Typography, PopoverContent, PopoverHandler } from "@material-tailwind/react";
 import { Participant } from "../../../../../domain/entities/Participant";
 import { Icon } from "../../../common/IconComp";
 import { OnlineDot } from "../../../common/onlineDot";
@@ -45,7 +44,8 @@ export function AvatarStack(props: AvatarStackProps) {
                             <div className="flex flex-col pl-2">
                                 <Typography
                                     variant="h6"
-                                    color="blue-gray">{Participant.User?.Profile?.firstName} {Participant.User?.Profile?.lastName}
+                                    color="blue-gray">
+                                    {Participant.User?.Profile?.firstName} {Participant.User?.Profile?.lastName}
                                 </Typography>
                                 <Typography
                                     variant="small"

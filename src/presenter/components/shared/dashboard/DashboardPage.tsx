@@ -96,7 +96,7 @@ export default function DashboardPage() {
 
     return (
         <main className={`
-            ${navBottom ? "withBottom lg:!mb-2 " : ""} 
+            ${(navBottom && !hideNavBottom) ? "withBottom lg:!mb-2 " : "mb-2"} 
             relative flex pb-0.5 !overflow-hidden anim`}
             data-cy="dashboard-body" >
             <div ref={divRef}
@@ -293,7 +293,10 @@ export default function DashboardPage() {
                         </CardBody>
                     </Card>
                 </div>
-                {<div className={`${(smallScreen) ? 'min-h-1 -mb-4 pt-8' : 'pt-4 min-h-[4rem] '} lg:hidden `}>
+                {<div className={`${(smallScreen) ? 'bg-black/20' : ''}`
+
+                    // 'min-h-1 -mb-4 pt-8' : 'pt-4 min-h-[4rem] '} lg:hidden `}>
+                }>
 
                 </div>}
             </div>

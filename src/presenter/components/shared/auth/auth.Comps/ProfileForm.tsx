@@ -1,4 +1,4 @@
-import { Card, CardHeader, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
+import { Card, CardHeader, Button, CardBody, Typography, Input, Select, List, ListItem } from "@material-tailwind/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
@@ -88,15 +88,16 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                     </CardHeader>
                     <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-1.5 mb-2 overflow-auto !max-h-[calc(100vh-18rem)]">
                         <Input
-                            label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"}
+                            //   label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"}
                             name="firstName"
-                            variant="standard"
+                            //  variant="standard"
                             onChange={formik.handleChange}
                             value={formik.values.firstName}
-                            error={formik.errors.firstName} />
+                        //   error={formik.errors.firstName}
+                        />
                         <Input
-                            label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"}
-                            name="lastName" variant="standard"
+                            // label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"}
+                            name="lastName"
                             onChange={formik.handleChange}
                             value={formik.values.lastName}
                             error={formik.errors.lastName} />
@@ -127,12 +128,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             }}>
                             {mailSubscriptions.map((label: Label, index: number) => {
                                 return (
-                                    <Option
+                                    <Select.Option
                                         className="!flex"
                                         value={label.value}
                                         key={index}>
                                         {label.label}
-                                    </Option>
+                                    </Select.Option>
                                 )
                             })}
                         </Select>
@@ -150,11 +151,11 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             }}>
                             {assistanceLevel.map((label: Label, index: number) => {
                                 return (
-                                    <Option
+                                    <Select.Option
                                         value={label.value}
                                         key={index}>
                                         {label.label}
-                                    </Option>
+                                    </Select.Option>
                                 )
                             })}
                         </Select>

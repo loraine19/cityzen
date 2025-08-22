@@ -81,7 +81,7 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
             <div className={
                 (navBottom ?
                     `items-center opacity-100 anim ${color}BG backdropBlur wRespXL rounded-full justify-center relative bottom-0 gap-6` :
-                    'z-0 md:scale-[0.75] scale-[0.72] -ml-[15%] -mr-[12%] lg:!-mr-[5rem] pt-[5px] lg:px-auto mr-2 gap-2 ') +
+                    'z-0 md:scale-[0.75] scale-[0.72] -ml-[15%] -mr-[12%] lg:!-mr-[5rem] pt-[5px] lg:px-auto gap-2 ') +
                 ` flex z-30`
             }>
                 <Navbar className={`
@@ -90,18 +90,20 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                         :
                         `shadow-none bg-transparent overflow-x-auto lg:!pt-0 lg:overflow-hidden`} 
                         flex rounded-full h-full items-center p-0`}>
-                    <div className={`${navBottom ? 'flex-row' : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
-                        <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full rounded-full justify-between h-full gap-auto `}>
+                    <div className={`${navBottom ? 'flex-row' : 'flex-row-reverse'} w-full min-w-max  h-full relative`}>
+                        <ul className={`flex !max-w-[calc(100vw-6rem)] overflow-auto flex-row w-full rounded-full justify-between h-full gap-auto `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
                                 <Typography
                                     onClick={() => { setColor(col) }}
                                     key={index}
                                     as="li"
                                     className={` text-${col}-500 flex rounded-full h-full items-center font-medium`}>
-                                    <NavLink to={to} className={({ isActive }) =>
-                                        `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full hover:!shadow-md
+                                    <NavLink
+                                        to={to}
+                                        className={({ isActive }) =>
+                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full hover:!shadow-md
                                         ${(isActive && navBottom) ? `border-[1px]  shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 lg:mr-2 z-30 ${color} ` : ''}`
-                                    }
+                                        }
                                     >
                                         {({ isActive }) => (
                                             <>

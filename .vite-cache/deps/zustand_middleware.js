@@ -68,11 +68,12 @@ var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
   }
   const { connection, ...connectionInformation } = extractConnectionInformation(store, extensionConnector, options);
   let isRecording = true;
-  api.setState = (state, replace, nameOrAction) => {
+  api.setState = ((state, replace, nameOrAction) => {
     const r = set(state, replace);
     if (!isRecording) return r;
-    const inferredActionType = findCallerName(new Error().stack);
-    const action = nameOrAction === void 0 ? { type: anonymousActionType || inferredActionType || "anonymous" } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
+    const action = nameOrAction === void 0 ? {
+      type: anonymousActionType || findCallerName(new Error().stack) || "anonymous"
+    } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
     if (store === void 0) {
       connection == null ? void 0 : connection.send(action, get());
       return r;
@@ -88,7 +89,7 @@ var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
       }
     );
     return r;
-  };
+  });
   api.devtools = {
     cleanup: () => {
       if (connection && typeof connection.unsubscribe === "function") {
@@ -245,7 +246,7 @@ var parseJsonThen = (stringified, fn) => {
 };
 var subscribeWithSelectorImpl = (fn) => (set, get, api) => {
   const origSubscribe = api.subscribe;
-  api.subscribe = (selector, optListener, options) => {
+  api.subscribe = ((selector, optListener, options) => {
     let listener = selector;
     if (optListener) {
       const equalityFn = (options == null ? void 0 : options.equalityFn) || Object.is;
@@ -262,7 +263,7 @@ var subscribeWithSelectorImpl = (fn) => (set, get, api) => {
       }
     }
     return origSubscribe(listener);
-  };
+  });
   const initialState = fn(set, get, api);
   return initialState;
 };
@@ -359,12 +360,12 @@ var persistImpl = (config, baseOptions) => (set, get, api) => {
   const savedSetState = api.setState;
   api.setState = (state, replace) => {
     savedSetState(state, replace);
-    void setItem();
+    return setItem();
   };
   const configResult = config(
     (...args) => {
       set(...args);
-      void setItem();
+      return setItem();
     },
     get,
     api

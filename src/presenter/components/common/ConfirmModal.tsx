@@ -7,7 +7,7 @@ export type ConfirmModalProps = {
     handleConfirm: () => void;
     handleCancel: () => void;
     title: string;
-    element: string | JSX.Element;
+    element: string | any;
     disableConfirm?: boolean;
     confirmString?: string;
 }
@@ -19,7 +19,11 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, handleConfirm,
                 className="relative h-min w-respLarge m-auto flex ">
                 <CardHeader
                     className="FixCardHeaderNoImage flex items-center justify-between p-4 text-center text-xl">
-                    <Typography variant="h5" color="blue-gray">{title}</Typography>
+                    <Typography
+                        variant="h5"
+                        color="primary">
+                        {title}
+                    </Typography>
 
                     {!disableConfirm && <Icon
                         onClick={handleCancel}
@@ -36,12 +40,9 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, handleConfirm,
                 <CardFooter className="justify-end FixCardFooter flex gap-8 pt-0">
 
                     <Button
-
                         size='lg'
-                        color="cyan"
-                        className="rounded-full"
+                        className="rounded-full bg-cyan-500"
                         onClick={() => { handleConfirm() }}>
-
                         {confirmString}
                     </Button>
                 </CardFooter>

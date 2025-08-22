@@ -1,4 +1,4 @@
-import { Popover, PopoverHandler, PopoverContent, Typography, Chip } from "@material-tailwind/react"
+import { Popover, PopoverContent, Typography, Chip, PopoverHandler } from "@material-tailwind/react"
 import { Icon } from "./IconComp"
 import { GroupView } from "../../views/viewsEntities/GroupViewEntity"
 import { groupCategories } from "../../constants"
@@ -34,9 +34,12 @@ export const GroupLink: React.FC<GroupDivProps> = ({ group }) => {
                             </p>
                             <Chip
                                 size='sm'
-                                value={category}
                                 className="GrayChip text-ellipsis scale-[0.8] " >
-                            </Chip></div>
+                                <Chip.Label>{category}
+
+                                </Chip.Label>
+                            </Chip>
+                        </div>
                     </PopoverContent>
                 </Popover>
             </div>

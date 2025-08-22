@@ -1,6 +1,6 @@
 import {
   require_react
-} from "./chunk-MC2JJCLE.js";
+} from "./chunk-ZHUB4BJD.js";
 import {
   __toESM
 } from "./chunk-OL46QLBJ.js";
@@ -475,7 +475,7 @@ var commonInteractionStyles = stylesheet.create({
         ".": ClassNames.hiddenOnSearch
       }, hidden)
     },
-    ":has(input(:placeholder-shown))": {
+    ":has(input:placeholder-shown)": {
       visibleOnSearchOnly: hidden
     }
   },
@@ -1051,6 +1051,27 @@ var smileys_people = [
     ],
     u: "1f925",
     a: "3.0"
+  },
+  {
+    n: [
+      "shaking face"
+    ],
+    u: "1fae8",
+    a: "15.0"
+  },
+  {
+    n: [
+      "head shaking horizontally"
+    ],
+    u: "1f642-200d-2194-fe0f",
+    a: "15.1"
+  },
+  {
+    n: [
+      "head shaking vertically"
+    ],
+    u: "1f642-200d-2195-fe0f",
+    a: "15.1"
   },
   {
     n: [
@@ -1648,14 +1669,6 @@ var smileys_people = [
   },
   {
     n: [
-      "kiss",
-      "kiss mark"
-    ],
-    u: "1f48b",
-    a: "0.6"
-  },
-  {
-    n: [
       "love letter"
     ],
     u: "1f48c",
@@ -1760,6 +1773,13 @@ var smileys_people = [
   },
   {
     n: [
+      "pink heart"
+    ],
+    u: "1fa77",
+    a: "15.0"
+  },
+  {
+    n: [
       "orange heart"
     ],
     u: "1f9e1",
@@ -1788,6 +1808,13 @@ var smileys_people = [
   },
   {
     n: [
+      "light blue heart"
+    ],
+    u: "1fa75",
+    a: "15.0"
+  },
+  {
+    n: [
       "purple heart"
     ],
     u: "1f49c",
@@ -1809,10 +1836,25 @@ var smileys_people = [
   },
   {
     n: [
+      "grey heart"
+    ],
+    u: "1fa76",
+    a: "15.0"
+  },
+  {
+    n: [
       "white heart"
     ],
     u: "1f90d",
     a: "12.0"
+  },
+  {
+    n: [
+      "kiss",
+      "kiss mark"
+    ],
+    u: "1f48b",
+    a: "0.6"
   },
   {
     n: [
@@ -1869,13 +1911,6 @@ var smileys_people = [
     ],
     u: "1f573-fe0f",
     a: "0.7"
-  },
-  {
-    n: [
-      "bomb"
-    ],
-    u: "1f4a3",
-    a: "0.6"
   },
   {
     n: [
@@ -2050,6 +2085,34 @@ var smileys_people = [
       "1faf4-1f3ff"
     ],
     a: "14.0"
+  },
+  {
+    n: [
+      "leftwards pushing hand"
+    ],
+    u: "1faf7",
+    v: [
+      "1faf7-1f3fb",
+      "1faf7-1f3fc",
+      "1faf7-1f3fd",
+      "1faf7-1f3fe",
+      "1faf7-1f3ff"
+    ],
+    a: "15.0"
+  },
+  {
+    n: [
+      "rightwards pushing hand"
+    ],
+    u: "1faf8",
+    v: [
+      "1faf8-1f3fb",
+      "1faf8-1f3fc",
+      "1faf8-1f3fd",
+      "1faf8-1f3fe",
+      "1faf8-1f3ff"
+    ],
+    a: "15.0"
   },
   {
     n: [
@@ -5308,6 +5371,48 @@ var smileys_people = [
   },
   {
     n: [
+      "person walking facing right"
+    ],
+    u: "1f6b6-200d-27a1-fe0f",
+    v: [
+      "1f6b6-1f3fb-200d-27a1-fe0f",
+      "1f6b6-1f3fc-200d-27a1-fe0f",
+      "1f6b6-1f3fd-200d-27a1-fe0f",
+      "1f6b6-1f3fe-200d-27a1-fe0f",
+      "1f6b6-1f3ff-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
+      "woman walking facing right"
+    ],
+    u: "1f6b6-200d-2640-fe0f-200d-27a1-fe0f",
+    v: [
+      "1f6b6-1f3fb-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3fc-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3fd-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3fe-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3ff-200d-2640-fe0f-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
+      "man walking facing right"
+    ],
+    u: "1f6b6-200d-2642-fe0f-200d-27a1-fe0f",
+    v: [
+      "1f6b6-1f3fb-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3fc-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3fd-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3fe-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f6b6-1f3ff-200d-2642-fe0f-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
       "standing person"
     ],
     u: "1f9cd",
@@ -5392,6 +5497,48 @@ var smileys_people = [
   },
   {
     n: [
+      "person kneeling facing right"
+    ],
+    u: "1f9ce-200d-27a1-fe0f",
+    v: [
+      "1f9ce-1f3fb-200d-27a1-fe0f",
+      "1f9ce-1f3fc-200d-27a1-fe0f",
+      "1f9ce-1f3fd-200d-27a1-fe0f",
+      "1f9ce-1f3fe-200d-27a1-fe0f",
+      "1f9ce-1f3ff-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
+      "woman kneeling facing right"
+    ],
+    u: "1f9ce-200d-2640-fe0f-200d-27a1-fe0f",
+    v: [
+      "1f9ce-1f3fb-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3fc-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3fd-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3fe-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3ff-200d-2640-fe0f-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
+      "man kneeling facing right"
+    ],
+    u: "1f9ce-200d-2642-fe0f-200d-27a1-fe0f",
+    v: [
+      "1f9ce-1f3fb-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3fc-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3fd-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3fe-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f9ce-1f3ff-200d-2642-fe0f-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
       "person with white cane",
       "person with probing cane"
     ],
@@ -5404,6 +5551,20 @@ var smileys_people = [
       "1f9d1-1f3ff-200d-1f9af"
     ],
     a: "12.1"
+  },
+  {
+    n: [
+      "person with white cane facing right"
+    ],
+    u: "1f9d1-200d-1f9af-200d-27a1-fe0f",
+    v: [
+      "1f9d1-1f3fb-200d-1f9af-200d-27a1-fe0f",
+      "1f9d1-1f3fc-200d-1f9af-200d-27a1-fe0f",
+      "1f9d1-1f3fd-200d-1f9af-200d-27a1-fe0f",
+      "1f9d1-1f3fe-200d-1f9af-200d-27a1-fe0f",
+      "1f9d1-1f3ff-200d-1f9af-200d-27a1-fe0f"
+    ],
+    a: "15.1"
   },
   {
     n: [
@@ -5422,6 +5583,20 @@ var smileys_people = [
   },
   {
     n: [
+      "man with white cane facing right"
+    ],
+    u: "1f468-200d-1f9af-200d-27a1-fe0f",
+    v: [
+      "1f468-1f3fb-200d-1f9af-200d-27a1-fe0f",
+      "1f468-1f3fc-200d-1f9af-200d-27a1-fe0f",
+      "1f468-1f3fd-200d-1f9af-200d-27a1-fe0f",
+      "1f468-1f3fe-200d-1f9af-200d-27a1-fe0f",
+      "1f468-1f3ff-200d-1f9af-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
       "woman with white cane",
       "woman with probing cane"
     ],
@@ -5434,6 +5609,20 @@ var smileys_people = [
       "1f469-1f3ff-200d-1f9af"
     ],
     a: "12.0"
+  },
+  {
+    n: [
+      "woman with white cane facing right"
+    ],
+    u: "1f469-200d-1f9af-200d-27a1-fe0f",
+    v: [
+      "1f469-1f3fb-200d-1f9af-200d-27a1-fe0f",
+      "1f469-1f3fc-200d-1f9af-200d-27a1-fe0f",
+      "1f469-1f3fd-200d-1f9af-200d-27a1-fe0f",
+      "1f469-1f3fe-200d-1f9af-200d-27a1-fe0f",
+      "1f469-1f3ff-200d-1f9af-200d-27a1-fe0f"
+    ],
+    a: "15.1"
   },
   {
     n: [
@@ -5451,6 +5640,20 @@ var smileys_people = [
   },
   {
     n: [
+      "person in motorized wheelchair facing right"
+    ],
+    u: "1f9d1-200d-1f9bc-200d-27a1-fe0f",
+    v: [
+      "1f9d1-1f3fb-200d-1f9bc-200d-27a1-fe0f",
+      "1f9d1-1f3fc-200d-1f9bc-200d-27a1-fe0f",
+      "1f9d1-1f3fd-200d-1f9bc-200d-27a1-fe0f",
+      "1f9d1-1f3fe-200d-1f9bc-200d-27a1-fe0f",
+      "1f9d1-1f3ff-200d-1f9bc-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
       "man in motorized wheelchair"
     ],
     u: "1f468-200d-1f9bc",
@@ -5462,6 +5665,20 @@ var smileys_people = [
       "1f468-1f3ff-200d-1f9bc"
     ],
     a: "12.0"
+  },
+  {
+    n: [
+      "man in motorized wheelchair facing right"
+    ],
+    u: "1f468-200d-1f9bc-200d-27a1-fe0f",
+    v: [
+      "1f468-1f3fb-200d-1f9bc-200d-27a1-fe0f",
+      "1f468-1f3fc-200d-1f9bc-200d-27a1-fe0f",
+      "1f468-1f3fd-200d-1f9bc-200d-27a1-fe0f",
+      "1f468-1f3fe-200d-1f9bc-200d-27a1-fe0f",
+      "1f468-1f3ff-200d-1f9bc-200d-27a1-fe0f"
+    ],
+    a: "15.1"
   },
   {
     n: [
@@ -5479,6 +5696,20 @@ var smileys_people = [
   },
   {
     n: [
+      "woman in motorized wheelchair facing right"
+    ],
+    u: "1f469-200d-1f9bc-200d-27a1-fe0f",
+    v: [
+      "1f469-1f3fb-200d-1f9bc-200d-27a1-fe0f",
+      "1f469-1f3fc-200d-1f9bc-200d-27a1-fe0f",
+      "1f469-1f3fd-200d-1f9bc-200d-27a1-fe0f",
+      "1f469-1f3fe-200d-1f9bc-200d-27a1-fe0f",
+      "1f469-1f3ff-200d-1f9bc-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
       "person in manual wheelchair"
     ],
     u: "1f9d1-200d-1f9bd",
@@ -5490,6 +5721,20 @@ var smileys_people = [
       "1f9d1-1f3ff-200d-1f9bd"
     ],
     a: "12.1"
+  },
+  {
+    n: [
+      "person in manual wheelchair facing right"
+    ],
+    u: "1f9d1-200d-1f9bd-200d-27a1-fe0f",
+    v: [
+      "1f9d1-1f3fb-200d-1f9bd-200d-27a1-fe0f",
+      "1f9d1-1f3fc-200d-1f9bd-200d-27a1-fe0f",
+      "1f9d1-1f3fd-200d-1f9bd-200d-27a1-fe0f",
+      "1f9d1-1f3fe-200d-1f9bd-200d-27a1-fe0f",
+      "1f9d1-1f3ff-200d-1f9bd-200d-27a1-fe0f"
+    ],
+    a: "15.1"
   },
   {
     n: [
@@ -5507,6 +5752,20 @@ var smileys_people = [
   },
   {
     n: [
+      "man in manual wheelchair facing right"
+    ],
+    u: "1f468-200d-1f9bd-200d-27a1-fe0f",
+    v: [
+      "1f468-1f3fb-200d-1f9bd-200d-27a1-fe0f",
+      "1f468-1f3fc-200d-1f9bd-200d-27a1-fe0f",
+      "1f468-1f3fd-200d-1f9bd-200d-27a1-fe0f",
+      "1f468-1f3fe-200d-1f9bd-200d-27a1-fe0f",
+      "1f468-1f3ff-200d-1f9bd-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
       "woman in manual wheelchair"
     ],
     u: "1f469-200d-1f9bd",
@@ -5518,6 +5777,20 @@ var smileys_people = [
       "1f469-1f3ff-200d-1f9bd"
     ],
     a: "12.0"
+  },
+  {
+    n: [
+      "woman in manual wheelchair facing right"
+    ],
+    u: "1f469-200d-1f9bd-200d-27a1-fe0f",
+    v: [
+      "1f469-1f3fb-200d-1f9bd-200d-27a1-fe0f",
+      "1f469-1f3fc-200d-1f9bd-200d-27a1-fe0f",
+      "1f469-1f3fd-200d-1f9bd-200d-27a1-fe0f",
+      "1f469-1f3fe-200d-1f9bd-200d-27a1-fe0f",
+      "1f469-1f3ff-200d-1f9bd-200d-27a1-fe0f"
+    ],
+    a: "15.1"
   },
   {
     n: [
@@ -5563,6 +5836,48 @@ var smileys_people = [
       "1f3c3-1f3ff-200d-2640-fe0f"
     ],
     a: "4.0"
+  },
+  {
+    n: [
+      "person running facing right"
+    ],
+    u: "1f3c3-200d-27a1-fe0f",
+    v: [
+      "1f3c3-1f3fb-200d-27a1-fe0f",
+      "1f3c3-1f3fc-200d-27a1-fe0f",
+      "1f3c3-1f3fd-200d-27a1-fe0f",
+      "1f3c3-1f3fe-200d-27a1-fe0f",
+      "1f3c3-1f3ff-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
+      "woman running facing right"
+    ],
+    u: "1f3c3-200d-2640-fe0f-200d-27a1-fe0f",
+    v: [
+      "1f3c3-1f3fb-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3fc-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3fd-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3fe-200d-2640-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3ff-200d-2640-fe0f-200d-27a1-fe0f"
+    ],
+    a: "15.1"
+  },
+  {
+    n: [
+      "man running facing right"
+    ],
+    u: "1f3c3-200d-2642-fe0f-200d-27a1-fe0f",
+    v: [
+      "1f3c3-1f3fb-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3fc-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3fd-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3fe-200d-2642-fe0f-200d-27a1-fe0f",
+      "1f3c3-1f3ff-200d-2642-fe0f-200d-27a1-fe0f"
+    ],
+    a: "15.1"
   },
   {
     n: [
@@ -6804,13 +7119,6 @@ var smileys_people = [
   },
   {
     n: [
-      "family"
-    ],
-    u: "1f46a",
-    a: "0.6"
-  },
-  {
-    n: [
       "man-woman-boy",
       "family: man, woman, boy"
     ],
@@ -7040,6 +7348,45 @@ var smileys_people = [
   },
   {
     n: [
+      "family"
+    ],
+    u: "1f46a",
+    a: "0.6"
+  },
+  {
+    n: [
+      "family adult adult child",
+      "family: adult, adult, child"
+    ],
+    u: "1f9d1-200d-1f9d1-200d-1f9d2",
+    a: "15.1"
+  },
+  {
+    n: [
+      "family adult adult child child",
+      "family: adult, adult, child, child"
+    ],
+    u: "1f9d1-200d-1f9d1-200d-1f9d2-200d-1f9d2",
+    a: "15.1"
+  },
+  {
+    n: [
+      "family adult child",
+      "family: adult, child"
+    ],
+    u: "1f9d1-200d-1f9d2",
+    a: "15.1"
+  },
+  {
+    n: [
+      "family adult child child",
+      "family: adult, child, child"
+    ],
+    u: "1f9d1-200d-1f9d2-200d-1f9d2",
+    a: "15.1"
+  },
+  {
+    n: [
       "footprints"
     ],
     u: "1f463",
@@ -7194,6 +7541,20 @@ var animals_nature = [
     ],
     u: "1f434",
     a: "0.6"
+  },
+  {
+    n: [
+      "moose"
+    ],
+    u: "1face",
+    a: "15.0"
+  },
+  {
+    n: [
+      "donkey"
+    ],
+    u: "1facf",
+    a: "15.0"
   },
   {
     n: [
@@ -7646,6 +8007,34 @@ var animals_nature = [
   },
   {
     n: [
+      "wing"
+    ],
+    u: "1fabd",
+    a: "15.0"
+  },
+  {
+    n: [
+      "black bird"
+    ],
+    u: "1f426-200d-2b1b",
+    a: "15.0"
+  },
+  {
+    n: [
+      "goose"
+    ],
+    u: "1fabf",
+    a: "15.0"
+  },
+  {
+    n: [
+      "phoenix"
+    ],
+    u: "1f426-200d-1f525",
+    a: "15.1"
+  },
+  {
+    n: [
       "frog",
       "frog face"
     ],
@@ -7788,6 +8177,13 @@ var animals_nature = [
     ],
     u: "1fab8",
     a: "14.0"
+  },
+  {
+    n: [
+      "jellyfish"
+    ],
+    u: "1fabc",
+    a: "15.0"
   },
   {
     n: [
@@ -7982,6 +8378,13 @@ var animals_nature = [
   },
   {
     n: [
+      "hyacinth"
+    ],
+    u: "1fabb",
+    a: "15.0"
+  },
+  {
+    n: [
       "seedling"
     ],
     u: "1f331",
@@ -8085,6 +8488,13 @@ var animals_nature = [
     ],
     u: "1faba",
     a: "14.0"
+  },
+  {
+    n: [
+      "mushroom"
+    ],
+    u: "1f344",
+    a: "0.6"
   }
 ];
 var food_drink = [
@@ -8122,6 +8532,13 @@ var food_drink = [
     ],
     u: "1f34b",
     a: "1.0"
+  },
+  {
+    n: [
+      "lime"
+    ],
+    u: "1f34b-200d-1f7e9",
+    a: "15.1"
   },
   {
     n: [
@@ -8310,13 +8727,6 @@ var food_drink = [
   },
   {
     n: [
-      "mushroom"
-    ],
-    u: "1f344",
-    a: "0.6"
-  },
-  {
-    n: [
       "peanuts"
     ],
     u: "1f95c",
@@ -8335,6 +8745,27 @@ var food_drink = [
     ],
     u: "1f330",
     a: "0.6"
+  },
+  {
+    n: [
+      "ginger root"
+    ],
+    u: "1fada",
+    a: "15.0"
+  },
+  {
+    n: [
+      "pea pod"
+    ],
+    u: "1fadb",
+    a: "15.0"
+  },
+  {
+    n: [
+      "brown mushroom"
+    ],
+    u: "1f344-200d-1f7eb",
+    a: "15.1"
   },
   {
     n: [
@@ -11072,6 +11503,14 @@ var activities = [
   },
   {
     n: [
+      "gun",
+      "pistol"
+    ],
+    u: "1f52b",
+    a: "0.6"
+  },
+  {
+    n: [
       "8ball",
       "billiards"
     ],
@@ -11091,20 +11530,6 @@ var activities = [
     ],
     u: "1fa84",
     a: "13.0"
-  },
-  {
-    n: [
-      "nazar amulet"
-    ],
-    u: "1f9ff",
-    a: "11.0"
-  },
-  {
-    n: [
-      "hamsa"
-    ],
-    u: "1faac",
-    a: "14.0"
   },
   {
     n: [
@@ -11432,6 +11857,13 @@ var objects = [
   },
   {
     n: [
+      "folding hand fan"
+    ],
+    u: "1faad",
+    a: "15.0"
+  },
+  {
+    n: [
       "purse"
     ],
     u: "1f45b",
@@ -11532,6 +11964,13 @@ var objects = [
     ],
     u: "1f462",
     a: "0.6"
+  },
+  {
+    n: [
+      "hair pick"
+    ],
+    u: "1faae",
+    a: "15.0"
   },
   {
     n: [
@@ -11810,6 +12249,20 @@ var objects = [
     ],
     u: "1fa98",
     a: "13.0"
+  },
+  {
+    n: [
+      "maracas"
+    ],
+    u: "1fa87",
+    a: "15.0"
+  },
+  {
+    n: [
+      "flute"
+    ],
+    u: "1fa88",
+    a: "15.0"
   },
   {
     n: [
@@ -12690,10 +13143,9 @@ var objects = [
   },
   {
     n: [
-      "gun",
-      "pistol"
+      "bomb"
     ],
-    u: "1f52b",
+    u: "1f4a3",
     a: "0.6"
   },
   {
@@ -12782,6 +13234,13 @@ var objects = [
     ],
     u: "1f517",
     a: "0.6"
+  },
+  {
+    n: [
+      "broken chain"
+    ],
+    u: "26d3-fe0f-200d-1f4a5",
+    a: "15.1"
   },
   {
     n: [
@@ -13121,6 +13580,20 @@ var objects = [
     ],
     u: "26b1-fe0f",
     a: "1.0"
+  },
+  {
+    n: [
+      "nazar amulet"
+    ],
+    u: "1f9ff",
+    a: "11.0"
+  },
+  {
+    n: [
+      "hamsa"
+    ],
+    u: "1faac",
+    a: "14.0"
   },
   {
     n: [
@@ -13595,6 +14068,13 @@ var symbols = [
   },
   {
     n: [
+      "khanda"
+    ],
+    u: "1faaf",
+    a: "15.0"
+  },
+  {
+    n: [
       "aries"
     ],
     u: "2648",
@@ -13857,6 +14337,13 @@ var symbols = [
     ],
     u: "1f4f6",
     a: "0.6"
+  },
+  {
+    n: [
+      "wireless"
+    ],
+    u: "1f6dc",
+    a: "15.0"
   },
   {
     n: [
@@ -16743,7 +17230,7 @@ var flags = [
   {
     n: [
       "flag-tr",
-      "turkey flag"
+      "türkiye flag"
     ],
     u: "1f1f9-1f1f7",
     a: "2.0"
@@ -17208,150 +17695,6 @@ function useSetConfig(config) {
 function usePickerConfig() {
   return (0, import_react.useContext)(ConfigContext);
 }
-var MutableConfigContext = import_react.default.createContext({});
-function useMutableConfig() {
-  var mutableConfig = import_react.default.useContext(MutableConfigContext);
-  return mutableConfig;
-}
-function useDefineMutableConfig(config) {
-  var MutableConfigRef = import_react.default.useRef({
-    onEmojiClick: config.onEmojiClick || emptyFunc,
-    onReactionClick: config.onReactionClick || config.onEmojiClick,
-    onSkinToneChange: config.onSkinToneChange || emptyFunc
-  });
-  import_react.default.useEffect(function() {
-    MutableConfigRef.current.onEmojiClick = config.onEmojiClick || emptyFunc;
-    MutableConfigRef.current.onReactionClick = config.onReactionClick || config.onEmojiClick;
-  }, [config.onEmojiClick, config.onReactionClick]);
-  import_react.default.useEffect(function() {
-    MutableConfigRef.current.onSkinToneChange = config.onSkinToneChange || emptyFunc;
-  }, [config.onSkinToneChange]);
-  return MutableConfigRef;
-}
-function emptyFunc() {
-}
-var MOUSE_EVENT_SOURCE;
-(function(MOUSE_EVENT_SOURCE2) {
-  MOUSE_EVENT_SOURCE2["REACTIONS"] = "reactions";
-  MOUSE_EVENT_SOURCE2["PICKER"] = "picker";
-})(MOUSE_EVENT_SOURCE || (MOUSE_EVENT_SOURCE = {}));
-function useSearchPlaceHolderConfig() {
-  var _find;
-  var _usePickerConfig = usePickerConfig(), searchPlaceHolder = _usePickerConfig.searchPlaceHolder, searchPlaceholder = _usePickerConfig.searchPlaceholder;
-  return (_find = [searchPlaceHolder, searchPlaceholder].find(function(p) {
-    return p !== DEFAULT_SEARCH_PLACEHOLDER;
-  })) != null ? _find : DEFAULT_SEARCH_PLACEHOLDER;
-}
-function useDefaultSkinToneConfig() {
-  var _usePickerConfig2 = usePickerConfig(), defaultSkinTone = _usePickerConfig2.defaultSkinTone;
-  return defaultSkinTone;
-}
-function useAllowExpandReactions() {
-  var _usePickerConfig3 = usePickerConfig(), allowExpandReactions = _usePickerConfig3.allowExpandReactions;
-  return allowExpandReactions;
-}
-function useSkinTonesDisabledConfig() {
-  var _usePickerConfig4 = usePickerConfig(), skinTonesDisabled = _usePickerConfig4.skinTonesDisabled;
-  return skinTonesDisabled;
-}
-function useEmojiStyleConfig() {
-  var _usePickerConfig5 = usePickerConfig(), emojiStyle = _usePickerConfig5.emojiStyle;
-  return emojiStyle;
-}
-function useAutoFocusSearchConfig() {
-  var _usePickerConfig6 = usePickerConfig(), autoFocusSearch = _usePickerConfig6.autoFocusSearch;
-  return autoFocusSearch;
-}
-function useCategoriesConfig() {
-  var _usePickerConfig7 = usePickerConfig(), categories = _usePickerConfig7.categories;
-  return categories;
-}
-function useCustomEmojisConfig() {
-  var _usePickerConfig8 = usePickerConfig(), customEmojis = _usePickerConfig8.customEmojis;
-  return customEmojis;
-}
-function useOpenConfig() {
-  var _usePickerConfig9 = usePickerConfig(), open = _usePickerConfig9.open;
-  return open;
-}
-function useOnEmojiClickConfig(mouseEventSource) {
-  var _ref;
-  var _useMutableConfig = useMutableConfig(), current = _useMutableConfig.current;
-  var handler = (_ref = mouseEventSource === MOUSE_EVENT_SOURCE.REACTIONS ? current.onReactionClick : current.onEmojiClick) != null ? _ref : current.onEmojiClick;
-  return handler || function() {
-  };
-}
-function useOnSkinToneChangeConfig() {
-  var _useMutableConfig2 = useMutableConfig(), current = _useMutableConfig2.current;
-  return current.onSkinToneChange || function() {
-  };
-}
-function usePreviewConfig() {
-  var _usePickerConfig10 = usePickerConfig(), previewConfig = _usePickerConfig10.previewConfig;
-  return previewConfig;
-}
-function useThemeConfig() {
-  var _usePickerConfig11 = usePickerConfig(), theme = _usePickerConfig11.theme;
-  return theme;
-}
-function useSuggestedEmojisModeConfig() {
-  var _usePickerConfig12 = usePickerConfig(), suggestedEmojisMode = _usePickerConfig12.suggestedEmojisMode;
-  return suggestedEmojisMode;
-}
-function useLazyLoadEmojisConfig() {
-  var _usePickerConfig13 = usePickerConfig(), lazyLoadEmojis = _usePickerConfig13.lazyLoadEmojis;
-  return lazyLoadEmojis;
-}
-function useClassNameConfig() {
-  var _usePickerConfig14 = usePickerConfig(), className = _usePickerConfig14.className;
-  return className;
-}
-function useStyleConfig() {
-  var _usePickerConfig15 = usePickerConfig(), height = _usePickerConfig15.height, width = _usePickerConfig15.width, style = _usePickerConfig15.style;
-  return _extends({
-    height: getDimension(height),
-    width: getDimension(width)
-  }, style);
-}
-function useReactionsOpenConfig() {
-  var _usePickerConfig16 = usePickerConfig(), reactionsDefaultOpen = _usePickerConfig16.reactionsDefaultOpen;
-  return reactionsDefaultOpen;
-}
-function useEmojiVersionConfig() {
-  var _usePickerConfig17 = usePickerConfig(), emojiVersion = _usePickerConfig17.emojiVersion;
-  return emojiVersion;
-}
-function useSearchDisabledConfig() {
-  var _usePickerConfig18 = usePickerConfig(), searchDisabled = _usePickerConfig18.searchDisabled;
-  return searchDisabled;
-}
-function useSkinTonePickerLocationConfig() {
-  var _usePickerConfig19 = usePickerConfig(), skinTonePickerLocation = _usePickerConfig19.skinTonePickerLocation;
-  return skinTonePickerLocation;
-}
-function useUnicodeToHide() {
-  var _usePickerConfig20 = usePickerConfig(), unicodeToHide = _usePickerConfig20.unicodeToHide;
-  return unicodeToHide;
-}
-function useReactionsConfig() {
-  var _usePickerConfig21 = usePickerConfig(), reactions = _usePickerConfig21.reactions;
-  return reactions;
-}
-function useGetEmojiUrlConfig() {
-  var _usePickerConfig22 = usePickerConfig(), getEmojiUrl = _usePickerConfig22.getEmojiUrl;
-  return getEmojiUrl;
-}
-function getDimension(dimensionConfig) {
-  return typeof dimensionConfig === "number" ? dimensionConfig + "px" : dimensionConfig;
-}
-function useSearchResultsConfig(searchResultsCount) {
-  var hasResults = searchResultsCount > 0;
-  var isPlural = searchResultsCount > 1;
-  if (hasResults) {
-    return isPlural ? SEARCH_RESULTS_MULTIPLE_RESULTS_FOUND.replace("%n", searchResultsCount.toString()) : SEARCH_RESULTS_ONE_RESULT_FOUND;
-  }
-  return SEARCH_RESULTS_NO_RESULTS_FOUND;
-}
 function useDebouncedState(initialValue, delay) {
   if (delay === void 0) {
     delay = 0;
@@ -17527,6 +17870,174 @@ function useUpdateSuggested() {
   return [suggestedUpdated, function updateSuggested() {
     setsuggestedUpdate(Date.now());
   }];
+}
+var MutableConfigContext = import_react.default.createContext({});
+function useMutableConfig() {
+  var mutableConfig = import_react.default.useContext(MutableConfigContext);
+  return mutableConfig;
+}
+function useDefineMutableConfig(config) {
+  var MutableConfigRef = import_react.default.useRef({
+    onEmojiClick: config.onEmojiClick || emptyFunc,
+    onReactionClick: config.onReactionClick || config.onEmojiClick,
+    onSkinToneChange: config.onSkinToneChange || emptyFunc
+  });
+  import_react.default.useEffect(function() {
+    MutableConfigRef.current.onEmojiClick = config.onEmojiClick || emptyFunc;
+    MutableConfigRef.current.onReactionClick = config.onReactionClick || config.onEmojiClick;
+  }, [config.onEmojiClick, config.onReactionClick]);
+  import_react.default.useEffect(function() {
+    MutableConfigRef.current.onSkinToneChange = config.onSkinToneChange || emptyFunc;
+  }, [config.onSkinToneChange]);
+  return MutableConfigRef;
+}
+function emptyFunc() {
+}
+var MOUSE_EVENT_SOURCE;
+(function(MOUSE_EVENT_SOURCE2) {
+  MOUSE_EVENT_SOURCE2["REACTIONS"] = "reactions";
+  MOUSE_EVENT_SOURCE2["PICKER"] = "picker";
+})(MOUSE_EVENT_SOURCE || (MOUSE_EVENT_SOURCE = {}));
+function useSearchPlaceHolderConfig() {
+  var _find;
+  var _usePickerConfig = usePickerConfig(), searchPlaceHolder = _usePickerConfig.searchPlaceHolder, searchPlaceholder = _usePickerConfig.searchPlaceholder;
+  return (_find = [searchPlaceHolder, searchPlaceholder].find(function(p) {
+    return p !== DEFAULT_SEARCH_PLACEHOLDER;
+  })) != null ? _find : DEFAULT_SEARCH_PLACEHOLDER;
+}
+function useDefaultSkinToneConfig() {
+  var _usePickerConfig2 = usePickerConfig(), defaultSkinTone = _usePickerConfig2.defaultSkinTone;
+  return defaultSkinTone;
+}
+function useAllowExpandReactions() {
+  var _usePickerConfig3 = usePickerConfig(), allowExpandReactions = _usePickerConfig3.allowExpandReactions;
+  return allowExpandReactions;
+}
+function useSkinTonesDisabledConfig() {
+  var _usePickerConfig4 = usePickerConfig(), skinTonesDisabled = _usePickerConfig4.skinTonesDisabled;
+  return skinTonesDisabled;
+}
+function useEmojiStyleConfig() {
+  var _usePickerConfig5 = usePickerConfig(), emojiStyle = _usePickerConfig5.emojiStyle;
+  return emojiStyle;
+}
+function useAutoFocusSearchConfig() {
+  var _usePickerConfig6 = usePickerConfig(), autoFocusSearch = _usePickerConfig6.autoFocusSearch;
+  return autoFocusSearch;
+}
+function useCategoriesConfig() {
+  var _usePickerConfig7 = usePickerConfig(), categories = _usePickerConfig7.categories;
+  return categories;
+}
+function useCustomEmojisConfig() {
+  var _usePickerConfig8 = usePickerConfig(), customEmojis = _usePickerConfig8.customEmojis;
+  return customEmojis;
+}
+function useOpenConfig() {
+  var _usePickerConfig9 = usePickerConfig(), open = _usePickerConfig9.open;
+  return open;
+}
+function useOnEmojiClickConfig(mouseEventSource) {
+  var _useMutableConfig = useMutableConfig(), current = _useMutableConfig.current;
+  var _useReactionsModeStat = useReactionsModeState(), setReactionsOpen = _useReactionsModeStat[1];
+  var handler = current.onEmojiClick || function() {
+  };
+  var onReactionClick = current.onReactionClick;
+  if (mouseEventSource === MOUSE_EVENT_SOURCE.REACTIONS && onReactionClick) {
+    return function() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      return onReactionClick.apply(void 0, args.concat([{
+        collapseToReactions: function collapseToReactions() {
+          setReactionsOpen(function(o) {
+            return o;
+          });
+        }
+      }]));
+    };
+  }
+  return function() {
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    handler.apply(void 0, args.concat([{
+      collapseToReactions: function collapseToReactions() {
+        setReactionsOpen(true);
+      }
+    }]));
+  };
+}
+function useOnSkinToneChangeConfig() {
+  var _useMutableConfig2 = useMutableConfig(), current = _useMutableConfig2.current;
+  return current.onSkinToneChange || function() {
+  };
+}
+function usePreviewConfig() {
+  var _usePickerConfig10 = usePickerConfig(), previewConfig = _usePickerConfig10.previewConfig;
+  return previewConfig;
+}
+function useThemeConfig() {
+  var _usePickerConfig11 = usePickerConfig(), theme = _usePickerConfig11.theme;
+  return theme;
+}
+function useSuggestedEmojisModeConfig() {
+  var _usePickerConfig12 = usePickerConfig(), suggestedEmojisMode = _usePickerConfig12.suggestedEmojisMode;
+  return suggestedEmojisMode;
+}
+function useLazyLoadEmojisConfig() {
+  var _usePickerConfig13 = usePickerConfig(), lazyLoadEmojis = _usePickerConfig13.lazyLoadEmojis;
+  return lazyLoadEmojis;
+}
+function useClassNameConfig() {
+  var _usePickerConfig14 = usePickerConfig(), className = _usePickerConfig14.className;
+  return className;
+}
+function useStyleConfig() {
+  var _usePickerConfig15 = usePickerConfig(), height = _usePickerConfig15.height, width = _usePickerConfig15.width, style = _usePickerConfig15.style;
+  return _extends({
+    height: getDimension(height),
+    width: getDimension(width)
+  }, style);
+}
+function useReactionsOpenConfig() {
+  var _usePickerConfig16 = usePickerConfig(), reactionsDefaultOpen = _usePickerConfig16.reactionsDefaultOpen;
+  return reactionsDefaultOpen;
+}
+function useEmojiVersionConfig() {
+  var _usePickerConfig17 = usePickerConfig(), emojiVersion = _usePickerConfig17.emojiVersion;
+  return emojiVersion;
+}
+function useSearchDisabledConfig() {
+  var _usePickerConfig18 = usePickerConfig(), searchDisabled = _usePickerConfig18.searchDisabled;
+  return searchDisabled;
+}
+function useSkinTonePickerLocationConfig() {
+  var _usePickerConfig19 = usePickerConfig(), skinTonePickerLocation = _usePickerConfig19.skinTonePickerLocation;
+  return skinTonePickerLocation;
+}
+function useUnicodeToHide() {
+  var _usePickerConfig20 = usePickerConfig(), unicodeToHide = _usePickerConfig20.unicodeToHide;
+  return unicodeToHide;
+}
+function useReactionsConfig() {
+  var _usePickerConfig21 = usePickerConfig(), reactions = _usePickerConfig21.reactions;
+  return reactions;
+}
+function useGetEmojiUrlConfig() {
+  var _usePickerConfig22 = usePickerConfig(), getEmojiUrl = _usePickerConfig22.getEmojiUrl;
+  return getEmojiUrl;
+}
+function getDimension(dimensionConfig) {
+  return typeof dimensionConfig === "number" ? dimensionConfig + "px" : dimensionConfig;
+}
+function useSearchResultsConfig(searchResultsCount) {
+  var hasResults = searchResultsCount > 0;
+  var isPlural = searchResultsCount > 1;
+  if (hasResults) {
+    return isPlural ? SEARCH_RESULTS_MULTIPLE_RESULTS_FOUND.replace("%n", searchResultsCount.toString()) : SEARCH_RESULTS_ONE_RESULT_FOUND;
+  }
+  return SEARCH_RESULTS_NO_RESULTS_FOUND;
 }
 function useIsSearchMode() {
   var _useSearchTermState = useSearchTermState(), searchTerm = _useSearchTermState[0];
@@ -18107,7 +18618,7 @@ function useSkinTonePickerKeyboardEvents() {
   var onKeyDown = (0, import_react.useMemo)(function() {
     return (
       // eslint-disable-next-line complexity
-      function onKeyDown2(event) {
+      (function onKeyDown2(event) {
         var key = event.key;
         if (isSkinToneInSearch) {
           switch (key) {
@@ -18158,7 +18669,7 @@ function useSkinTonePickerKeyboardEvents() {
               break;
           }
         }
-      }
+      })
     );
   }, [isOpen, focusSearchInput, setIsOpen, goDownFromSearchInput, onType, isSkinToneInPreview, isSkinToneInSearch]);
   (0, import_react.useEffect)(function() {
@@ -18224,7 +18735,7 @@ function useBodyKeyboardEvents() {
   var onKeyDown = (0, import_react.useMemo)(function() {
     return (
       // eslint-disable-next-line complexity
-      function onKeyDown2(event) {
+      (function onKeyDown2(event) {
         var key = event.key;
         var activeElement = buttonFromTarget(getActiveElement());
         switch (key) {
@@ -18260,7 +18771,7 @@ function useBodyKeyboardEvents() {
             onType(event);
             break;
         }
-      }
+      })
     );
   }, [goUpFromBody, onType, setVariationPicker, hasOpenToggles, closeAllOpenToggles]);
   (0, import_react.useEffect)(function() {
@@ -18529,7 +19040,7 @@ var styles = stylesheet.create({
       "--epr-dark-category-icon-active-color": "#3271b7",
       "--epr-dark-skin-tone-picker-menu-color": "#22222295",
       "--epr-dark-skin-tone-outer-border-color": "var(--epr-dark-picker-border-color)",
-      "--epr-dark-skin-tone-inner-border-color": "#FFFFFF"
+      "--epr-dark-skin-tone-inner-border-color": "#00000000"
     }
   },
   autoThemeDark: {
@@ -19447,6 +19958,7 @@ function Suggested(_ref) {
     [suggestedUpdated, suggestedEmojisModeConfig]
   );
   var emojiStyle = useEmojiStyleConfig();
+  var isEmojiDisallowed = useIsEmojiDisallowed();
   if (!isMounted) {
     return null;
   }
@@ -19457,6 +19969,9 @@ function Suggested(_ref) {
   }, suggested.map(function(suggestedItem) {
     var emoji = emojiByUnified(suggestedItem.original);
     if (!emoji) {
+      return null;
+    }
+    if (isEmojiDisallowed(emoji)) {
       return null;
     }
     return (0, import_react.createElement)(ClickableEmoji, {
@@ -20025,11 +20540,12 @@ var styles$d = stylesheet.create({
 function Preview() {
   var previewConfig = usePreviewConfig();
   var isSkinToneInPreview = useIsSkinToneInPreview();
+  var _useReactionsModeStat = useReactionsModeState(), reactionsOpen = _useReactionsModeStat[0];
   if (!previewConfig.showPreview) {
     return null;
   }
   return (0, import_react.createElement)(Flex, {
-    className: cx(styles$e.preview, commonInteractionStyles.hiddenOnReactions)
+    className: cx(styles$e.preview, commonInteractionStyles.hiddenOnReactions, reactionsOpen && styles$e.hideOnReactions)
   }, (0, import_react.createElement)(PreviewBody, null), (0, import_react.createElement)(Space, null), isSkinToneInPreview ? (0, import_react.createElement)(SkinTonePickerMenu, null) : null);
 }
 function PreviewBody() {
@@ -20085,6 +20601,10 @@ var styles$e = stylesheet.create({
   },
   emoji: {
     padding: "0"
+  },
+  hideOnReactions: {
+    opacity: "0",
+    transition: "opacity 0.5s ease-in-out"
   }
 });
 function categoryNameFromDom($category) {
@@ -20261,8 +20781,10 @@ function CategoryNavigation() {
       allowNavigation,
       categoryConfig,
       onClick: function onClick() {
-        setActiveCategory(category);
         scrollCategoryIntoView(category);
+        setTimeout(function() {
+          setActiveCategory(category);
+        }, 10);
       }
     });
   }));
@@ -20550,7 +21072,7 @@ function ExpandedPickerContent(_ref) {
   return (0, import_react.createElement)(import_react.Fragment, null, (0, import_react.createElement)(Header, null), (0, import_react.createElement)(Body, null), (0, import_react.createElement)(Preview, null));
 }
 var EmojiPickerReact = (0, import_react.memo)(EmojiPicker, compareConfig);
-var ErrorBoundary = function(_React$Component) {
+var ErrorBoundary = (function(_React$Component) {
   _inheritsLoose(ErrorBoundary2, _React$Component);
   function ErrorBoundary2(props) {
     var _this;
@@ -20576,7 +21098,7 @@ var ErrorBoundary = function(_React$Component) {
     return this.props.children;
   };
   return ErrorBoundary2;
-}(import_react.Component);
+})(import_react.Component);
 function ExportedEmoji(_ref) {
   var unified = _ref.unified, _ref$size = _ref.size, size = _ref$size === void 0 ? 32 : _ref$size, _ref$emojiStyle = _ref.emojiStyle, emojiStyle = _ref$emojiStyle === void 0 ? EmojiStyle.APPLE : _ref$emojiStyle, _ref$lazyLoad = _ref.lazyLoad, lazyLoad = _ref$lazyLoad === void 0 ? false : _ref$lazyLoad, getEmojiUrl = _ref.getEmojiUrl, emojiUrl = _ref.emojiUrl;
   if (!unified && !emojiUrl && !getEmojiUrl) {
