@@ -33,7 +33,7 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
         { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
     ]
 
-    const addBtnItem = addBtn ? [{
+    const addBtnItem = (type) ? [{
         to: `/${type}/create`,
         icon: { service: "partner_exchange", evenement: "event", annonce: "dashboard", vote: "ballot", groupe: "groups" }[type] || "add",
         label: `Ajouter un ${type}`,
@@ -156,11 +156,11 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                                             color={col} />
                                         <Icon
                                             bg
-                                            fill={addBtn ? true : false}
+                                            fill={type ? true : false}
                                             link={to}
                                             size='2xl'
                                             icon={icon}
-                                            color={addBtn ? color : col} />
+                                            color={type ? color : col} />
                                     </div>
                                     <div className={`py-2 px-4 right-[5rem] rounded-full text-${col}-500 absolute bg-white text-sm shadow-xl !border !border-gray-300`}>
                                         {label}

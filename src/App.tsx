@@ -82,7 +82,6 @@ function App() {
 
                                 {/* Pages with top navigation */}
                                 <Route element={<WithTopNavPages />}>
-                                    <Route path="/msg" element={<DashboardPage />} />
                                     <Route path="/chat" element={<ChatPage />} />
                                     <Route path="/service/create" element={<ServiceCreatePage />} />
                                     <Route path="/service/edit/:id" element={<ServiceEditPage />} />
@@ -114,8 +113,10 @@ function App() {
                                 </Route>
 
                                 <Route element={<WithTopNavPages addBtn />}>
+
                                     {/* Pages with bottom navigation */}
-                                    <Route element={<WithBottomPages />}>
+                                    <Route element={<WithBottomPages addBtn={false} />}>
+                                        <Route path="/msg" element={<DashboardPage />} />
                                         <Route path="/" element={<DashboardPage />} />
                                     </Route>
 
@@ -136,7 +137,9 @@ function App() {
                         </Routes>
                     </Suspense>
                     <AlertModal values={alertValues ?? errorValues} />
-                    <div className="scale-95"><ReactQueryDevtools /></div>
+                    <div className="scale-95 opacity-50">
+                        <ReactQueryDevtools />
+                    </div>
                 </div>
             </BrowserRouter>
         </ErrorBoundary>
