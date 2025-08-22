@@ -80,7 +80,7 @@ export default function SignInPage() {
     const terms = "Vous resterez connecté pour 48h ...";
 
     return (
-        <div className='flex flex-col justify-between h-full py-[8%]'>
+        <div className='flex flex-col justify-between h-full py-[8%] md:py-[4%] lg:py-[2%]'>
             <AuthHeader />
             <AuthForm
                 formik={formik}

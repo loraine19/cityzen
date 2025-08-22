@@ -2,12 +2,19 @@ import { VoteOpinion, VoteTarget } from "../../domain/entities/Vote";
 
 
 export class VoteDTO {
-    id?: number;
     userId?: number;
     targetId?: number;
-    target?: VoteTarget;
-    opinion?: VoteOpinion;
+    target: VoteTarget = VoteTarget.POOL;
+    opinion: VoteOpinion = VoteOpinion.OK;
+
     constructor(init?: Partial<VoteDTO>) {
-        Object.assign(this, init);
+        if (init) {
+            console.log("Initializing VoteDTO with values:", init, new Date().getTime());
+            Object.keys(init).forEach(key => {
+                if (key in this) {
+                    (this as any)[key] = init[key as keyof VoteDTO];
+                }
+            });
+        }
     }
 }

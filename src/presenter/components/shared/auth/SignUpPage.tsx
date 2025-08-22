@@ -48,7 +48,7 @@ export default function SignUpPage() {
 
 
     return (
-        <div className='flex flex-col justify-between h-full py-[6%] gap-2'>
+        <div className='flex flex-col justify-between h-full py-[6%] md:py-[2%] lg:py-2'>
             <AuthHeader />
             <main>
                 <AuthForm

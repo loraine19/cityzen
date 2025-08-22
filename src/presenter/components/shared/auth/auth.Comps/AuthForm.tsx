@@ -5,7 +5,6 @@ import { Icon } from '../../../common/IconComp';
 import { FormikProps } from 'formik';
 import { useUserStore } from '../../../../../application/stores/user.store'
 import DI from '../../../../../di/ioc';
-import { useUxStore } from '../../../../../application/stores/ux.store';
 
 type AuthFormProps = {
     lead: string;
@@ -40,7 +39,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     const [passWordInput2, setPassWordInput2] = useState<{ value: string, icon: string }>(passwordType)
     useEffect(() => { hidden && formik.resetForm() && (formik.values = {}) }, [hidden])
     const { setIsLoggedIn } = useUserStore()
-    const { setColor } = useUxStore((state) => state);
     const toggleInputStyle = (inputState: { value: string, icon: string }, setInputState: React.Dispatch<React.SetStateAction<{ value: string, icon: string }>>) => {
         setInputState(inputState.value === 'password' ? textType : passwordType);
     }
@@ -49,7 +47,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     const hiddeImage = (): string => { if (window.innerHeight < 780) return "hidden"; else return "" }
     window.addEventListener('resize', () => {
         hiddeImage()
-        setColor('blue-gray')
     })
 
 

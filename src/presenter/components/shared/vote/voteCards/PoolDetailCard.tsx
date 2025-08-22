@@ -25,7 +25,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
     }
     return (
         <div className="DetailCardDiv">
-            <Card className="FixCardNoImage w-respLarge" >
+            <Card className="FixCardNoImage !flex  justify-betweenw-respLarge" >
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
                     <div className={`ChipDivNoImage flex-wrap`}>
@@ -42,16 +42,15 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                     </div>
                 </CardHeader>
                 <CardBody
-                    className="FixCardBody">
+                    className="FixCardBody ">
                     <Title
                         title={pool?.title}
                         CreatedAt={pool?.createdAt}
                         group={pool?.Group}
                     />
-                    <div className="CardOverFlow h-full justify-between pb-4 mb-6">
+                    <div className="CardOverFlow flex h-full justify-between !pb-8">
                         <Typography
-                            color="blue-gray"
-                            className="mb-2">
+                            color="blue-gray">
                             {pool?.description}
                         </Typography>
                         <ProfileDiv
@@ -65,7 +64,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                         needed={pool?.needed} />
                 </CardBody>
                 <CardFooter
-                    className="CardFooter mb-2">
+                    className="CardFooter mb-1">
                     <ProfileDiv
                         profile={pool?.User || {} as Partial<User>} />
                     <div className="flex items-center gap-2 ">
@@ -76,7 +75,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
                                 value={pool.Votes?.length}
                                 variant="ghost"
                                 size='lg'
-                                className="rounded-full pl-5 GrayChip"
+                                className="rounded-full px-4 GrayChip"
                                 icon={
                                     <Icon
                                         icon="smart_card_reader"

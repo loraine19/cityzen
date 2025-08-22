@@ -23,7 +23,6 @@ export class PostVoteUseCase {
     }
 
     public async execute(dataDTO: VoteDTO): Promise<Vote> {
-        console.log("dataDTO", dataDTO, new Date().getTime());
         return await this.voteRepository.postVote(dataDTO);
     }
 }

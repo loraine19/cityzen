@@ -53,7 +53,7 @@ export default function EventDetailPage() {
                 `Confirmer votre participation à ${event?.title}`,
             function: async () => {
                 const data = await event?.toogleParticipate();
-                console.log(data);
+
                 if (data) {
                     setNotifAlert(data.Igo ? 'Vous avez annulé votre participation à l\'événement' : 'Vous participez à l\'événement');
                     setTimeout(() => { setNotifAlert('') }, 5000);

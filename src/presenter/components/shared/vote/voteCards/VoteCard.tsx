@@ -1,5 +1,5 @@
 import { Radio } from "@material-tailwind/react";
-import { VoteOpinion, VoteTarget } from "../../../../../domain/entities/Vote";
+import { VoteOpinion } from "../../../../../domain/entities/Vote";
 import { PoolSurveyView } from "../../../../views/viewsEntities/poolSurveyViewEntity";
 import { VoteDTO } from "../../../../../infrastructure/DTOs/VoteDTO";
 import DI from "../../../../../di/ioc";
@@ -12,13 +12,11 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
     const [opinion, setOpinion] = useState<VoteOpinion>(vote.myOpinion ?? VoteOpinion.OK)
 
     const { handleApiError } = useAlertStore(state => state)
-    const voteDTO = new VoteDTO({
+    const voteDTO: VoteDTO = new VoteDTO({
         targetId: vote.id,
-        target: vote.typeS === VoteTarget.POOL ?
-            'POOL' as VoteTarget :
-            'SURVEY' as VoteTarget,
+        target: vote.typeS,
         opinion
-    } as VoteDTO);
+    });
     const postVote = async (data: VoteDTO) => await DI.resolve('postVoteUseCase').execute(data)
     const updateVote = async (data: VoteDTO) => await DI.resolve('updateVoteUseCase').execute(data)
 
@@ -53,7 +51,6 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
 
     const alertValues: AlertValues = {
         handleConfirm: async () => {
-            console.log("vote from card", vote.IVoted, new Date().getTime());
             const ok = vote.IVoted ? await updateVote(voteDTO) : await postVote(voteDTO)
             if (ok.error) {
                 handleApiError(ok.error.message)
