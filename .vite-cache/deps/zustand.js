@@ -1,6 +1,6 @@
 import {
   require_react
-} from "./chunk-ZHUB4BJD.js";
+} from "./chunk-MC2JJCLE.js";
 import {
   __toESM
 } from "./chunk-OL46QLBJ.js";
@@ -35,8 +35,8 @@ var identity = (arg) => arg;
 function useStore(api, selector = identity) {
   const slice = import_react.default.useSyncExternalStore(
     api.subscribe,
-    import_react.default.useCallback(() => selector(api.getState()), [api, selector]),
-    import_react.default.useCallback(() => selector(api.getInitialState()), [api, selector])
+    () => selector(api.getState()),
+    () => selector(api.getInitialState())
   );
   import_react.default.useDebugValue(slice);
   return slice;

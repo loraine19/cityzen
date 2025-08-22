@@ -22,7 +22,6 @@ import {
   require_progress,
   require_prop_types,
   require_rating,
-  require_react,
   require_select,
   require_slider,
   require_spinner,
@@ -30,10 +29,12 @@ import {
   require_theme2,
   require_timeline,
   require_typography
-} from "./chunk-MWDXTQ6W.js";
+} from "./chunk-NPQ26ZJP.js";
 import "./chunk-PZE7CTFH.js";
-import "./chunk-3V3H3IQW.js";
-import "./chunk-ZHUB4BJD.js";
+import "./chunk-P5JXV5NI.js";
+import {
+  require_react
+} from "./chunk-MC2JJCLE.js";
 import {
   __commonJS,
   __toCommonJS

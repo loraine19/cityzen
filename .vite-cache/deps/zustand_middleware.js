@@ -71,9 +71,8 @@ var devtoolsImpl = (fn, devtoolsOptions = {}) => (set, get, api) => {
   api.setState = (state, replace, nameOrAction) => {
     const r = set(state, replace);
     if (!isRecording) return r;
-    const action = nameOrAction === void 0 ? {
-      type: anonymousActionType || findCallerName(new Error().stack) || "anonymous"
-    } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
+    const inferredActionType = findCallerName(new Error().stack);
+    const action = nameOrAction === void 0 ? { type: anonymousActionType || inferredActionType || "anonymous" } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
     if (store === void 0) {
       connection == null ? void 0 : connection.send(action, get());
       return r;
@@ -360,12 +359,12 @@ var persistImpl = (config, baseOptions) => (set, get, api) => {
   const savedSetState = api.setState;
   api.setState = (state, replace) => {
     savedSetState(state, replace);
-    return setItem();
+    void setItem();
   };
   const configResult = config(
     (...args) => {
       set(...args);
-      return setItem();
+      void setItem();
     },
     get,
     api

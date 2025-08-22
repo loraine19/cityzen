@@ -29,7 +29,6 @@ import {
   keepPreviousData,
   matchMutation,
   matchQuery,
-  mutationOptions,
   noop,
   notifyManager,
   onlineManager,
@@ -55,9 +54,9 @@ import {
   useSuspenseInfiniteQuery,
   useSuspenseQueries,
   useSuspenseQuery
-} from "./chunk-RRIO22OT.js";
-import "./chunk-RIJBGROQ.js";
-import "./chunk-ZHUB4BJD.js";
+} from "./chunk-Q2DUW2OO.js";
+import "./chunk-7RBSQVB5.js";
+import "./chunk-MC2JJCLE.js";
 import "./chunk-OL46QLBJ.js";
 export {
   CancelledError,
@@ -91,7 +90,6 @@ export {
   keepPreviousData,
   matchMutation,
   matchQuery,
-  mutationOptions,
   noop,
   notifyManager,
   onlineManager,

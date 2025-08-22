@@ -1,6 +1,6 @@
 import {
   require_react
-} from "./chunk-ZHUB4BJD.js";
+} from "./chunk-MC2JJCLE.js";
 import {
   __commonJS
 } from "./chunk-OL46QLBJ.js";
@@ -224,13 +224,13 @@ var require_react_jsx_dev_runtime_development = __commonJS({
         return null;
       };
       React = {
-        react_stack_bottom_frame: function(callStackForError) {
+        "react-stack-bottom-frame": function(callStackForError) {
           return callStackForError();
         }
       };
       var specialPropKeyWarningShown;
       var didWarnAboutElementRef = {};
-      var unknownOwnerDebugStack = React.react_stack_bottom_frame.bind(
+      var unknownOwnerDebugStack = React["react-stack-bottom-frame"].bind(
         React,
         UnknownOwner
       )();
