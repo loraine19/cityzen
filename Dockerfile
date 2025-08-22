@@ -12,8 +12,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # remove peer dependencies after fixing deps react 
-RUN npm install
-# --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
