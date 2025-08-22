@@ -6,11 +6,15 @@ import DI from "../../../../../di/ioc";
 import { useState } from "react";
 import { AlertModal } from "../../../common/AlertModal";
 import { AlertValues } from "../../../../../domain/entities/Error";
+import { useAlertStore } from "../../../../../application/stores/alert.store";
 
 export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView, refetch: (opinion: VoteOpinion) => void, open: boolean, close: () => void }) => {
     const [opinion, setOpinion] = useState<VoteOpinion>(vote.myOpinion ?? VoteOpinion.OK)
+
+    const { handleApiError } = useAlertStore(state => state)
     const voteDTO = new VoteDTO({
-        targetId: vote.id, target: vote.typeS === VoteTarget.POOL ?
+        targetId: vote.id,
+        target: vote.typeS === VoteTarget.POOL ?
             'POOL' as VoteTarget :
             'SURVEY' as VoteTarget,
         opinion
@@ -19,7 +23,7 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
     const updateVote = async (data: VoteDTO) => await DI.resolve('updateVoteUseCase').execute(data)
 
     const body =
-        <div className="flex gap-10">
+        <div className="flex md:gap-10 overflow-auto">
             <Radio
                 name="vote"
                 label="Contre"
@@ -45,12 +49,15 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
                 onChange={() => setOpinion(VoteOpinion.OK)}
             />
         </div>
-    const [voteNotification, setVoteNotification] = useState<string | undefined>(undefined)
+    const [voteNotification] = useState<string | undefined>(undefined)
 
     const alertValues: AlertValues = {
         handleConfirm: async () => {
+            console.log("vote from card", vote.IVoted, new Date().getTime());
             const ok = vote.IVoted ? await updateVote(voteDTO) : await postVote(voteDTO)
-            if (ok.error) setVoteNotification(ok.error.message)
+            if (ok.error) {
+                handleApiError(ok.error.message)
+            }
             else {
                 refetch(opinion);
                 close();
@@ -62,7 +69,7 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
         disableConfirm: false,
         isOpen: open,
         close: close,
-        notif: voteNotification,
+        notif: voteNotification
     }
     return (
         <div className="bg-cyan-100">

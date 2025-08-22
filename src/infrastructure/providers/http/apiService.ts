@@ -49,7 +49,8 @@ export class ApiService implements ApiServiceI {
 
     private handleRequest = (config: any) => {
         document.cookie = "user=; path=/; max-age=0";
-        this.logWithTime('handleRequest: ' + config);
+        this.logWithTime('handleRequest: ')
+        console.log("Request config:", config);
         if (config.url !== '/auth/refresh') {
             this.requestPending = {
                 config: config,

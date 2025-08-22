@@ -121,12 +121,13 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                                 value={survey?.Votes?.length}
                                 size='md' variant="ghost"
                                 className="rounded-full GrayChip h-max flex items-center  "
-                                icon={<Icon
-                                    icon="smart_card_reader"
-                                    fill={survey?.IVoted}
-                                    color={color()}
-                                    size="md"
-                                    title={`${survey?.Votes?.length} personnes ${survey?.IVoted && `dont vous`} ont voté`} />}>
+                                icon={
+                                    <Icon
+                                        icon="smart_card_reader"
+                                        fill={survey?.IVoted}
+                                        color={color()}
+                                        size="md"
+                                        title={`${survey?.Votes?.length} personnes ${survey?.IVoted && `dont vous`} ont voté`} />}>
                             </Chip>
                         </button>
                         <Icon

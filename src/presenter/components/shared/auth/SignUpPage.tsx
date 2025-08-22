@@ -48,7 +48,8 @@ export default function SignUpPage() {
 
 
     return (
-        <><AuthHeader />
+        <div className='flex flex-col justify-between h-full py-[6%] gap-2'>
+            <AuthHeader />
             <main>
                 <AuthForm
                     lead="Creer votre compte"
@@ -77,6 +78,6 @@ export default function SignUpPage() {
                     </Button>
                 </Link>
             </footer>
-        </>
+        </div>
     )
 }

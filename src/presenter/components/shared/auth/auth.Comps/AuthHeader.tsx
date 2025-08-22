@@ -2,7 +2,7 @@ import { Typography } from "@material-tailwind/react";
 
 export function AuthHeader() {
     return (
-        <header className="!min-h-[6rem] py-[1.5%] flex gap-4 items-center justify-center">
+        <header className="!min-h-[6rem] py-[5%] -ml-3 lg:py-[1.5%] flex gap-5 items-center justify-center">
             <img
                 onError={(e) => { (e.target as HTMLImageElement).src = 'https://citydo.fr/image/logo.svg' }}
                 className="h-[5rem] w-[5rem] object-cover object-center "
