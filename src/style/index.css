@@ -70,7 +70,7 @@ section,
 }
 
 footer {
-    @apply !px-[1%] md:px-[5%] lg:px-[2%] mx-auto flex justify-center items-center pb-1;
+    @apply !px-[1%] md:px-[5%] lg:px-[2%] mx-auto flex justify-center items-center pb-[0.7rem];
     width: 100%;
     margin: 0 auto;
     flex-shrink: 0;
@@ -78,7 +78,7 @@ footer {
 }
 
 header {
-    @apply w-full mx-auto px-4 relative;
+    @apply w-full mx-auto px-4 relative pt-[0.1rem];
     width: 100%;
     margin: 0 auto;
     flex-shrink: 0;

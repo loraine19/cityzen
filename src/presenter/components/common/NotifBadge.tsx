@@ -100,7 +100,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     type NotifBadgeProps = { count: number, notifs: NotifView[], color: string, icon: string, link: string }
 
     return (
-        <div className={` gap-4 flex justify-end flex-1 w-full  right-0  h-max  `}>
+        <div className={` gap-4 flex justify-end flex-1 w-full h-max  `}>
             {/* /// NOTIFICATION POPUP */}
             <div className={`w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
                 <Card className={`${notif ? 'animate-bounce absolute' : ''} z-50 mt-4 h-max px-4 py-2 w-respLarge rounded-2xl shadow-lg transition-all duration-1000 ease-in-out transform

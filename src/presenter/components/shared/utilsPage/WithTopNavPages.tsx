@@ -1,12 +1,12 @@
 import { Outlet } from "react-router"
 import NavBarTop from "../../common/NavBarTop"
 
-export const WithTopNavPages = (props: { addBtn?: boolean }) => {
+export const WithTopNavPages = ({ addBtn, navIcons }: { addBtn?: boolean, navIcons?: boolean }) => {
 
     return (
         <>
 
-            <NavBarTop addBtn={props.addBtn} />
+            <NavBarTop addBtn={addBtn} navIcons={navIcons} />
             <Outlet />
         </>)
 }

@@ -112,7 +112,7 @@ function App() {
                                     <Route path="/flag" element={<FlagPage />} />
                                 </Route>
 
-                                <Route element={<WithTopNavPages addBtn />}>
+                                <Route element={<WithTopNavPages addBtn navIcons />}>
 
                                     {/* Pages with bottom navigation */}
                                     <Route element={<WithBottomPages addBtn={false} />}>

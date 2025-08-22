@@ -9,7 +9,7 @@ import { AvatarUser } from "./AvatarUser";
 import { useUxStore } from "../../../application/stores/ux.store";
 import { NavBarSection } from "./NavBar";
 
-export default function NavBarTop({ addBtn }: { addBtn?: boolean }) {
+export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navIcons?: boolean }) {
     const { unReadMsgNotif } = useNotificationStore((state) => state);
     const navigate = useNavigate();
     const { user } = useUserStore((state) => state);
@@ -30,11 +30,11 @@ export default function NavBarTop({ addBtn }: { addBtn?: boolean }) {
 
     return (
         <header onClick={() => { hideNavBottom && setHideNavBottom(false) }}>
-            <div className={`w-respXl relative pt-1  h-full w-full flex justify-between
-                ${hideNavBottom ? '-mt-1.5 lg:flex animRev' : 'animRev'}`} >
+            <div className={`w-respXl relative h-full w-full flex justify-between pt-2
+                ${hideNavBottom ? 'lg:flex animRev ' : 'animRev'}`} >
                 <div className={`flex w-full max-w-max  h-full ${hideNavBottom ? 'hidden' : ''}`}>
                     <Menu placement="bottom-start">
-                        <MenuHandler className="relative h-max min-w-max p-1.5 z-50 flex items-center  cursor-pointer">
+                        <MenuHandler className="relative h-full min-w-max px-1.5 z-50 flex items-center cursor-pointer">
                             {onBoard ?
                                 <div className='flex w-full flex-1 items-center'>
                                     <img className="!w-[48px] !h-[48px] object-cover object-center"
@@ -92,13 +92,14 @@ export default function NavBarTop({ addBtn }: { addBtn?: boolean }) {
                                 </div>}
                         </div>}
                 </div>
-                {!navBottom &&
+
+                {(!navBottom && navIcons && !hideNavBottom) &&
                     <div className="w-[75%] lg:w-max max-w-[calc(100vw-12rem)]">
                         <NavBarSection addBtn={addBtn} />
                     </div>
                 }
                 <div
-                    className={`justify-center items-center flex h-full
+                    className={`justify-center items-center flex 
                     ${onBoard ? 'lg:pr-0' : 'pr-0'} 
                     ${hideNavBottom ? 'hidden' : ''} 
                     ${navBottom ? ' w-full' : ''}`} >

@@ -2,20 +2,20 @@ import { Outlet } from "react-router"
 import { useUxStore } from "../../../../application/stores/ux.store"
 import { NavBarBottom } from "../../common/NavBarBottom"
 
-export const WithBottomPages = (props: { addBtn?: boolean }) => {
+export const WithBottomPages = ({ addBtn }: { addBtn?: boolean }) => {
     const { navBottom } = useUxStore((state) => state)
 
     if (!navBottom)
         return (
             <>
-                <NavBarBottom addBtn={props.addBtn} />
+                <NavBarBottom addBtn={addBtn} />
                 <Outlet />
             </>)
 
     return (
         <>
             <Outlet />
-            <NavBarBottom addBtn={props.addBtn} />
+            <NavBarBottom addBtn={addBtn} />
 
         </>)
 }

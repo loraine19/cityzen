@@ -33,7 +33,7 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
         { to: "/vote", icon: "ballot", label: `${addBtn ? "Vote⠀" : 'Votes⠀⠀'}`, color: "!border-orange-500/20", col: 'orange' },
     ]
 
-    const addBtnItem = (type) ? [{
+    const addBtnItem = type ? [{
         to: `/${type}/create`,
         icon: { service: "partner_exchange", evenement: "event", annonce: "dashboard", vote: "ballot", groupe: "groups" }[type] || "add",
         label: `Ajouter un ${type}`,
@@ -75,13 +75,13 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
         <>
             <div className={`
             ${(closeDial) ? 'hidden' : ''} 
-            ${navBottom ? `bottom-[65px] ` : 'top-[0px]'}
+            ${navBottom ? `bottom-[65px]` : 'top-[0px]'}
                   left-0 h-screen w-full backdropBlur absolute`}>
             </div>
             <div className={
                 (navBottom ?
                     `items-center opacity-100 anim ${color}BG backdropBlur w-respXl rounded-full justify-center relative bottom-0 gap-6` :
-                    'z-0 md:scale-[0.75] scale-[0.73] -ml-[12%] -mr-[8%] lg:mx-auto  md:max-w-[calc(100vw-9rem)] pt-0.5 lg:-mt-1 lg:px-auto lg:gap-8 lg:justify-between gap-3 ') +
+                    'z-0 md:scale-[0.75] scale-[0.75] -ml-[3rem] -mr-[3rem] lg:!-mr-[5rem] pt-[5px] lg:px-auto pr-2 gap-2 ') +
                 ` flex z-30`
             }>
 
@@ -89,10 +89,10 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                     ${navBottom ?
                         'min-w-max w-full shadow-md !bg-white/95 border border-blue-gray-100/50'
                         :
-                        ' bg-transparent border-transparent shadow-none overflow-x-auto lg:!pt-0 lg:overflow-hidden '} 
-                        flex rounded-full h-full items-center p-0 `}>
+                        `shadow-none overflow-x-auto lg:!pt-0 lg:overflow-hidden`} 
+                        flex rounded-full h-full items-center p-0`}>
                     <div className={`${navBottom ? 'flex-row' : 'flex-row-reverse'} w-full min-w-max h-full relative`}>
-                        <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full  rounded-full justify-between h-full gap-auto`}>
+                        <ul className={`flex !max-w-[calc(100vw-8rem)] overflow-auto flex-row w-full rounded-full justify-between h-full gap-auto `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
                                 <Typography
                                     onClick={() => { setColor(col) }}
@@ -101,7 +101,7 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                                     className={` text-${col}-500 flex rounded-full h-full items-center font-medium`}>
                                     <NavLink to={to} className={({ isActive }) =>
                                         `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full 
-                                    ${(isActive && navBottom) ? `border-[1px] shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 z-30 ${color} ` : ''}`
+                                        ${(isActive && navBottom) ? `border-[1px] shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 lg:mr-2 z-30 ${color} ` : ''}`
                                     }
                                     >
                                         {({ isActive }) => (
@@ -171,10 +171,6 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                     </div>
                 </div>
             </div >
-
-
-
-
 
         </>
     );
