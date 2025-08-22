@@ -84,7 +84,6 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                     'z-0 md:scale-[0.75] scale-[0.75] -ml-[3rem] -mr-[3rem] lg:!-mr-[5rem] pt-[5px] lg:px-auto pr-2 gap-2 ') +
                 ` flex z-30`
             }>
-
                 <Navbar className={`
                     ${navBottom ?
                         'min-w-max w-full shadow-md !bg-white/95 border border-blue-gray-100/50'
@@ -100,8 +99,8 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                                     as="li"
                                     className={` text-${col}-500 flex rounded-full h-full items-center font-medium`}>
                                     <NavLink to={to} className={({ isActive }) =>
-                                        `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full 
-                                        ${(isActive && navBottom) ? `border-[1px] shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 lg:mr-2 z-30 ${color} ` : ''}`
+                                        `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full hover:!shadow-md
+                                        ${(isActive && navBottom) ? `border-[1px]  shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 lg:mr-2 z-30 ${color} ` : ''}`
                                     }
                                     >
                                         {({ isActive }) => (
@@ -123,7 +122,6 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                         </ul>
                     </div>
                 </Navbar>
-
                 <div
                     onMouseLeave={() => setCloseDial(true)}
                     onMouseEnter={() => setCloseDial(false)}
@@ -139,7 +137,7 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                                         color='white'
                                         bg clear
                                         size='5xl'
-                                        style={`${!closeDial ? '!text-white transition-transform group-hover:rotate-45 hover:scale-[1]' : 'hidden'} !text-[1.9rem] font-normal bg-${color}-500 h-10 w-10 !shadow-md`} />
+                                        style={`${!closeDial ? '!text-white transition-transform group-hover:rotate-45 hover:scale-[1]' : 'hidden'} !text-[2rem] font-normal bg-${color}-500 h-16 w-16 !shadow-md`} />
                                 </div>
                             </SpeedDialHandler>
                             <SpeedDialContent

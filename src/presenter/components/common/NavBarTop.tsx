@@ -30,9 +30,9 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
 
     return (
         <header onClick={() => { hideNavBottom && setHideNavBottom(false) }}>
-            <div className={`w-respXl relative h-full w-full flex justify-between pt-2
+            <div className={`w-respXl relative h-full w-full flex justify-between pt-1.5
                 ${hideNavBottom ? 'lg:flex animRev ' : 'animRev'}`} >
-                <div className={`flex w-full max-w-max  h-full ${hideNavBottom ? 'hidden' : ''}`}>
+                <div className={`flex w-full max-w-max h-full ${hideNavBottom ? 'hidden' : ''}`}>
                     <Menu placement="bottom-start">
                         <MenuHandler className="relative h-full min-w-max px-1.5 z-50 flex items-center cursor-pointer">
                             {onBoard ?
@@ -44,11 +44,11 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
                                 <div className="flex items-center relative">
                                     <AvatarUser
                                         style='!shadow-none'
-                                        avatarStyle='!w-[42px] !h-[42px] !text-[26px]'
+                                        avatarStyle='!w-[44px] !h-[42px] !text-[26px]'
                                         avatarSize={'sm'}
                                         Profile={user?.Profile} />
                                     <OnlineDot
-                                        className='!bottom-1 !right-1'
+                                        className='relative -bottom-[15px] !-left-[10px]'
                                         id={user?.id} />
                                 </div>}
                         </MenuHandler>
