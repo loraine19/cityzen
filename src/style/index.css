@@ -52,7 +52,7 @@ body {
 }
 
 main {
-    @apply flex flex-col w-respXl h-[calc(100%+0rem)] px-4 gap-1 flex-1 w-full mx-auto py-1;
+    @apply flex flex-col wRespXL h-[calc(100%+0rem)] px-4 gap-1 flex-1 w-full mx-auto py-1;
     min-height: 0;
     z-index: 0;
     max-height: 100vh;
@@ -89,7 +89,7 @@ header {
     @apply flex flex-col gap-0 relative;
 }
 
-.w-respXl {
+.wRespXL {
     @apply w-full my-0 mx-auto max-w-[1000px];
 }
 
@@ -213,7 +213,7 @@ header {
 }
 
 .Grid {
-    @apply max-h-full w-respXl grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 pb-4 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
+    @apply max-h-full wRespXL grid grid-cols-[minmax(calc(50%-1rem),_1fr)] pt-1 pb-4 gap-y-3.5 lg:grid-cols-[minmax(calc(50%-1rem),_1fr)_minmax(calc(50%-1rem),_1fr)] 
   lg:auto-rows-[minmax(300px,40vh)] auto-rows-[minmax(346px,40vh)];
 }
 

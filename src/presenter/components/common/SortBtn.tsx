@@ -30,7 +30,7 @@ export const SortButton = ({ sortList, setSelectedSort, selectedSort, reverse = 
                             />
                         </div>
                     </MenuHandler>
-                    <MenuList className="backdropBlur overflow-hidden bg-transparent m-auto !border-none shadow-none  flex rounded-2xl justify-end h-[calc(100%-110px)] w-respXl ">
+                    <MenuList className="backdropBlur overflow-hidden bg-transparent m-auto !border-none shadow-none  flex rounded-2xl justify-end h-[calc(100%-110px)] wRespXL ">
                         <div className="p-4 h-max bg-white shadow-lg rounded-2xl border relative right-0 flex flex-col justify-start">
                             {sortList.map((item: SortLabel, index: number) =>
                                 <div

@@ -55,7 +55,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     return (
         <form onSubmit={formik.handleSubmit} className='main'>
-            <div className='flex md:flex-row  flex-1 items-center h-full gap-8 w-respXl px-[2%] pt-8 pb-2 w-full'>
+            <div className='flex md:flex-row  flex-1 items-center h-full gap-8 wRespXL px-[2%] pt-8 pb-2 w-full'>
 
                 <Card className={`border-blue-gray-200 !hidden md:!flex flex-[50%] FixCardNoImage !p-8`} >
                     <div className="absolute rounded-xl inset-0 bg-black/10   z-0" />

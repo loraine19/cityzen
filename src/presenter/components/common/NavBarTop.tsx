@@ -30,7 +30,7 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
 
     return (
         <header onClick={() => { hideNavBottom && setHideNavBottom(false) }}>
-            <div className={`w-respXl relative h-full w-full flex justify-between pt-1.5
+            <div className={`wRespXL relative h-full w-full flex justify-between pt-1.5
                 ${hideNavBottom ? 'lg:flex animRev ' : 'animRev'}`} >
                 <div className={`flex w-full max-w-max h-full ${hideNavBottom ? 'hidden' : ''}`}>
                     <Menu placement="bottom-start">
