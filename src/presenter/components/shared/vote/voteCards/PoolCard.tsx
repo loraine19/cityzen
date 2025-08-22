@@ -104,9 +104,10 @@ export function PoolCard({ pool, change, mines, update }: PoolCardProps) {
                             disabled={pool?.status !== PoolSurveyStatus.PENDING}
                             onClick={() => setOpen(true)}>
                             <Chip
+                                key={pool.id}
                                 value={pool.Votes?.length}
                                 variant="ghost"
-                                className="GrayChip !px-3.5"
+                                className="rounded-full GrayChip h-max flex items-center  "
                                 icon={
                                     <Icon
                                         icon="smart_card_reader"

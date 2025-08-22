@@ -119,9 +119,8 @@ export function SurveyCard({ survey: initialSurvey, change, mines, update }: Sur
                             onClick={() => { setOpen(true) }}>
                             <Chip
                                 value={survey?.Votes?.length}
-                                variant="ghost"
-                                size='md'
-                                className="GrayChip !px-3.5"
+                                size='md' variant="ghost"
+                                className="rounded-full GrayChip h-max flex items-center  "
                                 icon={<Icon
                                     icon="smart_card_reader"
                                     fill={survey?.IVoted}

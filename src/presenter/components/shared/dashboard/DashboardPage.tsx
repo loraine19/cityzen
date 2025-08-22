@@ -88,15 +88,15 @@ export default function DashboardPage() {
     const [hide, setHide] = useState<boolean>(false);
     useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
-    const [smallScreen, setSmallScreen] = useState<boolean>(window.innerHeight < 705);
-    window.addEventListener('resize', () => {
-        setSmallScreen(window.innerHeight < 705)
-    })
+    // const [smallScreen, setSmallScreen] = useState<boolean>(window.innerHeight < 705);
+    // window.addEventListener('resize', () => {
+    //     setSmallScreen(window.innerHeight < 705)
+    // })
     // ${(smallScreen) ? "bg-yellow-200 " : "lg:!pb-20 pb-[4rem]"} 
 
     return (
         <main className={`
-            ${(navBottom && !hideNavBottom) ? "withBottom lg:!mb-2 " : "mb-2"} 
+             ${(navBottom && !hideNavBottom) ? "mb-2" : "mb-4"} 
             relative flex pb-0.5 !overflow-hidden anim`}
             data-cy="dashboard-body" >
             <div ref={divRef}
@@ -293,12 +293,7 @@ export default function DashboardPage() {
                         </CardBody>
                     </Card>
                 </div>
-                {<div className={`${(smallScreen) ? 'bg-black/20' : ''}`
 
-                    // 'min-h-1 -mb-4 pt-8' : 'pt-4 min-h-[4rem] '} lg:hidden `}>
-                }>
-
-                </div>}
             </div>
 
         </main>

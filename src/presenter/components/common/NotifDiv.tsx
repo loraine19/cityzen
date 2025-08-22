@@ -10,11 +10,11 @@ type NotifDivProps = {
 }
 const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch, error }) => {
     const { color } = useUxStore((state) => state);
-    const [attempt, setAttempt] = useState<number>(0);
+    let [attempt, setAttempt] = useState<number>(0);
 
     useEffect(() => {
         if (attempt < 1 && !isLoading && !error) setTimeout(() => {
-            notif && refetch()
+            notif; refetch(); attempt++
         }, 1000);
     }, [notif, error]);
 

@@ -91,7 +91,7 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                         `shadow-none bg-transparent overflow-x-auto lg:!pt-0 lg:overflow-hidden`} 
                         flex rounded-full h-full items-center p-0`}>
                     <div className={`${navBottom ? 'flex-row' : 'flex-row-reverse'} w-full min-w-max  h-full relative`}>
-                        <ul className={`flex !max-w-[calc(100vw-6rem)] overflow-auto flex-row w-full rounded-full justify-between h-full gap-auto `}>
+                        <ul className={`flex !max-w-[calc(100vw-6rem)] overflow-auto flex-row w-full rounded-full justify-between h-full gap-auto px-0.5 pt-0.5 `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
                                 <Typography
                                     onClick={() => { setColor(col) }}
@@ -101,8 +101,11 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                                     <NavLink
                                         to={to}
                                         className={({ isActive }) =>
-                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full hover:!shadow-md
-                                        ${(isActive && navBottom) ? `border-[1px]  shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 lg:mr-2 z-30 ${color} ` : ''}`
+                                            `flex gap-3 justify-center lg:justify-start p-[7px] items-center w-full !h-[57px] rounded-full
+                                            hover:bg-white/50 hover:shadow-blue-gray-100
+                                            hover:scale-[101%] transition duration-200
+                                            hover:shadow-sm
+                                            ${(isActive && navBottom) ? `border-[1px] shadowMid !bg-white` : isActive ? `animSlide border-[1px] shadow-sm mb-0.5 lg:mr-2 z-30 ${color} ` : ''}`
                                         }
                                     >
                                         {({ isActive }) => (

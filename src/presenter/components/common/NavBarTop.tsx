@@ -44,7 +44,7 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
                                 <div className="flex items-center relative">
                                     <AvatarUser
                                         style='!shadow-none'
-                                        avatarStyle='!w-[44px] !h-[42px] !text-[26px]'
+                                        avatarStyle='!min-w-[43px] !h-[42px] !text-[26px]'
                                         avatarSize={'sm'}
                                         Profile={user?.Profile} />
                                     <OnlineDot
@@ -56,7 +56,7 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
                             {menuItems.map((item, index) => (
                                 <MenuItem
                                     key={index}
-                                    className={`flex !flex-1 !min-w-60 pr-[10vw] rounded-none items-center gap-2.5 pl-2 ${item.style || ''}`}
+                                    className={`flex !flex-1 !min-w-60 pr-[10vw] items-center gap-2.5 pl-2 hover:bg-blue-gray-100/40  ${item.style || ''}`}
                                     onClick={item.onClick || undefined}>
                                     <Icon
                                         fill bg
