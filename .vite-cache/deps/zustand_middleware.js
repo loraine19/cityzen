@@ -360,12 +360,12 @@ var persistImpl = (config, baseOptions) => (set, get, api) => {
   const savedSetState = api.setState;
   api.setState = (state, replace) => {
     savedSetState(state, replace);
-    void setItem();
+    return setItem();
   };
   const configResult = config(
     (...args) => {
       set(...args);
-      void setItem();
+      return setItem();
     },
     get,
     api

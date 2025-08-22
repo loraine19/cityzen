@@ -6,17 +6,17 @@ import {
   mergeProps,
   render,
   setupStyleSheet
-} from "./chunk-TYCJHKIY.js";
+} from "./chunk-XUYCH2BJ.js";
 import {
   onlineManager,
   useQueryClient
-} from "./chunk-A4QCZLFE.js";
+} from "./chunk-RRIO22OT.js";
 import {
   require_jsx_runtime
-} from "./chunk-7RBSQVB5.js";
+} from "./chunk-RIJBGROQ.js";
 import {
   require_react
-} from "./chunk-MC2JJCLE.js";
+} from "./chunk-ZHUB4BJD.js";
 import {
   __privateAdd,
   __privateGet,
@@ -28,7 +28,7 @@ import {
 var React = __toESM(require_react(), 1);
 
 // node_modules/@tanstack/query-devtools/build/dev.js
-var _client, _onlineManager, _queryFlavor, _version, _isMounted, _styleNonce, _shadowDOMTarget, _buttonPosition, _position, _initialIsOpen, _errorTypes, _Component, _dispose, _a;
+var _client, _onlineManager, _queryFlavor, _version, _isMounted, _styleNonce, _shadowDOMTarget, _buttonPosition, _position, _initialIsOpen, _errorTypes, _hideDisabledQueries, _Component, _dispose, _a;
 var TanstackQueryDevtools = (_a = class {
   constructor(config) {
     __privateAdd(this, _client);
@@ -42,6 +42,7 @@ var TanstackQueryDevtools = (_a = class {
     __privateAdd(this, _position);
     __privateAdd(this, _initialIsOpen);
     __privateAdd(this, _errorTypes);
+    __privateAdd(this, _hideDisabledQueries);
     __privateAdd(this, _Component);
     __privateAdd(this, _dispose);
     const {
@@ -54,7 +55,8 @@ var TanstackQueryDevtools = (_a = class {
       initialIsOpen,
       errorTypes,
       styleNonce,
-      shadowDOMTarget
+      shadowDOMTarget,
+      hideDisabledQueries
     } = config;
     __privateSet(this, _client, createSignal(client));
     __privateSet(this, _queryFlavor, queryFlavor);
@@ -66,6 +68,7 @@ var TanstackQueryDevtools = (_a = class {
     __privateSet(this, _position, createSignal(position));
     __privateSet(this, _initialIsOpen, createSignal(initialIsOpen));
     __privateSet(this, _errorTypes, createSignal(errorTypes));
+    __privateSet(this, _hideDisabledQueries, createSignal(hideDisabledQueries));
   }
   setButtonPosition(position) {
     __privateGet(this, _buttonPosition)[1](position);
@@ -92,12 +95,13 @@ var TanstackQueryDevtools = (_a = class {
       const [pos] = __privateGet(this, _position);
       const [isOpen] = __privateGet(this, _initialIsOpen);
       const [errors] = __privateGet(this, _errorTypes);
+      const [hideDisabledQueries] = __privateGet(this, _hideDisabledQueries);
       const [queryClient] = __privateGet(this, _client);
       let Devtools;
       if (__privateGet(this, _Component)) {
         Devtools = __privateGet(this, _Component);
       } else {
-        Devtools = lazy(() => import("./HH7B3BHX-QVTH2VLZ.js"));
+        Devtools = lazy(() => import("./EDEL3XIZ-XEJOQJ4F.js"));
         __privateSet(this, _Component, Devtools);
       }
       setupStyleSheet(__privateGet(this, _styleNonce), __privateGet(this, _shadowDOMTarget));
@@ -129,6 +133,9 @@ var TanstackQueryDevtools = (_a = class {
         },
         get errorTypes() {
           return errors();
+        },
+        get hideDisabledQueries() {
+          return hideDisabledQueries();
         }
       }));
     }, el);
@@ -143,8 +150,8 @@ var TanstackQueryDevtools = (_a = class {
     (_a3 = __privateGet(this, _dispose)) == null ? void 0 : _a3.call(this);
     __privateSet(this, _isMounted, false);
   }
-}, _client = new WeakMap(), _onlineManager = new WeakMap(), _queryFlavor = new WeakMap(), _version = new WeakMap(), _isMounted = new WeakMap(), _styleNonce = new WeakMap(), _shadowDOMTarget = new WeakMap(), _buttonPosition = new WeakMap(), _position = new WeakMap(), _initialIsOpen = new WeakMap(), _errorTypes = new WeakMap(), _Component = new WeakMap(), _dispose = new WeakMap(), _a);
-var _client2, _onlineManager2, _queryFlavor2, _version2, _isMounted2, _styleNonce2, _shadowDOMTarget2, _buttonPosition2, _position2, _initialIsOpen2, _errorTypes2, _onClose, _Component2, _dispose2, _a2;
+}, _client = new WeakMap(), _onlineManager = new WeakMap(), _queryFlavor = new WeakMap(), _version = new WeakMap(), _isMounted = new WeakMap(), _styleNonce = new WeakMap(), _shadowDOMTarget = new WeakMap(), _buttonPosition = new WeakMap(), _position = new WeakMap(), _initialIsOpen = new WeakMap(), _errorTypes = new WeakMap(), _hideDisabledQueries = new WeakMap(), _Component = new WeakMap(), _dispose = new WeakMap(), _a);
+var _client2, _onlineManager2, _queryFlavor2, _version2, _isMounted2, _styleNonce2, _shadowDOMTarget2, _buttonPosition2, _position2, _initialIsOpen2, _errorTypes2, _hideDisabledQueries2, _onClose, _Component2, _dispose2, _a2;
 var TanstackQueryDevtoolsPanel = (_a2 = class {
   constructor(config) {
     __privateAdd(this, _client2);
@@ -158,6 +165,7 @@ var TanstackQueryDevtoolsPanel = (_a2 = class {
     __privateAdd(this, _position2);
     __privateAdd(this, _initialIsOpen2);
     __privateAdd(this, _errorTypes2);
+    __privateAdd(this, _hideDisabledQueries2);
     __privateAdd(this, _onClose);
     __privateAdd(this, _Component2);
     __privateAdd(this, _dispose2);
@@ -172,7 +180,8 @@ var TanstackQueryDevtoolsPanel = (_a2 = class {
       errorTypes,
       styleNonce,
       shadowDOMTarget,
-      onClose
+      onClose,
+      hideDisabledQueries
     } = config;
     __privateSet(this, _client2, createSignal(client));
     __privateSet(this, _queryFlavor2, queryFlavor);
@@ -184,6 +193,7 @@ var TanstackQueryDevtoolsPanel = (_a2 = class {
     __privateSet(this, _position2, createSignal(position));
     __privateSet(this, _initialIsOpen2, createSignal(initialIsOpen));
     __privateSet(this, _errorTypes2, createSignal(errorTypes));
+    __privateSet(this, _hideDisabledQueries2, createSignal(hideDisabledQueries));
     __privateSet(this, _onClose, createSignal(onClose));
   }
   setButtonPosition(position) {
@@ -214,13 +224,14 @@ var TanstackQueryDevtoolsPanel = (_a2 = class {
       const [pos] = __privateGet(this, _position2);
       const [isOpen] = __privateGet(this, _initialIsOpen2);
       const [errors] = __privateGet(this, _errorTypes2);
+      const [hideDisabledQueries] = __privateGet(this, _hideDisabledQueries2);
       const [queryClient] = __privateGet(this, _client2);
       const [onClose] = __privateGet(this, _onClose);
       let Devtools;
       if (__privateGet(this, _Component2)) {
         Devtools = __privateGet(this, _Component2);
       } else {
-        Devtools = lazy(() => import("./JZI2RDCT-3ZMZPUYT.js"));
+        Devtools = lazy(() => import("./RN252AT2-JTCGFSIG.js"));
         __privateSet(this, _Component2, Devtools);
       }
       setupStyleSheet(__privateGet(this, _styleNonce2), __privateGet(this, _shadowDOMTarget2));
@@ -253,6 +264,9 @@ var TanstackQueryDevtoolsPanel = (_a2 = class {
         get errorTypes() {
           return errors();
         },
+        get hideDisabledQueries() {
+          return hideDisabledQueries();
+        },
         get onClose() {
           return onClose();
         }
@@ -269,7 +283,7 @@ var TanstackQueryDevtoolsPanel = (_a2 = class {
     (_a3 = __privateGet(this, _dispose2)) == null ? void 0 : _a3.call(this);
     __privateSet(this, _isMounted2, false);
   }
-}, _client2 = new WeakMap(), _onlineManager2 = new WeakMap(), _queryFlavor2 = new WeakMap(), _version2 = new WeakMap(), _isMounted2 = new WeakMap(), _styleNonce2 = new WeakMap(), _shadowDOMTarget2 = new WeakMap(), _buttonPosition2 = new WeakMap(), _position2 = new WeakMap(), _initialIsOpen2 = new WeakMap(), _errorTypes2 = new WeakMap(), _onClose = new WeakMap(), _Component2 = new WeakMap(), _dispose2 = new WeakMap(), _a2);
+}, _client2 = new WeakMap(), _onlineManager2 = new WeakMap(), _queryFlavor2 = new WeakMap(), _version2 = new WeakMap(), _isMounted2 = new WeakMap(), _styleNonce2 = new WeakMap(), _shadowDOMTarget2 = new WeakMap(), _buttonPosition2 = new WeakMap(), _position2 = new WeakMap(), _initialIsOpen2 = new WeakMap(), _errorTypes2 = new WeakMap(), _hideDisabledQueries2 = new WeakMap(), _onClose = new WeakMap(), _Component2 = new WeakMap(), _dispose2 = new WeakMap(), _a2);
 
 // node_modules/@tanstack/react-query-devtools/build/modern/ReactQueryDevtools.js
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
@@ -282,7 +296,8 @@ function ReactQueryDevtools(props) {
     initialIsOpen,
     errorTypes,
     styleNonce,
-    shadowDOMTarget
+    shadowDOMTarget,
+    hideDisabledQueries
   } = props;
   const [devtools] = React.useState(
     new TanstackQueryDevtools({
@@ -295,7 +310,8 @@ function ReactQueryDevtools(props) {
       initialIsOpen,
       errorTypes,
       styleNonce,
-      shadowDOMTarget
+      shadowDOMTarget,
+      hideDisabledQueries
     })
   );
   React.useEffect(() => {
@@ -334,7 +350,7 @@ var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
 function ReactQueryDevtoolsPanel(props) {
   const queryClient = useQueryClient(props.client);
   const ref = React2.useRef(null);
-  const { errorTypes, styleNonce, shadowDOMTarget } = props;
+  const { errorTypes, styleNonce, shadowDOMTarget, hideDisabledQueries } = props;
   const [devtools] = React2.useState(
     new TanstackQueryDevtoolsPanel({
       client: queryClient,
@@ -347,7 +363,8 @@ function ReactQueryDevtoolsPanel(props) {
       errorTypes,
       styleNonce,
       shadowDOMTarget,
-      onClose: props.onClose
+      onClose: props.onClose,
+      hideDisabledQueries
     })
   );
   React2.useEffect(() => {

@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => {
       build: {
         minify: 'terser', // Use Terser for minification
         terserOptions: {
-          keep_fnames: true,
-          keep_classnames: true,
+          // keep_fnames: true,
+          // keep_classnames: true,
         },
         rollupOptions: {
           output: {

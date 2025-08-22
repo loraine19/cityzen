@@ -533,19 +533,20 @@ function createValidation(config) {
       abortEarly = schema.spec.abortEarly,
       disableStackTrace = schema.spec.disableStackTrace
     } = options;
-    function resolve(item) {
-      return Reference.isRef(item) ? item.getValue(value, parent, context) : item;
-    }
+    const resolveOptions = {
+      value,
+      parent,
+      context
+    };
     function createError(overrides = {}) {
-      const nextParams = Object.assign({
+      const nextParams = resolveParams(Object.assign({
         value,
         originalValue,
         label: schema.spec.label,
         path: overrides.path || path,
         spec: schema.spec,
         disableStackTrace: overrides.disableStackTrace || disableStackTrace
-      }, params, overrides.params);
-      for (const key of Object.keys(nextParams)) nextParams[key] = resolve(nextParams[key]);
+      }, params, overrides.params), resolveOptions);
       const error = new ValidationError(ValidationError.formatError(overrides.message || message, nextParams), value, nextParams.path, overrides.type || name, nextParams.disableStackTrace);
       error.params = nextParams;
       return error;
@@ -557,7 +558,9 @@ function createValidation(config) {
       type: name,
       from: options.from,
       createError,
-      resolve,
+      resolve(item) {
+        return resolveMaybeRef(item, resolveOptions);
+      },
       options,
       originalValue,
       schema
@@ -593,6 +596,16 @@ function createValidation(config) {
   }
   validate.OPTIONS = config;
   return validate;
+}
+function resolveParams(params, options) {
+  if (!params) return params;
+  for (const key of Object.keys(params)) {
+    params[key] = resolveMaybeRef(params[key], options);
+  }
+  return params;
+}
+function resolveMaybeRef(item, options) {
+  return Reference.isRef(item) ? item.getValue(options.value, options.parent, options.context) : item;
 }
 function getIn(schema, path, value, context = value) {
   let parent, lastPart, lastPartDebug;
@@ -692,6 +705,69 @@ function clone(src, seen = /* @__PURE__ */ new Map()) {
     throw Error(`Unable to clone ${src}`);
   }
   return copy;
+}
+function createStandardPath(path) {
+  if (!(path != null && path.length)) {
+    return void 0;
+  }
+  const segments = [];
+  let currentSegment = "";
+  let inBrackets = false;
+  let inQuotes = false;
+  for (let i = 0; i < path.length; i++) {
+    const char = path[i];
+    if (char === "[" && !inQuotes) {
+      if (currentSegment) {
+        segments.push(...currentSegment.split(".").filter(Boolean));
+        currentSegment = "";
+      }
+      inBrackets = true;
+      continue;
+    }
+    if (char === "]" && !inQuotes) {
+      if (currentSegment) {
+        if (/^\d+$/.test(currentSegment)) {
+          segments.push(currentSegment);
+        } else {
+          segments.push(currentSegment.replace(/^"|"$/g, ""));
+        }
+        currentSegment = "";
+      }
+      inBrackets = false;
+      continue;
+    }
+    if (char === '"') {
+      inQuotes = !inQuotes;
+      continue;
+    }
+    if (char === "." && !inBrackets && !inQuotes) {
+      if (currentSegment) {
+        segments.push(currentSegment);
+        currentSegment = "";
+      }
+      continue;
+    }
+    currentSegment += char;
+  }
+  if (currentSegment) {
+    segments.push(...currentSegment.split(".").filter(Boolean));
+  }
+  return segments;
+}
+function createStandardIssues(error, parentPath) {
+  const path = parentPath ? `${parentPath}.${error.path}` : error.path;
+  return error.errors.map((err) => ({
+    message: err,
+    path: createStandardPath(path)
+  }));
+}
+function issuesFromValidationError(error, parentPath) {
+  var _error$inner;
+  if (!((_error$inner = error.inner) != null && _error$inner.length) && error.errors.length) {
+    return createStandardIssues(error, parentPath);
+  }
+  const path = parentPath ? `${parentPath}.${error.path}` : error.path;
+  return error.inner.flatMap((err) => issuesFromValidationError(err, path));
 }
 var Schema = class {
   constructor(options) {
@@ -1236,12 +1312,40 @@ attempted value: ${formattedValue}
       type: next.type,
       oneOf: next._whitelist.describe(),
       notOneOf: next._blacklist.describe(),
-      tests: next.tests.map((fn) => ({
-        name: fn.OPTIONS.name,
-        params: fn.OPTIONS.params
-      })).filter((n, idx, list) => list.findIndex((c) => c.name === n.name) === idx)
+      tests: next.tests.filter((n, idx, list) => list.findIndex((c) => c.OPTIONS.name === n.OPTIONS.name) === idx).map((fn) => {
+        const params = fn.OPTIONS.params && options ? resolveParams(Object.assign({}, fn.OPTIONS.params), options) : fn.OPTIONS.params;
+        return {
+          name: fn.OPTIONS.name,
+          params
+        };
+      })
     };
     return description;
+  }
+  get ["~standard"]() {
+    const schema = this;
+    const standard = {
+      version: 1,
+      vendor: "yup",
+      async validate(value) {
+        try {
+          const result = await schema.validate(value, {
+            abortEarly: false
+          });
+          return {
+            value: result
+          };
+        } catch (err) {
+          if (err instanceof ValidationError) {
+            return {
+              issues: issuesFromValidationError(err)
+            };
+          }
+          throw err;
+        }
+      }
+    };
+    return standard;
   }
 };
 Schema.prototype.__isYupSchema__ = true;
@@ -2504,6 +2608,31 @@ var Lazy = class _Lazy {
     let next = this.clone();
     next.spec.meta = Object.assign(next.spec.meta || {}, args[0]);
     return next;
+  }
+  get ["~standard"]() {
+    const schema = this;
+    const standard = {
+      version: 1,
+      vendor: "yup",
+      async validate(value) {
+        try {
+          const result = await schema.validate(value, {
+            abortEarly: false
+          });
+          return {
+            value: result
+          };
+        } catch (err) {
+          if (ValidationError.isError(err)) {
+            return {
+              issues: issuesFromValidationError(err)
+            };
+          }
+          throw err;
+        }
+      }
+    };
+    return standard;
   }
 };
 function setLocale(custom) {
