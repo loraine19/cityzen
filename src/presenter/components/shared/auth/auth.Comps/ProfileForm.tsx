@@ -1,4 +1,4 @@
-import { Card, CardHeader, Button, CardBody, Typography, Input, Select, List, ListItem } from "@material-tailwind/react";
+import { Card, CardHeader, Button, CardBody, Typography, Input, Select, Option, List, ListItem, ListItemSuffix } from "@material-tailwind/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { assistanceLevel, mailSubscriptions } from "../../../../../domain/entities/Profile";
@@ -128,12 +128,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             }}>
                             {mailSubscriptions.map((label: Label, index: number) => {
                                 return (
-                                    <Select.Option
+                                    <Option
                                         className="!flex"
                                         value={label.value}
                                         key={index}>
                                         {label.label}
-                                    </Select.Option>
+                                    </Option>
                                 )
                             })}
                         </Select>
@@ -151,11 +151,11 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             }}>
                             {assistanceLevel.map((label: Label, index: number) => {
                                 return (
-                                    <Select.Option
+                                    <Option
                                         value={label.value}
                                         key={index}>
                                         {label.label}
-                                    </Select.Option>
+                                    </Option>
                                 )
                             })}
                         </Select>

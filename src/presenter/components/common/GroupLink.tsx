@@ -33,11 +33,11 @@ export const GroupLink: React.FC<GroupDivProps> = ({ group }) => {
                                 {group?.Address?.address}, {group?.Address?.zipcode} {group?.Address?.city}
                             </p>
                             <Chip
+                                key={category}
+                                value={category}
                                 size='sm'
                                 className="GrayChip text-ellipsis scale-[0.8] " >
-                                <Chip.Label>{category}
 
-                                </Chip.Label>
                             </Chip>
                         </div>
                     </PopoverContent>
