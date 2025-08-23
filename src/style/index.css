@@ -44,11 +44,11 @@
     @apply flex flex-col h-screen w-screen;
 }
 body {
-    @apply h-screen w-screen flex flex-col;
+    @apply h-screen w-screen  flex flex-col;
 }
 
 .App {
-    @apply flex flex-col w-screen  h-screen px-[0.5vw] overflow-auto min-h-[500px];
+    @apply flex flex-col w-screen overflow-hidden h-screen px-[0.5vw]  min-h-[500px];
 }
 
 main {
