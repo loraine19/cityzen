@@ -47,7 +47,7 @@ export const AvatarUser = ({ Profile, avatarSize = '', avatarStyle = '', style =
                     onError={() => setInError(true)}
                     referrerPolicy="unsafe-url"
                     size={avatarSize as any ?? 'sm'}
-                    className={`${classicStyle} ${avatarStyle} bg-${userColor}-100 text-white text-xs !max-w-4 fadeIn`}
+                    className={`${classicStyle} ${avatarStyle} bg-${userColor}-100 text-white text-xs  fadeIn`}
                     variant="circular"
                     alt={Profile?.firstName || 'user'}
                     src={Profile?.image as string}
@@ -57,7 +57,7 @@ export const AvatarUser = ({ Profile, avatarSize = '', avatarStyle = '', style =
                 <Icon
                     bg
                     fill
-                    style={`${avatarStyle} ${classicStyle} ${style} leading-[0.5] pt-[10%] flex z-auto  font-comfortaa font-bold `}
+                    style={`${avatarStyle} ${classicStyle} ${style} leading-[0.5] pt-[10%] flex z-auto min-w-max font-comfortaa font-bold `}
                     color={userColor}
                     size={iconSize()}
                     icon={Profile?.firstName?.charAt(0).toUpperCase() || '?'}
