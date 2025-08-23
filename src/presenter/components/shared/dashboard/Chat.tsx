@@ -90,8 +90,8 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
     const [openEmoji, setOpenEmoji] = useState(false);
 
     return (
-        <Card className='FixCardNoImage  bg-blue-gray-50 !border-white !border-8'>
-            <CardHeader className='FixCardHeaderNoImage pt-8 bg-transparent px-3'
+        <Card className='FixCardNoImage !flex bg-blue-gray-50 !border-white !border-8'>
+            <CardHeader className='FixCardHeaderNoImage pt-8 max-h-max  bg-transparent px-3'
                 floated={false}>
                 {newConv &&
                     <ProfileDiv profile={userRec} />}
@@ -102,8 +102,8 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
             <CardBody
                 ref={divRef}
                 onScroll={() => handleScroll()}
-                className='!overflow-auto flex flex-col-reverse pt-4 self-start'>
-                <div className='gap-4 p-3  justify-end items-end flex flex-col-reverse' >
+                className='!flex flex-1 !overflow-auto flex-col-reverse pt-4 px-4 self-start'>
+                <div className='gap-4 py-3 lg:px-2 flex-1 justify-end items-end flex flex-col-reverse' >
 
                     {!isLoading && messages && messages.map((msg: MessageView, index: number) => (
                         <div className={`flex p-0 w-full items-start ${msg.userId === messages[index + 1]?.userId ? ' pt-0' : ' pt-4'}`}
@@ -111,8 +111,8 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
 
                             <div
                                 className={`flex flex-1 [overflow-wrap:anywhere] flex-col px-5 shadow-sm pt-3 pb-6 justify-between relative  ${msg.isDeleted ? 'italic text-blue-gray-400' : ''} ${msg.IWrite ?
-                                    'bg-cyan-100 !text-right justify-end rounded-s-[1.5rem] rounded-tr-[1.5rem] !ml-[30%] ' :
-                                    'bg-orange-100 rounded-ss-[1.5rem] rounded-r-[1.5rem] !mr-[30%]'}`}>
+                                    'bg-cyan-100 !text-right justify-end rounded-s-[1.5rem] rounded-tr-[1.5rem] !ml-[28%] ' :
+                                    'bg-orange-100 rounded-ss-[1.5rem] rounded-r-[1.5rem] !mr-[28%]'}`}>
                                 <div className='text-xs font-light items-center flex flex-row-reverse justify-between'>
                                     {msg.formatedDate}
                                     {(msg.IWrite && !msg.isDeleted) &&

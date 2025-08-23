@@ -46,6 +46,7 @@ export const useUxStore = create<UxStore, [['zustand/persist', UxStore]]>(
               color = 'orange';
               break;
             case 'flag':
+            case 'chat':
               color = 'blue-gray';
               break;
             default:
