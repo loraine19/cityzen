@@ -185,7 +185,7 @@ export default function PostListPage() {
                         onClick={switchClick}
                         size="lg"
                         fill
-                        color="orange"
+                        color="rose"
                         style=" hidden md:flex"
                     />
                 </div>

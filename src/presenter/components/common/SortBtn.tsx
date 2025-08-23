@@ -23,7 +23,6 @@ export const SortButton = ({ sortList, setSelectedSort, selectedSort, reverse = 
                     <MenuHandler className="relative z-auto h-max min-w-max flex items-center  cursor-pointer">
                         <div className="flex items-center relative">
                             <Icon
-
                                 color={color ?? 'blue-gray'}
                                 icon="sort"
                                 size="lg"
@@ -68,7 +67,6 @@ export const SortButton = ({ sortList, setSelectedSort, selectedSort, reverse = 
                     </MenuList>
                 </Menu>
             </div>
-
         </div >
     )
 }

@@ -49,9 +49,9 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
 
     return (
         <>
-            <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-orange-400 !border-[1px]" : ""} !flex`}>
+            <Card className={`!flex justify-between ${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-orange-400 !border-[1px]" : ""} `}>
                 <CardHeader
-                    className={haveImage ? "h-full  lg:!max-h-[16vh] !max-h-[14vh] !mb-0" : "FixCardHeaderNoImage"}
+                    className={haveImage ? "h-full  lg:!max-h-[16vh] !max-h-[14vh] !mb-0" : "FixCardHeaderNoImage !m-0"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">
@@ -82,9 +82,9 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                         />
                     }
                 </CardHeader>
-                <CardBody className={` FixCardBody !flex-1 max-h-max -mt-2.5 mb-0`}>
+                <CardBody className={` FixCardBody h-full !flex-1`}>
                     <div className="relative flex items-center justify-between">
-                        <div className="flex gap-4 justify-between w-full mr-8">
+                        <div className="flex flex-col md:gap-4 lg:gap-0 justify-between w-full mr-8">
                             <Typography
                                 variant="h6">
                                 Probleme :
@@ -101,7 +101,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
                     </div>
 
                     <Typography
-                        className="leading-[1rem] pt-1 text-[0.9rem] !line-clamp-2 pr-6"
+                        className="leading-[1rem] pt-1 text-[0.9rem] !line-clamp-2 md:!line-clamp-6 lg:!line-clamp-2  pr-6"
                         color="blue-gray">
                         {description}
                     </Typography>

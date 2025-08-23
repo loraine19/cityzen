@@ -48,11 +48,11 @@ body {
 }
 
 .App {
-    @apply flex flex-col w-screen h-screen px-[0.5vw] overflow-auto min-h-[500px];
+    @apply flex flex-col w-screen  h-screen px-[0.5vw] overflow-auto min-h-[500px];
 }
 
 main {
-    @apply flex flex-col wRespXL h-[calc(100%+0rem)] px-4 gap-1 flex-1 w-full mx-auto py-1;
+    @apply flex flex-col wRespXL h-[calc(100%+0rem)] px-2 md:px-4 gap-1 flex-1 w-full mx-auto py-1;
     min-height: 0;
     z-index: 0;
     max-height: 100vh;
@@ -64,7 +64,7 @@ main {
 
 section,
 .Section {
-    @apply flex flex-col overflow-y-auto flex-1 px-[0.5%] md:px-[5%] lg:px-[2%];
+    @apply flex flex-col overflow-y-auto flex-1 px-[0%] md:px-[5%] lg:px-[2%];
     gap: 0.2rem;
     min-height: 0;
 }

@@ -81,8 +81,8 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
             <div className={
                 (navBottom ?
                     `items-center opacity-100 anim ${color}BG backdropBlur wRespXL rounded-full justify-center relative bottom-0 gap-6` :
-                    'z-0 md:scale-[0.75] scale-[0.72] -ml-[15%] -mr-[12%] lg:!-mr-[5rem] pt-[5px] lg:px-auto gap-2 ') +
-                ` flex z-30`
+                    'z-0 md:scale-[0.75] scale-[0.72]  -ml-[2.5rem] -mr-[2rem] lg:!-mr-[5rem] pt-[5px] lg:px-auto gap-2 ') +
+                ` flex z-30 `
             }>
                 <Navbar className={`
                     ${navBottom ?
@@ -91,7 +91,7 @@ export const NavBarSection: React.FC<NavBarProps> = ({ addBtn }) => {
                         `shadow-none bg-transparent overflow-x-auto lg:!pt-0 lg:overflow-hidden`} 
                         flex rounded-full h-full items-center p-0`}>
                     <div className={`${navBottom ? 'flex-row' : 'flex-row-reverse'} w-full min-w-max  h-full relative`}>
-                        <ul className={`flex !max-w-[calc(100vw-6rem)] overflow-auto flex-row w-full rounded-full justify-between h-full gap-auto  `}>
+                        <ul className={`flex !max-w-[calc(100vw-6rem)] overflow-y-hidden overflow-auto flex-row w-full rounded-full justify-between h-full gap-auto  `}>
                             {navItems.map(({ to, icon, label, color, col }: NavItem, index) => (
                                 <Typography
                                     onClick={() => { setColor(col) }}

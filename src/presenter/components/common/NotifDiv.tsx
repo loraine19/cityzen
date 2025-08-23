@@ -13,7 +13,7 @@ const NotifDiv: React.FC<NotifDivProps> = ({ notif, isLoading, refetch, error })
     let [attempt, setAttempt] = useState<number>(0);
 
     useEffect(() => {
-        if (attempt < 1 && !isLoading && !error) setTimeout(() => {
+        if (attempt < 2 && !isLoading && !error) setTimeout(() => {
             notif; refetch(); attempt++
         }, 1000);
     }, [notif, error]);

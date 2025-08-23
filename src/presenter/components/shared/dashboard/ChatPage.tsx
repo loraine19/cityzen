@@ -149,7 +149,7 @@ export default function ChatPage() {
                             onClick={() => connexion()} />}
 
                 </div>
-                <section className='flex pb-4 pt-8'>
+                <section className='flex !px-0 pb-4 pt-8'>
                     {notifConv &&
                         <NotifDiv
                             notif={notifConv}
@@ -159,8 +159,8 @@ export default function ChatPage() {
                         />}
                     {isLoadingConv ?
                         <Skeleton className=' m-auto !h-full !rounded-3xl' /> :
-                        <Card className='FixCardNoImage !pb-0 !px-0 flex '>
-                            <CardBody className='FixCardBody !p-0 !pt-3 !flex overflow-hidden'>
+                        <Card className='FixCardNoImage !flex !pb-0 !px-0 h-full'>
+                            <CardBody className=' !p-0 !pt-3 h-full'>
                                 <div className='flex flex-1 h-full  '>
                                     <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
                                         <List className='flex-1 '>
@@ -218,7 +218,7 @@ export default function ChatPage() {
                                         </List>
                                     </div>
                                     {open &&
-                                        <div className='relative flex h-full  pt-8 min-h-[90%] !w-[calc(100%-4rem)]'>
+                                        <div className='relative pt-3 !w-[calc(100%-4rem)]'>
                                             <Chat
                                                 refetch={refetch}
                                                 setNewConv={setNewConv}
@@ -234,7 +234,7 @@ export default function ChatPage() {
                                                 error={error}
                                             />
                                             <Icon
-                                                style='absolute !top-4 !right-2'
+                                                style='absolute !top-0 !right-4'
                                                 color='blue-gray'
                                                 size='md'
                                                 bg clear
@@ -253,8 +253,7 @@ export default function ChatPage() {
                             </CardBody>
                         </Card>}
                 </section>
-            </main>
+            </main >
         </ >
     )
 }
-

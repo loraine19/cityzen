@@ -13,7 +13,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
 
 
     return (
-        <Card className={`CardFix !h-full shadow-none !flex !gap-2 border border-gray-200  bg-blue-gray-50 opacity-95 !py-0 mb-1`}>
+        <Card className={`CardFix !h-full shadow-none !flex !gap-2 border border-gray-200  bg-blue-gray-50 opacity-95 !py-0 mb-1 md:!py-1`}>
             <CardHeader
                 className="fixCardHeaderNoImage mx-2 mt-1 py-1.5 shadow-none bg-transparent"
                 floated={false}>
@@ -51,11 +51,10 @@ export default function ServiceIssueCard(props: { service: Service }) {
                             </Typography>
                             <Icon
                                 bg
-                                icon="more_up"
+                                icon="visibility"
                                 link={`/service/${id}`}
                                 title={`voir les details de service  ${title}`}
-                                size="sm"
-                                fill />
+                                size="sm" />
                         </div>
                         <div className="flex gap-2 ">
                             <AvatarUser Profile={User.Profile} avatarSize="sm" />
@@ -74,7 +73,7 @@ export default function ServiceIssueCard(props: { service: Service }) {
                         <Typography
                             color="blue-gray"
                             variant="small"
-                            className="flex-0 pr-2 !line-clamp-2 leading-[1.1rem] ">
+                            className="flex-0 pr-2 !line-clamp-2  md:!line-clamp-6 lg:!line-clamp-1  leading-[1.1rem] ">
                             {description}
                         </Typography>
                     </div>

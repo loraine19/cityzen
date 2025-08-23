@@ -22,7 +22,7 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
         { icon: 'groups', text: "Groupes", onClick: () => navigate('/groupe'), color: "green" },
         { icon: 'diversity_3', text: "Conciliation", onClick: () => navigate('/conciliation'), color: 'orange' },
         { icon: "toll", text: `${user?.Profile?.points} points`, onClick: null, color: 'amber', style: 'hover:!bg-white' },
-        { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => { setNavBottom(!navBottom) }, color: 'blue-gray' },
+        { icon: navBottom ? 'move_up' : 'move_down', text: "Déplacer la barre", onClick: () => { setNavBottom(!navBottom) }, color: 'blue-gray', style: `${!hideNavBottom ? '' : 'hidden'}` },
         { icon: "exit_to_app", text: "Déconnexion", onClick: () => navigate('/signin'), style: "!text-red-500 !mt-2 !pt-2 border-t border-blue-gray-100", color: "red" },
     ]
 
@@ -30,11 +30,11 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
 
     return (
         <header onClick={() => { hideNavBottom && setHideNavBottom(false) }}>
-            <div className={`wRespXL relative h-full w-full flex justify-between pt-2
+            <div className={`wRespXL relative h-full w-full flex justify-between pt-1
                 ${hideNavBottom ? 'lg:flex animRev ' : 'animRev'}`} >
                 <div className={`flex w-full max-w-max h-full ${hideNavBottom ? 'hidden' : ''}`}>
                     <Menu placement="bottom-start">
-                        <MenuHandler className="relative h-full min-w-max pr-1.5 z-50 flex items-center cursor-pointer">
+                        <MenuHandler className="relative h-full min-w-max  z-50 flex items-center cursor-pointer">
                             {onBoard ?
                                 <div className='flex w-full flex-1 items-center'>
                                     <img className="!w-[48px] !h-[48px] object-cover object-center"
@@ -72,14 +72,14 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
                             ))}
                         </MenuList>
                     </Menu>
-                    {navBottom &&
+                    {(navBottom && !hideNavBottom) &&
                         <div className='flex items-center h-full w-full'>
                             {onBoard ?
                                 <Typography
                                     className='text-blue-gray-700 font-comfortaa text-[1.8rem] lg:text-[2.1rem] font-bold'>
                                     City'Do
                                 </Typography> :
-                                <div className='flex flex-col items-start px-4'>
+                                <div className='flex flex-col items-start'>
                                     <Typography
                                         variant='h5'
                                         className='text-blue-gray-800'>
