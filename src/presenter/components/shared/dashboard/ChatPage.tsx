@@ -162,7 +162,7 @@ export default function ChatPage() {
                         <Card className='FixCardNoImage !flex !pb-0 !px-0 h-full'>
                             <CardBody className=' !p-0 !pt-3 h-full'>
                                 <div className='flex flex-1 h-full  '>
-                                    <div className='flex-1 my-1 overflow-y-auto overflow-x-hidden'>
+                                    <div className='flex-1 -mt-5 overflow-y-auto overflow-x-hidden'>
                                         <List className='flex-1 '>
                                             {conversations &&
                                                 conversations.map((message: MessageView, index: number) =>
