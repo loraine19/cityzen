@@ -8,7 +8,7 @@ import { EventFindParams } from '../../domain/entities/Event';
 export const eventViewModel = () => {
   return (params: EventFindParams) => {
 
-    console.log('eventViewModel called', { caller: (new Error().stack?.split('\n')[2] || '').trim() });
+    // console.log('eventViewModel called', { caller: (new Error().stack?.split('\n')[2] || '').trim() });
 
     const { data: user, isLoading: userLoading } = useQuery({
       queryKey: ['user'],

@@ -17,7 +17,6 @@ export default function SignInPage() {
     const msg = searchParams.get("msg");
     const [notif, setNotif] = useState<string>(email && 'vous pouvez maintenant vous connecter' || msg || '')
     const [inError, setInError] = useState<boolean>(false);
-
     const signIn = async (accessData: AccessDTO) => await DI.resolve('signInUseCase').execute(accessData)
     const signInVerify = async (verifyData: VerifyDTO) => await DI.resolve('signInVerifyUseCase').execute(verifyData)
     const navigate = useNavigate();
@@ -96,7 +95,7 @@ export default function SignInPage() {
             <footer className="flex flex-col items-center gap-2 justify-center !static">
                 <Link to="/motdepasse_oublie">
                     <Typography
-                        className="text font-medium pb-2 nowraptext-center underline underline-offset-8 uppercase">
+                        className="text font-medium pb-2 nowrap text-center underline underline-offset-8 uppercase">
                         Mot de pass oublié
                     </Typography>
                 </Link>

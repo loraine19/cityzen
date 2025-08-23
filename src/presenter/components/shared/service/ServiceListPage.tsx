@@ -48,8 +48,6 @@ export default function ServicesPage() {
     useEffect(() => { setCategory(params.category || ''); setFilter(params.filter || '') }, []);
 
 
-
-
     //// NAMING
     const filterName = (): string => {
         switch (filter) {
@@ -101,6 +99,7 @@ export default function ServicesPage() {
             default: { setType(''), setStep('') }; break;
         }
         setParams({ filter: value as string || '', category })
+        await refetch();
     };
 
     const serviceTabs: TabLabel[] = [
@@ -178,7 +177,6 @@ export default function ServicesPage() {
 
         <main className={navBottom ? " withBottom " : ""}>
             <div className="sectionHeader">
-
                 <TabsMenu
                     labels={serviceTabs}
                     sortList={sortList}
@@ -203,10 +201,10 @@ export default function ServicesPage() {
                 <SubHeader
                     qty={count}
                     type={`services ${filterName()} ${categoryName()}`} />
-                {notif && !isLoading &&
+                {notif &&
                     <NotifDiv
-                        notif={notif}
                         error={error}
+                        notif={notif}
                         isLoading={isLoading}
                         refetch={refetch} />}
             </div>
@@ -214,9 +212,11 @@ export default function ServicesPage() {
                 <SkeletonGrid />
                 : <section
                     ref={divRef}
-                    onScroll={() => { onScroll(); handleHideCallback() }}
+                    onScroll={() => {
+                        onScroll();
+                        handleHideCallback()
+                    }}
                     className="Grid">
-
                     {services.map((service: ServiceView, index: number) => (
                         service &&
                         <div className="SubGrid" key={index}>
@@ -232,8 +232,6 @@ export default function ServicesPage() {
                         isBottom={isBottom}
                         hasNextPage={hasNextPage}
                         handleScroll={() => onScroll()} />
-
-
                 </section>}
         </main>
     );

@@ -63,7 +63,6 @@ export default function SignUpPage() {
                     formik={formik}
                     hidden={hidden}
                 />
-
             </main>
             <footer className="flex flex-col items-center gap-2 py-auto">
                 <Typography

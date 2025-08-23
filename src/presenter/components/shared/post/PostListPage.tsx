@@ -74,7 +74,6 @@ export default function PostListPage() {
         await refetch()
     }
 
-
     //// SEARCH
     const [searchCat, setSearchCat] = useState<Label>({ label: 'tous', value: '' });
     const [tabSelected] = useState<string>('');
@@ -150,7 +149,9 @@ export default function PostListPage() {
         handleHide(params)
     }, [divRef]);
     const [hide, setHide] = useState<boolean>(false);
-    useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide])
+    useEffect(() => {
+        (hide !== hideNavBottom) && setHideNavBottom(hide)
+    }, [hide]);
 
 
     //// SORT LIST
@@ -161,10 +162,11 @@ export default function PostListPage() {
         { key: PostSort.USER, label: "Utilisateur", icon: "person" }
     ]
 
-
+    //// RENDER
     return (
-        <main className={navBottom ? "withBottom" : "mb-4"}>
-            <div className="sectionHeader ">
+
+        <main className={navBottom ? " withBottom pb-5" : ""}>
+            <div className="sectionHeader">
                 <TabsMenu
                     labels={postTabs}
                     sortList={sortList}
