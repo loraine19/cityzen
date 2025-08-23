@@ -36,7 +36,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
         <div className="flex gap-3 items-center w-full">
 
             <Icon
-                icon={buttons[0].iconImage as string}
+                icon={buttons[0].iconImage as string || ''}
                 color={disabled1 ? 'gray' : 'red'}
                 onClick={() => { setOpen(true), setIndex(0) }}
                 bg size="md"
@@ -44,7 +44,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
                 title={buttons[0].title as string} />
 
             <Icon
-                icon={buttons[1].iconImage as string}
+                icon={buttons[1].iconImage as string || ''}
                 color={disabled2 ? 'gray' : 'orange'}
                 onClick={() => { setOpen(true), setIndex(1) }}
                 bg size="md"
@@ -54,7 +54,7 @@ export default function ModifBtnStack({ actions, disabled1, disabled2, update, i
 
             {icon3 &&
                 <Icon
-                    icon={buttons[2].iconImage as string}
+                    icon={buttons[2].iconImage as string || ''}
                     color={'cyan'}
                     onClick={() => { setOpen(true), setIndex(2) }}
                     bg size="md"

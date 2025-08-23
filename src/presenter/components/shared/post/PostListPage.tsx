@@ -163,8 +163,8 @@ export default function PostListPage() {
 
 
     return (
-        <main className={navBottom ? "withBottom" : ""}>
-            <div className="sectionHeader">
+        <main className={navBottom ? "withBottom" : "mb-4"}>
+            <div className="sectionHeader ">
                 <TabsMenu
                     labels={postTabs}
                     sortList={sortList}
@@ -238,7 +238,7 @@ export default function PostListPage() {
                     </>
                 }
                 <LoadMoreButton
-                    color={'orange'}
+                    color={'rose'}
                     isBottom={isBottom}
                     hasNextPage={true}
                     handleScroll={onScroll} />
