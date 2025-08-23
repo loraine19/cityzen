@@ -209,7 +209,7 @@ export default function VoteListPage() {
                     className="Grid">
 
                     {poolsSurveys.map((element: PoolSurveyView, index: number) =>
-                        element.typeS === VoteTarget.SURVEY ?
+                        element.type === VoteTarget.SURVEY ?
                             <div className="SubGrid" key={'div' + index}>
                                 <SurveyCard
                                     survey={element}

@@ -32,7 +32,14 @@ export default function EventDetailPage() {
     useEffect(() => {
         if (event && !event?.mine && !isLoading) navigate("/msg?msg=Vous n'avez pas le droit de modifier cet événement")
         setInitialValues(event as EventView)
+        setAddress(event?.Address || {} as AddressDTO)
     }, [isLoading]);
+
+    useEffect(() => {
+        if (event && event?.Address) {
+            setAddress(event?.Address || {} as AddressDTO)
+        }
+    }, [event])
 
     //// FORM SCHEMA
     const formSchema = object({

@@ -48,7 +48,7 @@ body {
 }
 
 .App {
-    @apply flex flex-col w-screen overflow-hidden h-screen px-[0.5vw]  min-h-[500px];
+    @apply flex flex-col w-screen overflow-hidden h-full px-[0.5vw] min-h-[500px];
 }
 
 main {
@@ -98,7 +98,7 @@ header {
 }
 
 .CTA {
-    @apply flex gap-y-2 gap-x-4 w-respLarge justify-around !px-4 pb-3 h-max lg:px-12;
+    @apply flex gap-y-2 gap-x-4 w-respLarge justify-around  pt-1 !px-0 pb-3 h-max;
 }
 
 /*** COLORS ***/

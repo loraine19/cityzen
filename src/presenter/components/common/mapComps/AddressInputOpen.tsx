@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Input, List, ListItem } from '@material-tailwind/react';
 import { Address } from '../../../../domain/entities/Address';
@@ -20,6 +20,11 @@ export const AddressInputOpen = (props: {
 
     const groupList = async (): Promise<Address[]> => await DI.resolve('getAddressUseCase').execute()
 
+
+    // USE EFFECT
+    useEffect(() => {
+        setInputValue(`${address?.address || ''} ${address?.zipcode || ''} ${address?.city || ''}`.trim());
+    }, [address]);
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const q = event.target.value;
@@ -106,6 +111,7 @@ export const AddressInputOpen = (props: {
                 variant='standard'
                 type="text"
                 name='address'
+                placeholder='Entrer une adresse'
                 value={inputValue}
                 onChange={(event) => {
                     if (event.target.value.trim() !== '' || event.target.value === '') { handleInputChange(event) }

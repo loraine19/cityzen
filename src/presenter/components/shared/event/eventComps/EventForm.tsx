@@ -32,17 +32,18 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
     //// ADDRESS GPS FUNCTION
     useEffect(() => {
         setAddress(Address)
-        Address && (formik.values.Address = Address)
+        if (Address) {
+            formik.values.Address = Address
+        }
     }, [Address]);
 
     const { image, title, category, description, start, end, participantsMin, Participants, id } = formik.values;
     const label = category ? getLabel(category, eventCategories) : '';
 
     return (
-        <form onSubmit={formik.handleSubmit} className="flex flex-col h-full overflow-hidden">
+        <form onSubmit={formik.handleSubmit} className="flex h-full flex-col overflow-hidden">
             <main>
                 <div className="sectionHeader gap-2">
-
                     <SubHeader
                         type={id ? 'Modifier mon évenement ' : 'Créer mon évenement '}
                         place={category ? label : ''} closeBtn />
@@ -74,7 +75,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                             user={user} />
                     </div>
                 </div>
-                <section className="flex flex-1 pb-1 pt-6 relative">
+                <section className="flex flex-1 pt-6 relative overflow-hidden">
                     <Card className="w-respLarge FixCard !relative !z-10">
                         <CardHeader className="FixCardHeader">
                             <div className={`${start ? 'ChipDiv !justify-end' : 'hidden'}`}>
@@ -119,12 +120,12 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             labelProps={{ className: "before:content-none after:content-none" }} />
                                     </div>
                                     <div className="flex flex-1 flex-col lg:pt-3 ">
-                                        {(Address?.lat && Address?.lng) ?
+                                        {((Address?.lat && Address?.lng)) ?
                                             <AddressMapOpen address={Address} /> : ''}
 
                                         <div className='relative z-50'>
                                             <AddressInputOpen
-                                                address={Address || formik.values.Address}
+                                                address={Address}
                                                 setAddress={setAddress}
                                                 error={formik.errors.Address} />
                                         </div>
@@ -179,7 +180,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             </Typography>
                                         </div>
                                         <Progress
-                                            label={`${participantsMin > 0 ? ` ,  soit ${Participants?.length} personnes` : 'Aucun participant'}`}
+                                            label={``}
                                             value={pourcentParticipants}
                                             size="md"
                                             color={pourcentParticipants === 100 ? "green" : "cyan"} />

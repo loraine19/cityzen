@@ -14,7 +14,8 @@ export class PoolSurveyView {
     mine: boolean = false;
     IVoted: boolean = false;
     myOpinion?: VoteOpinion | null = null;
-    typeS: VoteTarget = VoteTarget.POOL;
+    typeS: string = 'cagnotte';
+    type: VoteTarget = VoteTarget.POOL;
     pourcent: number = 0;
     needed: number = 0;
     title: string = '';
@@ -40,7 +41,8 @@ export class PoolSurveyView {
         if ('userIdBenef' in base) {
             Object.assign(this, base);
             this.flagged = false;
-            this.typeS = VoteTarget.POOL;
+            this.typeS = 'cagnotte'
+            this.type = VoteTarget.POOL;
             this.toogleVote = async (opinion: VoteOpinion) => {
                 const voteDto: VoteDTO = { targetId: base.id, target: VoteTarget.POOL, opinion }
                 this.IVoted ? await DI.resolve('updateVoteUseCase').execute(voteDto) : await DI.resolve('postVoteUseCase').execute(voteDto);
@@ -51,7 +53,8 @@ export class PoolSurveyView {
         if ('category' in base) {
             Object.assign(this, base);
             this.flagged = base?.Flags?.some(flag => flag?.userId === user?.id);
-            this.typeS = VoteTarget.SURVEY;
+            this.typeS = 'sondage';
+            this.type = VoteTarget.SURVEY;
             this.categoryS = SurveyCategory[base.category as string as keyof typeof SurveyCategory];
             this.image = base?.image
             this.toogleVote = async (opinion: VoteOpinion) => {

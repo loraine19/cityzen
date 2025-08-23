@@ -72,27 +72,28 @@ export default function EventDetailPage() {
 
 
     return (
-        <> <main data-cy="event-details-page">
-            <div className="sectionHader px-4">
-                <SubHeader
-                    type={`évenement ${event?.label ?? ''}`}
-                    place={` ${event?.Address?.address ?? ''} ${event?.Address?.city ?? ''}`}
-                    closeBtn />
+        <>
+            <main data-cy="event-details-page">
+                <div className="sectionHader px-4">
+                    <SubHeader
+                        type={`évenement ${event?.label ?? ''}`}
+                        place={` ${event?.Address?.address ?? ''} ${event?.Address?.city ?? ''}`}
+                        closeBtn />
 
-            </div>
-            <section>
-                {!isLoading && event ?
-                    <EventDetailCard
-                        EventLoad={event}
-                        refetch={refetch} /> :
-                    <Skeleton />}
-                {notif && <NotifDiv
-                    isLoading={isLoading}
-                    refetch={refetch}
-                    notif={notif}
-                />}
-            </section>
-        </main>
+                </div>
+                <section>
+                    {!isLoading && event ?
+                        <EventDetailCard
+                            EventLoad={event}
+                            refetch={refetch} /> :
+                        <Skeleton />}
+                    {notif && <NotifDiv
+                        isLoading={isLoading}
+                        refetch={refetch}
+                        notif={notif}
+                    />}
+                </section>
+            </main>
             <footer >
                 {(!isLoading && event && !error) && <>
                     {event?.mine && !isLoading ?
