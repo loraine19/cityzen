@@ -30,11 +30,11 @@ export default function NavBarTop({ addBtn, navIcons }: { addBtn?: boolean, navI
 
     return (
         <header onClick={() => { hideNavBottom && setHideNavBottom(false) }}>
-            <div className={`wRespXL relative h-full w-full flex justify-between pt-1.5
+            <div className={`wRespXL relative h-full w-full flex justify-between pt-2
                 ${hideNavBottom ? 'lg:flex animRev ' : 'animRev'}`} >
                 <div className={`flex w-full max-w-max h-full ${hideNavBottom ? 'hidden' : ''}`}>
                     <Menu placement="bottom-start">
-                        <MenuHandler className="relative h-full min-w-max px-1.5 z-50 flex items-center cursor-pointer">
+                        <MenuHandler className="relative h-full min-w-max pr-1.5 z-50 flex items-center cursor-pointer">
                             {onBoard ?
                                 <div className='flex w-full flex-1 items-center'>
                                     <img className="!w-[48px] !h-[48px] object-cover object-center"

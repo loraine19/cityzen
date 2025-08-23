@@ -13,6 +13,7 @@ import { getLabel } from '../../../views/viewsEntities/utilsService';
 import DI from '../../../../di/ioc';
 import { flagReasons } from '../../../constants';
 import { FlagView } from '../../../views/viewsEntities/flagViewEntities';
+import { Icon } from '../../common/IconComp';
 
 export default function FlagCreatePage() {
     const { id, target } = useParams();
@@ -120,12 +121,17 @@ export default function FlagCreatePage() {
                                 label={targetKey} />}
                     </section>
                 </main>
-                <footer className="CTA w-respLarge">
+                <footer className="CTA ">
                     <Button
+                        color='red'
                         type="submit"
-                        size="lg"
-                        className="w-full rounded-full" >
-                        envoyer mon signalement
+                        className="lgBtn" >
+                        <Icon
+                            fill
+                            size='lg'
+                            color="white"
+                            icon="flag_2" />
+                        Envoyer le signalement
                     </Button>
                 </footer>
             </form>

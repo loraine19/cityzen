@@ -20,9 +20,9 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
             <section className={`flex flex-1 pt-3`}>
                 <Card className=" w-respLarge FixCard z-50  ">
                     <CardHeader
-                        className={"FixCardHeaderNoImage px-4 min-h-max py-3 justify-between items-center shadow-none flex"}
+                        className={"FixCardHeaderNoImage px-4 min-h-max pt-2 gap-3 justify-between lg:items-center shadow-none flex !mt-0 flex-col lg:flex-row"}
                         floated={false}>
-                        <div className="flex gap-4">
+                        <div className="flex flex-col ">
                             <Typography
                                 className="truncate"
                                 variant="h6"
@@ -60,11 +60,9 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                 </div>}
                         </div>
                     </CardHeader>
-                    <CardBody
-                        className={` pt-0 flex-col flex flex-1 w-full gap-2  lg:max-h-[25vh] max-h-[30vh]`}
-                    >
-                        <div className={`${formik ? 'pt-2' : 'py-0'} lg:items-center flex flex-1 w-full gap-4 `}>
-                            <div className={`flex flex-1 h-full`}>
+                    <CardBody className={` flex-col flex flex-1 w-full gap-2 `}  >
+                        <div className={`${formik ? 'pt-2' : 'py-0'} pb-2 lg:items-center flex h-full w-full gap-4`}>
+                            <div className={`flex flex-1 h-full overflow-auto`}>
                                 <Textarea
                                     variant={formik ? "static" : "outlined"}
                                     error={Boolean(formik?.errors?.description)}
@@ -77,7 +75,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                     labelProps={{ className: "peer-focus:after:!border-none h-full" }}
                                 />
                             </div>
-                            <div className={imgBlob ? 'relative flex-1   flex' : `relative`}>
+                            <div className={imgBlob ? 'relative flex-1 flex' : `relative`}>
                                 <div className={imgBlob ? ' flex w-full' : `hidden`}>
                                     <Popover>
                                         <PopoverHandler>
@@ -113,8 +111,8 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                         </div>
                         <Typography variant="small">Concilateurs :</Typography>
                     </CardBody>
-                    <CardFooter className="CardFooter !overflow-auto w-full flex-1 flex flex-col  gap-3 !pt-2 lg:!pb-4">
-                        <div className='flex gap-3 md:!flex-row flex-col max-w-[100%] min-h-max '>
+                    <CardFooter className="CardFooter !overflow-auto w-full flex-1 flex flex-col  gap-3 !-mt-4 lg:!pb-4">
+                        <div className='flex gap-4 md:!flex-row flex-col max-w-[100%] min-h-max '>
                             <Select
                                 key='userIdModo'
                                 className="rounded-full flex  !shadow !py-1 bg-white border-none capitalize overflow-auto"
@@ -178,10 +176,7 @@ export const IssueForm: React.FC<IssueFormProps> = ({ issue, formik, service, mo
                                 }
                             </Select>
                         </div>
-                        <div className=" h-full">
-                            <ServiceIssueCard
-                                service={Service} />
-                        </div>
+                        <ServiceIssueCard service={Service} />
                     </CardFooter>
                 </Card>
             </section >

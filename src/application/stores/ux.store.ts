@@ -45,6 +45,9 @@ export const useUxStore = create<UxStore, [['zustand/persist', UxStore]]>(
             case 'sondage':
               color = 'orange';
               break;
+            case 'flag':
+              color = 'blue-gray';
+              break;
             default:
               color = 'blue-gray';
           }

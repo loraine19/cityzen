@@ -22,8 +22,11 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAProps) {
         case [PathElement.SERVICE, PathElement.EVENT, PathElement.GROUP].some(element => path.includes(element)):
             defColor = 'cyan';
             break;
-        case [PathElement.POST, PathElement.SURVEY, PathElement.POOL, PathElement.VOTE].some(element => path.includes(element)):
+        case [PathElement.SURVEY, PathElement.POOL, PathElement.VOTE].some(element => path.includes(element)):
             defColor = 'orange';
+            break;
+        case [PathElement.POST].some(element => path.includes(element)):
+            defColor = 'pink';
             break;
         default:
             defColor = 'gray';
@@ -57,7 +60,7 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAProps) {
 
 
     return (
-        <footer className={`CTA `}>
+        <footer className={`CTA pt-1 overflow-y-auto`}>
             {
                 <>
                     <Button className={buttons[0]?.icon === '' ? "hidden" : `{colorMap[(buttons[0]?.color ?? defColor) as keyof typeof colorMap]} lgBtn `}

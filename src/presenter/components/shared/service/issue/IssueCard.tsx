@@ -51,7 +51,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ mines, change, update, issue }) =
         <>
             <Card className={`${haveImage ? "FixCard" : "FixCardNoImage"} ${withMe ? "!border-orange-400 !border-[1px]" : ""} !flex`}>
                 <CardHeader
-                    className={haveImage ? "h-full lg:!max-h-[16vh] !max-h-[14vh] !mb-0" : "FixCardHeaderNoImage"}
+                    className={haveImage ? "h-full  lg:!max-h-[16vh] !max-h-[14vh] !mb-0" : "FixCardHeaderNoImage"}
                     floated={haveImage}>
                     <div className={haveImage ? "ChipDiv" : "ChipDivNoImage"}>
                         <div className="flex items-start gap-2 ">

@@ -11,6 +11,7 @@ import DI from '../../../../di/ioc';
 import { FlagView } from '../../../views/viewsEntities/flagViewEntities';
 import { FlagTarget } from '../../../../domain/entities/Flag';
 import { flagReasons } from '../../../constants';
+import { Icon } from '../../common/IconComp';
 
 
 export default function FlagEditPage() {
@@ -52,7 +53,7 @@ export default function FlagEditPage() {
             <form onSubmit={formik.handleSubmit}
                 className="flex flex-col h-full">
                 <main>
-                    <div className="sectionHeader px-4">
+                    <div className="sectionHeader">
                         <SubHeader
                             type={`Signaler `}
                             place={'un ' + FlagTarget[targetKey as string as keyof typeof FlagTarget]}
@@ -62,7 +63,7 @@ export default function FlagEditPage() {
                             <Switch
                                 label={flag.reason ? "signalé" : "non signalé"}
                                 className='px-2'
-                                color='cyan'
+                                color='red'
                                 name="active"
                                 onChange={formik.handleChange}
                                 checked={flag.reason ? true : false} />
@@ -95,12 +96,16 @@ export default function FlagEditPage() {
                                 flag={flag} />}
                     </section>
                 </main>
-                <footer className="CTA w-respLarge">
+                <footer className="CTA ">
                     <Button
                         type="submit"
-                        size="lg"
-                        className="w-full rounded-full" >
-                        retirer mon signalement
+                        className="lgBtn" >
+                        <Icon
+                            fill
+                            size='lg'
+                            color="white"
+                            icon="cancel" />
+                        Retirer le signalement
                     </Button>
                 </footer>
             </form>

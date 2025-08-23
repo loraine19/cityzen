@@ -91,7 +91,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                 </CardBody>
                 <CardFooter className="CardFooter flex justify-between items-center mb-2">
                     <ProfileDiv profile={User} />
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 overflow-auto">
                         <AvatarStack avatarDatas={Participants} />
                         <button
                             data-cy='btn-participate'

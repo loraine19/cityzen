@@ -104,7 +104,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                 )}
                 <div className="flex items-center ">
                     <button
-                        disabled={event?.status !== EventStatus.PENDING}
+                        disabled={event?.status === EventStatus.REJECTED}
                         data-cy='btn-participate'
                         onClick={async () => {
                             const event = toogleParticipate && await toogleParticipate()
@@ -119,7 +119,7 @@ export function EventCard({ event: initialEvent, change, mines, refetch }: Event
                                     size="md"
                                     icon="person"
                                     fill={event?.Igo}
-                                    color={(event?.Igo && event?.status === EventStatus.PENDING) ? "cyan" : "gray"}
+                                    color={(event?.Igo && event?.status !== EventStatus.REJECTED) ? "cyan" : "gray"}
                                     title={event?.Igo ? "Je n'y vais plus" : "Je participe"} />}
                         />
                     </button>

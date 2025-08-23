@@ -59,7 +59,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                         </Typography>
                     </div>
                 </CardBody>
-                <CardFooter className="CardFooter flex gap-4  mb-2">
+                <CardFooter className="CardFooter flex gap-4 mb-2">
                     <ProfileDiv profile={Author} />
                     <div className="flex items-center gap-2 ">
                         <button
@@ -76,7 +76,7 @@ export default function PostDetailCard(props: { post: PostView, mines?: boolean,
                                         icon="thumb_up"
                                         size="md"
                                         fill={ILike}
-                                        color={ILike ? "cyan" : "gray"}
+                                        color={ILike ? "rose" : "gray"}
                                         style=" hover:text-cyan-800 "
                                         title={ILike ? "Je n'aime plus" : "J'aime ce post"} />}>
                             </Chip>

@@ -98,7 +98,7 @@ header {
 }
 
 .CTA {
-    @apply flex gap-2 gap-x-4 w-respLarge justify-around !px-0 pt-2 h-max;
+    @apply flex gap-y-2 gap-x-4 w-respLarge justify-around !px-4 pb-3 h-max lg:px-12;
 }
 
 /*** COLORS ***/
@@ -401,7 +401,7 @@ button {
 }
 
 .lgBtn {
-    @apply flex min-h-max min-w-max items-center justify-center rounded-full w-full !shadow-md px-4 py-1.5 lg:py-2 !break-words;
+    @apply !flex min-h-max min-w-max items-center justify-center rounded-full w-full !shadow-md px-4 py-1.5 lg:py-2 gap-2 !break-words;
 }
 
 /* COMP */

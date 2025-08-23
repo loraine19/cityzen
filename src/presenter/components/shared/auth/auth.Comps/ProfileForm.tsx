@@ -42,21 +42,21 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
     return (
         <form onSubmit={formik.handleSubmit} className='flex h-full flex-col gap-2 ' >
             <main className='relative flex flex-1 pt-6 -mt-4'>
-                <Card className="w-respLarge h-full justify-between ">
+                <Card className="w-respLarge h-full ">
                     <CardHeader
-                        className="!bg-transparent shadow-none flex justify-center items-end"
+                        className="!bg-transparent !rounded-none !pb-2 shadow-none flex justify-center items-end"
                         floated={true}>
                         <ImageBtn
                             setImgBlob={setImgBlob}
                             formik={formik}
-                            className="-ml-20 " />
+                            className="-ml-20 -mb-3 " />
                         <AvatarUser
                             Profile={{
                                 firstName: formik.values.firstName, image: imgBlob as string,
                                 userId: user?.id || 0
                             } as any}
                             avatarSize={'lg'}
-                            avatarStyle="shadow-md   !rounded-full !h-[5rem] !w-[5rem] mb-1" />
+                            avatarStyle="shadow-md !rounded-full !h-[5rem] !w-[5rem]" />
 
                         <div className="w-full z-0 absolute left-0 top-10 flex justify-between">
                             <Typography
@@ -86,18 +86,19 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody className="flex flex-1 flex-col h-full gap-[4%] pb-4 pt-1.5 mb-2 overflow-auto !max-h-[calc(100vh-18rem)]">
+                    <CardBody className="flex flex-1 flex-col h-full gap-[4%] mb-4 overflow-auto ">
                         <Input
-                            //   label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"}
+                            label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"}
                             name="firstName"
-                            //  variant="standard"
+                            variant="standard"
                             onChange={formik.handleChange}
                             value={formik.values.firstName}
-                        //   error={formik.errors.firstName}
+                            error={formik.errors.firstName}
                         />
                         <Input
-                            // label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"}
+                            label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"}
                             name="lastName"
+                            variant="standard"
                             onChange={formik.handleChange}
                             value={formik.values.lastName}
                             error={formik.errors.lastName} />
