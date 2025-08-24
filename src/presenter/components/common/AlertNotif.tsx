@@ -17,10 +17,8 @@ export const AlertNotif = () => {
     const socketService = DI.resolve('socketService');
 
     const { setConnectedUsers, connectedUsers } = connectedUsersStore();
-
     const { connected, setConnected, user } = useUserStore();
-    const isOnline: boolean = connectedUsers.find((userId) => userId === user.id) ? true : false;
-    const [isConnected, setIsConnected] = useState<boolean>(isOnline);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
     const { setUnReadMsgNotif, setUnReadNotMessages } = useNotificationStore();
 
     //// STATE USER CONN 
@@ -54,7 +52,7 @@ export const AlertNotif = () => {
             socketService.disconnect(nameSpace);
             setConnected(false);
         }
-    }, [isLoggedIn, connectedUsers, isConnected])
+    }, [isLoggedIn, connectedUsers])
 
 
 
