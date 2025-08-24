@@ -31,7 +31,6 @@ export default function DashboardPage() {
     }, [user])
     const navigate = useNavigate();
 
-
     //// PARAMS
     const [searchParams] = useSearchParams();
     const msg = searchParams.get("msg");
@@ -157,7 +156,7 @@ export default function DashboardPage() {
                                         size="md"
                                         color="orange"
                                         title="voir mes notifications" />
-                                    <span className={notifsMsg.length < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-orange-500 border-[2px] border-white"} />
+                                    <span className={notifsOther.length < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-orange-500 border-[2px] border-white"} />
                                 </div>
                                 <div className="relative">
                                     < Icon
@@ -167,7 +166,7 @@ export default function DashboardPage() {
                                         size="md"
                                         color="cyan"
                                         title="voir mes messages" />
-                                    <span className={notifsOther.length < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-cyan-500 border-[2px] border-white"} />
+                                    <span className={notifsMsg.length < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-cyan-500 border-[2px] border-white"} />
                                 </div>
                                 <Typography> {count > 0 ?
                                     <>{count} {count > 1 ? 'notifications' : 'notification'} </> :
@@ -205,9 +204,10 @@ export default function DashboardPage() {
                                             onClick={async () => {
                                                 await readNotif(notif?.id);
                                                 await refetch();
-                                                notif?.link && navigate(notif?.link)
+                                                //notif?.link && navigate(notif?.link)
                                             }}
                                             size="md"
+                                            style="hover:cursor-pointer absolute right-0 !z-50"
                                             title={"fermer " + notif?.title} />
                                     </div>))}
                             </div>

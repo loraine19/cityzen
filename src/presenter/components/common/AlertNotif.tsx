@@ -1,17 +1,20 @@
-import { Card, } from "@material-tailwind/react";
+import { Card, Typography } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { connectedUsersStore } from "../../../application/stores/connectedUsers.store";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 import { Notif } from "../../../domain/entities/Notif";
 import DI from "../../../di/ioc";
 import { Icon } from "./IconComp";
+import { useUserStore } from "../../../application/stores/user.store";
 
 export const AlertNotif = () => {
+    const { isLoggedIn } = useUserStore(state => state);
 
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { isLoading, refetch, count, notifsMsg, notifsOther } = notifViewModelFactory()
     const nameSpace = 'notifs';
-    const [notif, setNotif] = useState<string | null>('null');
+    const [notif, setNotif] = useState<string | null>(null);
+    const [link, setLink] = useState<string | null>('/');
     const [connected, setConnected] = useState(false);
     const socketService = DI.resolve('socketService');
 
@@ -27,6 +30,7 @@ export const AlertNotif = () => {
     const up = async () => await socketService.sendMessage({ message: 'connexion au notif' }, nameSpace);
 
     useEffect(() => {
+        if (!isLoggedIn) return;
         console.warn('mounted CHAT')
         if (!connected) {
             connexion();
@@ -40,7 +44,7 @@ export const AlertNotif = () => {
             console.warn('unmounted CHAT')
             socketService.disconnect(nameSpace);
         }
-    }, [])
+    }, [isLoggedIn])
 
 
 
@@ -51,7 +55,8 @@ export const AlertNotif = () => {
                 if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
                     const notifMessage = newMessage as Notif;
                     setNotif(notifMessage.description);
-                    // setTimeout(() => { setNotif('') }, 5000);
+                    setLink(notifMessage.link || '/');
+                    setTimeout(() => { setNotif('') }, 5000);
                     if (notifMessage.type === 'MESSAGE') {
                         console.log('New message notification:', notifMessage);
                         await refetch();
@@ -81,11 +86,15 @@ export const AlertNotif = () => {
     return (
         <div className={`h-max w-full z-[1000] absolute left-0 top-0 flex justify-center `}>
             <div className="relative z-50 w-[90%] max-w-[600px] mx-auto justify-center items-center">
-                <Card className={`w-full rounded-2xl h-max px-4 py-3 shadow-lg transition-all duration-1000 ease-in-out transform bg-opacity-85 
+                <Card className={`w-full rounded-2xl h-max px-4 py-3 shadow-lg transition-all duration-1000 ease-in-out transform bg-opacity-95 
                  ${notif ?
                         'scale-100 opacity-100 top-3 slide absolutme' :
                         'scale-80 opacity-0 top-0'} `}>
-                    {notif}
+                    <Typography
+                        className="underline underline-offset-8 "
+                        as="a"
+                        href={link ?? '/'}
+                    >{notif}</Typography>
                     <Icon
                         bg
                         style='absolute right-2 top-1 opacity-70'

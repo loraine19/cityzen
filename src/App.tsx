@@ -63,6 +63,7 @@ function App() {
     return (
         <ErrorBoundary
             color={color} onRetry={handleRetry} retryCount={retryCount}>
+            <AlertNotif />
             <BrowserRouter>
                 <div className={`App ${color}BG`}>
                     <Suspense fallback={<LoadingPage />}>
@@ -79,6 +80,7 @@ function App() {
 
                             {/* Private routes */}
                             <Route path="/" element={<PrivateRoute />}>
+
                                 <Route path="/myprofile" element={<MyInfosPage />} />
 
                                 {/* Pages with top navigation */}
@@ -138,7 +140,7 @@ function App() {
                         </Routes>
                     </Suspense>
                     <AlertModal values={alertValues ?? errorValues} />
-                    <AlertNotif />
+
                     <div className="scale-95 opacity-50">
                         <ReactQueryDevtools />
                     </div>
