@@ -63,6 +63,7 @@ export default function SurveyDetailPage() {
                             className='lgBtn w-respLarge min-h-max'
                             onClick={() => setOpenVote(true)} >
                             <Icon
+                                size='lg'
                                 fill
                                 color='white'
                                 icon={survey.IVoted ? 'edit' : 'smart_card_reader'} />

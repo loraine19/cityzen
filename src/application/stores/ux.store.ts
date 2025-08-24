@@ -11,7 +11,6 @@ interface UxStore {
   setNavBottom: (value: boolean) => void;
   hideNavBottom: boolean;
   setHideNavBottom: (value: boolean) => void;
-
 }
 
 const storage = new cryptedStorage();
@@ -47,6 +46,7 @@ export const useUxStore = create<UxStore, [['zustand/persist', UxStore]]>(
               break;
             case 'flag':
             case 'chat':
+            case 'notification':
               color = 'blue-gray';
               break;
             default:

@@ -12,7 +12,7 @@ import { ProfileDiv } from "../../../common/ProfilDiv";
 
 type EventCardProps = {
     EventLoad: EventView,
-    refetch?: () => void,
+    refetch?: () => Promise<void>,
     change?: (e: any) => void
 }
 
@@ -97,7 +97,7 @@ export function EventDetailCard({ EventLoad, refetch }: EventCardProps) {
                             data-cy='btn-participate'
                             onClick={async () => {
                                 toogleParticipate && await toogleParticipate();
-                                refetch && refetch()
+                                refetch && await refetch()
                             }}>
                             <Chip
                                 value={participantsMin}

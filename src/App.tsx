@@ -15,6 +15,7 @@ import { useAlertStore } from "./application/stores/alert.store";
 import { WithTopNavPages } from "./presenter/components/shared/utilsPage/WithTopNavPages";
 import { WithBottomPages } from "./presenter/components/shared/utilsPage/WithBottomPages";
 import { useUxStore } from "./application/stores/ux.store";
+import { AlertNotif } from "./presenter/components/common/AlertNotif";
 
 // Lazy loaded pages
 const ServiceCreatePage = lazy(() => import("./presenter/components/shared/service/ServiceCreatePage"));
@@ -137,6 +138,7 @@ function App() {
                         </Routes>
                     </Suspense>
                     <AlertModal values={alertValues ?? errorValues} />
+                    <AlertNotif />
                     <div className="scale-95 opacity-50">
                         <ReactQueryDevtools />
                     </div>

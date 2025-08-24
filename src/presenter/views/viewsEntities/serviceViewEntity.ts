@@ -16,6 +16,12 @@ export class ServiceView extends Service {
     typeS: string;
     statusS: string
     statusValue: number
+    isNew: boolean;
+    isResp: boolean;
+    isValidated: boolean;
+    isFinish: boolean;
+    inIssue: boolean;
+
     constructor(service: Service, user: User) {
         super(service);
         if (!service) throw new Error('Impossible de récupérer le service')
@@ -24,10 +30,17 @@ export class ServiceView extends Service {
         this.mine = service?.userId === user?.id;
         this.isLate = this.isLateCalc(service?.createdAt, 15);
         this.points = this.GetPoints(service, user?.Profile);
+
         this.categoryS = ServiceCategory[service?.category as string as keyof typeof ServiceCategory]
         this.typeS = ServiceType[service?.type as string as keyof typeof ServiceType]
         this.statusS = ServiceStep[service?.status as string as keyof typeof ServiceStep]
         this.statusValue = Object.keys(ServiceStep).indexOf(service?.status as string)
+
+        this.isNew = this.statusS === ServiceStep.STEP_0 ? true : false;
+        this.isResp = this.statusS === ServiceStep.STEP_1 ? true : false;
+        this.isValidated = this.statusS === ServiceStep.STEP_2 ? true : false;
+        this.isFinish = this.statusS === ServiceStep.STEP_3 ? true : false;
+        this.inIssue = this.statusS === ServiceStep.STEP_4 ? true : false;
     }
 
     private isLateCalc = (date: Date, days: number) => new Date(date) < new Date((new Date().getTime() - days * 24 * 60 * 60 * 1000)) ? true : false

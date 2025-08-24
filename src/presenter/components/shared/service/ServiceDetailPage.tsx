@@ -9,51 +9,64 @@ import { Skeleton } from '../../common/Skeleton';
 import { generateContact, GenereMyActions, getEnumVal, isLate } from '../../../views/viewsEntities/utilsService';
 import { ContactDiv } from '../../common/ContactDiv';
 import { User } from '../../../../domain/entities/User';
+import { useAlertStore } from '../../../../application/stores/alert.store';
+import { ServiceView } from '../../../views/viewsEntities/serviceViewEntity';
+import { useEffect, useState } from 'react';
 
 export default function ServiceDetailPage() {
+
+    //// TODO 
+    // notif div refetch
+
+    //// PARAMS
     const { id } = useParams();
-    const navigate = useNavigate();
-
     const idS = id ? parseInt(id) : 0;
-    const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
-    const { service, isLoading, error, refetch } = serviceIdViewModelFactory(idS);
 
+    //// HANDLE API ERROR
+    const { handleApiError } = useAlertStore()
+    const navigate = useNavigate()
+
+    //// VIEW MODEL
+    const serviceIdViewModelFactory = DI.resolve('serviceIdViewModel');
+    const { service, isLoading, error, update } = serviceIdViewModelFactory(idS);
+
+    //// ACTIONS
     const deleteService = async (id: number) => await DI.resolve('deleteServiceUseCase').execute(id);
     const respService = async (id: number) => await DI.resolve('respServiceUseCase').execute(id);
     const cancelRespService = async (id: number) => await DI.resolve('cancelRespServiceUseCase').execute(id);
     const validRespService = async (id: number) => await DI.resolve('validRespServiceUseCase').execute(id);
     const finishService = async (id: number) => await DI.resolve('finishServiceUseCase').execute(id);
 
-    const isNew = service.statusS === ServiceStep.STEP_0 ? true : false;
-    const isResp = service.statusS === ServiceStep.STEP_1 ? true : false;
-    const isValidated = service.statusS === ServiceStep.STEP_2 ? true : false;
-    const isFinish = service.statusS === ServiceStep.STEP_3 ? true : false;
-    const inIssue = service.statusS === ServiceStep.STEP_4 ? true : false;
+    //// STATUS
     const statusInt = getEnumVal(service.statusS, ServiceStep)
     const isLateValue = (isLate(service.createdAt, 15) && statusInt < 1)
+    const { typeS, categoryS, mine } = service
 
-    const { typeS, categoryS, mine, IResp } = service
-    const generateActions = (): Action[] => {
-        const myAction = GenereMyActions(service, "service", deleteService, isLateValue);
+    //// ACTIONS
+    const myAction: Action[] = GenereMyActions(service, "service", deleteService, isLateValue);
+    const generateActions = (service: ServiceView): Action[] => {
         let actions: Action[] = [];
         switch (true) {
-            case (!IResp && !mine || isFinish):
+            case (!service.IResp && !mine || service.isFinish):
                 actions = [
                     {
-                        iconImage: isNew ? 'person' : isFinish ? 'check' : 'block',
-                        icon: isNew ? 'Répondre au service' : isFinish ? 'ce service est terminé' : service.statusS,
-                        title: isNew ? 'Nous envoyerons un message à ' + service.User?.email + ' pour le premier contact' : '',
+                        iconImage: service.isNew ? 'person' : service.isFinish ? 'check' : 'block',
+                        icon: service.isNew ? 'Répondre au service' : service.isFinish ? 'ce service est terminé' : service.statusS,
+                        title: service.isNew ? 'Nous envoyerons un message à ' + service.User?.email + ' pour le premier contact' : '',
                         body: service?.title,
-                        function: isNew ? async () => {
-                            await respService(service.id)
-                            await refetch()
-                        } : () => { },
+                        function: service.isNew ?
+                            async () => {
+                                const data = await respService(service.id)
+                                if (data.error || !data) handleApiError(data.error)
+                                else updateService();
+                            } :
+                            () => { alert('Service déjà répondu'); },
                     },
                 ];
                 break;
-            case (mine && isNew):
+            case (mine && service.isNew):
                 actions = [...myAction];
-                if (isLateValue && !isResp) {
+                if (isLateValue && !service.isResp) {
                     actions.push({
                         color: 'cyan',
                         icon: 'Relancer',
@@ -64,7 +77,7 @@ export default function ServiceDetailPage() {
                     });
                 }
                 break;
-            case (mine && isResp):
+            case (mine && service.isResp):
                 actions = [
                     ...myAction,
                     {
@@ -75,7 +88,8 @@ export default function ServiceDetailPage() {
                         body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone} , ${service?.points} points seront débités de votre compte, et crédités à ${service.UserResp?.Profile.firstName} après validation de la fin du service`,
                         function: async () => {
                             const data = await validRespService(service.id);
-                            data && await refetch()
+                            if (data.error || !data) handleApiError(data.error)
+                            else updateService();
                         },
                     },
                     {
@@ -85,13 +99,14 @@ export default function ServiceDetailPage() {
                         title: `Refuser la reponse de ${service.UserResp?.Profile.firstName}`,
                         body: `${service?.title} <br> Nous envoyerons un message à ${service.UserResp?.email} - ${service.UserResp?.Profile.phone}`,
                         function: async () => {
-                            await cancelRespService(service.id)
-                            await refetch()
+                            const data = await cancelRespService(service.id)
+                            if (data.error || !data) handleApiError(data.error)
+                            else updateService();
                         },
                     },
                 ];
                 break;
-            case (mine && isValidated):
+            case (mine && service.isValidated):
                 actions = [
                     {
                         color: 'cyan',
@@ -111,26 +126,35 @@ export default function ServiceDetailPage() {
                         icon: 'terminer',
                         title: 'Terminer le service',
                         body: `${service?.title}<br> et crediter ${service.UserResp?.Profile.firstName} <br> de ${service?.points} points, Nous enverrons un message à ${service.UserResp?.email} `,
-                        function: async () => { await finishService(service.id) }
+                        function: async () => {
+                            const data = await finishService(service.id);
+                            if (data.error || !data) handleApiError(data.error)
+                            else updateService();
+                        }
                     },
                 ];
                 break;
-            case (IResp && !isFinish && !inIssue):
+            case (service.IResp && !service.isFinish && !service.inIssue):
                 actions = [
                     {
-                        color: isResp ? 'orange' : 'red',
+                        color: service.isResp ? 'orange' : 'red',
                         iconImage: 'close',
-                        icon: isResp ? 'Annuler votre réponse' : isValidated ? "Besoin d'aide ?" : '',
-                        title: isResp ? 'Annuler votre réponse' : isValidated ? "Ouvrir une demande de conciliation?" : '',
-                        body: isResp ? service?.title : isValidated ? `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` : '',
+                        icon: service.isResp ? 'Annuler votre réponse' : service.isValidated ? "Besoin d'aide ?" : '',
+                        title: service.isResp ? 'Annuler votre réponse' : service.isValidated ? "Ouvrir une demande de conciliation?" : '',
+                        body: service.isResp ? service?.title : service.isValidated ? `Avant d'ouvrir une demande d'aide pouvez contacter ${generateContact(service.User)}` : '',
                         function: async () => {
-                            if (isResp) { await cancelRespService(service.id); await refetch() };
-                            if (isValidated) navigate(`/conciliation/create/${service.id}`);
+                            if (service.isResp) {
+                                const data = await cancelRespService(service.id);
+                                if (data.error) handleApiError(data.error)
+                                else updateService();
+                            }
+                            else if (service.isValidated) navigate(`/conciliation/create/${service.id}`)
+                            else alert('Service déjà répondu');
                         },
                     },
                 ];
                 break;
-            case (inIssue && IResp || inIssue && mine):
+            case (service.inIssue && service.isResp || service.inIssue && mine):
                 actions = [
                     {
                         color: 'red',
@@ -148,13 +172,22 @@ export default function ServiceDetailPage() {
 
         return isLoading ? [] as Action[] : actions;
     }
-    const ok = generateActions();
 
+    const disabled1 = (!mine && !service.IResp && statusInt >= 1) || service.isFinish
 
+    const [actions, setActions] = useState<Action[]>(generateActions(service))
 
-    const disabled1 = (!mine && !IResp && statusInt >= 1) || isFinish
+    useEffect(() => {
+        if (!isLoading && !error && service) {
+            const updatedActions = generateActions(service);
+            setActions([...updatedActions]);
+        }
+    }, [isLoading, error])
 
-
+    const updateService = async () => {
+        const data = await update();
+        setActions(generateActions(data));
+    }
 
     return (
         <>
@@ -174,7 +207,9 @@ export default function ServiceDetailPage() {
             </main>
             <footer>
                 {!isLoading && !error && service &&
-                    <CTAMines actions={ok} disabled1={disabled1} />}
+                    <CTAMines
+                        actions={actions}
+                        disabled1={disabled1} />}
             </footer>
         </>
     );

@@ -66,7 +66,17 @@ export const eventIdViewModel = () => {
     })
 
     const event = (!userLoading && !isLoading && !error) ? new EventView(data, userId) : {} as EventView
-    return { event, isLoading, error, refetch }
+
+    const update = async (): Promise<EventView | null> => {
+      const { data: freshData, isSuccess } = await refetch();
+      if (isSuccess && freshData) {
+        const updatedEvent = new EventView(freshData, userId);
+        return updatedEvent;
+      }
+      return null;
+    }
+
+    return { event, isLoading, error, refetch, update }
   }
 }
 

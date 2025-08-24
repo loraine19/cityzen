@@ -62,6 +62,15 @@ export const serviceIdViewModel = () => {
       queryFn: async () => await getServiceById.execute(id),
     })
     const service = userLoading || isLoading ? {} : data ? new ServiceView(data, user) : {} as ServiceView;
-    return { service, isLoading, error, refetch }
+
+    const update = async (): Promise<ServiceView | null> => {
+      const { data: freshData, isSuccess } = await refetch();
+      if (isSuccess && freshData) {
+        const updated = new ServiceView(freshData, user);
+        return updated;
+      }
+      return null;
+    };
+    return { service, isLoading, error, refetch, update }
   }
 }

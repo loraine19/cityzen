@@ -34,6 +34,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         if (this.props.retryCount < 3) {
             this.setState({ error });
             console.error('retrying...' + this.props.retryCount, error.message);
+            this.setState({ hasError: false });
             this.props.onRetry();
         }
         else {

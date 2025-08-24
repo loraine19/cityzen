@@ -9,11 +9,15 @@ import { Skeleton } from '../../common/Skeleton';
 import { useAlertStore } from '../../../../application/stores/alert.store';
 
 export default function PostDetailPage() {
+    //// PARAMS
     const { id } = useParams();
     const idS = id ? parseInt(id) : 0;
+
+    //// VIEW MODEL
     const postIdViewModelFactory = DI.resolve('postIdViewModel');
     const { post, isLoading, error } = postIdViewModelFactory(idS);
     const deletePost = async (id: number) => await DI.resolve('deletePostUseCase').execute(id);
+
     const { setOpen, open } = useAlertStore(state => state);
     const handleOpen = () => setOpen(!open)
     const myActions = post && GenereMyActions(post, "annonce", deletePost)

@@ -26,8 +26,6 @@ export default function PoolDetailPage() {
     // FUNCTIONS
     const deletePool = async (id: number) => await DI.resolve('deletePoolUseCase').execute(id)
     const myActions: Action[] = pool && GenereMyActions(pool, "vote/cagnotte", deletePool)
-
-
     const [openVote, setOpenVote] = useState(false);
 
     return (<>
@@ -57,11 +55,12 @@ export default function PoolDetailPage() {
                 <footer className={`CTA`}>
                     <Button
                         disabled={pool?.status !== PoolSurveyStatus.PENDING}
-                        size='lg'
+                        size='md'
                         color={pageColor}
                         className='lgBtn'
                         onClick={() => setOpenVote(true)}>
                         <Icon
+                            size='lg'
                             fill
                             icon='smart_card_reader'
                             color='white' />

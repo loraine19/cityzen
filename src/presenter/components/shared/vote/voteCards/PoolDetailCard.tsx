@@ -25,7 +25,7 @@ export default function PoolDetailCard({ pool, setOpen }: PoolDetailCardProps) {
     }
     return (
         <div className="DetailCardDiv">
-            <Card className="FixCardNoImage !flex  justify-betweenw-respLarge" >
+            <Card className="FixCardNoImage !flex  justify-between w-respLarge" >
                 <CardHeader className={"FixCardHeaderNoImage"}
                     floated={false}>
                     <div className={`ChipDivNoImage flex-wrap`}>

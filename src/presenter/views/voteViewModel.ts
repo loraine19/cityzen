@@ -57,9 +57,18 @@ export const poolIdViewModel = () => {
       queryFn: async () => await getPoolById.execute(id),
     })
 
-    console.log('voteview', data, isLoading, error, userLoading)
     const pool = (!userLoading && data && !error && !isLoading) ? new PoolSurveyView(data, user) : {} as PoolSurveyView;
-    return { pool, isLoading, error, refetch }
+
+    const update = async (): Promise<PoolSurveyView | null> => {
+      const { data: freshData, isSuccess } = await refetch();
+      if (isSuccess && freshData) {
+        const updatedEvent = new PoolSurveyView(freshData, user);
+        return updatedEvent;
+      }
+      return null;
+    }
+
+    return { pool, isLoading, error, refetch, update }
   }
 }
 
@@ -81,7 +90,16 @@ export const surveyIdViewModel = () => {
     })
 
     const survey = (!userLoading && !error && !isLoading && data) ? new PoolSurveyView(data, user) : {} as PoolSurveyView;
-    return { survey, isLoading, error, refetch }
+
+    const update = async (): Promise<PoolSurveyView | null> => {
+      const { data: freshData, isSuccess } = await refetch();
+      if (isSuccess && freshData) {
+        const updatedEvent = new PoolSurveyView(freshData, user);
+        return updatedEvent;
+      }
+      return null;
+    }
+    return { survey, isLoading, error, refetch, update }
   }
 }
 

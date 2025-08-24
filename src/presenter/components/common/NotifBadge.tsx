@@ -1,12 +1,11 @@
-import { Menu, MenuHandler, Chip, MenuList, Typography, MenuItem, Card } from "@material-tailwind/react"
+import { Menu, MenuHandler, Chip, MenuList, Typography, MenuItem } from "@material-tailwind/react"
 import { Icon } from "./IconComp"
 import { NotifView } from "../../views/viewsEntities/notifViewEntity";
 import { useNavigate } from "react-router";
 import DI from "../../../di/ioc";
 import { LoadMoreButton } from "./LoadMoreBtn";
-import { useEffect, useRef, useState } from "react";
-import { ElementNotif, Notif } from "../../../domain/entities/Notif";
-import { connectedUsersStore } from "../../../application/stores/connectedUsers.store";
+import { useRef, useState } from "react";
+import { ElementNotif } from "../../../domain/entities/Notif";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 
 export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
@@ -16,77 +15,13 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const messages = notifViewModelFactory(ElementNotif.MESSAGE)
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate()
-    const nameSpace = 'notifs';
-    const [notif, setNotif] = useState<string | null>(null);
-    const [connected, setConnected] = useState(false);
-    const socketService = DI.resolve('socketService');
 
-    const { setConnectedUsers } = connectedUsersStore();
-    const { setUnReadMsgNotif, setUnReadNotMessages, setUnReadNotif } = useNotificationStore();
-
-    const connexion = () => {
-        socketService.connect(nameSpace);
-        socketService.onConnect(() => { setConnected(true) });
-    }
-
-    const up = async () => await socketService.sendMessage({ message: 'connexion au notif' }, nameSpace);
-    useEffect(() => {
-        console.warn('mounted CHAT')
-        if (!connected) {
-            connexion();
-            up();
-        }
-        socketService.onConnectError((error: Error) => {
-            console.error("Connection Error:", error);
-        })
-
-        return () => {
-            console.warn('unmounted CHAT')
-            socketService.disconnect(nameSpace);
-        }
-    }, [])
-
-
-
-
-
-    useEffect(() => {
-        const handleNewMessage = async (newMessage: any) => {
-            console.log(newMessage)
-            socketService.onNewMessage(async (newMessage: Notif | { users: number[] }) => {
-                if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
-                    const notifMessage = newMessage as Notif;
-                    setNotif(notifMessage.description);
-                    setTimeout(() => { setNotif('') }, 1000);
-                    if (notifMessage.type === 'MESSAGE') {
-                        await messages.refetch();
-                        setUnReadMsgNotif(messages?.count ?? 0);
-                    } else {
-                        await refetch();
-                        setUnReadNotMessages(count ?? 0);
-                    }
-                } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
-                    setConnectedUsers((newMessage as { users: number[] }).users);
-                }
-            });
-
-            setUnReadMsgNotif(messages?.count)
-            setUnReadNotMessages(count)
-        };
-
-        socketService.onNewMessage(handleNewMessage);
-
-
-    }, [refetch, setUnReadMsgNotif, socketService]);
-
-
-
-
+    const { setUnReadNotif } = useNotificationStore();
 
 
     //// HANDLE SCROLL
     const divRef = useRef<HTMLDivElement>(null);
-    const [isBottom, setIsBottom] = useState(true);
+    const [isBottom, setIsBottom] = useState(false);
     const handleScroll = () => {
         setIsMenuOpen(true);
         if (isMenuOpen && divRef.current) {
@@ -101,15 +36,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
 
     return (
         <div className={` gap-3 md:gap-4 flex justify-end flex-1 w-full h-max  `}>
-            {/* /// NOTIFICATION POPUP */}
-            <div className={`w-full z-[1000] absolute left-0 top-0 flex justify-center m-auto flex-1 `}>
-                <Card className={`${notif ? 'animate-bounce absolute' : ''} z-50 mt-4 h-max px-4 py-2 w-respLarge rounded-2xl shadow-lg transition-all duration-1000 ease-in-out transform
-                 ${notif ?
-                        'scale-100 opacity-100 top-4' :
-                        'scale-80 opacity-0 top-0'} `}>
-                    {notif}
-                </Card>
-            </div>
+
 
             {!isLoading && [{ count: messages.count, notifs: messages.notifs, color: 'cyan', icon: 'chat', link: '/chat' },
             { count, notifs, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) =>
@@ -126,7 +53,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                         (list.count ? list.count.toString() : '0')}
                                 </span>
                             </MenuHandler>
-                            <MenuList className="flex flex-col max-h-[calc(100vh-9rem)] max-w-[calc(100vw-2rem)] ml-3 rounded-2xl backdropBlur ">
+                            <MenuList className="flex flex-col max-h-[calc(100vh-9rem)] !w-[450px] !max-w-[calc(100vw-2rem)] ml-1 rounded-2xl backdropBlur !border border-blue-gray-100">
                                 <div onScroll={handleScroll}
                                     className="relative overflow-auto !border-none hover:!border-none flex flex-col gap-1">
                                     {list.count === 0 ? (
@@ -179,7 +106,7 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
                                 </div>
                                 <LoadMoreButton
                                     color={list.color}
-                                    style="-mb-8"
+                                    style="-mb-3"
                                     size="3xl"
                                     isBottom={isBottom}
                                     hasNextPage={hasNextPage}
