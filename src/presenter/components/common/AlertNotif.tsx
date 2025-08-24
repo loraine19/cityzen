@@ -53,13 +53,16 @@ export const AlertNotif = () => {
                     setNotif(notifMessage.description);
                     // setTimeout(() => { setNotif('') }, 5000);
                     if (notifMessage.type === 'MESSAGE') {
+                        console.log('New message notification:', notifMessage);
                         await refetch();
                         setUnReadMsgNotif(notifsMsg.length ?? 0);
                     } else {
+                        console.log('New notification:', notifMessage);
                         await refetch();
                         setUnReadNotMessages(notifsOther.length ?? 0);
                     }
                 } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
+                    console.log('New users connected:', (newMessage as { users: number[] }).users);
                     setConnectedUsers((newMessage as { users: number[] }).users);
                 }
             })

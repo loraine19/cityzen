@@ -11,10 +11,10 @@ export const notifViewModel = () => {
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
         queryKey: ['notifs', filter],
-        staleTime: 60000,
+        staleTime: 6000,
         refetchOnWindowFocus: true,
         refetchOnReconnect: true,
-        refetchOnMount: false,
+        refetchOnMount: true,
         queryFn: async ({ pageParam = 1 }) => await getNotifs.execute(pageParam, filter) || [],
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => lastPage?.notifs?.length ? pages.length + 1 : undefined
@@ -48,7 +48,8 @@ export const notifMapViewModel = () => {
     const { data, isLoading, error, refetch }
       = useQuery({
         queryKey: ['notifsMap'],
-        staleTime: 600000,
+        refetchOnMount: true,
+        staleTime: 6000,
         queryFn: async () => await getNotifs.execute(0, '', map) || [],
       })
 
