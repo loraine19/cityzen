@@ -14,7 +14,7 @@ export const VoteCard = ({ vote, refetch, open, close }: { vote: PoolSurveyView,
     const { handleApiError } = useAlertStore(state => state)
     const voteDTO: VoteDTO = new VoteDTO({
         targetId: vote.id,
-        target: vote.typeS,
+        target: vote.type,
         opinion
     });
     const postVote = async (data: VoteDTO) => await DI.resolve('postVoteUseCase').execute(data)

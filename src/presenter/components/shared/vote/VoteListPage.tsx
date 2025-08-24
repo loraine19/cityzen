@@ -207,7 +207,6 @@ export default function VoteListPage() {
                     ref={divRef}
                     onScroll={() => { onScroll(); handleHideCallback() }}
                     className="Grid">
-
                     {poolsSurveys.map((element: PoolSurveyView, index: number) =>
                         element.type === VoteTarget.SURVEY ?
                             <div className="SubGrid" key={'div' + index}>
