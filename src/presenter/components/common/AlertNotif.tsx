@@ -16,21 +16,15 @@ export const AlertNotif = () => {
     const [link, setLink] = useState<string | null>('/')
     const socketService = DI.resolve('socketService');
 
-    const { setConnectedUsers, connectedUsers } = connectedUsersStore();
-    const { connected, setConnected, user } = useUserStore();
+    const { setConnectedUsers } = connectedUsersStore();
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const { setUnReadMsgNotif, setUnReadNotMessages } = useNotificationStore();
-
-    //// STATE USER CONN 
-    useEffect(() => {
-        setIsConnected(connectedUsers.find((userId) => userId === user.id) ? true : false)
-    }, [connectedUsers])
 
     //// SOCKET CONNECTION
     const connexion = () => {
         console.warn('CONNECTION')
         socketService.connect(nameSpace);
-        socketService.onConnect(() => { setConnected(true) });
+        socketService.onConnect(() => { setIsConnected(true) });
     }
 
     const up = async () => await socketService.sendMessage({ message: 'connexion au notif' }, nameSpace);
@@ -38,7 +32,7 @@ export const AlertNotif = () => {
     useEffect(() => {
         if (!isLoggedIn) return;
         console.warn('mounted CHAT')
-        if (!connected || !isConnected) {
+        if (!isConnected) {
             connexion();
             up();
         }
@@ -50,9 +44,9 @@ export const AlertNotif = () => {
         return () => {
             console.warn('unmounted CHAT')
             socketService.disconnect(nameSpace);
-            setConnected(false);
+            setIsConnected(false);
         }
-    }, [isLoggedIn, connectedUsers])
+    }, [isLoggedIn])
 
 
 
@@ -64,7 +58,7 @@ export const AlertNotif = () => {
                     const notifMessage = newMessage as Notif;
                     setNotif(notifMessage.description);
                     setLink(notifMessage.link || '/');
-                    setTimeout(() => { setNotif('') }, 5000);
+                    //  setTimeout(() => { setNotif('') }, 5000);
                     if (notifMessage.type === 'MESSAGE') {
                         console.log('New message notification:', notifMessage);
                         await refetch();
@@ -99,7 +93,7 @@ export const AlertNotif = () => {
                         'scale-100 opacity-100 top-3 slide absolutme' :
                         'scale-80 opacity-0 top-0'} `}>
                     <Typography
-                        className="underline underline-offset-8 "
+                        className="underline underline-offset-8 decoration-gray-300"
                         as="a"
                         href={link ?? '/'}
                     >{notif}</Typography>

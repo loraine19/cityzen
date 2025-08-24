@@ -17,6 +17,7 @@ import { AvatarUser } from "../../common/AvatarUser";
 import NotifDiv from "../../common/NotifDiv";
 import { useUxStore } from "../../../../application/stores/ux.store";
 import { HandleHideParams } from "../../../../application/useCases/utils.useCase";
+import { OnlineDot } from "../../common/onlineDot";
 
 export default function DashboardPage() {
 
@@ -95,10 +96,14 @@ export default function DashboardPage() {
                 <div className={`${userClasse}`}>
                     <Card className="lg:h-full p-0 flex-1 flex anim">
                         <CardHeader className="flex flex-col items-center justify-center  bg-transparent shadow-none">
-                            <AvatarUser
-                                avatarSize="lg"
-                                avatarStyle="!shadow-md  w-16 h-16 lg:w-[4.5rem] lg:h-[4.5rem] "
-                                Profile={user?.Profile} />
+                            <div className="relative space-x-1 ">
+                                <AvatarUser
+                                    avatarSize="lg"
+                                    avatarStyle="!shadow-md -mb-0.5 border border-gray-300  w-16 h-16 lg:w-[4.5rem] lg:h-[4.5rem] "
+                                    Profile={user?.Profile} />
+                                <OnlineDot
+                                    id={user.id} />
+                            </div>
 
                             <div className="flex flex-col items-center justify-center pt-1">
                                 <Typography
@@ -204,7 +209,6 @@ export default function DashboardPage() {
                                             onClick={async () => {
                                                 await readNotif(notif?.id);
                                                 await refetch();
-                                                //notif?.link && navigate(notif?.link)
                                             }}
                                             size="md"
                                             style="hover:cursor-pointer absolute right-0 !z-50"
