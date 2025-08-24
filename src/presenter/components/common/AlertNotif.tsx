@@ -11,7 +11,7 @@ export const AlertNotif = () => {
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const { isLoading, refetch, count, notifsMsg, notifsOther } = notifViewModelFactory()
     const nameSpace = 'notifs';
-    const [notif, setNotif] = useState<string | null>(null);
+    const [notif, setNotif] = useState<string | null>('null');
     const [connected, setConnected] = useState(false);
     const socketService = DI.resolve('socketService');
 
@@ -51,7 +51,7 @@ export const AlertNotif = () => {
                 if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
                     const notifMessage = newMessage as Notif;
                     setNotif(notifMessage.description);
-                    setTimeout(() => { setNotif('') }, 5000);
+                    // setTimeout(() => { setNotif('') }, 5000);
                     if (notifMessage.type === 'MESSAGE') {
                         await refetch();
                         setUnReadMsgNotif(notifsMsg.length ?? 0);
