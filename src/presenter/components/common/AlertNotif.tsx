@@ -87,7 +87,6 @@ export const AlertNotif = () => {
 
     return (
         <div className={`h-max w-full z-[1000] absolute left-0 top-0 flex justify-center `}>
-            {connected ? 'connected' : 'disconnected'}
             <div className="relative z-50 w-[90%] max-w-[600px] mx-auto justify-center items-center">
                 <Card className={`w-full rounded-2xl h-max px-4 py-3 shadow-lg transition-all duration-1000 ease-in-out transform bg-opacity-95 
                  ${notif ?
