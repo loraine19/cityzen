@@ -37,7 +37,6 @@ export default function CTAMines({ disabled1, disabled2, actions }: CTAProps) {
     const { setAlertValues, setOpen, } = useAlertStore(state => state)
 
     useEffect(() => {
-        console.log('Actions updated:', actions);
         setAlertValues({
             handleConfirm: () => {
                 actions[index]?.function && actions[index].function();

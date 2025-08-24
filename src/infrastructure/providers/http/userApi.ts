@@ -11,7 +11,6 @@ export class UserApi {
 
 
     async getUsersModos(groupId: number): Promise<User[]> {
-        console.log(groupId, 'groupId in getUsersModos', `${this.dataType}/modos/${groupId}`);
         return this.api.get(`${this.dataType}/modos/${groupId}`);
     }
 

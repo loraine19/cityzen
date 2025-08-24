@@ -29,7 +29,6 @@ export const postViewModel = () => {
     const flat = error || isLoading || !data ? [] : data?.pages.flat().map(page => page.posts).flat()
     const posts = (userLoading || isLoading || !flat || !data) ? [] : flat?.map(post => post && new PostView(post, userId))
 
-    console.log('postsViewModel', { count, posts, isLoading, error, hasNextPage })
     return {
       count,
       posts,

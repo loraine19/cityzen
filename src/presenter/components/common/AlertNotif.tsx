@@ -46,7 +46,7 @@ export const AlertNotif = () => {
 
     useEffect(() => {
         const handleNewMessage = async (newMessage: any) => {
-            console.log('new message received in AlertNotif', newMessage)
+            console.log('new message in AlertNotif', newMessage)
             socketService.onNewMessage(async (newMessage: Notif | { users: number[] }) => {
                 if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
                     const notifMessage = newMessage as Notif;

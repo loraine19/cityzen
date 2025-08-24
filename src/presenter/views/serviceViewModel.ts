@@ -23,9 +23,6 @@ export const serviceViewModel = () => {
       });
 
 
-    console.log('useInfiniteQuery services', error, data)
-
-
     const count = isLoading || error ? 0 : (data?.pages[data?.pages.length - 1].count)
     const flat = error || isLoading || !data ? [] : data?.pages.flat().map(page => page.services).flat()
     const services = (userLoading || isLoading || !flat || !data) ? [] : flat?.map((service: Service) => service && new ServiceView(service, user))

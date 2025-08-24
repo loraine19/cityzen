@@ -5,7 +5,6 @@ import { User } from '../../domain/entities/User';
 
 export const userViewModel = () => {
   return (groupeId: number) => {
-    console.log("groupeId", groupeId)
     const getUsers = DI.resolve('getUsersUseCase')
     const { data, isLoading, error, fetchNextPage, hasNextPage, refetch }
       = useInfiniteQuery({
@@ -16,7 +15,6 @@ export const userViewModel = () => {
         getNextPageParam: (lastPage, pages) => lastPage?.length ? pages.length + 1 : undefined
       })
 
-    console.log("data", data, groupeId)
     //  const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
     const flat = !data || error || isLoading ? [] : data?.pages.flat().map(page => page).flat()
     const users = (isLoading || !data) ? [] : flat?.map((user: User) => user)
