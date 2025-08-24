@@ -8,7 +8,6 @@ import Chat from './Chat';
 import { User } from '../../../../domain/entities/User';
 import { Icon } from '../../common/IconComp';
 import { useSearchParams } from 'react-router-dom';
-import { useNotificationStore } from '../../../../application/stores/notification.store';
 import { AvatarUser } from '../../common/AvatarUser';
 import NotifDiv from '../../common/NotifDiv';
 
@@ -20,9 +19,6 @@ export default function ChatPage() {
     const params = { with: Params.get("with"), text: Params.get("text") }
     const [userIdRec, setUserIdRec] = useState(parseInt(params.with || '0'));
 
-    const [open, setOpen] = useState(params.with ? true : false);
-    const [userRec, setUserRec] = useState<User>({} as User);
-
     //// VIEW MODEL
     const { conversations, countConv, isLoadingConv, refetchConv, errorConv } = DI.resolve('conversationsViewModel')()
     const [notif, setNotif] = useState<string>('');
@@ -30,6 +26,26 @@ export default function ChatPage() {
     const { messages, isLoading, refetch, fetchNextPage, hasNextPage, error } = conversationViewModelFactory(userIdRec)
     const getUserById = async (id: number) => await DI.resolve('getUserByIdUseCase').execute(id);
 
+
+    //// OPEN CHAT
+    const [open, setOpen] = useState(params.with ? true : false);
+    const [userRec, setUserRec] = useState<User>({} as User);
+    useEffect(() => {
+        if (params.with && params.with !== '0') {
+            const convMap = conversations.filter((conv: MessageView) => conv?.isWith?.id === parseInt(params.with || '0'));
+            if (conversations && convMap.length === 0) {
+                newUserConv();
+                setNewConv(true);
+            }
+        }
+    }, [params.with])
+
+    const newUserConv = async () => {
+        const UserRec = await getUserById(parseInt(params.with || '0'));
+        setUserRec(UserRec)
+    }
+
+    //// SOCKET CONNECTION
     const nameSpace = 'chat';
     const [online, setOnline] = useState<number[]>([]);
     const [newConv, setNewConv] = useState<boolean>(false);
@@ -41,7 +57,6 @@ export default function ChatPage() {
         socketService.onConnect(() => { setConnected(true) });
     }
 
-    const { setUnReadMsgNotif, unReadMsgNotif } = useNotificationStore();
     const up = async () => await socketService.sendMessage({ message: 'connexion au chat' }, nameSpace);
     useEffect(() => {
         console.warn('mounted CHAT')
@@ -55,7 +70,8 @@ export default function ChatPage() {
 
         return () => {
             console.warn('unmounted CHAT')
-            socketService.disconnect(nameSpace);
+            socketService.disconnect(nameSpace)
+            setConnected(false);
         }
     }, [])
 
@@ -66,31 +82,11 @@ export default function ChatPage() {
             refetchConv()
             if (newMessage.userIdRec === userRec.id || newMessage.userId === userRec.id) {
                 await refetch()
-                setUnReadMsgNotif(unReadMsgNotif + 1)
-            }
-        };
-
-        socketService.onNewMessage(handleNewMessage);
-
-
-    }, [userRec.id, refetch, refetchConv, setUnReadMsgNotif, unReadMsgNotif, socketService]);
-
-
-    useEffect(() => {
-        if (params.with && params.with !== '0') {
-            const convMap = conversations.filter((conv: MessageView) => conv?.isWith?.id === parseInt(params.with || '0'));
-            if (conversations && convMap.length === 0) {
-                newUserConv();
-                setNewConv(true);
             }
         }
-    }, [params.with])
+        socketService.onNewMessage(handleNewMessage)
+    }, [userRec.id, refetch, refetchConv, socketService]);
 
-
-    const newUserConv = async () => {
-        const UserRec = await getUserById(parseInt(params.with || '0'));
-        setUserRec(UserRec)
-    }
 
 
     const [message, setMessage] = useState(params?.text ?? '');
@@ -113,7 +109,7 @@ export default function ChatPage() {
         }
     }
 
-
+    //// NOTIFICATION CONVERSATION
     const [notifConv, setNotifConv] = useState<string>('');
     useEffect(() => {
         if (errorConv) {

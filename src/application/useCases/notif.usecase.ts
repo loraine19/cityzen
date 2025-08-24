@@ -1,8 +1,5 @@
-//src/application/useCases/notif/getNotifs.usecase.ts
-
 import { Notif } from "../../domain/entities/Notif";
 import { NotifRepositoryBase } from "../../domain/repositoriesBase/NotifRepositoryBase";
-
 
 
 export class GetNotifUseCase {

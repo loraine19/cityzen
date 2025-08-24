@@ -24,9 +24,14 @@ export const notifViewModel = () => {
     const flat = isLoading || !data || error ? [] : data?.pages.flat().map(page => page.notifs).flat()
     const notifs = isLoading || !flat || error || !data ? [] : flat?.map((notif: Notif) => notif && new NotifView(notif))
 
+    const notifsMsg = notifs.filter((notif) => notif.type === 'MESSAGE')
+    const notifsOther = notifs.filter((notif) => notif.type !== 'MESSAGE')
+
     return {
       count,
       notifs,
+      notifsMsg,
+      notifsOther,
       refetch,
       fetchNextPage,
       hasNextPage,
@@ -49,7 +54,8 @@ export const notifMapViewModel = () => {
 
     const count = isLoading ? 0 : (data?.count)
     const notifsMap = (isLoading || !data || error) ? [] : data?.notifs?.map((notif: Notif) => new NotifView(notif))
-    console.log('notifsMap', data)
+
+    console.log(data, error, notifsMap, 'notifs map')
 
     return {
       countMap: count,

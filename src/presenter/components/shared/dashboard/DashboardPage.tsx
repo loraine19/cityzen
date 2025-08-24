@@ -12,7 +12,6 @@ import { Role } from "../../../../domain/entities/GroupUser";
 import DI from "../../../../di/ioc";
 import { LoadMoreButton } from "../../common/LoadMoreBtn";
 import { ElementNotif } from "../../../../domain/entities/Notif";
-import { useNotificationStore } from "../../../../application/stores/notification.store";
 import { useAlertStore } from "../../../../application/stores/alert.store";
 import { AvatarUser } from "../../common/AvatarUser";
 import NotifDiv from "../../common/NotifDiv";
@@ -38,10 +37,9 @@ export default function DashboardPage() {
     const msg = searchParams.get("msg");
 
     //// NOTIFICATIONS
-    const { unReadMsgNotif, unReadNotMessages } = useNotificationStore((state) => state);
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
     const notifViewModelFactory = DI.resolve('notifViewModel');
-    const { notifs, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
+    const { notifs, notifsMsg, notifsOther, refetch, count, fetchNextPage, hasNextPage, isLoading } = notifViewModelFactory();
     const notifMapViewModelFactory = DI.resolve('notifMapViewModel');
     const { notifsMap, isLoadingMap, refetchMap, countMap } = notifMapViewModelFactory();
 
@@ -159,7 +157,7 @@ export default function DashboardPage() {
                                         size="md"
                                         color="orange"
                                         title="voir mes notifications" />
-                                    <span className={unReadNotMessages < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-orange-500 border-[2px] border-white"} />
+                                    <span className={notifsMsg.length < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-orange-500 border-[2px] border-white"} />
                                 </div>
                                 <div className="relative">
                                     < Icon
@@ -169,7 +167,7 @@ export default function DashboardPage() {
                                         size="md"
                                         color="cyan"
                                         title="voir mes messages" />
-                                    <span className={unReadMsgNotif < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-cyan-500 border-[2px] border-white"} />
+                                    <span className={notifsOther.length < 1 ? "hidden" : " absolute -top-0.5 right-0 w-3 h-3 rounded-full bg-cyan-500 border-[2px] border-white"} />
                                 </div>
                                 <Typography> {count > 0 ?
                                     <>{count} {count > 1 ? 'notifications' : 'notification'} </> :

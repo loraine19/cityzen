@@ -5,17 +5,16 @@ import { useNavigate } from "react-router";
 import DI from "../../../di/ioc";
 import { LoadMoreButton } from "./LoadMoreBtn";
 import { useRef, useState } from "react";
-import { ElementNotif } from "../../../domain/entities/Notif";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 
 export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
-    const { notifs, isLoading, refetch, count, fetchNextPage, hasNextPage } = notifViewModelFactory(Object.keys(ElementNotif).filter((key) => key !== 'MESSAGE').join(','));
-    const messages = notifViewModelFactory(ElementNotif.MESSAGE)
+    const { notifsMsg, notifsOther, isLoading, refetch, fetchNextPage, hasNextPage } = notifViewModelFactory()
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate()
 
+    //// TODO SET UNREAD NOTIF BY TYPE ( UPDATE COUNT FROM VIEW )
     const { setUnReadNotif } = useNotificationStore();
 
 
@@ -36,10 +35,8 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
 
     return (
         <div className={` gap-3 md:gap-4 flex justify-end flex-1 w-full h-max  `}>
-
-
-            {!isLoading && [{ count: messages.count, notifs: messages.notifs, color: 'cyan', icon: 'chat', link: '/chat' },
-            { count, notifs, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) =>
+            {!isLoading && [{ count: notifsMsg.length, notifs: notifsMsg, color: 'cyan', icon: 'chat', link: '/chat' },
+            { count: notifsOther.length, notifs: notifsOther, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) =>
                 <div
                     key={index}
                     className={`relative w-max  ${onBoard ? 'lg:hidden' : ''}`}>

@@ -2,19 +2,14 @@ import { Card, } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { connectedUsersStore } from "../../../application/stores/connectedUsers.store";
 import { useNotificationStore } from "../../../application/stores/notification.store";
-import { ElementNotif, Notif } from "../../../domain/entities/Notif";
-
+import { Notif } from "../../../domain/entities/Notif";
 import DI from "../../../di/ioc";
 import { Icon } from "./IconComp";
-
-
 
 export const AlertNotif = () => {
 
     const notifViewModelFactory = DI.resolve('notifViewModel');
-    const { refetch, count } = notifViewModelFactory(Object.keys(ElementNotif).filter((key) => key !== 'MESSAGE').join(','))
-
-    const messages = notifViewModelFactory(ElementNotif.MESSAGE)
+    const { isLoading, refetch, count, notifsMsg, notifsOther } = notifViewModelFactory()
     const nameSpace = 'notifs';
     const [notif, setNotif] = useState<string | null>(null);
     const [connected, setConnected] = useState(false);
@@ -23,12 +18,14 @@ export const AlertNotif = () => {
     const { setConnectedUsers } = connectedUsersStore();
     const { setUnReadMsgNotif, setUnReadNotMessages } = useNotificationStore();
 
+    //// SOCKET CONNECTION
     const connexion = () => {
         socketService.connect(nameSpace);
         socketService.onConnect(() => { setConnected(true) });
     }
 
     const up = async () => await socketService.sendMessage({ message: 'connexion au notif' }, nameSpace);
+
     useEffect(() => {
         console.warn('mounted CHAT')
         if (!connected) {
@@ -47,8 +44,6 @@ export const AlertNotif = () => {
 
 
 
-
-
     useEffect(() => {
         const handleNewMessage = async (newMessage: any) => {
             console.log('new message received in AlertNotif', newMessage)
@@ -56,27 +51,29 @@ export const AlertNotif = () => {
                 if (newMessage && typeof newMessage === 'object' && 'description' in newMessage) {
                     const notifMessage = newMessage as Notif;
                     setNotif(notifMessage.description);
-                    setTimeout(() => { setNotif(notifMessage.description) }, 5000);
+                    setTimeout(() => { setNotif('') }, 5000);
                     if (notifMessage.type === 'MESSAGE') {
-                        await messages.refetch();
-                        setUnReadMsgNotif(messages?.count ?? 0);
+                        await refetch();
+                        setUnReadMsgNotif(notifsMsg.length ?? 0);
                     } else {
                         await refetch();
-                        setUnReadNotMessages(count ?? 0);
+                        setUnReadNotMessages(notifsOther.length ?? 0);
                     }
                 } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
                     setConnectedUsers((newMessage as { users: number[] }).users);
                 }
-            });
-
-            setUnReadMsgNotif(messages?.count)
-            setUnReadNotMessages(count)
-        };
-
+            })
+            setUnReadMsgNotif(notifsMsg.length ?? 0);
+            setUnReadNotMessages(notifsOther.length ?? 0);
+        }
         socketService.onNewMessage(handleNewMessage);
-
-
     }, [refetch, setUnReadMsgNotif, socketService]);
+
+    //// COUNTER
+    useEffect(() => {
+        setUnReadMsgNotif(notifsMsg.length ?? 0);
+        setUnReadNotMessages(notifsOther.length ?? 0);
+    }, [isLoading, count])
 
     return (
         <div className={`h-max w-full z-[1000] absolute left-0 top-0 flex justify-center `}>

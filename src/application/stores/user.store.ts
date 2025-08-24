@@ -33,7 +33,7 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
                 }
                 //  if (!userUpdated?.Profile) { window.location.replace('/profile/create') };
                 set({ user: userUpdated });
-                set({ profile: new ProfileView(userUpdated.Profile) });
+                set({ profile: new ProfileView(userUpdated?.Profile) });
                 set({ isLoggedIn: loggedIn });
             }
         }
