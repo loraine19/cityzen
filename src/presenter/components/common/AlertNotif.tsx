@@ -16,9 +16,17 @@ export const AlertNotif = () => {
     const [link, setLink] = useState<string | null>('/')
     const socketService = DI.resolve('socketService');
 
-    const { setConnectedUsers } = connectedUsersStore();
-    const { connected, setConnected } = useUserStore();
+    const { setConnectedUsers, connectedUsers } = connectedUsersStore();
+
+    const { connected, setConnected, user } = useUserStore();
+    const isOnline: boolean = connectedUsers.find((userId) => userId === user.id) ? true : false;
+    const [isConnected, setIsConnected] = useState<boolean>(isOnline);
     const { setUnReadMsgNotif, setUnReadNotMessages } = useNotificationStore();
+
+    //// STATE USER CONN 
+    useEffect(() => {
+        setIsConnected(connectedUsers.find((userId) => userId === user.id) ? true : false)
+    }, [connectedUsers])
 
     //// SOCKET CONNECTION
     const connexion = () => {
@@ -46,7 +54,7 @@ export const AlertNotif = () => {
             socketService.disconnect(nameSpace);
             setConnected(false);
         }
-    }, [isLoggedIn])
+    }, [isLoggedIn, connectedUsers, isConnected])
 
 
 
@@ -99,7 +107,7 @@ export const AlertNotif = () => {
                     >{notif}</Typography>
                     <Icon
                         bg
-                        style='absolute right-2 top-1 opacity-70'
+                        style='absolute right-4 top-1 opacity-70'
                         icon='close'
                         size='sm'
                         onClick={() => setNotif(null)}

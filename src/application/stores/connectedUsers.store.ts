@@ -9,5 +9,6 @@ export const connectedUsersStore = create<ConnectedUsersStore>((set) => {
     return {
         connectedUsers: [],
         setConnectedUsers: (users: number[]) => set({ connectedUsers: [...users] }),
+
     };
 });
