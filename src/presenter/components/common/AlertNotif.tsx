@@ -40,7 +40,7 @@ export const AlertNotif = () => {
     useEffect(() => {
         if (!isLoggedIn) return;
         console.warn('mounted CHAT')
-        if (!connected) {
+        if (!connected || !isConnected) {
             connexion();
             up();
         }
