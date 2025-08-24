@@ -15,6 +15,8 @@ interface UserStore {
     fetchUser: () => Promise<void>;
     setIsLoggedIn: (value: boolean) => void;
     isLoggedIn: boolean;
+    connected: boolean;
+    setConnected: (value: boolean) => void;
 }
 
 export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
@@ -47,6 +49,8 @@ export const useUserStore = create<UserStore, [['zustand/persist', UserStore]]>(
             fetchUser,
             isLoggedIn: false,
             setIsLoggedIn: (value: boolean) => set(() => ({ isLoggedIn: value })),
+            connected: false,
+            setConnected: (value: boolean) => set(() => ({ connected: value })),
         }
     },
         {
