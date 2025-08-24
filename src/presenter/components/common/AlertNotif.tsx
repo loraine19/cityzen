@@ -58,18 +58,15 @@ export const AlertNotif = () => {
                     const notifMessage = newMessage as Notif;
                     setNotif(notifMessage.description);
                     setLink(notifMessage.link || '/');
-                    //  setTimeout(() => { setNotif('') }, 5000);
+                    setTimeout(() => { setNotif('') }, 5000);
                     if (notifMessage.type === 'MESSAGE') {
-                        console.log('New message notification:', notifMessage);
                         await refetch();
-                        setUnReadMsgNotif(notifsMsg.length ?? 0);
+                        setUnReadMsgNotif(notifsMsg.length + 1);
                     } else {
-                        console.log('New notification:', notifMessage);
                         await refetch();
-                        setUnReadNotMessages(notifsOther.length ?? 0);
+                        setUnReadNotMessages(notifsOther.length + 1);
                     }
                 } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
-                    console.log('New users connected:', (newMessage as { users: number[] }).users);
                     setConnectedUsers((newMessage as { users: number[] }).users);
                 }
             })
