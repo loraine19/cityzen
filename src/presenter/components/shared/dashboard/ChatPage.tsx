@@ -160,15 +160,15 @@ export default function ChatPage() {
                     {isLoadingConv ?
                         <Skeleton className=' m-auto !h-full !rounded-3xl' /> :
                         <Card className='FixCardNoImage !flex !pb-0 !px-0 h-full'>
-                            <CardBody className=' !p-0 !pt-3 h-full'>
+                            <CardBody className=' !p-0  h-full'>
                                 <div className='flex flex-1 h-full  '>
-                                    <div className='flex-1 -mt-5 overflow-y-auto overflow-x-hidden'>
-                                        <List className='flex-1 '>
+                                    <div className='flex-1  overflow-y-auto overflow-x-hidden'>
+                                        <List className='flex-1 pt-2'>
                                             {conversations &&
                                                 conversations.map((message: MessageView, index: number) =>
                                                     <div key={index + 'div'}>
                                                         <ListItem
-                                                            className={`p-1 ${(userIdRec === message?.isWith.id) ? '!bg-gray-200 border-white border-8 shadow-md  -ml-2' : ''}`}
+                                                            className={`p-1 ${(userIdRec === message?.isWith.id) ? '!bg-gray-200 border-white border-8 shadow-md -ml-2' : ''}`}
                                                             key={index}
                                                             onClick={() => {
                                                                 setOpen(true)
@@ -218,7 +218,7 @@ export default function ChatPage() {
                                         </List>
                                     </div>
                                     {open &&
-                                        <div className='relative pt-3 !w-[calc(100%-4rem)]'>
+                                        <div className='relative mt-6 !w-[calc(100%-4rem)]'>
                                             <Chat
                                                 refetch={refetch}
                                                 setNewConv={setNewConv}
@@ -234,7 +234,7 @@ export default function ChatPage() {
                                                 error={error}
                                             />
                                             <Icon
-                                                style='absolute !top-0 !right-4'
+                                                style='absolute -top-5 !right-1'
                                                 color='blue-gray'
                                                 size='md'
                                                 bg clear

@@ -147,7 +147,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
             <CardFooter
                 onMouseLeave={() => { setImTyping(false) }}
                 onMouseEnter={() => { setImTyping(true) }}
-                className={`${imTyping ? '-top-4' : 'top-0'}  flex justify-between rounded-[2rem] relative bg-white p-2 shadow-md m-2 min-h-min`}>
+                className={`${imTyping ? '-top-2' : '-top-1'}  flex justify-between rounded-[2rem] relative bg-white p-2 shadow-md m-2 min-h-min`}>
                 <div className='flex-0 flex top-0' >
                     <Icon
                         onClick={() => setOpenEmoji(!openEmoji)}
@@ -173,7 +173,7 @@ const Chat: React.FC<ChatProps> = ({ userRec = {} as User, handleSendMessage, me
                     </div>
                 </div>
                 <textarea
-                    className='rounded-xl pt-1 pl-4 w-full focus:outline-none resize-none overflow-hidden'
+                    className='rounded-xl py-1.5 pl-4 w-full focus:outline-none resize-none overflow-hidden'
                     rows={1}
                     value={message}
                     placeholder='Ecrivez un message...'
