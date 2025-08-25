@@ -135,11 +135,11 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='flex gap-[2vw] '>
-                                    <div className='flex flex-col flex-1 !max-w-[40vw] '>
+                                <div className='flex justify-between gap-[4%]'>
+                                    <div className='flex flex-col flex-1  !max-w-[48%] '>
                                         <Input
                                             labelProps={{ className: "before:content-none after:content-none" }}
-                                            className={`inputStandart ${formik.errors.start ? 'error' : ''}`}
+                                            className={`inputStandart !max-w-[85%] ${formik.errors.start ? 'error' : ''}`}
                                             type="datetime-local"
                                             placeholder={"date de debut"}
                                             name="start"
@@ -148,10 +148,10 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             defaultValue={start && formatDateForDB(start)} />
                                         <InputError error={formik.errors.start} tips={'Date de début'} mt />
                                     </div>
-                                    <div className='flex flex-col flex-1 !max-w-[40vw] '>
+                                    <div className='flex flex-col flex-1 !max-w-[48%] '>
                                         <Input
                                             labelProps={{ className: "before:content-none after:content-none" }}
-                                            className={`inputStandart ${formik.errors.end ? 'error' : ''}`}
+                                            className={`inputStandart max-w-[85%] ${formik.errors.end ? 'error' : ''}`}
                                             type="datetime-local"
                                             min={today}
                                             defaultValue={end && formatDateForDB(end)}
@@ -161,11 +161,11 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                         <InputError mt error={formik.errors.end} tips={'Date de fin'} />
                                     </div>
                                 </div>
-                                <div className='flex w-full gap-[2vw]  '>
-                                    <div className='flex flex-col !max-w-[40vw] w-full '>
+                                <div className='flex w-full gap-[4%] justify-between'>
+                                    <div className='flex flex-col !max-w-[48%] w-full '>
                                         <Input
                                             labelProps={{ className: "before:content-none after:content-none" }}
-                                            className={`inputStandart ${formik.errors.participantsMin ? 'error' : ''}`}
+                                            className={`inputStandart max-w-[85%] ${formik.errors.participantsMin ? 'error' : ''}`}
                                             type='number'
                                             placeholder={"Participants minimum"}
                                             name="participantsMin"
@@ -173,12 +173,12 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             defaultValue={participantsMin} />
                                         <InputError mt error={formik.errors.participantsMin} tips={'Participants minimum'} />
                                     </div>
-                                    <div className={"flex items-center max-w-[40vw]  gap-1 flex-col justify-center w-full"}>
-                                        <div className="mb-2 flex  w-full items-center justify-between gap-4">
+                                    <div className={"flex items-center max-w-[48%]  gap-1 flex-col justify-center w-full"}>
+                                        <div className="mb-2 flex w-full items-center justify-between gap-4">
                                             <Typography
                                                 color="blue-gray"
                                                 variant="small">
-                                                {pourcentParticipants > 0 && `Particpants inscrits` ||
+                                                {pourcentParticipants > 0 && `Inscrits` ||
                                                     pourcentParticipants >= 100 && `validé` || `aucun inscrit`}
                                             </Typography>
                                             <Typography

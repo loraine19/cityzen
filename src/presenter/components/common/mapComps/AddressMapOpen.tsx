@@ -12,19 +12,11 @@ import { ElementNotif } from '../../../../domain/entities/Notif';
 
 function ZoomControls() {
     const map = useMap();
-
-    const handleZoomIn = () => {
-        map.zoomIn();
-    };
-
-    const handleZoomOut = () => {
-        map.zoomOut();
-    };
+    const handleZoomIn = () => map.zoomIn()
+    const handleZoomOut = () => map.zoomOut()
 
     return (
-        <div
-            className='flex flex-col lg:flex-row  gap-[3px] absolute top-[10px] left-[10px] z-[1000]'
-        >
+        <div className='flex flex-col lg:flex-row  gap-[1px] absolute top-[10px] left-[10px] z-[1000]'>
             <Icon
                 style='!border-opacity-50 !shadow-md'
                 bg
