@@ -98,8 +98,8 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                 height={100}
                                 className={image || imgBlob ? "h-full w-full object-cover" : "hidden"} />
                         </CardHeader>
-                        <CardBody className='FixCardBody '>
-                            <div className='CardOverFlow gap-3 lg:gap-2'>
+                        <CardBody className='FixCardBody h-full'>
+                            <div className='CardOverFlow  h-full justify-between gap-4 lg:gap-3'>
                                 <Input
                                     className={`inputStandart ${formik.errors.title ? 'error' : ''}`}
                                     labelProps={{ className: "before:content-none after:content-none" }}
@@ -136,7 +136,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                     </div>
                                 </div>
                                 <div className='flex gap-[2vw] '>
-                                    <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pb-1'>
+                                    <div className='flex flex-col flex-1 !max-w-[40vw] '>
                                         <Input
                                             labelProps={{ className: "before:content-none after:content-none" }}
                                             className={`inputStandart ${formik.errors.start ? 'error' : ''}`}
@@ -148,7 +148,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             defaultValue={start && formatDateForDB(start)} />
                                         <InputError error={formik.errors.start} tips={'Date de début'} mt />
                                     </div>
-                                    <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pb-1'>
+                                    <div className='flex flex-col flex-1 !max-w-[40vw] '>
                                         <Input
                                             labelProps={{ className: "before:content-none after:content-none" }}
                                             className={`inputStandart ${formik.errors.end ? 'error' : ''}`}
@@ -161,8 +161,8 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                         <InputError mt error={formik.errors.end} tips={'Date de fin'} />
                                     </div>
                                 </div>
-                                <div className='flex w-full gap-[10%]  '>
-                                    <div className='flex flex-col w-full max-w-[30rem]'>
+                                <div className='flex w-full gap-[2vw]  '>
+                                    <div className='flex flex-col !max-w-[40vw] w-full '>
                                         <Input
                                             labelProps={{ className: "before:content-none after:content-none" }}
                                             className={`inputStandart ${formik.errors.participantsMin ? 'error' : ''}`}
@@ -173,7 +173,7 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                             defaultValue={participantsMin} />
                                         <InputError mt error={formik.errors.participantsMin} tips={'Participants minimum'} />
                                     </div>
-                                    <div className={"flex items-center  gap-1 flex-col justify-center w-full"}>
+                                    <div className={"flex items-center max-w-[40vw]  gap-1 flex-col justify-center w-full"}>
                                         <div className="mb-2 flex  w-full items-center justify-between gap-4">
                                             <Typography
                                                 color="blue-gray"

@@ -20,8 +20,8 @@ export default function ServiceCreatePage() {
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
         groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
-        skill: string().required("Niveau de compétence est obligatoire").notOneOf(["0"], "Niveau de compétence est obligatoire"),
-        hard: string().required("Niveau de pénibilité est obligatoire").notOneOf(["0"], "Niveau de pénibilité est obligatoire"),
+        skill: string().required("obligatoire").notOneOf(["0"], "obligatoire"),
+        hard: string().required("obligatoire").notOneOf(["0"], "obligatoire"),
     })
 
     const { setOpen, setAlertValues, handleApiError } = useAlertStore(state => state)

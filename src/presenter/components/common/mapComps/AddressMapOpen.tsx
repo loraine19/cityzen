@@ -9,6 +9,43 @@ import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import { NotifView } from '../../../views/viewsEntities/notifViewEntity';
 import { ElementNotif } from '../../../../domain/entities/Notif';
 
+
+function ZoomControls() {
+    const map = useMap();
+
+    const handleZoomIn = () => {
+        map.zoomIn();
+    };
+
+    const handleZoomOut = () => {
+        map.zoomOut();
+    };
+
+    return (
+        <div
+            className='flex flex-col lg:flex-row  gap-[3px] absolute top-[10px] left-[10px] z-[1000]'
+        >
+            <Icon
+                style='!border-opacity-50 !shadow-md'
+                bg
+                color='blue-gray'
+                title='Zoomer'
+                onClick={handleZoomIn}
+                icon="add_circle"
+                size="md"
+            />
+            <Icon
+                style='!border-opacity-50 !shadow-md'
+                bg
+                color='blue-gray'
+                title='Dézoomer'
+                onClick={handleZoomOut}
+                icon="do_not_disturb_on"
+                size="md"
+            />
+        </div>
+    );
+}
 function FlyToMarker({ position, setFly, zoom }: { position: [number, number], zoom: number, setFly?: React.Dispatch<React.SetStateAction<boolean>> }) {
     const map = useMap();
     useEffect(() => {
@@ -102,7 +139,7 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     const IntenaryChip = () => (
         <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1000 }}>
             <Icon
-                style='!border-opacity-50 shadow-md'
+                style='!border-opacity-50 !shadow-md'
                 link={`${googleMapsLink}`}
                 bg fill
                 title='Ouvrir dans Google Maps'
@@ -158,39 +195,46 @@ export const AddressMapOpen: React.FC<AddressMapOpenProps> = ({ address, message
     return (
         <Popover open={open} >
             <PopoverHandler>
-                <div className='border border-blue-gray-100 relative flex flex-1 min-h-[6.5rem] !h-[100%] !rounded-[0.8rem]  shadow-md mb-2'>
+                <div className='border border-blue-gray-100 relative flex flex-1 min-h-[8.5rem] lg:min-h-[6rem] !h-[100%] !rounded-[0.8rem]  shadow-md mb-2 lg:mb-0'>
                     <ExpandButton />
                     <MapContainer
                         center={position}
                         zoom={zoom}
+                        zoomControl={false}
+                        attributionControl={false}
                         scrollWheelZoom={false}
                         className='!z-10 flex flex-1 min-h-20 !rounded-xl ' >
                         <TileLayer url="https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}" />
+                        <ZoomControls />
                         {notifs && <MarkerList notifsMap={notifs} />}
-                        {!aera ? <Marker
-                            position={position}
-                            icon={L.icon({
-                                iconUrl: '/image/marker_orange.svg',
-                                iconSize: [60, 60],
-                                iconAnchor: [30, 60],
-                                popupAnchor: [0, -30],
-                                shadowAnchor: [30, 60],
-                                shadowSize: [61, 61],
-                                shadowUrl: '/image/marker_shadow.png'
-                            })}>
-                            <Popup>
-                                {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
-                            </Popup>
-                        </Marker> :
+                        {!aera ? (
+                            <Marker
+                                position={position}
+                                icon={L.icon({
+                                    iconUrl: '/image/marker_orange.svg',
+                                    iconSize: [60, 60],
+                                    iconAnchor: [30, 60],
+                                    popupAnchor: [0, -30],
+                                    shadowAnchor: [30, 60],
+                                    shadowSize: [61, 61],
+                                    shadowUrl: '/image/marker_shadow.png'
+                                })}>
+                                <Popup>
+                                    {typeof message === 'string' ? message : <>{message}</> || `${address?.address} ${address?.city}`}
+                                </Popup>
+                            </Marker>
+                        ) : (
                             <Circle
                                 center={position}
                                 radius={circleRadius}
                                 pathOptions={circleOptions}
-                            />}
+                            />
+                        )}
                         {!message && <FlyToMarker position={position} zoom={zoom} />}
                         {fly && <FlyToMarker position={position} setFly={setFly} zoom={zoom} />}
                         <IntenaryChip />
-                        <FlyButton />
+                        {/* Only show FlyButton if not already zoomed in */}
+                        {!fly && <FlyButton />}
                     </MapContainer>
                 </div>
             </PopoverHandler >

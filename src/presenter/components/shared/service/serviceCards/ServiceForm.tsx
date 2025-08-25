@@ -140,7 +140,7 @@ export function ServiceForm(props: { formik: any }) {
                                 className={haveImage ? "CardImage" : "hidden"}
                             />
                         </CardHeader>
-                        <CardBody className='FixCardBody'>
+                        <CardBody className='FixCardBody '>
                             <div className='CardOverFlow h-full justify-between gap-4 pt-2'>
                                 <Input
                                     labelProps={{ className: "before:content-none after:content-none" }}
@@ -196,7 +196,7 @@ export function ServiceForm(props: { formik: any }) {
                                                     }
                                                 )}
                                             </Select>
-                                            <InputError error={formik.errors.skill} />
+                                            <InputError mt error={formik.errors.skill} />
                                         </div>
                                         <div className="flex flex-1 flex-col">
                                             <InputError tips={'Niveau de pénibilité'} />
@@ -226,21 +226,23 @@ export function ServiceForm(props: { formik: any }) {
                                                     }
                                                 )}
                                             </Select>
-                                            <InputError error={formik.errors.hard} />
+                                            <InputError mt error={formik.errors.hard} />
                                         </div>
-                                        <Chip
-                                            value={`${points} points`}
-                                            className="flex-1 GrayChip lowercase !font-medium rounded-full h-full flex items-center justify-center gap-2 max-w-max px-5"
-                                            icon={
-                                                <Icon
-                                                    color={formik.values.type === "do" ?
-                                                        "green" : "orange"}
-                                                    icon="toll"
-                                                    size="md"
-                                                    style=" ml-0.5"
-                                                    fill={userProfile?.points > parseInt(points[0])}
-                                                />}
-                                        />
+                                        <div className="h-full flex flex-col justify-between">
+                                            <InputError tips={'Nombres de points'} />
+                                            <Chip
+                                                value={`${points} points`}
+                                                className="flex-1 GrayChip lowercase !font-medium rounded-full max-h-max flex items-center justify-center gap-2 max-w-max px-5"
+                                                icon={
+                                                    <Icon
+                                                        color={formik.values.type === "do" ?
+                                                            "green" : "orange"}
+                                                        icon="toll"
+                                                        size="md"
+                                                        style=" ml-0.5"
+                                                        fill={userProfile?.points > parseInt(points[0])}
+                                                    />}
+                                            /></div>
                                     </div>
                                 </div>
                             </div>
