@@ -9,7 +9,6 @@ import { useAlertStore } from '../../../../application/stores/alert.store';
 import { User } from '../../../../domain/entities/User';
 import ServiceCard from './serviceCards/ServiceCard';
 import { AlertValues } from '../../../../domain/entities/Error';
-import { useEffect } from 'react';
 import { ServiceStep } from '../../../../domain/entities/Service';
 
 
@@ -21,6 +20,8 @@ export default function ServiceCreatePage() {
         title: string().required("Le titre est obligatoire").min(5, "minmum 5 lettres"),
         description: string().required("Description est obligatoire").min(2, "minmum 2 lettres"),
         groupId: string().required("Groupe est obligatoire").notOneOf(["0"], "Groupe est obligatoire"),
+        skill: string().required("Niveau de compétence est obligatoire").notOneOf(["0"], "Niveau de compétence est obligatoire"),
+        hard: string().required("Niveau de pénibilité est obligatoire").notOneOf(["0"], "Niveau de pénibilité est obligatoire"),
     })
 
     const { setOpen, setAlertValues, handleApiError } = useAlertStore(state => state)
@@ -60,10 +61,6 @@ export default function ServiceCreatePage() {
             setOpen(true)
         }
     });
-
-    useEffect(() => {
-        console.log("formik.values", formik.values, "formik.errors", formik.errors)
-    }, [formik.values])
 
     return (
         <ServiceForm formik={formik} />

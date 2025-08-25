@@ -11,6 +11,7 @@ import { hardLevels, serviceCategoriesS, skillLevels } from "../../../../constan
 import { ServiceView } from "../../../../views/viewsEntities/serviceViewEntity";
 import { ServiceType } from "../../../../../domain/entities/Service";
 import GroupSelect from "../../../common/GroupSelect";
+import { InputError } from "../../../common/adaptatersComps/input";
 
 export function ServiceForm(props: { formik: any }) {
     const { formik } = props;
@@ -85,6 +86,7 @@ export function ServiceForm(props: { formik: any }) {
                                 />
                             </div>
                             <Select
+                                disabled={formik.values.statusValue > 0}
                                 className="rounded-full  shadow bg-white border-none capitalize"
                                 label={formik.errors.category ? formik.errors.category as string : "Choisir la catégorie"}
                                 name={"category"}
@@ -111,7 +113,8 @@ export function ServiceForm(props: { formik: any }) {
                             groupId={groupId}
                             setGroupId={setGroupId}
                             formik={formik}
-                            user={user} />
+                            user={user}
+                            disabled={formik.values.statusValue > 0} />
                     </div>
                 </div>
                 <section className={`flex pb-1 flex-1 relative pt-8`}>
@@ -138,51 +141,46 @@ export function ServiceForm(props: { formik: any }) {
                             />
                         </CardHeader>
                         <CardBody className='FixCardBody'>
-                            <div className='CardOverFlow h-full justify-between gap-4'>
+                            <div className='CardOverFlow h-full justify-between gap-4 pt-2'>
                                 <Input
-                                    error={formik.errors.title}
-                                    label={formik.errors.title ?
-                                        formik.errors.title as string : "titre"}
+                                    labelProps={{ className: "before:content-none after:content-none" }}
+                                    className={`inputStandart ${formik.errors.title ? 'error' : ''}`}
+                                    placeholder={"Titre"}
                                     name="title"
-                                    variant="standard"
                                     onChange={formik.handleChange}
                                     value={formik.values.title}
                                 />
-                                <div className='flex flex-col lg:flex-row gap-5 pt-3 h-full '>
-                                    <div className='flex flex-col flex-1 pt-1 '>
+                                <InputError error={formik.errors.title} />
+                                <div className='flex flex-col lg:flex-row gap-5 pt-2 h-full '>
+                                    <div className='flex flex-col flex-1  '>
                                         <Textarea
-                                            rows={2}
+                                            className={`inputStandart min-h-full ${formik.errors.description ? 'error' : ''}`}
+                                            labelProps={{ className: "before:content-none after:content-none" }}
+                                            placeholder='Description'
+                                            rows={1}
                                             resize={true}
-                                            variant="static"
-                                            error={formik.errors.description}
-                                            label={formik.errors.description ?
-                                                formik.errors.description as string : "Description"}
                                             name="description"
                                             onChange={formik.handleChange}
-                                            className="focus:outline-none min-h-full"
-                                            value={formik.values.description}
-                                            containerProps={{
-                                                className: "grid h-full",
-                                            }}
-                                            labelProps={{
-                                                className: "before:content-none after:content-none",
-                                            }}
+                                            defaultValue={formik.values.description}
+                                            containerProps={{ className: "grid h-full pb-1" }}
                                         />
+                                        <InputError mt error={formik.errors.description} />
                                     </div>
                                 </div>
-                                <div className="flex flex-col justify-center pt-4 h-full">
+                                <div className="flex flex-col justify-center h-full">
                                     <Typography className='text-xs pb-3'>Difficulté du service: </Typography>
                                     <div className="flex gap-[20%]">
-                                        <div className="flex flex-1 items-center">
+                                        <div className="flex flex-1 flex-col">
+                                            <InputError tips={'Niveau de Compétence'} />
                                             <Select
-                                                variant="standard"
-                                                label={"Compétence"}
-                                                name={"skill"}
-                                                value={formik.values.skill?.toString()}
-                                                containerProps={{ className: "min-w-max h-8" }}
                                                 labelProps={{
                                                     className: "before:border-none after:border-none"
                                                 }}
+                                                className={`inputStandart ${formik.errors.skill ? 'error' : ''}`}
+                                                placeholder={"Compétence"}
+                                                name={"skill"}
+                                                value={formik.values.skill?.toString()}
+                                                containerProps={{ className: "min-w-max h-8" }}
                                                 onChange={(e: any) => {
                                                     formik.setFieldValue('skill', e);
                                                 }} >
@@ -198,11 +196,13 @@ export function ServiceForm(props: { formik: any }) {
                                                     }
                                                 )}
                                             </Select>
+                                            <InputError error={formik.errors.skill} />
                                         </div>
-                                        <div className="flex flex-1 items-center">
+                                        <div className="flex flex-1 flex-col">
+                                            <InputError tips={'Niveau de pénibilité'} />
                                             <Select
-                                                variant="standard"
-                                                label="Pénibilité"
+                                                className={`inputStandart ${formik.errors.hard ? 'error' : ''}`}
+                                                placeholder="Pénibilité"
                                                 name={"hard"}
                                                 labelProps={{
                                                     className: "before:border-none after:border-none border-none"
@@ -226,6 +226,7 @@ export function ServiceForm(props: { formik: any }) {
                                                     }
                                                 )}
                                             </Select>
+                                            <InputError error={formik.errors.hard} />
                                         </div>
                                         <Chip
                                             value={`${points} points`}

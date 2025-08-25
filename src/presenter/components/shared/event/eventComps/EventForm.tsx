@@ -12,6 +12,7 @@ import { DateChip } from "../../../common/ChipDate";
 import { Icon } from "../../../common/IconComp";
 import GroupSelect from "../../../common/GroupSelect";
 import { useUserStore } from "../../../../../application/stores/user.store";
+import { InputError } from "../../../common/adaptatersComps/input";
 
 interface EventFormProps {
     formik: any;
@@ -98,28 +99,31 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                 className={image || imgBlob ? "h-full w-full object-cover" : "hidden"} />
                         </CardHeader>
                         <CardBody className='FixCardBody '>
-                            <div className='CardOverFlow gap-3'>
+                            <div className='CardOverFlow gap-3 lg:gap-2'>
                                 <Input
-                                    label={formik.errors.title ? formik.errors.title as string : "titre"}
-                                    name="title" variant="standard"
+                                    className={`inputStandart ${formik.errors.title ? 'error' : ''}`}
+                                    labelProps={{ className: "before:content-none after:content-none" }}
+                                    placeholder={"Titre"}
+                                    name="title"
                                     onChange={formik.handleChange}
-                                    error={formik.errors.title ? true : false}
                                     defaultValue={title} />
+                                <InputError error={formik.errors.title} />
                                 <div className='flex flex-col lg:flex-row gap-5 h-full'>
-                                    <div className='flex flex-col flex-1 pb-2'>
+                                    <div className='flex flex-col flex-1'>
                                         <Textarea
+                                            className={`inputStandart min-h-full placeholder:pt-3 ${formik.errors.description ? 'error' : ''}`}
+                                            labelProps={{ className: "before:content-none after:content-none" }}
+                                            placeholder='Description'
                                             rows={1}
                                             resize={true}
-                                            variant="standard"
-                                            label={formik.errors.description ? formik.errors.description as string : "Description"}
-                                            error={formik.errors.description ? true : false}
-                                            name="description" onChange={formik.handleChange}
-                                            className=" focus:outline-none min-h-full  "
+                                            name="description"
+                                            onChange={formik.handleChange}
                                             defaultValue={description}
                                             containerProps={{ className: "grid h-full" }}
-                                            labelProps={{ className: "before:content-none after:content-none" }} />
+                                        />
+                                        <InputError mt error={formik.errors.description} />
                                     </div>
-                                    <div className="flex flex-1 flex-col lg:pt-3 ">
+                                    <div className="flex flex-1 flex-col lg:pt-2 ">
                                         {((Address?.lat && Address?.lng)) ?
                                             <AddressMapOpen address={Address} /> : ''}
 
@@ -131,38 +135,43 @@ export function EventForm({ formik, Address, setAddress }: EventFormProps) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='flex gap-[2vw] pt-4'>
-                                    <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
+                                <div className='flex gap-[2vw] '>
+                                    <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pb-1'>
                                         <Input
+                                            labelProps={{ className: "before:content-none after:content-none" }}
+                                            className={`inputStandart ${formik.errors.start ? 'error' : ''}`}
                                             type="datetime-local"
-                                            label={formik.errors.start ? formik.errors.start as string : "date de debut"}
-                                            error={formik.errors.start ? true : false}
-                                            name="start" variant="standard"
+                                            placeholder={"date de debut"}
+                                            name="start"
                                             onChange={formik.handleChange}
                                             min={today}
                                             defaultValue={start && formatDateForDB(start)} />
+                                        <InputError error={formik.errors.start} tips={'Date de début'} mt />
                                     </div>
-                                    <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pt-1'>
+                                    <div className='flex flex-col flex-1 !max-w-[40vw] overflow-auto pb-1'>
                                         <Input
+                                            labelProps={{ className: "before:content-none after:content-none" }}
+                                            className={`inputStandart ${formik.errors.end ? 'error' : ''}`}
                                             type="datetime-local"
                                             min={today}
                                             defaultValue={end && formatDateForDB(end)}
-                                            label={formik.errors.end ? formik.errors.end as string : "date de fin"}
-                                            error={formik.errors.end ? true : false}
-                                            name="end" variant="standard"
+                                            placeholder={"date de fin"}
+                                            name="end"
                                             onChange={formik.handleChange} />
+                                        <InputError mt error={formik.errors.end} tips={'Date de fin'} />
                                     </div>
                                 </div>
-                                <div className='flex w-full gap-[10%]  pt-1'>
+                                <div className='flex w-full gap-[10%]  '>
                                     <div className='flex flex-col w-full max-w-[30rem]'>
                                         <Input
+                                            labelProps={{ className: "before:content-none after:content-none" }}
+                                            className={`inputStandart ${formik.errors.participantsMin ? 'error' : ''}`}
                                             type='number'
-                                            label={formik.errors.participantsMin ? formik.errors.participantsMin as string : "participants minimum"}
+                                            placeholder={"Participants minimum"}
                                             name="participantsMin"
-                                            error={formik.errors.participantsMin ? true : false}
-                                            variant="standard"
                                             onChange={formik.handleChange}
                                             defaultValue={participantsMin} />
+                                        <InputError mt error={formik.errors.participantsMin} tips={'Participants minimum'} />
                                     </div>
                                     <div className={"flex items-center  gap-1 flex-col justify-center w-full"}>
                                         <div className="mb-2 flex  w-full items-center justify-between gap-4">

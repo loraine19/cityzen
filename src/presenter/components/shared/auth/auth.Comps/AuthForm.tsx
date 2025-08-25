@@ -5,6 +5,7 @@ import { Icon } from '../../../common/IconComp';
 import { FormikProps } from 'formik';
 import { useUserStore } from '../../../../../application/stores/user.store'
 import DI from '../../../../../di/ioc';
+import { InputError } from '../../../common/adaptatersComps/input';
 
 type AuthFormProps = {
     lead: string;
@@ -66,9 +67,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                         Connecter vous à votre Quartier
                     </Typography>
                 </Card>
-                <Card className="md:flex-[50%] overflow-auto min-h-40 !h-full !w-full !flex flex-1 FixCardNoImage">
+                <Card className="md:flex-[50%] overflow-auto min-h-38 !h-full !w-full !flex flex-1 FixCardNoImage">
                     <CardHeader
-                        className="FixCardHeaderNoImage h-max w-full p-6 !flex flex-col"
+                        className="FixCardHeaderNoImage h-max w-full px-6 py-5 !flex flex-col"
                         floated={false}>
                         <Typography
                             variant="h5">
@@ -80,50 +81,47 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             {notif}
                         </Typography>
                     </CardHeader>
-                    <CardBody className='FixCardBody !flex overflow-auto'>
-                        <div className='flex flex-col gap-[1.5vh] w-full px-4 pt-4'>
+                    <CardBody className='FixCardBody  !flex overflow-auto'>
+                        <div className='flex flex-col gap-[1.5vh] w-full px-4 pt-2'>
                             <Input
-                                size='md'
-                                error={!!formik?.errors.email}
-                                label={typeof formik?.errors.email === 'string' ? formik?.errors.email : "Email"}
+                                labelProps={{ className: "before:content-none after:content-none" }}
+                                className={`inputStandart ${formik?.errors.email ? 'error' : ''}`}
+                                placeholder={"Email"}
                                 name="email"
-                                variant="standard"
                                 onChange={formik.handleChange}
                                 data-cy="email-input" />
+                            <InputError error={formik?.errors.email} />
                             <Input
-                                size='md'
+                                labelProps={{ className: "before:content-none after:content-none" }}
+                                className={`inputStandart ${formik?.errors.password ? 'error' : ''}`}
                                 icon={
                                     <Icon onClick={() => toggleInputStyle(passWordInput, setPassWordInput)}
-                                        size='2xl'
-                                        icon={passWordInput.icon}
-                                        style='!-mt-2 -ml-4' />
+                                        size='xl'
+                                        icon={passWordInput.icon} />
                                 }
                                 error={!!formik?.errors.password}
-                                label={typeof formik?.errors.password === 'string' ? formik?.errors.password : "Mot de passe"}
+                                placeholder={"Mot de passe"}
                                 name="password"
-                                variant="standard"
                                 onChange={formik.handleChange}
                                 type={passWordInput.value}
                                 data-cy="password-input" />
+                            <InputError error={formik?.errors.password} />
                             <div className={!confirm ? "hidden" : ""}>
                                 <Input
-                                    size='md'
+                                    labelProps={{ className: "before:content-none after:content-none" }}
+                                    className={`inputStandart ${formik?.errors.passwordConfirm ? 'error' : ''}`}
                                     icon={
                                         <Icon onClick={() =>
                                             toggleInputStyle(passWordInput2, setPassWordInput2)}
                                             icon={passWordInput2.icon}
-                                            size='2xl'
-                                            style='!-mt-2 -ml-4' />
-
+                                            size='xl' />
                                     }
-                                    error={!!formik.errors.passwordConfirm}
-                                    label={typeof formik?.errors.passwordConfirm === 'string' ?
-                                        formik?.errors.passwordConfirm : "Confirmer le mot de passe"}
+                                    placeholder={"Confirmer le mot de passe"}
                                     name="passwordConfirm"
                                     type={passWordInput2.value}
-                                    variant="standard"
                                     onChange={formik.handleChange}
                                     data-cy="password-confirm-input" />
+                                <InputError mt error={formik?.errors.passwordConfirm} />
                             </div>
                         </div>
                         <div className={`flex pt-8 min-h-44  px-4 ${hiddeImage()} justify-center `}>
@@ -135,7 +133,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                             </Card>
                         </div>
                     </CardBody>
-                    <CardFooter className={`flex flex-col !py-[4vh]`}>
+                    <CardFooter className={`flex flex-col !py-6`}>
                         <Typography className={`${!checkbox ? "hidden" : 'text-xs error'}`} >
                             {typeof formik.errors.checkbox === 'string' && formik.errors.checkbox}
                         </Typography>

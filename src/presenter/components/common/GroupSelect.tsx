@@ -7,11 +7,13 @@ interface GroupSelectProps {
     user: User;
     setGroupId: (groupId: string) => void;
     groupId?: string;
+    disabled?: boolean;
 }
-export default function GroupSelect({ formik, user, setGroupId, groupId }: GroupSelectProps) {
+export default function GroupSelect({ formik, user, setGroupId, groupId, disabled }: GroupSelectProps) {
 
     return (
         <Select
+            disabled={disabled}
             className="rounded-full shadow bg-white border-none capitalize"
             label={formik.errors.groupId ? formik.errors.groupId as string : "Choisir le groupe"}
             name={"groupId"}

@@ -5,6 +5,7 @@ import { Address } from '../../../../domain/entities/Address';
 import { Skeleton } from '../Skeleton';
 import { AddressDTO } from '../../../../infrastructure/DTOs/AddressDTO';
 import DI from '../../../../di/ioc';
+import { InputError } from '../adaptatersComps/input';
 
 interface AddressSuggestion { label: string; value: Address }
 
@@ -106,19 +107,18 @@ export const AddressInputOpen = (props: {
     return (
         <div className='relative z-40 '>
             <Input
-                error={error ? true : false}
-                label={error ? Object.values(error).join(', ') : "Adresse"}
+                className={`items-center flex-1 inputStandart ${error ? 'error' : ''}`}
+                placeholder={"Adresse"}
                 variant='standard'
                 type="text"
                 name='address'
-                placeholder='Entrer une adresse'
                 value={inputValue}
                 onChange={(event) => {
                     if (event.target.value.trim() !== '' || event.target.value === '') { handleInputChange(event) }
                 }}
-                className='items-center flex-1'
                 icon={inputValue && (<button onClick={() => { setInputValue('') }}> &#x2715;</button>)}
             />
+            <InputError error={error ? Object.values(error).join(', ') : ""} mt />
             {inputValue.length > 1 && inputLoading && (
                 <div className='z-50 absolute px-0.5 w-full' ref={(el) => el && el.scrollIntoView({ behavior: 'smooth', block: 'end' })}>
                     <List className='bg-white rounded-xl border border-gray-300 overflow-auto w-full shadow-lg max-h-[7.5rem] '>

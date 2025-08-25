@@ -87,14 +87,14 @@ export default function DashboardPage() {
     useEffect(() => { (hide !== hideNavBottom) && setHideNavBottom(hide) }, [hide]);
 
     return (
-        <main className={`${(!navBottom || hideNavBottom) ? 'pb-2' : '-mt-8 withBottom'} 
+        <main className={`${(!navBottom || hideNavBottom) ? 'pb-2' : 'lg:!-mt-4 -mt-8 withBottom'} 
               lg:!mb-2 relative flex pb-0.5 !overflow-hidden anim`}
             data-cy="dashboard-body" >
             <div ref={divRef}
                 onScroll={() => handleHideCallback()}
                 className={" px-[1%] flex-1 h-full flex flex-col lg:grid grid-cols-2 grid-rows-[auto_auto_auto_1fr_1fr_2fr_auto_auto] w-full gap-y-2 lg:gap-y-3 lg:gap-x-4 place-content-start overflow-auto "}>
                 <div className={`${userClasse}`}>
-                    <Card className="lg:h-full p-0 mt-6 flex-1 flex anim">
+                    <Card className="lg:h-full p-0 mt-6 lg:!mt-0 flex-1 flex anim">
                         <CardHeader className="flex  flex-col items-center justify-center  bg-transparent shadow-none">
                             <div className="relative space-x-1 ">
                                 <AvatarUser

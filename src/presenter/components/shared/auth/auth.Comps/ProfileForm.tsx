@@ -10,6 +10,7 @@ import { Icon } from "../../../common/IconComp";
 import DI from "../../../../../di/ioc";
 import { ListGroup } from "../../myInfos/ListGroup";
 import { AvatarUser } from "../../../common/AvatarUser";
+import { InputError } from "../../../common/adaptatersComps/input";
 
 type ProfileFormProps = {
     formik: any,
@@ -86,42 +87,45 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                             </div>
                         </div>
                     </CardHeader>
-                    <CardBody className="flex flex-1 flex-col h-full gap-[4%] mb-4 overflow-auto ">
+                    <CardBody className="flex flex-1 flex-col h-full gap-3 mb-4 overflow-auto ">
                         <Input
-                            label={formik.errors.firstName ? formik.errors.firstName as string : "Prénom"}
+                            labelProps={{ className: "before:content-none after:content-none" }}
+                            className={`inputStandart ${formik.errors.firstName ? 'error' : ''}`}
+                            placeholder={"Prénom"}
                             name="firstName"
-                            variant="standard"
                             onChange={formik.handleChange}
                             value={formik.values.firstName}
-                            error={formik.errors.firstName}
                         />
+                        <InputError error={formik.errors.firstName} />
                         <Input
-                            label={formik.errors.lastName ? formik.errors.lastName as string : "Nom"}
+                            labelProps={{ className: "before:content-none after:content-none" }}
+                            className={`inputStandart ${formik.errors.lastName ? 'error' : ''}`}
+                            placeholder={"Nom"}
                             name="lastName"
-                            variant="standard"
                             onChange={formik.handleChange}
                             value={formik.values.lastName}
-                            error={formik.errors.lastName} />
+                        />
+                        <InputError error={formik.errors.lastName} />
                         <Input
-                            label={formik.errors.phone ? formik.errors.phone as string : "Télephone"}
+                            labelProps={{ className: "before:content-none after:content-none" }}
+                            className={`inputStandart ${formik.errors.phone ? 'error' : ''}`}
+                            placeholder={"Télephone"}
                             name="phone"
-                            variant="standard"
                             onChange={formik.handleChange}
                             value={formik.values.phone}
-                            type='tel'
-                            error={formik.errors.phone} />
+                            type='tel' />
+                        <InputError error={formik.errors.phone} />
                         <AddressInputOpen
                             address={formik.values.Address}
                             setAddress={setAddress}
                             error={formik.errors.Address}
                         />
+
                         <Select
-                            labelProps={{ className: "text-gray-500" }}
-                            className="p-5 capitaliz "
-                            label={formik.errors.mailSub ? formik.errors.mailSub as string : "Notifications mails"}
+                            labelProps={{ className: "before:content-none after:content-none" }}
+                            className={`p-5 capitaliz inputStandart  ${formik.errors.mailSub ? 'error' : ''}`}
+                            placeholder={"Notifications mails"}
                             name="mailSub"
-                            variant='standard'
-                            error={formik.errors.mailSub}
                             value={formik.values.mailSub}
                             onChange={(val: any) => {
                                 setMailSub(val);
@@ -138,13 +142,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                                 )
                             })}
                         </Select>
+                        <InputError error={formik.errors.mailSub} tips={'souscription aux mails'} />
                         <Select
-                            labelProps={{ className: "text-gray-500" }}
-                            className="p-5 capitaliz "
-                            label={formik.errors.assistance ? formik.errors.assistance as string : "Assistance"}
+                            labelProps={{ className: "before:content-none after:content-none" }}
+                            className={`p-5 capitaliz inputStandart  ${formik.errors.mailSub ? 'error' : ''}`}
+                            placeholder={"Assistance"}
                             name="level"
-                            variant='standard'
-                            error={formik.errors.assistance}
                             value={formik.values.assistance}
                             onChange={(val: any) => {
                                 setAssistance(val);
@@ -160,25 +163,29 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ formik, setAssistance,
                                 )
                             })}
                         </Select>
+                        <InputError error={formik.errors.assistance} tips={'niveau d\'assistance'} />
                         <ListGroup groups={groups} />
                         <Input
-                            labelProps={{ className: "text-gray-500 " }}
-                            label="Ajouter une compétences"
+                            className={`inputStandart ${formik.errors.skills ? 'error' : ''}`}
+                            placeholder="Ajouter une compétences"
                             name="skills"
                             value={newSkill}
                             variant="standard"
                             onChange={(e: any) => { e.preventDefault(); setNewSkill(e.target.value) }}
                             onSubmit={addSkill}
                             icon={
-                                <Icon
-                                    color='blue-gray'
-                                    icon='add'
-                                    onClick={addSkill}
-                                    style={`py-1 !-ml-3 !-mt-2 ${newSkill && 'error bg-red-100 rounded-full'}`} />}
+                                <div className="-mt-2 -ml-1  opacity-90">
+                                    <Icon
+                                        color='blue-gray'
+                                        icon='add'
+                                        size='xl'
+                                        onClick={addSkill}
+                                        style={` ${newSkill && 'error bg-red-100 rounded-full'}`} />
+                                </div>}
                         />
                         <List className='flex p-0'>
-                            <Typography className='text-xs text-gray-500 font-normal'>
-                                Liste des compétences
+                            <Typography className='text-xs text-gray-400 -mt-1 font-normal'>
+                                {skillList.length > 0 && 'Liste des compétences'}
                             </Typography>
                             {skillList.map((skill: string, index: number) =>
                                 <ListItem

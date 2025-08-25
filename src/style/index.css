@@ -101,6 +101,18 @@ header {
     @apply flex gap-y-2 gap-x-4 w-respLarge justify-around  pt-1 !px-0 pb-3 h-max;
 }
 
+.inputStandart {
+    @apply !rounded-none border-b border-gray-400 ring-0 focus:!border-b-gray-800 dark:border-gray-600 dark:hover:border-gray-50 dark:focus:border-gray-50 !border-t-0 !border-x-0 hover:!border-t-0 placeholder:!opacity-90 placeholder:!text-blue-gray-600 !pl-0  focus:placeholder:!opacity-50 before:content-none after:content-none gap-4;
+}
+
+.inputStandart span {
+    @apply !left-0;
+}
+
+.inputStandart :last-child {
+    @apply right-0;
+}
+
 /*** COLORS ***/
 .cyanBG {
     background-image: linear-gradient(#f9fafb00, #a5f3fc);
@@ -336,7 +348,7 @@ nav li .icon {
 }
 
 .error {
-    @apply text-red-600;
+    @apply !text-red-500 !border-red-500;
 }
 
 .fill {
