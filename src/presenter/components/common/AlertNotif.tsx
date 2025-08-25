@@ -10,7 +10,7 @@ import { useUserStore } from "../../../application/stores/user.store";
 export const AlertNotif = () => {
     const { isLoggedIn } = useUserStore(state => state);
     const notifViewModelFactory = DI.resolve('notifViewModel');
-    const { isLoading, refetch, count, notifsMsg, notifsOther } = notifViewModelFactory()
+    const { refetch, countMsg, countOther } = notifViewModelFactory()
     const nameSpace = 'notifs';
     const [notif, setNotif] = useState<string | null>(null);
     const [link, setLink] = useState<string | null>('/')
@@ -61,26 +61,20 @@ export const AlertNotif = () => {
                     setTimeout(() => { setNotif('') }, 5000);
                     if (notifMessage.type === 'MESSAGE') {
                         await refetch();
-                        setUnReadMsgNotif(notifsMsg.length + 1);
+                        setUnReadMsgNotif(countMsg + 1);
                     } else {
                         await refetch();
-                        setUnReadNotMessages(notifsOther.length + 1);
+                        setUnReadNotMessages(countOther + 1);
                     }
                 } else if (newMessage && typeof newMessage === 'object' && 'users' in newMessage) {
                     setConnectedUsers((newMessage as { users: number[] }).users);
                 }
             })
-            setUnReadMsgNotif(notifsMsg.length ?? 0);
-            setUnReadNotMessages(notifsOther.length ?? 0);
         }
         socketService.onNewMessage(handleNewMessage);
     }, [refetch, setUnReadMsgNotif, socketService]);
 
-    //// COUNTER
-    useEffect(() => {
-        setUnReadMsgNotif(notifsMsg.length ?? 0);
-        setUnReadNotMessages(notifsOther.length ?? 0);
-    }, [isLoading, count])
+
 
     return (
         <div className={`h-max w-full z-[1000] absolute left-0 top-0 flex justify-center `}>

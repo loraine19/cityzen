@@ -4,13 +4,13 @@ import { NotifView } from "../../views/viewsEntities/notifViewEntity";
 import { useNavigate } from "react-router";
 import DI from "../../../di/ioc";
 import { LoadMoreButton } from "./LoadMoreBtn";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNotificationStore } from "../../../application/stores/notification.store";
 
 export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     const notifViewModelFactory = DI.resolve('notifViewModel');
     const readNotif = async (id: number) => await DI.resolve('readNotifUseCase').execute(id);
-    const { notifsMsg, notifsOther, isLoading, refetch, fetchNextPage, hasNextPage } = notifViewModelFactory()
+    const { isLoading, refetch, fetchNextPage, hasNextPage, count, countMsg, countOther, notifsMsg, notifsOther } = notifViewModelFactory()
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate()
 
@@ -33,10 +33,20 @@ export function NotifBadge({ onBoard }: { onBoard?: boolean }) {
     };
     type NotifBadgeProps = { count: number, notifs: NotifView[], color: string, icon: string, link: string }
 
+    const badgeMapGenerator = () => [
+        { count: countMsg, notifs: notifsMsg, color: 'cyan', icon: 'chat', link: '/chat' },
+        { count: countOther, notifs: notifsOther, color: 'orange', icon: 'notifications', link: '/notification' }
+    ];
+    const [badgeMap, setBadgeMap] = useState<NotifBadgeProps[]>(badgeMapGenerator());
+
+    useEffect(() => {
+        setBadgeMap(badgeMapGenerator());
+    }, [count])
+
+
     return (
         <div className={` gap-3 md:gap-4 flex justify-end flex-1 w-full h-max  `}>
-            {!isLoading && [{ count: notifsMsg.length, notifs: notifsMsg, color: 'cyan', icon: 'chat', link: '/chat' },
-            { count: notifsOther.length, notifs: notifsOther, color: 'orange', icon: 'notifications', link: '/notification' }].map((list: NotifBadgeProps, index: number) =>
+            {!isLoading && badgeMap.map((list: NotifBadgeProps, index: number) =>
                 <div
                     key={index}
                     className={`relative w-max  ${onBoard ? 'lg:hidden' : ''}`}>

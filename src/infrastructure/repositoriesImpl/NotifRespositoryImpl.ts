@@ -1,5 +1,5 @@
 //src/infrastructure/repositoriesImpl/UserRespositoryImpl.tsx
-import { Notif } from "../../domain/entities/Notif";
+import { Notif, NotifPage } from "../../domain/entities/Notif";
 import { NotifRepositoryBase } from "../../domain/repositoriesBase/NotifRepositoryBase";
 import { ApiServiceI } from "../providers/http/apiService";
 
@@ -13,7 +13,7 @@ export class NotifRepositoryImpl implements NotifRepositoryBase {
     private notifData: IData;
     constructor({ notifData }: { notifData: IData }) { this.notifData = notifData }
 
-    public async getNotifs(page?: number, filter?: string, map?: boolean): Promise<Notif[]> {
+    public async getNotifs(page?: number, filter?: string, map?: boolean): Promise<NotifPage> {
         return this.notifData.getNotifs(page, filter, map);
     }
 

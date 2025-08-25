@@ -18,6 +18,8 @@ export class Notif {
     }
 }
 
+export type NotifPage = { notifs: Notif[], count: number, countMsg: number, countOther: number };
+
 
 export enum ElementNotif {
     POST = 'POST',

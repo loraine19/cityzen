@@ -1,4 +1,4 @@
-import { Notif } from "../../domain/entities/Notif";
+import { Notif, NotifPage } from "../../domain/entities/Notif";
 import { NotifRepositoryBase } from "../../domain/repositoriesBase/NotifRepositoryBase";
 
 
@@ -8,7 +8,7 @@ export class GetNotifUseCase {
     constructor({ notifRepository }: { notifRepository: NotifRepositoryBase }) {
         this.notifRepository = notifRepository;
     }
-    public async execute(page?: number, filter?: string, map?: boolean): Promise<any> {
+    public async execute(page?: number, filter?: string, map?: boolean): Promise<NotifPage> {
         return this.notifRepository.getNotifs(page, filter, map);
     }
 

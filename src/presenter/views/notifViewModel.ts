@@ -21,14 +21,17 @@ export const notifViewModel = () => {
       })
 
     const count = isLoading ? 0 : (data?.pages[data?.pages.length - 1].count)
+    const countMsg = isLoading ? 0 : data?.pages[data?.pages.length - 1].countMsg
+    const countOther = isLoading ? 0 : data?.pages[data?.pages.length - 1].countOther
     const flat = isLoading || !data || error ? [] : data?.pages.flat().map(page => page.notifs).flat()
     const notifs = isLoading || !flat || error || !data ? [] : flat?.map((notif: Notif) => notif && new NotifView(notif))
-
     const notifsMsg = notifs.filter((notif) => notif.type === 'MESSAGE')
     const notifsOther = notifs.filter((notif) => notif.type !== 'MESSAGE')
 
     return {
       count,
+      countMsg,
+      countOther,
       notifs,
       notifsMsg,
       notifsOther,
@@ -49,6 +52,7 @@ export const notifMapViewModel = () => {
       = useQuery({
         queryKey: ['notifsMap'],
         refetchOnMount: true,
+        refetchOnReconnect: true,
         staleTime: 6000,
         queryFn: async () => await getNotifs.execute(0, '', map) || [],
       })
